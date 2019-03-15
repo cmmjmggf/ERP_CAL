@@ -1,8 +1,8 @@
-<div class="modal " id="mdlConciliaFabricaProduccion"  role="dialog">
+<div class="modal " id="mdlConRelControlesXMaquila"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Concilia de la Fábrica Producción</h5>
+                <h5 class="modal-title">Relación de controles Maq-Sem</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,16 +27,6 @@
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
                         </div>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-12 col-sm-12">
-                            <label>Precio <span class="badge badge-info mb-2" style="font-size: 12px;">1 Actual - 2 Del Movimiento</span></label>
-                            <select class="form-control form-control-sm required selectize" id="Precio" name="Precio" >
-                                <option value=""></option>
-                                <option value="1">1 Actual</option>
-                                <option value="2">2 Del Movimiento</option>
-                            </select>
-                        </div>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -47,84 +37,73 @@
     </div>
 </div>
 <script>
-    var mdlConciliaFabricaProduccion = $('#mdlConciliaFabricaProduccion');
+    var mdlConRelControlesXMaquila = $('#mdlConRelControlesXMaquila');
     $(document).ready(function () {
-        validacionSelectPorContenedor(mdlConciliaFabricaProduccion);
-        setFocusSelectToInputOnChange('#Precio', '#btnImprimir', mdlConciliaFabricaProduccion);
-        mdlConciliaFabricaProduccion.on('shown.bs.modal', function () {
-            mdlConciliaFabricaProduccion.find("input").val("");
-            $.each(mdlConciliaFabricaProduccion.find("select"), function (k, v) {
-                mdlConciliaFabricaProduccion.find("select")[k].selectize.clear(true);
+        mdlConRelControlesXMaquila.on('shown.bs.modal', function () {
+            mdlConRelControlesXMaquila.find("input").val("");
+            $.each(mdlConRelControlesXMaquila.find("select"), function (k, v) {
+                mdlConRelControlesXMaquila.find("select")[k].selectize.clear(true);
             });
-            mdlConciliaFabricaProduccion.find('#Ano').focus();
+            mdlConRelControlesXMaquila.find('#Ano').focus();
         });
 
-        mdlConciliaFabricaProduccion.find('#btnImprimir').on("click", function () {
-            var t_precio = mdlConciliaFabricaProduccion.find('#Precio').val();
-            if (t_precio !== '') {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData(mdlConciliaFabricaProduccion.find("#frmCaptura")[0]);
-                $.ajax({
-                    url: base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (data.length > 0) {
+        mdlConRelControlesXMaquila.find('#btnImprimir').on("click", function () {
 
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlConRelControlesXMaquila.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesMaterialesJasper/onReporteRelacionControlesMaq',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "85%",
+                                    height: "85%"
                                 },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "85%",
-                                        height: "85%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
                                 }
                             }
-                        });
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                            icon: "error"
-                        }).then((action) => {
-                            mdlConciliaFabricaProduccion.find('#Ano').focus();
-                        });
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES DE SELECCIONAR UN TIPO DE PRECIO",
-                    icon: "error"
-                }).then((action) => {
-                    mdlConciliaFabricaProduccion.find('#Precio')[0].selectize.focus();
-                });
-            }
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlConRelControlesXMaquila.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+
         });
 
-        mdlConciliaFabricaProduccion.find("#Ano").change(function () {
+        mdlConRelControlesXMaquila.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
@@ -135,23 +114,16 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlConciliaFabricaProduccion.find("#Ano").val("");
-                    mdlConciliaFabricaProduccion.find("#Ano").focus();
+                    mdlConRelControlesXMaquila.find("#Ano").val("");
+                    mdlConRelControlesXMaquila.find("#Ano").focus();
                 });
             }
         });
-        mdlConciliaFabricaProduccion.find("#Maq").change(function () {
+        mdlConRelControlesXMaquila.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlConciliaFabricaProduccion.find("#aMaq").change(function () {
-            onComprobarMaquilas($(this));
-        });
-        mdlConciliaFabricaProduccion.find("#Sem").change(function () {
-            var ano = mdlConciliaFabricaProduccion.find("#Ano");
-            onComprobarSemanasProduccion($(this), ano.val());
-        });
-        mdlConciliaFabricaProduccion.find("#aSem").change(function () {
-            var ano = mdlConciliaFabricaProduccion.find("#Ano");
+        mdlConRelControlesXMaquila.find("#Sem").change(function () {
+            var ano = mdlConRelControlesXMaquila.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
     });

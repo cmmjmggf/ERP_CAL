@@ -41,7 +41,7 @@ class ReportesMaterialesJasper extends CI_Controller {
         $parametros["tipo"] = $this->input->post('Tipo');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\materiales\entradasDiversas.jasper');
-        $jc->setFilename('VALE_ENTRADA_OTROS' . Date('h_i_s'));
+        $jc->setFilename('VALE_ENTRADA_OTROS_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
@@ -269,6 +269,22 @@ class ReportesMaterialesJasper extends CI_Controller {
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\materiales\comprasGeneralSemMaq.jasper');
         $jc->setFilename('COMPRAS_GENERAL_SEM_MAQ_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteRelacionControlesMaq() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\relacionControlesMaq.jasper');
+        $jc->setFilename('RELACION_CONTROLES_MAQ_SEM_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
