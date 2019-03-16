@@ -16,9 +16,21 @@ class ListasPrecioMaquilas extends CI_Controller {
             $this->load->view('vEncabezado');
 
             switch ($this->session->userdata["TipoAcceso"]) {
+
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuProduccion');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+
+                    if ($Origen === 'CLIENTES') {
+                        $this->load->view('vMenuClientes');
+                    } else if ($Origen === 'PRODUCCION') {
+                        $this->load->view('vMenuProduccion');
+                    }
+                    //Cuando no viene de ningun modulo y lo teclean
+                    else {
+                        $this->load->view('vMenuPrincipal');
+                    }
                     break;
 
                 case 'PRODUCCION':
