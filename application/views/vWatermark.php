@@ -20,6 +20,7 @@ switch ($TYPE) {
     }
     .watermark p{
         color:#fff !important;
+        text-shadow: 0 0 3px #333, 0 0 5px #0000FF !important;
     }
     html canvas{
         box-shadow: inset 0px 0px 900px 0px rgba(0,0,0,1);

@@ -150,7 +150,9 @@ class Avance8 extends CI_Controller {
             /* SOLO SE GENERA EL AVANCE EN LA FRACCIÓN 51 QUE ES LA PIEL */
             if ($check_avance[0]->EXISTE <= 0) {
                 $id = 0;
+                
                 if (intval($x->post('NUMERO_FRACCION')) === 51) {
+                    /* 51 = ENTRETELADO*/
                     $avance = array(
                         'Control' => $x->post('CONTROL'),
                         'FechaAProduccion' => Date('d/m/Y'),
@@ -206,9 +208,11 @@ class Avance8 extends CI_Controller {
                             $avance['Departamento'] = 30;
                             $avance['Fraccion'] = 103;
                             $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* REBAJADO */;
-                    $this->db->set('EstatusProduccion', 'ENTRETELADO')
-                            ->where('Control', $x->post('CONTROL'))
-                            ->update('controles');
+                            $this->db->set('EstatusProduccion', 'ENTRETELADO')
+                                    ->where('Control', $x->post('CONTROL'))
+                                    ->update('controles');
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
                             break;
                         case 40:
                             /* FOLEADO */
@@ -218,12 +222,22 @@ class Avance8 extends CI_Controller {
                             $this->db->set('EstatusProduccion', 'FOLEADO')
                                     ->where('Control', $x->post('CONTROL'))
                                     ->update('controles');
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
+                            break;
+                        case 50:
+                            /* DOBLILLADO */ 
+                            $this->db->set('EstatusProduccion', 'DOBLILLADO')
+                                    ->where('Control', $x->post('CONTROL'))
+                                    ->update('controles');
                             break;
                         case 60:
                             /* LASER */
                             $avance['Departamento'] = 60;
                             $avance['Fraccion'] = $x->post('NUMERO_FRACCION');
                             $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* FOLEADO */;
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
                             break;
                         case 70:
                             /* PREL-CORTE */
@@ -233,6 +247,8 @@ class Avance8 extends CI_Controller {
                             $this->db->set('EstatusProduccion', 'LASER')
                                     ->where('Control', $x->post('CONTROL'))
                                     ->update('controles');
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
                             break;
                         case 80:
                             /* RAYADO CONTADO */
@@ -242,10 +258,10 @@ class Avance8 extends CI_Controller {
                             $this->db->set('EstatusProduccion', 'RAYADO CONTADO')
                                     ->where('Control', $x->post('CONTROL'))
                                     ->update('controles');
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
                             break;
                     }
-                    $this->db->insert('avance', $avance);
-                    $id = $this->db->insert_id();
                 }
                 /* PASO 2 : PAGAR FRACCION */
                 $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)

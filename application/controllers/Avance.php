@@ -52,6 +52,30 @@ class Avance extends CI_Controller {
         }
     }
 
+    public function getRastreoXConcepto() {
+        try {
+            print json_encode($this->avm->getRastreoXConcepto($this->input->get('CONTROL')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getRastreoXControl() {
+        try {
+            print json_encode($this->avm->getRastreoXControl($this->input->get('CONTROL')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getConceptosNomina() {
+        try {
+            print json_encode($this->avm->getConceptosNomina());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleados() {
         try {
             print json_encode($this->avm->getEmpleados());
@@ -194,7 +218,7 @@ class Avance extends CI_Controller {
         try {
             $db = $this->db;
             $x = $this->input;
-            $id = 0; 
+            $id = 0;
             $frac = intval($x->post('FRACCION'));
             $depto = intval($x->post('DEPTO'));
 
@@ -228,6 +252,10 @@ class Avance extends CI_Controller {
                     'Hora' => Date('h:i:s a'),
                     'Fraccion' => $x->post('FRACCION')
                 ));
+                /* DE ADORNO B PASA A ALMACEN DE ADORNO */
+                if ($x->post('DEPTO') === 220) {
+                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->where('Control', $x->post('CONTROL'))->update('controles');
+                }
                 $id = $this->db->insert_id();
             }
             $fecha = $x->post('FECHA');
@@ -237,7 +265,7 @@ class Avance extends CI_Controller {
 
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
-            
+
             $this->db->insert('fracpagnomina', array(
                 'numeroempleado' => $x->post('EMPLEADO'),
                 'maquila' => substr($x->post('CONTROL'), 4, 2),
@@ -256,7 +284,10 @@ class Avance extends CI_Controller {
                 'avance_id' => $id,
                 'fraccion' => $x->post('FRACCIONT'))
             );
-            $this->db->set('EstatusProduccion', $x->post('DEPTOT'))->where('Control', $x->post('CONTROL'))->update('controles');
+//SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
+            if ($x->post('DEPTO') !== 220) {
+                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))->where('Control', $x->post('CONTROL'))->update('controles');
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
