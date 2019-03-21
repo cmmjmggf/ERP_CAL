@@ -32,7 +32,31 @@ class ControlPlantilla_model extends CI_Model {
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
                                         CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN
-', false)->from('controlpla AS CP')->get()->result();
+', false)->from('controlpla AS CP')->where_in('CP.Estatus', array(1, 2))->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEntregados() {
+        try {
+            return $this->db->select('CP.`ID`,
+                                        CP.`Tipo` AS ESTATUS,
+                                        CP.Documento AS DOCUMENTO,
+                                        CP.`Proveedor` AS PROVEEDOR,
+                                        CP.`Fecha` AS FECHA,
+                                        CP.FechaRetorna AS FECHA_RETORNA,
+                                        CP.`Control` AS CONTROL,
+                                        CP.`Estilo` AS ESTILO,
+                                        CP.`Color` AS COLOR,
+                                        CP.`Pares` AS PARES,
+                                        CP.`Fraccion` AS FRACCION,
+                                        CP.`FraccionT` AS FRACCIONT,
+                                        CP.`Precio` AS PRECIO,
+                                        CP.`Registro`,
+                                        CP.`Estatus` AS ESTATUS,
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN
+', false)->from('controlpla AS CP')->where_in('CP.Estatus', array(2))->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -82,25 +106,36 @@ class ControlPlantilla_model extends CI_Model {
 
     public function getUltimoDocumento($ANO, $MES, $DIA) {
         try {
-
-            return $this->db->select("CP.Documento AS DOCTO_ANTERIOR, 
-                CASE WHEN CP.Documento IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CP.Documento,1,2) END AS ANO, 
-                CASE WHEN CP.Documento IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CP.Documento,3,2) END AS MES, 
-                CASE WHEN CP.Documento IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CP.Documento,5,2) END AS DIA,  
-                CASE WHEN CP.Documento IS NULL THEN LPAD(1,3,0) ELSE SUBSTRING(CP.Documento + 1,7,3) END AS CONSECUTIVO,
-                COUNT(CP.ID) AS VALID", false)
+            $EXISTE = $this->db->select("COUNT(CP.ID) AS VALIDO", false)
                             ->from('controlpla AS CP')
                             ->where("SUBSTRING(CP.Documento,1,2) = SUBSTRING({$ANO},3,2) "
                                     . "AND SUBSTRING(CP.Documento,3,2) = {$MES} "
                                     . "AND SUBSTRING(CP.Documento,5,2) = {$DIA} ", null, false)
-                            ->order_by('CP.Documento', 'ASC')
+                            ->order_by('CP.Documento', 'DESC')
                             ->limit(1)
                             ->get()->result();
+            $preselect = "CP.Documento AS DOCTO_ANTERIOR, 
+                CASE WHEN CP.Documento IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CP.Documento,1,2) END AS ANO, 
+                CASE WHEN CP.Documento IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CP.Documento,3,2) END AS MES, 
+                CASE WHEN CP.Documento IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CP.Documento,5,2) END AS DIA,  
+                CASE WHEN CP.Documento IS NULL THEN LPAD(1,3,0) ELSE LPAD(SUBSTRING(CP.Documento+1,7,3),3,0) END AS CONSECUTIVO";
+            if (intval($EXISTE[0]->VALIDO) > 0) {
+                $this->db->select($preselect, false);
+            } else {
+                $preselect .= ",COUNT(CP.ID) AS VALID";
+                $this->db->select($preselect, false);
+            }
+            return $this->db->from('controlpla AS CP')
+                            ->where("SUBSTRING(CP.Documento,1,2) = SUBSTRING({$ANO},3,2) "
+                                    . "AND SUBSTRING(CP.Documento,3,2) = {$MES} "
+                                    . "AND SUBSTRING(CP.Documento,5,2) = {$DIA} ", null, false)
+                            ->order_by('CP.Documento', 'DESC')
+                            ->limit(1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getFraccionesXEstilo($ESTILO) {
         try {
             return $this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
@@ -120,6 +155,18 @@ class ControlPlantilla_model extends CI_Model {
             return $this->db->select("FXE.CostoMO AS PRECIO_COSTOMO", false)
                             ->from('fraccionesxestilo AS FXE')
                             ->where("FXE.Estilo LIKE '{$ESTILO}' AND FXE.Fraccion LIKE '{$FRACCION}'", null, false)
+                            ->limit(1)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComprobarEstatusDocumento($DOCTO) {
+        try {
+            return $this->db->select("CP.ID AS IDDOCTO,COUNT(CP.ID) AS VALIDO", false)
+                            ->from('controlpla AS CP')
+                            ->where("CP.Documento LIKE '{$DOCTO}' AND CP.Estatus IN(1)", null, false)
                             ->limit(1)
                             ->get()->result();
         } catch (Exception $exc) {

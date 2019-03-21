@@ -34,7 +34,7 @@
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control" class="form-control form-control-sm">
+                <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Estilo</label>
@@ -65,8 +65,14 @@
                 <label>Reimprime</label>
                 <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm date">
             </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
+                <button type="button" class="btn btn-primary" id="btnAcepta"><span class="fa fa-check"></span> ACEPTA </button>
+            </div>
             <div class="w-100"></div>
-            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xl-11">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
+                <button type="button" class="btn btn-warning" onclick="ControlPlantilla.ajax.reload()"><span class="fa fa-sync"></span> REFRESCAR</button>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card-block mt-4">
                     <div id="ControlPlantilla" class="table-responsive">
                         <table id="tblControlPlantilla" class="table table-sm display " style="width:100%">
@@ -89,15 +95,119 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
-                <button type="button" id="btnEliminar" name="btnEliminar" class="btn btn-danger">
-                    <span class="fa fa-trash"></span>
-                </button>
-            </div>
-
         </div>
     </div>
 </div>
+<div class="modal animated zoomIn" id="mdlRetorno">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content  modal-lg">
+            <div class="modal-header">
+                <h5 class="modal-title">Retorno de plantilla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Documento</label>
+                        <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" class="form-control">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Fecha vale</label>
+                        <input type="text" id="FechaVale" name="FechaVale" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <div class="w-100"></div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table class="table table-hover" id="tblRetornaDocumento">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">TP</th>
+                                <th scope="col">Docto</th>
+                                <th scope="col">Proveedor</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Llegada</th>
+                                <th scope="col">Control</th>
+                                <th scope="col">Estilo</th>
+                                <th scope="col">-</th>
+                                <th scope="col">Pares</th>
+                                <th scope="col">-</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno">Acepta</button>
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal animated zoomIn" id="mdlReportePago">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content  modal-lg">
+            <div class="modal-header">
+                <h5 class="modal-title">Maquila x fecha</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>De la fecha</label>
+                        <input type="text" id="DeLaFecha" name="DeLaFecha" class="form-control date">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>A la fecha</label>
+                        <input type="text" id="ALaFecha" name="ALaFecha" class="form-control date">
+                    </div>
+                </div>
+                <br>
+                <div class="w-100"></div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table class="table table-hover" id="tblRetornaDocumento">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">TP</th>
+                                <th scope="col">Docto</th>
+                                <th scope="col">Proveedor</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Llegada</th>
+                                <th scope="col">Control</th>
+                                <th scope="col">Estilo</th>
+                                <th scope="col">-</th>
+                                <th scope="col">Pares</th>
+                                <th scope="col">-</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno">Acepta</button>
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     var pnlTablero = $("#pnlTablero"), ControlPlantilla, tblControlPlantilla = pnlTablero.find("#tblControlPlantilla"),
             Proveedor = pnlTablero.find("#Proveedor"), TipoMaquila = pnlTablero.find("#TipoMaquila"),
@@ -105,22 +215,162 @@
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"),
             Pares = pnlTablero.find("#Pares"), Fraccion = pnlTablero.find("#Fraccion"),
             Precio = pnlTablero.find("#Precio"), Fecha = pnlTablero.find("#Fecha"),
-            btnAcepta = pnlTablero.find("#btnAcepta");
+            btnAcepta = pnlTablero.find("#btnAcepta"), mdlRetorno = $("#mdlRetorno"),
+            btnRetorna = pnlTablero.find("#btnRetorna"), DocumentoRetorno = mdlRetorno.find("#DocumentoRetorno"),
+            FechaVale = mdlRetorno.find("#FechaVale"), RetornaDocumento, tblRetornaDocumento = mdlRetorno.find("#tblRetornaDocumento"),
+            btnConceptosPlantilla = pnlTablero.find("#btnConceptosPlantilla"),
+            btnAceptaRetorno = mdlRetorno.find("#btnAceptaRetorno");
 
+    var FechaActual = '<?php print Date('d/m/Y'); ?>';
     $(document).ready(function () {
         getProveedores();
         getMaquilasPlantillas();
         getRecords();
         getUltimoDocumento();
+
+        btnAceptaRetorno.click(function () {
+            if (DocumentoRetorno.val()) {
+                /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
+                $.getJSON('<?php print base_url('ControlPlantilla/onComprobarEstatusDocumento'); ?>', {
+                    DOCTO: DocumentoRetorno.val()
+                }).done(function (a) {
+                    console.log(a);
+                    if (a.length > 0) {
+                        var r = a[0];
+                        if (parseInt(r.VALIDO) > 0) {
+                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>',
+                                    {ID: r.IDDOCTO, FECHA: FechaVale.val()}).done(function (a) {
+                                swsd('SE HA RETORNADO EL DOCUMENTO', function () {
+                                    DocumentoRetorno.val('').focus().select();
+                                    RetornaDocumento.ajax.reload();
+                                });
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+
+                            });
+                        } else {
+                            swwt('ESTE DOCUMENTO NO ES VÁLIDO O YA FUE ENTREGADO', function () {
+                                DocumentoRetorno.focus().select();
+                            });
+                        }
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
+                /*2.- EN CASO DE QUE ESTE ACTIVO CAMBIARLO A ESTATUS DOS(2)*/
+
+            } else {
+                swwt('DEBE DE ESPECIFICAR UN DOCUMENTO', function () {
+                    DocumentoRetorno.focus().select();
+                });
+            }
+        });
+
+        btnConceptosPlantilla.click(function () {
+            $.fancybox.open({
+                src: '<?= base_url('MaqPlantillas/?TIPO=1'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    afterClose: function (instance, current) {
+                        getMaquilasPlantillas();
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        mdlRetorno.on('shown.bs.modal', function () {
+            if (!$.fn.DataTable.isDataTable('#tblRetornaDocumento')) {
+                var cols = [
+                    {"data": "ID"}/*0*/,
+                    {"data": "ESTATUS"}/*1*/,
+                    {"data": "DOCUMENTO"}/*2*/,
+                    {"data": "PROVEEDOR"}/*2*/,
+                    {"data": "FECHA"}/*3*/,
+                    {"data": "FECHA_RETORNA"}/*3*/,
+                    {"data": "CONTROL"}/*4*/,
+                    {"data": "ESTILO"}/*6*/,
+                    {"data": "COLOR"}/*7*/,
+                    {"data": "PARES"}/*9*/,
+                    {"data": "BTN"}/*8*/
+                ];
+                var coldefs = [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ];
+                var xoptions = {
+                    "dom": 'rit',
+                    "ajax": {
+                        "url": '<?php print base_url('ControlPlantilla/getEntregados'); ?>',
+                        "type": "POST",
+                        "contentType": "application/json",
+                        "dataSrc": ""
+                    },
+                    buttons: buttons,
+                    "columns": cols,
+                    "columnDefs": coldefs,
+                    language: lang,
+                    select: true,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 99999999,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "bSort": true,
+                    "scrollY": "300px",
+                    "scrollX": true,
+                    "aaSorting": [
+                        [0, 'desc']
+                    ]
+                };
+                RetornaDocumento = tblRetornaDocumento.DataTable(xoptions);
+            } else {
+                RetornaDocumento.ajax.reload();
+                RetornaDocumento.columns.adjust().draw();
+            }
+        });
+
+        btnRetorna.click(function () {
+            mdlRetorno.modal('show');
+            DocumentoRetorno.focus();
+            FechaVale.val(FechaActual);
+        });
+
         btnAcepta.click(function () {
             getUltimoDocumento();
             $.post('<?php print base_url('ControlPlantilla/onGuardar'); ?>', {
                 PROVEEDOR: Proveedor.val(),
+                PROVEEDORT: Proveedor.find("option:selected").text(),
                 TIPO: TipoMaquila.val(),
                 DOCUMENTO: Documento.val(),
                 CONTROL: Control.val(),
                 ESTILO: Estilo.val(),
                 COLOR: Color.val(),
+                COLORT: Color.find("option:selected").text(),
                 PARES: Pares.val(),
                 FRACCION: Fraccion.val(),
                 FRACCIONT: Fraccion.find("option:selected").text(),
@@ -138,7 +388,7 @@
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
-
+                Fecha.val(FechaActual);
             });
         });
 
@@ -160,6 +410,7 @@
                 ESTILO: Estilo.val()
             }).done(function (a) {
                 Precio.val((a.length > 0) ? a[0].PRECIO_COSTOMO : '');
+                Fecha.val(FechaActual);
             }).fail(function (x, y, z) {
                 getError(x);
             }).always(function () {
@@ -216,6 +467,7 @@
             ]
         };
         ControlPlantilla = tblControlPlantilla.DataTable(xoptions);
+
     }
 
     function getProveedores() {
@@ -231,6 +483,9 @@
     }
 
     function getMaquilasPlantillas() {
+        console.log('Refrescando maq plantillas...');
+        TipoMaquila[0].selectize.clear(true);
+        TipoMaquila[0].selectize.clearOptions();
         $.getJSON('<?php print base_url('ControlPlantilla/getMaquilasPlantillas'); ?>').done(function (a) {
             a.forEach(function (e) {
                 TipoMaquila[0].selectize.addOption({text: e.ID + ' ' + e.MAQPLA, value: e.ID});
@@ -252,11 +507,19 @@
                 getColoresXEstilo(r);
                 getFraccionesXEstilo(r);
                 Pares.val(r.PARES);
+                btnAcepta.attr('disabled', false);
+            } else {
+                swwt('ES NECESARIO QUE ESPECIFIQUE UN CONTROL VÁLIDO', function () {
+                    Control.focus().select();
+                    Estilo.val('');
+                    Pares.val('');
+                });
+                btnAcepta.attr('disabled', true);
             }
         }).fail(function (x, y, z) {
             getError(x);
         }).always(function () {
-
+            Fecha.val(FechaActual);
         });
     }
 
@@ -303,7 +566,7 @@
             /*19(ANO) 03(MES) 07(DIA) 001(CONSECUTIVO) = 190307001*/
             if (a.length > 0) {
                 var udoc = a[0];
-                documento = udoc.ANO + "" + udoc.MES + "" + udoc.DIA + "" + udoc.CONSECUTIVO;
+                documento = udoc.ANO + "" + udoc.MES + "" + udoc.DIA + "" + (udoc.CONSECUTIVO);
                 Documento.val(documento);
             } else {
                 swal('ERROR', 'NO FUE POSIBLE OBTENER EL ULTIMO DOCUMENTO, REVISE LA CONSOLA PARA MAS DETALLE', 'error');
@@ -342,9 +605,23 @@
     }
 
     function onEliminarControlPlantilla(ID) {
-        swal('Estas seguro?', 'Una vez hecho esto no se puede deshacer', 'warning').then((value) => {
+        onBeep(1);
+        swal({
+            title: "¿Estas seguro?",
+            text: "El registro será eliminado, una vez aceptada la acción",
+            icon: "warning",
+            buttons: true
+        }).then((value) => {
             if (value) {
-                console.log('ELIMINANDO...')
+                $.post('<?php print base_url('ControlPlantilla/onEliminar'); ?>',
+                        {ID: ID}).done(function (a) {
+                    sws('SE HA ELIMINADO EL REGISTRO');
+                    ControlPlantilla.ajax.reload();
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
             }
         });
     }

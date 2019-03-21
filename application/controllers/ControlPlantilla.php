@@ -50,6 +50,14 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    public function getEntregados() {
+        try {
+            print json_encode($this->cpm->getEntregados());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getMaquilasPlantillas() {
         try {
             print json_encode($this->cpm->getMaquilasPlantillas());
@@ -106,6 +114,14 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    public function onComprobarEstatusDocumento() {
+        try {
+            print json_encode($this->cpm->onComprobarEstatusDocumento($this->input->get('DOCTO')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onGuardar() {
         try {
             /*
@@ -114,17 +130,19 @@ class ControlPlantilla extends CI_Controller {
              *  2 = ENTREGADO/RECIBIDO/RETORNADO
              *  3 = PROCESADO COMO PLANTILLA
              */
-            $x = $this->input;
+            $x = $this->input; 
             $this->db->insert('controlpla', array(
                 'Proveedor' => $x->post('PROVEEDOR'),
+                'ProveedorT' => str_replace("{$x->post('PROVEEDOR')} ", "", $x->post('PROVEEDORT')),
                 'Tipo' => $x->post('TIPO'),
                 'Documento' => $x->post('DOCUMENTO'),
                 'Control' => $x->post('CONTROL'),
                 'Estilo' => $x->post('ESTILO'),
                 'Color' => $x->post('COLOR'),
+                'ColorT' => str_replace("{$x->post('COLOR')}-", "", $x->post('COLORT')),
                 'Pares' => $x->post('PARES'),
                 'Fraccion' => $x->post('FRACCION'),
-                'FraccionT' => $x->post('FRACCIONT'),
+                'FraccionT' => str_replace("{$x->post('FRACCION')} ", "", $x->post('FRACCIONT')),
                 'Precio' => $x->post('PRECIO'),
                 'Fecha' => $x->post('FECHA'),
                 'Registro' => Date('d/m/Y h:i:s a'),
@@ -134,4 +152,43 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    public function onEliminar() {
+        try {
+            $this->db->set('Estatus', 3)->where('ID', $this->input->post('ID'))->update('controlpla');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRetornaDocumento() {
+        try {
+            $this->db->set('Estatus', 2)->set('FechaRetorna', $this->input->post('FECHA'))->where('ID', $this->input->post('ID'))->update('controlpla');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarRetornoControlPlantilla() {
+        try {
+            $this->db->set('Estatus', 1)->set('FechaRetorna', $this->input->post('FECHA'))->where('ID', $this->input->post('ID'))->update('controlpla');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getReporteDePago() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["FECHAINICIAL"] = 1;
+        $parametros["FECHAFINAL"] = 2019;
+        $parametros["Nmaq"] = 'CALZADO LOBO 12345';
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\plantilla\ReportePago.jasper');
+        $jc->setFilename('ReporteDePago_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
 }
