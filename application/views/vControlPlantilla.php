@@ -152,7 +152,7 @@
         </div>
     </div>
 </div>
-<div class="modal animated zoomIn" id="mdlReportePago">
+<div class="modal animated slideInDown" id="mdlReportePago">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content  modal-lg">
             <div class="modal-header">
@@ -171,33 +171,26 @@
                         <label>A la fecha</label>
                         <input type="text" id="ALaFecha" name="ALaFecha" class="form-control date">
                     </div>
-                </div>
-                <br>
-                <div class="w-100"></div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table class="table table-hover" id="tblRetornaDocumento">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">TP</th>
-                                <th scope="col">Docto</th>
-                                <th scope="col">Proveedor</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Llegada</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Estilo</th>
-                                <th scope="col">-</th>
-                                <th scope="col">Pares</th>
-                                <th scope="col">-</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                    <div class="col-12">
+                        <br>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="chkRecibido">
+                            <label class="custom-control-label" for="chkRecibido">Lo recibido</label>
+                        </div>
+                    </div>   
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="chkSinRecibir">
+                            <label class="custom-control-label" for="chkSinRecibir">Sin recibir</label>
+                        </div>
+                    </div>             
+                </div>          
             </div>
             <div class="modal-footer">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno">Acepta</button>
+                    <button type="button" class="btn btn-primary" id="btnAceptaReportePago">Acepta</button>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -219,14 +212,33 @@
             btnRetorna = pnlTablero.find("#btnRetorna"), DocumentoRetorno = mdlRetorno.find("#DocumentoRetorno"),
             FechaVale = mdlRetorno.find("#FechaVale"), RetornaDocumento, tblRetornaDocumento = mdlRetorno.find("#tblRetornaDocumento"),
             btnConceptosPlantilla = pnlTablero.find("#btnConceptosPlantilla"),
-            btnAceptaRetorno = mdlRetorno.find("#btnAceptaRetorno");
+            btnAceptaRetorno = mdlRetorno.find("#btnAceptaRetorno"), mdlReportePago = $("#mdlReportePago"),
+            btnAceptaReportePago = mdlReportePago.find("#btnAceptaReportePago");
+    btnReportePago = pnlTablero.find("#btnReportePago");
 
     var FechaActual = '<?php print Date('d/m/Y'); ?>';
+
     $(document).ready(function () {
         getProveedores();
         getMaquilasPlantillas();
         getRecords();
         getUltimoDocumento();
+
+        btnAceptaReportePago.click(function () {
+            getReport(1);
+        });
+
+        mdlReportePago.find("#chkRecibido").change(function () {
+            mdlReportePago.find("#chkSinRecibir")[0].checked = false;
+        });
+
+        mdlReportePago.find("#chkSinRecibir").change(function () {
+            mdlReportePago.find("#chkRecibido")[0].checked = false;
+        });
+
+        btnReportePago.click(function () {
+            mdlReportePago.modal('show');
+        });
 
         btnAceptaRetorno.click(function () {
             if (DocumentoRetorno.val()) {
@@ -418,6 +430,76 @@
             });
         });
     });
+
+    function getReport(pdfxls) {
+
+        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+        var f = new FormData();
+        f.append('FECHAINICIAL', mdlReportePago.find("#DeLaFecha").val());
+        f.append('FECHAFINAL', mdlReportePago.find("#ALaFecha").val());
+        var sts = 0;
+        if (mdlReportePago.find("#chkSinRecibir")[0].checked) {
+            sts = 1;
+        } else if (mdlReportePago.find("#chkRecibido")[0].checked) {
+            sts = 2;
+        }
+        f.append('STS', sts);
+        f.append('TDOC', pdfxls);
+        $.ajax({
+            url: '<?php print base_url('ControlPlantilla/getReporteDePago'); ?>',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: f
+        }).done(function (data, x, jq) {
+            console.log(data);
+            var ext = getExt(data);
+            if (data.length > 0) {
+                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
+                    $.fancybox.defaults.animationEffect = "zoom-in-out";
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "95%",
+                                    height: "95%"
+                                },
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
+                                }
+                            }
+                        }
+                    });
+                } else if (ext === "xls" || ext === "XLS" || ext === "Xls") {
+                    window.open(data, '_blank');
+                }
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "NO EXISTEN DOCUMENTOS",
+                    icon: "error"
+                }).then((action) => {
+
+                });
+            }
+            HoldOn.close();
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+            HoldOn.close();
+        });
+    }
 
     function getRecords() {
 

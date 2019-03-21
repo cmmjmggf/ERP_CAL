@@ -9,7 +9,8 @@ class ControlPlantilla extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('ControlPlantilla_model', 'cpm');
+        $this->load->library('session')
+                ->model('ControlPlantilla_model', 'cpm')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -130,7 +131,7 @@ class ControlPlantilla extends CI_Controller {
              *  2 = ENTREGADO/RECIBIDO/RETORNADO
              *  3 = PROCESADO COMO PLANTILLA
              */
-            $x = $this->input; 
+            $x = $this->input;
             $this->db->insert('controlpla', array(
                 'Proveedor' => $x->post('PROVEEDOR'),
                 'ProveedorT' => str_replace("{$x->post('PROVEEDOR')} ", "", $x->post('PROVEEDORT')),
@@ -182,13 +183,28 @@ class ControlPlantilla extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["FECHAINICIAL"] = 1;
-        $parametros["FECHAFINAL"] = 2019;
-        $parametros["Nmaq"] = 'CALZADO LOBO 12345';
+        $parametros["FECHAINICIAL"] = $this->input->post('FECHAINICIAL');
+        $parametros["FECHAFINAL"] = $this->input->post('FECHAFINAL');
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\plantilla\ReportePago.jasper');
-        $jc->setFilename('ReporteDePago_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
+        switch (intval($this->input->post('STS'))) {
+            case 1:
+                $jc->setJasperurl('jrxml\plantilla\ReportePagoSinRecibir.jasper');
+                $jc->setFilename('ReporteDePagoSinRecibir_' . Date('h_i_s'));
+                break;
+            case 2:
+                $jc->setJasperurl('jrxml\plantilla\ReportePagoRecibido.jasper');
+                $jc->setFilename('ReporteDePagoRecibido_' . Date('h_i_s'));
+                break;
+        }
+        switch (intval($this->input->post('TDOC'))) {
+            case 1:
+                $jc->setDocumentformat('pdf');
+                break;
+            case 2:
+                $jc->setDocumentformat('xls');
+                break;
+        }
         PRINT $jc->getReport();
     }
+
 }
