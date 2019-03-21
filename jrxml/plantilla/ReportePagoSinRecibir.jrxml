@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePagoSinRecibir" language="groovy" pageWidth="793" pageHeight="1122" columnWidth="753" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.6573415000000025"/>
-	<property name="ireport.x" value="622"/>
+	<property name="ireport.x" value="234"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -198,13 +198,13 @@ END) AS STT_PORCTJ
 					</textElement>
 					<text><![CDATA[Recibido]]></text>
 				</staticText>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="304" y="0" width="98" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e74507b4-16c5-4840-90f5-c6564bdeee26"/>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="304" y="0" width="100" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="114d2751-5e71-4264-bb0c-030fa320a5aa"/>
 					<textElement verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{FECHA_RECIBIDO}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{FECHA_SINRECIBIR}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
