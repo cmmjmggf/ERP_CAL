@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePagoRecibido" language="groovy" pageWidth="793" pageHeight="1122" columnWidth="753" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="2.6573415000000025"/>
+	<property name="ireport.zoom" value="1.0245201830476067"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -478,12 +478,59 @@ END) AS STT_PORCTJ
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="19" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="24" splitType="Stretch"/>
+		<band height="81" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="402" y="10" width="196" height="14" forecolor="#000000" uuid="3d97003c-5510-41de-a864-9ac2f4f13843"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Por Concepto de pago de maquila]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="29" y="67" width="196" height="14" forecolor="#000000" uuid="8f785fcc-a939-48a9-9742-a7143ff8c936"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrego Ing. Marco A.Muñoz]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="302" y="10" width="100" height="14" uuid="d4efa355-ded7-46ad-8972-dca328e6cc78"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", new Double($V{SUBTOTAL_2}.doubleValue() + $V{STT_PORCTJ_3}.doubleValue()))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="302" y="69" width="289" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fdad9c11-912c-40db-877c-2bc3a2b3eaff"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Recibe "+$F{PROVEEDOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="FixRelativeToBottom" x="29" y="10" width="196" height="14" forecolor="#000000" uuid="1b24efac-7ae1-4485-be6d-8a6ee60c6c65"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recibi del Ing. Marcos A.Muñoz la cantidad]]></text>
+			</staticText>
+		</band>
 	</pageFooter>
 	<summary>
-		<band height="19" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>
