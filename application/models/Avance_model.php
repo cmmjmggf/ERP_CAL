@@ -79,6 +79,41 @@ class Avance_model extends CI_Model {
         }
     }
 
+    public function getRastreoXControl() {
+        try {
+            return $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
+                                    . "FP.numfrac AS NUM_FRACCION, FP.fecha AS FECHA, "
+                                    . "FP.fecha AS FECHA,FP.Semana AS SEMANA, "
+                                    . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
+                                    . "FP.subtot AS SUBTOTAL")
+                            ->from("fracpagnomina AS FP")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getRastreoXConcepto() {
+        try {
+            return $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
+                                    . "FP.numfrac AS NUM_FRACCION, FP.fecha AS FECHA, "
+                                    . "FP.fecha AS FECHA,FP.Semana AS SEMANA, "
+                                    . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
+                                    . "FP.subtot AS SUBTOTAL")
+                            ->from("fracpagnomina AS FP")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getConceptosNomina() {
+        try {
+            return $this->db->select("CN.Clave AS CLAVE, CN.Descripcion AS CONCEPTO")
+                            ->from("conceptosnomina AS CN")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleados() {
         try {
             return $this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")

@@ -7,7 +7,9 @@ class Avance7 extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('Avance7_model', 'avm')->helper('jaspercommand_helper');
+        $this->load->library('session')
+                ->model('Avance7_model', 'avm')
+                ->helper('jaspercommand_helper');
     }
 
     public function getXLS() {

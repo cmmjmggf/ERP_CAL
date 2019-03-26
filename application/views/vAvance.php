@@ -78,20 +78,20 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" aling="center">
                     <hr>
-                </div> 
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                </div>                
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 d-none">
                     <label>Depto des</label>
                     <input type="text" id="DeptoDes" name="DeptoDes" class="form-control" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 d-none">
                     <label>Depto Avance</label>
                     <input type="text" id="DeptoAva" name="DeptoAva" class="form-control" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 d-none">
                     <label>Fraccion descripcion</label>
                     <input type="text" id="DescripcionFraccion" name="DescripcionFraccion" class="form-control" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 d-none">
                     <label>Precio Fraccion</label>
                     <input type="text" id="PrecioFraccion" name="PrecioFraccion" class="form-control" readonly="">
                 </div>
@@ -99,10 +99,20 @@
             <!--SECCION DOS-->
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
-                    <div class="col-11 col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xl-11">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <h4>Fracciones pagadas en nomina de este control</h4>
                     </div>
-                    <div class="col-1 col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
+                        <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                            <span class="fa fa-bullseye"></span><br>
+                            Rastreo X Concepto
+                        </button>
+                        <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                            <span class="fa fa-globe"></span><br>
+                            Rastreo X Control
+                        </button>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <button type="button" id="btnBorrar" name="btnBorrar" class="btn btn-danger">
                             <span class="fa fa-trash"></span>
                         </button>
@@ -127,8 +137,7 @@
                             <th scope="col">SubTotal</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table> 
             </div>
             <!--SECCION TRES-->
@@ -138,6 +147,118 @@
         </div>
     </div>
 </div>
+<!--RASTREO X CONCEPTO-->
+<div class="modal animated fadeIn" id="mdlRastreoXConcepto">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">RASTREO POR CONCEPTO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Empleado</label>
+                        <select id="EmpleadoRXC" name="EmpleadoRXC" class="form-control"></select>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Concepto</label>
+                        <select id="ConceptoRXC" name="ConceptoRXC" class="form-control"></select>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="tblRastreoXConcepto" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Sem</th>
+                                    <th scope="col">Emp</th>
+                                    <th scope="col">Concepto</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Concepto</th>
+                                    <th scope="col">Per</th>
+                                    <th scope="col">Importe</th>
+                                    <th scope="col">Ded</th>
+                                    <th scope="col">Importe</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Acepta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--RASTREO X CONTROL-->
+<div class="modal animated fadeIn" id="mdlRastreoXControl">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">RASTREO POR CONTROL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Control</label>
+                        <input type="text" id="ControlRXCTROL" name="ControlRXCTROL" class="form-control numeric">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label>Semana</label>
+                        <input type="text" id="SemanaRXCTROL" name="SemanaRXCTROL" class="form-control numeric">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                        <label>Empleado</label>
+                        <select id="EmpleadoRXCTROL" name="EmpleadoRXCTROL" class="form-control"></select>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                        <label>Desc.fraccion</label>
+                        <select id="FraccionRXCTROL" name="FraccionRXCTROL" class="form-control"></select>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                        <label>Avance actual</label>
+                        <input type="text" id="AvanceActual" name="AvanceActual" class="form-control" readonly="">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="tblRastreoXControl" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Emp</th>
+
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Frac</th>
+                                    <th scope="col">Fecha</th>
+
+                                    <th scope="col">Semana</th>  
+                                    <th scope="col">Pares</th>
+                                    <th scope="col">Precio</th>
+
+                                    <th scope="col">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Acepta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var master_url = '<?= base_url('Avance/') ?>', pnlTablero = $("#pnlTablero");
     var Fecha = pnlTablero.find("#Fecha"), Departamento = pnlTablero.find("#Departamento"),
@@ -150,12 +271,27 @@
             btnAceptar = pnlTablero.find("#btnAceptar"), btnBorrar = pnlTablero.find("#btnBorrar"),
             ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"), Empleado = pnlTablero.find("#Empleado"),
             PrecioFraccion = pnlTablero.find("#PrecioFraccion"), DeptoDes = pnlTablero.find("#DeptoDes"),
-            DeptoAva = pnlTablero.find("#DeptoAva"), DescripcionFraccion = pnlTablero.find("#DescripcionFraccion");
+            DeptoAva = pnlTablero.find("#DeptoAva"), DescripcionFraccion = pnlTablero.find("#DescripcionFraccion"),
+            btnRastreoXConcepto = pnlTablero.find("#btnRastreoXConcepto"),
+            btnRastreoXControl = pnlTablero.find("#btnRastreoXControl"),
+            mdlRastreoXConcepto = $("#mdlRastreoXConcepto"), mdlRastreoXControl = $("#mdlRastreoXControl"),
+            RastreoXConcepto, tblRastreoXConcepto = mdlRastreoXConcepto.find("#tblRastreoXConcepto"),
+            RastreoXControl, tblRastreoXControl = mdlRastreoXControl.find("#tblRastreoXControl"),
+            EmpleadoRXC = mdlRastreoXConcepto.find("#EmpleadoRXC"),
+            ConceptoRXC = mdlRastreoXConcepto.find("#ConceptoRXC"),
+            EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL");
 
     $(document).ready(function () {
 
+        btnRastreoXControl.click(function () {
+            mdlRastreoXControl.modal('show');
+        });
+
+        btnRastreoXConcepto.click(function () {
+            mdlRastreoXConcepto.modal('show');
+        });
+
         btnBorrar.click(function () {
-            console.log(Avances.rows({selected: true}).data());
             var row = Avances.rows({selected: true}).data();
             if (parseInt(row.ID) > 0) {
                 HoldOn.open({
@@ -229,6 +365,7 @@
         });
 
         getDepartamentos();
+
         $("#usuario").val('<?php print $_SESSION['USERNAME']; ?>').prop('disabled', true);
 
         $.getJSON('<?php print base_url('avance_maqplant'); ?>').done(function (d) {
@@ -242,6 +379,8 @@
         $.getJSON('<?php print base_url('avance_empleados'); ?>').done(function (d) {
             d.forEach(function (v) {
                 Empleado[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                EmpleadoRXC[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                EmpleadoRXCTROL[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -265,6 +404,7 @@
         });
 
         Fecha.val(getActualDate());
+
         $.post('<?php print base_url('Avance/getSemanaNomina'); ?>', {
             FECHA: Fecha.val()
         }).done(function (d) {
@@ -276,6 +416,7 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
+
         var cols = [
             {"data": "ID"}/*0*/,
             {"data": "EMPLEADO"}/*1*/,
@@ -323,12 +464,91 @@
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
-            ],
-            createdRow: function (row, data, dataIndex) {
-            }
+            ]
         };
         Avances = tblAvance.DataTable(xoptions);
-        tblAvance.find("tr").draggable();
+//
+        RastreoXConcepto = tblRastreoXConcepto.DataTable({
+            "dom": 'rit',
+            "ajax": {
+                "url": '<?php print base_url('Avance/getRastreoXConcepto'); ?>',
+                "type": "POST",
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = (Control.val().trim());
+                }
+            },
+            buttons: buttons,
+            "columns": [
+                {"data": "ID"}/*0*/,
+                {"data": "SEMANA"}/*1*/,
+                {"data": "EMPLEADO"}/*2*/,
+                {"data": "FECHA"}/*3*/,
+                {"data": "CONCEPTO"}/*4*/, 
+                {"data": "PER"}/*9*/,
+                {"data": "IMPORTE"}/*9*/,
+                {"data": "DED"}/*9*/,
+                {"data": "SUBTOTAL"}/*10*/
+            ],
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "498px",
+            "scrollX": true,
+            "aaSorting": [
+                [0, 'desc']
+            ]
+        });
+
+        RastreoXControl = tblRastreoXControl.DataTable({
+            "dom": 'rit',
+            "ajax": {
+                "url": '<?php print base_url('Avance/getRastreoXControl'); ?>',
+                "type": "POST",
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = (Control.val().trim());
+                }
+            },
+            buttons: buttons,
+            "columns": [
+                {"data": "ID"}/*0*/,
+                {"data": "CONTROL"}/*1*/,
+                {"data": "EMPLEADO"}/*2*/,
+                {"data": "ESTILO"}/*3*/,
+                {"data": "NUM_FRACCION"}/*4*/,
+                {"data": "FECHA"}/*5*/,
+                {"data": "SEMANA"}/*6*/,
+                {"data": "PARES"}/*7*/,
+                {"data": "PRECIO_FRACCION"}/*8*/,
+                {"data": "SUBTOTAL"}/*10*/
+            ],
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "498px",
+            "scrollX": true,
+            "aaSorting": [
+                [0, 'desc']
+            ]
+        });
+        getConceptosNomina();
     });
 
     function getPrecioFraccionXEstiloFraccion() {
@@ -398,9 +618,9 @@
                 });
             } else if (c === deptos.length) {
                 onBeep(5);
-//                swal('ATENCIÓN', 'EL CONTROL CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS, SELECCIONE EL SIGUIENTE DEPARTAMENTO', 'success').then((value) => {
+                //                swal('ATENCIÓN', 'EL CONTROL CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS, SELECCIONE EL SIGUIENTE DEPARTAMENTO', 'success').then((value) => {
                 ctrl.focus().select();
-//                });
+                //                });
             }
             /*
              swal('ATENCIÓN', 'ESTE CONTROL NO HA PASADO POR LOS DEPARTAMENTOS REQUERIDOS','warning').then((value) => {
@@ -425,6 +645,19 @@
             i = "0" + i;
         }
         return i;
+    }
+
+    function getConceptosNomina() {
+        $.getJSON('<?php print base_url('Avance/getConceptosNomina'); ?>').done(function (a) {
+            console.log(a);
+            a.forEach(function (e) { 
+                ConceptoRXC[0].selectize.addOption({text: e.CLAVE + ' ' + e.CONCEPTO, value: e.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+
+        });
     }
 
     function getDepartamentos() {
@@ -478,7 +711,8 @@
 
         });
     }
-</script><style>
+</script>
+<style>
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
@@ -538,9 +772,17 @@
         -webkit-animation:highlight 1.4s infinite; /* Safari and Chrome */
         border-radius: 5px;
     }
-    
+
     table tbody tr:hover { 
         font-weight:normal !important; 
+    }
+
+    .box-success{
+        box-shadow: 0 0 0 0.2rem #CDDC39 !important;
+    }
+
+    .box-info{
+        box-shadow: 0 0 0 0.2rem #33C2E1 !important;
     }
 
     @-moz-keyframes myfirst /* Firefox */

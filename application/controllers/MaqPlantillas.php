@@ -14,33 +14,30 @@ class MaqPlantillas extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            if (!(NULL !==$this->input->get('TIPO'))) {
+                switch ($this->session->userdata["TipoAcceso"]) {
+                    case 'SUPER ADMINISTRADOR':
+                        $this->load->view('vNavGeneral');
+                        //Validamos que no venga vacia y asignamos un valor por defecto
+                        $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
-            switch ($this->session->userdata["TipoAcceso"]) {
-                case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    //Validamos que no venga vacia y asignamos un valor por defecto
-                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
-
-                    if ($Origen === 'FICHASTECNICAS') {
+                        if ($Origen === 'FICHASTECNICAS') {
+                            $this->load->view('vMenuFichasTecnicas');
+                        }
+                        //Cuando no viene de ningun modulo y lo teclean
+                        else {
+                            $this->load->view('vMenuPrincipal');
+                        }
+                        break;
+                    case 'DISEÑO Y DESARROLLO':
                         $this->load->view('vMenuFichasTecnicas');
-                    }
-                    //Cuando no viene de ningun modulo y lo teclean
-                    else {
-                        $this->load->view('vMenuPrincipal');
-                    }
-                    break;
-                case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vMenuFichasTecnicas');
-                    break;
+                        break;
+                }
             }
 
-            $this->load->view('vFondo');
-            $this->load->view('vMaqPlantillas');
-            $this->load->view('vFooter');
+            $this->load->view('vFondo')->view('vMaqPlantillas')->view('vFooter');
         } else {
-            $this->load->view('vEncabezado');
-            $this->load->view('vSesion');
-            $this->load->view('vFooter');
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 

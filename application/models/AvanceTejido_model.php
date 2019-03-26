@@ -39,20 +39,31 @@ class AvanceTejido_model extends CI_Model {
 
     public function getUltimoDocumento($ANO, $MES, $DIA) {
         try {
-
-            return $this->db->select("CTEJ.docto AS DOCTO_ANTERIOR, 
-                CASE WHEN CTEJ.docto IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CTEJ.docto,1,2) END AS ANO, 
-                CASE WHEN CTEJ.docto IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CTEJ.docto,3,2) END AS MES, 
-                CASE WHEN CTEJ.docto IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CTEJ.docto,5,2) END AS DIA,  
-                CASE WHEN CTEJ.docto IS NULL THEN LPAD(1,3,0) ELSE SUBSTRING(CTEJ.docto + 1,7,3) END AS CONSECUTIVO,
-                COUNT(CTEJ.ID) AS VALID", false)
-                            ->from('controltej AS CTEJ')
-                            ->where("SUBSTRING(CTEJ.docto,1,2) = SUBSTRING({$ANO},3,2) "
-                                    . "AND SUBSTRING(CTEJ.docto,3,2) = {$MES} "
-                                    . "AND SUBSTRING(CTEJ.docto,5,2) = {$DIA} ", null, false)
-                            ->order_by('CTEJ.docto', 'ASC')
+            $EXISTE = $this->db->select("COUNT(CP.ID) AS VALIDO", false)
+                            ->from('controltej AS CP')
+                            ->where("SUBSTRING(CP.docto,1,2) = SUBSTRING({$ANO},3,2) "
+                                    . "AND SUBSTRING(CP.docto,3,2) = {$MES} "
+                                    . "AND SUBSTRING(CP.docto,5,2) = {$DIA} ", null, false)
+                            ->order_by('CP.docto', 'DESC')
                             ->limit(1)
                             ->get()->result();
+            $preselect = "CP.docto AS DOCTO_ANTERIOR, 
+                CASE WHEN CP.docto IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CP.docto,1,2) END AS ANO, 
+                CASE WHEN CP.docto IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CP.docto,3,2) END AS MES, 
+                CASE WHEN CP.docto IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CP.docto,5,2) END AS DIA,  
+                CASE WHEN CP.docto IS NULL THEN LPAD(1,3,0) ELSE LPAD(SUBSTRING(CP.docto+1,7,3),3,0) END AS CONSECUTIVO";
+            if (intval($EXISTE[0]->VALIDO) > 0) {
+                $this->db->select($preselect, false);
+            } else {
+                $preselect .= ",COUNT(CP.ID) AS VALID";
+                $this->db->select($preselect, false);
+            }
+            return $this->db->from('controltej AS CP')
+                            ->where("SUBSTRING(CP.docto,1,2) = SUBSTRING({$ANO},3,2) "
+                                    . "AND SUBSTRING(CP.docto,3,2) = {$MES} "
+                                    . "AND SUBSTRING(CP.docto,5,2) = {$DIA} ", null, false)
+                            ->order_by('CP.docto', 'DESC')
+                            ->limit(1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

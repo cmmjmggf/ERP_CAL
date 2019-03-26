@@ -76,15 +76,9 @@ class Accesos_model extends CI_Model {
 
     public function getItems($O) {
         try {
-            $this->db->select("IXO.ID, IXO.Item, IXO.Opcion", false)
-                    ->from('itemsxopcion AS IXO')->where('IXO.Opcion', $O);
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            $data = $query->result();
-            return $data;
+            return $this->db->select("IXO.ID, IXO.Item, IXO.Opcion", false)
+                    ->from('itemsxopcion AS IXO')->where('IXO.Opcion', $O)
+                    ->order_by('IXO.Item','ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -158,6 +152,7 @@ class Accesos_model extends CI_Model {
                             ->where('IXOMU.Opcion', $O)
                             ->where('IXO.Opcion', $O)
                             ->order_by('IXO.Order', 'ASC')
+                            ->order_by('IXO.Item', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
