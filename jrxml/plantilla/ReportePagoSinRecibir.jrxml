@@ -110,7 +110,7 @@ END) AS STT_PORCTJ
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="16">
+			<band height="15">
 				<staticText>
 					<reportElement style="Column header" isPrintRepeatedValues="false" x="0" y="0" width="330" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="da8e039b-c660-43a3-a791-f9d7a0f7c98b"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -511,7 +511,7 @@ END) AS STT_PORCTJ
 				<text><![CDATA[Recibi del Ing. Marcos A.Muñoz la cantidad]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="304" y="70" width="289" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="50220c57-5860-4a00-8158-38bcd9952b3f"/>
+				<reportElement mode="Transparent" x="304" y="68" width="289" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="50220c57-5860-4a00-8158-38bcd9952b3f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -522,7 +522,7 @@ END) AS STT_PORCTJ
 				<textFieldExpression><![CDATA["Recibe "+$F{PROVEEDOR}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="403" y="10" width="196" height="14" forecolor="#000000" uuid="90af5f78-fd4d-4110-8ce8-aba63b3dbd1d"/>
+				<reportElement style="Column header" x="402" y="10" width="196" height="14" forecolor="#000000" uuid="90af5f78-fd4d-4110-8ce8-aba63b3dbd1d"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>

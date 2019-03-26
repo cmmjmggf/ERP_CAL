@@ -481,7 +481,7 @@ END) AS STT_PORCTJ
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="81" splitType="Stretch">
+		<band height="82" splitType="Stretch">
 			<staticText>
 				<reportElement style="Column header" x="402" y="10" width="196" height="14" forecolor="#000000" uuid="3d97003c-5510-41de-a864-9ac2f4f13843"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
@@ -490,7 +490,7 @@ END) AS STT_PORCTJ
 				<text><![CDATA[Por Concepto de pago de maquila]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="29" y="67" width="196" height="14" forecolor="#000000" uuid="8f785fcc-a939-48a9-9742-a7143ff8c936"/>
+				<reportElement style="Column header" x="29" y="68" width="196" height="14" forecolor="#000000" uuid="8f785fcc-a939-48a9-9742-a7143ff8c936"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -511,7 +511,7 @@ END) AS STT_PORCTJ
 				<textFieldExpression><![CDATA[String.format("%.2f", new Double($V{SUBTOTAL_2}.doubleValue() + $V{STT_PORCTJ_3}.doubleValue()))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="302" y="69" width="289" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fdad9c11-912c-40db-877c-2bc3a2b3eaff"/>
+				<reportElement mode="Transparent" x="302" y="68" width="289" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fdad9c11-912c-40db-877c-2bc3a2b3eaff"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
