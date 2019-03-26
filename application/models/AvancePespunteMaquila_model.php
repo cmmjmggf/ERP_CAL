@@ -48,9 +48,11 @@ class AvancePespunteMaquila_model extends CI_Model {
 
     public function getMaquilas() {
         try {
-            return $this->db->select("M.Clave AS CLAVE, CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
+            return $this->db->select("CAST(M.Clave AS SIGNED) AS CLAVE, "
+                                    . "CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
                             ->from('maquilas AS M')
                             ->where('M.Estatus', 'ACTIVO')
+                            ->order_by('CLAVE', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
