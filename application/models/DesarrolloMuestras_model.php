@@ -15,7 +15,8 @@ class DesarrolloMuestras_model extends CI_Model {
             $this->db->select('FT.ID, E.Clave AS Estilo, FT.Color, FT.Pieza AS Pza, '
                             . 'P.Descripcion AS PzaT, A.Clave AS Articulo, FT.Precio, '
                             . 'FT.Consumo AS Cons, FT.PzXPar, FT.Estatus, FT.FechaAlta, '
-                            . 'FT.AfectaPV, P.Departamento AS Sec,P.Rango AS Rango, '
+                            . 'FT.AfectaPV, P.Departamento AS Sec,'
+                            . '(CASE WHEN P.Rango IS NULL THEN "" ELSE P.Rango END) AS Rango, '
                             . 'A.Descripcion AS ArticuloT, E.Linea AS Linea, E.Foto AS Foto', false)
                     ->from('fichatecnica AS FT')
                     ->join('piezas AS P', 'FT.Pieza = P.Clave')
@@ -26,6 +27,36 @@ class DesarrolloMuestras_model extends CI_Model {
             } else {
                 $this->db->limit(500);
             }
+            return $this->db->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getMuestras() {
+        try {
+            $this->db->select('DM.ID, DM.Estilo, DM.EstiloT, DM.Color, DM.ColorT, 
+DM.EspecificacionCorte, DM.FechaCorte, DM.AccionCorrectivaCorte, DM.FechaAccionCorrectivaCorte, DM.EspecificacionRayado, 
+DM.FechaRayado, DM.AccionCorrectivaRayado, DM.FechaAccionCorrectivaRayado, DM.EspecificacionRebajadoyperforado, DM.FechaRebajadoyperforado, 
+DM.AccionCorrectivaRebajadoyperforado, DM.FechaAccionCorrectivaRebajadoyperforado, DM.EspecificacionFoleado, DM.FechaFoleado, 
+DM.AccionCorrectivaFoleado, DM.FechaAccionCorrectivaFoleado, DM.EspecificacionDoblillado, DM.FechaDoblillado, DM.AccionCorrectivaDoblillado, 
+DM.FechaAccionCorrectivaDoblillado, DM.EspecificacionLaser, DM.FechaLaser, DM.AccionCorrectivaLaser, DM.FechaAccionCorrectivaLaser, 
+DM.EspecificacionPrelcorte, DM.FechaPrelcorte, DM.AccionCorrectivaPrelcorte, DM.FechaAccionCorrectivaPrelcorte, DM.EspecificacionRayadocontado, 
+DM.FechaRayadocontado, DM.AccionCorrectivaRayadocontado, DM.FechaAccionCorrectivaRayadocontado, DM.EspecificacionEntretelado, DM.FechaEntretelado, 
+DM.AccionCorrectivaEntretelado, DM.FechaAccionCorrectivaEntretelado, DM.EspecificacionMaquila, DM.FechaMaquila, DM.AccionCorrectivaMaquila, 
+DM.FechaAccionCorrectivaMaquila, DM.EspecificacionPespunte, DM.FechaPespunte, DM.AccionCorrectivaPespunte, DM.FechaAccionCorrectivaPespunte, 
+DM.EspecificacionPrelpespunte, DM.FechaPrelpespunte, DM.AccionCorrectivaPrelpespunte, DM.FechaAccionCorrectivaPrelpespunte, DM.EspecificacionAlmacenpespunte, 
+DM.FechaAlmacenpespunte, DM.AccionCorrectivaAlmacenpespunte, DM.FechaAccionCorrectivaAlmacenpespunte, DM.EspecificacionEnsuelado, DM.FechaEnsuelado, 
+DM.AccionCorrectivaEnsuelado, DM.FechaAccionCorrectivaEnsuelado, DM.EspecificacionTejido, DM.FechaTejido, DM.AccionCorrectivaTejido, 
+DM.FechaAccionCorrectivaTejido, DM.EspecificacionAlmacentejido, DM.FechaAlmacentejido, DM.AccionCorrectivaAlmacentejido, 
+DM.FechaAccionCorrectivaAlmacentejido, DM.EspecificacionChoferes, DM.FechaChoferes, DM.AccionCorrectivaChoferes, 
+DM.FechaAccionCorrectivaChoferes, DM.EspecificacionMontadoa, DM.FechaMontadoa, DM.AccionCorrectivaMontadoa, 
+DM.FechaAccionCorrectivaMontadoa, DM.EspecificacionMontadob, DM.FechaMontadob, DM.AccionCorrectivaMontadob, 
+DM.FechaAccionCorrectivaMontadob, DM.EspecificacionPegado, DM.FechaPegado, DM.AccionCorrectivaPegado, DM.FechaAccionCorrectivaPegado, 
+DM.EspecificacionAdornoa, DM.FechaAdornoa, DM.AccionCorrectivaAdornoa, DM.FechaAccionCorrectivaAdornoa, DM.EspecificacionAdornob, 
+DM.FechaAdornob, DM.AccionCorrectivaAdornob, DM.FechaAccionCorrectivaAdornob, DM.EspecificacionAlmacenadorno, DM.FechaAlmacenadorno, 
+DM.AccionCorrectivaAlmacenadorno, DM.FechaAccionCorrectivaAlmacenadorno, DM.Registro, DM.Usuario', false)
+                    ->from('desarrollo_muestras AS DM');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -47,9 +78,33 @@ class DesarrolloMuestras_model extends CI_Model {
 
     public function getFotoXEstilo($Estilo) {
         try {
-            return $this->db->select("E.Foto AS Foto", false)
+            return $this->db->select("E.Descripcion AS Estilo, E.Foto AS Foto", false)
                             ->from('estilos AS E')
                             ->where('E.Clave', $Estilo)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDepartamentos() {
+        try {
+            return $this->db->select("D.Clave AS CLAVE, D.Descripcion AS DEPTO,"
+                                    . "REPLACE(REPLACE(REPLACE(CONCAT(UCASE(LEFT(Descripcion, 1)), LOWER(substr(Descripcion, 2,length(Descripcion) ) ) ),' ',''),'-',''),'\"','') AS DEPTOR", false)
+                            ->from('departamentos AS D')
+                            ->where('D.Avance IN(0,1) AND D.Produccion = 1', null, false)
+                            ->order_by('ABS(D.Clave)', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDesarrolloMuestra($ESTILO, $COLOR) {
+        try {
+            return $this->db->select("DM.*", false)
+                            ->from('desarrollo_muestras AS DM')
+                            ->where("DM.Estilo = $ESTILO AND DM.Color = $COLOR", null, false)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
