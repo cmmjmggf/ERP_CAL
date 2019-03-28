@@ -368,7 +368,9 @@
                     HoldOn.close();
                 });
             } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning');
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning').then((value)=>{
+                    Estilo.focus().select();
+                });
             }
         });
 
