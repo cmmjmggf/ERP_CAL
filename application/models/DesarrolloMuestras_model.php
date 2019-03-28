@@ -39,23 +39,19 @@ class DesarrolloMuestras_model extends CI_Model {
 DM.EspecificacionCorte, DM.FechaCorte, DM.AccionCorrectivaCorte, DM.FechaAccionCorrectivaCorte, DM.EspecificacionRayado, 
 DM.FechaRayado, DM.AccionCorrectivaRayado, DM.FechaAccionCorrectivaRayado, DM.EspecificacionRebajadoyperforado, DM.FechaRebajadoyperforado, 
 DM.AccionCorrectivaRebajadoyperforado, DM.FechaAccionCorrectivaRebajadoyperforado, DM.EspecificacionFoleado, DM.FechaFoleado, 
-DM.AccionCorrectivaFoleado, DM.FechaAccionCorrectivaFoleado, DM.EspecificacionDoblillado, DM.FechaDoblillado, DM.AccionCorrectivaDoblillado, 
-DM.FechaAccionCorrectivaDoblillado, DM.EspecificacionLaser, DM.FechaLaser, DM.AccionCorrectivaLaser, DM.FechaAccionCorrectivaLaser, 
+DM.AccionCorrectivaFoleado, DM.FechaAccionCorrectivaFoleado, DM.EspecificacionLaser, DM.FechaLaser, DM.AccionCorrectivaLaser, DM.FechaAccionCorrectivaLaser, 
 DM.EspecificacionPrelcorte, DM.FechaPrelcorte, DM.AccionCorrectivaPrelcorte, DM.FechaAccionCorrectivaPrelcorte, DM.EspecificacionRayadocontado, 
 DM.FechaRayadocontado, DM.AccionCorrectivaRayadocontado, DM.FechaAccionCorrectivaRayadocontado, DM.EspecificacionEntretelado, DM.FechaEntretelado, 
 DM.AccionCorrectivaEntretelado, DM.FechaAccionCorrectivaEntretelado, DM.EspecificacionMaquila, DM.FechaMaquila, DM.AccionCorrectivaMaquila, 
 DM.FechaAccionCorrectivaMaquila, DM.EspecificacionPespunte, DM.FechaPespunte, DM.AccionCorrectivaPespunte, DM.FechaAccionCorrectivaPespunte, 
-DM.EspecificacionPrelpespunte, DM.FechaPrelpespunte, DM.AccionCorrectivaPrelpespunte, DM.FechaAccionCorrectivaPrelpespunte, DM.EspecificacionAlmacenpespunte, 
-DM.FechaAlmacenpespunte, DM.AccionCorrectivaAlmacenpespunte, DM.FechaAccionCorrectivaAlmacenpespunte, DM.EspecificacionEnsuelado, DM.FechaEnsuelado, 
+DM.EspecificacionPrelpespunte, DM.FechaPrelpespunte, DM.AccionCorrectivaPrelpespunte, DM.FechaAccionCorrectivaPrelpespunte,  DM.EspecificacionEnsuelado, DM.FechaEnsuelado, 
 DM.AccionCorrectivaEnsuelado, DM.FechaAccionCorrectivaEnsuelado, DM.EspecificacionTejido, DM.FechaTejido, DM.AccionCorrectivaTejido, 
-DM.FechaAccionCorrectivaTejido, DM.EspecificacionAlmacentejido, DM.FechaAlmacentejido, DM.AccionCorrectivaAlmacentejido, 
-DM.FechaAccionCorrectivaAlmacentejido, DM.EspecificacionChoferes, DM.FechaChoferes, DM.AccionCorrectivaChoferes, 
+DM.FechaAccionCorrectivaTejido, DM.EspecificacionChoferes, DM.FechaChoferes, DM.AccionCorrectivaChoferes, 
 DM.FechaAccionCorrectivaChoferes, DM.EspecificacionMontadoa, DM.FechaMontadoa, DM.AccionCorrectivaMontadoa, 
 DM.FechaAccionCorrectivaMontadoa, DM.EspecificacionMontadob, DM.FechaMontadob, DM.AccionCorrectivaMontadob, 
 DM.FechaAccionCorrectivaMontadob, DM.EspecificacionPegado, DM.FechaPegado, DM.AccionCorrectivaPegado, DM.FechaAccionCorrectivaPegado, 
 DM.EspecificacionAdornoa, DM.FechaAdornoa, DM.AccionCorrectivaAdornoa, DM.FechaAccionCorrectivaAdornoa, DM.EspecificacionAdornob, 
-DM.FechaAdornob, DM.AccionCorrectivaAdornob, DM.FechaAccionCorrectivaAdornob, DM.EspecificacionAlmacenadorno, DM.FechaAlmacenadorno, 
-DM.AccionCorrectivaAlmacenadorno, DM.FechaAccionCorrectivaAlmacenadorno, DM.Registro, DM.Usuario', false)
+DM.FechaAdornob, DM.AccionCorrectivaAdornob, DM.FechaAccionCorrectivaAdornob, DM.Registro, DM.Usuario', false)
                     ->from('desarrollo_muestras AS DM');
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -92,7 +88,7 @@ DM.AccionCorrectivaAlmacenadorno, DM.FechaAccionCorrectivaAlmacenadorno, DM.Regi
             return $this->db->select("D.Clave AS CLAVE, D.Descripcion AS DEPTO,"
                                     . "REPLACE(REPLACE(REPLACE(CONCAT(UCASE(LEFT(Descripcion, 1)), LOWER(substr(Descripcion, 2,length(Descripcion) ) ) ),' ',''),'-',''),'\"','') AS DEPTOR", false)
                             ->from('departamentos AS D')
-                            ->where('D.Avance IN(0,1) AND D.Produccion = 1', null, false)
+                            ->where('D.Avance IN(1) AND D.Produccion = 1', null, false)
                             ->order_by('ABS(D.Clave)', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {

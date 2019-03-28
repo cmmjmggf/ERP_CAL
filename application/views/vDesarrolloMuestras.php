@@ -30,8 +30,8 @@
                         <select id="Color" name="Color" class="form-control"></select>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                        <label>Depto</label>
-                        <input type="text" id="Depto" name="Depto" class="form-control numbersOnly">
+                        <label>Depto</label> 
+                        <select id="Depto" name="Depto" class="form-control">                        </select>
                     </div>
                     <div class="w-100"><br></div>
                     <div class="col-12 col-xs-12 col-md-12 col-lg-12 col-xl-12">
@@ -96,10 +96,12 @@
                     <thead>
                         <tr> 
                             <th scope="col">ID</th>
+
                             <th scope="col">ESTILO</th>
                             <th scope="col">-</th>
                             <th scope="col">COLOR</th>
                             <th scope="col">-</th>
+
                             <th scope="col">CORTE</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (CORTE)</th>
@@ -112,15 +114,10 @@
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (REBAJADO Y PERFORADO)</th>
                             <th scope="col">FECHA A.C</th>
-
                             <th scope="col">FOLEADO</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (FOLEADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">DOBLILLADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (DOBLILLADO)</th>
-                            <th scope="col">FECHA A.C</th>
+                            <th scope="col">FECHA A.C</th> 
                             <th scope="col">LASER</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (LASER)</th>
@@ -148,11 +145,7 @@
                             <th scope="col">PREL-PESPUNTE</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (PREL-PESPUNTE)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ALMACEN PESPUNTE</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ALMACEN PESPUNTE)</th>
-                            <th scope="col">FECHA A.C</th>
+                            <th scope="col">FECHA A.C</th> 
                             <th scope="col">ENSUELADO</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (ENSUELADO)</th>
@@ -160,11 +153,7 @@
                             <th scope="col">TEJIDO</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (TEJIDO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ALMACEN TEJIDO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ALMACEN TEJIDO)</th>
-                            <th scope="col">FECHA A.C</th>
+                            <th scope="col">FECHA A.C</th> 
                             <th scope="col">CHOFERES</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (CHOFERES)</th>
@@ -188,10 +177,6 @@
                             <th scope="col">ADORNO B</th>
                             <th scope="col">FECHA</th>
                             <th scope="col">A.C (ADORNO B)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ALMACEN ADORNO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ALMACEN ADORNO)</th>
                             <th scope="col">FECHA A.C</th>
                             <th scope="col">REGISTRO</th>
                             <th scope="col">USUARIO</th>
@@ -220,6 +205,11 @@
 
         getDepartamentos();
 
+        Depto.change(function () {
+            if (Depto.val()) {
+                pnlTablero.find("#Deptos").find("input[data-clave='" + Depto.val() + "']").focus();
+            }
+        });
 
         btnMuestras.click(function () {
             if (!$.fn.DataTable.isDataTable('#tblMuestras')) {
@@ -234,54 +224,46 @@
                         "dataSrc": ""
                     },
                     "columns": [
-                        {"data": "ID"}, {"data": "Estilo"}, {"data": "EstiloT"}, 
-                        {"data": "Color"}, {"data": "ColorT"}, {"data": "EspecificacionCorte"}, 
-                        {"data": "FechaCorte"}, {"data": "AccionCorrectivaCorte"}, 
-                        {"data": "FechaAccionCorrectivaCorte"}, {"data": "EspecificacionRayado"}, 
-                        {"data": "FechaRayado"}, {"data": "AccionCorrectivaRayado"}, 
-                        {"data": "FechaAccionCorrectivaRayado"}, {"data": "EspecificacionRebajadoyperforado"}, 
-                        {"data": "FechaRebajadoyperforado"}, {"data": "AccionCorrectivaRebajadoyperforado"}, 
-                        {"data": "FechaAccionCorrectivaRebajadoyperforado"}, {"data": "EspecificacionFoleado"}, 
-                        {"data": "FechaFoleado"}, {"data": "AccionCorrectivaFoleado"}, 
-                        {"data": "FechaAccionCorrectivaFoleado"}, {"data": "EspecificacionDoblillado"}, 
-                        {"data": "FechaDoblillado"}, {"data": "AccionCorrectivaDoblillado"}, 
-                        {"data": "FechaAccionCorrectivaDoblillado"}, {"data": "EspecificacionLaser"}, 
-                        {"data": "FechaLaser"}, {"data": "AccionCorrectivaLaser"}, 
-                        {"data": "FechaAccionCorrectivaLaser"}, {"data": "EspecificacionPrelcorte"}, 
-                        {"data": "FechaPrelcorte"}, {"data": "AccionCorrectivaPrelcorte"}, 
-                        {"data": "FechaAccionCorrectivaPrelcorte"}, {"data": "EspecificacionRayadocontado"}, 
-                        {"data": "FechaRayadocontado"}, {"data": "AccionCorrectivaRayadocontado"}, 
-                        {"data": "FechaAccionCorrectivaRayadocontado"}, {"data": "EspecificacionEntretelado"}, 
-                        {"data": "FechaEntretelado"}, {"data": "AccionCorrectivaEntretelado"}, 
-                        {"data": "FechaAccionCorrectivaEntretelado"}, {"data": "EspecificacionMaquila"}, 
-                        {"data": "FechaMaquila"}, {"data": "AccionCorrectivaMaquila"}, 
-                        {"data": "FechaAccionCorrectivaMaquila"}, {"data": "EspecificacionPespunte"}, 
-                        {"data": "FechaPespunte"}, {"data": "AccionCorrectivaPespunte"}, 
-                        {"data": "FechaAccionCorrectivaPespunte"}, {"data": "EspecificacionPrelpespunte"}, 
-                        {"data": "FechaPrelpespunte"}, {"data": "AccionCorrectivaPrelpespunte"}, 
-                        {"data": "FechaAccionCorrectivaPrelpespunte"}, {"data": "EspecificacionAlmacenpespunte"}, 
-                        {"data": "FechaAlmacenpespunte"}, {"data": "AccionCorrectivaAlmacenpespunte"}, 
-                        {"data": "FechaAccionCorrectivaAlmacenpespunte"}, {"data": "EspecificacionEnsuelado"}, 
-                        {"data": "FechaEnsuelado"}, {"data": "AccionCorrectivaEnsuelado"}, 
-                        {"data": "FechaAccionCorrectivaEnsuelado"}, {"data": "EspecificacionTejido"}, 
-                        {"data": "FechaTejido"}, {"data": "AccionCorrectivaTejido"}, 
-                        {"data": "FechaAccionCorrectivaTejido"}, {"data": "EspecificacionAlmacentejido"}, 
-                        {"data": "FechaAlmacentejido"}, {"data": "AccionCorrectivaAlmacentejido"}, 
-                        {"data": "FechaAccionCorrectivaAlmacentejido"}, {"data": "EspecificacionChoferes"}, 
-                        {"data": "FechaChoferes"}, {"data": "AccionCorrectivaChoferes"}, 
-                        {"data": "FechaAccionCorrectivaChoferes"}, {"data": "EspecificacionMontadoa"}, 
-                        {"data": "FechaMontadoa"}, {"data": "AccionCorrectivaMontadoa"}, 
-                        {"data": "FechaAccionCorrectivaMontadoa"}, {"data": "EspecificacionMontadob"}, 
-                        {"data": "FechaMontadob"}, {"data": "AccionCorrectivaMontadob"}, 
-                        {"data": "FechaAccionCorrectivaMontadob"}, {"data": "EspecificacionPegado"}, 
-                        {"data": "FechaPegado"}, {"data": "AccionCorrectivaPegado"}, 
-                        {"data": "FechaAccionCorrectivaPegado"}, {"data": "EspecificacionAdornoa"}, 
-                        {"data": "FechaAdornoa"}, {"data": "AccionCorrectivaAdornoa"}, 
-                        {"data": "FechaAccionCorrectivaAdornoa"}, {"data": "EspecificacionAdornob"}, 
-                        {"data": "FechaAdornob"}, {"data": "AccionCorrectivaAdornob"}, 
-                        {"data": "FechaAccionCorrectivaAdornob"}, {"data": "EspecificacionAlmacenadorno"}, 
-                        {"data": "FechaAlmacenadorno"}, {"data": "AccionCorrectivaAlmacenadorno"}, 
-                        {"data": "FechaAccionCorrectivaAlmacenadorno"}, {"data": "Registro"}, 
+                        {"data": "ID"}, {"data": "Estilo"}, {"data": "EstiloT"},
+                        {"data": "Color"}, {"data": "ColorT"}, {"data": "EspecificacionCorte"},
+                        {"data": "FechaCorte"}, {"data": "AccionCorrectivaCorte"},
+                        {"data": "FechaAccionCorrectivaCorte"}, {"data": "EspecificacionRayado"},
+                        {"data": "FechaRayado"}, {"data": "AccionCorrectivaRayado"},
+                        {"data": "FechaAccionCorrectivaRayado"}, {"data": "EspecificacionRebajadoyperforado"},
+                        {"data": "FechaRebajadoyperforado"}, {"data": "AccionCorrectivaRebajadoyperforado"},
+                        {"data": "FechaAccionCorrectivaRebajadoyperforado"}, {"data": "EspecificacionFoleado"},
+                        {"data": "FechaFoleado"}, {"data": "AccionCorrectivaFoleado"},
+                        {"data": "FechaAccionCorrectivaFoleado"}, {"data": "EspecificacionLaser"},
+                        {"data": "FechaLaser"}, {"data": "AccionCorrectivaLaser"},
+                        {"data": "FechaAccionCorrectivaLaser"}, {"data": "EspecificacionPrelcorte"},
+                        {"data": "FechaPrelcorte"}, {"data": "AccionCorrectivaPrelcorte"},
+                        {"data": "FechaAccionCorrectivaPrelcorte"}, {"data": "EspecificacionRayadocontado"},
+                        {"data": "FechaRayadocontado"}, {"data": "AccionCorrectivaRayadocontado"},
+                        {"data": "FechaAccionCorrectivaRayadocontado"}, {"data": "EspecificacionEntretelado"},
+                        {"data": "FechaEntretelado"}, {"data": "AccionCorrectivaEntretelado"},
+                        {"data": "FechaAccionCorrectivaEntretelado"}, {"data": "EspecificacionMaquila"},
+                        {"data": "FechaMaquila"}, {"data": "AccionCorrectivaMaquila"},
+                        {"data": "FechaAccionCorrectivaMaquila"}, {"data": "EspecificacionPespunte"},
+                        {"data": "FechaPespunte"}, {"data": "AccionCorrectivaPespunte"},
+                        {"data": "FechaAccionCorrectivaPespunte"}, {"data": "EspecificacionPrelpespunte"},
+                        {"data": "FechaPrelpespunte"}, {"data": "AccionCorrectivaPrelpespunte"},
+                        {"data": "FechaAccionCorrectivaPrelpespunte"}, {"data": "EspecificacionEnsuelado"},
+                        {"data": "FechaEnsuelado"}, {"data": "AccionCorrectivaEnsuelado"},
+                        {"data": "FechaAccionCorrectivaEnsuelado"}, {"data": "EspecificacionTejido"},
+                        {"data": "FechaTejido"}, {"data": "AccionCorrectivaTejido"},
+                        {"data": "FechaAccionCorrectivaTejido"},  {"data": "EspecificacionChoferes"},
+                        {"data": "FechaChoferes"}, {"data": "AccionCorrectivaChoferes"},
+                        {"data": "FechaAccionCorrectivaChoferes"}, {"data": "EspecificacionMontadoa"},
+                        {"data": "FechaMontadoa"}, {"data": "AccionCorrectivaMontadoa"},
+                        {"data": "FechaAccionCorrectivaMontadoa"}, {"data": "EspecificacionMontadob"},
+                        {"data": "FechaMontadob"}, {"data": "AccionCorrectivaMontadob"},
+                        {"data": "FechaAccionCorrectivaMontadob"}, {"data": "EspecificacionPegado"},
+                        {"data": "FechaPegado"}, {"data": "AccionCorrectivaPegado"},
+                        {"data": "FechaAccionCorrectivaPegado"}, {"data": "EspecificacionAdornoa"},
+                        {"data": "FechaAdornoa"}, {"data": "AccionCorrectivaAdornoa"},
+                        {"data": "FechaAccionCorrectivaAdornoa"}, {"data": "EspecificacionAdornob"},
+                        {"data": "FechaAdornob"}, {"data": "AccionCorrectivaAdornob"},
+                        {"data": "FechaAccionCorrectivaAdornob"}, {"data": "Registro"},
                         {"data": "Usuario"}
                     ],
                     "columnDefs": coldefs,
@@ -290,7 +272,7 @@
                     "colReorder": true,
                     "displayLength": 500,
                     "scrollY": "600px",
-                    "scrollX":true,
+                    "scrollX": true,
                     "bLengthChange": false,
                     "deferRender": true,
                     "scrollCollapse": false,
@@ -302,7 +284,6 @@
             } else {
                 Muestras.ajax.reload();
             }
-
             mdlMuestras.modal('show');
         });
 
@@ -368,7 +349,7 @@
                     HoldOn.close();
                 });
             } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning').then((value)=>{
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning').then((value) => {
                     Estilo.focus().select();
                 });
             }
@@ -454,6 +435,7 @@
             ]
         });
     });
+    
     function getColoresXEstilo() {
         Color[0].selectize.clear(true);
         Color[0].selectize.clearOptions();
@@ -496,6 +478,9 @@
     }
 
     function getDatosXEstiloColor() {
+        HoldOn.open({
+            theme: 'sk-rect'
+        });
         pnlTablero.find('#Deptos input[id^="Especificacion"]').val('');
         pnlTablero.find('#Deptos input[id^="Fecha"]').val('');
         pnlTablero.find('#Deptos input[id^="AccionCorrectiva"]').val('');
@@ -508,39 +493,55 @@
             if (a.length > 0) {
                 $.each(a[0], function (k, v) {
                     console.log(k, v);
-                    if (pnlTablero.find("#" + k).val() === '') {
-                        pnlTablero.find("#" + k).val(v);
+                    var input = pnlTablero.find("#" + k);
+                    if (input.val() === '') {
+                        input.val(v);
+                        if (v) {
+                            input.attr('readonly', true);
+                        } else {
+                            input.attr('readonly', false);
+                        }
+                    } else {
+
                     }
                 });
                 nuevo = false;
                 btnCancelar.removeClass("d-none");
             }
-        }).fail(function (x) {
+        }
+        ).fail(function (x) {
             getError(x);
         }).always(function () {
+            HoldOn.close();
         });
     }
 
     function getDepartamentos() {
+        var readonly = 'readonly=""', usr = '<?php print $this->session->TipoAcceso; ?>';
+
         $.getJSON('<?php print base_url('DesarrolloMuestras/getDepartamentos'); ?>').done(function (a) {
             var deptos = "", ldeptos = "";
             a.forEach(function (e) {
+                Depto[0].selectize.addOption({text: e.CLAVE + ' ' + e.DEPTO, value: e.CLAVE});
                 ldeptos += '<a href="#" class="list-group-item list-group-item-action">' + e.CLAVE + ' ' + e.DEPTO + '</a>';
                 deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">' +
                         '<label  class="text-info">' + e.DEPTO + '</label>' +
-                        '</div>' +
-                        '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-3 my-1 form-group has-danger">' +
+                        '</div>';
+                deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-3 my-1 form-group has-danger">' +
                         '<input type="text" id="Especificacion' + e.DEPTOR + '" name="Especificacion' + e.DEPTOR + '" class="form-control is-invalid" data-clave="' + e.CLAVE + '">' +
-                        '</div>' +
-                        '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-1 my-1 form-group has-danger">' +
+                        '</div>';
+                deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-1 my-1 form-group has-danger">' +
                         '<input type="text" id="Fecha' + e.DEPTOR + '" name="Fecha' + e.DEPTOR + '" class="form-control date is-invalid" placeholder="XX/XX/XXXX">' +
-                        '</div>' +
-                        '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-5 my-1 form-group has-success">' +
-                        '<input type="text" id="AccionCorrectiva' + e.DEPTOR + '" name="AccionCorrectiva' + e.DEPTOR + '" class="form-control is-valid" placeholder="DETALLE SU ACCIÓN CORRECTIVA PARA ' + e.DEPTO + '">' +
-                        '</div>' +
-                        '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-1 form-group has-success">' +
-                        '<input type="text" id="FechaAccionCorrectiva' + e.DEPTOR + '" name="FechaAccionCorrectiva' + e.DEPTOR + '" class="form-control date is-valid" placeholder="XX/XX/XXXX">' +
-                        '</div><div class="w-100 my-2"></div>';
+                        '</div>';
+                if (usr === 'SUPER ADMINISTRADOR' || usr === 'DISEÑO Y DESARROLLO') {
+                    deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-5 my-1 form-group has-success">' +
+                            '<input type="text" id="AccionCorrectiva' + e.DEPTOR + '" name="AccionCorrectiva' + e.DEPTOR + '" class="form-control is-valid" placeholder="DETALLE SU ACCIÓN CORRECTIVA PARA ' + e.DEPTO + '">' +
+                            '</div>';
+                    deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-1 form-group has-success">' +
+                            '<input type="text" id="FechaAccionCorrectiva' + e.DEPTOR + '" name="FechaAccionCorrectiva' + e.DEPTOR + '" class="form-control date is-valid" placeholder="XX/XX/XXXX">' +
+                            '</div>';
+                }
+                deptos += '<div class="w-100 my-2"></div>';
             });
             pnlTablero.find("#Deptos .row").html(deptos);
             pnlTablero.find("#ldeptos:first-child").after(ldeptos);
