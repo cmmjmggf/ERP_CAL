@@ -1,4 +1,3 @@
-
 <script src="<?php print base_url('js/multiselectjs/multiselect.min.js'); ?>"></script>
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">

@@ -190,7 +190,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
 <script>
     var pnlTablero = $("#pnlTablero"), btnGuardar = pnlTablero.find("#btnGuardar"),
             Estilo = pnlTablero.find("#Estilo"), EstiloT = pnlTablero.find("#EstiloT"),
@@ -204,6 +204,7 @@
     $(document).ready(function () {
 
         getDepartamentos();
+
 
         Depto.change(function () {
             if (Depto.val()) {
@@ -251,7 +252,7 @@
                         {"data": "FechaEnsuelado"}, {"data": "AccionCorrectivaEnsuelado"},
                         {"data": "FechaAccionCorrectivaEnsuelado"}, {"data": "EspecificacionTejido"},
                         {"data": "FechaTejido"}, {"data": "AccionCorrectivaTejido"},
-                        {"data": "FechaAccionCorrectivaTejido"},  {"data": "EspecificacionChoferes"},
+                        {"data": "FechaAccionCorrectivaTejido"}, {"data": "EspecificacionChoferes"},
                         {"data": "FechaChoferes"}, {"data": "AccionCorrectivaChoferes"},
                         {"data": "FechaAccionCorrectivaChoferes"}, {"data": "EspecificacionMontadoa"},
                         {"data": "FechaMontadoa"}, {"data": "AccionCorrectivaMontadoa"},
@@ -295,14 +296,20 @@
             Color.val('');
             Depto.val('');
             pnlTablero.find('#Deptos input[id^="Especificacion"]').val('');
+            pnlTablero.find('#Deptos input[id^="Especificacion"]').removeAttr('readonly');
             pnlTablero.find('#Deptos input[id^="Fecha"]').val('');
+            pnlTablero.find('#Deptos input[id^="Fecha"]').removeAttr('readonly');
             pnlTablero.find('#Deptos input[id^="AccionCorrectiva"]').val('');
+            pnlTablero.find('#Deptos input[id^="AccionCorrectiva"]').removeAttr('readonly');
             pnlTablero.find('#Deptos input[id^="FechaAccionCorrectiva"]').val('');
+            pnlTablero.find('#Deptos input[id^="FechaAccionCorrectiva"]').removeAttr('readonly');
             $.each(pnlTablero.find("select"), function (k, v) {
                 pnlTablero.find("select")[k].selectize.clear(true);
             });
             Foto[0].src = '';
             Estilo.focus().select();
+            btnCancelar.addClass('d-none');
+            onBeep(1);
         });
 
         btnGuardar.click(function () {
@@ -349,6 +356,7 @@
                     HoldOn.close();
                 });
             } else {
+                onBeep(2);
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning').then((value) => {
                     Estilo.focus().select();
                 });
@@ -387,6 +395,7 @@
                 FichaTecnica.ajax.reload();
             }
         });
+
         var coldefs = [
             {
                 "targets": [0],
@@ -435,7 +444,7 @@
             ]
         });
     });
-    
+
     function getColoresXEstilo() {
         Color[0].selectize.clear(true);
         Color[0].selectize.clearOptions();
@@ -492,7 +501,6 @@
             console.log(a);
             if (a.length > 0) {
                 $.each(a[0], function (k, v) {
-                    console.log(k, v);
                     var input = pnlTablero.find("#" + k);
                     if (input.val() === '') {
                         input.val(v);
@@ -523,7 +531,8 @@
             var deptos = "", ldeptos = "";
             a.forEach(function (e) {
                 Depto[0].selectize.addOption({text: e.CLAVE + ' ' + e.DEPTO, value: e.CLAVE});
-                ldeptos += '<a href="#" class="list-group-item list-group-item-action">' + e.CLAVE + ' ' + e.DEPTO + '</a>';
+                ldeptos += '<a href="#" class="list-group-item list-group-item-action" onclick="onSeleccionarDepto(this,' + e.CLAVE + ')">' + e.CLAVE + ' ' + e.DEPTO + '</a>';
+
                 deptos += '<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">' +
                         '<label  class="text-info">' + e.DEPTO + '</label>' +
                         '</div>';
@@ -551,6 +560,17 @@
 
         });
     }
+
+    function onSeleccionarDepto(a, b) {
+        if (Estilo.val()) {
+            Depto[0].selectize.setValue(b);
+        } else {
+            swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN ESTILO Y UN COLOR', 'warning').then((value) => {
+                Estilo.focus().select();
+            });
+        }
+    }
+
 </script>
 
 <style>
