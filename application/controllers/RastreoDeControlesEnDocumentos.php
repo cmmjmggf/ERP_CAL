@@ -16,7 +16,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('RastreoDeControlesEnDocumentos_model', 'avm');
+        $this->load->library('session')->model('RastreoDeControlesEnDocumentos_model', 'rced');
     }
 
     public function index() {
@@ -33,6 +33,24 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+    
+    
+    public function getClientes() {
+        try {
+            print json_encode($this->rced->getClientes());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    
+    public function getColoresXEstilo() {
+        try {
+            print json_encode($this->rced->getColoresXEstilo());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 }

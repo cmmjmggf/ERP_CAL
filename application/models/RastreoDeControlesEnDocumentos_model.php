@@ -18,5 +18,27 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function getClientes() {
+        try {
+            return $this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
+                            ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getColoresXEstilo($Estilo) {
+        try {
+            return $this->db->select("CAST(C.Clave AS SIGNED ) AS CLAVE, CONCAT(C.Clave,'-', C.Descripcion) AS COLOR ", false)
+                            ->from('colores AS C')
+                            ->where('C.Estilo', $Estilo)
+                            ->where('C.Estatus', 'ACTIVO')
+                            ->order_by('ID', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
 }

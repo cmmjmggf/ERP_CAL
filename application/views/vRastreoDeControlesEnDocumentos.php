@@ -6,8 +6,8 @@
             </div>
             <div class="col-sm-6 float-right" align="right"></div>
         </div>
-        <div class="card-block mt-4">
-            <div class="row">
+        <div class="card-block">
+            <div class="row  mb-2">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <label>Control</label>
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm">
@@ -31,7 +31,7 @@
             </div>
             <div class="row">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table class="table table-hover">
+                    <table id="tblFechasDelPedido" class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -45,7 +45,7 @@
                     </table>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table class="table table-hover">
+                    <table id="tblFechasDeFacturacion" class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -59,7 +59,7 @@
                     </table>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table class="table table-hover">
+                    <table id="tblFechasDevolucion" class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -73,7 +73,105 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <div class="w-100"></div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="tblFechasDeAvance" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Corte</th>
+                                <th scope="col">Rayado</th>
+                                <th scope="col">Rebajado</th>
+                                <th scope="col">Foleado</th>
+                                <th scope="col">Entretelado</th>
+                                <th scope="col">Alm-Corte</th>
+                                <th scope="col">Pespunte</th>
+                                <th scope="col">Alm-Pespunte</th>
+                                <th scope="col">Tejido</th>
+                                <th scope="col">Alm-Tejido</th>
+                                <th scope="col">Montado</th>
+                                <th scope="col">Adorno</th>
+                                <th scope="col">Alm-Adorno</th>
+                                <th scope="col">Terminado</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <table id="tblRastreoDeControlesEnNomina" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Empleado</th>
+                                <th scope="col">Control</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Estilo</th>
+                                <th scope="col">Fraccion</th>
+                                <th scope="col">Semana</th>
+                                <th scope="col">Pares</th>
+                                <th scope="col">Depto</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div class="row">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label>Estatus en producción</label>
+                            <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control" placeholder="Estatus en producción">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <label>Empleado</label>
+                            <select id="Empleado" name="Empleado" class="form-control"></select>
+                        </div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <label>Fracción</label>
+                            <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm    ">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"), Cliente = pnlTablero.find("#Cliente");
+
+    $(document).ready(function () {
+        getClientes();
+        Control.focus();
+    });
+
+    function getClientes() {
+        Cliente[0].selectize.clear(true);
+        Cliente[0].selectize.clearOptions();
+        $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentos/getClientes'); ?>').done(function (a) {
+            if (a.length > 0) {
+                a.forEach(function (x) {
+                    Cliente[0].selectize.addOption({text: x.CLIENTE, value: x.CLAVE});
+                });
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+        });
+    }
+    
+    function getColoresXEstilo(e, rq) {
+        $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
+            x.forEach(function (i) {
+                Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
+            });
+            if (rq) {
+                Color[0].selectize.setValue(rq.Color);
+            }
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+</script>

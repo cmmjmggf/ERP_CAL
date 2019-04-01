@@ -82,129 +82,137 @@
         </div>
     </div>
 </div>
-<div class="modal modal-fullscreen animated fadeIn" id="mdlMuestras">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Muestras</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="card m-3 animated fadeIn d-none" id="pnlTableroMuestras">
+    <div class="card-body ">
+        <div class="row">
+            <div class="col-sm-12 float-left my-4">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                        <button type="button" id="btnCancelarPanelMuestras" class="btn btn-danger">
+                            <span class="fa fa-arrow-left"></span> VOLVER</button>
+                    </div>                    
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4" align="center">
+                        <legend class="float-left font-weight-bold">Muestras</legend>
+                    </div> 
+                </div>
             </div>
-            <div class="modal-body">
-                <table id="tblMuestras" class="table table-hover">
-                    <thead>
-                        <tr> 
-                            <th scope="col">ID</th>
-
-                            <th scope="col">ESTILO</th>
-                            <th scope="col">-</th>
-                            <th scope="col">COLOR</th>
-                            <th scope="col">-</th>
-
-                            <th scope="col">CORTE</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (CORTE)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">RAYADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (RAYADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">REBAJADO Y PERFORADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (REBAJADO Y PERFORADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">FOLEADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (FOLEADO)</th>
-                            <th scope="col">FECHA A.C</th> 
-                            <th scope="col">LASER</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (LASER)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">PREL-CORTE</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (PREL-CORTE)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">RAYADO CONTADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (RAYADO CONTADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ENTRETELADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C ENTRETELADO</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">MAQUILA</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (MAQUILA)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">PESPUNTE</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (PESPUNTE)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">PREL-PESPUNTE</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (PREL-PESPUNTE)</th>
-                            <th scope="col">FECHA A.C</th> 
-                            <th scope="col">ENSUELADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ENSUELADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">TEJIDO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (TEJIDO)</th>
-                            <th scope="col">FECHA A.C</th> 
-                            <th scope="col">CHOFERES</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (CHOFERES)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">MONTADO A</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (MONTADO A)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">MONTADO B</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (MONTADO B)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">PEGADO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (PEGADO)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ADORNO A</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ADORNO A)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">ADORNO B</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">A.C (ADORNO B)</th>
-                            <th scope="col">FECHA A.C</th>
-                            <th scope="col">REGISTRO</th>
-                            <th scope="col">USUARIO</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="modal-footer"> 
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <div class="col-12">
+                <div  class="table-responsive">
+                    <table id="tblMuestras"  class="table table-sm " style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">ESTILO</th>
+                                <th scope="col">-</th>
+                                <th scope="col">COLOR</th>
+                                <th scope="col">-</th>
+                                <th scope="col">CORTE</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (CORTE)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">RAYADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (RAYADO)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">REBAJADO Y PERFORADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (REBAJADO Y PERFORADO)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">FOLEADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (FOLEADO)</th>
+                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">LASER</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (LASER)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">PREL-CORTE</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (PREL-CORTE)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">RAYADO CONTADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (RAYADO CONTADO)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">ENTRETELADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C ENTRETELADO</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">MAQUILA</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (MAQUILA)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">PESPUNTE</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (PESPUNTE)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">PREL-PESPUNTE</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (PREL-PESPUNTE)</th>
+                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">ENSUELADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (ENSUELADO)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">TEJIDO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (TEJIDO)</th>
+                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">CHOFERES</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (CHOFERES)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">MONTADO A</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (MONTADO A)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">MONTADO B</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (MONTADO B)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">PEGADO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (PEGADO)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">ADORNO A</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (ADORNO A)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">ADORNO B</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">A.C (ADORNO B)</th>
+                                <th scope="col">FECHA A.C</th>
+                                <th scope="col">REGISTRO</th>
+                                <th scope="col">USUARIO</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div> 
+</div>
+
 <script>
     var pnlTablero = $("#pnlTablero"), btnGuardar = pnlTablero.find("#btnGuardar"),
             Estilo = pnlTablero.find("#Estilo"), EstiloT = pnlTablero.find("#EstiloT"),
             Color = pnlTablero.find("#Color"), Depto = pnlTablero.find("#Depto"),
             FichaTecnica, tblFichaTecnica = pnlTablero.find("#tblFichaTecnica"),
             Foto = pnlTablero.find("#Foto"), btnCancelar = pnlTablero.find("#btnCancelar"),
-            btnMuestras = pnlTablero.find("#btnMuestras"), mdlMuestras = $("#mdlMuestras"),
-            Muestras, tblMuestras = mdlMuestras.find("#tblMuestras"),
+            btnMuestras = pnlTablero.find("#btnMuestras"), pnlTableroMuestras = $("#pnlTableroMuestras"),
+            Muestras, tblMuestras = pnlTableroMuestras.find("#tblMuestras"),
+            btnCancelarPanelMuestras = pnlTableroMuestras.find("#btnCancelarPanelMuestras"),
             nuevo = true;
 
     $(document).ready(function () {
 
         getDepartamentos();
 
+        btnCancelarPanelMuestras.click(function () {
+            pnlTableroMuestras.addClass('d-none');
+            pnlTablero.removeClass('d-none'); 
+        });
 
         Depto.change(function () {
             if (Depto.val()) {
@@ -217,8 +225,6 @@
                 Muestras = tblMuestras.DataTable({
                     "dom": 'Bfrtip',
                     buttons: buttons,
-                    orderCellsTop: true,
-                    fixedHeader: true,
                     "ajax": {
                         "url": '<?php print base_url('DesarrolloMuestras/getMuestras'); ?>',
                         "contentType": "application/json",
@@ -270,7 +276,7 @@
                     "columnDefs": coldefs,
                     language: lang,
                     "autoWidth": true,
-                    "colReorder": true,
+                    "colReorder": false,
                     "displayLength": 500,
                     "scrollY": "600px",
                     "scrollX": true,
@@ -285,7 +291,8 @@
             } else {
                 Muestras.ajax.reload();
             }
-            mdlMuestras.modal('show');
+            pnlTablero.addClass('d-none');
+            pnlTableroMuestras.removeClass('d-none');
         });
 
         btnCancelar.click(function () {

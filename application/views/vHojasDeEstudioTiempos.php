@@ -8,45 +8,165 @@
                 <label>ID</label>
                 <input type="text" class="form-control form-control-sm d-none" id="ID" maxlength="10" name="ID">
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Estilo</label>     
-                <input type="text" class="form-control form-control-sm" autofocus id="Estilo" name="Estilo" maxlength="10"  min="1" max="10">
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Fecha</label>
-                <input type="text" class="form-control form-control-sm date" id="Fecha" maxlength="10" name="Fecha">
-            </div>  
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Conteo no.</label>     
-                <input type="text" class="form-control form-control-sm numbersOnly" autofocus id="Conteo" name="Conteo" maxlength="10"  min="1" max="10">
-            </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
-                <label>Departamento</label>
-                <select id="Departamento" name="Departamento" class="form-control form-control-sm"></select>
-            </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
-                <label>Fracción</label>
-                <select id="Fraccion" name="Fraccion" class="form-control form-control-sm"></select>
-            </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
-                <label>Sub-Fracción</label>
-                <select id="SubFraccion" name="SubFraccion" class="form-control form-control-sm"></select>
-            </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
-                <label>Linea</label>
-                <select id="Linea" name="Linea" class="form-control form-control-sm"></select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Operar</label>     
-                <select id="Operar" name="Operar" class="form-control form-control-sm"></select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Pares</label>     
-                <input type="text" class="form-control form-control-sm" autofocus id="Operar" name="Operar" >
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2">
-                <label>Productividad</label>     
-                <input type="text" class="form-control form-control-sm" autofocus id="Productividad" name="Productividad" >
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-5">
+                        <label>Estilo</label>     
+                        <input type="text" class="form-control form-control-sm" autofocus id="Estilo" name="Estilo" maxlength="10"  min="1" max="10">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-5">
+                        <label>Fecha</label>
+                        <input type="text" class="form-control form-control-sm date" id="Fecha" maxlength="10" name="Fecha">
+                    </div>  
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                        <label>Conteo no.</label>     
+                        <input type="text" class="form-control form-control-sm numbersOnly" autofocus id="Conteo" name="Conteo" maxlength="10"  min="1" max="10">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                        <label>Departamento</label>
+                        <select id="Departamento" name="Departamento" class="form-control form-control-sm"></select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                        <label>Fracción</label>
+                        <select id="Fraccion" name="Fraccion" class="form-control form-control-sm"></select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                        <label>Sub-Fracción</label>
+                        <select id="SubFraccion" name="SubFraccion" class="form-control form-control-sm"></select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                        <label>Linea</label>
+                        <select id="Linea" name="Linea" class="form-control form-control-sm"></select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                        <label>Operar</label>     
+                        <select id="Operar" name="Operar" class="form-control form-control-sm"></select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                        <label>Pares</label>     
+                        <input type="text" class="form-control form-control-sm" autofocus id="Operar" name="Operar" >
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4"></div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                        <label>Productividad</label>     
+                        <input type="text" class="form-control form-control-sm" autofocus id="Productividad" name="Productividad" >
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 align-self-center">
+                        <div class="alert alert-dismissible alert-primary align-self-center">
+                            <p class="font-weight-bold">Ciclos en segundos de esta fracción</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                        <div class="row">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 1</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloUno" name="CicloUno" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 2</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloDos" name="CicloDos" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 3</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloTres" name="CicloTres" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 4</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloCuatro" name="CicloCuatro" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 5</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloCinco" name="CicloCinco" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 6</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloSeis" name="CicloSeis" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 7</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloSiete" name="CicloSiete" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 8</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloOcho" name="CicloOcho" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 9</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloNueve" name="CicloNueve" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Ciclo 10</label>
+                                <input type="text" class="form-control form-control-sm" id="CicloDiez" name="CicloDiez" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                        <div class="row">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tiempo total</label>
+                                <input type="text" class="form-control form-control-sm" id="TiempoTotal" name="TiempoTotal">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>No ciclos</label>
+                                <input type="text" class="form-control form-control-sm" id="NoCiclos" name="NoCiclos" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tiempo normal</label>
+                                <input type="text" class="form-control form-control-sm" id="TiempoNormal" name="TiempoNormal" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tolerancia</label>
+                                <input type="text" class="form-control form-control-sm" id="Tolerancia" name="Tolerancia" >
+                            </div>
+
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tiempo stdr.</label>
+                                <input type="text" class="form-control form-control-sm" id="TiempoStdr" name="TiempoStdr" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tiempo muerto</label>
+                                <input type="text" class="form-control form-control-sm" id="TiempoMuerto" name="TiempoMuerto" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Total</label>
+                                <input type="text" class="form-control form-control-sm" id="Total" name="Total" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Tiempo stdr</label>
+                                <input type="text" class="form-control form-control-sm" id="TotalStdr" name="TotalStdr" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Salario stdr</label>
+                                <input type="text" class="form-control form-control-sm" id="SalarioStdr" name="SalarioStdr" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label>Pares x semana</label>
+                                <input type="text" class="form-control form-control-sm" id="ParesXSemana" name="ParesXSemana" >
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                                <label>Minu / Semana</label>
+                                <input type="text" class="form-control form-control-sm" id="MinuSemana" name="MinuSemana" >
+                            </div>
+
+                        </div>
+                    </div>        
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                        <label>Fin</label>
+                        <input type="text" class="form-control form-control-sm" id="Fin" name="Fin" >
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                        <label>Prm-minu</label>
+                        <input type="text" class="form-control form-control-sm" id="Prmminu" name="Prmminu" >
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-7"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                        <label>Tiempo std</label>
+                        <input type="text" class="form-control form-control-sm" id="TiempoStd" name="TiempoStd" >
+                    </div>
+                </div>
             </div>
             <div id="EstiloDescripcion" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" aling="center"></div>
             <div id="Departamentos" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"></div>
@@ -54,7 +174,7 @@
                 <button type="button" class="btn btn-primary animated fadeIn" id="btnGuardarTiempo">GUARDAR</button>
                 <button type="button" class="btn btn-danger animated fadeIn" id="btnCancelarTiempo">CANCELAR</button>
             </div>
-            <div id="TiemposXEstiloDepto" class="table-responsive d-none">
+            <div id="TiemposXEstiloDepto" class="table-responsive">
                 <table id="tblTiemposXEstiloDepto" class="table table-sm display hover" style="width:100%">
                     <thead>
                         <tr>
@@ -70,24 +190,14 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-
-                            <th></th>
-                            <th></th>
-
-                            <th></th> 
-                        </tr>
-                    </tfoot>
+                    <tfoot></tfoot>
                 </table>
             </div>
         </div>
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/TiemposXEstiloDepto/';
+    var master_url = base_url + 'index.php/HojasDeEstudioTiempos/';
     var pnlTablero = $("#pnlTablero");
     var Linea = pnlTablero.find("#Linea"), Estilo = pnlTablero.find("#Estilo");
     var btnGuardarTiempo = pnlTablero.find("#btnGuardarTiempo"), btnCancelarTiempo = pnlTablero.find("#btnCancelarTiempo");
@@ -242,7 +352,7 @@
             }
         });
 
-        getTiemposXEstilo();
+//        getTiemposXEstilo();
     });
 
     function getLineaXEstilo(input) {
