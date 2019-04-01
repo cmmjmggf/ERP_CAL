@@ -19,7 +19,7 @@
                 <button type="button" class="btn btn-secondary btn-sm " id="btnVerDefectos" >
                     <span class="fa fa-check-double" ></span> DEFECTOS
                 </button>
-                <button type="button" class="btn btn-info btn-sm " id="btnVerControlesTerminadoss" >
+                <button type="button" class="btn btn-info btn-sm " id="btnVerDetalles" >
                     <span class="fa fa-cube" ></span> DETALLES
                 </button>
                 <button type="button" class="btn btn-warning btn-sm" id="btnListaPrecios" >
@@ -224,7 +224,7 @@
             btnAceptar = pnlTablero.find("#btnAceptar");
     var btnVerDefectos = pnlTablero.find('#btnVerDefectos');
     var btnVerOrdPrd = pnlTablero.find('#btnVerOrdPrd');
-    var btnVerControlesTerminadoss = pnlTablero.find('#btnVerControlesTerminadoss');
+    var btnVerDetalles = pnlTablero.find('#btnVerDetalles');
     var btnListaPrecios = pnlTablero.find('#btnListaPrecios');
     var btnGeneralListaPrecios = pnlTablero.find('#btnGeneralListaPrecios');
     var btnDevClientes = pnlTablero.find('#btnDevClientes');
@@ -298,32 +298,6 @@
                 }
             });
         });
-        btnVerControlesTerminadoss.click(function () {
-            $.fancybox.open({
-                src: base_url + '/ControlesTerminadossDefectos.shoes/?origen=PRODUCCION',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "85%",
-                            height: "85%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
-            });
-        });
         btnListaPrecios.click(function () {
             $.fancybox.open({
                 src: base_url + '/ListasPrecioMaquilas.shoes/?origen=PRODUCCION',
@@ -350,9 +324,9 @@
                 }
             });
         });
-        btnVerDefectos.click(function () {
+        btnVerDetalles.click(function () {
             $.fancybox.open({
-                src: base_url + '/Defectos.shoes/?origen=PRODUCCION',
+                src: base_url + '/DetallesDefectos.shoes/?origen=PRODUCCION',
                 type: 'iframe',
                 opts: {
                     afterShow: function (instance, current) {
@@ -893,6 +867,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
+            "scrollX": true,
             keys: true,
             "bSort": true,
             "aaSorting": [
@@ -968,6 +943,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             keys: true,
+            "scrollX": true,
             "bSort": true,
             "aaSorting": [
                 [1, 'asc']/*ID*/
