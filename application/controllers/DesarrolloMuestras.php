@@ -47,7 +47,15 @@ class DesarrolloMuestras extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    }  
+    }
+
+    public function getMuestras() {
+        try {
+            print json_encode($this->dmm->getMuestras());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
     public function getColoresXEstilo() {
         try {
@@ -55,7 +63,7 @@ class DesarrolloMuestras extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    } 
+    }
 
     public function getFotoXEstilo() {
         try {
@@ -63,6 +71,44 @@ class DesarrolloMuestras extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    } 
+    }
+
+    public function getDepartamentos() {
+        try {
+            print json_encode($this->dmm->getDepartamentos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDesarrolloMuestra() {
+        try {
+            print json_encode($this->dmm->getDesarrolloMuestra($this->input->get('ESTILO'), $this->input->get('COLOR')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onGuardar() {
+        try {
+            $data = array();
+            foreach ($this->input->post() as $k => $v) {
+                $data[$k] = ($v !== '') ? strtoupper($v) : NULL;
+            }
+            switch (intval($this->input->post('NUEVO'))) {
+                case 1:
+                    $data["Registro"] = Date('d/m/Y h:i:s a');
+                    $data["Usuario"] = $this->session->ID;
+                    $this->db->insert('desarrollo_muestras', $data);
+                    break;
+                case 2:
+                    unset($data['NUEVO']);
+                    $this->db->where('ID', $this->input->post('ID'))->update('desarrollo_muestras', $data);
+                    break;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
 }
