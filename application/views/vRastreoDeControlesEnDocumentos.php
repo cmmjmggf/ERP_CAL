@@ -138,11 +138,23 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"), Cliente = pnlTablero.find("#Cliente");
+    var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"), 
+        Estilo = pnlTablero.find("#Estilo"), Cliente = pnlTablero.find("#Cliente"),
+        Empleado = pnlTablero.find("#Empleado");
 
     $(document).ready(function () {
         getClientes();
+        getEmpleados();
         Control.focus();
+        Estilo.on('keydown', function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                getColoresXEstilo($(this).val());
+            }
+        }).focusout(function () {
+            if ($(this).val()) {
+                getColoresXEstilo($(this).val());
+            }
+        });
     });
 
     function getClientes() {
@@ -159,15 +171,27 @@
         }).always(function () {
         });
     }
-    
-    function getColoresXEstilo(e, rq) {
+
+    function getEmpleados() {
+        Empleado[0].selectize.clear(true);
+        Empleado[0].selectize.clearOptions();
+        $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentos/getEmpleados'); ?>').done(function (a) {
+            if (a.length > 0) {
+                a.forEach(function (x) {
+                    Empleado[0].selectize.addOption({text: x.EMPLEADO, value: x.CLAVE});
+                });
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+        });
+    }
+
+    function getColoresXEstilo(e) {
         $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
             x.forEach(function (i) {
                 Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
             });
-            if (rq) {
-                Color[0].selectize.setValue(rq.Color);
-            }
         }).fail(function (x, y, z) {
             getError(x);
         }).always(function () {

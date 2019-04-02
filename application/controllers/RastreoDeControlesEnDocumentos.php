@@ -36,10 +36,17 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         }
     }
     
-    
     public function getClientes() {
         try {
             print json_encode($this->rced->getClientes());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function getEmpleados() {
+        try {
+            print json_encode($this->rced->getEmpleados());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

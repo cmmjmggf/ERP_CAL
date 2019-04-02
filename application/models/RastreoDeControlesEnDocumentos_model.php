@@ -18,7 +18,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getClientes() {
         try {
             return $this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
@@ -36,6 +36,19 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
                             ->where('C.Estatus', 'ACTIVO')
                             ->order_by('ID', 'ASC')
                             ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleados() {
+        try {
+            return $this->db->select("E.Numero AS CLAVE, "
+                                    . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
+                                    . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
+                                    . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
+                                    . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
+                            ->from("empleados AS E")->where('E.DepartamentoFisico', 10)->where('E.AltaBaja', 1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
