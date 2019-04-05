@@ -6,10 +6,10 @@
             </div>
             <div class="col-sm-6" align="right">
 
-                <button type="button" class="btn btn-info btn-sm " id="btnVerDetalles" >
-                    <span class="fa fa-cube" ></span> AÑADE CLIENTES A PRIORIDAD
-                </button>
-                <button type="button" class="btn btn-warning btn-sm" id="btnImprimir">
+                <!--                <button type="button" class="btn btn-info btn-sm " id="btnVerDetalles" >
+                                    <span class="fa fa-cube" ></span> AÑADE CLIENTES A PRIORIDAD
+                                </button>-->
+                <button type="button" class="btn btn-warning btn-sm" id="btnTodosPedidos">
                     <i class="fa fa-print"></i> IMPRIME TODOS LOS PEDIDOS
                 </button>
                 <button type="button" class="btn btn-warning btn-sm" id="btnPedidosCliente">
@@ -69,11 +69,51 @@
         </div>
     </div>
 </div>
+
+<div class="modal " id="mdlSeleccionaSemana"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Selecciona Semana</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmExplosion">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Año</label>
+                            <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>De la sem.</label>
+                            <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
+                        </div>
+                        <div class="col-6">
+                            <label>A la sem.</label>
+                            <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var master_url = base_url + 'index.php/PrioridadesPorCliente/';
     var tblRegistros = $('#tblRegistros');
     var Registros;
     var pnlTablero = $("#pnlTablero");
+
+    var mdlSeleccionaSemana = $("#mdlSeleccionaSemana");
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         validacionSelectPorContenedor(pnlTablero);
@@ -107,9 +147,56 @@
             }
         });
 
+        mdlSeleccionaSemana.on('shown.bs.modal', function () {
+            mdlSeleccionaSemana.find("input").val("");
+            mdlSeleccionaSemana.find('#Ano').focus();
+        });
 
+        mdlSeleccionaSemana.find("#Ano").change(function () {
+            if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "AÑO INCORRECTO",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    buttons: false,
+                    timer: 1000
+                }).then((action) => {
+                    mdlSeleccionaSemana.find("#Ano").val("");
+                    mdlSeleccionaSemana.find("#Ano").focus();
+                });
+            }
+        });
 
+        mdlSeleccionaSemana.find("#Sem").change(function () {
+            var ano = mdlSeleccionaSemana.find("#Ano");
+            onComprobarSemanasProduccion($(this), ano.val());
+        });
 
+        mdlSeleccionaSemana.find("#aSem").change(function () {
+            var ano = mdlSeleccionaSemana.find("#Ano");
+            onComprobarSemanasProduccion($(this), ano.val());
+        });
+
+        mdlSeleccionaSemana.find('#btnImprimir').click(function () {
+            var sem = mdlSeleccionaSemana.find('#Sem').val();
+            var asem = mdlSeleccionaSemana.find('#aSem').val();
+            var ano = mdlSeleccionaSemana.find('#Ano').val();
+            HoldOn.open({theme: 'sk-cube', message: 'CARGANDO...'});
+            $.post(master_url + 'onImprimirReportePedidoGeneral', {dSem: sem, aSem: asem, ano: ano}).done(function (data) {
+                onNotifyOld('fa fa-check', 'REPORTE GENERADO', 'success');
+                onImprimirReporteFancy(data);
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
+
+        });
+
+        pnlTablero.find('#btnTodosPedidos').click(function () {
+            mdlSeleccionaSemana.modal('show');
+        });
 
         pnlTablero.find("#Cliente").change(function () {
             Registros.column(0).search($(this).val()).draw();
@@ -289,6 +376,36 @@
             HoldOn.close();
         });
 
+    }
+    function onComprobarSemanasProduccion(v, ano) {
+        $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarSemanasProduccion', {Clave: $(v).val(), Ano: ano}).done(function (data) {
+            if (data.length > 0) {
+
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
+                    icon: "warning",
+                    buttons: {
+                        eliminar: {
+                            text: "Aceptar",
+                            value: "aceptar"
+                        }
+                    }
+                }).then((value) => {
+                    switch (value) {
+                        case "aceptar":
+                            swal.close();
+                            $(v).val('');
+                            $(v).focus();
+                            break;
+                    }
+                });
+            }
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
     }
 </script>
 <style>

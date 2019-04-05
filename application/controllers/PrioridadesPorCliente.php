@@ -55,6 +55,23 @@ class PrioridadesPorCliente extends CI_Controller {
         }
     }
 
+    public function onImprimirReportePedidoGeneral() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["dSem"] = $this->input->post('dSem');
+        $parametros["aSem"] = $this->input->post('aSem');
+        $parametros["Ano"] = $this->input->post('ano');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reportePedidosGeneral.jasper');
+
+        $jc->setFilename('REPORTE_PEDIDOS_GENERAL_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onImprimirReportePedidoCliente() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
