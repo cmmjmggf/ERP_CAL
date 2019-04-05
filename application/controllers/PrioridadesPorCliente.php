@@ -3,14 +3,15 @@
 /* NO TOCAR */
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
-class RastreoControlesEmpleado extends CI_Controller {
+require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
+
+class PrioridadesPorCliente extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('RastreoControlesEmpleado_model');
+        $this->load->library('session')->model('PrioridadesPorCliente_model')->helper('jaspercommand_helper')->helper('file');
     }
 
     public function index() {
@@ -45,7 +46,7 @@ class RastreoControlesEmpleado extends CI_Controller {
             }
 
             $this->load->view('vFondo');
-            $this->load->view('vRastreoControlesEmpleado');
+            $this->load->view('vPrioridadesPorCliente');
             $this->load->view('vFooter');
         } else {
             $this->load->view('vEncabezado');
@@ -54,17 +55,48 @@ class RastreoControlesEmpleado extends CI_Controller {
         }
     }
 
+    public function onImprimirReportePedidoCliente() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["Cliente"] = $this->input->post('Cliente');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reportePedidosCliente.jasper');
+
+        $jc->setFilename('REPORTE_PEDIDOS_CLIENTE_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onImprimirReportePedidoControl() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["Pedido"] = $this->input->post('Pedido');
+        $parametros["Cliente"] = $this->input->post('Cliente');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reportePedidoClienteControl.jasper');
+
+        $jc->setFilename('REPORTE_PEDIDO_CLIENTE_CONTROL_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function getRecords() {
         try {
-            print json_encode($this->RastreoControlesEmpleado_model->getRecords());
+            print json_encode($this->PrioridadesPorCliente_model->getRecords());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function getEmpleados() {
+    public function getClientes() {
         try {
-            print json_encode($this->RastreoControlesEmpleado_model->getEmpleados());
+            print json_encode($this->PrioridadesPorCliente_model->getClientes());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -12,7 +12,10 @@ class Departamentos_model extends CI_Model {
 
     public function getRecords() {
         try {
-            return $this->db->select("D.ID, D.Clave, D.Descripcion, D.Tipo, D.Avance, D.Fraccion")->from("departamentos AS D")->where("D.Estatus", "ACTIVO")->get()->result();
+            return $this->db->select("D.ID,CAST(D.Clave AS SIGNED ) AS Clave, D.Descripcion, D.Tipo, D.Avance, D.Fraccion")
+                            ->from("departamentos AS D")
+                            ->where("D.Estatus", "ACTIVO")
+                            ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
