@@ -31,7 +31,11 @@
             </div>
             <div class="row">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table id="tblFechasDelPedido" class="table table-hover">
+                    <div class="col text-center">
+                        <p class="font-weight-bold">FECHAS DEL PEDIDO</p>
+                    </div>
+                    <div class="w-100"></div> 
+                    <table id="tblFechasDelPedido" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -42,10 +46,14 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-                    </table>
+                    </table> 
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table id="tblFechasDeFacturacion" class="table table-hover">
+                    <div class="col text-center">
+                        <p class="font-weight-bold">FECHAS DE FACTURACIÓN</p>
+                    </div>
+                    <div class="w-100"></div>
+                    <table id="tblFechasDeFacturacion" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -59,7 +67,11 @@
                     </table>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                    <table id="tblFechasDevolucion" class="table table-hover">
+                    <div class="col text-center">
+                        <p class="font-weight-bold">FECHAS DEVOLUCIÓN</p>
+                    </div>
+                    <div class="w-100"></div>
+                    <table id="tblFechasDevolucion" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -75,7 +87,11 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table id="tblFechasDeAvance" class="table table-hover">
+                    <div class="col text-center">
+                        <p class="font-weight-bold">FECHAS DE AVANCE</p>
+                    </div>
+                    <div class="w-100"></div>
+                    <table id="tblFechasDeAvance" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">Corte</th>
@@ -99,7 +115,11 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                    <table id="tblRastreoDeControlesEnNomina" class="table table-hover">
+                    <div class="col text-center">
+                        <p class="font-weight-bold">RASTREO DE CONTROLES EN NOMINA</p>
+                    </div>
+                    <div class="w-100"></div>
+                    <table id="tblRastreoDeControlesEnNomina" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -138,25 +158,117 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"), 
-        Estilo = pnlTablero.find("#Estilo"), Cliente = pnlTablero.find("#Cliente"),
-        Empleado = pnlTablero.find("#Empleado");
+    var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"),
+            Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"),
+            Cliente = pnlTablero.find("#Cliente"), EstatusProduccion = pnlTablero.find("#EstatusProduccion"),
+            Empleado = pnlTablero.find("#Empleado"), Pares = pnlTablero.find("#Pares"),
+            Fraccion = pnlTablero.find("#Fraccion"),
+            FechasDelPedido, tblFechasDelPedido = pnlTablero.find("#tblFechasDelPedido"),
+            FechasDeFacturacion, tblFechasDeFacturacion = pnlTablero.find("#tblFechasDeFacturacion"),
+            FechasDevolucion, tblFechasDevolucion = pnlTablero.find("#tblFechasDevolucion"),
+            FechasDeAvance, tblFechasDeAvance = pnlTablero.find("#tblFechasDeAvance"),
+            RastreoDeControlesEnNomina, tblRastreoDeControlesEnNomina = pnlTablero.find("#tblRastreoDeControlesEnNomina");
 
     $(document).ready(function () {
         getClientes();
         getEmpleados();
         Control.focus();
-        Estilo.on('keydown', function (e) {
-            if (e.keyCode === 13 && $(this).val()) {
-                getColoresXEstilo($(this).val());
+        Control.on('keydown', function (e) {
+            if (e.keyCode === 13 && Control.val()) {
+                getInfoXControl(Control.val());
             }
         }).focusout(function () {
-            if ($(this).val()) {
-                getColoresXEstilo($(this).val());
+            if (Control.val()) {
+                getInfoXControl(Control.val());
+            }
+        });
+        Empleado.on('keydown', function () {
+            RastreoDeControlesEnNomina.ajax.reload();
+        });
+        /*DATATABLES*/
+        var cols = [
+            {"data": "ID"}/*0*/, {"data": "PEDIDO"}/*1*/,
+            {"data": "ENTREGA"}/*2*/, {"data": "CAPTURA"},
+            {"data": "PRODUCCION"}
+        ];
+        var coldefs = [
+            {
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            }
+        ];
+        FechasDelPedido = tblFechasDelPedido.DataTable({
+            "dom": 'frit',
+            buttons: buttons,
+            "ajax": {
+                "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getPedidos'); ?>',
+                "contentType": "application/json",
+                "dataSrc": ""
+            },
+            "columns": cols,
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true
+        });
+        FechasDeFacturacion = tblFechasDeFacturacion.DataTable();
+        FechasDevolucion = tblFechasDevolucion.DataTable();
+        FechasDeAvance = tblFechasDeAvance.DataTable();
+        RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
+            "dom": 'frit',
+            buttons: buttons,
+            "ajax": {
+                "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getControlesEnNomina'); ?>',
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = (Control.val().trim());
+                    d.EMPLEADO = (Empleado.val().trim());
+                    d.FRACCION = (Fraccion.val().trim());
+                }
+            },
+            "columns": [
+                {"data": "ID"}/*0*/, {"data": "EMPLEADO"}/*1*/,
+                {"data": "CONTROL"}/*2*/, {"data": "FECHA"},
+                {"data": "ESTILO"}, {"data": "FRACCION"},
+                {"data": "SEMANA"}, {"data": "PARES"},
+                {"data": "DEPTO"}
+            ],
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true
+        });
+        tblRastreoDeControlesEnNomina.find('tbody').on('click', 'tr', function () {
+            if (Control.val()) {
+                var r = RastreoDeControlesEnNomina.row($(this)).data();
+                console.log('ROW ', r);
+                Empleado[0].selectize.setValue(r.EMPLEADO);
+                Fraccion.val(r.NUM_FRACCION);
+            } else {
+                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+                    Control.focus();
+                });
             }
         });
     });
-
     function getClientes() {
         Cliente[0].selectize.clear(true);
         Cliente[0].selectize.clearOptions();
@@ -188,10 +300,41 @@
     }
 
     function getColoresXEstilo(e) {
+        Color[0].selectize.clear(true);
+        Color[0].selectize.clearOptions();
         $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
             x.forEach(function (i) {
                 Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
             });
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+
+    function getInfoXControl(e) {
+        $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
+            console.log(x);
+            if (x.length > 0) {
+                var xx = x[0];
+                Estilo.val(xx.Estilo);
+                $.when($.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: xx.Estilo}).done(function (x, y, z) {
+                    x.forEach(function (i) {
+                        Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
+                    });
+                }).fail(function (x, y, z) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                })).done(function () {
+                    Color[0].selectize.setValue(xx.Color);
+                });
+                Pares.val(xx.Pares);
+                Cliente[0].selectize.setValue(xx.Cliente);
+                EstatusProduccion.val(xx.EstatusProduccion);
+                RastreoDeControlesEnNomina.ajax.reload();
+            }
         }).fail(function (x, y, z) {
             getError(x);
         }).always(function () {

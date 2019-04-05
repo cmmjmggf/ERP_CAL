@@ -19,6 +19,39 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
         }
     }
 
+    public function getPedidos() {
+        try {
+            return$this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
+                                    . "PX.FechaEntrega AS ENTREGA, PX.FechaRecepcion AS CAPTURA, "
+                                    . "PX.FechaProg AS PRODUCCION", false)
+                            ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getControlesEnNomina($CONTROL, $EMPLEADO, $FRACCION) {
+        try {
+            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
+                FPN.control AS CONTROL, FPN.fecha AS FECHA, 
+                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
+                FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
+                    ->from('fracpagnomina AS FPN');
+            if ($CONTROL !== '') {
+                $this->db->where('FPN.control', $CONTROL);
+            }
+            if ($EMPLEADO !== '') {
+                $this->db->where('FPN.numeroempleado', $EMPLEADO);
+            }
+            if ($FRACCION !== '') {
+                $this->db->where('FPN.fraccion', $FRACCION);
+            }
+            return $this->db->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getClientes() {
         try {
             return $this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
@@ -35,6 +68,17 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
                             ->where('C.Estilo', $Estilo)
                             ->where('C.Estatus', 'ACTIVO')
                             ->order_by('ID', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl($Control) {
+        try {
+            return $this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, C.Maquila, C.Semana, C.Consecutivo, C.Motivo, C.Cancelacion, C.EstatusProduccion", false)
+                            ->from('controles AS C')
+                            ->where('C.Control', $Control)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

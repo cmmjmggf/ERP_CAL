@@ -35,7 +35,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
-    
+
     public function getClientes() {
         try {
             print json_encode($this->rced->getClientes());
@@ -43,7 +43,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getEmpleados() {
         try {
             print json_encode($this->rced->getEmpleados());
@@ -51,13 +51,43 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
-    
-    public function getColoresXEstilo() {
+
+    public function getPedidos() {
         try {
-            print json_encode($this->rced->getColoresXEstilo());
+            print json_encode($this->rced->getPedidos());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
+
+    public function getControlesEnNomina() {
+        try {
+            $xi = $this->input;
+            print json_encode(
+                    $this->rced->getControlesEnNomina(
+                            $xi->get('CONTROL'),
+                            $xi->get('EMPLEADO'),
+                            $xi->get('FRACCION')
+                            ));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getColoresXEstilo() {
+        try {
+            print json_encode($this->rced->getColoresXEstilo($this->input->get('ESTILO')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl() {
+        try {
+            print json_encode($this->rced->getInfoXControl($this->input->get('CONTROL')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
