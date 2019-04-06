@@ -1,4 +1,4 @@
-<!-- Contenido  --> 
+<!-- Contenido  -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <button class="btn btn-primary text-success btn-sm navbar-brand" id="sidebarCollapse">
         <i class="fa fa-industry"></i> Producción
@@ -32,3 +32,4 @@
 
 <?php
 $this->load->view('vExplosionSemanal');
+$this->load->view('vVisualizaPedido');

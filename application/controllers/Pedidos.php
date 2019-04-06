@@ -68,8 +68,16 @@ class Pedidos extends CI_Controller {
     }
 
     public function getPedidoDByID() {
-        try { 
+        try {
             print json_encode($this->pem->getPedidoDByID($this->input->get('ID')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPedidoByPedidoByCliente() {
+        try {
+            print json_encode($this->pem->getPedidoByPedidoByCliente($this->input->get('Cliente'), $this->input->get('Pedido')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -555,7 +563,7 @@ class Pedidos extends CI_Controller {
                         $pdf->SetFont('Calibri', '', 7.5);
                         $row = array();
                         $estilo_color = $v->EstiloT . "/" . $v->ColorT;
-                        array_push($row, $estilo_color, $v->Maquila, $v->Semana, $v->Recio, $v->Pares); //4 
+                        array_push($row, $estilo_color, $v->Maquila, $v->Semana, $v->Recio, $v->Pares); //4
                         for ($index = 1; $index <= 22; $index++) {
                             array_push($row, ( $v->{"C$index"} !== '0') ? $v->{"C$index"} : '-'); //5
                         }
