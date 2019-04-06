@@ -48,7 +48,7 @@ class CerrarProg extends CI_Controller {
 
     public function getRecords() {
         try {
-            $x = $this->input;  
+            $x = $this->input;
             print json_encode($this->cprm->getRecords($x->get('MAQUILA'), $x->get('SEMANA'), $x->get('ANIO')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -66,7 +66,7 @@ class CerrarProg extends CI_Controller {
     public function onGenerarControles() {
         try {
             $controles = json_decode($this->input->post('SubControles'));
-           
+
             switch ($this->input->post('Marca')) {
                 case 1:
                     foreach ($controles as $k => $v) {
@@ -88,6 +88,14 @@ class CerrarProg extends CI_Controller {
                             ));
                             $this->db->set('Control', $Y . $S . $M . $C)->where('ID', $v->PedidoDetalle)->update('pedidox');
 //                            print $this->db->last_query();/*QUEDA PARA PRUEBAS*/
+
+                            /* AGREGAR REGISTRO EN AVAPRD (FILI) */
+//                            $dtm = $this->db->select('',false)->from('')->where()->get()->result();
+                            $this->db->insert('avaprd', array(
+                                'contped' => $Y . $S . $M . $C,
+                                'status' => 1,
+                                'fec1' => Date('d/m/Y h:i:s a')
+                            ));
                         }
                     }
                     break;

@@ -191,8 +191,9 @@ class Avance7 extends CI_Controller {
                         }
                         /* MOVER EL ESTATUS DE PRODUCCION
                          * 70	PREL-CORTE, GENERA AVANCE 1
-                         *                          */
+                         */
                         $this->db->set('EstatusProduccion', 'PREL-CORTE')
+                                ->set('DeptoProduccion', 70)
                                 ->where('Control', $x->post('CONTROL'))
                                 ->update('controles');
                         print '{"AVANZO":"1","FR":"' . $x->post('NUMERO_FRACCION') . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO"}';

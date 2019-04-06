@@ -4,8 +4,13 @@
             <div class="col-sm-2 float-left">
                 <legend class="float-left">Pedidos</legend>
             </div>
-            <div class="col-sm-9">
-                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="# # # # #">
+            <div class="col-sm-5">
+                <label>Cliente</label>
+                <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" autofocus=""></select>
+            </div>
+            <div class="col-sm-4">
+                <label>Pedido</label>
+                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm  noBorders notEnter numbersOnly" autofocus="" placeholder="# # # # #">
             </div>
             <div class="col-sm-1 float-right" align="right">
                 <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar">
@@ -19,7 +24,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Clave</th>
+                            <th>Pedidos</th>
                             <th>Cliente</th>
                             <th>Agente</th>  
                             <th>Pares</th>
@@ -478,15 +483,20 @@
     $(document).ready(function () {
         init();
         handleEnter();
+        pnlTablero.find("#NumeroDePedido")
         pnlTablero.find("#NumeroDePedido").keydown(function (e) {
-            if (e.keyCode === 13 && isValidInput($(this))) {
+            if (e.keyCode === 13 && isValidInput($(this)) &&
+                    pnlTablero.find("#ClientePedido").val()) {
                 HoldOn.open({
                     theme: 'sk-bounce',
                     message: 'Por favor espere...'
                 });
-                $.getJSON(master_url + 'getIDXClave', {PEDIDO: $(this).val()}).done(function (data) {
-                    console.log('getIDXClave', "\n", data);
-                    getPedidoByID(data[0].ID);
+                $.getJSON(master_url + 'getIDXClave',
+                        {
+                            PEDIDO: $(this).val(),
+                            CLIENTE: pnlTablero.find("#ClientePedido").val()
+                        }).done(function (data) {
+                    getPedidoByID(data[0].ID, data[0].Cliente);
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                 }).always(function () {
@@ -494,17 +504,21 @@
             }
             if (isValidInput($(this))) {
                 tblPedidos.DataTable().column(1).search($(this).val()).draw();
+                tblPedidos.DataTable().column(2).search(pnlTablero.find("#ClientePedido").val()).draw();
             } else {
                 tblPedidos.DataTable().column(1).search('').draw();
+                tblPedidos.DataTable().column(2).search('').draw();
             }
         }).keyup(function () {
             if (isValidInput($(this))) {
                 tblPedidos.DataTable().column(1).search($(this).val()).draw();
+                tblPedidos.DataTable().column(2).search(pnlTablero.find("#ClientePedido").val()).draw();
             } else {
                 tblPedidos.DataTable().column(1).search('').draw();
+                tblPedidos.DataTable().column(2).search('').draw();
             }
         });
-
+        /*BUSCA CONFORME VA ESCRIBIENDO, DE INICIO NO TIENE NINGUN DATO, HASTA QUE ESCRIBAS*/
         pnlDatos.find('#Estilo').selectize({
             valueField: 'Clave',
             labelField: 'Estilo',
@@ -651,7 +665,7 @@
         btnImprimir.click(function () {
             if (temp !== '') {
                 HoldOn.open({message: 'Espere...', theme: 'sk-cube'});
-                $.post(master_url + 'onImprimirPedidoReducido', {ID: temp}).done(function (data) {
+                $.post(master_url + 'onImprimirPedidoReducido', {ID: temp, CLIENTE: pnlDatos.find("#Cliente").val()}).done(function (data) {
                     //check Apple device
                     if (isAppleDevice() || isMobile) {
                         window.open(data, '_blank');
@@ -1038,10 +1052,11 @@
 
     function init() {
         getRecords();
-        getOptions("getClientes", "Cliente", "Clave", "Cliente"); //Clientes
-        getOptions("getAgentes", "Agente", "Clave", "Agente"); //Agentes
+        getOptions("getClientes", "Cliente", "Clave", "Cliente", pnlDatos); //Clientes
+        getOptions("getClientes", "ClientePedido", "Clave", "Cliente", pnlTablero); //Clientes
+        getOptions("getAgentes", "Agente", "Clave", "Agente", pnlDatos); //Agentes
         //getOptions("getEstilos", "Estilo", "Clave", "Estilo"); //Estilos
-        getOptions("getMaquilas", "Maquila", "Clave", "Maquila"); //Maquilas
+        getOptions("getMaquilas", "Maquila", "Clave", "Maquila", pnlDatos); //Maquilas
     }
 
     function getRecords() {
@@ -1058,7 +1073,8 @@
                 "dataSrc": ""
             },
             "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Cliente"}, {"data": "Agente"}, {"data": "Pares"}, {"data": "FechaPedido"}
+                {"data": "ID"}, {"data": "Clave"}, {"data": "Cliente"},
+                {"data": "Agente"}, {"data": "Pares"}, {"data": "FechaPedido"}
             ],
             "columnDefs": [
                 {
@@ -1096,7 +1112,7 @@
             $(this).addClass("success");
             var dtm = Pedidos.row(this).data();
             temp = dtm.Clave;
-            getPedidoByID(temp);
+            getPedidoByID(temp, dtm.Cliente);
         });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblPedidoDetalle')) {
@@ -1104,10 +1120,10 @@
         }
     }
 
-    function getOptions(url, comp, key, field) {
+    function getOptions(url, comp, key, field, parent) {
         $.getJSON(master_url + url).done(function (data) {
             $.each(data, function (k, v) {
-                pnlDatos.find("#" + comp)[0].selectize.addOption({text: v[field], value: v[key]});
+                parent.find("#" + comp)[0].selectize.addOption({text: v[field], value: v[key]});
             });
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -1270,8 +1286,8 @@
         }
     }
 
-    function getPedidoByID(idx) {
-        $.getJSON('<?php print base_url('pedsid'); ?>', {ID: idx}).done(function (data) {
+    function getPedidoByID(idx, cliente) {
+        $.getJSON('<?php print base_url('pedsid'); ?>', {ID: idx, CLIENTE: cliente}).done(function (data) {
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
@@ -1306,11 +1322,12 @@
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
             temp = dt.Clave;
             opciones_detalle.ajax = {
-                "url": '<?php print base_url('pedbyid') ?>', 
+                "url": '<?php print base_url('pedbyid') ?>',
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": {
-                    "ID": dt.Clave
+                    "ID": dt.Clave,
+                    "CLIENTE": dt.Cliente
                 }
             };
             if ($.fn.DataTable.isDataTable('#tblPedidoDetalle')) {

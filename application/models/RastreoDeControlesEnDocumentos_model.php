@@ -24,7 +24,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
             return$this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
                                     . "PX.FechaEntrega AS ENTREGA, PX.FechaRecepcion AS CAPTURA, "
                                     . "PX.FechaProg AS PRODUCCION", false)
-                            ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->get()->result();
+                            ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->limit(3999)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -46,7 +46,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
             if ($FRACCION !== '') {
                 $this->db->where('FPN.fraccion', $FRACCION);
             }
-            return $this->db->get()->result();
+            return $this->db->limit(999)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

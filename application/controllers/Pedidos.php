@@ -61,15 +61,15 @@ class Pedidos extends CI_Controller {
 
     public function getPedidosByID() {
         try {
-            print json_encode($this->pem->getPedidosByID($this->input->get('ID')));
+            print json_encode($this->pem->getPedidosByID($this->input->get('ID'),$this->input->get('CLIENTE')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
     public function getPedidoDByID() {
-        try {
-            print json_encode($this->pem->getPedidoDByID($this->input->get('ID')));
+        try { 
+            print json_encode($this->pem->getPedidoDByID($this->input->get('ID'),$this->input->get('CLIENTE')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -85,7 +85,7 @@ class Pedidos extends CI_Controller {
 
     public function getIDXClave() {
         try {
-            print json_encode($this->pem->getIDXClave($this->input->get('PEDIDO')));
+            print json_encode($this->pem->getIDXClave($this->input->get('PEDIDO'),$this->input->get('CLIENTE')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -221,7 +221,7 @@ class Pedidos extends CI_Controller {
 
     public function onComprobarClavePedido() {
         try {
-            print json_encode($this->pem->onComprobarClavePedido($this->input->get('CLAVE')));
+            print json_encode($this->pem->onComprobarClavePedido($this->input->get('CLAVE'),$this->input->get('cliente')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -354,8 +354,9 @@ class Pedidos extends CI_Controller {
             $pdf->AddFont('Calibri', 'BI');
 
             $IDX = $this->input->post('ID');
-            $Pedido = $this->pem->getPedidoByID($IDX);
-            $Series = $this->pem->getSerieXPedido($IDX);
+            $CLIENTE = $this->input->post('CLIENTE');
+            $Pedido = $this->pem->getPedidoByID($IDX,$CLIENTE);
+            $Series = $this->pem->getSerieXPedido($IDX,$CLIENTE);
 
             $pdf->SetFont('Calibri', '', 7.5);
             $E = $Pedido[0];
@@ -563,7 +564,7 @@ class Pedidos extends CI_Controller {
                         $pdf->SetFont('Calibri', '', 7.5);
                         $row = array();
                         $estilo_color = $v->EstiloT . "/" . $v->ColorT;
-                        array_push($row, $estilo_color, $v->Maquila, $v->Semana, $v->Recio, $v->Pares); //4
+                        array_push($row, $estilo_color, $v->Maquila, $v->Semana, $v->Recio, $v->Pares); //4 
                         for ($index = 1; $index <= 22; $index++) {
                             array_push($row, ( $v->{"C$index"} !== '0') ? $v->{"C$index"} : '-'); //5
                         }

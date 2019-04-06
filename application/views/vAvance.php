@@ -1,13 +1,24 @@
 <div class="card mt-2 mx-2 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
-        <div class="row" style="margin-right: 0px;">
+        <div class="row m-4" style="margin-right: 0px;">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                 <h3 class="font-weight-bold">Avance</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                <h3 class="font-weight-bold"></h3>
+                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                    <span class="fa fa-bullseye"></span>
+                    Rastreo X Concepto
+                </button>
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                    <span class="fa fa-globe"></span> 
+                    Rastreo X Control
+                </button>
+                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                    <span class="fa fa-paint-brush"></span> 
+                    Desarrollo de muestras
+                </button>
             </div>
         </div>
     </div>
@@ -99,19 +110,9 @@
             <!--SECCION DOS-->
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h4>Fracciones pagadas en nomina de este control</h4>
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                        <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
-                            <span class="fa fa-bullseye"></span><br>
-                            Rastreo X Concepto
-                        </button>
-                        <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
-                            <span class="fa fa-globe"></span><br>
-                            Rastreo X Control
-                        </button>
-                    </div>
+                    </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <button type="button" id="btnBorrar" name="btnBorrar" class="btn btn-danger">
                             <span class="fa fa-trash"></span>
@@ -176,7 +177,6 @@
                                     <th scope="col">Emp</th>
                                     <th scope="col">Concepto</th>
                                     <th scope="col">Fecha</th>
-                                    <th scope="col">Concepto</th>
                                     <th scope="col">Per</th>
                                     <th scope="col">Importe</th>
                                     <th scope="col">Ded</th>
@@ -279,9 +279,35 @@
             RastreoXControl, tblRastreoXControl = mdlRastreoXControl.find("#tblRastreoXControl"),
             EmpleadoRXC = mdlRastreoXConcepto.find("#EmpleadoRXC"),
             ConceptoRXC = mdlRastreoXConcepto.find("#ConceptoRXC"),
-            EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL");
+            EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL"),
+            btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras");
 
     $(document).ready(function () {
+
+        btnDesarrolloDeMuestras.click(function () {
+            $.fancybox.defaults.animationEffect = "zoom-in";
+            $.fancybox.defaults.animationEffect = "zoom-in-out";
+            $.fancybox.open({
+                src: '<?php print base_url('DesarrolloMuestras/?origen=PRODUCCION'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
 
         btnRastreoXControl.click(function () {
             mdlRastreoXControl.modal('show');
@@ -466,18 +492,14 @@
                 [0, 'desc']
             ]
         };
-        Avances = tblAvance.DataTable(xoptions);
-//
+        Avances = tblAvance.DataTable(xoptions); 
         RastreoXConcepto = tblRastreoXConcepto.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getRastreoXConcepto'); ?>',
                 "type": "POST",
                 "contentType": "application/json",
-                "dataSrc": "",
-                "data": function (d) {
-                    d.CONTROL = (Control.val().trim());
-                }
+                "dataSrc": ""
             },
             buttons: buttons,
             "columns": [
@@ -485,7 +507,7 @@
                 {"data": "SEMANA"}/*1*/,
                 {"data": "EMPLEADO"}/*2*/,
                 {"data": "FECHA"}/*3*/,
-                {"data": "CONCEPTO"}/*4*/, 
+                {"data": "CONCEPTO"}/*4*/,
                 {"data": "PER"}/*9*/,
                 {"data": "IMPORTE"}/*9*/,
                 {"data": "DED"}/*9*/,
@@ -496,7 +518,7 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 500,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -650,7 +672,7 @@
     function getConceptosNomina() {
         $.getJSON('<?php print base_url('Avance/getConceptosNomina'); ?>').done(function (a) {
             console.log(a);
-            a.forEach(function (e) { 
+            a.forEach(function (e) {
                 ConceptoRXC[0].selectize.addOption({text: e.CLAVE + ' ' + e.CONCEPTO, value: e.CLAVE});
             });
         }).fail(function (x, y, z) {

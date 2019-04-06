@@ -54,7 +54,7 @@ class Avance extends CI_Controller {
 
     public function getRastreoXConcepto() {
         try {
-            print json_encode($this->avm->getRastreoXConcepto($this->input->get('CONTROL')));
+            print json_encode($this->avm->getRastreoXConcepto());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -62,7 +62,7 @@ class Avance extends CI_Controller {
 
     public function getRastreoXControl() {
         try {
-            print json_encode($this->avm->getRastreoXControl($this->input->get('CONTROL')));
+            print json_encode($this->avm->getRastreoXControl());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -185,6 +185,10 @@ class Avance extends CI_Controller {
                 'Hora' => Date('h:i:s a'),
             );
             $this->db->insert('avance', $data);
+            $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
+                    ->set('DeptoProduccion', $x->post('DEPTO'))
+                    ->where('Control', $x->post('CONTROL'))
+                    ->update('controles');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -237,6 +241,9 @@ class Avance extends CI_Controller {
                     'Fraccion' => $x->post('FRACCION')
                 ));
                 $id = $this->db->insert_id();
+                $this->db->set('EstatusProduccion', ($depto === 180) ? "MONTADO A" : "MONTADO B")
+                        ->set('DeptoProduccion', $x->post('DEPTO'))
+                        ->where('Control', $x->post('CONTROL'))->update('pedidox');
             }
             if ($x->post('FRACCION') === 600 && $x->post('DEPTO') === 210 ||
                     $x->post('FRACCION') === 600 && $x->post('DEPTO') === 220) {
@@ -254,7 +261,12 @@ class Avance extends CI_Controller {
                 ));
                 /* DE ADORNO B PASA A ALMACEN DE ADORNO */
                 if ($x->post('DEPTO') === 220) {
-                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->where('Control', $x->post('CONTROL'))->update('controles');
+                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('controles');
+                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
                 }
                 $id = $this->db->insert_id();
             }
@@ -286,7 +298,12 @@ class Avance extends CI_Controller {
             );
 //SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
             if ($x->post('DEPTO') !== 220) {
-                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))->where('Control', $x->post('CONTROL'))->update('controles');
+                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
+                        ->set('DeptoProduccion', $x->post('DEPTO'))
+                        ->where('Control', $x->post('CONTROL'))->update('controles');
+                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
+                        ->set('DeptoProduccion', $x->post('DEPTO'))
+                        ->where('Control', $x->post('CONTROL'))->update('pedidox');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -94,12 +94,17 @@ class Avance_model extends CI_Model {
 
     public function getRastreoXConcepto() {
         try {
-            return $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
-                                    . "FP.numfrac AS NUM_FRACCION, FP.fecha AS FECHA, "
-                                    . "FP.fecha AS FECHA,FP.Semana AS SEMANA, "
-                                    . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
-                                    . "FP.subtot AS SUBTOTAL")
-                            ->from("fracpagnomina AS FP")->get()->result();
+            $this->db->select("PN.ID, "
+                    . "PN.numsem AS SEMANA,"
+                    . "PN.numemp AS EMPLEADO, "
+                    . "PN.fecha AS FECHA, "
+                    . "PN.numcon AS CONCEPTO, "
+                    . "PN.tpcon AS PER, "
+                    . "PN.importe AS IMPORTE, "
+                    . "PN.tpcond AS DED, "
+                    . "PN.imported AS SUBTOTAL")
+                    ->from("prenomina AS PN")->limit(9999); 
+            return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

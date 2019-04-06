@@ -148,6 +148,10 @@ class ControlPlantilla extends CI_Controller {
                 'Fecha' => $x->post('FECHA'),
                 'Registro' => Date('d/m/Y h:i:s a'),
                 'Estatus' => 1));
+            $this->db->set('EstatusProduccion', 'MAQUILA')
+                    ->set('DeptoProduccion', 100)
+                    ->where('Control', $x->post('CONTROL'))
+                    ->update('controles');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
