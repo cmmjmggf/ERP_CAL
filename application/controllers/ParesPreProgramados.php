@@ -219,7 +219,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosEstilo() {
         try {
             $x = $this->input;
-            $ESTILOS = $this->pam->getEstilos($x->post('ESTILO'), $x->post('CLIENTE'));
+            $ESTILOS = $this->pam->getEstilos($x->post('ESTILO'), $x->post('CLIENTE'), $x->post('MAQUILA'), $x->post('SEMANA'));
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');
@@ -364,7 +364,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosLineas() {
         try {
             $x = $this->input;
-            $LINEAS = $this->pam->getLineas($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'));
+            $LINEAS = $this->pam->getLineas($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'));
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');

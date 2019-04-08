@@ -60,7 +60,7 @@
         </div> 
     </div>
 </div>
-
+ 
 <script>
     var mdlParesPreProgramados = $("#mdlParesPreProgramados");
     var master_url_pares_preprogramados = base_url + 'index.php/ParesPreProgramados/';

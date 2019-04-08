@@ -7,14 +7,27 @@
         <!--MODULOS POR USUARIO-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                <h4 class="font-italic">MODULOS POR USUARIO</h4>
-                <hr>
-                <div class="w-100"></div>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <h4 class="font-italic">MODULOS POR USUARIO</h4>
+                        <hr>
+                    </div>
+                    <div class="col-4" align="right">
+
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 pb-3">
+            <div class="w-100"></div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3">
                 <label>Usuario</label>
                 <select id="mxu" name="mxu" class="form-control form-control-sm NotSelectize">
                 </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3"align="right">
+                <button id="btnAsignaTodo" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
+                    <span class="fa fa-shield-alt"></span>
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -284,7 +297,7 @@
             sixio = pnlTableroBody.find("#sixio"), sixit = pnlTableroBody.find("#sixit"),
             ssixiu = pnlTableroBody.find("#ssixiu"), ssixim = pnlTableroBody.find("#ssixim"),
             ssixio = pnlTableroBody.find("#ssixio"), ssixit = pnlTableroBody.find("#ssixit"),
-            ssixis = pnlTableroBody.find("#ssixis");
+            ssixis = pnlTableroBody.find("#ssixis"), btnAsignaTodo = pnlTableroBody.find("#btnAsignaTodo");
 
     var btnAsignarModulos = pnlTableroBody.find("#btnAsignarModulos"),
             btnAsignarOpcionesxModulos = pnlTableroBody.find("#btnAsignarOpcionesxModulos"),
@@ -293,6 +306,23 @@
             btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo");
 
     $(document).ready(function () {
+
+        btnAsignaTodo.click(function () {
+            if (mxu.val()) {
+                HoldOn.open({
+                    theme:'sk-rect',
+                    message:'Asignando permisos...'
+                });
+                
+                
+            } else {
+                onBeep(2);
+                swal('ATENCIÓN', 'DEBE DE SELECCIONAR AL MENOS UN USUARIO', 'warning').then((value) => {
+                    mxu[0].selectize.open();
+                });
+            }
+        });
+
         pnlTableroBody.find("#mxu, #oxmu,#ixou,#sixiu,#ssixiu").selectize({
             create: true,
             sortField: 'text'
@@ -322,7 +352,7 @@
                 });
                 console.log('subsubitems', subsubitems);
                 if (subsubitems.length > 0) {
-                    onEstablecerSubSubItems(ssixiu.val(), ssixim.val(), ssixio.val(), ssixit.val(), ssixis.val(), subsubitems); 
+                    onEstablecerSubSubItems(ssixiu.val(), ssixim.val(), ssixio.val(), ssixit.val(), ssixis.val(), subsubitems);
                 } else if (subsubitems.length <= 0 && $("#subsubitems option").length > 0) {
                     onBeep(2);
                     console.log($("#subsubitems option"), $("#subsubitems option").length)
@@ -339,7 +369,7 @@
                         }
                     });
                 } else if (subsubitems.length <= 0) {
-                    swal('ATENCIÓN','NO SE HAN PODIDO ASIGNAR LOS SUBSUBITEMS','error');
+                    swal('ATENCIÓN', 'NO SE HAN PODIDO ASIGNAR LOS SUBSUBITEMS', 'error');
                 }
             } else {
                 onBeep(2);
