@@ -12,7 +12,7 @@ class ParesPreProgramados_model extends CI_Model {
 
     public function getParesPreProgramados($CEL, $I, $CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF) {
         try {
-            $this->db->select('C.Clave AS CLAVE_CLIENTE, C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE, A.Nombre AS AGENTE, ES.Descripcion AS ESTADO, 
+            $this->db->select('C.Clave AS CLAVE_CLIENTE, C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE, A.Nombre AS AGENTE, ES.Descripcion AS ESTADO,
 P.Clave AS PEDIDO, E.Linea AS CLAVE_LINEA, L.Descripcion AS LINEA, P.Estilo AS CLAVE_ESTILO, CO.Descripcion AS COLOR,
 P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Semana AS SEMANA, C.Pais AS PAIS', false)
                     ->from('pedidox AS P')
@@ -58,7 +58,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             } else if ($FECHAF !== '') {
                 $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             }
-            $sql =  $this->db->get()->result();
+            $sql = $this->db->get()->result();
             return $sql;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -107,9 +107,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
         try {
             $this->db->select('C.Clave AS CLAVE_CLIENTE, '
                             . 'CONCAT(C.Clave," - ",C.RazonS) AS CLIENTE', false)
-                    ->from('pedidox AS P')
-                    ->join('clientes AS C', 'P.Cliente = C.ID')
-                    ->group_by('C.ID');
+                    ->from('clientes AS C')->where('C.Estatus', 'ACTIVO');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

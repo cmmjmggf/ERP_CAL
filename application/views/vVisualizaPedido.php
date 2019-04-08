@@ -51,71 +51,46 @@
         });
 
         mdlReimprimirPedido.find('#Pedido').on("keyup", function (e) {
-            if (e.keyCode === 13) {
-                var cliente = mdlReimprimirPedido.find("#ClienteVisPed").val();
-                $.getJSON(base_url + 'index.php/Pedidos/getPedidoByPedidoByCliente', {Cliente: cliente, Pedido: $(this).val()}).done(function (data, x, jq) {
-                    $.each(data, function (k, v) {
-                        mdlReimprimirPedido.find("#ClienteVisPed")[0].selectize.addOption({text: v.Cliente, value: v.ID});
-                    });
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                }).always(function () {
-                    HoldOn.close();
-                });
-            }
 
         });
 
         mdlReimprimirPedido.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlReimprimirPedido.find("#frmCaptura")[0]);
-            $.ajax({
-                url: base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion',
-                type: "POST",
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: frm
-            }).done(function (data, x, jq) {
-                console.log(data);
-                if (data.length > 0) {
+            var cliente = mdlReimprimirPedido.find("#ClienteVisPed").val();
+            var clave = mdlReimprimirPedido.find("#Pedido").val();
+            $.post(base_url + 'index.php/Pedidos/onImprimirPedidoReducido', {ID: clave, CLIENTE: cliente}).done(function (data) {
+                //check Apple device
 
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
+                $.fancybox.open({
+                    src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                    type: 'iframe',
+                    opts: {
+                        afterShow: function (instance, current) {
+                            console.info('done!');
+                        },
+                        iframe: {
+                            // Iframe template
+                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                            preload: true,
+                            // Custom CSS styling for iframe wrapping element
+                            // You can use this to set custom iframe dimensions
+                            css: {
+                                width: "100%",
+                                height: "100%"
                             },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
+                            // Iframe tag attributes
+                            attr: {
+                                scrolling: "auto"
                             }
                         }
-                    });
-                } else {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                        icon: "error"
-                    }).then((action) => {
-                        mdlReimprimirPedido.find('#Ano').focus();
-                    });
-                }
-                HoldOn.close();
+                    }
+                });
+
             }).fail(function (x, y, z) {
+                HoldOn.close();
                 console.log(x, y, z);
+                swal('ATENCIÓN', 'NO HA SIDO POSIBLE MOSTRAR EL PEDIDO PARA SU IMPRESIÓN,VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'warning');
+            }).always(function () {
                 HoldOn.close();
             });
 
