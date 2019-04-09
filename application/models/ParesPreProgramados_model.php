@@ -66,7 +66,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
         }
     }
 
-    public function getClientes($CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA) {
+    public function getClientes($CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF) {
         try {
             $this->db->select('C.Clave AS CLAVE_CLIENTE, '
                             . 'C.RazonS AS CLIENTE, '
@@ -95,8 +95,12 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($LINEA !== '') {
                 $this->db->where("L.Clave", $LINEA);
             }
-            if ($FECHA !== '') {
-                $this->db->where("P.FechaEntrega", $FECHA);
+            if ($FECHA !== '' && $FECHAF !== '') {
+                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
+            } else if ($FECHA !== '') {
+                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHA', \"%d/%m/%Y\")");
+            } else if ($FECHAF !== '') {
+                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             }
             $this->db->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false);
             return $this->db->group_by('C.ID')->get()->result();

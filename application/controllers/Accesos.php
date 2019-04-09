@@ -386,4 +386,12 @@ class Accesos extends CI_Controller {
         }
     }
 
+    public function onAsignarTodo() {
+        try {
+            $this->acm->onAsignarTodo($this->input->post('USUARIO'));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

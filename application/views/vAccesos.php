@@ -310,11 +310,18 @@
         btnAsignaTodo.click(function () {
             if (mxu.val()) {
                 HoldOn.open({
-                    theme:'sk-rect',
-                    message:'Asignando permisos...'
+                    theme: 'sk-rect',
+                    message: 'Asignando permisos...'
                 });
-                
-                
+                $.post('<?php print base_url('Accesos/onAsignarTodo'); ?>', {USUARIO: mxu.val()}).done(function (a, b, c) {
+                    onBeep(5);
+                    swal('ATENCIÓN', 'SE HAN ASIGNADO TODOS LOS PERMISOS CON ÉXITO', 'success');
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'DEBE DE SELECCIONAR AL MENOS UN USUARIO', 'warning').then((value) => {
