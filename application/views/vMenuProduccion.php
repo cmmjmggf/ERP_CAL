@@ -34,3 +34,4 @@
 $this->load->view('vExplosionSemanal');
 $this->load->view('vVisualizaPedido');
 $this->load->view('vReporteParesPreAsignados');
+$this->load->view('vEstadisticasEntrega');
