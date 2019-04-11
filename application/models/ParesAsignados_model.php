@@ -22,8 +22,8 @@ class ParesAsignados_model extends CI_Model {
                             . 'P.Observacion AS OBSERVACION_UNO, '
                             . 'P.ObservacionDetalle AS OBSERVACION_DOS,'
                             . 'C.Observaciones AS OBSERVACIONES_CLIENTE', false)
-                    ->from('pedidox AS P')->join('clientes AS C', 'P.Cliente = C.ID')
-                    ->join('colores AS CO', 'P.Color = CO.Clave AND CO.Estilo = P.Estilo');
+                    ->from('pedidox AS P')->join('clientes AS C', 'P.Cliente = C.ID', 'left')
+                    ->join('colores AS CO', 'P.Color = CO.Clave AND CO.Estilo = P.Estilo', 'left');
             if ($MI !== '' && $MF !== '') {
                 $this->db->where("P.Maquila BETWEEN $MI AND $MF", null, false);
             }
@@ -72,4 +72,5 @@ class ParesAsignados_model extends CI_Model {
             echo $exc->getTraceAsString();
         }
     }
+
 }
