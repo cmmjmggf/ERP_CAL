@@ -54,7 +54,8 @@ class Avance extends CI_Controller {
 
     public function getRastreoXConcepto() {
         try {
-            print json_encode($this->avm->getRastreoXConcepto());
+            $x = $this->input; 
+            print json_encode($this->avm->getRastreoXConcepto($x->get('EMPLEADO'),$x->get('CONCEPTO')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

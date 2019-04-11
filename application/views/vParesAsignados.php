@@ -155,7 +155,7 @@
         if (e.keyCode === 13 && input.val() !== '') {
             $.getJSON(master_url_pares_asignados + 'onChecarSemanaValida', {SEMANA: input.val()}).done(function (data, x, jq) {
                 console.log('SEMANA VÁLIDA ? ',data);
-                if (parseInt(data[0].SEMANA_NO_CERRADA) === 1) {
+                if (parseInt(data[0].SEMANA_NO_CERRADA) === 0) {
                     swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
                         input.focus();
                     });

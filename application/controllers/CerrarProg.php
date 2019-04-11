@@ -94,7 +94,7 @@ class CerrarProg extends CI_Controller {
                             $this->db->insert('avaprd', array(
                                 'contped' => $Y . $S . $M . $C,
                                 'status' => 1,
-                                'fec1' => Date('d/m/Y h:i:s a')
+                                'fec1' => Date('Y-m-d h:i:s')
                             ));
                         }
                     }
