@@ -25,10 +25,10 @@ class ParesAsignados_model extends CI_Model {
                     ->from('pedidox AS P')->join('clientes AS C', 'P.Cliente = C.ID')
                     ->join('colores AS CO', 'P.Color = CO.Clave AND CO.Estilo = P.Estilo');
             if ($MI !== '' && $MF !== '') {
-                $this->db->where("P.Maquila BETWEEN '$MI' AND '$MF'", null, false);
+                $this->db->where("P.Maquila BETWEEN $MI AND $MF", null, false);
             }
             if ($SI !== '' && $SF !== '') {
-                $this->db->where("P.Semana BETWEEN '$SI' AND '$SF'", null, false);
+                $this->db->where("P.Semana BETWEEN $SI AND $SF", null, false);
             }
             if ($A !== '') {
                 $this->db->where("P.Ano LIKE '$A'", null, false);

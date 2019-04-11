@@ -187,7 +187,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Acepta</button>
@@ -210,11 +209,11 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Control</label>
-                        <input type="text" id="ControlRXCTROL" name="ControlRXCTROL" class="form-control numeric">
+                        <input type="text" id="ControlRXCTROL" name="ControlRXCTROL" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Semana</label>
-                        <input type="text" id="SemanaRXCTROL" name="SemanaRXCTROL" class="form-control numeric">
+                        <input type="text" id="SemanaRXCTROL" name="SemanaRXCTROL" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <label>Empleado</label>
@@ -226,7 +225,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance actual</label>
-                        <input type="text" id="AvanceActual" name="AvanceActual" class="form-control" readonly="">
+                        <input type="text" id="AvanceActual" name="AvanceActual" class="form-control form-control-sm" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table id="tblRastreoXControl" class="table table-hover">
@@ -235,15 +234,12 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Control</th>
                                     <th scope="col">Emp</th>
-
                                     <th scope="col">Estilo</th>
                                     <th scope="col">Frac</th>
                                     <th scope="col">Fecha</th>
-
                                     <th scope="col">Semana</th>  
                                     <th scope="col">Pares</th>
                                     <th scope="col">Precio</th>
-
                                     <th scope="col">SubTotal</th>
                                 </tr>
                             </thead>
@@ -279,10 +275,49 @@
             RastreoXControl, tblRastreoXControl = mdlRastreoXControl.find("#tblRastreoXControl"),
             EmpleadoRXC = mdlRastreoXConcepto.find("#EmpleadoRXC"),
             ConceptoRXC = mdlRastreoXConcepto.find("#ConceptoRXC"),
+            ControlRXCTROL = mdlRastreoXControl.find("#ControlRXCTROL"),
+            SemanaRXCTROL = mdlRastreoXControl.find("#SemanaRXCTROL"),
             EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL"),
+            FraccionRXCTROL = mdlRastreoXControl.find("#FraccionRXCTROL"),
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras");
 
     $(document).ready(function () {
+
+        FraccionRXCTROL.on('keyup change', function () {
+            if ($(this).val()) {
+                RastreoXControl.ajax.reload();
+            }
+        });
+
+        EmpleadoRXCTROL.on('keyup change', function () {
+            if ($(this).val()) {
+                RastreoXControl.ajax.reload();
+            }
+        });
+
+        SemanaRXCTROL.on('keyup change', function () {
+            if ($(this).val()) {
+                RastreoXControl.ajax.reload();
+            }
+        });
+
+        ControlRXCTROL.on('keyup change', function () {
+            if ($(this).val()) {
+                RastreoXControl.ajax.reload();
+            }
+        });
+
+        ConceptoRXC.on('change', function () {
+            if ($(this).val()) {
+                RastreoXConcepto.ajax.reload();
+            }
+        });
+
+        EmpleadoRXC.on('change', function () {
+            if ($(this).val()) {
+                RastreoXConcepto.ajax.reload();
+            }
+        });
 
         btnDesarrolloDeMuestras.click(function () {
             $.fancybox.defaults.animationEffect = "zoom-in";
@@ -492,22 +527,25 @@
                 [0, 'desc']
             ]
         };
-        Avances = tblAvance.DataTable(xoptions); 
+        Avances = tblAvance.DataTable(xoptions);
         RastreoXConcepto = tblRastreoXConcepto.DataTable({
             "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getRastreoXConcepto'); ?>',
-                "type": "POST",
                 "contentType": "application/json",
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.EMPLEADO = (EmpleadoRXC.val().trim());
+                    d.CONCEPTO = (ConceptoRXC.val().trim());
+                }
             },
             buttons: buttons,
             "columns": [
                 {"data": "ID"}/*0*/,
                 {"data": "SEMANA"}/*1*/,
                 {"data": "EMPLEADO"}/*2*/,
-                {"data": "FECHA"}/*3*/,
-                {"data": "CONCEPTO"}/*4*/,
+                {"data": "CONCEPTO"}/*3*/,
+                {"data": "FECHA"}/*4*/,
                 {"data": "PER"}/*9*/,
                 {"data": "IMPORTE"}/*9*/,
                 {"data": "DED"}/*9*/,
@@ -534,11 +572,12 @@
             "dom": 'rit',
             "ajax": {
                 "url": '<?php print base_url('Avance/getRastreoXControl'); ?>',
-                "type": "POST",
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CONTROL = (Control.val().trim());
+                    d.CONTROL = (ControlRXCTROL.val().trim());
+                    d.SEMANA = (SemanaRXCTROL.val().trim());
+                    d.EMPLEADO = (EmpleadoRXCTROL.val().trim());
                 }
             },
             buttons: buttons,
