@@ -34,7 +34,7 @@ class ParesAsignadosControl extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $x = $this->input; 
+        $x = $this->input;
         $parametros["MAQUILAINICIO"] = intval($x->post('MAQUILA_INICIAL'));
         $parametros["MAQUILAFIN"] = intval($x->post('MAQUILA_FINAL'));
         $parametros["SEMANAINICIO"] = intval($x->post('SEMANA_INICIAL'));
@@ -42,8 +42,22 @@ class ParesAsignadosControl extends CI_Controller {
         $parametros["ANO"] = intval($x->post('ANIO'));
 
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquila.jasper');
-        $jc->setFilename('ParesAsignadosAMaquila_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+        $nrpt = $this->input->post('TIPO');
+        switch (intval($nrpt)) {
+            case 1:
+                if ($this->input->post('NUMERACION') === 0) {
+                    $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquila.jasper');
+                    $jc->setFilename('ParesAsignadosAMaquila_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                } else if ($this->input->post('NUMERACION') === 1) {
+                    $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerie.jasper');
+                    $jc->setFilename('ParesAsignadosAMaquilaSerie_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                }
+                break;
+            case 2:
+                $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaEsponjasLatex.jasper');
+                $jc->setFilename('ParesAsignadosAMaquilaSerie_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                break;
+        }
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }

@@ -30,19 +30,10 @@
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" align="center">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-indigo active">
-                        <input type="radio" name="btnControl" id="btnControl" autocomplete="off" checked> CONTROL
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnSerie" id="btnSerie" autocomplete="off"> SERIE
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnPreprogramados" id="btnPreprogramados" autocomplete="off" checked> PREPROGRAMADOS
+                        <input type= "radio" name="btnControl" id="btnControl" autocomplete="off" checked> CONTROL
                     </label>
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnEsponjasYLatex" id="btnEsponjasYLatex" autocomplete="off"> ESPONJAS Y LATEX
-                    </label> 
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnMinutaje" id="btnMinutaje" autocomplete="off"> SOLO MINUTAJE
                     </label>
                 </div>
             </div>
@@ -54,6 +45,7 @@
                     </span>
                 </div>
             </div>
+
         </div>
     </div>
     <div class="card-footer">
@@ -86,12 +78,8 @@
                     SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',
                     SEMANA_FINAL: ParesSemanaFinal.val().trim() !== '' ? ParesSemanaFinal.val() : '',
                     ANIO: ParesAnio.val().trim() !== '' ? ParesAnio.val() : '',
-                    TIPO:
-                            pnlTablero.find("#btnControl")[0].checked ? 1 :
-                            pnlTablero.find("#btnSerie")[0].checked ? 2 :
-                            pnlTablero.find("#btnPreprogramados")[0].checked ? 3 :
-                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 4 :
-                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 5 : 0,
+                    TIPO: pnlTablero.find("#btnControl")[0].checked ? 1 :
+                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0,
                     NUMERACION: pnlTablero.find("#rConNumeracion")[0].checked ? 1 : 0
                 }).done(function (data, x, jq) {
                     onBeep(1);

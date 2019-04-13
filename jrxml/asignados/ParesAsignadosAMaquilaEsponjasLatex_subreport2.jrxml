@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosAMaquilaEsponjasLatex_subreport2" language="groovy" columnCount="10" printOrder="Horizontal" pageWidth="600" pageHeight="842" columnWidth="30" columnSpacing="33" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c08bd535-dc38-41c1-a807-aba21c0ee649">
+	<property name="ireport.zoom" value="5.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="Linea" class="java.lang.String"/>
+	<parameter name="MAQUILAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAQUILAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT L.Clave AS Linea,E.Clave AS Estilo, sum(P.Pares) AS Pares FROM  pedidox as P
+INNER JOIN estilos AS E ON P.Estilo = E.Clave
+INNER JOIN lineas AS L ON E.Linea = L.Clave
+WHERE L.Clave = $P{Linea}
+AND P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
+AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}
+GROUP BY E.Clave]]>
+	</queryString>
+	<field name="Linea" class="java.lang.String"/>
+	<field name="Estilo" class="java.lang.String"/>
+	<field name="Pares" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="Estilo">
+		<groupExpression><![CDATA[$F{Estilo}]]></groupExpression>
+	</group>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="27" height="10" uuid="a5b4c7f1-96e1-4c9a-b524-9b031fe8bab6"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="27" height="10" uuid="1a677b5f-30c8-4449-a452-e656f5fa9b5d"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
