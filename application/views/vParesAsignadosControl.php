@@ -6,23 +6,23 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
                 <label>De la Maquila</label>
-                <input type="text" id="ParesMaquilaInicial" name="ParesMaquilaInicial" class="form-control form-control-sm" autofocus="">
+                <input type="text" id="ParesMaquilaInicial" name="ParesMaquilaInicial" class="form-control form-control-sm numbersOnly" autofocus="">
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
                 <label>A la Maquila</label>
-                <input type="text" id="ParesMaquilaFinal" name="ParesMaquilaFinal" class="form-control form-control-sm">
+                <input type="text" id="ParesMaquilaFinal" name="ParesMaquilaFinal" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
                 <label>De sem</label>
-                <input type="text" id="ParesSemanaInicial" name="ParesSemanaInicial" class="form-control form-control-sm">
+                <input type="text" id="ParesSemanaInicial" name="ParesSemanaInicial" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
                 <label>A sem</label>
-                <input type="text" id="ParesSemanaFinal" name="ParesSemanaFinal" class="form-control form-control-sm">
+                <input type="text" id="ParesSemanaFinal" name="ParesSemanaFinal" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>Año</label>
-                <input type="text" id="ParesAnio" name="ParesAnio" class="form-control form-control-sm">
+                <input type="text" id="ParesAnio" name="ParesAnio" class="form-control form-control-sm  numbersOnly">
             </div>
 
             <div class="w-100 my-3"></div>
