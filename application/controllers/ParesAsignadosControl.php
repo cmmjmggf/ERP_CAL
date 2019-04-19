@@ -43,23 +43,33 @@ class ParesAsignadosControl extends CI_Controller {
 
         $jc->setParametros($parametros);
         $nrpt = $this->input->post('TIPO');
+        $reports = array();
         switch (intval($nrpt)) {
             case 1:
-                if ($this->input->post('NUMERACION') === 0) {
+                if (intval($this->input->post('NUMERACION')) === 0) {
                     $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquila.jasper');
                     $jc->setFilename('ParesAsignadosAMaquila_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
-                } else if ($this->input->post('NUMERACION') === 1) {
+                    $jc->setDocumentformat('pdf');
+                    $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
+                }
+                if (intval($this->input->post('NUMERACION')) === 1) {
                     $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerie.jasper');
                     $jc->setFilename('ParesAsignadosAMaquilaSerie_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
                 }
-                break;
-            case 2:
                 $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaEsponjasLatex.jasper');
-                $jc->setFilename('ParesAsignadosAMaquilaSerie_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
-                break;
+                $jc->setFilename('ParesAsignadosAMaquilaEsponjasLatex_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                $jc->setDocumentformat('pdf');
+                $reports['PARESASIGNADOSAMAQUILAESPONJALATEX'] = $jc->getReport();
+                
+                $jc->setJasperurl('jrxml\asignados\ParesAsignadosControlHerramental.jasper');
+                $jc->setFilename('ParesAsignadosControlHerramental_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                $jc->setDocumentformat('pdf');
+                $reports['PARESASIGNADOSAMAQUILAHERRAMENTAL'] = $jc->getReport();
+                break; 
         }
-        $jc->setDocumentformat('pdf');
-        PRINT $jc->getReport();
+        print json_encode($reports);
     }
 
 }

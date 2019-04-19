@@ -54,6 +54,9 @@
         </div>
     </div>
 </div>
+<div id="rpts">
+
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"), ParesAnio = pnlTablero.find("#ParesAnio"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
@@ -81,9 +84,9 @@
                     TIPO: pnlTablero.find("#btnControl")[0].checked ? 1 :
                             pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0,
                     NUMERACION: pnlTablero.find("#rConNumeracion")[0].checked ? 1 : 0
-                }).done(function (data, x, jq) {
+                }).done(function (data, x, jq) { 
                     onBeep(1);
-                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    onImprimirReporteFancyArray(JSON.parse(data));
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
