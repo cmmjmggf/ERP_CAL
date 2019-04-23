@@ -18,6 +18,18 @@ class Fracciones_model extends CI_Model {
         }
     }
 
+    public function getFracciones() {
+        try {
+            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS Clave ,CONCAT(D.Clave,'-',D.Descripcion) AS Fraccion")
+                            ->from("fracciones AS D")
+                            ->where("D.Estatus", "ACTIVO")
+                            ->order_by('Clave', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getDepartamentos() {
         try {
             return $this->db->select(" CAST(D.Clave AS SIGNED ) AS Clave ,CONCAT(D.Clave,'-',D.Descripcion) AS Departamento")

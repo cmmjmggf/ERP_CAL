@@ -70,4 +70,71 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirReporteMatrizFraccionesEstiloLinea() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["linea"] = $this->input->post('Linea');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reporteFraccionesXEstiloMatrizLinea.jasper');
+        $jc->setFilename('REPORTE_MATRIZ_FRACCIONES_ESTILO_LINEA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteFraccionesCapturadasNominaSem() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["fraccion"] = $this->input->post('Fraccion');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\fraccionesPagadasNominaPorSemMaq.jasper');
+        $jc->setFilename('REPORTE_DESTAJOS_NOMINA_FRACCION_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteLotificacionSuelas() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["asem"] = $this->input->post('aSem');
+        $parametros["amaq"] = $this->input->post('aMaq');
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["grupo"] = $this->input->post('Tipo');
+        $parametros["articulo"] = $this->input->post('Articulo');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reporteLotificacionSuela.jasper');
+        $jc->setFilename('REPORTE_LOTE_SUELA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteLotificacionSuelasArticulo() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["asem"] = $this->input->post('aSem');
+        $parametros["amaq"] = $this->input->post('aMaq');
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["grupo"] = $this->input->post('Tipo');
+        $parametros["articulo"] = $this->input->post('Articulo');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reporteLotificacionSuelaArticulo.jasper');
+        $jc->setFilename('REPORTE_LOTE_SUELA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

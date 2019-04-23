@@ -52,6 +52,14 @@ class Fracciones extends CI_Controller {
         }
     }
 
+    public function getFracciones() {
+        try {
+            print json_encode($this->Fracciones_model->getFracciones());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getDepartamentos() {
         try {
             print json_encode($this->Fracciones_model->getDepartamentos());

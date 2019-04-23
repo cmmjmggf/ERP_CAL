@@ -171,4 +171,16 @@ class Articulos_model extends CI_Model {
         }
     }
 
+    public function getSuelasPlantas() {
+        try {
+            return $this->db->select("P.Clave AS ID, CONCAT(P.Clave,' ',P.Descripcion) AS Articulo", false)
+                            ->from("articulos AS P")
+                            ->where('P.Departamento', '80')
+                            ->order_by("P.Descripcion", "ASC")
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

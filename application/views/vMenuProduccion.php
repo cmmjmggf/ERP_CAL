@@ -32,7 +32,14 @@
 
 <?php
 $this->load->view('vExplosionSemanal');
+$this->load->view('vExplosionSemanalCliente');
+$this->load->view('vExplosionSemanalArticulo');
+$this->load->view('vCotejaExplosionOrdCom');
+$this->load->view('vExplosionSemanalOrdComProyeccion');
 $this->load->view('vVisualizaPedido');
 $this->load->view('vReporteParesPreAsignados');
 $this->load->view('vEstadisticasEntrega');
 $this->load->view('vReporteCorteHiloTejer');
+$this->load->view('vReporteMatrizFraccionesEstiloLinea');
+$this->load->view('vFraccionesCapturadasNominaSem');
+$this->load->view('vLotificacionSuelasPlantas');

@@ -1,8 +1,8 @@
-<div class="modal " id="mdlReporteCorteHiloTejer"  role="dialog">
+<div class="modal " id="mdlFraccionesCapturadasNominaSem"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Consumo de hilo X maquila</h5>
+                <h5 class="modal-title">Fracciones Capturadas de Nómina</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,6 +27,14 @@
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-12">
+                            <label>Fraccion</label>
+                            <select class="form-control form-control-sm required selectize" id="Fraccion" name="Fraccion" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -37,22 +45,23 @@
     </div>
 </div>
 <script>
-    var mdlReporteCorteHiloTejer = $('#mdlReporteCorteHiloTejer');
+    var mdlFraccionesCapturadasNominaSem = $('#mdlFraccionesCapturadasNominaSem');
     $(document).ready(function () {
-        mdlReporteCorteHiloTejer.on('shown.bs.modal', function () {
-            mdlReporteCorteHiloTejer.find("input").val("");
-            $.each(mdlReporteCorteHiloTejer.find("select"), function (k, v) {
-                mdlReporteCorteHiloTejer.find("select")[k].selectize.clear(true);
+        mdlFraccionesCapturadasNominaSem.on('shown.bs.modal', function () {
+            mdlFraccionesCapturadasNominaSem.find("input").val("");
+            $.each(mdlFraccionesCapturadasNominaSem.find("select"), function (k, v) {
+                mdlFraccionesCapturadasNominaSem.find("select")[k].selectize.clear(true);
             });
-            mdlReporteCorteHiloTejer.find('#Ano').focus();
+            getFracciones();
+            mdlFraccionesCapturadasNominaSem.find('#Ano').focus();
         });
 
-        mdlReporteCorteHiloTejer.find('#btnImprimir').on("click", function () {
+        mdlFraccionesCapturadasNominaSem.find('#btnImprimir').on("click", function () {
 
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlReporteCorteHiloTejer.find("#frmCaptura")[0]);
+            var frm = new FormData(mdlFraccionesCapturadasNominaSem.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesMaterialesJasper/onReporteConsumoHiloMaquila',
+                url: base_url + 'index.php/ReportesProduccionJasper/onReporteFraccionesCapturadasNominaSem',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -92,7 +101,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlReporteCorteHiloTejer.find('#Ano').focus();
+                        mdlFraccionesCapturadasNominaSem.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
@@ -101,8 +110,7 @@
                 HoldOn.close();
             });
         });
-
-        mdlReporteCorteHiloTejer.find("#Ano").change(function () {
+        mdlFraccionesCapturadasNominaSem.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
@@ -113,16 +121,16 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlReporteCorteHiloTejer.find("#Ano").val("");
-                    mdlReporteCorteHiloTejer.find("#Ano").focus();
+                    mdlFraccionesCapturadasNominaSem.find("#Ano").val("");
+                    mdlFraccionesCapturadasNominaSem.find("#Ano").focus();
                 });
             }
         });
-        mdlReporteCorteHiloTejer.find("#Maq").change(function () {
+        mdlFraccionesCapturadasNominaSem.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlReporteCorteHiloTejer.find("#Sem").change(function () {
-            var ano = mdlReporteCorteHiloTejer.find("#Ano");
+        mdlFraccionesCapturadasNominaSem.find("#Sem").change(function () {
+            var ano = mdlFraccionesCapturadasNominaSem.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
     });
@@ -185,6 +193,17 @@
             console.log(x.responseText);
         });
     }
-
+    function getFracciones() {
+        mdlFraccionesCapturadasNominaSem.find("#Fraccion")[0].selectize.clear(true);
+        mdlFraccionesCapturadasNominaSem.find("#Fraccion")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/Fracciones/getFracciones').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlFraccionesCapturadasNominaSem.find("#Fraccion")[0].selectize.addOption({text: v.Fraccion, value: v.Clave});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
 
 </script>

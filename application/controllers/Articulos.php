@@ -240,4 +240,12 @@ class Articulos extends CI_Controller {
         }
     }
 
+    public function getSuelasPlantas() {
+        try {
+            print json_encode($this->Articulos_model->getSuelasPlantas());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
