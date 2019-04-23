@@ -86,16 +86,26 @@ class CerrarProg extends CI_Controller {
                                 'Estatus' => 'A', 'Departamento' => 1 /* 0|null|Inexistente - PEDIDO => 1 - PROGRAMADO */,
                                 'Ano' => $Y, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
                             ));
-                            $this->db->set('Control', $Y . $S . $M . $C)->where('ID', $v->PedidoDetalle)->update('pedidox');
+                            $Control = $Y . $S . $M . $C;
+                            $this->db->set('Control', $Control)->where('ID', $v->PedidoDetalle)->update('pedidox');
 //                            print $this->db->last_query();/*QUEDA PARA PRUEBAS*/
 
                             /* AGREGAR REGISTRO EN AVAPRD (FILI) */
-//                            $dtm = $this->db->select('',false)->from('')->where()->get()->result();
-                            $this->db->insert('avaprd', array(
-                                'contped' => $Y . $S . $M . $C,
-                                'status' => 1,
-                                'fec1' => Date('Y-m-d h:i:s')
-                            ));
+                            $check_control = $this->db->select('COUNT(A.contped) AS EXISTE', false)
+                                            ->from('avaprd AS A')
+                                            ->where('A.contped', $Control)
+                                            ->get()->result();
+                            if ($check_control[0]->EXISTE <= 0) {
+                                $this->db->insert('avaprd', array(
+                                    'contped' => $Control,
+                                    'status' => 1,
+                                    'fec1' => Date('Y-m-d h:i:s')
+                                ));
+                            } else {
+                                $this->db->set('fec1', Date('Y-m-d h:i:s'))
+                                        ->where('contped', $Control)
+                                        ->update('avaprd');
+                            }
                         }
                     }
                     break;

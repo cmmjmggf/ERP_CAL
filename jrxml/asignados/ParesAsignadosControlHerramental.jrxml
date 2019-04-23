@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosControlHerramental" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab3e28d2-be0b-4d04-907a-96610fc3ab9a">
+	<property name="ireport.zoom" value="2.4200000000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="MAQUILAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAQUILAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+(
+CASE
+WHEN E.Herramental = 1 THEN "PATRÓN BASE"
+WHEN E.Herramental = 2 THEN "CARTON Y TESEO"
+WHEN E.Herramental = 3 THEN "TESEO"
+WHEN E.Herramental = 4 THEN "SUAJE"
+END
+) AS HERRAMENTAL,
+E.Clave AS CLAVE, E.Descripcion AS ESTILOT, SUM(P.Pares) AS PARES,
+CAST(P.Pares AS SIGNED) AS PAREX
+FROM pedidox AS P
+INNER JOIN Estilos AS E ON P.Estilo = E.Clave
+WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
+AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}
+AND E.Herramental IS NOT NULL AND P.Estatus NOT IN ('F')
+GROUP BY E.Herramental, E.Clave
+ORDER BY E.Herramental DESC]]>
+	</queryString>
+	<field name="HERRAMENTAL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLAVE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ESTILOT" class="java.lang.String"/>
+	<field name="PARES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PAREX" class="java.lang.Long"/>
+	<variable name="PARES_1" class="java.lang.Integer" resetType="Group" resetGroup="HERRAMENTAL" calculation="Count">
+		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
+	</variable>
+	<variable name="PAREX_1" class="java.lang.Long" resetType="Group" resetGroup="HERRAMENTAL" calculation="Sum">
+		<variableExpression><![CDATA[$F{PAREX}]]></variableExpression>
+	</variable>
+	<variable name="PAREX_2" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{PAREX}]]></variableExpression>
+	</variable>
+	<group name="HERRAMENTAL">
+		<groupExpression><![CDATA[$F{HERRAMENTAL}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="14" uuid="7ac3631a-3117-4ec5-bb06-b75986f6c355"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{HERRAMENTAL}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="14" width="100" height="1" uuid="0069fc7f-4b51-4512-a545-9144fa46df58"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<textField>
+					<reportElement x="200" y="0" width="50" height="14" uuid="5fc1db27-c15d-4405-8a18-aad7ae659ca3"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAREX_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="66" y="0" width="134" height="14" isPrintInFirstWholeBand="true" uuid="658213b2-080f-4d27-8d90-d10fe8a9ccc7"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total por herramental]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="1" width="72" height="42" isPrintInFirstWholeBand="true" uuid="5bd89dde-857f-4f29-93b8-4d4dcfc00f10"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="196" y="31" width="25" height="14" uuid="5cbcfbdd-df6e-410a-ba0b-7579f8b183b9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAFIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="31" width="22" height="14" uuid="8ea6ecec-214f-4f84-9876-cf860aa7a1f2"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAINICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="72" y="31" width="54" height="14" isPrintInFirstWholeBand="true" uuid="7d71b790-cf20-4047-b96e-ceea0e9bc56f"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[De la sem]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="457" y="5" width="80" height="12" isPrintInFirstWholeBand="true" uuid="c2ab2d8c-89b4-4ec9-91ed-e8bce778191d"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="438" y="17" width="115" height="12" isPrintInFirstWholeBand="true" uuid="fb395142-f2af-4a1f-a933-89c155217bd2"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="538" y="5" width="15" height="12" isPrintInFirstWholeBand="true" uuid="8baee4ca-cb9d-4a71-869e-fe113bf0169f"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="275" y="17" width="22" height="14" uuid="a541cf1f-a86d-4818-af32-ed542793290f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{MAQUILAINICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="146" y="31" width="51" height="14" isPrintInFirstWholeBand="true" uuid="a514e976-534d-476a-b794-39218451072b"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[a la sem]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="73" y="1" width="225" height="16" isPrintInFirstWholeBand="true" uuid="5ee54baa-37c8-4a45-b5a0-b7705eb4ddfd"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="72" y="17" width="203" height="14" isPrintInFirstWholeBand="true" uuid="734ca793-3317-4f11-8ce1-371a74e18d58"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Programacion por herramentales de la maquila]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="297" y="17" width="29" height="14" isPrintInFirstWholeBand="true" uuid="87a058d2-193f-4c90-b37c-5c9727bce156"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="326" y="17" width="22" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e84a4955-6b1b-43b4-b898-c4f796f2437e"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MAQUILAFIN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="0" width="100" height="14" uuid="6e975f1c-60b6-47c4-8297-89b682495f0a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTILOT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="100" y="14" width="150" height="1" uuid="b080f150-d591-4db6-af5f-347387bf7cd2"/>
+			</line>
+			<textField>
+				<reportElement x="200" y="1" width="50" height="14" uuid="af8d9807-9d18-4fe2-a0ce-16d4a4112730"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement x="200" y="0" width="50" height="14" uuid="5e1509a5-604b-4f1c-a2bb-b356c310546f"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAREX_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="66" y="0" width="134" height="14" isPrintInFirstWholeBand="true" uuid="28ec052a-33b8-4c6d-87ab-761d00194965"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total general]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

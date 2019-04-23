@@ -3,7 +3,7 @@
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ParesAsignadosControl extends CI_Controller {
+class ParesAsignadosXTiempos extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -22,7 +22,7 @@ class ParesAsignadosControl extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
             }
-            $this->load->view('vFondo')->view('vParesAsignadosControl')->view('vFooter');
+            $this->load->view('vFondo')->view('vParesAsignadosXTiempos')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

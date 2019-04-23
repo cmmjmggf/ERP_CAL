@@ -1,6 +1,6 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Pares asignados</h3>
+        <h3 class="font-weight-bold">Pares asignados X Tiempos</h3>
     </div>
     <div class="card-body">
         <div class="row">

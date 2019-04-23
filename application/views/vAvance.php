@@ -72,15 +72,15 @@
                 <div class="w-100"></div> 
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <label>Estilo</label>
-                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm numbersOnly" maxlength="2">
+                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm numbersOnly" maxlength="2"  readonly="">
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <label>Depto.Actual</label>
-                    <input type="text" id="DeptoActual" name="DeptoActual" class="form-control form-control-sm numbersOnly" maxlength="2">
+                    <input type="text" id="DeptoActual" name="DeptoActual" class="form-control form-control-sm numbersOnly"  readonly="" maxlength="2">
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Pares</label>
-                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" maxlength="5">
+                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" readonly="" maxlength="5">
                 </div>
                 <div class="col-12 col-sm-12 col-sm-1 col-lg-1 col-xl-1">
                     <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-primary mt-4"  data-toggle="tooltip" data-placement="right" title="Aceptar">
@@ -460,6 +460,13 @@
             if (e.keyCode === 13) {
                 getDeptosXControl($(this));
                 getDeptoActualXControl();
+                $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>',{CONTROL: Control.val()}).done(function(a,b,c){
+                    console.log("CONTROL",a);
+                }).fail(function(x,y,z){
+                    getError(x);
+                }).always(function(){
+                    
+                });
                 Avances.ajax.reload();
             }
         });
@@ -737,7 +744,10 @@
             ul.find("li").click(function () {
                 ul.find("li").removeClass('li-selected');
                 var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
-                if (parseInt(clave) >= 180) {
+                var depto = parseInt(clave);
+                if (depto >= 180 || depto === 30 || depto === 40 || 
+                    depto === 90 || depto === 100 || depto === 105 || 
+                    depto === 110 || depto === 140 || depto === 150) {
                     if (Control.val()) {
                         li.addClass('li-selected');
                         Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
@@ -752,7 +762,7 @@
                         });
                     }
                 } else {
-                    swal('ATENCIÓN', 'DEPARTAMENTO INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
+                    swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
                         ul.find("li").removeClass('li-selected');
                     });
                 }

@@ -1,25 +1,4 @@
 <!DOCTYPE html>
-<!--
-Copyright 2012 Mozilla Foundation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Adobe CMap resources are covered by their own copyright but the same license:
-
-    Copyright 1990-2015 Adobe Systems Incorporated.
-
-See https://github.com/adobe-type-tools/cmap-resources
--->
 <html dir="ltr" mozdisallowselectionprint>
     <head>
         <meta charset="utf-8">
@@ -27,22 +6,15 @@ See https://github.com/adobe-type-tools/cmap-resources
         <meta name="google" content="notranslate">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>PDF.js viewer</title>
-
-
         <link rel="stylesheet" href="viewer.css">
-
-
         <!-- This snippet is used in production (included from viewer.html) -->
         <link rel="resource" type="application/l10n" href="locale/locale.properties">
         <script src="../build/pdf.js"></script>
-
-
-        <script src="viewer.js"></script>  
+        <script src="viewer.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     </head>
-
     <body tabindex="1" class="loadingInProgress">
         <div id="outerContainer">
-
             <div id="sidebarContainer">
                 <div id="toolbarSidebar">
                     <div class="splitToolbarButton toggled">
@@ -328,10 +300,10 @@ See https://github.com/adobe-type-tools/cmap-resources
                         </div>
                         <div class="separator"></div>
                         <div class="row">
-                            <span data-l10n-id="document_properties_title">Title:</span> <p id="titleField">-</p>
+                            <span data-l10n-id="document_properties_title">Title:</span> <p id="titleField">Reporte</p>
                         </div>
                         <div class="row">
-                            <span data-l10n-id="document_properties_author">Author:</span> <p id="authorField">-</p>
+                            <span data-l10n-id="document_properties_author">Author:</span> <p id="authorField">Ing.Giovanni Flores</p>
                         </div>
                         <div class="row">
                             <span data-l10n-id="document_properties_subject">Subject:</span> <p id="subjectField">-</p>
@@ -346,7 +318,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                             <span data-l10n-id="document_properties_modification_date">Modification Date:</span> <p id="modificationDateField">-</p>
                         </div>
                         <div class="row">
-                            <span data-l10n-id="document_properties_creator">Creator:</span> <p id="creatorField">-</p>
+                            <span data-l10n-id="document_properties_creator">Creator:</span> <p id="creatorField">Ing.Giovanni Flores</p>
                         </div>
                         <div class="separator"></div>
                         <div class="row">

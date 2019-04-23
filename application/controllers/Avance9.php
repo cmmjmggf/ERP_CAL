@@ -154,7 +154,10 @@ class Avance9 extends CI_Controller {
                         $id = $this->db->insert_id();
                         $this->db->set('EstatusProduccion', 'RAYADO')
                                 ->where('Control', $x->post('CONTROL'))
-                                ->update('controles');
+                                ->update('controles'); 
+                        $this->db->set('fec3', Date('Y-m-d h:i:s'))
+                                ->where('contped', $x->post('CONTROL'))
+                                ->update('avaprd');
                     }
                     /* PASO 2 : AGREGAR FRACCION PAGADA */
                     $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)

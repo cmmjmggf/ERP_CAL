@@ -54,8 +54,8 @@ class Avance extends CI_Controller {
 
     public function getRastreoXConcepto() {
         try {
-            $x = $this->input; 
-            print json_encode($this->avm->getRastreoXConcepto($x->get('EMPLEADO'),$x->get('CONCEPTO')));
+            $x = $this->input;
+            print json_encode($this->avm->getRastreoXConcepto($x->get('EMPLEADO'), $x->get('CONCEPTO')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -219,6 +219,17 @@ class Avance extends CI_Controller {
         }
     }
 
+    public function getInformacionXControl() {
+        try {
+            $Control = $this->input->get('CONTROL');
+            $control_informacion = $this->db->select('C.Estilo AS ESTILO, C.Pares AS PARES, C.DeptoProduccion AS DEPTOPROD')
+                            ->from('controles AS C')->where("C.Control LIKE '$Control'", null, false)->get()->result();
+            print json_encode($control_informacion);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAvanzar() {
         try {
             $db = $this->db;
@@ -246,8 +257,8 @@ class Avance extends CI_Controller {
                         ->set('DeptoProduccion', $x->post('DEPTO'))
                         ->where('Control', $x->post('CONTROL'))->update('pedidox');
             }
-            if ($x->post('FRACCION') === 600 && $x->post('DEPTO') === 210 ||
-                    $x->post('FRACCION') === 600 && $x->post('DEPTO') === 220) {
+            if ($frac === 600 && $depto === 210 ||
+                    $frac === 600 && $depto === 220) {
                 $db->insert('avance', array(
                     'Control' => $x->post('CONTROL'),
                     'FechaAProduccion' => $x->post('FECHA'),
@@ -261,16 +272,17 @@ class Avance extends CI_Controller {
                     'Fraccion' => $x->post('FRACCION')
                 ));
                 /* DE ADORNO B PASA A ALMACEN DE ADORNO */
-                if ($x->post('DEPTO') === 220) {
-                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                if ($depto === 220) {
+                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
                             ->set('DeptoProduccion', $x->post('DEPTO'))
                             ->where('Control', $x->post('CONTROL'))->update('controles');
-                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
                             ->set('DeptoProduccion', $x->post('DEPTO'))
                             ->where('Control', $x->post('CONTROL'))->update('pedidox');
                 }
-                $id = $this->db->insert_id();
+                $id = $db->insert_id();
             }
+
             $fecha = $x->post('FECHA');
             $dia = substr($fecha, 0, 2);
             $mes = substr($fecha, 3, 2);
@@ -279,7 +291,95 @@ class Avance extends CI_Controller {
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
 
-            $this->db->insert('fracpagnomina', array(
+            $db->set('EstatusProduccion', $x->post('DEPTOT'))
+                    ->set('DeptoProduccion', $x->post('DEPTO'))
+                    ->where('Control', $x->post('CONTROL'))->update('controles');
+            $db->set('EstatusProduccion', $x->post('DEPTOT'))
+                    ->set('DeptoProduccion', $x->post('DEPTO'))
+                    ->where('Control', $x->post('CONTROL'))->update('pedidox');
+
+            //SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
+            if ($depto !== 220) {
+                if ($depto === 30 && $frac === 103) {
+                    /* REBAJADO Y PERFORADO */
+                    $db->set('fec33', Date('Y-m-d h:i:s'))
+                            ->where('contped', $x->post('CONTROL'))
+                            ->update('avaprd');
+                    $db->insert('avance', array(
+                        'Control' => $x->post('CONTROL'),
+                        'FechaAProduccion' => $x->post('FECHA'),
+                        'Departamento' => $x->post('DEPTO'),
+                        'DepartamentoT' => $x->post('DEPTOT'),
+                        'FechaAvance' => $x->post('FECHA'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => $x->post('FRACCION')
+                    ));
+                }
+
+                if ($depto === 40 && $frac === 60) {
+                    /* FOLEADO */
+                    $db->set('fec4', Date('Y-m-d h:i:s'))
+                            ->where('contped', $x->post('CONTROL'))
+                            ->update('avaprd');
+                    $db->insert('avance', array(
+                        'Control' => $x->post('CONTROL'),
+                        'FechaAProduccion' => $x->post('FECHA'),
+                        'Departamento' => $x->post('DEPTO'),
+                        'DepartamentoT' => $x->post('DEPTOT'),
+                        'FechaAvance' => $x->post('FECHA'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => $x->post('FRACCION')
+                    ));
+                }
+                if ($depto === 90 && $frac === 51) {
+                    /* ENTRETELADO */
+                    $db->insert('avance', array(
+                        'Control' => $x->post('CONTROL'),
+                        'FechaAProduccion' => $x->post('FECHA'),
+                        'Departamento' => $x->post('DEPTO'),
+                        'DepartamentoT' => $x->post('DEPTOT'),
+                        'FechaAvance' => $x->post('FECHA'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => $x->post('FRACCION')
+                    ));
+                    $db->set('fec40', Date('Y-m-d h:i:s'))
+                            ->where('contped', $x->post('CONTROL'))
+                            ->update('avaprd');
+                    $check_maquila = $db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
+                                            . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
+                                            . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
+                                            . '(CASE WHEN E.MaqPlant4 IS NULL THEN 0 ELSE E.MaqPlant4 END) AS MP4', false)
+                                    ->from('estilos AS E')->like('E.Clave', $x->post('ESTILO'))->get()->result();
+                    if (intval($check_maquila[0]->MP1) >= 0 &&
+                            intval($check_maquila[0]->MP2) >= 0 &&
+                            intval($check_maquila[0]->MP3) >= 0 &&
+                            intval($check_maquila[0]->MP4) >= 0) {
+                        $this->db->set('fec42', Date('Y-m-d h:i:s'))
+                                ->where('contped', $Control)
+                                ->update('avaprd');
+                        $this->db->set('EstatusProduccion', 'ALMACEN CORTE')
+                                ->set('DeptoProduccion', 105)
+                                ->where('Control', $Control)
+                                ->update('controles');
+                    } else {
+                        $this->db->set('EstatusProduccion', 'MAQUILA')
+                                ->set('DeptoProduccion', 100)
+                                ->where('Control', $Control)
+                                ->update('controles');
+                    }
+                }
+            }
+            $id = $db->insert_id();
+            $db->insert('fracpagnomina', array(
                 'numeroempleado' => $x->post('EMPLEADO'),
                 'maquila' => substr($x->post('CONTROL'), 4, 2),
                 'control' => $x->post('CONTROL'),
@@ -297,15 +397,6 @@ class Avance extends CI_Controller {
                 'avance_id' => $id,
                 'fraccion' => $x->post('FRACCIONT'))
             );
-//SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
-            if ($x->post('DEPTO') !== 220) {
-                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
-                        ->set('DeptoProduccion', $x->post('DEPTO'))
-                        ->where('Control', $x->post('CONTROL'))->update('controles');
-                $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
-                        ->set('DeptoProduccion', $x->post('DEPTO'))
-                        ->where('Control', $x->post('CONTROL'))->update('pedidox');
-            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

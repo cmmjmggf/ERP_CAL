@@ -13,6 +13,7 @@
     var isMobile = false;
     var seg = <?php print (isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : 0); ?>;
     function onImprimirReporteFancy(url) {
+        $.fancybox.defaults.animationEffect = "zoom-in-out";
         $.fancybox.open({
             toolbar: false,
             smallBtn: true,
@@ -20,7 +21,6 @@
             type: 'iframe',
             opts: {
                 afterShow: function (instance, current) {
-                    console.info('done!');
                 },
                 iframe: {
                     // Iframe template
@@ -39,6 +39,42 @@
                 }
             }
         });
+    }
+
+    function onImprimirReporteFancyArray(urls) {
+        console.log(urls);
+        var files = [];
+        $.each(urls, function (k, v) {
+            files.push({
+                toolbar: false,
+                smallBtn: true,
+                src: base_url + 'js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#pagemode=thumbs',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        $.fancybox.defaults.animationEffect = "zoom-in-out";
+        $.fancybox.open(files);
     }
 
     function mobilecheck() {
