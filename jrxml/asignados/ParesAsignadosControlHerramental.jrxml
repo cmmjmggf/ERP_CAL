@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosControlHerramental" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab3e28d2-be0b-4d04-907a-96610fc3ab9a">
 	<property name="ireport.zoom" value="2.4200000000000017"/>
-	<property name="ireport.x" value="95"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -105,17 +105,17 @@ ORDER BY E.Herramental DESC]]>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="412" y="17" width="25" height="14" uuid="5cbcfbdd-df6e-410a-ba0b-7579f8b183b9"/>
+				<reportElement x="196" y="31" width="25" height="14" uuid="5cbcfbdd-df6e-410a-ba0b-7579f8b183b9"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{SEMANAFIN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="341" y="17" width="22" height="14" uuid="8ea6ecec-214f-4f84-9876-cf860aa7a1f2"/>
+				<reportElement x="125" y="31" width="22" height="14" uuid="8ea6ecec-214f-4f84-9876-cf860aa7a1f2"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{SEMANAINICIO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="288" y="17" width="54" height="14" isPrintInFirstWholeBand="true" uuid="7d71b790-cf20-4047-b96e-ceea0e9bc56f"/>
+				<reportElement isPrintRepeatedValues="false" x="72" y="31" width="54" height="14" isPrintInFirstWholeBand="true" uuid="7d71b790-cf20-4047-b96e-ceea0e9bc56f"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -143,12 +143,12 @@ ORDER BY E.Herramental DESC]]>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="267" y="17" width="22" height="14" uuid="a541cf1f-a86d-4818-af32-ed542793290f"/>
+				<reportElement x="275" y="17" width="22" height="14" uuid="a541cf1f-a86d-4818-af32-ed542793290f"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MAQUILAINICIO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="362" y="17" width="51" height="14" isPrintInFirstWholeBand="true" uuid="a514e976-534d-476a-b794-39218451072b"/>
+				<reportElement isPrintRepeatedValues="false" x="146" y="31" width="51" height="14" isPrintInFirstWholeBand="true" uuid="a514e976-534d-476a-b794-39218451072b"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -162,12 +162,27 @@ ORDER BY E.Herramental DESC]]>
 				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="72" y="17" width="196" height="14" isPrintInFirstWholeBand="true" uuid="734ca793-3317-4f11-8ce1-371a74e18d58"/>
+				<reportElement isPrintRepeatedValues="false" x="72" y="17" width="203" height="14" isPrintInFirstWholeBand="true" uuid="734ca793-3317-4f11-8ce1-371a74e18d58"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pares asignados herramentales de la maquila]]></text>
+				<text><![CDATA[Programacion por herramentales de la maquila]]></text>
 			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="297" y="17" width="29" height="14" isPrintInFirstWholeBand="true" uuid="87a058d2-193f-4c90-b37c-5c9727bce156"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="326" y="17" width="22" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e84a4955-6b1b-43b4-b898-c4f796f2437e"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MAQUILAFIN}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
