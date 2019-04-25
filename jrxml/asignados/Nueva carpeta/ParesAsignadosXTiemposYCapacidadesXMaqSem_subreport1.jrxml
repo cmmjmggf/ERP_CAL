@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXTiemposYCapacidadesXMaqSem_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="41e9f3ed-bd2b-424a-8d33-4caffa2d355f">
+	<property name="ireport.zoom" value="8.954302432552396"/>
+	<property name="ireport.x" value="3768"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ESTILO" class="java.lang.String"/>
+	<parameter name="LINEA" class="java.lang.String"/>
+	<parameter name="PARES" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT A.Linea, A.Estilo, A.Total,
+FORMAT(SUM(CASE WHEN B.Departamento = 10 THEN B.Tiempo ELSE NULL END),2) AS CORTE_PIEL,
+FORMAT(SUM(CASE WHEN B.Departamento = 10 THEN B.Tiempo ELSE NULL END),2) AS CORTE_FORRO,
+FORMAT(SUM(CASE WHEN B.Departamento = 10 THEN B.Tiempo ELSE NULL END),2) AS TOTAL_CORTE,
+FORMAT(SUM(CASE WHEN B.Departamento = 20 THEN B.Tiempo ELSE NULL END),2) AS RAYADO,
+FORMAT(SUM(CASE WHEN B.Departamento = 30 THEN B.Tiempo ELSE NULL END),2) AS REBAJADO,
+FORMAT(SUM(CASE WHEN B.Departamento = 40 THEN B.Tiempo ELSE NULL END),2) AS FOLEADO,
+FORMAT(SUM(CASE WHEN B.Departamento = 90 THEN B.Tiempo ELSE NULL END),2) AS ENTRETELA,
+FORMAT(SUM(CASE WHEN B.Departamento = 110 THEN B.Tiempo ELSE NULL END),2) AS PESPUNT,
+FORMAT(SUM(CASE WHEN B.Departamento = 140 THEN B.Tiempo ELSE NULL END),2) AS ENSUELADO,
+FORMAT(SUM(CASE WHEN B.Departamento = 120 THEN B.Tiempo ELSE NULL END),2) AS "PRE-PESP",
+FORMAT(SUM(CASE WHEN B.Departamento = 60 THEN B.Tiempo ELSE NULL END),2) AS LASER,
+FORMAT(SUM(CASE WHEN B.Departamento IN(180,190) THEN B.Tiempo ELSE NULL END),2) AS MONTADO,
+FORMAT(SUM(CASE WHEN B.Departamento IN(210,220) THEN B.Tiempo ELSE NULL END),2) AS ADORNO,
+FORMAT(SUM(CASE WHEN B.Departamento IN(10,20,30,40,90,110,120,140,60,180,190,210,220) THEN B.Tiempo ELSE NULL END),2) AS TOTALES,
+FORMAT((SUM(CASE WHEN B.Departamento IN(10,20,30,40,90,110,120,140,60,180,190,210,220) THEN B.Tiempo ELSE NULL END) * $P{PARES}),2) AS TOTALESXPARES
+FROM tiemposxestilodepto AS A
+INNER JOIN tiemposxestilodepto_has_deptos AS B
+ON A.ID = B.TiempoXEstiloDepto
+INNER JOIN departamentos AS D
+ON D.Clave = B.Departamento
+WHERE A.Linea = $P{LINEA} AND A.Estilo = $P{ESTILO};]]>
+	</queryString>
+	<field name="Linea" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Estilo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Total" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CORTE_PIEL" class="java.lang.String"/>
+	<field name="CORTE_FORRO" class="java.lang.String"/>
+	<field name="TOTAL_CORTE" class="java.lang.String"/>
+	<field name="RAYADO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REBAJADO" class="java.lang.String"/>
+	<field name="FOLEADO" class="java.lang.String"/>
+	<field name="ENTRETELA" class="java.lang.String"/>
+	<field name="PESPUNT" class="java.lang.String"/>
+	<field name="ENSUELADO" class="java.lang.String"/>
+	<field name="PRE-PESP" class="java.lang.String"/>
+	<field name="LASER" class="java.lang.String"/>
+	<field name="MONTADO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ADORNO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTALES" class="java.lang.String"/>
+	<field name="TOTALESXPARES" class="java.lang.String"/>
+	<detail>
+		<band height="9" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="35" height="9" uuid="109d4cb5-ddc8-4939-b8dd-e77d79d9d623"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CORTE_PIEL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="35" y="0" width="35" height="9" uuid="3392141f-e9bb-4f7f-9578-29bdde4dc446"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CORTE_FORRO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="0" width="35" height="9" uuid="92d5277c-19dc-4903-b60a-b5f4a65e0b57"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_CORTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="105" y="0" width="35" height="9" uuid="91baf5b5-2321-4b40-ba0e-c582d3759ef9"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAYADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="140" y="0" width="35" height="9" uuid="91baf5b5-2321-4b40-ba0e-c582d3759ef9"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REBAJADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="175" y="0" width="35" height="9" uuid="f41d509e-584e-4955-a28e-54f007f9eae6"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FOLEADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="210" y="0" width="35" height="9" uuid="55ca3eca-2f5c-41b3-b1f9-efc193e380e5"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENTRETELA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="245" y="0" width="35" height="9" uuid="4d069797-5360-46f3-9fae-be4971316a4e"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PESPUNT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="280" y="0" width="35" height="9" uuid="ae2f67fb-a335-4292-878a-c69d328e53ce"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENSUELADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="315" y="0" width="35" height="9" uuid="d6b5a5e4-d2ff-4315-bd0d-20592ff5bace"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRE-PESP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="35" height="9" uuid="78e8dbfa-090f-483b-b029-40fc9118880e"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LASER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="385" y="0" width="35" height="9" uuid="e07fc491-be54-4f70-8791-a4c5c9c90d18"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="420" y="0" width="35" height="9" uuid="90eafc5b-1da8-460b-a51f-7492dbcd82b6"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADORNO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="40" height="9" uuid="74aed07e-8ea3-463d-9d15-72061b393c4c"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTALES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="495" y="0" width="35" height="9" uuid="a6148da5-82cf-491b-ab64-9cc7144a2c2f"/>
+				<box>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTALESXPARES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

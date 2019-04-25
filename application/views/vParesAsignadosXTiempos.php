@@ -3,49 +3,24 @@
         <h3 class="font-weight-bold">Pares asignados X Tiempos</h3>
     </div>
     <div class="card-body">
-        <div class="row">
+        <div class="row" align="center">
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>De la Maquila</label>
-                <input type="text" id="ParesMaquilaInicial" name="ParesMaquilaInicial" class="form-control form-control-sm numbersOnly" autofocus="">
+                <label>Maquila</label>
+                <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm numbersOnly" autofocus="">
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>A la Maquila</label>
-                <input type="text" id="ParesMaquilaFinal" name="ParesMaquilaFinal" class="form-control form-control-sm  numbersOnly">
+                <label>Semana</label>
+                <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numbersOnly">
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>De sem</label>
-                <input type="text" id="ParesSemanaInicial" name="ParesSemanaInicial" class="form-control form-control-sm  numbersOnly">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                <label>Dia</label>
+                <input type="text" id="Dia" name="Dia" class="form-control form-control-sm  numbersOnly">
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>A sem</label>
-                <input type="text" id="ParesSemanaFinal" name="ParesSemanaFinal" class="form-control form-control-sm  numbersOnly">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                 <label>Año</label>
-                <input type="text" id="ParesAnio" name="ParesAnio" class="form-control form-control-sm  numbersOnly">
+                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm  numbersOnly">
             </div>
-
             <div class="w-100 my-3"></div>
-
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" align="center">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-indigo active">
-                        <input type= "radio" name="btnControl" id="btnControl" autocomplete="off" checked> CONTROL
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnEsponjasYLatex" id="btnEsponjasYLatex" autocomplete="off"> ESPONJAS Y LATEX
-                    </label>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                <div class="form-group">
-                    <span class="switch switch-lg">
-                        <input id="rConNumeracion" name="rConNumeracion"  type="checkbox" class="switch" id="rConNumeracion">
-                        <label for="rConNumeracion">Con numeración</label>
-                    </span>
-                </div>
-            </div>
-
         </div>
     </div>
     <div class="card-footer">
@@ -54,39 +29,28 @@
         </div>
     </div>
 </div>
-<div id="rpts">
-
-</div>
 <script>
-    var pnlTablero = $("#pnlTablero"), ParesAnio = pnlTablero.find("#ParesAnio"),
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
-            ParesMaquilaInicial = pnlTablero.find("#ParesMaquilaInicial"),
-            ParesMaquilaFinal = pnlTablero.find("#ParesMaquilaFinal"),
-            ParesSemanaInicial = pnlTablero.find("#ParesSemanaInicial"),
-            ParesSemanaFinal = pnlTablero.find("#ParesSemanaFinal");
+            Maquila = pnlTablero.find("#Maquila"),
+            Semana = pnlTablero.find("#Semana");
 
     $(document).ready(function () {
-        ParesAnio.val(new Date().getFullYear());
+        Anio.val(new Date().getFullYear());
 
         btnAceptar.click(function () {
-            if (ParesMaquilaInicial.val() && ParesMaquilaFinal.val()
-                    && ParesSemanaInicial.val() && ParesSemanaFinal.val()) {
+            if (Maquila.val() && Semana.val() && Anio.val()) {
                 HoldOn.open({
                     theme: 'sk-cube',
                     message: 'Por favor espere...'
                 });
-                $.post('<?php print base_url('ParesAsignadosControl/getParesAsignadosControl'); ?>', {
-                    MAQUILA_INICIAL: ParesMaquilaInicial.val().trim() !== '' ? parseInt(ParesMaquilaInicial.val()) : '',
-                    MAQUILA_FINAL: ParesMaquilaFinal.val().trim() !== '' ? parseInt(ParesMaquilaFinal.val()) : '',
-                    SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',
-                    SEMANA_FINAL: ParesSemanaFinal.val().trim() !== '' ? ParesSemanaFinal.val() : '',
-                    ANIO: ParesAnio.val().trim() !== '' ? ParesAnio.val() : '',
-                    TIPO: pnlTablero.find("#btnControl")[0].checked ? 1 :
-                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0,
-                    NUMERACION: pnlTablero.find("#rConNumeracion")[0].checked ? 1 : 0
-                }).done(function (data, x, jq) { 
+                $.post('<?php print base_url('ParesAsignadosXTiempos/getParesAsignadosControlXTiempos'); ?>', {
+                    MAQUILA: Maquila.val().trim() !== '' ? parseInt(Maquila.val()) : '',
+                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
+                    ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
+                }).done(function (data, x, jq) {
                     onBeep(1);
-                    onImprimirReporteFancyArray(JSON.parse(data));
+                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
@@ -95,14 +59,12 @@
                 });
             } else {
                 swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    if (ParesMaquilaInicial.val()) {
-                        ParesMaquilaInicial.focus();
-                    } else if (ParesMaquilaFinal.val()) {
-                        ParesMaquilaFinal.focus().select();
-                    } else if (ParesSemanaInicial.val()) {
-                        ParesSemanaInicial.focus().select();
-                    } else if (ParesSemanaFinal.val()) {
-                        ParesSemanaFinal.focus().select();
+                    if (Maquila.val()) {
+                        Maquila.focus();
+                    } else if (Semana.val()) {
+                        Semana.focus().select();
+                    } else if (Anio.val()) {
+                        Anio.focus().select();
                     }
                 });
             }
