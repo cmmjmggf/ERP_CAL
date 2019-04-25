@@ -52,7 +52,7 @@
                 type: 'iframe',
                 opts: {
                     afterShow: function (instance, current) {
-                        
+
                     },
                     iframe: {
                         // Iframe template
@@ -1096,7 +1096,8 @@
                     if ($.inArray(el.SubSubItem, usubsubitems) === -1 && el.RefItem === '#' && el.RefSubItem === '#' && parseInt(el.SubItemDropdown) === 1) {
                         usubsubitems.push(el.SubSubItem);
                         subsubitems.push({SubItem: el.SubItem, SubSubItem: el.SubSubItem, IconSubSubItem: el.IconSubSubItem,
-                            RefSubSubItem: el.RefSubSubItem, SubSubItemModal: el.SubSubItemModal, IsSubSubItem: el.is_subsubitem});
+                            RefSubSubItem: el.RefSubSubItem, SubSubItemModal: el.SubSubItemModal, IsSubSubItem: el.is_subsubitem,
+                            SubSubItemBackdrop: el.SubSubItemBackdrop});
                     }
                 });
                 $.each(menus, function (k, v) {
@@ -1171,7 +1172,14 @@
                                                                 }
                                                                 $.each(subsubitems, function (kss, vss) {
                                                                     if (vss.IsSubSubItem !== null) {
-                                                                        opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fas fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                        switch (parseInt(vss.SubSubItemModal)) {
+                                                                            case 0:
+                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fas fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                                break;
+                                                                            case 1:
+                                                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fas fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                                break;
+                                                                        }
                                                                         nav_subsubitems = 1;
                                                                     }
                                                                 });
@@ -1180,7 +1188,7 @@
                                                                 }
                                                             }
                                                             break;
-                                                    }
+                                                    }/*END SWITCH*/
                                                 }
                                                 nav_subitems = 1;
                                             });
