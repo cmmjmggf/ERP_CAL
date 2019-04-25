@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="conciliaFraccionEstiloNomina" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="291" columnSpacing="10" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="a7da0111-f879-4848-8c29-681462a8d7c9">
+	<property name="ireport.zoom" value="2.357947691000021"/>
+	<property name="ireport.x" value="141"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\wamp64\\www\\ERP_CAL\\jrxml\\produccion\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="maq" class="java.lang.String"/>
+	<parameter name="sem" class="java.lang.String"/>
+	<parameter name="ano" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select PE.control, PE.estilo, cast(PE.pares as decimal(5,3)) as pares, sum(fpn.subtot) as total_fpn
+from pedidox PE
+join fracpagnomina fpn on fpn.control = PE.control
+where PE.semana = $P{sem}
+and PE.Ano = $P{ano}
+and PE.maquila = $P{maq}
+group by PE.control;]]>
+	</queryString>
+	<field name="control" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estilo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pares" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_fpn" class="java.lang.Double"/>
+	<variable name="returnValue" class="java.lang.Double" resetType="None"/>
+	<variable name="total_fpn_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_fpn}]]></variableExpression>
+	</variable>
+	<variable name="sumGen" class="java.lang.Double" calculation="Sum"/>
+	<columnHeader>
+		<band height="52" splitType="Stretch">
+			<rectangle>
+				<reportElement x="111" y="31" width="97" height="20" uuid="8588160b-4f9a-4a00-ad29-549496b51d3c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="42" y="41" width="30" height="11" uuid="c3b3ad38-f2af-4cc6-8b4e-4459a8288821"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="41" width="41" height="11" uuid="d2146605-d33b-4a18-bfdf-5eb48512d612"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Control]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="157" y="41" width="43" height="11" uuid="31d14766-cd62-4460-9bb4-04ebc3ce9aca"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="41" width="43" height="11" uuid="6bd82c3c-78bc-401a-adba-d70ac33a4fe6"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fracción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="72" y="41" width="39" height="11" uuid="6d863c73-c6db-4021-ba83-11eba955aecb"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="51" width="266" height="1" uuid="ada07962-4ed5-4884-8460-64f229a77ba6"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="491" y="0" width="80" height="12" isPrintInFirstWholeBand="true" uuid="57fc76fa-2562-4aa7-bacf-b07b6aa820db"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement x="448" y="12" width="139" height="12" isPrintInFirstWholeBand="true" uuid="4cc8102a-0903-4554-b0fb-48270759e213"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="572" y="0" width="15" height="12" isPrintInFirstWholeBand="true" uuid="fe7cef56-989d-464a-9903-ff860ef11f68"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="2ce2a663-5201-4fb4-b021-282a0c4a52d8"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="72" y="0" width="215" height="14" isPrintInFirstWholeBand="true" uuid="b0e74d61-1385-4cd6-b098-15dea8fa799c"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="72" y="14" width="152" height="11" isPrintInFirstWholeBand="true" uuid="6b70e92d-2a45-45f5-9917-d0d1e4ccaa5b"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concilia de nómina por Estilo Fracción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="31" width="97" height="11" uuid="22036667-36e4-4df0-ae02-67fe101efd70"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pagos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="41" width="53" height="11" uuid="ca0d49e2-967f-42cb-9673-626166a4ef92"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diferencia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="9" splitType="Stretch">
+			<textField>
+				<reportElement x="42" y="-1" width="30" height="9" uuid="cb7280bd-a6ca-4413-9ecd-50ae9196e133"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="-1" width="41" height="9" uuid="9097ae84-00fd-4c64-8d7d-2217b0fe7346"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="111" y="-1" width="43" height="9" uuid="488135ba-5768-4634-b76f-acb385fb713a"/>
+				<subreportParameter name="estilo">
+					<subreportParameterExpression><![CDATA[$F{estilo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pares">
+					<subreportParameterExpression><![CDATA[$F{pares}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="returnValue" toVariable="returnValue"/>
+				<returnValue subreportVariable="sumGen" toVariable="sumGen" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "conciliaFraccionEstiloNomina_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<textField pattern="###0">
+				<reportElement x="72" y="-1" width="39" height="9" uuid="1e695f50-352e-450b-aa3c-ab686e9256e5"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pares}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="8" width="256" height="1" uuid="0d2ba893-8b9c-470d-b861-9e4c471e5416"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField evaluationTime="Band" pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="203" y="-1" width="53" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="cf5c99bd-61aa-4de7-95c2-7a186f4367a8"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{returnValue}*$F{pares}-$F{total_fpn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="157" y="-1" width="43" height="9" uuid="07e7510b-ffa0-4aa2-8a92-5f917e02702d"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_fpn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="12">
+			<staticText>
+				<reportElement x="28" y="1" width="83" height="11" uuid="14b5010f-149c-4e58-b3db-058dc0b0ff99"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total por semana:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="-1" width="587" height="1" uuid="ed712f81-7b7b-4e5c-bb4d-96080715daaa"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="157" y="1" width="43" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="96e566c9-0e84-4bc6-a577-6ea2609f5a74"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_fpn_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="113" y="1" width="41" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="01cc0c62-e965-4097-843d-35b54322e669"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumGen}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="204" y="1" width="52" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="80ec8fad-df53-4188-851b-9f8f9400849b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumGen}-$V{total_fpn_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

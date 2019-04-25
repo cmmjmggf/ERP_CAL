@@ -57,7 +57,7 @@ WHERE PE.Maquila BETWEEN $P{maq} AND $P{amaq}
 AND PE.Semana BETWEEN $P{sem} AND $P{asem}
 AND PE.Ano = $P{ano}
 AND PE.Estatus = 'A'
-order by Suela ASC]]>
+order by Suela ASC, PE.Control ASC]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

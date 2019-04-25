@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="costoManoObraDestajos_subreport2" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="88f9173e-27e7-4d24-8ad2-8ce931e51b15">
+	<property name="ireport.zoom" value="2.593742460100003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="depto" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select sum(A.pares) AS total_pares,
+
+(SELECT sum(fpn2.subtot) as total_pesos
+from fracpagnomina	fpn2
+where fpn2.anio = 2019
+and fpn2.semana = 15
+and fpn2.depto = $P{depto}
+and date_format(fpn2.fecha,'%d/%m/%Y') = '05/04/2019') as total_pesos
+
+from (SELECT DISTINCT(fpn.control), fpn.pares
+from fracpagnomina	fpn
+where fpn.anio = 2019
+and fpn.semana = 15
+and fpn.depto = $P{depto}
+and date_format(fpn.fecha,'%d/%m/%Y') = '05/04/2019') AS A]]>
+	</queryString>
+	<field name="total_pares" class="java.lang.Double"/>
+	<field name="total_pesos" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="¤ #,##0" isBlankWhenNull="true">
+				<reportElement x="30" y="0" width="43" height="13" uuid="76d9a180-c488-4099-8013-4fd76dbae190"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_pesos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="30" height="13" uuid="5e853864-d5a3-4f84-a8c8-4f05169ca9e5"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_pares}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -43,3 +43,9 @@ $this->load->view('vReporteCorteHiloTejer');
 $this->load->view('vReporteMatrizFraccionesEstiloLinea');
 $this->load->view('vFraccionesCapturadasNominaSem');
 $this->load->view('vLotificacionSuelasPlantas');
+$this->load->view('vEstiloFraccionNomina');
+$this->load->view('vMaterialSemanaProduccionEstilo');
+$this->load->view('vConciliaFabricaProduccion');
+$this->load->view('vConRelControlesXMaquila');
+$this->load->view('vManoObraDirecta');
+
