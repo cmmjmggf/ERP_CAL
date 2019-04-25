@@ -111,6 +111,69 @@ class TiemposXEstiloDepto extends CI_Controller {
                         $TOTAL += $v->DEPTOTIME;
                     }
                     $this->db->set('Total', $TOTAL)->where('ID', $ID)->update('tiemposxestilodepto');
+
+                    /* AGREGAR EN TABLA DE PASO */
+                    $this->db->insert('estilostiempox', array('linea' => $x->post('LINEA'), 'estilo' => $x->post('ESTILO')));
+                    $rowX = $this->db->query('SELECT LAST_INSERT_ID()')->row_array();
+                    $IDX = $rowX['LAST_INSERT_ID()'];
+
+                    foreach ($TIEMPOS as $k => $v) {
+                        switch (intval($v->DEPTO)) {
+                            case 10:
+                                /* CORTE */
+                                $this->db->set('cortep', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                $this->db->set('cortef', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 20:
+                                /* RAYADO */
+                                $this->db->set('rayado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 30:
+                                /* REBAJADO Y PERFORADO */
+                                $this->db->set('rebaja', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 40:
+                                /* FOLEADO */
+                                $this->db->set('folead', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 90:
+                                /* ENTRETELADO */
+                                $this->db->set('entrete', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 110:
+                                /* PESPUNTE */
+                                $this->db->set('pespu', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 140:
+                                /* ENSUELADO */
+                                $this->db->set('ensuel', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 120:
+                                /* PRELIMINAR - PESPUNTE */
+                                $this->db->set('prepes', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 60:
+                                /* LASER (ES LASER PERO FILI NO LO CAMBIO DE TEJIDO A LASER, SOLO LO CAMBIO EN EL REPORTE EL TITULO) */
+                                $this->db->set('tejido', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 180:
+                                /* MONTADO A */
+                                $this->db->set('montado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 190:
+                                /* MONTADO B */
+                                $this->db->set('montado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 210:
+                                /* ADORNO A */
+                                $this->db->set('adorno', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                            case 220:
+                                /* ADORNO B */
+                                $this->db->set('adorno', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                break;
+                        }
+                    }
                     break;
                 case 1:
                     $TOTAL = 0;
@@ -128,6 +191,68 @@ class TiemposXEstiloDepto extends CI_Controller {
                         }
                     }
                     $this->db->set('Total', $TOTAL)->where('ID', $x->post('ID'))->update('tiemposxestilodepto');
+
+                    $IDR = $this->db->select('E.ID AS IDEX')->from('estilostiempox AS E')->where('E.linea', $x->post('LINEA'))->where('E.estilo', $x->post('ESTILO'))->get()->result();
+                    if (isset($IDR[0]->IDEX)) {
+                        $IDX = $IDR[0]->IDEX;
+                        foreach ($TIEMPOS as $k => $v) {
+                            switch (intval($v->DEPTO)) {
+                                case 10:
+                                    /* CORTE */
+                                    $this->db->set('cortep', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    $this->db->set('cortef', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 20:
+                                    /* RAYADO */
+                                    $this->db->set('rayado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 30:
+                                    /* REBAJADO Y PERFORADO */
+                                    $this->db->set('rebaja', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 40:
+                                    /* FOLEADO */
+                                    $this->db->set('folead', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 90:
+                                    /* ENTRETELADO */
+                                    $this->db->set('entrete', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 110:
+                                    /* PESPUNTE */
+                                    $this->db->set('pespu', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 140:
+                                    /* ENSUELADO */
+                                    $this->db->set('ensuel', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 120:
+                                    /* PRELIMINAR - PESPUNTE */
+                                    $this->db->set('prepes', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 60:
+                                    /* LASER (ES LASER PERO FILI NO LO CAMBIO DE TEJIDO A LASER, SOLO LO CAMBIO EN EL REPORTE EL TITULO) */
+                                    $this->db->set('tejido', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 180:
+                                    /* MONTADO A */
+                                    $this->db->set('montado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 190:
+                                    /* MONTADO B */
+                                    $this->db->set('montado', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 210:
+                                    /* ADORNO A */
+                                    $this->db->set('adorno', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                                case 220:
+                                    /* ADORNO B */
+                                    $this->db->set('adorno', $v->DEPTOTIME)->where('ID', $IDX)->update('estilostiempox');
+                                    break;
+                            }
+                        }
+                    }
                     break;
             }
         } catch (Exception $exc) {
