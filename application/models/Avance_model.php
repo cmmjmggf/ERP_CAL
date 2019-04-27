@@ -22,6 +22,7 @@ class Avance_model extends CI_Model {
             if ($CONTROL !== '') {
                 $this->db->like('F.control', $CONTROL);
             }
+            $this->db->limit(99);
 
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -86,7 +87,7 @@ class Avance_model extends CI_Model {
                                     . "FP.fecha AS FECHA,FP.Semana AS SEMANA, "
                                     . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
                                     . "FP.subtot AS SUBTOTAL")
-                            ->from("fracpagnomina AS FP")->get()->result();
+                            ->from("fracpagnomina AS FP")->limit(999)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -103,12 +104,12 @@ class Avance_model extends CI_Model {
                             . "PN.importe AS IMPORTE, "
                             . "PN.tpcond AS DED, "
                             . "PN.imported AS SUBTOTAL")
-                    ->from("prenomina AS PN")->limit(9999);
+                    ->from("prenomina AS PN")->limit(999);
             if ($E !== "") {
-                $this->db->where('PN.numemp',$E);
+                $this->db->where('PN.numemp', $E);
             }
             if ($C !== '') {
-                $this->db->where('PN.numcon',$C );
+                $this->db->where('PN.numcon', $C);
             }
             return $this->db->get()->result();
         } catch (Exception $exc) {

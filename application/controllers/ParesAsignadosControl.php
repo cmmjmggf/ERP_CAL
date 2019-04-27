@@ -45,29 +45,45 @@ class ParesAsignadosControl extends CI_Controller {
         $nrpt = $this->input->post('TIPO');
         $reports = array();
 
-        if (intval($this->input->post('NUMERACION')) === 0) {
-            $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquila.jasper');
-            $jc->setFilename('ParesAsignadosAMaquila_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
-            $jc->setDocumentformat('pdf');
-            $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
-        }
-        if (intval($this->input->post('NUMERACION')) === 1) {
-            $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerie.jasper');
-            $jc->setFilename('ParesAsignadosAMaquilaSerie_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
-            $jc->setDocumentformat('pdf');
-            $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
-        }
         switch (intval($nrpt)) {
             case 1:
-                $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaEsponjasLatex.jasper');
-                $jc->setFilename('ParesAsignadosAMaquilaEsponjasLatex_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+                /* CONTROL */
+                /* 1 PARES ASIGNADOS  */
+                if (intval($x->post('NUMERACION')) === 0) {
+                    $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquila.jasper');
+                    $jc->setFilename('ParesAsignadosAMaquila_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
+                }
+                if (intval($this->input->post('NUMERACION')) === 1) {
+                    $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerie.jasper');
+                    $jc->setFilename('ParesAsignadosAMaquilaSerie_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['PARESASIGNADOSAMAQUILA'] = $jc->getReport();
+                }
+//                $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaEsponjasLatex.jasper');
+//                $jc->setFilename('ParesAsignadosAMaquilaEsponjasLatex_' . $MI . '_' . $MF . '_' . Date('h_i_s'));
+//                $jc->setDocumentformat('pdf');
+//                $reports['PARESASIGNADOSAMAQUILAESPONJALATEX'] = $jc->getReport();
+                break;
+            case 2:
+                /* ESPONJA LATEX CON SERIE */
+                $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerieEsponja.jasper');
+                $jc->setFilename('ParesAsignadosAMaquilaSerieEsponja_' . Date('h_i_s'));
                 $jc->setDocumentformat('pdf');
                 $reports['PARESASIGNADOSAMAQUILAESPONJALATEX'] = $jc->getReport();
-                break; 
+                break;
         }
 
+        /* 2 PARES ASIGNADOS X LINEA */
+        $jc->setJasperurl('jrxml\asignados\ParesAsignadosXLinea.jasper');
+        $jc->setFilename('ParesAsignadosXLinea_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        $reports['PARESASIGNADOSAMAQUILAXSEMANAXLINEA'] = $jc->getReport();
+
+        /* 3 PARES ASIGNADOS X HERRAMENTAL (SUAJE) */
         $jc->setJasperurl('jrxml\asignados\ParesAsignadosControlHerramental.jasper');
-        $jc->setFilename('ParesAsignadosControlHerramental_' . $x->post('MAQUILA_FIN') . '_' . $x->post('MAQUILA_FIN') . '_' . Date('h_i_s'));
+        $jc->setFilename('ParesAsignadosControlHerramental_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         $reports['PARESASIGNADOSAMAQUILAHERRAMENTAL'] = $jc->getReport();
         print json_encode($reports);

@@ -66,7 +66,7 @@
                 <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm date">
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary" id="btnAcepta"><span class="fa fa-check"></span> ACEPTA </button>
+                <button type="button" class="btn btn-primary" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
@@ -143,7 +143,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno">Acepta</button>
+                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno" >Acepta</button>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -411,9 +411,6 @@
                 getInfoXControl();
                 getUltimoDocumento();
             }
-        }).focusout(function () {
-            getInfoXControl();
-            getUltimoDocumento();
         });
 
         Fraccion.change(function () {

@@ -184,16 +184,37 @@
     label{
         font-weight: bold;
     }
-
+    .swal-title{
+        color: #000 !important;
+    }
+    .swal-text{ 
+        color: #000 !important;
+    }
     .swal-modal{
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
+        border:2px solid #D6D6D6;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,e5e5e5+100;White+3D */
+        background: rgb(255,255,255); /* Old browsers */
+        background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */ 
     }
     .swal-overlay {
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.71+0,0.6+51,0.7+100 */
-        background: -moz-linear-gradient(top, rgba(0,0,0,0.71) 0%, rgba(0,0,0,0.6) 51%, rgba(0,0,0,0.7) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, rgba(0,0,0,0.71) 0%,rgba(0,0,0,0.6) 51%,rgba(0,0,0,0.7) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, rgba(0,0,0,0.71) 0%,rgba(0,0,0,0.6) 51%,rgba(0,0,0,0.7) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5000000', endColorstr='#b3000000',GradientType=0 ); /* IE6-9 */
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.71+0,0.19+52,0.7+100 */
+        background: -moz-linear-gradient(top,  rgba(0,0,0,0.71) 0%, rgba(0,0,0,0.19) 52%, rgba(0,0,0,0.7) 100%) !important; /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  rgba(0,0,0,0.71) 0%,rgba(0,0,0,0.19) 52%,rgba(0,0,0,0.7) 100%) !important; /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  rgba(0,0,0,0.71) 0%,rgba(0,0,0,0.19) 52%,rgba(0,0,0,0.7) 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5000000', endColorstr='#b3000000',GradientType=0 ) !important; /* IE6-9 */
+
+    }
+    .swal-button{
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4d6b7d+0,082a3c+100 */
+        background: rgb(77,107,125); /* Old browsers */
+        background: -moz-linear-gradient(top, rgba(77,107,125,1) 0%, rgba(8,42,60,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(77,107,125,1) 0%,rgba(8,42,60,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(77,107,125,1) 0%,rgba(8,42,60,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d6b7d', endColorstr='#082a3c',GradientType=0 ); /* IE6-9 */
     }
     /*Submenu*/
     /*//Copy this css*/

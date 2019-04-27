@@ -576,7 +576,7 @@
         });
 
         RastreoXControl = tblRastreoXControl.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getRastreoXControl'); ?>',
                 "contentType": "application/json",

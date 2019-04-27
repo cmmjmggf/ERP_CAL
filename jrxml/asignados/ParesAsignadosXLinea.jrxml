@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXLinea" language="groovy" pageWidth="595" pageHeight="842" columnWidth="571" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="30078ee2-aa69-41c3-b089-7774d6afb523">
+	<property name="ireport.zoom" value="1.5421731577181332"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="MAQUILAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAQUILAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAINICIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEMANAFIN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\wamp64\\www\\ERP_CAL\\jrxml\\asignados\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT P.Estilo, sum(CAST(P.Pares AS SIGNED)) AS Pares, L.Clave AS Linea, CONCAT(L.Clave, " ",L.Descripcion) as LineaT,
+CONCAT(P.Estilo, " ",P.Pares) AS EstiloPares
+FROM  pedidox as P
+INNER JOIN estilos AS E ON P.Estilo = E.Clave
+INNER JOIN lineas AS L ON E.Linea = L.Clave
+WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
+AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND
+P.Estatus NOT IN ('F')  AND P.stsavan NOT IN(12,13)
+GROUP BY L.Clave
+ORDER BY L.Clave ASC]]>
+	</queryString>
+	<field name="Estilo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Pares" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Linea" class="java.lang.String"/>
+	<field name="LineaT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EstiloPares" class="java.lang.String"/>
+	<variable name="Pares_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Pares}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="59">
+			<line>
+				<reportElement x="2" y="58" width="570" height="1" uuid="e2c8fdc6-9445-4252-ae72-a96a58bcf55e"/>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="79" y="16" width="134" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares asignados a maquila]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="79" y="0" width="225" height="16" isPrintInFirstWholeBand="true" uuid="acf1674d-8383-4182-83a8-ad3cf9bb07b9"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="557" y="6" width="15" height="12" isPrintInFirstWholeBand="true" uuid="9564d570-f4af-4b3a-bc73-1a39ce64dd69"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="433" y="18" width="139" height="12" isPrintInFirstWholeBand="true" uuid="f87076c2-ccc5-4d14-ab98-47d775e84bfb"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="476" y="6" width="80" height="12" isPrintInFirstWholeBand="true" uuid="e79e7db9-b308-43e2-bbe6-2c01c9007f6e"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="100" y="46" width="425" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="1bd2dec2-21c6-4713-940b-8a8695955081"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTILOS Y PARES]]></text>
+			</staticText>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="2" y="2" width="72" height="42" isPrintInFirstWholeBand="true" uuid="081844f8-8ac6-4d18-88e3-8e7eec18f17c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="46" width="100" height="13" uuid="62d3e4f4-b4bd-4269-a4f6-9cfc954bda9b"/>
+				<text><![CDATA[Linea]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="525" y="36" width="46" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="9120040c-e1cb-4878-a90c-0495e4c2a96d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL X LINEA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="213" y="16" width="25" height="14" uuid="7662b134-d229-4ec0-8421-aa5fd8587030"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{MAQUILAINICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="238" y="16" width="49" height="14" isPrintInFirstWholeBand="true" uuid="74909832-5f71-4511-bc92-64cb3493ac9f"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[De la sem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="312" y="16" width="51" height="14" isPrintInFirstWholeBand="true" uuid="bd23c34f-1047-4c6f-85af-45eaed7f2fc8"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[a la sem]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="287" y="16" width="25" height="14" uuid="38a1f993-7185-4927-a392-c647847eceab"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAINICIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="16" width="25" height="14" uuid="694bb96a-606e-4323-aa94-4cf858dfa41f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAFIN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="be55474f-8b23-47d8-bf47-798fcb81ab0b"/>
+				<textFieldExpression><![CDATA[$F{LineaT}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="101" y="0" width="424" height="24" uuid="6db63eab-d3db-444b-9f1e-15ef3e9da140"/>
+				<subreportParameter name="MAQUILAINICIO">
+					<subreportParameterExpression><![CDATA[$P{MAQUILAINICIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MAQUILAFIN">
+					<subreportParameterExpression><![CDATA[$P{MAQUILAFIN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ANO">
+					<subreportParameterExpression><![CDATA[$P{ANO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SEMANAINICIO">
+					<subreportParameterExpression><![CDATA[$P{SEMANAINICIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SEMANAFIN">
+					<subreportParameterExpression><![CDATA[$P{SEMANAFIN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LINEA">
+					<subreportParameterExpression><![CDATA[$F{Linea}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Horizontal.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="525" y="0" width="47" height="24" uuid="b72cff25-3f60-4c2c-a577-cc8bc517d268"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="24" width="572" height="1" uuid="a273391f-1953-4a2e-8c7b-d367b6a16e21"/>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="101" y="0" width="1" height="25" uuid="841e6293-8502-4200-8df7-fd50523b7fc6"/>
+			</line>
+			<line>
+				<reportElement x="525" y="-1" width="1" height="25" uuid="3bf96360-fba7-430d-89f0-e7528dda520c"/>
+			</line>
+		</band>
+	</detail>
+	<summary>
+		<band height="22">
+			<textField>
+				<reportElement x="525" y="0" width="46" height="20" uuid="59103ffd-c045-435c-8317-dd1bce0c5c29"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{Pares_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="425" y="0" width="100" height="20" uuid="7085114b-5f1f-4b70-ae9e-93533ce62331"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
