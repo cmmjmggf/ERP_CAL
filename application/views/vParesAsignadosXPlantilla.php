@@ -1,4 +1,3 @@
-
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
         <h3 class="font-weight-bold">Pares asignados plantilla otros</h3>

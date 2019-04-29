@@ -562,7 +562,6 @@
     }
 
     function getMaquilasPlantillas() {
-        console.log('Refrescando maq plantillas...');
         TipoMaquila[0].selectize.clear(true);
         TipoMaquila[0].selectize.clearOptions();
         $.getJSON('<?php print base_url('ControlPlantilla/getMaquilasPlantillas'); ?>').done(function (a) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXPlantilla" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1223631-bb4e-4dbf-96fc-446bcb682a64">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.zoom" value="1.7715610000000075"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -37,8 +37,9 @@ WHEN P.stsavan = 10 THEN "ADORNO"
 WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
 WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO"
 WHEN P.stsavan = 13 THEN "FACTURADO"
-END) AS AvanceT
+END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
+INNER JOIN controlpla AS CP ON P.Control = CP.Control
 INNER JOIN clientes AS CT ON P.Cliente = CT.Clave
 INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN colores AS C ON P.Color = C.Clave
@@ -157,6 +158,10 @@ GROUP BY P.Clave]]>
 	</field>
 	<field name="CLIENTET" class="java.lang.String"/>
 	<field name="AvanceT" class="java.lang.String"/>
+	<field name="ParesSum" class="java.lang.Long"/>
+	<variable name="ParesSum_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{ParesSum}]]></variableExpression>
+	</variable>
 	<group name="AVANCE">
 		<groupExpression><![CDATA[$F{stsavan}]]></groupExpression>
 		<groupHeader>
@@ -170,9 +175,6 @@ GROUP BY P.Clave]]>
 				</textField>
 			</band>
 		</groupHeader>
-		<groupFooter>
-			<band height="21"/>
-		</groupFooter>
 	</group>
 	<columnHeader>
 		<band height="64" splitType="Stretch">
@@ -327,7 +329,7 @@ GROUP BY P.Clave]]>
 				<text><![CDATA[AVANCE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="701" y="42" width="29" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="87f37634-da78-44b1-89cb-3496a1dac63f"/>
+				<reportElement mode="Opaque" x="701" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="87f37634-da78-44b1-89cb-3496a1dac63f"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
@@ -337,7 +339,7 @@ GROUP BY P.Clave]]>
 				<text><![CDATA[FECHA PEDIDO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="730" y="42" width="39" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c05d7ac0-5e45-455c-96e2-60b2a4a721fa"/>
+				<reportElement mode="Opaque" x="733" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c05d7ac0-5e45-455c-96e2-60b2a4a721fa"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
@@ -347,7 +349,7 @@ GROUP BY P.Clave]]>
 				<text><![CDATA[FECHA CAPTURA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="763" y="42" width="39" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="86c816dd-8641-4cab-a1f6-d41c98c8b1f7"/>
+				<reportElement mode="Opaque" x="767" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="86c816dd-8641-4cab-a1f6-d41c98c8b1f7"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
@@ -357,7 +359,7 @@ GROUP BY P.Clave]]>
 				<text><![CDATA[FECHA ENTREGA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="703" y="26" width="95" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="dbc1bbad-5b8e-44fa-8735-d510f0d1f4af"/>
+				<reportElement mode="Opaque" x="703" y="26" width="95" height="16" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="dbc1bbad-5b8e-44fa-8735-d510f0d1f4af"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
@@ -369,7 +371,7 @@ GROUP BY P.Clave]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="72" height="11" uuid="6d5a52a3-7a27-4f08-a7c9-f1363c3088ff"/>
 				<textElement>
@@ -408,7 +410,7 @@ GROUP BY P.Clave]]>
 			</textField>
 			<textField>
 				<reportElement x="585" y="0" width="35" height="11" uuid="ac512efb-2709-4c46-87a8-890b065b9a83"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
@@ -421,12 +423,50 @@ GROUP BY P.Clave]]>
 				<textFieldExpression><![CDATA[$F{AvanceT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="703" y="0" width="27" height="11" uuid="e285bd64-ddf6-45ee-9ae3-ab07bad522bf"/>
+				<reportElement x="703" y="0" width="30" height="11" uuid="e285bd64-ddf6-45ee-9ae3-ab07bad522bf"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaPedido}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="733" y="0" width="35" height="11" uuid="e93602e9-a112-42dd-a4c7-1068d638b077"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaRecepcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="768" y="0" width="35" height="11" uuid="1160ddfb-31b7-4338-8060-73a7354e4fc0"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaEntrega}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="11" width="802" height="1" uuid="5357b129-2fb1-40d0-b907-f0a3bfb8e02b"/>
+			</line>
 		</band>
 	</detail>
+	<summary>
+		<band height="13">
+			<textField>
+				<reportElement x="585" y="0" width="35" height="12" uuid="977ade33-6885-4fc2-a970-bc56a206688d"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ParesSum_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="523" y="0" width="62" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="f91bfb4f-2d41-4d09-b23b-885a889162a1"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total general]]></text>
+			</staticText>
+		</band>
+	</summary>
 </jasperReport>
