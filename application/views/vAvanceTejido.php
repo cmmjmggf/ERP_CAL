@@ -239,7 +239,8 @@
                             COLORT: Color.find("option:selected").text(),
                             DOCUMENTO: Documento.val(),
                             PARES: Pares.val(),
-                            FRACCION: Frac.val()
+                            FRACCION: Frac.val(),
+                            SEMANA: Semana.val()
                         }).done(function (a) {
                             console.log(a);
                             swal('ATENCIÓN', 'SE HA GENERADO UN AVANCE A TEJIDO EN EL CONTROL ' + Control.val(), 'success').then((value) => {
@@ -459,7 +460,7 @@
                 {CONTROL: Control.val()}).done(function (a) {
             if (a.length > 0) {
                 if (parseInt(a[0].EXISTE) > 0) {
-                    swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
+                    swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL','warning').then((value) => {
                         Control.focus().select();
                         Fra.val('');
                         Estilo.val('');

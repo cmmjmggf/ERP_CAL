@@ -1,31 +1,17 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Pares asignados plantilla otros</h3>
+        <h3 class="font-weight-bold">Pares para preparar plantilla a tejido x fechas</h3>
     </div>
     <div class="card-body">
         <div class="row" align="">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>De la maquila</label>
-                <input type="text" id="MaquilaInicial" name="MaquilaInicial" class="form-control form-control-sm numbersOnly required" autofocus="">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <label>Fecha Inicial</label>
+                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date required" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>A la maquila</label>
-                <input type="text" id="MaquilaFinal" name="MaquilaFinal" class="form-control form-control-sm numbersOnly required" autofocus="">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <label>Fecha Final</label>
+                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date required" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>De la Semana</label>
-                <input type="text" id="SemanaInicial" name="SemanaInicial" class="form-control form-control-sm  numbersOnly required">
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>A la Semana</label>
-                <input type="text" id="SemanaFinal" name="SemanaFinal" class="form-control form-control-sm  numbersOnly required">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
-                <label>Año</label>
-                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm  numbersOnly required"> 
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"></div>
-            <div class="w-100 my-3"></div>
         </div>
     </div>
     <div class="card-footer">
@@ -35,28 +21,21 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
+    var pnlTablero = $("#pnlTablero"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
-            MaquilaInicial = pnlTablero.find("#MaquilaInicial"),
-            MaquilaFinal = pnlTablero.find("#MaquilaFinal"),
-            SemanaInicial = pnlTablero.find("#SemanaInicial"),
-            SemanaFinal = pnlTablero.find("#SemanaFinal");
+            FechaInicial = pnlTablero.find("#FechaInicial"),
+            FechaFinal = pnlTablero.find("#FechaFinal");
 
-    $(document).ready(function () {
-        Anio.val(new Date().getFullYear());
+    $(document).ready(function () { 
 
         btnAceptar.click(function () {
-            if (MaquilaInicial.val() && MaquilaFinal.val()
-                    && SemanaInicial.val() && SemanaFinal.val() && Anio.val()) {
+            if (FechaInicial.val() && FechaFinal.val()) {
                 HoldOn.open({
                     theme: 'sk-cube', message: 'Por favor espere...'
                 });
-                $.post('<?php print base_url('ParesAsignadosXPlantilla/getParesAsignadosXPlantilla'); ?>', {
-                    MAQUILA_INICIAL: MaquilaInicial.val().trim() !== '' ? parseInt(MaquilaInicial.val()) : '',
-                    MAQUILA_FINAL: MaquilaFinal.val().trim() !== '' ? parseInt(MaquilaFinal.val()) : '',
-                    SEMANA_INICIAL: SemanaInicial.val().trim() !== '' ? SemanaInicial.val() : '',
-                    SEMANA_FINAL: SemanaFinal.val().trim() !== '' ? SemanaFinal.val() : '',
-                    ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
+                $.post('<?php print base_url('ParesAsignadosPlantillaTejido/getReporte'); ?>', {
+                    FECHA_INICIAL: FechaInicial.val().trim() !== '' ? FechaInicial.val() : '',
+                    FECHA_FINAL: FechaFinal.val().trim() !== '' ? FechaFinal.val() : ''
                 }).done(function (data, x, jq) {
                     console.log(data);
                     onBeep(1);

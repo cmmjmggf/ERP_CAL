@@ -40,9 +40,7 @@ class ParesAsignadosXPlantilla extends CI_Controller {
         $parametros["SEMANA_INICIAL"] = intval($x->post('SEMANA_INICIAL'));
         $parametros["SEMANA_FINAL"] = intval($x->post('SEMANA_FINAL'));
         $parametros["ANO"] = intval($x->post('ANIO'));
-
         $jc->setParametros($parametros);
-
         $jc->setJasperurl('jrxml\asignados\ParesAsignadosXPlantilla.jasper');
         $jc->setFilename('ParesAsignadosXPlantilla_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');

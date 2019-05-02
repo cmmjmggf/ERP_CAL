@@ -78,7 +78,7 @@ class CerrarProg extends CI_Controller {
                             $C = $C > 0 ? $C : str_pad(1, 3, '0', STR_PAD_LEFT);
                             $this->cprm->onAgregarControl(array(
                                 'Control' => $Y . $S . $M . $C,
-                                'FechaProgramacion' => Date('d/m/Y h:i:s a'),
+                                'FechaProgramacion' => Date('Y-m-d h:i:s'),
                                 'Estilo' => $v->Estilo, 'Color' => $v->Color,
                                 'Serie' => $v->Serie, 'Cliente' => $v->Cliente,
                                 'Pares' => $v->Pares, 'Pedido' => $v->Pedido,

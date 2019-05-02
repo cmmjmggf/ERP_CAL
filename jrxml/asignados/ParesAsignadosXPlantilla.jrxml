@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXPlantilla" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1223631-bb4e-4dbf-96fc-446bcb682a64">
-	<property name="ireport.zoom" value="1.7715610000000075"/>
+	<property name="ireport.zoom" value="1.9487171000000107"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -19,25 +19,17 @@ P.Estatus, P.Registro, P.Recibido, P.Pares, P.ParesFacturados,
 P.EstiloT, P.ColorT, P.DiaProg, P.SemProg, P.AnioProg, P.FechaProg, P.HoraProg,
  P.Empleado, P.Tiempo, P.EstatusProduccion, P.DeptoProduccion, P.stsavan, CT.RazonS AS CLIENTET,
 (CASE
-WHEN P.stsavan = 1 THEN "PROGRAMADO"
-WHEN P.stsavan = 2 THEN "CORTE"
-WHEN P.stsavan = 3 THEN "PROGRAMADO"
-WHEN P.stsavan = 33 THEN "REBAJADO"
-WHEN P.stsavan = 33 THEN "FOLEADO"
-WHEN P.stsavan = 40 THEN "ENTRETELADO"
-WHEN P.stsavan = 42 THEN "MAQUILA"
-WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
-WHEN P.stsavan = 5 THEN "PESPUNTE"
-WHEN P.stsavan = 55 THEN "ENSUELADO"
-WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE"
-WHEN P.stsavan = 7 THEN "TEJIDO"
-WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO"
-WHEN P.stsavan = 9 THEN "MONTADO"
-WHEN P.stsavan = 10 THEN "ADORNO"
-WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
-WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO"
-WHEN P.stsavan = 13 THEN "FACTURADO"
-END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE"
+WHEN P.stsavan = 3 THEN "PROGRAMADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO"
+WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO"
+WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO"
+WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO"
+END) AS AvanceT,
+CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
 INNER JOIN controlpla AS CP ON P.Control = CP.Control
 INNER JOIN clientes AS CT ON P.Cliente = CT.Clave
@@ -45,8 +37,7 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN colores AS C ON P.Color = C.Clave
 WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND
 P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND
-P.Ano = $P{ANO}  AND P.stsavan NOT IN(12,13)
-GROUP BY P.Clave]]>
+P.Ano = $P{ANO}]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -177,7 +168,7 @@ GROUP BY P.Clave]]>
 		</groupHeader>
 	</group>
 	<columnHeader>
-		<band height="64" splitType="Stretch">
+		<band height="66" splitType="Stretch">
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="72" y="12" width="125" height="14" isPrintInFirstWholeBand="true" uuid="419e7984-7272-4c44-91fd-57cd269633d3"/>
 				<textElement>
@@ -207,7 +198,7 @@ GROUP BY P.Clave]]>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="689" y="0" width="80" height="12" isPrintInFirstWholeBand="true" uuid="63ded974-7d5a-4ff6-8b99-87a928ae6752"/>
+				<reportElement isPrintRepeatedValues="false" x="689" y="0" width="78" height="12" isPrintInFirstWholeBand="true" uuid="63ded974-7d5a-4ff6-8b99-87a928ae6752"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
@@ -226,34 +217,31 @@ GROUP BY P.Clave]]>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="52" width="96" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c0372ade-1407-4a66-b52c-23d9b1ba11bf"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Control]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="101" y="52" width="196" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="559da8f7-8f6d-42dc-8c8b-c5efeaa49288"/>
+				<reportElement mode="Opaque" x="101" y="52" width="278" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="559da8f7-8f6d-42dc-8c8b-c5efeaa49288"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="197" y="12" width="35" height="14" uuid="797d2189-ff21-4b8e-a4bf-462a43bdc52c"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{MAQUILA_INICIAL}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="262" y="12" width="35" height="14" uuid="cc0ee39b-3e46-40b2-a05c-20a9b1774b2c"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{MAQUILA_FINAL}]]></textFieldExpression>
@@ -267,7 +255,7 @@ GROUP BY P.Clave]]>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="379" y="12" width="35" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="fd990c42-28f4-4541-b7fd-2ee1613cec9e"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -275,7 +263,7 @@ GROUP BY P.Clave]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="466" y="12" width="35" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="46654187-ccca-462d-ac9d-ae69afc45368"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -299,11 +287,11 @@ GROUP BY P.Clave]]>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="424" y="52" width="45" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="e702906e-c77c-4c3c-af31-e9c432375e20"/>
+				<reportElement mode="Opaque" x="424" y="52" width="161" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="e702906e-c77c-4c3c-af31-e9c432375e20"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Color]]></text>
@@ -323,10 +311,10 @@ GROUP BY P.Clave]]>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[AVANCE]]></text>
+				<text><![CDATA[Avance]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="701" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="87f37634-da78-44b1-89cb-3496a1dac63f"/>
@@ -364,23 +352,26 @@ GROUP BY P.Clave]]>
 					<leftPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FECHAS]]></text>
 			</staticText>
+			<line>
+				<reportElement x="1" y="64" width="802" height="1" uuid="f51c5a9b-61c4-474e-8808-e6dcb0007902"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="72" height="11" uuid="6d5a52a3-7a27-4f08-a7c9-f1363c3088ff"/>
-				<textElement>
+				<reportElement x="0" y="0" width="96" height="11" uuid="6d5a52a3-7a27-4f08-a7c9-f1363c3088ff"/>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="72" y="0" width="307" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="3f9536f7-5442-4dda-98e5-d06dc54f25f0"/>
+				<reportElement mode="Transparent" x="96" y="0" width="283" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="3f9536f7-5442-4dda-98e5-d06dc54f25f0"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -396,7 +387,7 @@ GROUP BY P.Clave]]>
 			</textField>
 			<textField>
 				<reportElement x="424" y="0" width="45" height="11" uuid="f754026b-1321-4fdb-9ea1-7c50921c9a08"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Color}]]></textFieldExpression>
