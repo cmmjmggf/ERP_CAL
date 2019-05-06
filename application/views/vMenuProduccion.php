@@ -48,4 +48,7 @@ $this->load->view('vMaterialSemanaProduccionEstilo');
 $this->load->view('vConciliaFabricaProduccion');
 $this->load->view('vConRelControlesXMaquila');
 $this->load->view('vManoObraDirecta');
-
+$this->load->view('vParesAsignadosMaqSemGen');
+$this->load->view('vAvanceProduccion');
+$this->load->view('vAvanceProduccionSemDia');
+$this->load->view('vAvanceProduccionPorLinea');

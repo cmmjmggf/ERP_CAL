@@ -1,19 +1,14 @@
-<div class="modal " id="mdlLotificacionSuelasPlantas"  role="dialog">
+<div class="modal " id="mdlAvanceProduccion"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Lotif. Suela X Semana/Maquila</h5>
+                <h5 class="modal-title">Reporte Avance</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="frmCaptura">
-                    <div class="row">
-                        <div class="col-12">
-                            <label class="text-danger">Nota. Controles FACTURADOS/CANCELADOS no se imprimirán</label>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-6">
                             <label>Año</label>
@@ -39,19 +34,28 @@
                         </div>
 
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="TresDias">
+                                <label class="custom-control-label text-info labelCheck" for="TresDias">+3 Días</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="text-danger">Nota. Seleccione un Tipo/Filtro, en caso de ser necesario</label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12 col-sm-12">
-                            <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">1 SUELA, 2 PLANTA</span></label>
+                            <label>Tipo/Filtro</label>
                             <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >
                                 <option value=""></option>
-                                <option value="3">1 SUELA</option>
-                                <option value="52">2 PLANTA</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-12">
-                            <label>Lotificación <span class="badge badge-warning mb-2" style="font-size: 12px;">Sí desea toda la sem-maq. Dejar en blanco</span></label>
-                            <select class="form-control form-control-sm required selectize" id="Articulo" name="Articulo" >
-                                <option value=""></option>
+                                <option value="1">1 CON CÉLULA DE PESPUNTE</option>
+                                <option value="2">2 CON TEJEDORA</option>
+                                <option value="3">3 CON SUELA</option>
+                                <option value="4">4 ORDENADO POR LINEA/FECHA ENTREGA</option>
                             </select>
                         </div>
                     </div>
@@ -65,81 +69,27 @@
     </div>
 </div>
 <script>
-    var mdlLotificacionSuelasPlantas = $('#mdlLotificacionSuelasPlantas');
-
+    var mdlAvanceProduccion = $('#mdlAvanceProduccion');
     $(document).ready(function () {
-        mdlLotificacionSuelasPlantas.on('shown.bs.modal', function () {
-            mdlLotificacionSuelasPlantas.find("input").val("");
-            $.each(mdlLotificacionSuelasPlantas.find("select"), function (k, v) {
-                mdlLotificacionSuelasPlantas.find("select")[k].selectize.clear(true);
+        mdlAvanceProduccion.on('shown.bs.modal', function () {
+            mdlAvanceProduccion.find("input").val("");
+            $.each(mdlAvanceProduccion.find("select"), function (k, v) {
+                mdlAvanceProduccion.find("select")[k].selectize.clear(true);
             });
-            getSuelasPlantas();
-            mdlLotificacionSuelasPlantas.find('#Ano').focus();
+            mdlAvanceProduccion.find('#Ano').focus();
         });
-        mdlLotificacionSuelasPlantas.find('#btnImprimir').on("click", function () {
+        mdlAvanceProduccion.find('#btnImprimir').on("click", function () {
 
-            if (mdlLotificacionSuelasPlantas.find('#Articulo').val() !== '') {
+            var TresDias = mdlAvanceProduccion.find("#TresDias")[0].checked ? true : false;
 
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData(mdlLotificacionSuelasPlantas.find("#frmCaptura")[0]);
-                $.ajax({
-                    url: base_url + 'index.php/ReportesProduccionJasper/onReporteLotificacionSuelasArticulo',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (data.length > 0) {
-
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
-                                },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "85%",
-                                        height: "85%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                            icon: "error"
-                        }).then((action) => {
-                            mdlLotificacionSuelasPlantas.find('#Ano').focus();
-                        });
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                });
-
+            if (TresDias) {
+                onImprimirReporte('onReporteAvanceNormalDeptoTresdias');
             } else {
-                if (mdlLotificacionSuelasPlantas.find('#Tipo').val() !== '') {
-
-
+                if (mdlAvanceProduccion.find('#Tipo').val() !== '') {
                     HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                    var frm = new FormData(mdlLotificacionSuelasPlantas.find("#frmCaptura")[0]);
+                    var frm = new FormData(mdlAvanceProduccion.find("#frmCaptura")[0]);
                     $.ajax({
-                        url: base_url + 'index.php/ReportesProduccionJasper/onReporteLotificacionSuelas',
+                        url: base_url + 'index.php/ReportesProduccionJasper/onReporteAvancePorTipo',
                         type: "POST",
                         cache: false,
                         contentType: false,
@@ -179,7 +129,7 @@
                                 text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                                 icon: "error"
                             }).then((action) => {
-                                mdlLotificacionSuelasPlantas.find('#Ano').focus();
+                                mdlAvanceProduccion.find('#Ano').focus();
                             });
                         }
                         HoldOn.close();
@@ -187,27 +137,12 @@
                         console.log(x, y, z);
                         HoldOn.close();
                     });
-
                 } else {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "DEBE DE ELEGIR UN TIPO",
-                        icon: "warning",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-                        if (action) {
-                            mdlLotificacionSuelasPlantas.find("#Tipo")[0].selectize.focus();
-                        }
-                    });
+                    onImprimirReporte('onReporteAvanceNormalDepto');
                 }
             }
-
-
-
-        }
-        );
-        mdlLotificacionSuelasPlantas.find("#Ano").change(function () {
+        });
+        mdlAvanceProduccion.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
@@ -218,32 +153,32 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlLotificacionSuelasPlantas.find("#Ano").val("");
-                    mdlLotificacionSuelasPlantas.find("#Ano").focus();
+                    mdlAvanceProduccion.find("#Ano").val("");
+                    mdlAvanceProduccion.find("#Ano").focus();
                 });
             }
         });
-        mdlLotificacionSuelasPlantas.find("#Maq").change(function () {
+        mdlAvanceProduccion.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlLotificacionSuelasPlantas.find("#aMaq").change(function () {
+        mdlAvanceProduccion.find("#aMaq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlLotificacionSuelasPlantas.find("#Sem").change(function () {
-            var ano = mdlLotificacionSuelasPlantas.find("#Ano");
+        mdlAvanceProduccion.find("#Sem").change(function () {
+            var ano = mdlAvanceProduccion.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
-        mdlLotificacionSuelasPlantas.find("#aSem").change(function () {
-            var ano = mdlLotificacionSuelasPlantas.find("#Ano");
+        mdlAvanceProduccion.find("#aSem").change(function () {
+            var ano = mdlAvanceProduccion.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
     });
 
-    function onImprimirReporte(reporte, frm) {
+    function onImprimirReporte(reporte) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-
+        var frm = new FormData(mdlAvanceProduccion.find("#frmCaptura")[0]);
         $.ajax({
-            url: base_url + 'index.php/ReportesProduccionJasper/onReporteLotificacionSuelas',
+            url: base_url + 'index.php/ReportesProduccionJasper/' + reporte,
             type: "POST",
             cache: false,
             contentType: false,
@@ -283,7 +218,7 @@
                     text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                     icon: "error"
                 }).then((action) => {
-                    mdlLotificacionSuelasPlantas.find('#Ano').focus();
+                    mdlAvanceProduccion.find('#Ano').focus();
                 });
             }
             HoldOn.close();
@@ -352,18 +287,7 @@
             console.log(x.responseText);
         });
     }
-    function getSuelasPlantas() {
-        mdlLotificacionSuelasPlantas.find("#Articulo")[0].selectize.clear(true);
-        mdlLotificacionSuelasPlantas.find("#Articulo")[0].selectize.clearOptions();
-        $.getJSON(base_url + 'index.php/Articulos/getSuelasPlantas').done(function (data) {
-            $.each(data, function (k, v) {
-                mdlLotificacionSuelasPlantas.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.ID});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
+
 
 </script>
 

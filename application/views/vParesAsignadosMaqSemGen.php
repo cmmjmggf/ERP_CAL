@@ -1,8 +1,8 @@
-<div class="modal " id="mdlManoObraDirecta"  role="dialog">
+<div class="modal " id="mdlParesAsignadosMaqSemGen"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Concilia Nómina Estilo Fracción </h5>
+                <h5 class="modal-title">Pares Asignados X Semana/Maquila</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,6 +20,11 @@
                             <label>De la sem.</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
                         </div>
+                        <div class="col-6">
+                            <label>A la sem.</label>
+                            <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -31,19 +36,33 @@
     </div>
 </div>
 <script>
-    var mdlManoObraDirecta = $('#mdlManoObraDirecta');
+    var mdlParesAsignadosMaqSemGen = $('#mdlParesAsignadosMaqSemGen');
     $(document).ready(function () {
-        mdlManoObraDirecta.on('shown.bs.modal', function () {
-            mdlManoObraDirecta.find("input").val("");
-            $.each(mdlManoObraDirecta.find("select"), function (k, v) {
-                mdlManoObraDirecta.find("select")[k].selectize.clear(true);
+        mdlParesAsignadosMaqSemGen.on('shown.bs.modal', function () {
+            mdlParesAsignadosMaqSemGen.find("input").val("");
+
+            mdlParesAsignadosMaqSemGen.find('#Ano').focus();
+        });
+        mdlParesAsignadosMaqSemGen.find('#btnImprimir').on("click", function () {
+            HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
+            var frm = new FormData(mdlParesAsignadosMaqSemGen.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesProduccionJasper/ReporteParesAsignadosMaqSemGen',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                onImprimirReporteFancyArray(JSON.parse(data));
+            }).fail(function (x, y, z) {
+                console.log(x.responseText);
+                swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+            }).always(function () {
+                HoldOn.close();
             });
-            mdlManoObraDirecta.find('#Ano').focus();
         });
-        mdlManoObraDirecta.find('#btnImprimir').on("click", function () {
-            onImprimirReporte();
-        });
-        mdlManoObraDirecta.find("#Ano").change(function () {
+        mdlParesAsignadosMaqSemGen.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
@@ -54,70 +73,22 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlManoObraDirecta.find("#Ano").val("");
-                    mdlManoObraDirecta.find("#Ano").focus();
+                    mdlParesAsignadosMaqSemGen.find("#Ano").val("");
+                    mdlParesAsignadosMaqSemGen.find("#Ano").focus();
                 });
             }
         });
-        mdlManoObraDirecta.find("#Sem").change(function () {
-            var ano = mdlManoObraDirecta.find("#Ano");
+
+        mdlParesAsignadosMaqSemGen.find("#Sem").change(function () {
+            var ano = mdlParesAsignadosMaqSemGen.find("#Ano");
+            onComprobarSemanasProduccion($(this), ano.val());
+        });
+        mdlParesAsignadosMaqSemGen.find("#aSem").change(function () {
+            var ano = mdlParesAsignadosMaqSemGen.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
     });
 
-    function onImprimirReporte() {
-        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-        var frm = new FormData(mdlManoObraDirecta.find("#frmCaptura")[0]);
-        $.ajax({
-            url: base_url + 'index.php/ReportesProduccionJasper/onReporteConciliaCostoManoObraDestajo',
-            type: "POST",
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: frm
-        }).done(function (data, x, jq) {
-            console.log(data);
-            if (data.length > 0) {
-
-                $.fancybox.open({
-                    src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                    type: 'iframe',
-                    opts: {
-                        afterShow: function (instance, current) {
-                            console.info('done!');
-                        },
-                        iframe: {
-                            // Iframe template
-                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                            preload: true,
-                            // Custom CSS styling for iframe wrapping element
-                            // You can use this to set custom iframe dimensions
-                            css: {
-                                width: "100%",
-                                height: "100%"
-                            },
-                            // Iframe tag attributes
-                            attr: {
-                                scrolling: "auto"
-                            }
-                        }
-                    }
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                    icon: "error"
-                }).then((action) => {
-                    mdlManoObraDirecta.find('#Ano').focus();
-                });
-            }
-            HoldOn.close();
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-            HoldOn.close();
-        });
-    }
     function onComprobarSemanasProduccion(v, ano) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarSemanasProduccion', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
@@ -148,6 +119,7 @@
             console.log(x.responseText);
         });
     }
+
 
 </script>
 

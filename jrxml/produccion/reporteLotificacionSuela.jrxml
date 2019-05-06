@@ -53,8 +53,8 @@ PE.C1, PE.C2, PE.C3, PE.C4, PE.C5, PE.C6, PE.C7, PE.C8, PE.C9, PE.C10, PE.C11, P
 from pedidox PE
 join controles C ON  PE.Control = C.Control
 join series S on S.Clave = PE.Serie
-WHERE PE.Maquila BETWEEN $P{maq} AND $P{amaq}
-AND PE.Semana BETWEEN $P{sem} AND $P{asem}
+WHERE cast(PE.Maquila as signed) BETWEEN $P{maq} AND $P{amaq}
+AND cast(PE.Semana as signed) BETWEEN $P{sem} AND $P{asem}
 AND PE.Ano = $P{ano}
 AND PE.Estatus = 'A'
 order by Suela ASC, PE.Control ASC]]>
@@ -601,7 +601,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{C21}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="17" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="d6c05289-e1a7-446c-bf60-a5932ed8da92">
 					<printWhenExpression><![CDATA[($F{T1} > 0)]]></printWhenExpression>
 				</reportElement>
@@ -618,7 +618,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="44" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="0044b932-d4df-4ad4-99c7-cf57646ea2aa">
 					<printWhenExpression><![CDATA[($F{T2}>0)]]></printWhenExpression>
 				</reportElement>
@@ -635,7 +635,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="71" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="bc37503b-11fc-41df-acb4-677bbac59b55">
 					<printWhenExpression><![CDATA[($F{T3}>0)]]></printWhenExpression>
 				</reportElement>
@@ -652,7 +652,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="98" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="e1d83926-415a-4f31-81ef-cb061572986c">
 					<printWhenExpression><![CDATA[($F{T4}>0)]]></printWhenExpression>
 				</reportElement>
@@ -669,7 +669,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T4}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="125" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="26d53eb3-3217-49ce-be5e-a7211fac378b">
 					<printWhenExpression><![CDATA[($F{T5}>0)]]></printWhenExpression>
 				</reportElement>
@@ -686,7 +686,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T5}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="152" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="a66e9661-e22b-4356-8c25-c1fdb1d77e37">
 					<printWhenExpression><![CDATA[($F{T6}>0)]]></printWhenExpression>
 				</reportElement>
@@ -703,7 +703,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T6}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="179" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="5b818076-d1bb-433c-916e-4c5823308103">
 					<printWhenExpression><![CDATA[($F{T7}>0)]]></printWhenExpression>
 				</reportElement>
@@ -720,7 +720,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T7}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="206" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="13e28eda-1f42-47c9-a831-fecdf00e510d">
 					<printWhenExpression><![CDATA[($F{T8}>0)]]></printWhenExpression>
 				</reportElement>
@@ -737,7 +737,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T8}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="233" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="e3fb8d9a-0844-42dc-9d13-250bb52c8a16">
 					<printWhenExpression><![CDATA[($F{T9}>0)]]></printWhenExpression>
 				</reportElement>
@@ -754,7 +754,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T9}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="260" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="8986f5a1-dd2f-47d6-b8e9-0f136d180682">
 					<printWhenExpression><![CDATA[($F{T10}>0)]]></printWhenExpression>
 				</reportElement>
@@ -771,7 +771,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T10}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="287" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="dd1db82a-d5c4-4b0c-99a2-ace54e10f8b6">
 					<printWhenExpression><![CDATA[($F{T11}>0)]]></printWhenExpression>
 				</reportElement>
@@ -788,7 +788,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T11}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="314" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="6d2b16f2-a72d-40a1-9917-074d8dc254c8">
 					<printWhenExpression><![CDATA[($F{T12}>0)]]></printWhenExpression>
 				</reportElement>
@@ -805,7 +805,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T12}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="341" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="eac66440-9f79-42aa-b20d-4e61f93ef079">
 					<printWhenExpression><![CDATA[($F{T13}>0)]]></printWhenExpression>
 				</reportElement>
@@ -822,7 +822,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T13}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="368" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="a1e2c308-560d-4f25-8a17-d84ccf2a031f">
 					<printWhenExpression><![CDATA[($F{T14}>0)]]></printWhenExpression>
 				</reportElement>
@@ -839,7 +839,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T14}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="395" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="9974d9ae-97d6-4638-8831-063a22464ee9">
 					<printWhenExpression><![CDATA[($F{T15}>0)]]></printWhenExpression>
 				</reportElement>
@@ -856,7 +856,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T15}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="422" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="7aa58dd7-b0f3-49d9-ba73-e13517d0901f">
 					<printWhenExpression><![CDATA[($F{T16}>0)]]></printWhenExpression>
 				</reportElement>
@@ -873,7 +873,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T16}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="449" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="60ba307d-db0b-474d-a61a-74256826e524">
 					<printWhenExpression><![CDATA[($F{T17}>0)]]></printWhenExpression>
 				</reportElement>
@@ -890,7 +890,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T17}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="476" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="f6d5a32c-20ea-4662-9b2c-6a731d370eb4">
 					<printWhenExpression><![CDATA[($F{T18}>0)]]></printWhenExpression>
 				</reportElement>
@@ -907,7 +907,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T18}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="503" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="484f0c63-5616-47f0-8d10-8bf2e303331a">
 					<printWhenExpression><![CDATA[($F{T19}>0)]]></printWhenExpression>
 				</reportElement>
@@ -924,7 +924,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T19}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="530" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="cb43df23-bca5-4cb7-995d-45961cb91ca2">
 					<printWhenExpression><![CDATA[($F{T20}>0)]]></printWhenExpression>
 				</reportElement>
@@ -941,7 +941,7 @@ order by Suela ASC, PE.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{T20}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0.0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="557" y="18" width="27" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="9391332a-cb64-4561-9ba9-e91e45537ecb">
 					<printWhenExpression><![CDATA[($F{T21} > 0)]]></printWhenExpression>
 				</reportElement>
@@ -992,6 +992,10 @@ order by Suela ASC, PE.Control ASC]]>
 					<jr:codeExpression><![CDATA[$F{Control}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
+			<textField>
+				<reportElement x="187" y="46" width="100" height="20" uuid="80f09c7e-4343-4db7-8780-c418ae8325fa"/>
+				<textFieldExpression><![CDATA[$P{grupo}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

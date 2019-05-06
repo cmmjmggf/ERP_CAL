@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.38491268230095"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.2304157239725044"/>
+	<property name="ireport.x" value="396"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -74,9 +74,7 @@ Pedido ASC,
 NombreCliente ASC,
 
 P.Estilo ASC,
-P.Color ASC
-
-]]>
+P.Color ASC]]>
 	</queryString>
 	<field name="Suela" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -355,7 +353,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="363" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0044b932-d4df-4ad4-99c7-cf57646ea2aa">
 						<printWhenExpression><![CDATA[($F{T2}>0)]]></printWhenExpression>
 					</reportElement>
@@ -389,7 +387,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T3}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="399" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e1d83926-415a-4f31-81ef-cb061572986c">
 						<printWhenExpression><![CDATA[($F{T4}>0)]]></printWhenExpression>
 					</reportElement>
@@ -423,7 +421,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T5}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="435" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a66e9661-e22b-4356-8c25-c1fdb1d77e37">
 						<printWhenExpression><![CDATA[($F{T6}>0)]]></printWhenExpression>
 					</reportElement>
@@ -457,7 +455,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T7}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="471" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="13e28eda-1f42-47c9-a831-fecdf00e510d">
 						<printWhenExpression><![CDATA[($F{T8}>0)]]></printWhenExpression>
 					</reportElement>
@@ -491,7 +489,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T9}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="507" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8986f5a1-dd2f-47d6-b8e9-0f136d180682">
 						<printWhenExpression><![CDATA[($F{T10}>0)]]></printWhenExpression>
 					</reportElement>
@@ -525,7 +523,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T11}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="543" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6d2b16f2-a72d-40a1-9917-074d8dc254c8">
 						<printWhenExpression><![CDATA[($F{T12}>0)]]></printWhenExpression>
 					</reportElement>
@@ -559,7 +557,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T13}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="579" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a1e2c308-560d-4f25-8a17-d84ccf2a031f">
 						<printWhenExpression><![CDATA[($F{T14}>0)]]></printWhenExpression>
 					</reportElement>
@@ -593,7 +591,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T15}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="615" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7aa58dd7-b0f3-49d9-ba73-e13517d0901f">
 						<printWhenExpression><![CDATA[($F{T16}>0)]]></printWhenExpression>
 					</reportElement>
@@ -627,7 +625,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T17}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="651" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f6d5a32c-20ea-4662-9b2c-6a731d370eb4">
 						<printWhenExpression><![CDATA[($F{T18}>0)]]></printWhenExpression>
 					</reportElement>
@@ -661,7 +659,7 @@ P.Color ASC
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T19}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0.0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="687" y="0" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cb43df23-bca5-4cb7-995d-45961cb91ca2">
 						<printWhenExpression><![CDATA[($F{T20}>0)]]></printWhenExpression>
 					</reportElement>
