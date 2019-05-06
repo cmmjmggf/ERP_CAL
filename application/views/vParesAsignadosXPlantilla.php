@@ -1,51 +1,31 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Pares asignados</h3>
+        <h3 class="font-weight-bold">Pares asignados plantilla otros</h3>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>De la Maquila</label>
-                <input type="text" id="ParesMaquilaInicial" name="ParesMaquilaInicial" class="form-control form-control-sm numbersOnly" autofocus="">
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>A la Maquila</label>
-                <input type="text" id="ParesMaquilaFinal" name="ParesMaquilaFinal" class="form-control form-control-sm  numbersOnly">
+        <div class="row" align="">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                <label>De la maquila</label>
+                <input type="text" id="MaquilaInicial" name="MaquilaInicial" class="form-control form-control-sm numbersOnly required" autofocus="">
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>De sem</label>
-                <input type="text" id="ParesSemanaInicial" name="ParesSemanaInicial" class="form-control form-control-sm  numbersOnly">
+                <label>A la maquila</label>
+                <input type="text" id="MaquilaFinal" name="MaquilaFinal" class="form-control form-control-sm numbersOnly required" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-2">
-                <label>A sem</label>
-                <input type="text" id="ParesSemanaFinal" name="ParesSemanaFinal" class="form-control form-control-sm  numbersOnly">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                <label>De la Semana</label>
+                <input type="text" id="SemanaInicial" name="SemanaInicial" class="form-control form-control-sm  numbersOnly required">
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                <label>A la Semana</label>
+                <input type="text" id="SemanaFinal" name="SemanaFinal" class="form-control form-control-sm  numbersOnly required">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>Año</label>
-                <input type="text" id="ParesAnio" name="ParesAnio" class="form-control form-control-sm  numbersOnly">
+                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm  numbersOnly required"> 
             </div>
-
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"></div>
             <div class="w-100 my-3"></div>
-
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" align="center">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-indigo">
-                        <input type= "radio" name="btnControl" id="btnControl" autocomplete="off"> CONTROL
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnEsponjasYLatex" id="btnEsponjasYLatex" autocomplete="off"> ESPONJAS Y LATEX
-                    </label>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                <div class="form-group">
-                    <span class="switch switch-lg">
-                        <input id="rConNumeracion" name="rConNumeracion"  type="checkbox" class="switch" id="rConNumeracion">
-                        <label for="rConNumeracion">Con numeración</label>
-                    </span>
-                </div>
-            </div>
-
         </div>
     </div>
     <div class="card-footer">
@@ -54,41 +34,33 @@
         </div>
     </div>
 </div>
-<div id="rpts">
-
-</div>
 <script>
-    var pnlTablero = $("#pnlTablero"), ParesAnio = pnlTablero.find("#ParesAnio"),
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
-            ParesMaquilaInicial = pnlTablero.find("#ParesMaquilaInicial"),
-            ParesMaquilaFinal = pnlTablero.find("#ParesMaquilaFinal"),
-            ParesSemanaInicial = pnlTablero.find("#ParesSemanaInicial"),
-            ParesSemanaFinal = pnlTablero.find("#ParesSemanaFinal");
+            MaquilaInicial = pnlTablero.find("#MaquilaInicial"),
+            MaquilaFinal = pnlTablero.find("#MaquilaFinal"),
+            SemanaInicial = pnlTablero.find("#SemanaInicial"),
+            SemanaFinal = pnlTablero.find("#SemanaFinal");
 
     $(document).ready(function () {
-        ParesAnio.val(new Date().getFullYear());
+        Anio.val(new Date().getFullYear());
 
         btnAceptar.click(function () {
-            if (ParesMaquilaInicial.val() && ParesMaquilaFinal.val()
-                    && ParesSemanaInicial.val() && ParesSemanaFinal.val()) {
+            if (MaquilaInicial.val() && MaquilaFinal.val()
+                    && SemanaInicial.val() && SemanaFinal.val() && Anio.val()) {
                 HoldOn.open({
-                    theme: 'sk-cube',
-                    message: 'Por favor espere...'
+                    theme: 'sk-cube', message: 'Por favor espere...'
                 });
-                console.log('TIPO',pnlTablero.find("#btnControl")[0].checked ? 1 :
-                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0)
-                $.post('<?php print base_url('ParesAsignadosControl/getParesAsignadosControl'); ?>', {
-                    MAQUILA_INICIAL: ParesMaquilaInicial.val().trim() !== '' ? parseInt(ParesMaquilaInicial.val()) : '',
-                    MAQUILA_FINAL: ParesMaquilaFinal.val().trim() !== '' ? parseInt(ParesMaquilaFinal.val()) : '',
-                    SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',
-                    SEMANA_FINAL: ParesSemanaFinal.val().trim() !== '' ? ParesSemanaFinal.val() : '',
-                    ANIO: ParesAnio.val().trim() !== '' ? ParesAnio.val() : '',
-                    TIPO: pnlTablero.find("#btnControl")[0].checked ? 1 :
-                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0,
-                    NUMERACION: pnlTablero.find("#rConNumeracion")[0].checked ? 1 : 0
-                }).done(function (data, x, jq) { 
+                $.post('<?php print base_url('ParesAsignadosXPlantilla/getParesAsignadosXPlantilla'); ?>', {
+                    MAQUILA_INICIAL: MaquilaInicial.val().trim() !== '' ? parseInt(MaquilaInicial.val()) : '',
+                    MAQUILA_FINAL: MaquilaFinal.val().trim() !== '' ? parseInt(MaquilaFinal.val()) : '',
+                    SEMANA_INICIAL: SemanaInicial.val().trim() !== '' ? SemanaInicial.val() : '',
+                    SEMANA_FINAL: SemanaFinal.val().trim() !== '' ? SemanaFinal.val() : '',
+                    ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
+                }).done(function (data, x, jq) {
+                    console.log(data);
                     onBeep(1);
-                    onImprimirReporteFancyArray(JSON.parse(data));
+                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
@@ -96,21 +68,23 @@
                     HoldOn.close();
                 });
             } else {
-                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    if (ParesMaquilaInicial.val()) {
-                        ParesMaquilaInicial.focus();
-                    } else if (ParesMaquilaFinal.val()) {
-                        ParesMaquilaFinal.focus().select();
-                    } else if (ParesSemanaInicial.val()) {
-                        ParesSemanaInicial.focus().select();
-                    } else if (ParesSemanaFinal.val()) {
-                        ParesSemanaFinal.focus().select();
-                    }
-                });
+                onValidarTodosInput(pnlTablero);
             }
         });
 
     });
+
+    function onValidarTodosInput(pnl) {
+        swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
+            $.each(pnl.find("div.card-body input.required"), function (k, v) {
+                if ($(v).val().trim() === '') {
+                    $(v).focus().select();
+                    return false;
+                }
+            });
+        });
+    }
+
 </script>
 <style>
     .btn-indigo {

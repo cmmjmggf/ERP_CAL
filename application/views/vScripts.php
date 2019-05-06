@@ -48,7 +48,7 @@
             files.push({
                 toolbar: false,
                 smallBtn: true,
-                src: base_url + 'js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#pagemode=thumbs',
+                src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#pagemode=thumbs',
                 type: 'iframe',
                 opts: {
                     afterShow: function (instance, current) {

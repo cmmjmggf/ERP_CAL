@@ -22,7 +22,7 @@ class AsignaDiaSemACtrlParaCorte_model extends CI_Model {
                             ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
                             ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
                             ->where('PR.Control IS NULL', null, false)
-                            ->where_not_in('P.Control', array(0))
+                            ->where_not_in('P.Control', array(0))->limit(9999)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

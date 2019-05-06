@@ -138,6 +138,8 @@ class AvanceTejido extends CI_Controller {
     public function onAvanzar() {
         try {
             $x = $this->input;
+
+            /* avance, avaprd */
             $this->db->insert('controltej', array(
                 'numcho' => $x->post('NUM_CHOFER'),
                 'nomcho' => $x->post('CHOFER'),
@@ -154,7 +156,7 @@ class AvanceTejido extends CI_Controller {
                 'tipo' => 0,
                 'fraccion' => $x->post('FRACCION')
             ));
-            $this->db->insert('avance', array(
+            $ID = $this->db->insert('avance', array(
                 'Control' => $x->post('CONTROL'),
                 'FechaAProduccion' => $x->post('FECHA'),
                 'Departamento' => 150,
@@ -166,9 +168,48 @@ class AvanceTejido extends CI_Controller {
                 'Hora' => Date('h:i:s a'),
                 'Fraccion' => $x->post('FRACCION')
             ));
+            /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
             $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')
                     ->where('Control', $x->post('CONTROL'))
                     ->update('controles');
+            /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+            $db->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                    ->set('DeptoProduccion', 150)
+                    ->where('Control', $x->post('CONTROL'))->update('pedidox');
+            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES)*/
+            $this->db->set('fec7', Date('Y-m-d h:i:s'))
+                    ->where('contped', $x->post('CONTROL'))
+                    ->update('avaprd');
+
+            /* fracpagnomina */
+            $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
+                            ->where('FXE.Estilo', $x->post('ESTILO'))
+                            ->where('FXE.Fraccion', $x->post('FRACCION'))
+                            ->get()->result();
+            $fecha = $x->post('FECHA');
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+            $this->db->insert('fracpagnomina', array(
+                'numeroempleado' => $x->post('NUM_TEJEDORA'),
+                'maquila' => intval(substr($x->post('CONTROL'), 4, 2)),
+                'control' => $x->post('CONTROL'),
+                'estilo' => $x->post('ESTILO'),
+                'numfrac' => $x->post('FRACCION'),
+                'preciofrac' => $FXE[0]->PRECIO,
+                'pares' => $x->post('PARES'),
+                'subtot' => (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO)),
+                'status' => 0,
+                'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
+                'semana' => $x->post('SEMANA'),
+                'depto' => 150,
+                'registro' => 0,
+                'anio' => Date('Y'),
+                'avance_id' => $ID,
+                'fraccion' => $x->post('FRACCIONT')
+            ));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
