@@ -51,11 +51,11 @@ cast(P.Semana as signed) AS Semana,
 P.Control,
 cast(P.Pares as SIGNED) AS Pares,
 str_to_date(P.FechaEntrega,"%d/%m/%Y") FechaEntrega  ,
-A.fec12,
+case when A.fec12 > '1899-12-30 00:00:00' then A.fec12 else null end as fec12,
 CAST((select sem from semanasproduccion where
 A.fec12
 BETWEEN str_to_date(FechaIni,"%d/%m/%Y") and str_to_date(FechaFin,"%d/%m/%Y")
-and Ano = '2019') AS SIGNED) AS SemanaTerminado,
+and Ano = $P{ano}) AS SIGNED) AS SemanaTerminado,
 P.Cliente AS ClaveCliente,
 ifnull(CTE.RazonS,'Z NO EXISTE CLIENTE') AS NombreCliente
 
@@ -372,14 +372,14 @@ order by SemanaTerminado ASC,NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaEntrega}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="283" y="0" width="42" height="11" uuid="9e79aa01-7190-40ae-98f4-0cf656f58abf"/>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="283" y="0" width="41" height="11" uuid="9e79aa01-7190-40ae-98f4-0cf656f58abf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fec12}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="379" y="0" width="55" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f3052a69-be45-44c7-9c89-af4e4f5acbef"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

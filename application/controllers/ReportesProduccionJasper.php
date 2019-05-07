@@ -35,11 +35,7 @@ class ReportesProduccionJasper extends CI_Controller {
     }
 
     public function onReporteEstadisticasEntrega() {
-
-
-
         $Tipo = $this->input->post('Tipo');
-
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -140,8 +136,6 @@ class ReportesProduccionJasper extends CI_Controller {
     }
 
     public function onReporteConciliaSemanaFraccionEstilo() {
-
-
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -582,6 +576,52 @@ class ReportesProduccionJasper extends CI_Controller {
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\avancePorDeptoLinea.jasper');
         $jc->setFilename('REPORTE_AVANCE_DEPTO_LINEA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function getDepartamentos() {
+        try {
+            print json_encode($this->ReportesProduccion_model->getDepartamentos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onReporteAvancePorDeptoEspecifico() {
+
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["depto"] = $this->input->post('Depto');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\avancePorDeptoEspecifico.jasper');
+        $jc->setFilename('REPORTE_AVANCE_DEPTO_ESPECIFICO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteDiasEntregaFacTermi() {
+
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["asem"] = $this->input->post('aSem');
+        $parametros["amaq"] = $this->input->post('aMaq');
+        $parametros["maq"] = $this->input->post('Maq');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\reporteDiasEntregaFacturado.jasper');
+        $jc->setFilename('REPORTE_DIAS_ENTREGA_TERMIN_FACTURADO_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }

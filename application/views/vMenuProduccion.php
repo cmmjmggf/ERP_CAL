@@ -52,3 +52,6 @@ $this->load->view('vParesAsignadosMaqSemGen');
 $this->load->view('vAvanceProduccion');
 $this->load->view('vAvanceProduccionSemDia');
 $this->load->view('vAvanceProduccionPorLinea');
+$this->load->view('vAvanceProduccionPorDepto');
+$this->load->view('vDiasPromedioEntregaPorCliente');
+

@@ -149,4 +149,19 @@ order by depto asc "
         }
     }
 
+    /* REPORTE DE AVANCE POR DEPTO */
+
+    public function getDepartamentos() {
+        try {
+            return $this->db->select("CAST(P.Clave AS SIGNED ) AS ID, CONCAT(P.Clave,' - ',IFNULL(P.Descripcion,'')) AS Depto ", false)
+                            ->from('departamentos AS P')
+                            ->where_in('P.Estatus', 'ACTIVO')
+                            ->where_in('P.Tipo', 1)
+                            ->order_by('ID', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
