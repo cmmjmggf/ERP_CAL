@@ -361,8 +361,8 @@
                         });
                     } else {
                         $.post('<?php print base_url('Avance7/getInfoXControl') ?>', {CONTROL: Control.val()}).done(function (a, b, c) {
-                            if (a.length > 0) {
-                                var r = JSON.parse(a);
+                            var r = JSON.parse(a);
+                            if (r.length > 0 && a.length > 0) {
                                 Estilo.val(r[0].Estilo);
                                 Pares.val(r[0].Pares);
                                 /*OBTENER ULTIMO AVANCE*/
@@ -378,7 +378,7 @@
                                 Estilo.val('');
                                 Pares.val('');
                                 EstatusAvance.val('');
-                                swal('ATENCIÓN', 'ESTE CONTROL NO EXISTE', 'error').then((value) => {
+                                swal('ATENCIÓN', 'ESTE CONTROL NO ES VÁLIDO O NO TIENE FRACCIONES POR ESTILO', 'error').then((value) => {
                                     Control.focus().select();
                                 });
                             }
@@ -659,7 +659,7 @@
                     $.fancybox.defaults.animationEffect = "zoom-in-out";
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe', 
+                        type: 'iframe',
                         opts: {
                             afterShow: function (instance, current) {
                                 console.info('done!');

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXPlantilla" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1223631-bb4e-4dbf-96fc-446bcb682a64">
-	<property name="ireport.zoom" value="1.9487171000000107"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.104606615295775"/>
+	<property name="ireport.x" value="566"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -11,44 +11,82 @@
 	<parameter name="SEMANA_FINAL" class="java.lang.String"/>
 	<parameter name="ANO" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  P.ID, P.Clave, P.Cliente, P.Agente, P.FechaPedido,
-P.FechaRecepcion, P.Usuario, P.Estilo, P.Color, P.FechaEntrega,
-P.Maquila, P.Semana, P.Ano, P.Recio, P.Precio,
-P.Observacion, P.ObservacionDetalle, P.Serie, P.Control,
-P.Estatus, P.Registro, P.Recibido, P.Pares, P.ParesFacturados,
-P.EstiloT, P.ColorT, P.DiaProg, P.SemProg, P.AnioProg, P.FechaProg, P.HoraProg,
- P.Empleado, P.Tiempo, P.EstatusProduccion, P.DeptoProduccion, P.stsavan, CT.RazonS AS CLIENTET,
+		<![CDATA[SELECT MQ, MQD, Control, CLIENTET, Estilo, Color, ColorT, Pares, stsavan, FechaPedido, FechaRecepcion, FechaEntrega, AvanceT, ParesSum
+FROM ((SELECT
+E.MaqPlant1 AS MQ, (SELECT MPL.Descripcion FROM maquilasplantillas AS MPL WHERE MPL.Clave = E.MaqPlant1) AS MQD,
+ P.Control,  CT.RazonS AS CLIENTET, P.Estilo, P.Color, P.ColorT,  P.Pares, P.stsavan, P.FechaPedido, P.FechaRecepcion, P.FechaEntrega,
 (CASE
-WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE"
-WHEN P.stsavan = 3 THEN "PROGRAMADO" WHEN P.stsavan = 33 THEN "REBAJADO"
-WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO"
-WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
-WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO"
-WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
-WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO"
-WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
-WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO"
-END) AS AvanceT,
-CAST(P.Pares AS SIGNED) AS ParesSum
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE" WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO" WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO" WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
-INNER JOIN controlpla AS CP ON P.Control = CP.Control
-INNER JOIN clientes AS CT ON P.Cliente = CT.Clave
-INNER JOIN estilos AS E ON P.Estilo = E.Clave
-INNER JOIN colores AS C ON P.Color = C.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND
-P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND
-P.Ano = $P{ANO}]]>
+INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}  AND E.MaqPlant1 IS NOT NULL AND E.MaqPlant1 NOT IN(0))
+UNION
+
+(SELECT
+E.MaqPlant2 AS MQ, (SELECT MPL.Descripcion FROM maquilasplantillas AS MPL WHERE MPL.Clave = E.MaqPlant2) AS MQD,
+ P.Control,  CT.RazonS AS CLIENTET, P.Estilo, P.Color, P.ColorT,  P.Pares, P.stsavan, P.FechaPedido, P.FechaRecepcion, P.FechaEntrega,
+(CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE" WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO" WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO" WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
+FROM pedidox AS P
+INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}  AND E.MaqPlant2 IS NOT NULL AND E.MaqPlant2 NOT IN(0))
+UNION
+
+(SELECT
+E.MaqPlant3 AS MQ, (SELECT MPL.Descripcion FROM maquilasplantillas AS MPL WHERE MPL.Clave = E.MaqPlant3) AS MQD,
+ P.Control,  CT.RazonS AS CLIENTET, P.Estilo, P.Color, P.ColorT,  P.Pares, P.stsavan, P.FechaPedido, P.FechaRecepcion, P.FechaEntrega,
+(CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE" WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO" WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO" WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
+FROM pedidox AS P
+INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO} AND E.MaqPlant3 IS NOT NULL AND E.MaqPlant3 NOT IN(0))
+UNION ALL
+(SELECT
+E.MaqPlant4 AS MQ, (SELECT MPL.Descripcion FROM maquilasplantillas AS MPL WHERE MPL.Clave = E.MaqPlant4) AS MQD,
+ P.Control,  CT.RazonS AS CLIENTET, P.Estilo, P.Color, P.ColorT,  P.Pares, P.stsavan, P.FechaPedido, P.FechaRecepcion, P.FechaEntrega,
+(CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE" WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO" WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO" WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
+FROM pedidox AS P
+INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}
+AND E.MaqPlant4 IS NOT NULL AND E.MaqPlant4 NOT IN(0))
+) AS A ORDER BY ABS(A.MQ) ASC, A.Estilo ASC;]]>
 	</queryString>
-	<field name="ID" class="java.lang.Integer">
+	<field name="MQ" class="java.lang.String"/>
+	<field name="MQD" class="java.lang.String"/>
+	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Clave" class="java.lang.String">
+	<field name="CLIENTET" class="java.lang.String"/>
+	<field name="Estilo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Cliente" class="java.lang.String">
+	<field name="Color" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Agente" class="java.lang.String">
+	<field name="ColorT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Pares" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stsavan" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="FechaPedido" class="java.lang.String">
@@ -57,112 +95,34 @@ P.Ano = $P{ANO}]]>
 	<field name="FechaRecepcion" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Usuario" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Estilo" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Color" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="FechaEntrega" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Maquila" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Semana" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Ano" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Recio" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Precio" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Observacion" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ObservacionDetalle" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Serie" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Control" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Estatus" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Registro" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Recibido" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Pares" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ParesFacturados" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="EstiloT" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ColorT" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="DiaProg" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="SemProg" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="AnioProg" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="FechaProg" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="HoraProg" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Empleado" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Tiempo" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="EstatusProduccion" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="DeptoProduccion" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="stsavan" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="CLIENTET" class="java.lang.String"/>
 	<field name="AvanceT" class="java.lang.String"/>
 	<field name="ParesSum" class="java.lang.Long"/>
 	<variable name="ParesSum_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{ParesSum}]]></variableExpression>
 	</variable>
-	<group name="AVANCE">
-		<groupExpression><![CDATA[$F{stsavan}]]></groupExpression>
+	<variable name="MQD_1" class="java.lang.Integer" resetType="Group" resetGroup="MAQUILAPLANTILLA" calculation="Count">
+		<variableExpression><![CDATA[$F{MQD}]]></variableExpression>
+	</variable>
+	<group name="MAQUILAPLANTILLA">
+		<groupExpression><![CDATA[$F{MQ}]]></groupExpression>
 		<groupHeader>
 			<band height="12">
 				<textField>
-					<reportElement x="0" y="0" width="100" height="11" uuid="520cd007-fbc2-4c85-83a4-a1a5617262ac"/>
-					<textElement>
-						<font size="8" isBold="true"/>
+					<reportElement x="0" y="0" width="25" height="12" uuid="1b5d8dc9-4a29-4a04-8fae-cb8b006216c0"/>
+					<textElement textAlignment="Center">
+						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{stsavan}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{MQ}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="25" y="0" width="354" height="12" uuid="3d256a3c-e150-4399-9bd5-d2d14345eb33"/>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MQD}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -216,7 +176,7 @@ P.Ano = $P{ANO}]]>
 				<text><![CDATA[De la semanas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="52" width="96" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c0372ade-1407-4a66-b52c-23d9b1ba11bf"/>
+				<reportElement mode="Opaque" x="1" y="52" width="95" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c0372ade-1407-4a66-b52c-23d9b1ba11bf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -287,7 +247,7 @@ P.Ano = $P{ANO}]]>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="424" y="52" width="161" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="e702906e-c77c-4c3c-af31-e9c432375e20"/>
+				<reportElement mode="Opaque" x="425" y="52" width="158" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="e702906e-c77c-4c3c-af31-e9c432375e20"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
@@ -317,44 +277,44 @@ P.Ano = $P{ANO}]]>
 				<text><![CDATA[Avance]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="701" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="87f37634-da78-44b1-89cb-3496a1dac63f"/>
+				<reportElement mode="Opaque" x="701" y="52" width="35" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="87f37634-da78-44b1-89cb-3496a1dac63f"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ PEDIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="733" y="52" width="35" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c05d7ac0-5e45-455c-96e2-60b2a4a721fa"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CAPTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="767" y="52" width="35" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="86c816dd-8641-4cab-a1f6-d41c98c8b1f7"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTREGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="704" y="43" width="95" height="10" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="dbc1bbad-5b8e-44fa-8735-d510f0d1f4af"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[FECHA PEDIDO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="733" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="c05d7ac0-5e45-455c-96e2-60b2a4a721fa"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHA CAPTURA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="767" y="42" width="35" height="22" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="86c816dd-8641-4cab-a1f6-d41c98c8b1f7"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHA ENTREGA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="703" y="26" width="95" height="16" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="dbc1bbad-5b8e-44fa-8735-d510f0d1f4af"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHAS]]></text>
+				<text><![CDATA[FECHA]]></text>
 			</staticText>
 			<line>
 				<reportElement x="1" y="64" width="802" height="1" uuid="f51c5a9b-61c4-474e-8808-e6dcb0007902"/>
@@ -386,14 +346,14 @@ P.Ano = $P{ANO}]]>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="424" y="0" width="45" height="11" uuid="f754026b-1321-4fdb-9ea1-7c50921c9a08"/>
+				<reportElement x="424" y="0" width="35" height="11" uuid="f754026b-1321-4fdb-9ea1-7c50921c9a08"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Color}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="469" y="0" width="116" height="12" uuid="44b7775a-2d5c-4703-90af-e240e5826126"/>
+				<reportElement x="459" y="0" width="126" height="12" uuid="44b7775a-2d5c-4703-90af-e240e5826126"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
