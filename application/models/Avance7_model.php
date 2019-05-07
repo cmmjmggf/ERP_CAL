@@ -21,6 +21,7 @@ class Avance7_model extends CI_Model {
                             ->where('E.Numero', $EMPLEADO)
                             ->where_in('E.AltaBaja', array(1))
                             ->where_in('E.FijoDestajoAmbos', array(2, 3))
+                            ->where_in('E.DepartamentoFisico', array(20/* RAYADO */, 30/* REBAJADO */, 40/* FOLEADO */))
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -77,7 +78,7 @@ class Avance7_model extends CI_Model {
     public function getInfoXControl($CONTROL) {
         try {
             $this->db->select("C.Estilo, C.Pares, FXE.CostoMO, (C.Pares * FXE.CostoMO) AS TOTAL", false)
-                    ->from('controles as C')
+                    ->from('pedidox as C')
                     ->join('fraccionesxestilo as FXE', 'C.Estilo = FXE.Estilo')
                     ->where("C.Control", $CONTROL)->limit(1);
             $query = $this->db->get();

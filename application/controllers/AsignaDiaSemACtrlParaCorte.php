@@ -208,6 +208,14 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     'nomart' => $x->CLAVE_ARTICULO
                 );
                 $this->db->insert('programacion', $dtm);
+                /* Modificar en pedidox */
+                $this->db->set('DiaProg', $x->post('DIA'))
+                        ->set('SemProg', $x->post('Semana'))
+                        ->set('AnioProg', $x->post('ANIO'))
+                        ->set('FechaProg', Date('d/m/Y'))
+                        ->set('HoraProg', Date('h:i:s'))
+                        ->where('Control', $x->post('CONTROL'))
+                        ->update('pedidox');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

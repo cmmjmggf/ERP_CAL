@@ -22,7 +22,9 @@ class Avance8 extends CI_Controller {
     public function onComprobarFraccionXEstilo() {
         try {
             $x = $this->input;
-            print json_encode($this->axepn->onComprobarFraccionXEstilo($x->get('CR'), $x->get('FR')));
+            /* cr = control, fr = fraccion */
+            $control = $this->db->select('P.Estilo', false)->from('pedidox AS P')->where('P.Control', $x->get('CR'))->get()->result();
+            print json_encode($this->axepn->getInfoXControl($x->get('CR')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -98,7 +100,7 @@ class Avance8 extends CI_Controller {
 
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
-            
+
             $Control = $x->post('CONTROL');
 
             $data = array(

@@ -146,4 +146,35 @@ class Avance8_model extends CI_Model {
         }
     }
 
+    public function onComprobarFraccionXEstilo($ESTILO, $FRACCION) {
+        try {
+            return $this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, F.Clave AS FCLAVE, F.Descripcion AS FRACCIONDES, F.Departamento AS FRACCIONDEPTO", false)
+                            ->from('fraccionesxestilo AS FE')->join('fracciones AS F', 'F.Clave = FE.Fraccion')
+                            ->where('FE.Estilo', $ESTILO)
+                            ->where('FE.Fraccion', $FRACCION)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl($CONTROL) {
+        try {
+            $this->db->select("C.Estilo, C.Pares, FXE.CostoMO, (C.Pares * FXE.CostoMO) AS TOTAL", false)
+                    ->from('pedidox as C')
+                    ->join('fraccionesxestilo as FXE', 'C.Estilo = FXE.Estilo')
+                    ->where("C.Control", $CONTROL)->limit(1);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+//        print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
