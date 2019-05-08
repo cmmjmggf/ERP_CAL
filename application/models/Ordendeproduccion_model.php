@@ -37,10 +37,10 @@ class Ordendeproduccion_model extends CI_Model {
                             . " CASE "
                             . "WHEN PD.Control IS NULL THEN '' "
                             . "ELSE PD.Control END AS Marca, "
-                            . "CONCAT(CT.Ano, CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
+                            . "CONCAT(RIGHT(CT.Ano,2), CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
                             . "S.ID AS SerieID,"
                             . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
-                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente')
+                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
                     ->join('series AS S', 'PD.Serie = S.Clave')
                     ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
                     ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
@@ -108,8 +108,8 @@ class Ordendeproduccion_model extends CI_Model {
 
     public function getPedidosByMaquilaSemana($MAQUILA, $SEMANA, $ANO) {
         try {
-            $this->db->select("P.Clave AS CLAVE_PEDIDO, C.Clave CLAVE_CLIENTE, "
-                            . "C.RazonS AS CLIENTE, P.FechaPedido AS FECHA_PEDIDO, "
+            $this->db->select("P.Clave AS CLAVE_PEDIDO, P.Cliente CLAVE_CLIENTE, "
+                            . "IFNULL(C.RazonS,\"Z FALTA AGREGAR EL CLIENTE\") AS CLIENTE, P.FechaPedido AS FECHA_PEDIDO, "
                             . "T.Descripcion AS TRANSPORTE, A.Nombre AGENTE, S.Clave AS SERIE,"
                             . "CT.ID AS CLAVE_CONTROL,"
                             . "S.T1, S.T2, S.T3, S.T4, S.T5,"
@@ -120,14 +120,14 @@ class Ordendeproduccion_model extends CI_Model {
                             . "E.Horma AS HORMA, E.Descripcion AS OESTILOT, CO.Descripcion AS OCOLORT, P.ID AS PEDIDO_DETALLE,"
                             . "P.*, P.Clave AS Pedido", false)
                     ->from('pedidox AS P')
-                    ->join('clientes AS C', 'P.Cliente = C.Clave')
-                    ->join('estilos AS E', 'P.Estilo = E.Clave')
-                    ->join('colores AS CO', 'P.Color = CO.Clave')
-                    ->join('agentes AS A', 'P.Agente = A.Clave')
+                    ->join('clientes AS C', 'P.Cliente = C.Clave', 'left')
+                    ->join('estilos AS E', 'P.Estilo = E.Clave', 'left')
+                    ->join('colores AS CO', 'P.Color = CO.Clave', 'left')
+                    ->join('agentes AS A', 'P.Agente = A.Clave', 'left')
                     ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
-                    ->join('series AS S', 'P.Serie = S.Clave')
-                    ->join('lineas AS L', 'E.Linea = L.Clave')
-                    ->join('controles AS CT', 'CT.Pedido = P.ID')
+                    ->join('series AS S', 'P.Serie = S.Clave', 'left')
+                    ->join('lineas AS L', 'E.Linea = L.Clave', 'left')
+                    ->join('controles AS CT', 'CT.PedidoDetalle = P.ID', 'left')
                     ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.ID', 'left')
                     ->where('P.Maquila', $MAQUILA)
                     ->where('P.Semana', $SEMANA)

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamentoSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
+	<property name="ireport.zoom" value="2.662000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="60"/>
+	<parameter name="SEMANA" class="java.lang.String"/>
+	<parameter name="ANO" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="181" y="37" width="82" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="db3b9795-3728-405c-b205-4d9831e55a23"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[De la semanas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="116" y="37" width="30" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="52fd3ebf-40f9-475c-87f7-02dd06b0f9db"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="82" y="23" width="344" height="14" isPrintInFirstWholeBand="true" uuid="e8ecfabe-45d6-401f-88b5-53edf348c6a2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares fabricados por departamento de la semana]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="416" y="23" width="139" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="5b84a6dd-d909-48bc-8e81-2201dcc36d09"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="10" width="344" height="14" isRemoveLineWhenBlank="true" uuid="d9f7cc57-467e-4ba3-955f-63a4767d2c8c"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="298" y="37" width="52" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="380ea55d-c1d0-49eb-9ad4-b4fe9aceeebf"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la sem]]></text>
+			</staticText>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="10" y="10" width="72" height="42" isPrintInFirstWholeBand="true" uuid="f45e1d8e-40d3-49d0-b99e-e0e8f6def94c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="540" y="11" width="15" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e44f1b65-6a92-4a47-918c-ff432634274c"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="445" y="11" width="78" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="704f84b4-5ea2-4220-bac0-6d901008471e"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="82" width="146" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="736272e1-620f-4f21-9473-9f634a44aa1e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento o persona]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="76" width="50" height="20" uuid="024810c3-e663-4495-ba68-e022207ae5f0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jueves]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="76" width="50" height="20" uuid="0e4b5f55-f2da-4999-aa2c-52816a6453ad"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Viernes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="76" width="50" height="20" uuid="7d18af64-7cd0-477b-9e09-fab88d54b46c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Sabado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="76" width="50" height="20" uuid="ca9e2667-93f9-4038-a97d-16fddea6c3c5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Domingo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="76" width="50" height="20" uuid="76c579e2-6d44-42da-91b9-57e6f1da8716"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Lunes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="76" width="50" height="20" uuid="5dddfcd0-ae8d-4379-abdf-633ba00052ad"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Martes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="76" width="50" height="20" uuid="82934f7b-a0ab-4ce9-9fcd-9af7e3c8f854"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Miercoles]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="76" width="60" height="20" uuid="42eee13d-fb90-4856-92ec-dbf7a07f53b6"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Totales]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="146" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e36f6c92-9a93-4f46-a1c7-bab8e37f0b59"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales por día]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="14" width="146" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="d6dacf63-287c-4804-9d13-9de2180d1cf6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[---- % ----]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

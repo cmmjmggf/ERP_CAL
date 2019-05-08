@@ -40,7 +40,7 @@ class Iordendeproduccion_model extends CI_Model {
                             . "CONCAT(CT.Ano, CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
                             . "S.ID AS SerieID,"
                             . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
-                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente')
+                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
                     ->join('estilos AS E', 'PD.Estilo = E.Clave')
                     ->join('colores AS C', 'PD.color = C.Clave AND C.Estilo = E.Clave')
                     ->join('series AS S', 'E.Serie = S.Clave')
