@@ -51,14 +51,15 @@ class ParesProducidosPorDepartamento extends CI_Controller {
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
-        $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
-        $parametros["SEMANA"] = intval($x->post('SEMANA'));
-        $parametros["ANO"] = intval($x->post('ANIO'));
+        $parametros["MAQUILA"] = intval($x->post('MAQUILA'));  
+        $parametros["DEPARTAMENTO"] = intval($x->post('DEPARTAMENTO'));  
+        $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');  
+        $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL'); 
 
         $jc->setParametros($parametros);
 
-        $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
-        $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+        $jc->setJasperurl('jrxml\asignados\ParesProducidosPorDepartamento.jasper');
+        $jc->setFilename('ParesProducidosPorDepartamento' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         print $jc->getReport();
     }  

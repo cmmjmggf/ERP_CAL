@@ -17,6 +17,61 @@
                 <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="w-100 my-3"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="btn-group btn-group-toggle flex-wrap" data-toggle="buttons">
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnCorte" id="btnCorte" autocomplete="off" depto="10"> CORTE
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnEnsuelado" id="btnEnsuelado" autocomplete="off" depto="140"> ENSUELADO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnRayado" id="btnRayado" autocomplete="off" depto="20"> RAYADO
+                    </label> 
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnAlmPespunte" id="btnAlmPespunte" autocomplete="off" depto="130"> ALM-PESPUNTE
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnRebajado" id="btnRebajado" autocomplete="off" depto="30"> REBAJADO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnTejido" id="btnTejido" autocomplete="off" depto="150"> TEJIDO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnFoleado" id="btnFoleado" autocomplete="off" depto="40"> FOLEADO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnAlmTejido" id="btnAlmTejido" autocomplete="off" depto="160"> ALM-TEJIDO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnEntretelado" id="btnEntretelado" autocomplete="off" depto="90"> ENTRETELADO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnMontado" id="btnMontado" autocomplete="off" depto="180"> MONTADO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnAlmCorte" id="btnAlmCorte" autocomplete="off" depto="105"> ALM-CORTE
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnAdorno" id="btnAdorno" autocomplete="off" depto="210"> ADORNO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnPespunte" id="btnPespunte" autocomplete="off" depto="110"> PESPUNTE
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnAlmAdorno" id="btnAlmAdorno" autocomplete="off" depto="230"> ALM-ADORNO
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnLaser" id="btnLaser" autocomplete="off" depto="60"> LASER
+                    </label>
+                    <label class="btn btn-indigo">
+                        <input type="radio" name="btnTodos" id="btnTodos" autocomplete="off"> TODOS
+                    </label>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+
+            </div>
         </div>
     </div>
     <div class="card-footer">
@@ -33,44 +88,72 @@
             Maquila = pnlTablero.find("#Maquila");
 
     $(document).ready(function () {
+        btnAceptar.attr('disabled', true);
         Anio.val(new Date().getFullYear());
+
+        $("input[type='radio']").on('change', function () {
+            onHabilitar();
+        });
+        FechaInicial.on('keyup keydown', function () {
+            onHabilitar();
+        });
+        FechaFinal.on('keyup keydown', function () {
+            onHabilitar();
+        });
+        Maquila.on('keyup keydown', function () {
+            onHabilitar();
+        });
 
         btnAceptar.click(function () {
             btnAceptar.attr('disabled', true);
-            if (FechaInicial.val() && FechaFinal.val()) {
-                HoldOn.open({
-                    theme: 'sk-cube',
-                    message: 'Por favor espere...'
-                });
-                $.post('<?php print base_url('ParesFabricadosPorDepartamentoSemana/getReporte'); ?>', {
-                    FECHA_INICIAL: FechaInicial.val().trim() !== '' ? parseInt(FechaInicial.val()) : '',
-                    FECHA_FINAL: FechaFinal.val().trim() !== '' ? parseInt(FechaFinal.val()) : '',
-                    MAQUILA: Maquila.val().trim() !== '' ? Maquila.val() : ''
-                }).done(function (data, x, jq) {
-                    onBeep(1);
-                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
-                }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                }).always(function () {
-                    HoldOn.close();
-                    btnAceptar.attr('disabled', false);
-                });
+            var depto = pnlTablero.find("label.active").eq(0).find("input[type='radio']").attr('depto');
+            if (depto !== undefined) {
+                if (FechaInicial.val() && FechaFinal.val()) {
+                    HoldOn.open({
+                        theme: 'sk-cube',
+                        message: 'Por favor espere...'
+                    });
+                    $.post('<?php print base_url('ParesProducidosPorDepartamento/getReporte'); ?>', {
+                        FECHA_INICIAL: FechaInicial.val().trim() !== '' ? (FechaInicial.val()) : '',
+                        FECHA_FINAL: FechaFinal.val().trim() !== '' ? (FechaFinal.val()) : '',
+                        MAQUILA: Maquila.val().trim() !== '' ? Maquila.val() : '',
+                        DEPARTAMENTO: depto !== '' && depto !== undefined ? parseInt(depto) : 0
+                    }).done(function (data, x, jq) {
+                        onBeep(1);
+                        onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    }).fail(function (x, y, z) {
+                        console.log(x.responseText);
+                        swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                    }).always(function () {
+                        HoldOn.close();
+                        btnAceptar.attr('disabled', false);
+                    });
+                } else {
+                    swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
+                        if (FechaInicial.val()) {
+                            FechaInicial.focus();
+                        } else if (FechaFinal.val()) {
+                            FechaFinal.focus();
+                        } else if (Maquila.val()) {
+                            Maquila.focus().select();
+                        }
+                        btnAceptar.attr('disabled', false);
+                    });
+                }
             } else {
-                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    if (FechaInicial.val()) {
-                        FechaInicial.focus();
-                    } else if (FechaFinal.val()) {
-                        FechaFinal.focus();
-                    } else if (Maquila.val()) {
-                        Maquila.focus().select();
-                    }
-                    btnAceptar.attr('disabled', false);
-                });
+                swal('ATENCIÓN', 'DEBE DE SELECCIONAR AL MENOS UN DEPARTAMENTO', 'warning');
             }
         });
 
     });
+
+    function onHabilitar() {
+        if (FechaInicial.val() && FechaFinal.val() && Maquila.val()) {
+            btnAceptar.attr('disabled', false);
+        } else {
+            btnAceptar.attr('disabled', true);
+        }
+    }
 </script>
 <style>
     .btn-indigo {

@@ -8,19 +8,20 @@
                 <label>Año</label>
                 <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numbersOnly">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="w-100"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <label>De la maquila</label>
                 <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <label>A la maquila</label>
                 <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <label>De la semana</label>
                 <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <label>A la semana</label>
                 <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
             </div> 
