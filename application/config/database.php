@@ -76,10 +76,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => '127.0.0.1',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'lobo_solo',
+    'hostname' => '74.208.220.234',
+    'username' => 'christian',
+    'password' => 'abcd1234',
+    'database' => 'erp_cal',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,

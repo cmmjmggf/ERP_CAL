@@ -233,7 +233,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<text><![CDATA[Total de Maquila]]></text>
 				</staticText>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="293" y="0" width="22" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="7e8b2799-cd84-4312-8814-37b4ba8737fd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -249,7 +249,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{no_entregados_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="380" y="0" width="42" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="96e4da37-407d-4faf-9d1b-f26634179a85"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -257,7 +257,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{a_tiempo_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="422" y="0" width="42" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="87b35396-9148-4c91-9348-0407fa42c8dd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -265,7 +265,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{0_4_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="464" y="0" width="42" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="b6842fcb-2e38-4ce8-83d9-a771a1b2e160"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -273,7 +273,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{5_8_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="506" y="0" width="42" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="1b3b8166-7ffc-4ac2-9954-6ef21bbd9992"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -281,7 +281,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{9_12_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="548" y="0" width="40" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="bb8e13d9-b4a5-4a56-9e5f-2a4a281bedd7"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -311,7 +311,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Sem}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0" isBlankWhenNull="false">
+				<textField pattern="###0" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="293" y="0" width="22" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="4614fcc7-f702-4c9c-ab08-628d57fb9a5f"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -787,7 +787,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<text><![CDATA[Total General]]></text>
 			</staticText>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="293" y="0" width="22" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="7507332f-7516-44ca-943e-c8be0d262247"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -795,7 +795,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Pares_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="335" y="0" width="45" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="499a2aed-07c5-4287-9ef9-c1f86739bc30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -803,7 +803,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{no_entregados_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="380" y="0" width="42" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="3b1d173e-f77e-4fc2-b3dc-4b962ad7d56a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -811,7 +811,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{a_tiempo_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="422" y="0" width="42" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="7ad55064-77d3-47e9-85e6-e4e63af3a372"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -819,7 +819,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{0_4_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="464" y="0" width="42" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5f261702-379e-46f9-bb62-276af0a81c6b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -827,7 +827,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{5_8_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="506" y="0" width="42" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5f53746e-45af-4839-9d6c-ce2744ae8351"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -835,7 +835,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{9_12_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="548" y="0" width="40" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b8ef0911-0aa3-4fef-9ca9-f8d456e42cbb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -850,7 +850,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<text><![CDATA[Porcentaje %]]></text>
 			</staticText>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="335" y="10" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fcc3a8a4-de0c-47ab-b801-e39791397d4c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -858,7 +858,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{por1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="380" y="10" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="245afe91-5783-4b0b-bafe-b48ea4496dff"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -866,7 +866,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{por2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="422" y="10" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7a03190c-8631-48e3-9d3a-730ca0c8e7f4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -874,7 +874,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{0_4_3}/$V{Pares_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="464" y="10" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="187c6f2d-b9a2-4496-9bd6-0c2525cd79ca"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -882,7 +882,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{5_8_3}/$V{Pares_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="506" y="10" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="32a79f42-72d7-486b-aacf-63849cf56f7b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -890,7 +890,7 @@ order by Maq, Sem, NombreCliente ASC, P.Control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{9_12_3}/$V{Pares_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="548" y="10" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="91dacd0a-5dcd-4e0a-947a-ddc797fcce4b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

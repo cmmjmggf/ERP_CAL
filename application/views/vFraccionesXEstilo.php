@@ -116,6 +116,7 @@
                                     <th>Eliminar</th>
                                     <th>DeptoCat</th>
                                     <th>Fraccion_ID</th>
+                                    <th>depto_orden</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -123,6 +124,7 @@
                                 <tr>
                                     <th></th>
                                     <th>Totales:</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -495,6 +497,11 @@
                     "targets": [7],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [8],
+                    "visible": false,
+                    "searchable": false
                 }
             ],
             "columns": [
@@ -505,7 +512,8 @@
                 {"data": "ACV"}, /*4*/
                 {"data": "Eliminar"}, /*5*/
                 {"data": "DeptoCat"}, /*6*/
-                {"data": "Fraccion_ID"} /*7*/
+                {"data": "Fraccion_ID"}, /*7*/
+                {"data": "depto_orden"}
             ],
             rowGroup: {
                 endRender: function (rows, group) {
@@ -576,7 +584,7 @@
             "scrollCollapse": true,
             "bSort": true,
             "keys": true,
-            order: [[6, 'asc']],
+            order: [[8, 'asc']],
 
             "initComplete": function (x, y) {
                 HoldOn.close();

@@ -878,7 +878,6 @@
             }
         });
         tblControlesTerminados.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             nuevo = false;
             tblControlesTerminados.find("tbody tr").removeClass("success");
             $(this).addClass("success");
@@ -953,7 +952,6 @@
             }
         });
         tblControlesRechazados.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             nuevo = false;
             tblControlesRechazados.find("tbody tr").removeClass("success");
             $(this).addClass("success");

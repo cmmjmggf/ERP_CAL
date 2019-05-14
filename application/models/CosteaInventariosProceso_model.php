@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 header('Access-Control-Allow-Origin: *');
 
-class FraccionesXEstilo_model extends CI_Model {
+class CosteaInventariosProceso_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
@@ -64,12 +64,9 @@ class FraccionesXEstilo_model extends CI_Model {
 
     public function getRecords() {
         try {
-            $this->db->select("FXE.Estilo AS EstiloId,E.Descripcion   "
+            $this->db->select("EP.maq, EP.linea AS linea, EP.estilo, EP.color, EP.colorT, EP.totalmp  "
                             . " ", false)
-                    ->from('fraccionesxestilo AS FXE')
-                    ->join('estilos AS E', 'ON E.Clave = FXE.Estilo')
-                    ->where('FXE.Estatus', 'ACTIVO')
-                    ->group_by(array('FXE.Estilo', 'E.Descripcion'));
+                    ->from('estilosproceso AS EP');
 
             $query = $this->db->get();
             /*
@@ -194,7 +191,6 @@ class FraccionesXEstilo_model extends CI_Model {
             ELSE CONCAT(\'<span class="text-danger text-strong">NO</span>\')
             END AS ACV,
             CONCAT(\'<span class="fa fa-trash fa-lg " onclick="onEliminarFraccion(\', FE.ID, \')">\', \'</span>\') AS Eliminar,
-            cast(D.Clave as signed) depto_orden,
             CONCAT(D.Clave, \' - \', D.Descripcion) AS DeptoCat,
             FE.Fraccion AS Fraccion_ID, FE.AfectaCostoVTA
             ', false)

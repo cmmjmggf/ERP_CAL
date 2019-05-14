@@ -125,7 +125,7 @@ class ControlesTerminados extends CI_Controller {
             $x = $this->input;
             $this->ctm->onAgregar(array(
                 'control' => ($x->post('control') !== NULL) ? $x->post('control') : NULL,
-                'fecha' => Date('d/m/Y'),
+                'fecha' => Date('Y-m-d'),
                 'hora' => Date('H:i:s'),
                 'docto' => ($x->post('docto') !== NULL) ? $x->post('docto') : NULL,
                 'maq' => ($x->post('maq') !== NULL) ? $x->post('maq') : NULL,
@@ -145,7 +145,7 @@ class ControlesTerminados extends CI_Controller {
             $x = $this->input;
             $this->ctm->onAgregarRechazado(array(
                 'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'Fecha' => Date('d/m/Y'),
+                'Fecha' => Date('Y-m-d'),
                 'Defecto' => ($x->post('Defecto') !== NULL) ? $x->post('Defecto') : NULL,
                 'Detalle' => ($x->post('Detalle') !== NULL) ? $x->post('Detalle') : NULL,
                 'Maq' => ($x->post('Maq') !== NULL) ? $x->post('Maq') : NULL,
@@ -177,7 +177,7 @@ class ControlesTerminados extends CI_Controller {
                 /* Agregamos el control a controlCali */
                 $this->ctm->onAgregarRechazado(array(
                     'Control' => $this->input->post('Control'),
-                    'Fecha' => Date('d/m/Y'),
+                    'Fecha' => Date('Y-m-d'),
                     'Defecto' => $this->input->post('Defecto'),
                     'Detalle' => $this->input->post('Detalle'),
                     'Maq' => $this->input->post('Maq'),

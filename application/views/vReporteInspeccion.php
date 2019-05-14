@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Antigüedad de Saldos</h5>
+                <h5 class="modal-title">Reporte Inspección</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -58,7 +58,7 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/ReportesInspeccion/';
+
     var mdlReporteInspeccion = $('#mdlReporteInspeccion');
     $(document).ready(function () {
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlReporteInspeccion);
@@ -68,8 +68,8 @@
             $.each(mdlReporteInspeccion.find("select"), function (k, v) {
                 mdlReporteInspeccion.find("select")[k].selectize.clear(true);
             });
-            getProveedores();
-            getArticulos();
+            getProveedoresInspeccionMat();
+            getArticulosInspeccionMat();
             mdlReporteInspeccion.find("#FechaIni").val(getToday());
             mdlReporteInspeccion.find("#FechaFin").val(getToday());
             mdlReporteInspeccion.find('#Tp').focus();
@@ -138,10 +138,10 @@
 
     });
 
-    function getProveedores() {
+    function getProveedoresInspeccionMat() {
         mdlReporteInspeccion.find("#Proveedor")[0].selectize.clear(true);
         mdlReporteInspeccion.find("#Proveedor")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getProveedores').done(function (data) {
+        $.getJSON(base_url + 'index.php/ReportesInspeccion/' + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
                 mdlReporteInspeccion.find("#Proveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
             });
@@ -151,10 +151,10 @@
         });
     }
 
-    function getArticulos() {
+    function getArticulosInspeccionMat() {
         mdlReporteInspeccion.find("#Articulo")[0].selectize.clear(true);
         mdlReporteInspeccion.find("#Articulo")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getArticulos').done(function (data) {
+        $.getJSON(base_url + 'index.php/ReportesInspeccion/' + 'getArticulos').done(function (data) {
             $.each(data, function (k, v) {
                 mdlReporteInspeccion.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
             });

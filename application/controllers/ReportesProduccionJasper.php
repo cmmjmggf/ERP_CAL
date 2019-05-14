@@ -626,4 +626,19 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteControlesEntXMaquila() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $this->input->post('FechaIni');
+        $parametros["fechaFin"] = $this->input->post('FechaFin');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\relacionControlesEntregadosMaq.jasper');
+        $jc->setFilename('REPORTE_CONTROLES_ENTREGADOS_X_MAQ_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

@@ -59,7 +59,7 @@ class ControlesTerminados_model extends CI_Model {
                             CT.Maq,
                             CT.Sem,
                             CT.Docto,
-                            CT.Fecha,
+                            date_format(CT.Fecha,'%d/%m/%Y') as Fecha,
                             CT.Pares "
                             . "")
                     ->from("controlcali CT")
@@ -83,7 +83,7 @@ class ControlesTerminados_model extends CI_Model {
             $this->db->select("
                             CT.ID,
                             CT.control,
-                            CT.fecha,
+                            date_format(CT.fecha,'%d/%m/%Y') as fecha,
                             P.Maquila,
                             P.Semana,
                             CT.estilo,

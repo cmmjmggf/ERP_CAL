@@ -54,4 +54,4 @@ $this->load->view('vAvanceProduccionSemDia');
 $this->load->view('vAvanceProduccionPorLinea');
 $this->load->view('vAvanceProduccionPorDepto');
 $this->load->view('vDiasPromedioEntregaPorCliente');
-
+$this->load->view('vParesEntregadosCalidadXMaq');

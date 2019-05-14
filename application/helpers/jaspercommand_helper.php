@@ -8,11 +8,11 @@
 class JasperCommand {
 
     //put your code here
-    private $dbname = "lobo_solo";
-    private $dbuser = "root";
-    private $dbpassword = "";
+    private $dbname = "erp_cal";
+    private $dbuser = "christian";
+    private $dbpassword = "abcd1234";
     private $dbtype = "mysql";
-    private $ip = "127.0.0.1";
+    private $ip = "74.208.220.234";
     private $dbport = "3306";
     //SI ES WINDOWS JAVA -JAR
     private $jasperurlsoftware = 'java -jar application\third_party\JasperPHP\src\JasperStarter\lib\jasperstarter.jar';

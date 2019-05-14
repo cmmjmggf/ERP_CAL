@@ -329,45 +329,37 @@ ORDER BY Maq ASC, Doc ASC, A.Descripcion ASC]]>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="77" y="24" width="52" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="241f50af-a10a-45b4-aaec-9ba6f37d9786"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="9" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Del grupo:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="297" y="11" width="21" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="bebc3894-6c4c-4cb6-b374-ffe6206b7b5e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="9" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Al:]]></text>
 			</staticText>
 			<textField>
 				<reportElement isPrintRepeatedValues="false" x="236" y="11" width="61" height="12" isPrintInFirstWholeBand="true" uuid="c255e60e-e2a0-45c8-b463-638fa7612710"/>
 				<textElement textAlignment="Center">
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaIni}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement isPrintRepeatedValues="false" x="318" y="11" width="54" height="12" isPrintInFirstWholeBand="true" uuid="af01c898-11bc-4d2f-b001-c13e4e5f8653"/>
 				<textElement textAlignment="Center">
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaFin}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement isPrintRepeatedValues="false" x="130" y="24" width="242" height="12" isPrintInFirstWholeBand="true" uuid="48c2220c-099e-4592-b439-0bcd31c060ce"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreGrupo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="77" y="10" width="169" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="d5a268c1-e980-4bb7-b2a1-bb20c9c22b49"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Materiales Pedidos vs Recibidos del:"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="262" y="44" width="35" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="db705900-11a0-41b3-91cc-31fcb7013671"/>
@@ -392,6 +384,13 @@ ORDER BY Maq ASC, Doc ASC, A.Descripcion ASC]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="77" y="11" width="159" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="de8b0382-623f-4dc5-bd5a-675bc015078f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Salidas de Material X Grupo de la fecha:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
