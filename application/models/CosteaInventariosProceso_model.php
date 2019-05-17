@@ -12,12 +12,214 @@ class CosteaInventariosProceso_model extends CI_Model {
         date_default_timezone_set('America/Mexico_City');
     }
 
-    public function onVerificarEstiloBloqueado($Estilo) {
+    public function onActualizarTotalEncabezado($est, $col, $maq) {
         try {
-            $this->db->select("Seguridad   "
+            $this->db->query("update estilosproceso
+                                set totalmp =
+                                (select sum(A.costomp)+ sum(A.costomo)+ sum(gastosdepto)
+                                FROM
+                                (
+                               SELECT  EPD.depto, sum(EPD.costomp) as costomp, 0 costomo, EPD.gastosdepto
+                                FROM estilosprocesod EPD where EPD.estilo = '$est' and EPD.color = '$col' and EPD.maq = '$maq'
+                                group by depto
+                                union all
+
+                                select EPDMO.depto, 0 costomp, EPDMO.costo as costomo, 0 as gastosdepto
+                                from estilosprocesodmo EPDMO
+                                where EPDMO.estilo = '$est'
+                                order by depto asc
+                                ) AS A )
+                                where estilo = '$est' and color = '$col' and maq = $maq ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onValidaExisteFichaTecnicaManoObra() {
+        try {
+            $this->db->select(" c.estilo,c.color, 'FT' as msg
+                                FROM (
+                                        select estilo, color from pedidox
+                                        where CONCAT(Estilo,Color)  not in (select CONCAT(Estilo,Color) from fichatecnica)
+                                        and estilo <> '0' and estilo is not null
+                                                and estatus in ('A')
+                                    ) AS c
+
+                                union all
+
+                                SELECT c.estilo,'' as color, 'MO' as msg
+                                FROM (
+                                        select estilo from pedidox
+                                        where CONCAT(Estilo)  not in (select CONCAT(Estilo) from fraccionesxestilo)
+                                        and estilo <> '0' and estilo is not null
+                                                and estatus in ('A')
+                                    ) AS c ; "
+                    . " ", false);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTablaDetalleParaInsert($est, $col, $maq) {
+        try {
+            $this->db->query("INSERT INTO estilosprocesod
+                                (maq,
+                                estilo,
+                                color,
+                                depto,
+                                gastosdepto,
+                                costomp)
+
+                                SELECT
+                                    maq, estilo, color, depto, gastosdepto, costomp
+                                FROM
+
+                                (SELECT
+                                MA.Clave AS maq,
+                                FT.Estilo as estilo,
+                                FT.Color as color,
+                                CAST(P.Departamento AS SIGNED ) AS depto,
+                                (select GFD.costo from gastosfabricaxdepto GFD where GFD.clave = P.Departamento limit 1) as gastosdepto,
+                                @desperdicio := CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                                WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
+                                WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
+                                WHEN E.PiezasCorte > 18  THEN MA.PorExtra19a ELSE 0 END as Desperdicio,
+                                @costo := FT.Consumo *  PM.Precio as CostoSinDesp,
+                                CASE WHEN G.Clave IN (1, 2) THEN
+                                @costo + ((@costo) * @desperdicio)
+                                ELSE
+                                FT.Consumo *  PM.Precio
+                                END AS costomp
+                                FROM fichatecnica AS FT
+                                JOIN piezas AS P ON P.Clave = FT.Pieza
+                                JOIN articulos AS A ON A.Clave = FT.Articulo
+                                JOIN grupos AS G ON G.Clave =  A.Grupo
+                                JOIN preciosmaquilas AS PM ON PM.Articulo = FT.Articulo AND PM.Maquila = '$maq'
+                                JOIN estilos E on FT.Estilo = E.Clave
+                                join maquilas MA on MA.Clave = '$maq'
+                                WHERE FT.Estilo = '$est'
+                                AND FT.Color = '$col'
+                                ORDER BY depto ASC) AS A");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTablaDetalleParaInsertManoObra($est) {
+        try {
+            $this->db->query("INSERT INTO estilosprocesodmo
+                                (estilo,
+                                depto,
+                                costo)
+                                select
+                                FXE.Estilo,
+                                CAST(F.Departamento AS SIGNED ) AS depto,
+                                SUM(FXE.CostoMO) AS costomo
+                                from
+                                fraccionesxestilo  FXE
+                                join fracciones AS F ON FXE.Fraccion = F.Clave
+                                where FXE.Estilo = '$est'
+                                and FXE.AfectaCostoVTA = 1
+                                group by depto
+                                order by depto ASC ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTablaEncabezadosManoObraParaInsert() {
+        try {
+            $this->db->select("EP.estilo  "
                             . " ", false)
-                    ->from('estilos')
-                    ->where('Clave', $Estilo);
+                    ->from('estilosproceso AS EP')
+                    ->group_by('EP.estilo')->order_by('EP.estilo', 'ASC');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTablaEncabezadosParaInsert() {
+        try {
+            $this->db->select("EP.maq, EP.linea AS linea, EP.estilo, EP.color, EP.colorT, EP.totalmp  "
+                            . " ", false)
+                    ->from('estilosproceso AS EP')
+                    ->order_by('EP.maq', 'ASC')->order_by('EP.estilo', 'ASC')->order_by('EP.color', 'ASC');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCrearTablaConRegistrosEncabezado() {
+        try {
+            $this->db->query('truncate table estilosproceso');
+
+            $this->db->query("INSERT INTO estilosproceso
+                            (`linea`,
+                            `estilo`,
+                            `color`,
+                            `colorT`,
+                            `maq`,
+                            `fecha`,
+                            `totalmp`)
+                            select E.Linea, E.Clave as Estilo, PE.Color ,PE.ColorT, PE.Maquila, now() as fecha, 0
+                            from pedidox PE
+                            join estilos E on E.Clave = PE.estilo
+                            where PE.estilo <> '0' and PE.estilo is not null
+                            and PE.estatus in ('A')
+                            GROUP BY PE.Maquila, PE.estilo, PE.Color
+                            order by PE.Maquila ASC, PE.estilo ASC, PE.Color ASC ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onLimpiarTabla() {
+        try {
+            $this->db->query('truncate table gastosfabricaxdepto');
+            $this->db->query('INSERT INTO gastosfabricaxdepto (`clave`,`departamento`,`costo`)
+              select cast(clave as signed) as clave, Descripcion ,0
+              from departamentos where tipo = 1 order by clave asc ');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDeptosParaGastosDepto() {
+        try {
+            $this->db->select("clave, "
+                            . "departamento, "
+                            . "concat('<input type=''text'' class=''form-control form-control-sm'' onkeypress=''validate(event,this.value);'' onpaste= ''return false;''  value=''', costo ,''' onchange=''onChangeCosto(this.value,', clave ,')'' />')  "
+                            . " AS costo,  "
+                            . "costo as costoHide, "
+                            . "'' as Eliminar "
+                            . ""
+                            . ""
+                            . " ", false)
+                    ->from('gastosfabricaxdepto')->order_by('clave', 'asc');
 
             $query = $this->db->get();
             /*
@@ -32,39 +234,16 @@ class CosteaInventariosProceso_model extends CI_Model {
         }
     }
 
-    public function onAumentaPrecioFracciones($Porcentaje) {
-        try {
-
-            $sql = "UPDATE fraccionesxestilo FXE "
-                    . "JOIN estilos E on FXE.Estilo = E.Clave "
-                    . "SET "
-                    . "FXE.CostoMO = FXE.CostoMO + (FXE.CostoMO * $Porcentaje) , "
-                    . "FXE.CostoVTA = FXE.CostoVTA + (FXE.CostoVTA * $Porcentaje) "
-                    . "WHERE E.Seguridad = 0 "
-                    . " ";
-            $this->db->query($sql);
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onAumentaPrecioFraccionesXEstilo($Estilo, $Porcentaje) {
-        try {
-
-
-            $sql = "UPDATE fraccionesxestilo "
-                    . "SET CostoMO = CostoMO + (CostoMO * $Porcentaje) , CostoVTA = CostoVTA + (CostoVTA * $Porcentaje) "
-                    . "WHERE Estilo= '$Estilo' "
-                    . " ";
-            $this->db->query($sql);
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function getRecords() {
         try {
-            $this->db->select("EP.maq, EP.linea AS linea, EP.estilo, EP.color, EP.colorT, EP.totalmp  "
+            $this->db->select(""
+                            . "EP.maq as maq, "
+                            . "EP.linea AS linea, "
+                            . "EP.estilo as estilo, "
+                            . "EP.color as color, EP.colorT, "
+                            . "concat('$',cast(EP.totalmp as decimal(6,2))) as totalmp"
+                            . ""
+                            . " "
                             . " ", false)
                     ->from('estilosproceso AS EP');
 
@@ -81,238 +260,11 @@ class CosteaInventariosProceso_model extends CI_Model {
         }
     }
 
-    public function getDatosEmpresa() {
-        try {
-            $this->db->select("E.RazonSocial as Empresa, E.Foto as Logo "
-                            . " ", false)
-                    ->from('empresas AS E')
-                    ->where('Estatus', 'ACTIVO');
-
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            //print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getEncabezadoFXE($Estilo) {
-        try {
-            $this->db->query("set sql_mode=''");
-            $this->db->select("FXE.Estilo AS ESTILO,L.CLAVE AS CLINEA, L.DESCRIPCION AS DLINEA   "
-                            . " ", false)
-                    ->from('fraccionesxestilo AS FXE')
-                    ->join('estilos AS E', 'ON E.Clave = FXE.Estilo')
-                    ->join('lineas AS L', 'ON L.Clave = E.Linea')
-                    ->where('FXE.Estilo', $Estilo)
-                    ->group_by(array('FXE.Estilo', 'E.Descripcion'));
-
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            //print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getDeptosFXE($Estilo) {
-        try {
-            $this->db->query("set sql_mode=''");
-            $this->db->select("CAST(D.Clave AS SIGNED ) AS CDEPTO, D.Descripcion AS DDEPTO  "
-                            . " ", false)
-                    ->from('fraccionesxestilo AS FXE')
-                    ->join('fracciones AS F', 'ON FXE.Fraccion = F.Clave')
-                    ->join('departamentos AS D', 'ON D.Clave = F.Departamento')
-                    ->where('FXE.Estilo', $Estilo)
-                    ->group_by(array('D.Clave', 'D.Descripcion'))
-                    ->order_by('CDEPTO', 'ASC');
-
-
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            //print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getFraccionesFXE($Estilo) {
-        try {
-            $this->db->select("D.Clave AS CDEPTO, CAST(F.Clave AS SIGNED ) AS CFRACCION,F.Descripcion AS DFRACCION, "
-                            . "CostoMO AS COSTOMO, CostoVTA  AS COSTOVTA "
-                            . " ", false)
-                    ->from('fraccionesxestilo AS FXE')
-                    ->join('fracciones AS F', 'ON FXE.Fraccion = F.Clave')
-                    ->join('departamentos AS D', 'ON D.Clave = F.Departamento')
-                    ->where('FXE.Estilo', $Estilo)
-                    ->where('FXE.AfectaCostoVTA', '1')
-                    ->order_by('D.Clave', 'ASC')
-                    ->order_by('CFRACCION', 'ASC');
-
-
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            //print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getFraccionesXEstiloDetalleByID($Estilo) {
-        try {
-            $this->db->select('
-            FE.ID AS ID,
-            CONCAT(F.Clave, \'-\', F.Descripcion) AS Fraccion,
-            FE.CostoMO  AS CostoMO,
-            FE.CostoVTA  AS CostoVTA,
-
-            CASE WHEN  FE.AfectaCostoVTA  = 1
-            THEN CONCAT(\'<span class="text-success text-strong">SI</span>\')
-            ELSE CONCAT(\'<span class="text-danger text-strong">NO</span>\')
-            END AS ACV,
-            CONCAT(\'<span class="fa fa-trash fa-lg " onclick="onEliminarFraccion(\', FE.ID, \')">\', \'</span>\') AS Eliminar,
-            CONCAT(D.Clave, \' - \', D.Descripcion) AS DeptoCat,
-            FE.Fraccion AS Fraccion_ID, FE.AfectaCostoVTA
-            ', false)
-                    ->from('fraccionesxestilo AS FE')
-                    ->join('`fracciones` AS `F`', '`FE`.`Fraccion` = `F`.`Clave`')
-                    ->join('departamentos AS D', '`F`.`Departamento` = `D`.`Clave`')
-                    ->where('FE.Estilo', $Estilo)
-                    ->where('FE.Estatus', 'ACTIVO');
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-//            print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onComprobarExisteEstilo($Estilo) {
-        try {
-            return $this->db->select('COUNT(*) AS EXISTE', false)->from('fraccionesxestilo AS FE ')
-                            ->where('FT.Estilo', $Estilo)
-                            ->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onAgregar($array) {
-        try {
-            $this->db->insert("fraccionesxestilo", $array);
-            $query = $this->db->query('SELECT LAST_INSERT_ID() AS IDL');
-            $row = $query->row_array();
-            return $row['IDL'];
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onModificar($ID, $DATA) {
-        try {
-            $this->db->where('ID', $ID)->update("fraccionesxestilo", $DATA);
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onEliminarFraccion($ID) {
-        try {
-            $this->db->where('ID', $ID)->delete("fraccionesxestilo");
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function getFraccionXEstiloByEstilo($Estilo) {
         try {
             return $this->db->select('U.*', false)->from('fraccionesxestilo AS U')
                             ->where('U.Estilo', $Estilo)
                             ->where_in('U.Estatus', 'ACTIVO')->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getDepartamentos() {
-        try {
-            return $this->db->select("CAST(D.Clave AS SIGNED ) AS Clave,CONCAT(D.Clave,'-',D.Descripcion) AS Departamento")
-                            ->from("departamentos AS D")
-                            ->where("D.Estatus", "ACTIVO")
-                            ->order_by('Clave', 'ASC')
-                            ->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getFraccionesXDepartamento($Depto) {
-        try {
-            return $this->db->select("CAST(D.Clave AS SIGNED ) AS ID,CONCAT(D.Clave,'-',D.Descripcion) AS Fraccion")
-                            ->from("fracciones AS D")
-                            ->where("D.Estatus", "ACTIVO")
-                            ->where("D.Departamento", $Depto)
-                            ->order_by('ID', 'ASC')
-                            ->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getFracciones() {
-        try {
-            return $this->db->select("CAST(D.Clave AS SIGNED ) AS ID,CONCAT(D.Clave,'-',D.Descripcion) AS Fraccion ")
-                            ->from("fracciones AS D")
-                            ->order_by('ID', 'ASC')
-                            ->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getEstilos() {
-        try {
-            return $this->db->select("E.Clave AS Clave, CONCAT(E.Clave,' - ',IFNULL(E.Descripcion,'')) AS Estilo")
-                            ->from("estilos AS E")
-                            ->where("E.Estatus", "ACTIVO")
-                            ->order_by('Clave', 'ASC')
-                            ->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getEstiloByID($ID) {
-        try {
-            return $this->db->select('E.*', false)
-                            ->from('estilos AS E')
-                            ->where('E.Clave', $ID)
-                            ->where_in('E.Estatus', 'ACTIVO')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

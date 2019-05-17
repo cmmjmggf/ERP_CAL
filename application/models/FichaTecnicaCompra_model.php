@@ -70,7 +70,8 @@ class FichaTecnicaCompra_model extends CI_Model {
                     ->join('piezas AS P', 'ON P.Clave =  FT.Pieza')
                     ->where('FT.Estilo', $Estilo)
                     ->where('FT.Color', $Color)
-                    ->group_by(array('G.Clave'))
+                    ->group_by(array('P.Departamento', 'G.Clave'))
+                    ->order_by('CDEPTO', 'ASC')
                     ->order_by('CGRUPO', 'ASC');
 
 

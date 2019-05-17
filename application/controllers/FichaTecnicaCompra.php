@@ -385,11 +385,15 @@ class FichaTecnicaCompra extends CI_Controller {
             $pdf->Cell(30, 4, 'MANO OBRA', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(200);
             $pdf->Cell(10, 4, '$' . number_format($TOTAL_MO, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->SetX(170);
+            $pdf->Cell(30, 4, 'GASTOS', 'B'/* BORDE */, 0, 'L');
+            $pdf->SetX(200);
+            $pdf->Cell(10, 4, '$' . number_format($GastosPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
             $pdf->SetFont('Calibri', 'BI', 10);
             $pdf->SetX(170);
             $pdf->Cell(30, 4, 'Total', ''/* BORDE */, 0, 'L');
             $pdf->SetX(200);
-            $TOTAL_FINAL = $TOTAL_DESPERDICIO_GEN + $TOTAL_MO;
+            $TOTAL_FINAL = $TOTAL_DESPERDICIO_GEN + $TOTAL_MO + $GastosPOST;
             $pdf->Cell(10, 4, '$' . number_format($TOTAL_FINAL, 2, ".", ","), ''/* BORDE */, 1, 'R');
 
 

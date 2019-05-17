@@ -12,12 +12,12 @@ class Usuario_model extends CI_Model {
 
     public function getRecords() {
         try {
-           return $this->db->select("ID, U.usuario  AS Nombre,
+            return $this->db->select("ID, U.usuario  AS Nombre,
                 CONCAT('<span class=\'label label-info\'>',ifnull(U.UltimoAcceso,'--'),'</span>') AS 'Último Acceso',
-                  (CASE WHEN  U.Estatus ='A' THEN CONCAT('<span class=\'label label-success\'>','ACTIVO','</span>')
+                  (CASE WHEN  U.Estatus ='ACTIVO' THEN CONCAT('<span class=\'label label-success\'>','ACTIVO','</span>')
                     ELSE CONCAT('<span class=\'label label-danger\'>','INACTIVO','</span>') END) AS Estatus ,
                     U.TipoAcceso AS Acceso
-                    FROM usuarios AS U; ", false)->get()->result(); 
+                    FROM usuarios AS U; ", false)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
