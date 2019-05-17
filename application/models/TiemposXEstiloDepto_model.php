@@ -21,16 +21,23 @@ class TiemposXEstiloDepto_model extends CI_Model {
         }
     }
 
-    public function getTiemposXEstiloDepto() {
+    public function getTiemposXEstiloDepto($ESTILO, $LINEA) {
         try {
-            return $this->db->select('TXED.ID, TXED.Linea AS LINEA, TXED.Estilo AS ESTILO,'
-                                    . 'TXEDHDTO.Departamento AS CLAVE_DEPARTAMENTO, DEPTO.Descripcion AS DEPARTAMENTO, '
-                                    . 'TXEDHDTO.Tiempo AS TIEMPO, '
-                                    . 'TXED.Total AS TOTAL, TXEDHDTO.ID AS IDD')
-                            ->from('tiemposxestilodepto AS TXED')
-                            ->join('tiemposxestilodepto_has_deptos AS TXEDHDTO', 'TXED.ID = TXEDHDTO.TiempoXEstiloDepto')
-                            ->join('departamentos AS DEPTO', 'TXEDHDTO.Departamento = DEPTO.Clave')
-                            ->get()->result();
+            $xdb = $this->db;
+             $xdb->select('TXED.ID, TXED.Linea AS LINEA, TXED.Estilo AS ESTILO,'
+            . 'TXEDHDTO.Departamento AS CLAVE_DEPARTAMENTO, DEPTO.Descripcion AS DEPARTAMENTO, '
+            . 'TXEDHDTO.Tiempo AS TIEMPO, '
+            . 'TXED.Total AS TOTAL, TXEDHDTO.ID AS IDD')
+            ->from('tiemposxestilodepto AS TXED')
+            ->join('tiemposxestilodepto_has_deptos AS TXEDHDTO', 'TXED.ID = TXEDHDTO.TiempoXEstiloDepto')
+            ->join('departamentos AS DEPTO', 'TXEDHDTO.Departamento = DEPTO.Clave');
+             if($ESTILO !==''){
+               $xdb->like("TXED.Estilo", $ESTILO);
+             }
+             if ($LINEA !== '') {
+                $xdb->like("TXED.Linea", $LINEA);
+            }
+            return $xdb->limit(200)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

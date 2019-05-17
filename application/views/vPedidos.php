@@ -1060,6 +1060,10 @@
     }
 
     function getRecords() {
+        HoldOn.open({
+            theme:'sk-rect',
+            message: 'Cargando...'
+        });
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblPedidos')) {

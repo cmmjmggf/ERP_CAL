@@ -356,8 +356,9 @@
         btnRefrescar.click(function () {
             if ($.fn.DataTable.isDataTable('#tblControlesSinAsignarAlDia') && $.fn.DataTable.isDataTable('#tblControlesAsignadosAlDia')) {
                 ControlesSinAsignarAlDia.ajax.reload();
-                ControlesAsignadosAlDia.ajax.reload();
-                getCortadores();
+                ControlesAsignadosAlDia.ajax.reload(function () {
+                    getCortadores();
+                });
                 pnlTablero.find(".btn-group-toggle label").removeClass("active");
                 onBeep(4);
                 swal({
@@ -465,6 +466,10 @@
     });
 
     function getControlesSinAsignarYAsignadosAlDia() {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Cargando...'
+        });
         ControlesSinAsignarAlDia = tblControlesSinAsignarAlDia.DataTable(options);
         ControlesAsignadosAlDia = tblControlesAsignadosAlDia.DataTable({
             dom: 'Bfrtip',
@@ -524,7 +529,10 @@
             "bSort": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/
-            ]
+            ],
+            initComplete: function () {
+                HoldOn.close();
+            }
         });
     }
 

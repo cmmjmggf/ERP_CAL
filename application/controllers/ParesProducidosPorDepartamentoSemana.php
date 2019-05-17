@@ -57,7 +57,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
 
         $jc->setParametros($parametros);
 
-        $jc->setJasperurl('jrxml\asignados\ParesFabricadosPorDepartamentoSemana.jasper');
+        $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorDepartamentoSemana.jasper');
         $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         print $jc->getReport();

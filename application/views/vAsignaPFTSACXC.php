@@ -807,7 +807,9 @@
                 message: 'Cargando...'
             });
             $.getJSON(master_url + 'getExplosionXSemanaControlFraccionArticulo',
-                    {SEMANA: S.val(), CONTROL: C.val(), FRACCION: F.val(), ARTICULO: A, GRUPO: G}).done(function (data) {
+                    {SEMANA: S.val(), CONTROL: C.val(), 
+                     FRACCION: F.val(), ARTICULO: A, 
+                     GRUPO: G}).done(function (data) {
                 if (data.length > 0) {
                     Explosion.val(data[0].EXPLOSION);
                     Entregar.prop('readonly', false);
@@ -1004,7 +1006,7 @@
         {
             console.log('Entregar.val() > Explosion.val() ELSE');
         }
-        console.log(seguro);
+        
         if (seguro) {
             $.post(master_url + 'onEntregarPielForroTextilSintetico', {
                 TIPO: tipo_consumo,
@@ -1044,6 +1046,7 @@
             });
         }
     }
+    
     function getEmpleados() {
         $.getJSON(master_url + 'getEmpleados').done(function (data) {
             $.each(data, function (k, v) {

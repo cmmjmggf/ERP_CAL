@@ -182,20 +182,29 @@
             tblTiemposXEstiloDepto.DataTable().column(2).search('').draw();
             Estilo.val('').focus();
             Linea.removeClass("highlight-input");
+             TiemposXEstiloDepto.ajax.reload();
         });
         Linea.on('keydown', function () {
             if (isValidInput(Linea)) {
-                tblTiemposXEstiloDepto.DataTable().column(1).search($(this).val()).draw();
+                TiemposXEstiloDepto.ajax.reload(function () {
+                    tblTiemposXEstiloDepto.DataTable().column(1).search($(this).val()).draw();
+                });
             } else {
-                tblTiemposXEstiloDepto.DataTable().column(1).search('').draw();
+                TiemposXEstiloDepto.ajax.reload(function () {
+                    tblTiemposXEstiloDepto.DataTable().column(1).search('').draw();
+                });
             }
         });
         Estilo.on('keydown', function (e) {
             var input = $(this);
             if ($(this).val() !== '') {
-                tblTiemposXEstiloDepto.DataTable().column(2).search($(this).val()).draw();
+                TiemposXEstiloDepto.ajax.reload(function () {
+                    tblTiemposXEstiloDepto.DataTable().column(2).search($(this).val()).draw();
+                });
             } else {
-                tblTiemposXEstiloDepto.DataTable().column(2).search('').draw();
+                TiemposXEstiloDepto.ajax.reload(function () {
+                    tblTiemposXEstiloDepto.DataTable().column(2).search('').draw();
+                });
             }
             if (e.keyCode === 13 && input.val() !== '') {
                 $.getJSON(master_url + 'onComprobarEstilo', {ESTILO: input.val()}).done(function (data, x, jq) {
@@ -304,7 +313,10 @@
     }
 
     function getTiemposXEstilo() {
-
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Cargando...'
+        });
         var cols = [
             {"data": "ID"}/*0*/,
             {"data": "LINEA"}/*1*/,
@@ -353,7 +365,11 @@
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getTiemposXEstiloDepto',
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.ESTILO = (Estilo.val().trim());
+                    d.LINEA = (Linea.val().trim());
+                }
             },
             "columns": cols,
             "columnDefs": coldefs,
@@ -381,6 +397,10 @@
                 dataSrc: "ESTILO"
             },
             createdRow: function (row, data, dataIndex) {
+            },
+            initComplete: function (a, b) {
+                HoldOn.close();
+
             }
         };
         TiemposXEstiloDepto = tblTiemposXEstiloDepto.DataTable(xoptions);

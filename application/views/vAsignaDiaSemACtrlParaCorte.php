@@ -67,6 +67,8 @@
                 <label>Fracción</label>
                 <select id="Fraccion" name="Fraccion" class="form-control form-control-sm NotSelectize" multiple="">
                 </select>
+                <input type="text" id="FraccionesSeleccionadas" class="form-control-sm" readonly="">
+                <button type="button" class="btn btn-primary" id="btnFraccionCheck">Obtener</button>
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <label>Cortador</label>
@@ -192,7 +194,8 @@
 <script>
     var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"), Dia = pnlTablero.find("#Dia"),
             Semana = pnlTablero.find("#Semana"), Cortador = pnlTablero.find("#Cortador"),
-            Fraccion = pnlTablero.find("#Fraccion"), Control = pnlTablero.find("#Control"),
+            Fraccion = pnlTablero.find("#Fraccion"), FraccionesSeleccionadas = pnlTablero.find("#FraccionesSeleccionadas"),
+            Control = pnlTablero.find("#Control"),
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"), Pares = pnlTablero.find("#Pares"),
             Precio = pnlTablero.find("#Precio"), Tiempo = pnlTablero.find("#Tiempo"), btnGuardar = pnlTablero.find("#btnGuardar"),
             ColorNombre = pnlTablero.find("#ColorNombre"), TxPar = pnlTablero.find("#TxPar"), Pesos = pnlTablero.find("#Pesos"),
@@ -273,10 +276,13 @@
             [0, 'desc']/*ID*/
         ],
         initComplete: function () {
-            Anio.focus();
         }
     };
     $(document).ready(function () {
+
+        pnlTablero.find("#btnFraccionCheck").click(function () {
+            console.log(Fraccion.val())
+        });
 
         btnTiemposXEstilos.click(function () {
             $.fancybox.open({
@@ -401,8 +407,9 @@
             onGuardarAsignacionDeDiaXControl();
         });
 
-        Fraccion.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-            Fraccion.removeClass('bounceIn animated');
+        Fraccion.on('change', function () {
+            console.log($(this).val())
+            FraccionesSeleccionadas.val("99,100");
         });
 
         $("#btnAmbas, #btnPiel, #btnForro").change(function () {
@@ -410,16 +417,17 @@
             switch ($(this).attr('id')) {
                 case 'btnPiel':
                     Fraccion[0].selectize.setValue(100);
+                    FraccionesSeleccionadas.val(100);
                     break;
                 case 'btnForro':
                     Fraccion[0].selectize.setValue(99);
+                    FraccionesSeleccionadas.val(99);
                     break;
                 case 'btnAmbas':
                     Fraccion[0].selectize.setValue([99, 100]);
-                    Fraccion.val('99,100');
+                    FraccionesSeleccionadas.val("99,100");
                     break;
             }
-            Fraccion.addClass('bounceIn animated');
         });
 
         Dia.on('keydown keypress keyup', function () {
@@ -475,6 +483,10 @@
     });
 
     function getControlesSinAsignarYAsignadosAlDia() {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Cargando...'
+        });
         ControlesSinAsignarAlDia = tblControlesSinAsignarAlDia.DataTable(options);
         ControlesAsignadosAlDia = tblControlesAsignadosAlDia.DataTable({
             dom: 'Bfrtip',
@@ -534,7 +546,10 @@
             "bSort": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/
-            ]
+            ],
+            initComplete: function () {
+                HoldOn.close();
+            }
         });
     }
 
@@ -578,8 +593,15 @@
             theme: 'sk-bounce',
             message: 'Por favor espere un momento...'
         });
+        var FRACCIONES = [];
+        $.each(Fraccion.val(), function (k, v) {
+            FRACCIONES.push({
+                FRACCIONES: v   
+            });
+        });
+        console.log(FRACCIONES);
         $.getJSON('<?= base_url('AsignaDiaSemACtrlParaCorte/getEstiloColorParesTxParPorControl') ?>', {
-            CONTROL: e, TIPO: Fraccion.val()[0]
+            CONTROL: e, TIPO: FRACCIONES
         }).done(function (data, x, jq) {
             var r = data[0];
             if (r) {
@@ -595,7 +617,7 @@
                 ClaveArticulo.val(r.CLAVE_ARTICULO);
                 Estilo.focus().select();
             } else {
-                swal('ATENCIÓN', 'NO SE HAN ESTABLECIDO TIEMPOS PARA ESTE CONTROL', 'warning').then((value) => {
+                swal('ATENCIÓN', 'NO SE HAN ESTABLECIDO TIEMPOS PARA ESTE CONTROL EN CORTE', 'warning').then((value) => {
                     Control.focus().select();
                 });
             }

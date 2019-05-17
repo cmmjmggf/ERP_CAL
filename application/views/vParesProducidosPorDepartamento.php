@@ -42,7 +42,7 @@
                     </label>
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnAlmTejido" id="btnAlmTejido" autocomplete="off" depto="160"> ALM-TEJIDO
-                    </label>
+                    </label> 
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnEntretelado" id="btnEntretelado" autocomplete="off" depto="90"> ENTRETELADO
                     </label>

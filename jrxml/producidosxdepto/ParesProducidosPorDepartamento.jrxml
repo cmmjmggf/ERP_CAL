@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamento" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.4200000000000013"/>
+	<property name="ireport.x" value="444"/>
+	<property name="ireport.y" value="16"/>
 	<parameter name="DEPARTAMENTO" class="java.lang.Integer"/>
 	<parameter name="FECHAINICIAL" class="java.lang.String"/>
 	<parameter name="FECHAFINAL" class="java.lang.String"/>
@@ -13,10 +13,16 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT FPN.numeroempleado AS NUMEMP,
-CONCAT(E.PrimerNombre," ",E.SegundoNombre," ",E.Paterno," ",E.Materno) AS  EMPLEADO,
+CONCAT((CASE WHEN E.PrimerNombre ="0" THEN "" ELSE E.PrimerNombre END)," ",(CASE WHEN E.SegundoNombre ="0" THEN "" ELSE E.SegundoNombre END)," ",(CASE WHEN E.Paterno ="0" THEN "" ELSE E.Paterno END)," ",(CASE WHEN E.Materno ="0" THEN "" ELSE E.Materno END)) AS  EMPLEADO,
 FPN.control AS CONTROL, FPN.estilo AS ESTILO, C.Descripcion AS COLOR, P.Pares AS PARES,
 P.Cliente AS CLAVE_CLIENTE, CL.RazonS AS CLIENTET, P.FechaEntrega AS FECHA_ENTREGA,
-FPN.fecha AS FECHA_FPN, CAST(P.Pares AS SIGNED) AS PARESCOUNT
+FPN.fecha AS FECHA_FPN, CAST(P.Pares AS SIGNED) AS PARESCOUNT,
+(CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE" WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 33 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO" WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO" WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT
 FROM fracpagnomina AS FPN
 INNER JOIN empleados AS E ON FPN.numeroempleado = E.Numero
 INNER JOIN pedidox AS P ON FPN.Control = P.Control
@@ -24,7 +30,7 @@ INNER JOIN clientes AS CL ON CL.Clave = P.Cliente
 INNER JOIN estilos AS ES ON P.Estilo = ES.Clave
 INNER JOIN colores AS C ON P.Estilo = C.Estilo AND P.Color = C.Clave
 WHERE FPN.fecha BETWEEN str_to_date($P{FECHAINICIAL},"%d/%m/%Y") and str_to_date($P{FECHAFINAL},"%d/%m/%Y") AND
-FPN.depto = $P{DEPARTAMENTO} AND FPN.Maquila = $P{MAQUILA}
+FPN.depto IN($P{DEPARTAMENTO}) AND FPN.Maquila = $P{MAQUILA}
 order by E.Numero ASC;]]>
 	</queryString>
 	<field name="NUMEMP" class="java.lang.Integer"/>
@@ -46,6 +52,7 @@ order by E.Numero ASC;]]>
 	<field name="FECHA_ENTREGA" class="java.lang.String"/>
 	<field name="FECHA_FPN" class="java.sql.Timestamp"/>
 	<field name="PARESCOUNT" class="java.lang.Long"/>
+	<field name="AvanceT" class="java.lang.String"/>
 	<variable name="PARESCOUNT_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{PARESCOUNT}]]></variableExpression>
 	</variable>
@@ -65,7 +72,7 @@ order by E.Numero ASC;]]>
 				</staticText>
 				<textField>
 					<reportElement x="48" y="0" width="47" height="12" uuid="9e3560ce-ab2a-40f3-84d2-7b56b05bd6cf"/>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NUMEMP}]]></textFieldExpression>
@@ -282,14 +289,14 @@ order by E.Numero ASC;]]>
 			</textField>
 			<textField>
 				<reportElement x="656" y="0" width="73" height="11" uuid="ac8b8899-1d29-4bee-a452-64b319ec891f"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_ENTREGA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="729" y="0" width="73" height="11" uuid="1f815f92-fcc1-46f0-a1ba-3f759b02ab65"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_FPN}]]></textFieldExpression>
@@ -300,6 +307,13 @@ order by E.Numero ASC;]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CLIENTET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="353" y="0" width="92" height="12" uuid="8734c8d6-c550-4a38-87fd-bba521a0b40b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AvanceT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -4,17 +4,56 @@
     </div>
     <div class="card-body">
         <div class="row" align="center">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                <label>Año</label>
+                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numbersOnly" maxlength="4" >
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                <label>Semana nomina actual</label>
+                <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numbersOnly" maxlength="2" autofocus="">
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="w-100"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>De la fecha</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>A la fecha</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <label>Maq</label>
-                <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm  numbersOnly">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="w-100 m-2"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="chkDetallePespunte">
+                    <label class="custom-control-label" for="chkDetallePespunte" >Detalle de pespunte</label>
+                </div>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="chkDetalleMontado">
+                    <label class="custom-control-label" for="chkDetalleMontado" >Detalle montado</label>
+                </div>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="chkDetalleAdorno">
+                    <label class="custom-control-label" for="chkDetalleAdorno" >Detalle adorno</label>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="chkDetalleTejido">
+                    <label class="custom-control-label" for="chkDetalleTejido" >Detalle tejido</label>
+                </div>
+            </div>
+            <div class="col-12 m-2">
+                <p class="font-weight-bold">Nota: Para imprimir todos los departamentos por dia no seleccione ninguna casilla</p>
             </div>
             <div class="w-100 my-3"></div>
         </div>
@@ -26,7 +65,7 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Ano"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             FechaInicial = pnlTablero.find("#FechaInicial"),
             FechaFinal = pnlTablero.find("#FechaFinal"),
