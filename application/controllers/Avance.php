@@ -190,6 +190,10 @@ class Avance extends CI_Controller {
                     ->set('DeptoProduccion', $x->post('DEPTO'))
                     ->where('Control', $x->post('CONTROL'))
                     ->update('controles');
+            $this->db->set('EstatusProduccion', $x->post('DEPTOT'))
+                    ->set('DeptoProduccion', $x->post('DEPTO'))
+                    ->where('Control', $x->post('CONTROL'))
+                    ->update('pedidox');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

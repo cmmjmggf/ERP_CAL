@@ -51,7 +51,6 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
-        $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
         $parametros["SEMANA"] = intval($x->post('SEMANA'));
         $parametros["ANO"] = intval($x->post('ANIO'));
 
@@ -61,5 +60,17 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
         $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         print $jc->getReport();
-    }  
+    }
+
+    public function getSemanaActual() {
+        try {
+            $s = $this->input->get('FECHA');
+            print json_encode($this->db->select('SP.Sem AS SEMANA')->from('semanasproduccion AS SP')
+                                    ->where('str_to_date("' . $s . '", \'%d/%m/%Y\') BETWEEN str_to_date(FechaIni, \'%d/%m/%Y\') AND str_to_date(FechaFin, \'%d/%m/%Y\')', null, false)
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

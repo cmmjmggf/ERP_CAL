@@ -55,9 +55,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
         $parametros["DEPARTAMENTO"] = ($x->post('DEPARTAMENTO'));
         $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
         $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
-
         $jc->setParametros($parametros);
-
         $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamento.jasper');
         $jc->setFilename('ParesProducidosPorDepartamento' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');

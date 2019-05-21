@@ -196,6 +196,10 @@ class Avance7 extends CI_Controller {
                                 ->set('DeptoProduccion', 70)
                                 ->where('Control', $x->post('CONTROL'))
                                 ->update('controles');
+                        $this->db->set('EstatusProduccion', 'PREL-CORTE')
+                                ->set('DeptoProduccion', 70)
+                                ->where('Control', $x->post('CONTROL'))
+                                ->update('pedidox');
                         print '{"AVANZO":"1","FR":"' . $x->post('NUMERO_FRACCION') . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO"}';
                     } else {
                         print '{"AVANZO":"0","FR":"' . $x->post('NUMERO_FRACCION') . '","RETORNO":"SI", "MESSAGE":"FRACCION ' . $x->post('NUMERO_FRACCION') . ', NO GENERA AVANCE"}';

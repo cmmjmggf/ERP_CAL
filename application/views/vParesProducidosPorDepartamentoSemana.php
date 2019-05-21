@@ -65,7 +65,7 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Ano"),
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Ano"), Semana = pnlTablero.find("#Semana"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             FechaInicial = pnlTablero.find("#FechaInicial"),
             FechaFinal = pnlTablero.find("#FechaFinal"),
@@ -73,18 +73,19 @@
 
     $(document).ready(function () {
         Anio.val(new Date().getFullYear());
-
+        getSemanaActual();
         btnAceptar.click(function () {
             btnAceptar.attr('disabled', true);
-            if (FechaInicial.val() && FechaFinal.val()) {
-                HoldOn.open({
-                    theme: 'sk-cube',
-                    message: 'Por favor espere...'
-                });
-                $.post('<?php print base_url('ParesFabricadosPorDepartamentoSemana/getReporte'); ?>', {
+            HoldOn.open({
+                theme: 'sk-cube',
+                message: 'Por favor espere...'
+            });
+            if (Anio.val() && Semana.val() && FechaInicial.val() && FechaFinal.val()) {
+                $.post('<?php print base_url('ParesProducidosPorDepartamentoSemana/getReporte'); ?>', {
                     FECHA_INICIAL: FechaInicial.val().trim() !== '' ? parseInt(FechaInicial.val()) : '',
                     FECHA_FINAL: FechaFinal.val().trim() !== '' ? parseInt(FechaFinal.val()) : '',
-                    MAQUILA: Maquila.val().trim() !== '' ? Maquila.val() : ''
+                    ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
+                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);
                     onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
@@ -96,20 +97,50 @@
                     btnAceptar.attr('disabled', false);
                 });
             } else {
-                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    if (FechaInicial.val()) {
-                        FechaInicial.focus();
-                    } else if (FechaFinal.val()) {
-                        FechaFinal.focus();
-                    } else if (Maquila.val()) {
-                        Maquila.focus().select();
-                    }
-                    btnAceptar.attr('disabled', false);
-                });
+                if (!Anio.val()) {
+                    swal('ATENCIÓN', 'EL AÑO ES REQUERIDO', 'warning').then((value) => {
+                        if (value) {
+                            Anio.focus().select();
+                            btnAceptar.attr('disabled', false);
+                        }
+                    });
+                }
+                if (!Semana.val()) {
+                    swal('ATENCIÓN', 'LA SEMANA ES REQUERIDA', 'warning').then((value) => {
+                        if (value) {
+                            Semana.focus().select();
+                            btnAceptar.attr('disabled', false);
+                        }
+                    });
+                }
+                if (!FechaInicial.val() || !FechaFinal.val()) {
+                    swal('ATENCIÓN', 'LAS FECHAS SON REQUERIDAS', 'warning').then((value) => {
+                        FechaInicial.focus().select();
+                        btnAceptar.attr('disabled', false);
+                    });
+                }
             }
         });
 
     });
+
+    function getSemanaActual() {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Espere...'
+        });
+        $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getSemanaActual'); ?>', {
+            FECHA: '<?php print Date('d/m/Y'); ?>'
+        }).done(function (a, b, c) {
+            console.log(a);
+            var d = JSON.parse(a);
+            Semana.val(d[0].SEMANA);
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
 </script>
 <style>
     .btn-indigo {
