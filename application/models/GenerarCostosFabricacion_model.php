@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 header('Access-Control-Allow-Origin: *');
 
-class CosteaInventariosProceso_model extends CI_Model {
+class GenerarCostosFabricacion_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
@@ -260,11 +260,29 @@ class CosteaInventariosProceso_model extends CI_Model {
         }
     }
 
-    public function getFraccionXEstiloByEstilo($Estilo) {
+    public function getDetalleByEstiloColorMaq($Est, $Col, $Maq) {
         try {
-            return $this->db->select('U.*', false)->from('fraccionesxestilo AS U')
-                            ->where('U.Estilo', $Estilo)
-                            ->where_in('U.Estatus', 'ACTIVO')->get()->result();
+            return $this->db->select("
+                                    concat(A.depto,' ',D.Descripcion) as depto, sum(A.costomp) as costomp, sum(A.costomo) as costomo, sum(gastosdepto) as gastos,
+                                    sum(A.costomp)+ sum(A.costomo)+ sum(gastosdepto) as total, A.depto as orden
+                                    FROM
+                                    (
+                                    SELECT  depto,
+                                    sum(costomp) as costomp, 0 costomo, gastosdepto
+                                    FROM estilosprocesod
+                                    where estilo = '$Est' and color = '$Col' and maq = '$Maq'
+                                    group by depto
+
+                                    union all
+
+                                    select depto,0 costomp, costo as costomo , 0 as gastosdepto
+                                    from estilosprocesodmo where estilo = '$Est'
+                                    order by depto asc
+                                    ) AS A
+                                    join departamentos D on D.Clave = A.depto
+                                    group by A.depto order by A.depto "
+                            . ''
+                            . '', false)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

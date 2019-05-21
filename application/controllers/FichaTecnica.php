@@ -39,6 +39,13 @@ class FichaTecnica extends CI_Controller {
                     $this->load->view('vMenuMateriales');
                     $this->load->view('vFichaTecnicaConsulta');
                     break;
+                case 'PRODUCCION':
+                    $this->load->view('vMenuProduccion');
+                    if ($Seguridad === '1') {
+                        $this->load->view('vFichaTecnica');
+                    } else {
+                        $this->load->view('vFichaTecnicaConsulta');
+                    }
             }
 
             $this->load->view('vFooter');

@@ -64,7 +64,7 @@ class SalidasAlmacenMP_model extends CI_Model {
 
     public function getDatosByArticulo($Mat, $Maq, $d1, $d2, $d3) {
         try {
-            $this->db->select("PM.Precio, U.Descripcion AS Unidad "
+            $this->db->select("PM.Precio, U.Descripcion AS Unidad, M.grupo "
                             . "")
                     ->from("articulos AS M")
                     ->join("unidades AS U", 'ON U.Clave = M.UnidadMedida')

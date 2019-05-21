@@ -62,7 +62,7 @@
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
                 <label for="Cabecero" ><legend class="badge badge-info">Avance Actual</legend></label>
-                <input type="text" class="form-control form-control-sm" readonly="" id="AvanceProd" name="AvanceProd">
+                <input type="text" class="form-control form-control-sm" readonly="" id="EstatusProduccion" name="EstatusProduccion">
             </div>
         </div>
         <div class="row">
@@ -125,6 +125,8 @@
     var btnVerCabeceros = pnlTablero.find('#btnVerCabeceros');
     var btnControlCompleto = pnlTablero.find('#btnControlCompleto');
     var btnAceptar = pnlTablero.find('#btnAceptar');
+
+    var estilo, color, tipoArt;
     $(document).ready(function () {
 
         handleEnter();
@@ -190,13 +192,16 @@
                 }
             });
         });
+
         pnlTablero.find('#Control').blur(function () {
+
             var control = $(this).val().toString();
             if (control !== '') {
-                var estilo, color;
-                var tipoArt = pnlTablero.find('#Tipo').val();
+
+                tipoArt = pnlTablero.find('#Tipo').val();
                 var descTipoArt = pnlTablero.find("#Tipo").text();
                 if (tipoArt !== '') {
+                    HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
                     //Verificamos si ya fue entregado en cada uno de los tipos
                     $.getJSON(master_url + 'onVerificarMaterialEntregado', {
                         Control: $(this).val(),
@@ -212,7 +217,10 @@
                                 closeOnEsc: false
                             }).then((action) => {
                                 if (action) {
-                                    pnlTablero.find('#Control').val('').focus();
+                                    getFolio();//Armamos el documento con la fecha/hora de hoy
+                                    //Aún así lo dejamos capturar, sólo se le avisa que ya está capturado
+                                    onObtenerControlPedidoSerie(control);
+                                    btnControlCompleto.addClass('d-none');
                                 }
                             });
                         } else {//EL CONTROL NO HA SIDO ENTREGADO
@@ -221,74 +229,8 @@
                             //----------------------------
                             //-----------------------------
                             //---------------Consultar Contro en pedido-------------------
-                            $.getJSON(master_url + 'getPedidoByControl', {
-                                Control: control
-                            }).done(function (data) {
-                                if (data.length > 0) { //Si el control existe
-                                    estilo = data[0].Estilo;
-                                    color = data[0].Color;
-                                    $.each(data[0], function (k, v) {
-                                        var ParesPedido = k.replace("C", "P");
-                                        //Llenamos los campos
-                                        pnlTablero.find("[name='" + k + "']").val(v);
-                                        pnlTablero.find('#rPares').find("[name='" + ParesPedido + "']").val(v);
-
-                                        //Deshabilitamos campos inecesarios
-                                        if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
-                                            pnlTablero.find('#rCantidades').find("[name='" + k + "']").prop('disabled', true);
-                                        } else {
-                                            pnlTablero.find('#rCantidades').find("[name='" + k + "']").prop('disabled', false);
-                                        }
-                                    });
-                                    pnlTablero.find('#MaquilaRecibe').text(data[0].EntregaMat);
-                                    pnlTablero.find('#rCantidades').find('#TotalParesEntrega').val(data[0].Pares);
-
-                                    //Consultar Ficha Tecnica para traer cabecero
-                                    $.getJSON(master_url + 'getCabeceroFichaTecnica', {
-                                        Estilo: estilo,
-                                        Color: color,
-                                        Tipo: tipoArt
-                                    }).done(function (data) {
-                                        if (data.length > 0) { //Si el cabecero existe
-                                            $.each(data[0], function (k, v) {
-                                                pnlTablero.find("[name='" + k + "']").val(v);
-                                            });
-                                        } else { //Si el cabecero no existe
-                                            swal({
-                                                title: "ATENCIÓN",
-                                                text: "NO EXISTE EL CABECERO EN ESTE TIPO/CONTROL ",
-                                                icon: "warning",
-                                                closeOnClickOutside: false,
-                                                closeOnEsc: false
-                                            }).then((action) => {
-                                                if (action) {
-                                                    pnlTablero.find('#MaquilaRecibe').html('');
-                                                    pnlTablero.find('#tblTallas').find("input").prop('disabled', true);
-                                                    pnlTablero.find('input').val('');
-                                                    pnlTablero.find('#Control').val('').focus();
-                                                }
-                                            });
-                                        }
-                                    });
-
-
-                                } else { //Si el control no existe
-                                    swal({
-                                        title: "ATENCIÓN",
-                                        text: "EL CONTROL " + control + " NO EXISTE ",
-                                        icon: "warning",
-                                        closeOnClickOutside: false,
-                                        closeOnEsc: false
-                                    }).then((action) => {
-                                        if (action) {
-                                            pnlTablero.find('#MaquilaRecibe').html('');
-                                            pnlTablero.find('#tblTallas').find("input").prop('disabled', true);
-                                            pnlTablero.find('input').val('');
-                                            pnlTablero.find('#Control').val('').focus();
-                                        }
-                                    });
-                                }
-                            });
+                            onObtenerControlPedidoSerie(control);
+                            btnControlCompleto.removeClass('d-none');
                             //---------------------------
                             //----------------------------
                             //-----------------------------
@@ -316,6 +258,7 @@
             }
         });
         btnAceptar.click(function () {
+
             var maq = pnlTablero.find("#Pares").val();
             if (parseInt(maq) === 97) {
                 swal("Atención", "LA MAQUILA 97 NO PUEDE ENTREGAR SUELA/PLANTA/ENTRESUELA ", {
@@ -339,9 +282,6 @@
                     onGuardarMovimiento();
                 }
             }
-
-
-
         });
     });
 
@@ -370,6 +310,7 @@
         var doc;
         isValid('pnlTablero');
         if (valido) {
+            HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
             //traemos la tabla
             var rows = pnlTablero.find("#tblTallas > tbody");
 
@@ -446,6 +387,7 @@
         $.post(master_url + 'onImprimirValeEntrada', {
             Doc: doc
         }).done(function (data) {
+            HoldOn.close();
             console.log(data);
             $.fancybox.open({
                 src: data,
@@ -475,6 +417,80 @@
                     }
                 }
             });
+        });
+    }
+
+    function onObtenerControlPedidoSerie(control) {
+        $.getJSON(master_url + 'getPedidoByControl', {
+            Control: control
+        }).done(function (data) {
+            if (data.length > 0) { //Si el control existe
+                estilo = data[0].Estilo;
+                color = data[0].Color;
+                $.each(data[0], function (k, v) {
+                    var ParesPedido = k.replace("C", "P");
+                    //Llenamos los campos
+                    pnlTablero.find("[name='" + k + "']").val(v);
+                    pnlTablero.find('#rPares').find("[name='" + ParesPedido + "']").val(v);
+
+                    //Deshabilitamos campos inecesarios
+                    if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
+                        pnlTablero.find('#rCantidades').find("[name='" + k + "']").prop('disabled', true);
+                    } else {
+                        pnlTablero.find('#rCantidades').find("[name='" + k + "']").prop('disabled', false);
+                    }
+                });
+                pnlTablero.find('#MaquilaRecibe').text(data[0].EntregaMat);
+                pnlTablero.find('#rCantidades').find('#TotalParesEntrega').val(data[0].Pares);
+
+                //Consultar Ficha Tecnica para traer cabecero
+                $.getJSON(master_url + 'getCabeceroFichaTecnica', {
+                    Estilo: estilo,
+                    Color: color,
+                    Tipo: tipoArt
+                }).done(function (data) {
+                    if (data.length > 0) { //Si el cabecero existe
+                        $.each(data[0], function (k, v) {
+                            pnlTablero.find("[name='" + k + "']").val(v);
+                        });
+                        HoldOn.close();
+                    } else { //Si el cabecero no existe
+                        HoldOn.close();
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "NO EXISTE EL CABECERO EN ESTE TIPO/CONTROL ",
+                            icon: "warning",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+                            if (action) {
+                                pnlTablero.find('#MaquilaRecibe').html('');
+                                pnlTablero.find('#tblTallas').find("input").prop('disabled', true);
+                                pnlTablero.find('input').val('');
+                                pnlTablero.find('#Control').val('').focus();
+                            }
+                        });
+                    }
+                });
+
+
+            } else { //Si el control no existe
+                HoldOn.close();
+                swal({
+                    title: "ATENCIÓN",
+                    text: "EL CONTROL " + control + " NO EXISTE ",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    if (action) {
+                        pnlTablero.find('#MaquilaRecibe').html('');
+                        pnlTablero.find('#tblTallas').find("input").prop('disabled', true);
+                        pnlTablero.find('input').val('');
+                        pnlTablero.find('#Control').val('').focus();
+                    }
+                });
+            }
         });
     }
 </script>

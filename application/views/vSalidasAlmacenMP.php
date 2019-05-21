@@ -229,10 +229,24 @@
                     Depto3: depto3
                 }).done(function (data) {
                     if (data.length > 0) {
-                        pnlTablero.find('#Precio').val(data[0].Precio);
-                        pnlTablero.find('#Unidad').val(data[0].Unidad);
 
-                        getMatEntregado(ano, maq, sem, pnlTablero.find("#Articulo").val());
+                        console.log(data[0].grupo);
+                        //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
+
+                        if (data[0].grupo === '3') {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "EN ESTE MÓDULO NO SE PERMITE DAR SALIDA A SUELAS",
+                                icon: "warning"
+                            }).then((value) => {
+                                pnlTablero.find("#Articulo")[0].selectize.setValue('', true);
+                                pnlTablero.find("#Articulo")[0].selectize.focus();
+                            });
+                        } else {
+                            pnlTablero.find('#Precio').val(data[0].Precio);
+                            pnlTablero.find('#Unidad').val(data[0].Unidad);
+                            getMatEntregado(ano, maq, sem, pnlTablero.find("#Articulo").val());
+                        }
                     } else {
                         swal({
                             title: "ATENCIÓN",

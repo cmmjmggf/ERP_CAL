@@ -41,6 +41,9 @@ class Estilos extends CI_Controller {
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vMenuFichasTecnicas');
                     break;
+                case 'PRODUCCION':
+                    $this->load->view('vMenuProduccion');
+                    break;
             }
 
             $this->load->view('vFondo');

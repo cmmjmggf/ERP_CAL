@@ -45,7 +45,7 @@
         setFocusSelectToInputOnChange('#Grupo', '#btnImprimir', mdlMaterialRecibidoPedido);
 
         mdlMaterialRecibidoPedido.on('shown.bs.modal', function () {
-            getGrupos();
+            getGruposMatRecibidoPedido();
             mdlMaterialRecibidoPedido.find("input").val("");
             $.each(mdlMaterialRecibidoPedido.find("select"), function (k, v) {
                 mdlMaterialRecibidoPedido.find("select")[k].selectize.clear(true);
@@ -116,7 +116,7 @@
 
     });
 
-    function getGrupos() {
+    function getGruposMatRecibidoPedido() {
         $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGrupos').done(function (data) {
             $.each(data, function (k, v) {
                 mdlMaterialRecibidoPedido.find("#Grupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});

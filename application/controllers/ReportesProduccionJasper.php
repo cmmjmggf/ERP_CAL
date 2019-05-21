@@ -641,4 +641,26 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteCostoInvProduccion() {
+        $Reporte = $this->input->post('Reporte');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["mes"] = $this->input->post('Mes');
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["nummes"] = $this->input->post('NumMes');
+
+        $report_name = "jrxml\produccion\\{$Reporte}.jasper";
+
+        $jc->setJasperurl($report_name);
+        $jc->setParametros($parametros);
+
+        $jc->setFilename('REPORTE_COSTO_INV_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

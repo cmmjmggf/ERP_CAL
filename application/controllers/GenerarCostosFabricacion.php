@@ -3,11 +3,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
-class CosteoInventariosProceso extends CI_Controller {
+class GenerarCostosFabricacion extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session')->model('CosteaInventariosProceso_model');
+        $this->load->library('session')->model('GenerarCostosFabricacion_model');
     }
 
     public function index() {
@@ -48,7 +48,7 @@ class CosteoInventariosProceso extends CI_Controller {
                     $this->load->view('vMenuMateriales');
                     break;
             }
-            $this->load->view('vCosteoInventariosProceso');
+            $this->load->view('vGenerarCostosFabricacion');
             $this->load->view('vFooter');
         } else {
             $this->load->view('vEncabezado');
@@ -59,7 +59,7 @@ class CosteoInventariosProceso extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->CosteaInventariosProceso_model->getRecords());
+            print json_encode($this->GenerarCostosFabricacion_model->getRecords());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -67,7 +67,7 @@ class CosteoInventariosProceso extends CI_Controller {
 
     public function getDeptosParaGastosDepto() {
         try {
-            print json_encode($this->CosteaInventariosProceso_model->getDeptosParaGastosDepto());
+            print json_encode($this->GenerarCostosFabricacion_model->getDeptosParaGastosDepto());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -85,37 +85,37 @@ class CosteoInventariosProceso extends CI_Controller {
     }
 
     public function onLimpiarTabla() {
-        $this->CosteaInventariosProceso_model->onLimpiarTabla();
+        $this->GenerarCostosFabricacion_model->onLimpiarTabla();
     }
 
     public function onValidaExisteFichaTecnicaManoObra() {
         try {
             //Valida que existan todos los estilo-color en fichas tecnicas
-            print json_encode($this->CosteaInventariosProceso_model->onValidaExisteFichaTecnicaManoObra());
+            print json_encode($this->GenerarCostosFabricacion_model->onValidaExisteFichaTecnicaManoObra());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
     public function onGenerarCostosInventarioProceso() {
-        $this->CosteaInventariosProceso_model->onCrearTablaConRegistrosEncabezado();
-        $DatosEnc = $this->CosteaInventariosProceso_model->getTablaEncabezadosParaInsert();
-        $DatosEncMO = $this->CosteaInventariosProceso_model->getTablaEncabezadosManoObraParaInsert();
+        $this->GenerarCostosFabricacion_model->onCrearTablaConRegistrosEncabezado();
+        $DatosEnc = $this->GenerarCostosFabricacion_model->getTablaEncabezadosParaInsert();
+        $DatosEncMO = $this->GenerarCostosFabricacion_model->getTablaEncabezadosManoObraParaInsert();
         $this->db->query('truncate table estilosprocesod');
         $this->db->query('truncate table estilosprocesodmo');
 
         foreach ($DatosEncMO as $key => $D) {
-            $this->CosteaInventariosProceso_model->getTablaDetalleParaInsertManoObra($D->estilo);
+            $this->GenerarCostosFabricacion_model->getTablaDetalleParaInsertManoObra($D->estilo);
         }
         foreach ($DatosEnc as $key => $D) {
-            $this->CosteaInventariosProceso_model->getTablaDetalleParaInsert($D->estilo, $D->color, $D->maq);
-            $this->CosteaInventariosProceso_model->onActualizarTotalEncabezado($D->estilo, $D->color, $D->maq);
+            $this->GenerarCostosFabricacion_model->getTablaDetalleParaInsert($D->estilo, $D->color, $D->maq);
+            $this->GenerarCostosFabricacion_model->onActualizarTotalEncabezado($D->estilo, $D->color, $D->maq);
         }
     }
 
-    public function getFraccionXEstiloByEstilo() {
+    public function getDetalleByEstiloColorMaq() {
         try {
-            print json_encode($this->CosteaInventariosProceso_model->getFraccionXEstiloByEstilo($this->input->get('Estilo')));
+            print json_encode($this->GenerarCostosFabricacion_model->getDetalleByEstiloColorMaq($this->input->get('estilo'), $this->input->get('color'), $this->input->get('maq')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
