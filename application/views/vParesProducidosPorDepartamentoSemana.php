@@ -18,41 +18,41 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>De la fecha</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date">
+                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" readonly="">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>A la fecha</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date">
+                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" readonly="">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
             <div class="w-100 m-2"></div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="chkDetallePespunte">
                     <label class="custom-control-label" for="chkDetallePespunte" >Detalle de pespunte</label>
                 </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="chkDetalleMontado">
                     <label class="custom-control-label" for="chkDetalleMontado" >Detalle montado</label>
                 </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="chkDetalleAdorno">
                     <label class="custom-control-label" for="chkDetalleAdorno" >Detalle adorno</label>
                 </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="chkDetalleTejido">
                     <label class="custom-control-label" for="chkDetalleTejido" >Detalle tejido</label>
                 </div>
             </div>
-            <div class="col-12 m-2">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="col-12 mt-4">
                 <p class="font-weight-bold">Nota: Para imprimir todos los departamentos por dia no seleccione ninguna casilla</p>
             </div>
             <div class="w-100 my-3"></div>
@@ -71,9 +71,65 @@
             FechaFinal = pnlTablero.find("#FechaFinal"),
             Maquila = pnlTablero.find("#Maquila");
 
+    function onDetallechk(chk) {
+        pnlTablero.find("#chkDetallePespunte")[0].checked = false;
+        pnlTablero.find("#chkDetalleMontado")[0].checked = false;
+        pnlTablero.find("#chkDetalleAdorno")[0].checked = false;
+        pnlTablero.find("#chkDetalleTejido")[0].checked = false;
+        pnlTablero.find("#" + chk)[0].checked = true;
+    }
     $(document).ready(function () {
         Anio.val(new Date().getFullYear());
-        getSemanaActual();
+        getSemanaActual('<?php print Date('d/m/Y'); ?>');
+
+        Semana.on('keydown', function (e) {
+            if (e.keyCode === 13 && Semana.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Espere...'
+                });
+                $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getFechasXSemana'); ?>', {
+                    SEMANA: Semana.val()
+                }).done(function (a, b, c) {
+                    console.log(a);
+                    var d = JSON.parse(a);
+                    if (d.length > 0) {
+                        Semana.val(d[0].SEMANA);
+                        FechaInicial.val(d[0].FEINI);
+                        FechaFinal.val(d[0].FEFIN);
+                    }
+                }).fail(function (x, y, z) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            }
+        });
+
+        pnlTablero.find("#chkDetallePespunte").on('change', function () {
+            if (pnlTablero.find("#chkDetallePespunte")[0].checked) {
+                onDetallechk("chkDetallePespunte");
+            }
+        });
+
+        pnlTablero.find("#chkDetalleMontado").on('change', function () {
+            if (pnlTablero.find("#chkDetalleMontado")[0].checked) {
+                onDetallechk("chkDetalleMontado");
+            }
+        });
+
+        pnlTablero.find("#chkDetalleAdorno").on('change', function () {
+            if (pnlTablero.find("#chkDetalleAdorno")[0].checked) {
+                onDetallechk("chkDetalleAdorno");
+            }
+        });
+
+        pnlTablero.find("#chkDetalleTejido").on('change', function () {
+            if (pnlTablero.find("#chkDetalleTejido")[0].checked) {
+                onDetallechk("chkDetalleTejido");
+            }
+        });
+
         btnAceptar.click(function () {
             btnAceptar.attr('disabled', true);
             HoldOn.open({
@@ -85,7 +141,11 @@
                     FECHA_INICIAL: FechaInicial.val().trim() !== '' ? parseInt(FechaInicial.val()) : '',
                     FECHA_FINAL: FechaFinal.val().trim() !== '' ? parseInt(FechaFinal.val()) : '',
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
-                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : ''
+                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
+                    TIPO: pnlTablero.find("#chkDetallePespunte")[0].checked ? 1 :
+                            pnlTablero.find("#chkDetalleMontado")[0].checked ? 2 :
+                            pnlTablero.find("#chkDetalleAdorno")[0].checked ? 3 :
+                            pnlTablero.find("#chkDetalleTejido")[0].checked ? 4 : 0
                 }).done(function (data, x, jq) {
                     onBeep(1);
                     onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
@@ -121,20 +181,23 @@
                 }
             }
         });
-
     });
 
-    function getSemanaActual() {
+    function getSemanaActual(fecha) {
         HoldOn.open({
             theme: 'sk-rect',
             message: 'Espere...'
         });
         $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getSemanaActual'); ?>', {
-            FECHA: '<?php print Date('d/m/Y'); ?>'
+            FECHA: fecha
         }).done(function (a, b, c) {
             console.log(a);
             var d = JSON.parse(a);
-            Semana.val(d[0].SEMANA);
+            if (d.length > 0) {
+                Semana.val(d[0].SEMANA);
+                FechaInicial.val(d[0].FEINI);
+                FechaFinal.val(d[0].FEFIN);
+            }
         }).fail(function (x, y, z) {
             getError(x);
         }).always(function () {
@@ -370,5 +433,8 @@
     } 
     .dropdown-menu {
         margin-top: 0.75rem;
+    }
+    .custom-control.custom-checkbox:hover{
+        cursor: pointer !important;
     }
 </style>A

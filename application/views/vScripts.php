@@ -1266,7 +1266,7 @@
         setTimeout(function () {
             getQuickMenu(type);
             onComprobarModulos(type);
-        }, 25000);
+        }, 100000);
     }
 
     function getQuickMenu(type) {

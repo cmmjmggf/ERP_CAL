@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamentoSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorPersonaSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
 	<property name="ireport.zoom" value="2.0000000000000218"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -7,71 +7,104 @@
 	<parameter name="ANO" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="DEPTO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT SP.FechaIni AS JUEVES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 1 DAY), '%d/%m/%Y') AS VIERNES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 2 DAY), '%d/%m/%Y') AS SABADO,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 3 DAY), '%d/%m/%Y') AS DOMINGO,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 4 DAY), '%d/%m/%Y') AS LUNES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 5 DAY), '%d/%m/%Y') AS MARTES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 6 DAY), '%d/%m/%Y') AS MIERCOLES,  F.depto AS DEPTO, DEP.Descripcion AS DEPARTAMENTO,
-sum(F.pares) AS TOTAL_PARES,
+date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'), INTERVAL 1 DAY), '%d/%m/%Y') AS VIERNES,
+DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 2 DAY) AS SABADO,
+DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 3 DAY) AS DOMINGO,
+DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 4 DAY) AS LUNES,
+DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 5 DAY) AS MARTES,
+DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 6 DAY) AS MIERCOLES,
+E.Numero AS DEPTO,
+(CASE
+WHEN E.Numero = 1000 THEN "CELULA 1" WHEN E.Numero = 999 THEN "CELULA 2"
+WHEN E.Numero = 998 THEN "CELULA 3" WHEN E.Numero = 997 THEN "CELULA 4"
+WHEN E.Numero = 996 THEN "CELULA 5" WHEN E.Numero = 995 THEN "CELULA 6"
+WHEN E.Numero = 994 THEN "CELULA 7" WHEN E.Numero = 899 THEN "CELULA 8"
+WHEN E.Numero = 1001 THEN "CELULA 9" WHEN E.Numero = 1002 THEN "CELULA 10"
+WHEN E.Numero = 1003 THEN "CELULA 11" WHEN E.Numero = 900 THEN "MAQ-PESP 1"
+WHEN E.Numero = 901 THEN "MAQ-PESP 2" WHEN E.Numero = 902 THEN "MAQ-PESP 3"
+WHEN E.Numero = 903 THEN "MAQ-PESP 4" WHEN E.Numero = 904 THEN "MAQ-PESP 5"
+WHEN E.Numero = 905 THEN "MAQ-PESP 6" WHEN E.Numero = 906 THEN "MAQ-PESP 7"
+WHEN E.Numero = 907 THEN "MAQ-PESP 8" WHEN E.Numero = 908 THEN "MAQ-PESP 9"
+WHEN E.Numero = 992 THEN "Adorno A" WHEN E.Numero = 1005 THEN "Adorno B"
+WHEN E.Numero = 993 THEN "Montado A" WHEN E.Numero = 1005 THEN "Montado B"
+
+WHEN E.Numero = 991 THEN "Cel-montado B" WHEN E.Numero = 992 THEN "Cel-adorno A"
+WHEN E.Numero = 993 THEN "Cel-montado A" WHEN E.Numero = 30 THEN "JUAN ALEJANDRO CHAVEZ LOPEZ"
+WHEN E.Numero = 31 THEN "PAULA LOPEZ PALMA" WHEN E.Numero = 97 THEN "ALBERTO MEDINA RAMIREZ"
+WHEN E.Numero = 284 THEN "PAULA LOPEZ PALMA" WHEN E.Numero = 285 THEN "ALBERTO MEDINA RAMIREZ"
+WHEN E.Numero = 286 THEN "FABIOLA HERNANDEZ HERNANDEZ" WHEN E.Numero = 287 THEN "MA EUGENIA ROJAS ARAUJO"
+
+WHEN E.Numero = 2645 THEN "FRANCO VALDEZ  GODINEZ" WHEN E.Numero = 288 THEN "MARIA DEL ROCIO ORTEGA CERVANTES"
+WHEN E.Numero = 613 THEN "REYNA LOPEZ HERNANDEZ" WHEN E.Numero = 1044 THEN "BALBINA PINA ORTEGA"
+WHEN E.Numero = 1132 THEN "MARIA EUGENIA MEDINA ESCAREÑO" WHEN E.Numero = 2025 THEN "MARIA GUADALUPE QUEZADA PEREZ"
+WHEN E.Numero = 2051 THEN "SANTIAGO ROCHA" WHEN E.Numero = 2179 THEN "DOMITILA NICASIO RAMIREZ"
+WHEN E.Numero = 2361 THEN "J  PATRICIO CHAVEZ CERVANTES" WHEN E.Numero = 2640 THEN "ANTONIO HERNANDEZ HERNANDEZ"
+WHEN E.Numero = 2641 THEN "ALMA DELIA GUERRERO ESPINOZA" WHEN E.Numero = 2716 THEN "CAROLINA  GALVAN FONSECA"
+ WHEN E.Numero = 2748 THEN "MARIA GUADALUPE CASTILLO REYES"
+END) AS DEPARTAMENTO,
+SUM(F.pares) AS TOTAL_PARES,
+IFNULL(
+(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
+AND FF.fecha = date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d')),0) AS TOTAL_PARES_JUEVES ,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d')),0) AS TOTAL_PARES_JUEVES,
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+INTERVAL 1 DAY)),0)  AS TOTAL_PARES_VIERNES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
 AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 1 DAY)),0)
- AS TOTAL_PARES_VIERNES,
+INTERVAL 2 DAY)), 0)  AS TOTAL_PARES_SABADO,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
 AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 2 DAY)),0)
- AS TOTAL_PARES_SABADO,
-
-
-(SELECT IFNULL(SUM(FF.Pares),0) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 3 DAY))
- AS TOTAL_PARES_DOMINGO,
+INTERVAL 3 DAY)),0)  AS TOTAL_PARES_DOMINGO,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
 AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 4 DAY)),0)
- AS TOTAL_PARES_LUNES,
+INTERVAL 4 DAY)),0)  AS TOTAL_PARES_LUNES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
 AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 5 DAY)),0)
- AS TOTAL_PARES_MARTES,
+INTERVAL 5 DAY)),0) AS TOTAL_PARES_MARTES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
+LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
+WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
 AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 6 DAY)),0)
- AS TOTAL_PARES_MIERCOLES
-FROM semanasproduccion AS SP INNER JOIN fracpagnomina AS F LEFT JOIN departamentos AS DEP ON F.depto = DEP.Clave
-WHERE SP.Ano = $P{ANO} AND SP.Sem = $P{SEMANA} AND SP.Sem = F.semana AND SP.Ano = F.anio AND DEP.Descripcion IS NOT NULL
-GROUP BY F.depto ORDER BY F.depto ASC;]]>
+INTERVAL 6 DAY)),0) AS TOTAL_PARES_MIERCOLES
+
+FROM semanasproduccion AS SP INNER JOIN fracpagnomina AS F
+LEFT JOIN departamentos AS DEP ON F.depto = DEP.Clave LEFT JOIN empleados AS E ON F.numeroempleado = E.Numero
+WHERE SP.Ano = $P{ANO} AND SP.Sem = $P{SEMANA} AND SP.Sem = F.semana AND SP.Ano = F.anio AND DEP.Clave =$P{DEPTO} AND
+E.Numero IN( 1000,999,998,997,996, 995,994,899,1001,1002,
+1003,900,901,902,903, 904,905,906,907,908,
+992,1005,993,1005,991, 992,993,30,31,97,
+284,285,286,287,2645,288,613,1044,1132,2025,
+2051,2179,2361,2640,2641,2716,2748)
+GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 	</queryString>
 	<field name="JUEVES" class="java.lang.String"/>
 	<field name="VIERNES" class="java.lang.String"/>
@@ -84,10 +117,10 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="MIERCOLES" class="java.lang.String"/>
-	<field name="DEPTO" class="java.lang.Integer">
+	<field name="DEPTO" class="java.lang.Integer"/>
+	<field name="DEPARTAMENTO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEPARTAMENTO" class="java.lang.String"/>
 	<field name="TOTAL_PARES" class="java.lang.Double"/>
 	<field name="TOTAL_PARES_JUEVES" class="java.lang.Double"/>
 	<field name="TOTAL_PARES_VIERNES" class="java.lang.Double"/>
@@ -529,8 +562,7 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 			<textField isBlankWhenNull="true">
 				<reportElement x="146" y="13" width="50" height="14" uuid="8fb5ed75-e872-4908-ae5e-782ddd53ebac"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[
-$V{PORCENTAJE_JUEVES} == 0 ?
+				<textFieldExpression><![CDATA[$V{PORCENTAJE_JUEVES} == 0 ?
 0 : String.valueOf($V{PORCENTAJE_JUEVES}).length() > 3 ?
 String.valueOf($V{PORCENTAJE_JUEVES}).substring(0,4) : 0]]></textFieldExpression>
 			</textField>
@@ -629,8 +661,7 @@ String.valueOf($V{PORCENTAJE_DOMINGO}).substring(0,4) : 0]]></textFieldExpressio
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1} == 0 ?
 0 : String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="395" y="14" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0fe27eeb-bfe2-41df-a6c3-bf7bd9b92f08"/>
@@ -640,8 +671,7 @@ String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1} == 0 ?
 0 : String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="444" y="14" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b2468869-e146-4ba4-8661-47aa6c8946b9"/>
@@ -651,8 +681,7 @@ String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1} == 0 ?
 0 : String.valueOf($V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+String.valueOf($V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

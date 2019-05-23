@@ -53,20 +53,65 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
         $x = $this->input;
         $parametros["SEMANA"] = intval($x->post('SEMANA'));
         $parametros["ANO"] = intval($x->post('ANIO'));
-
-        $jc->setParametros($parametros);
-
-        $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorDepartamentoSemana.jasper');
-        $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));
+        $TIPO = intval($x->post('TIPO'));
         $jc->setDocumentformat('pdf');
-        print $jc->getReport();
+        switch ($TIPO) {
+            case 0: 
+                $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorDepartamentoSemana.jasper');
+                $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));
+                print $jc->getReport();
+                break;
+            case 1:
+                /*PESPUNTE*/
+                $parametros["DEPTO"] = 110;
+                $jc->setParametros($parametros);
+                $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
+                $jc->setFilename('ParesFabricadosPorPersonaSemanaPespunte' . Date('h_i_s'));
+                print $jc->getReport();
+                break;
+            case 2:
+                /*MONTADO A*/
+                $parametros["DEPTO"] = 180;
+                $jc->setParametros($parametros);
+                $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
+                $jc->setFilename('ParesFabricadosPorPersonaSemanaMontado' . Date('h_i_s'));
+                print $jc->getReport();
+                break;
+            case 3:
+                /*ADORNO A*/
+                $parametros["DEPTO"] = 210;
+                $jc->setParametros($parametros);
+                $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
+                $jc->setFilename('ParesFabricadosPorPersonaSemanaAdorno' . Date('h_i_s'));
+                print $jc->getReport();
+                break;
+            case 4:
+                /*TEJIDO*/
+                $parametros["DEPTO"] = 150;
+                $jc->setParametros($parametros);
+                $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
+                $jc->setFilename('ParesFabricadosPorPersonaSemanaTejido' . Date('h_i_s'));
+                print $jc->getReport();
+                break;
+        }
     }
 
     public function getSemanaActual() {
         try {
             $s = $this->input->get('FECHA');
-            print json_encode($this->db->select('SP.Sem AS SEMANA')->from('semanasproduccion AS SP')
+            print json_encode($this->db->select('SP.Sem AS SEMANA, SP.FechaIni AS FEINI, SP.FechaFin AS FEFIN')->from('semanasnomina AS SP')
                                     ->where('str_to_date("' . $s . '", \'%d/%m/%Y\') BETWEEN str_to_date(FechaIni, \'%d/%m/%Y\') AND str_to_date(FechaFin, \'%d/%m/%Y\')', null, false)
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFechasXSemana() {
+        try {
+            $s = $this->input->get('SEMANA');
+            print json_encode($this->db->select('SP.Sem AS SEMANA, SP.FechaIni AS FEINI, SP.FechaFin AS FEFIN')->from('semanasnomina AS SP')
+                                    ->where("SP.Sem = $s ", null, false)
                                     ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
