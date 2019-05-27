@@ -56,3 +56,5 @@ $this->load->view('vAvanceProduccionPorDepto');
 $this->load->view('vDiasPromedioEntregaPorCliente');
 $this->load->view('vParesEntregadosCalidadXMaq');
 $this->load->view('vCostoInventariosProceso');
+$this->load->view('vEtiTrazabilidad');
+$this->load->view('vEtiCajasXCliente');

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" columnCount="3" printOrder="Horizontal" pageWidth="277" pageHeight="99" columnWidth="87" columnSpacing="8" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.453457296369771"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="3c871842-0faa-4096-b4d6-f103ccdea395"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM etiqcaja;]]>
+	</queryString>
+	<field name="contped" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estiped" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="combped" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="punto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="recio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="control" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tpo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="color" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="suela" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tmex" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tusa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tmer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tbra" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="1" width="277" height="98" forecolor="#666666" backcolor="#666666" uuid="b054330b-0dc5-4dca-b2dd-dbd5140a4238"/>
+			</rectangle>
+			<textField>
+				<reportElement mode="Transparent" x="4" y="9" width="78" height="10" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="4" y="21" width="18" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="c25ad366-8e31-41c4-a4f6-f527ee775656"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="4" y="46" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Corte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="4" y="53" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="7187e33a-1ecf-413e-a046-c1a0e001de96"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forro]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="57" y="21" width="24" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="41e422a7-be2d-43d8-99dc-fc8441b36ae2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estiped}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="34" y="46" width="24" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="eb18d45c-e198-460a-bab9-c97c3175c090"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tpo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="34" y="53" width="24" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="4e4ab9fd-39c9-4c43-b799-413aeef501f1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{combped}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="4" y="37" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="b3a45fcb-7110-44f3-80dc-19d7f5f66f72"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{punto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="4" y="60" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="be9bcea7-6f13-4128-a535-b0b1151c54f9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suela]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="34" y="60" width="24" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="64e0817c-8524-49bf-9908-aad78cbfb542"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{combped}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="2" y="70" width="80" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="949a4e8f-bf87-4da9-85ff-88ccb70d3fd8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hecho en León Gto MX]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="46" y="79" width="35" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="146e10cb-bc97-4cd7-b81c-066a304b036b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CICEG 9741]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="2" y="79" width="44" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="0834602a-2cdc-40fc-b8d2-55ab727a58e4"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contped}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Transparent" x="4" y="29" width="77" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="5d920a5a-5bf2-4a65-9c00-4b2564dde82c"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="4" y="45" width="77" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="51aa5090-c099-47bf-8d55-0c1ebba741c1"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="4" y="69" width="77" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="13933476-97e3-4961-9012-dd23b5fd1183"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="4" y="78" width="77" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="0eff5221-cc1a-4bd1-a44d-beb6d1548c20"/>
+			</line>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="4" y="30" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="7cca3739-4d76-4051-8272-aeac144dd9bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Mex]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="32" y="37" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="3c37d395-2fe6-42e2-8826-8e6ff854b8a7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tusa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="32" y="30" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="22e3e438-1353-4f8d-9e40-e37a29a63a9a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Eur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="60" y="30" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="bb3e60ec-6fa2-498a-a053-63712f601584"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[USA]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="60" y="37" width="21" height="8" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="8b2cff38-e08f-413a-a38f-21d97701c4d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tmer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

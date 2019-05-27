@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="excelEtiquetasGenericas" language="groovy" pageWidth="802" pageHeight="805" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2c0ad748-4185-4a61-a7c2-565304e3aae1">
+	<property name="ireport.zoom" value="1.1000000000000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[select * from etiqcaja;]]>
+	</queryString>
+	<field name="contped" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estiped" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="combped" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="punto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="recio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="control" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tpo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="color" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="suela" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tmex" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tusa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tmer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tbra" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="11">
+			<staticText>
+				<reportElement x="68" y="0" width="51" height="11" uuid="02e0dbba-cf42-4e98-a348-18d9ed08ab6e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="68" height="11" uuid="bd1aa6a0-0fa7-465c-873f-baa26b549fb5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Control]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="119" y="0" width="43" height="11" uuid="fcf8b3d7-7c75-47af-b7d6-27356cb73b25"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Talla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="0" width="27" height="11" uuid="c82276d1-8e22-493a-9194-a944e6a4dc3a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Tpo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="0" width="37" height="11" uuid="0ae0aa6c-84c4-4def-9395-136868734bb9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="0" width="343" height="11" uuid="4875fa02-bd15-4d94-873c-8e357b5c3895"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Nom Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="569" y="0" width="88" height="11" uuid="30983a3f-084f-432d-bc78-d3b1777f4470"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Codigo 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="657" y="0" width="88" height="11" uuid="5096542d-89a2-483a-9f4e-34854db6564d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Codigo 2]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="68" height="11" uuid="910b1ec5-6693-46d4-aed7-7e040b4458fc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="68" y="0" width="51" height="11" uuid="d6a83cb7-6c93-484b-9a66-1b6dd5b6cc0c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estiped}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="119" y="0" width="43" height="11" uuid="f86a46e2-98ca-457e-b171-30153b3eed0f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{punto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="162" y="0" width="27" height="11" uuid="03dab2d0-3b8e-4912-a2cf-b33526c18d3d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tpo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="189" y="0" width="37" height="11" uuid="7167552c-216d-4435-9037-a7d0b0fc3435"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{combped}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="226" y="0" width="343" height="11" uuid="fd6ab843-5e9c-42e6-a143-b071b14dd710"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{recio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="569" y="0" width="88" height="11" uuid="09f3c8af-8229-4566-b793-6b08dac72211"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA['*'+$F{contped}+'*']]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="657" y="0" width="88" height="11" uuid="5898b6fe-8b44-4896-9dfd-5fbe28840dd5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contped}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
