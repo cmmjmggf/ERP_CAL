@@ -37,7 +37,6 @@ class InventarioProcesoXDepto extends CI_Controller {
                     $this->load->view('vMenuProduccion');
                     break;
             }
-
             $this->load->view('vFondo')->view('vInventarioProcesoXDepto')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
@@ -51,15 +50,18 @@ class InventarioProcesoXDepto extends CI_Controller {
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
-        $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
-        $parametros["SEMANA"] = intval($x->post('SEMANA'));
+        $parametros["MAQUILA_INICIAL"] = intval($x->post('MAQUILA_INICIAL'));
+        $parametros["MAQUILA_FINAL"] = intval($x->post('MAQUILA_FINAL'));
+        $parametros["SEMANA_INICIAL"] = intval($x->post('SEMANA_INICIAL'));
+        $parametros["SEMANA_FINAL"] = intval($x->post('SEMANA_FINAL'));
         $parametros["ANO"] = intval($x->post('ANIO'));
 
         $jc->setParametros($parametros);
 
-        $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
-        $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+        $jc->setJasperurl('jrxml\inventarioxdepto\InventarioXDepto.jasper');
+        $jc->setFilename('InventarioXDepto' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         print $jc->getReport();
-    }  
+    }
+
 }

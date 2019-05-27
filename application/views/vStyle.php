@@ -298,5 +298,7 @@
         background-color: #2C3E50;
     }
 
-
+    .swal-icon--success__hide-corners,.swal-icon--success:after, .swal-icon--success:before{
+        background-color: transparent !important;
+    }
 </style>
