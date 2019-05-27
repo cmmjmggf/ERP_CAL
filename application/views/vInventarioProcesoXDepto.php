@@ -3,34 +3,28 @@
         <h3 class="font-weight-bold">Inventario proceso por departamento</h3>
     </div>
     <div class="card-body">
-        <div class="row" align="center">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-2"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-1"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>Año</label>
-                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numbersOnly" autofocus="">
+                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numeric" maxlength="4">
             </div>
-            <div class="w-100"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-2"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>De la maquila</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="MaquilaInicial" name="MaquilaInicial" class="form-control form-control-sm numeric" autofocus="" maxlength="2">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>A la maquila</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="MaquilaFinal" name="MaquilaFinal" class="form-control form-control-sm numeric" maxlength="2">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-2"></div>
-            <div class="w-100"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-2"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>De la semana</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="SemanaInicial" name="SemanaInicial" class="form-control form-control-sm numeric" maxlength="2">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>A la semana</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
-            </div> 
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-2"></div>
+                <input type="text" id="SemanaFinal" name="SemanaFinal" class="form-control form-control-sm numeric" maxlength="2">
+            </div>  
             <div class="w-100 my-3"></div>
         </div>
     </div>
@@ -40,6 +34,57 @@
         </div>
     </div>
 </div>
+<script>
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Ano"),
+            MaquilaInicial = pnlTablero.find("#MaquilaInicial"),
+            MaquilaFinal = pnlTablero.find("#MaquilaFinal"),
+            btnAceptar = pnlTablero.find("#btnAceptar"),
+            SemanaInicial = pnlTablero.find("#SemanaInicial"),
+            SemanaFinal = pnlTablero.find("#SemanaFinal");
+
+    $(document).ready(function () {
+
+        Anio.val(new Date().getFullYear());
+
+        btnAceptar.click(function () {
+            if (MaquilaInicial.val() && MaquilaFinal.val() &&
+                    SemanaInicial.val() && SemanaFinal.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Por favor espere...'
+                });
+                btnAceptar.attr('disabled', true);
+                var f = new FormData();
+                f.append('MAQUILA_INICIAL', MaquilaInicial.val());
+                f.append('MAQUILA_FINAL', MaquilaFinal.val());
+                f.append('SEMANA_INICIAL', SemanaInicial.val());
+                f.append('SEMANA_FINAL', SemanaFinal.val());
+                f.append('ANIO', Anio.val());
+                $.ajax({
+                    url: '<?php print base_url('InventarioProcesoXDepto/getReporte'); ?>',
+                    type: "POST",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: f
+                }).done(function (data, x, jq) {
+                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                }).always(function () {
+                    HoldOn.close();
+                    btnAceptar.attr('disabled', false);
+                })
+            } else {
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODOS LOS CAMPOS', 'warning').then((value) => {
+                    MaquilaInicial.focus().select();
+                });
+            }
+        });
+
+    });
+</script>
 <style>
     .card{
         background-color: #f9f9f9;
