@@ -118,7 +118,7 @@
         });
 
         pnlTablero.find("#col0_filter").change(function () {
-            if (parseInt($(this).val()) < 2016 || parseInt($(this).val()) > 2020 || $(this).val() === '') {
+            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
                     text: "AÑO INCORRECTO",

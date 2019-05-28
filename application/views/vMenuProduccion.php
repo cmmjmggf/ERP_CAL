@@ -58,3 +58,4 @@ $this->load->view('vParesEntregadosCalidadXMaq');
 $this->load->view('vCostoInventariosProceso');
 $this->load->view('vEtiTrazabilidad');
 $this->load->view('vEtiCajasXCliente');
+$this->load->view('vEtiZapica');

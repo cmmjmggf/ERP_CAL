@@ -1,81 +1,59 @@
-<div class="modal " id="mdlMovPorAjuste"  role="dialog">
+<div class="modal " id="mdlEtiZapica"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Movimientos de entradas y salidas por ajuste</h5>
+                <h5 class="modal-title">Etiquetas para Zapica</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="frmCaptura">
-                    <div class="row">
-                        <div class="col-6">
-                            <label>Almacen/Maquila <span class="badge badge-warning mb-2" style="font-size: 12px;">Sólo Almacén [1] y Sub-Almacén [97]</span></label>
-                            <select class="form-control form-control-sm required" id="Maq" name="Maq" >
-                                <option value=""></option>
-                                <option value="movarticulos">1 Almacén General</option>
-                                <option value="movarticulos_fabrica">97 Sub Almacén</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label>Mes </label>
-                            <select class="form-control form-control-sm required" id="Mes" name="Mes" >
-                                <option value=""></option>
-                                <option value="1">1 Enero</option>
-                                <option value="2">2 Febrero</option>
-                                <option value="3">3 Marzo</option>
-                                <option value="4">4 Abril</option>
-                                <option value="5">5 Mayo</option>
-                                <option value="6">6 Junio</option>
-                                <option value="7">7 Julio</option>
-                                <option value="8">8 Agosto</option>
-                                <option value="9">9 Septiembre</option>
-                                <option value="10">10 Octubre</option>
-                                <option value="11">11 Noviembre</option>
-                                <option value="12">12 Diciembre</option>
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label>Año </label>
+                    <div class="row"¿>
+                        <div class="col-4" >
+                            <label>Año</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
                         </div>
+                        <div class="col-4">
+                            <label>Linea</label>
+                            <select id="Linea" name="Linea" class="form-control form-control-sm required">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label>Temporada</label>
+                            <select id="Temporada" name="Temporada" class="form-control form-control-sm required">
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
-
-
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
+                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    var mdlMovPorAjuste = $('#mdlMovPorAjuste');
-    var precio_Art = 0;
+    var mdlEtiZapica = $('#mdlEtiZapica');
     $(document).ready(function () {
-        validacionSelectPorContenedor(mdlMovPorAjuste);
-        setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlMovPorAjuste);
-        setFocusSelectToInputOnChange('#Mes', '#Ano', mdlMovPorAjuste);
-        mdlMovPorAjuste.on('shown.bs.modal', function () {
-            mdlMovPorAjuste.find("input").val("");
-            $.each(mdlMovPorAjuste.find("select"), function (k, v) {
-                mdlMovPorAjuste.find("select")[k].selectize.clear(true);
+        mdlEtiZapica.on('shown.bs.modal', function () {
+            mdlEtiZapica.find("input").val("");
+            $.each(mdlEtiZapica.find("select"), function (k, v) {
+                mdlEtiZapica.find("select")[k].selectize.clear(true);
             });
-            mdlMovPorAjuste.find('#Maq')[0].selectize.focus();
+            getLineas();
+            getTemporadas();
+            mdlEtiZapica.find('#Ano').focus();
         });
 
-        mdlMovPorAjuste.find('#btnAceptar').on("click", function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlMovPorAjuste.find("#frmCaptura")[0]);
-
+        mdlEtiZapica.find('#btnImprimir').on("click", function () {
+            HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
+            var frm = new FormData(mdlEtiZapica.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/CapturaInventarios/onReporteMovAjuste',
+                url: base_url + 'index.php/ReportesEstiquetasProduccion/OnReporteEtiquetaZapica',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -115,18 +93,19 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlMovPorAjuste.find('#Ano').focus();
+                        mdlEtiZapica.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
-                console.log(x, y, z);
+                console.log(x.responseText);
+                swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+            }).always(function () {
                 HoldOn.close();
             });
         });
-
-        mdlMovPorAjuste.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+        mdlEtiZapica.find("#Ano").change(function () {
+            if (parseInt($(this).val()) < 2000 || parseInt($(this).val()) > 2040 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
                     text: "AÑO INCORRECTO",
@@ -136,10 +115,38 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlMovPorAjuste.find("#Ano").val("");
-                    mdlMovPorAjuste.find("#Ano").focus();
+                    mdlEtiZapica.find("#Ano").val("");
+                    mdlEtiZapica.find("#Ano").focus();
                 });
             }
         });
     });
+
+    function getLineas() {
+        $.getJSON(base_url + 'index.php/Lineas/' + 'getLineasSelect').done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                mdlEtiZapica.find("#Linea")[0].selectize.addOption({text: v.Linea, value: v.Clave});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+
+    function getTemporadas() {
+        $.getJSON(base_url + 'index.php/Lineas/' + 'getTemporadas').done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                mdlEtiZapica.find("#Temporada")[0].selectize.addOption({text: v.Temporada, value: v.Clave});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+
+
 </script>
+
+

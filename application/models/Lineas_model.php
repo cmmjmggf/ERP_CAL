@@ -26,6 +26,14 @@ class Lineas_model extends CI_Model {
         }
     }
 
+    public function getLineasSelect() {
+        try {
+            return $this->db->select("cast(L.Clave AS signed) AS Clave,CONCAT(L.Clave,'-',L.Descripcion) AS Linea")->from("lineas AS L")->where("L.Estatus", "ACTIVO")->order_by('Clave', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getLineaByID($IDX) {
         try {
             return $this->db->select("L.*")->from("lineas AS L")->where("L.Estatus", "ACTIVO")->where("L.ID", $IDX)->get()->result();

@@ -62,6 +62,14 @@ class Lineas extends CI_Controller {
         }
     }
 
+    public function getLineasSelect() {
+        try {
+            print json_encode($this->Lineas_model->getLineasSelect());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onComprobarClave() {
         try {
             print json_encode($this->Lineas_model->onComprobarClave($this->input->get('Clave')));
