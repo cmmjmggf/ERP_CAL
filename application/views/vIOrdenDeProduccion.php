@@ -116,11 +116,7 @@
             $("#ControlInicial, #ControlFinal").keydown(function (e) {
                 console.log(e.keyCode)
                 if (ControlInicial.val() && ControlFinal.val() && e.keyCode === 13) {
-                    btnGenerar.prop("disabled", false);
-//                    Controles.ajax.reload(function(){
-//                        HoldOn.close();
-//                    });
-//                    onVerificarFormValido();
+                    btnGenerar.prop("disabled", false);  
                 } else {
                     btnGenerar.prop("disabled", true);
                 }
