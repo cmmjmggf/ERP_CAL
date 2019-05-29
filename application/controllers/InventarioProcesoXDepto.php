@@ -57,11 +57,33 @@ class InventarioProcesoXDepto extends CI_Controller {
         $parametros["ANO"] = intval($x->post('ANIO'));
 
         $jc->setParametros($parametros);
+        switch (intval($x->post('TIPO'))) {
+            case 1:
+                $this->db->query('TRUNCATE TABLE invxdeptodia');
+                $deptos = $this->db->select("",false);
+                for ($i = intval($x->post('MAQUILA_INICIAL')); $i <= intval($x->post('MAQUILA_FINAL')); $i++) {
+                    for ($ii = intval($x->post('SEMANA_INICIAL')); $ii <= intval($x->post('SEMANA_FINAL')); $ii++) {
+                        $this->db->insert('invxdeptodia', array(
+                            'ANIO' => $x->post('ANIO'),
+                            'MAQUILA' => $i,
+                            'SEMANA' => $ii,
+                            'DEPTO' => $ii
+                        ));
+                    }
+                }
 
-        $jc->setJasperurl('jrxml\inventarioxdepto\InventarioXDepto.jasper');
-        $jc->setFilename('InventarioXDepto' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        print $jc->getReport();
+                $jc->setJasperurl('jrxml\inventarioxdepto\InventarioXDeptoDia.jasper');
+                $jc->setFilename('InventarioXDeptoDia' . Date('h_i_s'));
+                $jc->setDocumentformat('pdf');
+                print $jc->getReport();
+                break;
+            case 2:
+                $jc->setJasperurl('jrxml\inventarioxdepto\InventarioXDepto.jasper');
+                $jc->setFilename('InventarioXDepto' . Date('h_i_s'));
+                $jc->setDocumentformat('pdf');
+                print $jc->getReport();
+                break;
+        }
     }
 
 }

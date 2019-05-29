@@ -113,11 +113,18 @@
                 onObtenerElUltimoControl(this);
             });
 
-            $("#ControlInicial, #ControlFinal").keyup(function () {
-                onVerificarFormValido();
-                Controles.draw();
-            }).change(function () {
-                onVerificarFormValido();
+            $("#ControlInicial, #ControlFinal").keydown(function (e) {
+                console.log(e.keyCode)
+                if (ControlInicial.val() && ControlFinal.val()) {
+                    HoldOn.open({
+                        theme:'sk-rect',
+                        message:'Espere...'
+                    });
+                    Controles.ajax.reload(function(){
+                        HoldOn.close();
+                    });
+                    onVerificarFormValido();
+                }
             });
 
             btnGenerar.click(function () {
@@ -211,8 +218,8 @@
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "data": function (d) { 
-                    d.CONTROL_INICIAL = (ControlInicial.val().trim()); 
+                "data": function (d) {
+                    d.CONTROL_INICIAL = (ControlInicial.val().trim());
                     d.CONTROL_FINAL = (ControlFinal.val().trim());
                 }
             },
@@ -303,9 +310,11 @@
                 $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
                     return parseFloat(a) + parseFloat(b);
                 }, 0));
+            },
+            initComplete: function () {
+                HoldOn.close();
             }
         });
-        HoldOn.close();
     }
 
     function onVerificarFormValido() {

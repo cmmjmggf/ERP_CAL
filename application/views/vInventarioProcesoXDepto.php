@@ -24,7 +24,15 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
                 <label>A la semana</label>
                 <input type="text" id="SemanaFinal" name="SemanaFinal" class="form-control form-control-sm numeric" maxlength="2">
-            </div>  
+            </div>
+            <div class="w-100 my-2"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-2">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="SemanaDias" description="SEMANA DIAS">
+                    <label class="custom-control-label" for="SemanaDias" >SEMANA DIAS</label>
+                </div>
+            </div>
             <div class="w-100 my-3"></div>
         </div>
     </div>
@@ -40,7 +48,8 @@
             MaquilaFinal = pnlTablero.find("#MaquilaFinal"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             SemanaInicial = pnlTablero.find("#SemanaInicial"),
-            SemanaFinal = pnlTablero.find("#SemanaFinal");
+            SemanaFinal = pnlTablero.find("#SemanaFinal"),
+            SemanaDias = pnlTablero.find("#SemanaDias");
 
     $(document).ready(function () {
 
@@ -60,6 +69,7 @@
                 f.append('SEMANA_INICIAL', SemanaInicial.val());
                 f.append('SEMANA_FINAL', SemanaFinal.val());
                 f.append('ANIO', Anio.val());
+                f.append('TIPO', (SemanaDias[0].checked) ? 1 : 2);
                 $.ajax({
                     url: '<?php print base_url('InventarioProcesoXDepto/getReporte'); ?>',
                     type: "POST",
@@ -69,13 +79,12 @@
                     data: f
                 }).done(function (data, x, jq) {
                     onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
-
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
                     HoldOn.close();
                     btnAceptar.attr('disabled', false);
-                })
+                });
             } else {
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODOS LOS CAMPOS', 'warning').then((value) => {
                     MaquilaInicial.focus().select();

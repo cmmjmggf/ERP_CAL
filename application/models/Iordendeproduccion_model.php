@@ -31,7 +31,7 @@ class Iordendeproduccion_model extends CI_Model {
                             . "CONCAT('$',PD.Precio) AS Precio , "
                             . "CONCAT('$',(PD.Precio * PD.Pares)) AS Importe, "
                             . "CONCAT('$',(PD.Precio * PD.Pares)) AS Descuento,"
-                            . "PD.FechaEntrega AS Entrega,"
+                            . "PD.FechaEntrega AS Entrega," 
                             . "CONCAT(S.PuntoInicial ,'/',S.PuntoFinal) AS Serie, "
                             . "PD.Ano AS Anio,"
                             . " CASE "
@@ -46,11 +46,11 @@ class Iordendeproduccion_model extends CI_Model {
                     ->join('series AS S', 'E.Serie = S.Clave')
                     ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
                     ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
-                    ->where('PD.Control != 0 AND OP.ID IS NOT NULL', null, false);
+                    ->where('PD.Control != 0', null, false);
             if ($CI !== '' && $CF !== '') {
                 $this->db->where("OP.ControlT BETWEEN $CI AND $CF", null, false);
             }
-            return $this->db->where('CT.Estatus', 'A')->get()->result();
+            return $this->db->where('CT.Estatus', 'A')->limit(1000)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
