@@ -21,7 +21,7 @@ class Defectos extends CI_Controller {
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
-                   
+
                     if ($Origen === 'MATERIALES') {
                         $this->load->view('vMenuMateriales');
                     } else if ($Origen === 'CLIENTES') {
@@ -29,6 +29,8 @@ class Defectos extends CI_Controller {
                     } else if ($Origen === 'PRODUCCION') {
                         $this->load->view('vMenuProduccion');
                     } else if ($Origen === 'FACTURACION') {
+                        $this->load->view('vMenuFacturacion');
+                    } else if ($Origen === 'FICHASTECNICAS') {
                         $this->load->view('vMenuFacturacion');
                     }
                     //Cuando no viene de ningun modulo y lo teclean
@@ -43,8 +45,11 @@ class Defectos extends CI_Controller {
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
                     break;
-                 case 'FACTURACION':
-                     $this->load->view('vMenuFacturacion');
+                case 'FACTURACION':
+                    $this->load->view('vMenuFacturacion');
+                    break;
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
             }
 

@@ -31,6 +31,8 @@ class DetallesDefectos extends CI_Controller {
                         $this->load->view('vMenuProduccion');
                     } else if ($Origen === 'FACTURACION') {
                         $this->load->view('vMenuFacturacion');
+                    } else if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFacturacion');
                     }
                     //Cuando no viene de ningun modulo y lo teclean
                     else {
@@ -46,6 +48,9 @@ class DetallesDefectos extends CI_Controller {
                     break;
                 case 'FACTURACION':
                     $this->load->view('vMenuFacturacion');
+                    break;
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
             }
 

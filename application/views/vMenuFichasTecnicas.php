@@ -17,3 +17,7 @@
 </script>
 <?php
 $this->load->view('vFichaTecnicaCompra');
+$this->load->view('vReporteCorteHiloTejer');
+$this->load->view('vReporteParesPreAsignados');
+$this->load->view('vEtiTrazabilidad');
+$this->load->view('vEtiZapica');

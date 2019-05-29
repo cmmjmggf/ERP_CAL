@@ -25,6 +25,9 @@ class ListaDePrecios extends CI_Controller {
                 case 'FACTURACION':
                     $this->load->view('vMenuFacturacion');
                     break;
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
+                    break;
             }
 
             $this->load->view('vFondo')->view('vListaDePrecios')->view('vFooter');
