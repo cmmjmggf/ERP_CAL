@@ -10,13 +10,11 @@ switch ($TYPE) {
 ?>
 <div class="col-12 watermark" align="center">
     <p class="font-weight-bold font-italic text-muted">© 2019, Calzado Lobo Solo.</p>
-    <p class="font-italic text-muted">Calzado Lobo Solo and the Lobo Solo logo are both Copyright © 2019</p>
-    <p class="font-italic text-muted">All other content is Copyright © by their respective owners.</p>
 </div>
 </div>
 <style>
-    .fixed-bottom { 
-        z-index: 1000; 
+    .fixed-bottom {
+        z-index: 1000;
     }
     .watermark p{
         color:#fff !important;

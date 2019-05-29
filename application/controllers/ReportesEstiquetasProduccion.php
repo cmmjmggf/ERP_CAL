@@ -15,6 +15,21 @@ class ReportesEstiquetasProduccion extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function OnReporteEtiquetaZapica() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["Ano"] = $this->input->post('Ano');
+        $parametros["Linea"] = $this->input->post('Linea');
+        $parametros["Temporada"] = $this->input->post('Temporada');
+        $parametros["Logo"] = base_url() . $this->session->LOGO;
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\etiquetas\etiquetaZapica.jasper');
+        $jc->setFilename('ETIQUETA_ZAPICA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     /* Reporte de Etiquetas para PAKAR */
 
     public function OnReporteEtiquetasCajasPakar() {
@@ -39,7 +54,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                         $pares = intval($v->{"C$i"});
 
                         //variables para crear el codigo de barras
-                        $estilo_cb = str_pad($v->Estilo, 6, '0', STR_PAD_LEFT);
+                        $estilo_cb = str_pad($v->Estilo, 6, '.', STR_PAD_LEFT);
                         $color_cb = str_pad($v->Color, 3, '0', STR_PAD_LEFT);
                         $talla_cb = (strlen($talla) <= 2) ? str_pad($talla, 4, '0', STR_PAD_LEFT) : $talla;
                         $codigo_barras = $estilo_cb . $color_cb . $talla_cb;
@@ -87,8 +102,11 @@ class ReportesEstiquetasProduccion extends CI_Controller {
 
             //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
             foreach ($reporte as $key => $line) {
-                //Metemos los datos
-                fputcsv($file, $line);
+                //Se meten los datos del arreglo en el excel
+                fputcsv($file, array_map(function($v) {
+                            //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
+                            return $v . "\r";
+                        }, $line));
             }
             //Cerramos el archivo
             fclose($file);
@@ -122,7 +140,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                         $pares = intval($v->{"C$i"});
 
                         //variables para crear el codigo de barras
-                        $estilo_cb = str_pad($v->Estilo, 6, '0', STR_PAD_LEFT);
+                        $estilo_cb = str_pad($v->Estilo, 6, '.', STR_PAD_LEFT);
                         $color_cb = str_pad($v->Color, 3, '0', STR_PAD_LEFT);
                         $talla_cb = (strlen($talla) <= 2) ? str_pad($talla, 4, '0', STR_PAD_LEFT) : $talla;
                         $codigo_barras = $estilo_cb . $color_cb . $talla_cb;
@@ -169,8 +187,11 @@ class ReportesEstiquetasProduccion extends CI_Controller {
 
             //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
             foreach ($reporte as $key => $line) {
-                //Metemos los datos
-                fputcsv($file, $line);
+                //Se meten los datos del arreglo en el excel
+                fputcsv($file, array_map(function($v) {
+                            //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
+                            return $v . "\r";
+                        }, $line));
             }
             //Cerramos el archivo
             fclose($file);
@@ -204,7 +225,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                         $pares = intval($v->{"C$i"});
 
                         //variables para crear el codigo de barras
-                        $estilo_cb = str_pad($v->Estilo, 6, '0', STR_PAD_LEFT);
+                        $estilo_cb = str_pad($v->Estilo, 6, '.', STR_PAD_LEFT);
                         $color_cb = str_pad($v->Color, 3, '0', STR_PAD_LEFT);
                         $talla_cb = (strlen($talla) <= 2) ? str_pad($talla, 4, '0', STR_PAD_LEFT) : $talla;
                         $codigo_barras = $estilo_cb . $color_cb . $talla_cb;
@@ -243,7 +264,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
             $file = fopen('php://output', 'w');
             //Encabezados
             fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            $header = array("Control", "Estilo", "Talla", "Tpo", "Color", "Nom Color", "Codigo 1", "Codigo 2");
+            $header = array("Control", "Estilo", "Talla", "Tpo", "Color", "Nom Color", "Codigo 1", "Codigo 2", "Foto");
             //Escribir CSV en memoria
             fputcsv($file, $header);
             //Obtener datos de la tabla de paso
@@ -251,8 +272,21 @@ class ReportesEstiquetasProduccion extends CI_Controller {
 
             //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
             foreach ($reporte as $key => $line) {
-                //Metemos los datos
-                fputcsv($file, $line);
+
+
+                $row = array(
+                    $line->control,
+                    $line->estiped,
+                    $line->punto,
+                    $line->tpo,
+                    $line->combped,
+                    $line->recio,
+                    $line->cod1,
+                    $line->cod2,
+                    'C:\\SIS386\\Fotos\\' . $line->estiped . '-1.jpg'
+                );
+                //Se meten los datos del arreglo en el csv
+                fputcsv($file, $row);
             }
             //Cerramos el archivo
             fclose($file);

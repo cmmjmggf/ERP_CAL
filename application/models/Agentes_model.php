@@ -34,34 +34,9 @@ class Agentes_model extends CI_Model {
         }
     }
 
-    public function getAgentes() {
+    public function getAgentesSelect() {
         try {
-            $this->db->select("U.ID, U.Clave+'-'+U.RazonSocial AS Nombre ", false)->from('agentes AS U')->where_in('U.Estatus', 'ACTIVO');
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getVendedores() {
-        try {
-            return $this->db->select("V.ID, V.Clave+'-'+VRazonSocial AS Nombre ", false)
-                            ->from('agentes AS V')
-                            ->where_in('V.Estatus', 'ACTIVO')->get()->result();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getMagnusID($ID) {
-        try {
-            $this->db->select("C.IDMAGNUS AS MAGNUS", false)->from('agentes AS C')->where_in('C.Estatus', 'ACTIVO')->where('C.ID', $ID);
+            $this->db->select("cast(U.Clave as signed) as Clave, concat(U.Clave,'-',U.Descripcion) AS Agente ", false)->from('agentes AS U')->order_by('Clave', 'ASC');
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
