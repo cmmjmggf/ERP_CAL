@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventarioXDeptoDia" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="4.594972986357281"/>
-	<property name="ireport.x" value="424"/>
-	<property name="ireport.y" value="134"/>
+	<property name="ireport.zoom" value="2.3579476910000325"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="MAQUILA_FINAL" class="java.lang.Integer">
@@ -21,71 +21,21 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.Pares AS PARES, D.Descripcion AS DEPTO,
-$P{SEMANA_INICIAL} AS SEMANA_ZERO,
-($P{SEMANA_INICIAL} + 1 ) AS SEMANA_UNO, ($P{SEMANA_INICIAL} + 2 ) AS SEMANA_DOS, ($P{SEMANA_INICIAL} + 3 ) AS SEMANA_TRES,
-($P{SEMANA_INICIAL} + 4 ) AS SEMANA_CUATRO, ($P{SEMANA_INICIAL} + 5 ) AS SEMANA_CINCO, ($P{SEMANA_INICIAL} + 6 ) AS SEMANA_SEIS,
-($P{SEMANA_INICIAL} + 7 ) AS SEMANA_SIETE, ($P{SEMANA_INICIAL} + 8 ) AS SEMANA_OCHO, ($P{SEMANA_INICIAL} + 9 ) AS SEMANA_NUEVE,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = $P{SEMANA_INICIAL} AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_ZERO,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 1) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_UNO,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 2) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0)  AS PARES_DOS,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 3) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0)  AS PARES_TRES,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 4) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0)  AS PARES_CUATRO,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 5) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0)  AS PARES_CINCO,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 6) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0)  AS PARES_SEIS,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 7) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_SIETE,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 8) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_OCHO,
-IFNULL(
-(SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
-AND PP.Semana = ($P{SEMANA_INICIAL} + 9) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_NUEVE
+		<![CDATA[SELECT P.Semana AS SEM, P.stsavan AS CLAVE,  D.Descripcion AS DEPTO ,P.Pares AS PARES
 
-FROM pedidox AS P INNER JOIN departamentos AS D ON P.stsavan = D.Clave
+FROM pedidox AS P
+INNER JOIN departamentos AS D ON P.stsavan = D.Clave
 WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Ano = $P{ANO}
-AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
-GROUP BY D.Clave;]]>
+AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14  AND P.DiaProg = 1;]]>
 	</queryString>
-	<field name="PARES" class="java.lang.String">
+	<field name="SEM" class="java.lang.String"/>
+	<field name="CLAVE" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="DEPTO" class="java.lang.String"/>
-	<field name="SEMANA_ZERO" class="java.lang.Object"/>
-	<field name="SEMANA_UNO" class="java.lang.Double"/>
-	<field name="SEMANA_DOS" class="java.lang.Double"/>
-	<field name="SEMANA_TRES" class="java.lang.Double"/>
-	<field name="SEMANA_CUATRO" class="java.lang.Double"/>
-	<field name="SEMANA_CINCO" class="java.lang.Double"/>
-	<field name="SEMANA_SEIS" class="java.lang.Double"/>
-	<field name="SEMANA_SIETE" class="java.lang.Double"/>
-	<field name="SEMANA_OCHO" class="java.lang.Double"/>
-	<field name="SEMANA_NUEVE" class="java.lang.Double"/>
-	<field name="PARES_ZERO" class="java.lang.Double"/>
-	<field name="PARES_UNO" class="java.lang.Double"/>
-	<field name="PARES_DOS" class="java.lang.Double"/>
-	<field name="PARES_TRES" class="java.lang.Double"/>
-	<field name="PARES_CUATRO" class="java.lang.Double"/>
-	<field name="PARES_CINCO" class="java.lang.Double"/>
-	<field name="PARES_SEIS" class="java.lang.Double"/>
-	<field name="PARES_SIETE" class="java.lang.Double"/>
-	<field name="PARES_OCHO" class="java.lang.Double"/>
-	<field name="PARES_NUEVE" class="java.lang.Double"/>
+	<field name="PARES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="TOTALXDEPTO" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{PARES_ZERO}+$F{PARES_UNO}+$F{PARES_DOS}+$F{PARES_TRES}+$F{PARES_CUATRO}+$F{PARES_CINCO}+$F{PARES_SEIS}+$F{PARES_SIETE}+$F{PARES_OCHO}+$F{PARES_NUEVE}]]></variableExpression>
 	</variable>

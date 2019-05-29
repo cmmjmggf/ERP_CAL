@@ -6,24 +6,24 @@
         <div class="row">
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <label>Del control</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus maxlength="10" onkeyup="onVerificarFormValido()" onkeypress="onVerificarFormValido()">
+                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus maxlength="10" >
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <label>Al control</label>     
-                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" maxlength="10"  min="1" max="10" onkeyup="onVerificarFormValido()" onkeypress="onVerificarFormValido()">
+                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" maxlength="10"  min="1" max="10" >
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-none" data-column="13">
                 <label>Semana</label>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col13_filter" maxlength="2" minlength="1" onkeypress="" onkeyup="onVerificarFormValido()" onfocus="">
+                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col13_filter" maxlength="2" minlength="1" onfocus="">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-none" data-column="14">
                 <label>Año</label>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col14_filter" maxlength="4" minlength="1" onkeypress="" onkeyup="onVerificarFormValido()" onfocus="">
+                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col14_filter" maxlength="4" minlength="1" onfocus="">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-12 col-xl-12 mt-4" align="right">
                 <button type="button" class="btn btn-primary" id="btnGenerar">Aceptar</button>
             </div>
-            <div id="Controles" class="table-responsive">
+            <div id="Controles" class="table-responsive d-none">
                 <table id="tblControles" class="table table-sm display hover" style="width:100%">
                     <thead>
                         <tr>
@@ -95,7 +95,7 @@
         // Listen for the jQuery ready event on the document
         $(function () {
             handleEnter();
-            getRecords();
+//            getRecords();
 
             $.fn.dataTable.ext.search.push(
                     function (settings, data, dataIndex) {
@@ -115,15 +115,14 @@
 
             $("#ControlInicial, #ControlFinal").keydown(function (e) {
                 console.log(e.keyCode)
-                if (ControlInicial.val() && ControlFinal.val()) {
-                    HoldOn.open({
-                        theme:'sk-rect',
-                        message:'Espere...'
-                    });
-                    Controles.ajax.reload(function(){
-                        HoldOn.close();
-                    });
-                    onVerificarFormValido();
+                if (ControlInicial.val() && ControlFinal.val() && e.keyCode === 13) {
+                    btnGenerar.prop("disabled", false);
+//                    Controles.ajax.reload(function(){
+//                        HoldOn.close();
+//                    });
+//                    onVerificarFormValido();
+                } else {
+                    btnGenerar.prop("disabled", true);
                 }
             });
 
