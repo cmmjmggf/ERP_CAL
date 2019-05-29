@@ -43,6 +43,14 @@ class GruposClientes extends CI_Controller {
         }
     }
 
+    public function getGruposClientes() {
+        try {
+            print json_encode($this->Gruposclientes_model->getGruposClientes());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getID() {
         try {
             print json_encode($this->Gruposclientes_model->getID());

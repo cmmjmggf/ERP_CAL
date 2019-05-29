@@ -139,7 +139,9 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
     public function getDatosReporteExcelGenerico() {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select("control,estiped,punto,tpo,combped,recio,concat('*',contped,'*') as cod1,contped as cod2 ", false)
+            $this->db
+                    ->select("control,estiped,punto,tpo,combped,recio,concat('*',contped,'*') as cod1,contped as cod2 "
+                            , false)
                     ->from('etiqcaja');
 
             $query = $this->db->get();
@@ -148,7 +150,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
              */
             $str = $this->db->last_query();
             //print $str;
-            $data = $query->result_array();
+            $data = $query->result();
             return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

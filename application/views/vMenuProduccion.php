@@ -59,3 +59,6 @@ $this->load->view('vCostoInventariosProceso');
 $this->load->view('vEtiTrazabilidad');
 $this->load->view('vEtiCajasXCliente');
 $this->load->view('vEtiZapica');
+$this->load->view('vEstatusPedidoXGrupoAgente');
+$this->load->view('vFichaTecnicaCompra');
+$this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');

@@ -51,6 +51,14 @@ class Agentes extends CI_Controller {
         }
     }
 
+    public function getAgentesSelect() {
+        try {
+            print json_encode($this->Agentes_model->getAgentesSelect());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getID() {
         try {
             print json_encode($this->Agentes_model->getID());

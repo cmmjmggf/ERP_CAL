@@ -663,4 +663,28 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteEstatusPedidoXGrupoAgente() {
+        $xGrupo = $this->input->post('EsPorGrupo');
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["agente"] = $this->input->post('Agente');
+        $parametros["grupo"] = $this->input->post('Grupo');
+
+        $jc->setJasperurl('jrxml\produccion\estatusPedidosPorAgenteEstados.jasper');
+
+        if ($xGrupo === '1') {
+            $jc->setJasperurl('jrxml\produccion\estatusPedidosPorGrupoCliente.jasper');
+        }
+
+        $jc->setParametros($parametros);
+
+        $jc->setFilename('REPORTE_ESTATUS_PEDIDOS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }
