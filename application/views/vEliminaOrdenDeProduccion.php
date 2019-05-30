@@ -2,7 +2,7 @@
     <div class="card-header" align="center">
         <h3 class="font-weight-bold">Elimina orden de producción semana / maquila</h3>
     </div>
-    <div class="card-body"> 
+    <div class="card-body">
         <div class="row" aling="center">
             <div class="col-12 col-sm-6 col-md-6 col-lg-1 col-xl-1 mt-4">
                 <button type="button" class="btn btn-warning" id="btnReload"><span class="fa fa-retweet"></span></button>
@@ -12,9 +12,9 @@
                 <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus maxlength="10">
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-5 col-xl-5">
-                <label>Al control</label>     
+                <label>Al control</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" maxlength="10" >
-            </div> 
+            </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1 mt-4">
                 <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
             </div>
@@ -25,7 +25,7 @@
             <div class="col-12">
                 <p class="text-info font-weight-bold">Nota: Esta rutina no afecta el avance de producción.</p>
             </div>
-            <div id="Controles" class="table-responsive">
+            <div id="Controles" class="table-responsive d-none">
                 <table id="tblControles" class="table table-sm display hover" style="width:100%">
                     <thead>
                         <tr>
@@ -96,12 +96,12 @@
         // Listen for the jQuery ready event on the document
         $(function () {
             handleEnter();
-            getRecords();
+            //getRecords();
             $.fn.dataTable.ext.search.push(
                     function (settings, data, dataIndex) {
                         var min = $('#ControlInicial').val() !== '' ? parseInt($('#ControlInicial').val()) : 0;
                         var max = $('#ControlFinal').val() !== '' ? parseInt($('#ControlFinal').val()) : 9999999999;
-                        var age = parseInt(data[15]) || 0; // use data for the age column 
+                        var age = parseInt(data[15]) || 0; // use data for the age column
                         if ((isNaN(min) && isNaN(max)) || (isNaN(min) && age <= max) || (min <= age && isNaN(max)) || (min <= age && age <= max))
                         {
                             return true;
@@ -122,38 +122,52 @@
             $("#ControlInicial").focus();
 
             btnEliminar.click(function () {
-                swal({
-                    title: "Estas seguro?",
-                    text: "Serán eliminados los '" + tblControles.find("tbody tr").length + "' registros, una vez completada la acción",
-                    icon: "warning",
-                    buttons: true
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        var nc = 0;
-                        $.each(tblControles.find("tbody tr"), function () {
-                            console.log(Controles.row($(this)).data());
-                            nc += 1;
-                        });
-                        $.post(master_url + 'onEliminarEntreControles', {
-                            INICIO: $("#ControlInicial").val(),
-                            FIN: $("#ControlFinal").val()
-                        }).done(function (data, x, jq) {
-                            Controles.ajax.reload();
-                            swal({
-                                title: "ATENCIÓN",
-                                text: "SE HAN ELIMINADO " + nc + " CONTROLES",
-                                icon: "success",
-                                closeOnClickOutside: false,
-                                closeOnEsc: false,
-                                buttons: true
+
+                if ($("#ControlInicial").val() && $("#ControlFinal").val()) {
+
+                    swal({
+                        title: "Estas seguro?",
+                        text: "Serán eliminadas las ordenes de producción seleccionadas, una vez completada la acción",
+                        icon: "warning",
+                        buttons: true
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            var nc = 0;
+//                        $.each(tblControles.find("tbody tr"), function () {
+//                            console.log(Controles.row($(this)).data());
+//                            nc += 1;
+//                        });
+                            $.post(master_url + 'onEliminarEntreControles', {
+                                INICIO: $("#ControlInicial").val(),
+                                FIN: $("#ControlFinal").val()
+                            }).done(function (data, x, jq) {
+                                //Controles.ajax.reload();
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "SE HAN ELIMINADO " + nc + " CONTROLES",
+                                    icon: "success",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false,
+                                    buttons: true
+                                });
+                            }).fail(function (x, y, z) {
+                                console.log(x.responseText, y, z);
+                            }).always(function () {
+                                HoldOn.close();
                             });
-                        }).fail(function (x, y, z) {
-                            console.log(x.responseText, y, z);
-                        }).always(function () {
-                            HoldOn.close();
-                        });
-                    }
-                });
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "Debes de introducir un control inicial y un final",
+                        icon: "error",
+                        buttons: true
+                    }).then((willDelete) => {
+                        $("#ControlInicial").focus();
+                    });
+                }
+
             });
 
         });

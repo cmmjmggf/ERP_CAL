@@ -28,7 +28,7 @@ class Estilos_model extends CI_Model {
 
     public function getEstilos() {
         try {
-            return $this->db->select("E.Clave,CONCAT(E.Clave,'-',E.Descripcion) AS Estilo")->from("estilos AS E")->where("E.Estatus", "ACTIVO")->get()->result();
+            return $this->db->select("E.Clave,CONCAT(E.Clave,'-',E.Descripcion) AS Estilo")->from("estilos AS E")->where("E.Estatus", "ACTIVO")->order_by('E.Clave', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

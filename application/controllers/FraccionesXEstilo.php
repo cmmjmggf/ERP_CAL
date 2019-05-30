@@ -11,6 +11,14 @@ class FraccionesXEstilo extends CI_Controller {
                 ->helper('ReportesFracciones_helper')->helper('file')->helper('array');
     }
 
+    public function onCopiarFraccionesDeEstiloaEstilo() {
+        try {
+            $this->FraccionesXEstilo_model->onCopiarFraccionesDeEstiloaEstilo($this->input->post('dEstilo'), $this->input->post('aEstilo'), $this->input->post('cMuestras'));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');

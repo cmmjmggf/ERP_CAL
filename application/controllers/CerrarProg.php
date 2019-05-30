@@ -15,25 +15,19 @@ class CerrarProg extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
-                    break;
-                case 'ADMINISTRACION':
-                    $this->load->view('vMenuAdministracion');
-                    break;
-                case 'CONTABILIDAD':
-                    $this->load->view('vMenuContabilidad');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuRecursosHumanos');
-                    break;
-                case 'INGENIERIA':
-                    $this->load->view('vMenuIngenieria');
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+                    if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFichasTecnicas');
+                    }
+                    //Cuando no viene de ningun modulo y lo teclean
+                    else {
+                        $this->load->view('vMenuProduccion');
+                    }
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vMenuDisDes');
-                    break;
-                case 'ALMACEN':
-                    $this->load->view('vMenuAlmacen');
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');

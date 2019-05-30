@@ -12,6 +12,38 @@ class FraccionesXEstilo_model extends CI_Model {
         date_default_timezone_set('America/Mexico_City');
     }
 
+    public function onCopiarFraccionesDeEstiloaEstilo($dEstilo, $aEstilo, $cMuestras) {
+        try {
+
+
+            $sql = "INSERT INTO fraccionesxestilo
+                    (`Estilo`,
+                    `FechaAlta`,
+                    `Fraccion`,
+                    `CostoMO`,
+                    `CostoVTA`,
+                    `AfectaCostoVTA`,
+                    `Estatus`)
+                    select
+                    '$aEstilo' as Estilo,
+                    date_format(now(),'%d/%m/%Y') as Fecha,
+                    Fraccion,
+                    CostoMO,
+                    CostoVTA,
+                    AfectaCostoVTA,
+                    'ACTIVO' as Estatus
+                    from fraccionesxestilo
+                    where estilo = '$dEstilo' ";
+
+            if ($cMuestras === '0') {
+                $sql .= "and AfectaCostoVTA = 1 ";
+            }
+            $this->db->query($sql);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarEstiloBloqueado($Estilo) {
         try {
             $this->db->select("Seguridad   "

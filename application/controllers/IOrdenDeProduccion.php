@@ -9,7 +9,7 @@ class IOrdenDeProduccion extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('Iordendeproduccion_model','iopm')->helper('ordendeproduccion_helper');
+        $this->load->library('session')->model('Iordendeproduccion_model', 'iopm')->helper('ordendeproduccion_helper');
     }
 
     public function index() {
@@ -17,19 +17,19 @@ class IOrdenDeProduccion extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+                    if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFichasTecnicas');
+                    }
+                    //Cuando no viene de ningun modulo y lo teclean
+                    else {
+                        $this->load->view('vMenuProduccion');
+                    }
                     break;
-                case 'VENTAS':
-                    $this->load->view('vMenuClientes');
-                    break;
-                case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'FACTURACION':
-                    $this->load->view('vMenuFacturacion');
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');

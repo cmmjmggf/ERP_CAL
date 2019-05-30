@@ -24,6 +24,8 @@ class Pedidos extends CI_Controller {
                         $this->load->view('vMenuProduccion');
                     } else if ($Origen === 'CLIENTES') {
                         $this->load->view('vMenuClientes');
+                    } else if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFichasTecnicas');
                     } else {
                         $this->load->view('vMenuPrincipal');
                     }
@@ -31,17 +33,11 @@ class Pedidos extends CI_Controller {
                 case 'CLIENTES':
                     $this->load->view('vMenuAdministracion');
                     break;
-                case 'CONTABILIDAD':
-                    $this->load->view('vMenuContabilidad');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuRecursosHumanos');
-                    break;
-                case 'INGENIERIA':
-                    $this->load->view('vMenuIngenieria');
-                    break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');
+                    break;
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
             }
 

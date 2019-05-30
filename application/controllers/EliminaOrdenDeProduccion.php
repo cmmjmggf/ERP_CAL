@@ -16,19 +16,19 @@ class EliminaOrdenDeProduccion extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+                    if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFichasTecnicas');
+                    }
+                    //Cuando no viene de ningun modulo y lo teclean
+                    else {
+                        $this->load->view('vMenuProduccion');
+                    }
                     break;
-                case 'VENTAS':
-                    $this->load->view('vMenuClientes');
-                    break;
-                case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'FACTURACION':
-                    $this->load->view('vMenuFacturacion');
+                case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');
@@ -54,9 +54,9 @@ class EliminaOrdenDeProduccion extends CI_Controller {
             $CONTROL_INICIAL = $this->input->post('INICIO');
             $CONTROL_FINAL = $this->input->post('FIN');
             $this->db->trans_begin();
-            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
-                INNER JOIN OrdenDeProduccion AS OP 
-                ON OPD.OrdenDeProduccion = OP.ID 
+            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
+                INNER JOIN OrdenDeProduccion AS OP
+                ON OPD.OrdenDeProduccion = OP.ID
                 WHERE OPD.ID > 0 AND OP.ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL");
             $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL");
             if ($this->db->trans_status() === FALSE) {
@@ -68,4 +68,5 @@ class EliminaOrdenDeProduccion extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
 }

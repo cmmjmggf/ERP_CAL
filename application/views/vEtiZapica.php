@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmCaptura">
-                    <div class="row"¿>
+                    <div class="row">
                         <div class="col-4" >
                             <label>Año</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >

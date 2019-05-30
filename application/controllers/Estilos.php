@@ -56,6 +56,16 @@ class Estilos extends CI_Controller {
         }
     }
 
+    public function getEstilosSelect() {
+        try {
+            extract($this->input->post());
+            $data = $this->Estilos_model->getEstilos();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getLineas() {
         try {
             extract($this->input->post());

@@ -14,4 +14,10 @@
     $(document).ready(function () {
         getMenu(7);
     });
+    handleEnter();
 </script>
+
+
+
+<?php
+$this->load->view('vCopiarFraccionEstiloaEstilo');
