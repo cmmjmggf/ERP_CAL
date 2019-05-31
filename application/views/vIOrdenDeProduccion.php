@@ -116,13 +116,14 @@
             $("#ControlInicial, #ControlFinal").keydown(function (e) {
                 console.log(e.keyCode)
                 if (ControlInicial.val() && ControlFinal.val() && e.keyCode === 13) {
-                    btnGenerar.prop("disabled", false);  
+                    btnGenerar.prop("disabled", false);
                 } else {
                     btnGenerar.prop("disabled", true);
                 }
             });
 
             btnGenerar.click(function () {
+                btnGenerar.prop("disabled", true);
                 HoldOn.open({
                     theme: 'sk-bounce',
                     message: 'GENERANDO...'
@@ -163,6 +164,7 @@
                     swal('ATENCION', 'HA OCURRIDO UN ERROR AL OBTENER EL REPORTE, REVISE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
                     HoldOn.close();
+                    btnGenerar.prop("disabled", false);
                 });
             });
 
