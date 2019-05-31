@@ -91,13 +91,13 @@
                                             <input type="checkbox" class="custom-control-input selectNotEnter" id="Egresos" name="Egresos" style="cursor: pointer !important;">
                                             <label class="custom-control-label text-danger labelCheck" for="Egresos" style="cursor: pointer !important;">Egresos</label>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-4" align="center">
                                         <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                                             <input type="checkbox" class="custom-control-input selectNotEnter" id="Activos" name="Activos" style="cursor: pointer !important;">
                                             <label class="custom-control-label text-danger labelCheck" for="Activos" style="cursor: pointer !important;">Activos</label>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="w-100"></div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                         <label for="PrimerNombre" >1er Nombre*</label>
@@ -137,39 +137,39 @@
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="CP" >C.P.*</label>
                                         <input type="text" id="CP" name="CP"  class="form-control form-control-sm numbersOnly" placeholder="" >
-                                    </div>       
+                                    </div>
 
-                                    <div class="w-100"></div>                     
+                                    <div class="w-100"></div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                         <label for="RFC" >R.F.C.*</label>
                                         <input type="text" id="RFC" name="RFC"  class="form-control form-control-sm" placeholder="" >
-                                    </div>                   
+                                    </div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                         <label for="CURP" >CURP*</label>
                                         <input type="text" id="CURP" name="CURP"  class="form-control form-control-sm" placeholder="" >
                                     </div>
-                                    <div class="w-100"></div>                     
+                                    <div class="w-100"></div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="NoIMSS" >No.IMSS*</label>
-                                        <input type="text" id="NoIMSS" name="NoIMSS"  class="form-control form-control-sm" placeholder="" required="">  
+                                        <input type="text" id="NoIMSS" name="NoIMSS"  class="form-control form-control-sm" placeholder="" required="">
                                         <div class="custom-control custom-checkbox mt-2"  align="center" style="cursor: pointer !important;">
                                             <input type="checkbox" class="custom-control-input selectNotEnter" id="Incapacitado" name="Incapacitado" style="cursor: pointer !important;">
                                             <label class="custom-control-label text-danger labelCheck" for="Incapacitado" style="cursor: pointer !important;">Incapacitado</label>
                                         </div>
-                                    </div>                 
+                                    </div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="FechaIngreso" >Fecha Ingreso*</label>
                                         <input type="text" id="FechaIngreso" name="FechaIngreso"  class="form-control form-control-sm date notEnter" placeholder="" >
-                                    </div>                 
+                                    </div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="Nacimiento" >Nacimiento*</label>
                                         <input type="text" id="Nacimiento" name="Nacimiento"  class="form-control form-control-sm date notEnter" placeholder="" >
-                                    </div>                 
+                                    </div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="FechaIMSS" >Fecha IMSS*</label>
                                         <input type="text" id="FechaIMSS" name="FechaIMSS"  class="form-control form-control-sm date notEnter" placeholder="" >
-                                    </div>           
-                                    <div class="w-100"></div>     
+                                    </div>
+                                    <div class="w-100"></div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="Sexo" >Sexo*</label>
                                         <select id="Sexo" name="Sexo"  class="form-control form-control-sm" placeholder="" >
@@ -190,14 +190,14 @@
                                         <label for="Cel" >Tel.Cel*</label>
                                         <input type="tel" id="Cel" name="Cel"  class="form-control form-control-sm numbersOnly notEnter" placeholder="" onfocus="" >
                                     </div>
-                                </div>                                 
+                                </div>
                             </div>
                             <!--FIN DATOS-->
                             <!--PERFIL-->
                             <div class="tab-pane fade" id="perfil">
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label>Departamento*</label>  
+                                        <label>Departamento*</label>
                                         <select id="DepartamentoFisico" name="DepartamentoFisico" class="form-control form-control-sm" required="">
                                             <option value=""></option>
                                         </select>
@@ -266,7 +266,7 @@
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="Porcentaje" >%*</label>
                                         <input type="text" id="Porcentaje" name="Porcentaje" class="form-control form-control-sm numbersOnly" required="">
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <!--FIN PERFIL-->
@@ -343,7 +343,8 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="center">
-                        <img id="FotoPerfil" src="<?php print base_url('img/empleado_sin_foto.png'); ?>" class="img-fluid" style="cursor: pointer;" onclick="onCambiarImagen(this)">
+                        <img id="FotoPerfil" src="<?php print base_url('img/empleado_sin_foto.png'); ?>" class="img-fluid" style="cursor: pointer;"
+                             onclick="onCambiarImagen(this)">
                         <input type="file" id="Foto" name="Foto" class="d-none">
                     </div>
                     <div class="row pt-2">
@@ -354,6 +355,7 @@
                             <i class="fa fa-save"></i>
                         </button>
                     </div>
+                </div>
             </fieldset>
         </form>
     </div>
@@ -367,6 +369,9 @@
     var btnCredencial = $("#btnCredencial");
     var NumeroEmpleado = pnlTablero.find("#NumeroEmpleado");
     var nuevo = false;
+    var tfoto;
+
+
     $(document).ready(function () {
         handleEnter();
         getRecords();
@@ -417,73 +422,87 @@
                     FotoPerfil[0].src = reader.result;
                 };
                 reader.readAsDataURL(Foto[0].files[0]);
+                tfoto = true;
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
+                tfoto = false;
             }
         });
 
         btnGuardar.click(function () {
             console.log('guardando...');
-            isValid('pnlDatos');
-            if (valido) {
-                var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
-                frm.append('Incapacitado', pnlDatos.find("#Incapacitado")[0].checked ? 1 : 0);
-                frm.append('Egresos', pnlDatos.find("#Egresos")[0].checked ? 1 : 0);
-                frm.append('Activos', pnlDatos.find("#Activos")[0].checked ? 1 : 0);
-                if (!nuevo) {
-                    $.ajax({
-                        url: master_url + 'onModificar',
-                        type: "POST",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: frm
-                    }).done(function (data, x, jq) {
-                        console.log(data);
-                        onBeep(1);
-                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
-                        nuevo = false;
-                        Empleados.ajax.reload();
-                        pnlDatos.addClass("d-none");
-                        pnlTablero.removeClass("d-none");
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    }).always(function () {
-                        HoldOn.close();
-                    });
-                } else {
-                    $.ajax({
-                        url: master_url + 'onAgregar',
-                        type: "POST",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: frm
-                    }).done(function (data, x, jq) {
-                        console.log(data);
-                        pnlDatos.find("[name='ID']").val(data);
-                        nuevo = false;
-                        Empleados.ajax.reload();
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "EMPLEADO GUARDADO",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                            buttons: false,
-                            timer: 1200
-                        }).then((action) => {
+            if (tfoto) {
+                isValid('pnlDatos');
+                if (valido) {
+                    var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                    frm.append('Incapacitado', pnlDatos.find("#Incapacitado")[0].checked ? 1 : 0);
+                    frm.append('Egresos', pnlDatos.find("#Egresos")[0].checked ? 1 : 0);
+                    frm.append('Activos', pnlDatos.find("#Activos")[0].checked ? 1 : 0);
+                    if (!nuevo) {
+                        $.ajax({
+                            url: master_url + 'onModificar',
+                            type: "POST",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: frm
+                        }).done(function (data, x, jq) {
+                            //console.log(data);
+                            onBeep(1);
+                            swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
+                            nuevo = false;
+                            Empleados.ajax.reload();
+                            pnlDatos.addClass("d-none");
+                            pnlTablero.removeClass("d-none");
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        }).always(function () {
+                            HoldOn.close();
                         });
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    }).always(function () {
-                        HoldOn.close();
+                    } else {
+                        $.ajax({
+                            url: master_url + 'onAgregar',
+                            type: "POST",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: frm
+                        }).done(function (data, x, jq) {
+                            //console.log(data);
+                            pnlDatos.find("[name='ID']").val(data);
+                            nuevo = false;
+                            Empleados.ajax.reload();
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "EMPLEADO GUARDADO",
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                                buttons: false,
+                                timer: 1200
+                            }).then((action) => {
+                            });
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                    }
+                } else {
+                    onBeep(2);
+                    swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error').then((value) => {
+                        $('.nav-tabs li:eq(0) a').tab('show');
                     });
                 }
             } else {
-                onBeep(2);
-                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error').then((value) => {
-                    $('.nav-tabs li:eq(0) a').tab('show');
+                swal({
+                    title: "ATENCIÓN",
+                    text: "DEBE DE CARGAR UNA FOTOFRAFÍA DEL EMPLEADO ",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    Foto.focus();
                 });
             }
         });
@@ -502,6 +521,7 @@
             btnCredencial.addClass("d-none");
             FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
             nuevo = true;
+            tfoto = false;
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
@@ -606,11 +626,30 @@
                 }
             });
             var ext = getExt(dtm.FOTOEMPLEADO);
-            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
-                FotoPerfil[0].src = base_url + dtm.FOTOEMPLEADO;
-            } else {
-                FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
-            }
+
+
+            $.ajax({
+                url: base_url + dtm.FOTOEMPLEADO,
+                type: 'HEAD',
+                error: function ()
+                {
+                    FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
+                    tfoto = false;
+                },
+                success: function ()
+                {
+                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
+                        FotoPerfil[0].src = base_url + dtm.FOTOEMPLEADO;
+                        tfoto = true;
+                    } else {
+                        tfoto = false;
+                        FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
+                    }
+                }
+            });
+
+
+
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
             btnCredencial.removeClass("d-none");
@@ -626,7 +665,10 @@
 
     function onCambiarImagen(e) {
         Foto.trigger('click');
+        Foto.attr("type", "file");
+        Foto.val('');
     }
+
 
     function getEstados() {
         $.getJSON(master_url + 'getEstados').done(function (data) {
@@ -666,7 +708,7 @@
                         // Custom CSS styling for iframe wrapping element
                         // You can use this to set custom iframe dimensions
                         css: {
-                            width: "50%",
+                            width: "80%",
                             height: "50%"
                         },
                         // Iframe tag attributes
@@ -722,5 +764,5 @@
         color: #fff;
         background-color: #795548;
         border-color: #4E342E;
-    } 
+    }
 </style>

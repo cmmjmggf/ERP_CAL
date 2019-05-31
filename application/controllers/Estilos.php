@@ -286,7 +286,6 @@ class Estilos extends CI_Controller {
 
             $ID = $x->post('ID');
             $AdjuntoP = $this->input->post('Foto');
-            var_dump($AdjuntoP);
             if (empty($AdjuntoP)) {
                 if ($_FILES["Foto"]["tmp_name"] !== "") {
                     $URL_DOC = 'uploads/Estilos';

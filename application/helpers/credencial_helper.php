@@ -19,11 +19,11 @@ class PDF extends FPDF {
         $this->AddFont('Calibri', 'I');
         $this->AddFont('Calibri', 'B');
         $this->AddFont('Calibri', 'BI');
-        $this->Image($this->getLogo(), 12, 11, 80, 18); 
+        $this->Image($this->getLogo(), 12, 11, 42);
     }
 
     function Footer() {
-        
+
     }
 
     protected $T128;                                         // Tableau des codes 128

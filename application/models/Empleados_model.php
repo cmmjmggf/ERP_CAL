@@ -52,7 +52,7 @@ class Empleados_model extends CI_Model {
     public function getEmpleadoByNumero($ID) {
         try {
             return $this->db->select("E.ID, E.Numero, "
-                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, "
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
                                     . "D.Descripcion AS DEPARTAMENTO", false)
                             ->from('empleados AS E')
                             ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico', 'left')
