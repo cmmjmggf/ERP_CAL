@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventarioXDeptoDia" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="2.3579476910000325"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.177248169415715"/>
+	<property name="ireport.x" value="1172"/>
+	<property name="ireport.y" value="93"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="MAQUILA_FINAL" class="java.lang.Integer">
@@ -21,62 +21,103 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.Semana AS SEM, P.stsavan AS CLAVE,  D.Descripcion AS DEPTO ,P.Pares AS PARES
+		<![CDATA[SELECT P.Maquila AS MAQUILA, P.Semana AS SEM, P.stsavan AS CLAVE_DEPTO,  D.Descripcion AS DEPTO , SUM(P.Pares) AS PARES,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 0 )  AS DOMINGO_SABADO,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 1 )  AS JUEVES,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 2 )  AS VIERNES,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 3 )  AS LUNES,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 4 )  AS MARTES,
+
+(SELECT SUM(PP.Pares) AS PARES
+FROM pedidox AS PP
+INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
+WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 5 )  AS MIERCOLES
 
 FROM pedidox AS P
 INNER JOIN departamentos AS D ON P.stsavan = D.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Ano = $P{ANO}
-AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14  AND P.DiaProg = 1;]]>
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14 AND P.DiaProg IN(0,1,2,3,4,5)
+GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 	</queryString>
+	<field name="MAQUILA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="SEM" class="java.lang.String"/>
-	<field name="CLAVE" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="CLAVE_DEPTO" class="java.lang.Integer"/>
 	<field name="DEPTO" class="java.lang.String"/>
-	<field name="PARES" class="java.lang.String">
+	<field name="PARES" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="TOTALXDEPTO" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{PARES_ZERO}+$F{PARES_UNO}+$F{PARES_DOS}+$F{PARES_TRES}+$F{PARES_CUATRO}+$F{PARES_CINCO}+$F{PARES_SEIS}+$F{PARES_SIETE}+$F{PARES_OCHO}+$F{PARES_NUEVE}]]></variableExpression>
+	<field name="DOMINGO_SABADO" class="java.lang.Double"/>
+	<field name="JUEVES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VIERNES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="LUNES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MARTES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MIERCOLES" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TOTAL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{DOMINGO_SABADO}+$F{JUEVES}+$F{VIERNES}+$F{LUNES}+$F{MARTES}+$F{MIERCOLES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_ZERO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_ZERO}]]></variableExpression>
+	<variable name="DOMINGO_SABADO_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{DOMINGO_SABADO}]]></variableExpression>
 	</variable>
-	<variable name="PARES_UNO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_UNO}]]></variableExpression>
+	<variable name="JUEVES_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUEVES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_DOS_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_DOS}]]></variableExpression>
+	<variable name="VIERNES_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{VIERNES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_TRES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_TRES}]]></variableExpression>
+	<variable name="LUNES_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{LUNES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_CUATRO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_CUATRO}]]></variableExpression>
+	<variable name="MARTES_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{MARTES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_CINCO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_CINCO}]]></variableExpression>
+	<variable name="MIERCOLES_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{MIERCOLES}]]></variableExpression>
 	</variable>
-	<variable name="PARES_SEIS_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_SEIS}]]></variableExpression>
-	</variable>
-	<variable name="PARES_SIETE_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_SIETE}]]></variableExpression>
-	</variable>
-	<variable name="PARES_OCHO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_OCHO}]]></variableExpression>
-	</variable>
-	<variable name="PARES_NUEVE_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{PARES_NUEVE}]]></variableExpression>
-	</variable>
-	<variable name="TOTALXDEPTOS" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$V{TOTALXDEPTO}]]></variableExpression>
-	</variable>
+	<group name="SEMANA">
+		<groupExpression><![CDATA[$F{SEM}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="67" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="72" y="13" width="433" height="14" isPrintInFirstWholeBand="true" uuid="e8ecfabe-45d6-401f-88b5-53edf348c6a2"/>
 				<textElement>
@@ -117,100 +158,107 @@ AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
 				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="203" y="39" width="1" height="27" uuid="9b00365a-716e-490e-94d5-aa4399db320e"/>
+				<reportElement x="253" y="34" width="1" height="28" uuid="9b00365a-716e-490e-94d5-aa4399db320e"/>
 			</line>
 			<line>
-				<reportElement x="204" y="39" width="299" height="1" uuid="7105e634-ea9c-41c4-ad8a-cf344c76446a"/>
+				<reportElement x="254" y="34" width="299" height="1" uuid="7105e634-ea9c-41c4-ad8a-cf344c76446a"/>
 			</line>
 			<line>
-				<reportElement x="204" y="55" width="299" height="1" uuid="506b28c4-0dcc-4d66-bf21-6906e6fb3a7b"/>
+				<reportElement x="254" y="50" width="299" height="1" uuid="506b28c4-0dcc-4d66-bf21-6906e6fb3a7b"/>
 			</line>
 			<line>
-				<reportElement x="503" y="39" width="1" height="27" uuid="b40022f5-8945-4e6f-a7ce-9711faae9e19"/>
+				<reportElement x="553" y="34" width="1" height="27" uuid="b40022f5-8945-4e6f-a7ce-9711faae9e19"/>
 			</line>
 			<line>
-				<reportElement x="253" y="55" width="1" height="11" uuid="a939b5af-1690-4b5a-9690-e2075eb249e0"/>
+				<reportElement x="303" y="50" width="1" height="11" uuid="a939b5af-1690-4b5a-9690-e2075eb249e0"/>
 			</line>
 			<line>
-				<reportElement x="303" y="55" width="1" height="11" uuid="5a423839-849b-4315-bab4-bfd7d35fa7d0"/>
+				<reportElement x="353" y="50" width="1" height="11" uuid="5a423839-849b-4315-bab4-bfd7d35fa7d0"/>
 			</line>
 			<line>
-				<reportElement x="354" y="55" width="1" height="11" uuid="b59921da-f262-4070-a115-e2f31ffa7139"/>
+				<reportElement x="404" y="50" width="1" height="11" uuid="b59921da-f262-4070-a115-e2f31ffa7139"/>
 			</line>
 			<line>
-				<reportElement x="403" y="55" width="1" height="11" uuid="20a64e4e-d634-43b8-b087-052dc8183c25"/>
+				<reportElement x="453" y="50" width="1" height="11" uuid="20a64e4e-d634-43b8-b087-052dc8183c25"/>
 			</line>
 			<line>
-				<reportElement x="453" y="55" width="1" height="11" uuid="2b9ef812-90e6-4991-a3c2-cb89049e10b8"/>
+				<reportElement x="503" y="50" width="1" height="11" uuid="2b9ef812-90e6-4991-a3c2-cb89049e10b8"/>
 			</line>
 			<line>
-				<reportElement x="503" y="54" width="1" height="13" uuid="2a7b85a4-3986-40e0-9dcc-b1b546fd344b"/>
+				<reportElement x="553" y="49" width="1" height="13" uuid="2a7b85a4-3986-40e0-9dcc-b1b546fd344b"/>
 			</line>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="36" y="53" width="164" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="736272e1-620f-4f21-9473-9f634a44aa1e"/>
+				<reportElement isPrintRepeatedValues="false" x="36" y="50" width="167" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="736272e1-620f-4f21-9473-9f634a44aa1e"/>
 				<textElement textAlignment="Center">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Departamento]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="66" width="503" height="1" uuid="bbf1f5ef-61d2-4e3a-b287-fe062ebdb1b7"/>
+				<reportElement x="0" y="62" width="554" height="1" uuid="bbf1f5ef-61d2-4e3a-b287-fe062ebdb1b7"/>
 			</line>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" mode="Opaque" x="205" y="41" width="249" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" forecolor="#333333" backcolor="#FFFFFF" uuid="e1f3c377-031d-4522-90f0-f7c4b1e88721"/>
+				<reportElement isPrintRepeatedValues="false" mode="Opaque" x="255" y="36" width="249" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" forecolor="#333333" backcolor="#FFFFFF" uuid="e1f3c377-031d-4522-90f0-f7c4b1e88721"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[DIAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="454" y="55" width="49" height="12" uuid="945f4068-6653-4c92-90c6-822dcc8695a5"/>
+				<reportElement x="504" y="50" width="49" height="12" uuid="945f4068-6653-4c92-90c6-822dcc8695a5"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="1" y="52" width="35" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="6edef66d-cdcb-4eff-bb60-3fc1a1de2db9"/>
+				<reportElement isPrintRepeatedValues="false" x="1" y="50" width="35" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="6edef66d-cdcb-4eff-bb60-3fc1a1de2db9"/>
 				<textElement textAlignment="Center">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sem]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="203" y="54" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="9d2496d4-5d05-4c0e-9a88-d4f2d0f94a28"/>
+				<reportElement isPrintRepeatedValues="false" x="253" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="9d2496d4-5d05-4c0e-9a88-d4f2d0f94a28"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jueves]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="253" y="55" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="7342cad8-b949-44d1-9fc1-37d5e36b73c1"/>
+				<reportElement isPrintRepeatedValues="false" x="303" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="7342cad8-b949-44d1-9fc1-37d5e36b73c1"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Viernes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="303" y="54" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="3c29459a-3678-41c0-af7b-341daf283814"/>
+				<reportElement isPrintRepeatedValues="false" x="353" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="3c29459a-3678-41c0-af7b-341daf283814"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lunes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="353" y="55" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="42e66255-904d-4c36-b80b-1252044dc27e"/>
+				<reportElement isPrintRepeatedValues="false" x="403" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="42e66255-904d-4c36-b80b-1252044dc27e"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Martes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="403" y="55" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="30507a55-7823-4a1c-a120-be28f39f2dc5"/>
+				<reportElement isPrintRepeatedValues="false" x="453" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="30507a55-7823-4a1c-a120-be28f39f2dc5"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Miercoles]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="203" y="50" width="50" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="bae3b270-e98d-4a9f-94bc-a316cfbaa9fc"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -219,28 +267,6 @@ AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
 			<line>
 				<reportElement x="0" y="13" width="504" height="1" uuid="69ddc483-46f9-4343-9861-fc1cb59120cc"/>
 			</line>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1" y="0" width="199" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ff38a78d-7016-457c-abca-4708d3642066"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DEPTO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="254" y="0" width="50" height="12" uuid="add827ac-183f-43e8-ae22-5574a9c89393"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PARES_UNO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="304" y="0" width="50" height="12" uuid="a905e5f9-d93c-45ff-ba70-13fe83c4333d"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PARES_DOS}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="203" y="0" width="1" height="13" uuid="2be63891-c077-4304-954e-9271ce0d9e58"/>
 			</line>
@@ -250,25 +276,9 @@ AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
 			<line>
 				<reportElement x="303" y="0" width="1" height="13" uuid="39baa024-9f80-4209-be65-b1c3639d7c6b"/>
 			</line>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="354" y="0" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="65345dfd-c6fa-418a-a724-a5c7ffcd5605"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PARES_TRES}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="354" y="0" width="1" height="13" uuid="7ce7d45f-8228-47d1-b59b-0831e221ac77"/>
 			</line>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="404" y="0" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cb098f5f-bf68-4fdd-a3c9-cb3e588f82d9"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PARES_CUATRO}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="403" y="0" width="1" height="13" uuid="2942657c-25fe-46fd-9acc-316e82a5beb0"/>
 			</line>
@@ -278,17 +288,68 @@ AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
 			<line>
 				<reportElement x="503" y="0" width="1" height="13" uuid="37bd1ca8-45ed-4058-96db-fb16556ccc44"/>
 			</line>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="205" y="0" width="49" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a1407970-35de-454d-9e9b-4a55f22814eb"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PARES_ZERO}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="0" width="1" height="13" uuid="b34f971e-9c34-42c1-ac2d-8bb9233338d3"/>
 			</line>
+			<textField>
+				<reportElement x="1" y="0" width="35" height="13" uuid="c4aa55d0-3de0-445a-888c-a71442e1e8b9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{SEM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="0" width="167" height="13" uuid="4856ca7d-7333-4de5-a557-d2aff45e0053"/>
+				<textFieldExpression><![CDATA[$F{DEPTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="204" y="0" width="50" height="13" uuid="2dd9cfbd-d145-45da-97e6-3af9f5b054fc"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DOMINGO_SABADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="254" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0539a62d-52df-4785-a79d-fced1d800ac6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JUEVES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="071741c6-009d-4fe0-a1e8-4de8f9f9dd66"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VIERNES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="355" y="0" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e7c70e85-f0dd-47ef-b22a-6c7c5b4667c7"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LUNES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="404" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="170d8b2a-af46-427a-a06c-80fdfe212fbd"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MARTES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="454" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="af7498c3-0e8a-4683-88b8-95cc7ae47250"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MIERCOLES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="505" y="0" width="48" height="14" uuid="bfd14838-1673-4a02-b1f0-f35b281fc23f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
@@ -301,39 +362,39 @@ AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
 				<text><![CDATA[Totales por semanas]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="204" y="0" width="50" height="12" uuid="274ddd71-e24a-484f-8cd9-dc321dcc4855"/>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PARES_ZERO_1}]]></textFieldExpression>
+				<reportElement x="203" y="0" width="50" height="13" uuid="b394e671-5891-42a7-9c78-8f612225a7b1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{DOMINGO_SABADO_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="254" y="0" width="50" height="12" uuid="deabf4a4-061c-4dba-9596-27066c63e207"/>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<reportElement x="254" y="0" width="50" height="13" uuid="883714e1-5292-43f2-9f01-168f3e6b876f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{JUEVES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="45394991-d836-428c-a752-9bcaf80719c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARES_UNO_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{VIERNES_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="304" y="0" width="50" height="12" uuid="80e0f74f-2bbf-4c61-9007-720ce155fff1"/>
+				<reportElement x="354" y="0" width="50" height="13" uuid="441646f5-bc13-4388-9e6a-bce093637175"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+					<font isStrikeThrough="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARES_DOS_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{LUNES_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="354" y="0" width="50" height="12" uuid="8c52216d-e104-4faf-9f06-762a262597fb"/>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PARES_TRES_1}]]></textFieldExpression>
+				<reportElement x="403" y="0" width="50" height="13" uuid="d6419d84-2338-4ce9-9b0e-5aec1f7f7327"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{MARTES_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="404" y="0" width="50" height="12" uuid="09c4220b-55e1-4f85-8b8b-9fc8e4bad515"/>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PARES_CUATRO_1}]]></textFieldExpression>
+				<reportElement x="453" y="0" width="50" height="13" uuid="4fb2164a-f369-4d00-ae65-96477e2592ae"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{MIERCOLES_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
