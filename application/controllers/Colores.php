@@ -14,10 +14,9 @@ class Colores extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
-
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
+                        $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
@@ -33,7 +32,6 @@ class Colores extends CI_Controller {
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }
-
             $this->load->view('vFondo');
             $this->load->view('vColores');
             $this->load->view('vFooter');

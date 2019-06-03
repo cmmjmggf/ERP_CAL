@@ -28,7 +28,7 @@
 <div class="d-none animated fadeIn text-dark" id="pnlDatos">
     <form id="frmNuevo">
         <fieldset>
-            <!--            PRIMER CONTENEDOR-->
+            <!-- PRIMER CONTENEDOR-->
             <div class="card  m-3 ">
                 <div class="card-body">
                     <div class="row">
