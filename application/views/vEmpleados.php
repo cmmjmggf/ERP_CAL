@@ -531,7 +531,21 @@
             });
             pnlTablero.addClass('d-none');
             pnlDatos.removeClass('d-none');
-            pnlDatos.find("#Numero").focus();
+
+
+            $.getJSON(master_url + 'getUltimo').done(function (data, x, jq) {
+                if (data.length > 0) {
+                    var Numero = $.isNumeric(data[0].Numero) ? parseInt(data[0].Numero) + 1 : 1;
+                    pnlDatos.find("#Numero").val(Numero);
+                } else {
+                    pnlDatos.find("#Numero").val('1');
+                }
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
+            pnlDatos.find("#Numero").focus().select();
+
+
         });
     });
 

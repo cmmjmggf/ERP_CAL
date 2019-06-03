@@ -10,6 +10,40 @@ class Empleados_model extends CI_Model {
         parent::__construct();
     }
 
+    public function getUltimo() {
+        try {
+            return $this->db->select("CAST(E.Numero as signed) AS Numero")->from("empleados AS E")
+                            ->where('Numero < 5555', null, false)
+                            ->order_by("Numero", "DESC")
+                            ->limit(1)
+                            ->get()
+                            ->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadoByNumeroExt($ID) {
+        try {
+            return $this->db->select("E.Ahorro", false)
+                            ->from('empleados AS E')
+                            ->where('E.Numero', $ID)->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadosCajaAhorro() {
+        try {
+            return $this->db->select("E.Numero AS Clave, "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, E.Ahorro "
+                                    . "  ", false)
+                            ->from('empleados AS E')->where('E.Ahorro > 0', null, false)->where('E.altabaja', 1)->order_by('Clave', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             return $this->db->select("E.ID, E.Numero AS No, E.NumFis, E.Egresos, E.Activos, "

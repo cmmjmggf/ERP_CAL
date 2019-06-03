@@ -75,6 +75,14 @@ class Empleados extends CI_Controller {
         }
     }
 
+    public function getUltimo() {
+        try {
+            print json_encode($this->Empleados_model->getUltimo());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAgregar() {
         try {
             $data = array();
@@ -165,6 +173,41 @@ class Empleados extends CI_Controller {
             } else {
                 $this->db->set('Foto', null)->where('ID', $ID)->update('empleados');
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    /* Funciones para mndificaciones desde otros modulos */
+
+    public function getEmpleadoByNumeroExt() {
+        try {
+            print json_encode($this->Empleados_model->getEmpleadoByNumeroExt($this->input->get('Numero')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadosCajaAhorro() {
+        try {
+            print json_encode($this->Empleados_model->getEmpleadosCajaAhorro());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificarExt() {
+        try {
+            $x = $this->input;
+            $data = array();
+            foreach ($this->input->post() as $key => $v) {
+                //print "$key  = $v \n";
+                if ($v !== '') {
+                    $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
+                }
+            }
+            unset($data["Numero"]);
+            $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
