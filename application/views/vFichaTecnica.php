@@ -30,10 +30,43 @@
     <div class="card-body text-dark">
         <form id="frmNuevo">
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-4 float-left">
+                <div class="col-12 col-sm-6 col-md-2 float-left">
                     <legend class="float-left">Ficha Técnica</legend>
                 </div>
-                <div class="col-12 col-sm-6 col-md-8" align="right">
+
+                <div class="col-12 col-sm-12 col-md-10" align="right">
+
+                    <button type="button" class="btn btn-info btn-sm" id="btnColor" >
+                        <span class="fa fa-fill-drip"></span> Color comb.
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnArticulos" >
+                        <span class="fa fa-swatchbook"></span> Articulos
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" id="btnEliminarFT" >
+                        <span class="fa fa-trash-alt"></span> Elimina F.T.
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnEstilos" >
+                        <span class="fa fa-palette"></span> Estilos
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnImprimeCostoFT" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">
+                        <span class="fa fa-palette"></span> Imp.costo F.T
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnFotos" >
+                        <span class="fa fa-images"></span> Fotos
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnCopyFTaFT" >
+                        <span class="fa fa-paste"></span> Copy F.T - F.T
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" id="btnMatSemProd" >
+                        <span class="fa fa-boxes"></span> Mat.sem.Prod
+                    </button>   
+                    <button type="button" class="btn btn-info btn-sm" id="btnSupleMaFT ">
+                        <span class="fa fa-magic"></span> Suple mat
+                    </button>             
+                    <button type="button" class="btn btn-info btn-sm" id="btnSupleMaXLinFT">
+                        <span class="fa fa-magic"></span> Suple mat X linea
+                    </button>
+
                     <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                         <span class="fa fa-arrow-left" ></span> REGRESAR
                     </button>
@@ -44,7 +77,9 @@
                         <span class="fa fa-file-invoice fa-1x"></span> FRACCIONES POR ESTILO
                     </button>
                 </div>
+
             </div>
+
             <div class=" row">
                 <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                     <label for="Estilo">Estilo*</label>
@@ -222,6 +257,35 @@
 </div>
 
 <!--SCRIPT-->
+
+
+<div class="modal" id="mdlEstilosFotos">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ESTILOS (FOTO)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <select id="EstiloFoto" name="EstiloFoto" class="form-control"></select>
+                    </div>
+                    <div class="col-8 text-center">
+                        <a href="image.jpg"  data-fancybox data-caption="Caption for single image">
+                            <img src="<?php print base_url('img/LS.png'); ?>" class="img-thumbnail" id="imgsrc" >
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var master_url = base_url + 'index.php/FichaTecnica/';
     var pnlDatos = $("#pnlDatos");
@@ -244,6 +308,11 @@
     var mdlEditarArticulo = $('#mdlEditarArticulo');
     var btnEditarRenglon = mdlEditarArticulo.find('#btnEditarRenglon');
 
+    var btnArticulos = pnlDatos.find("#btnArticulos"),
+            btnEstilos = pnlDatos.find("#btnEstilos"),
+            btnColor = pnlDatos.find("#btnColor"),
+            btnFotos = pnlDatos.find("#btnFotos"), mdlEstilosFotos = $("#mdlEstilosFotos");
+    var EstiloFotos = mdlEstilosFotos.find("#EstiloFoto");
 
     var Selectizer = function () {
         return {
@@ -285,6 +354,138 @@
     }();
 
     $(document).ready(function () {
+
+        $.fancybox.defaults.animationEffect = "zoom-in-out";
+
+        $("#mdlEstilosFotos").find("#EstiloFoto").change(function () {
+            console.log($(this).val());
+            mdlEstilosFotos.find("#imgsrc").attr('src', $(this).val());
+        });
+
+        btnFotos.click(function () {
+            EstiloFotos[0].selectize.clear(true);
+            $.when($.getJSON('<?php print base_url('FichaTecnica/getEstilosFoto'); ?>').done(function (a, b, c) {
+                $.each(a, function (k, v) {
+                    EstiloFotos[0].selectize.addOption({text: v.CLAVE, value: v.URL});
+                });
+            })).then(function (x) {
+                mdlEstilosFotos.modal('show');
+            });
+        });
+
+
+        btnEstilos.click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('Estilos'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    afterClose: function () {
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Espere...'
+                        });
+                        $.when($.getJSON(master_url + 'getEstilos').done(function (data, x, jq) {
+                            pnlDatos.find("#Estilo")[0].selectize.clear(true);
+                            $.each(data, function (k, v) {
+                                pnlDatos.find("#Estilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
+                            });
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        })).done(function (a) {
+                            HoldOn.close();
+                            onNotifyOld('<span><span>', 'SE HAN ACTUALIZADO LOS ESTILOS', 'info');
+                        });
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+        btnArticulos.click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('Articulos'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    afterClose: function () {
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Espere...'
+                        });
+                        $.when($.getJSON(master_url + 'getArticulos').done(function (data, x, jq) {
+                            pnlDatos.find("#Articulo")[0].selectize.clear(true);
+                            $.each(data, function (k, v) {
+                                pnlDatos.find("#Articulo")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                            });
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        })).done(function (a) {
+                            HoldOn.close();
+                            onNotifyOld('<span><span>', 'SE HAN ACTUALIZADO LOS ARTICULOS', 'info');
+                        });
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+        btnColor.click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('Colores'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
         pnlControlesDetalle.find('#Articulo').selectize({
             valueField: 'Clave',
             labelField: 'Articulo',
@@ -307,7 +508,6 @@
         setFocusSelectToInputOnChange('#Color', '#FechaAlta', pnlDatos);
         setFocusSelectToSelectOnChange('#Pieza', '#Articulo', pnlDatos);
         setFocusSelectToInputOnChange('#Articulo', '#PzXPar', pnlDatos);
-
         pnlDatos.find("#FechaAlta").inputmask({alias: "date"});
         btnAgregar.click(function () {
             isValid('pnlDatos');
@@ -316,7 +516,6 @@
                 onAgregarFila();
             }
         });
-
         pnlDatos.find("[name='Estilo']").change(function () {
             if (nuevo) {
                 pnlDatos.find("[name='Color']")[0].selectize.clear(true);
@@ -326,13 +525,11 @@
                 getFotoXEstilo($(this).val());
             }
         });
-
         pnlDatos.find("[name='Color']").change(function () {
             if (nuevo) {
                 onComprobarExisteEstiloColor(pnlDatos.find("[name='Estilo']").val(), $(this).val());
             }
         });
-
         btnEliminar.click(function () {
             if (temp !== 0 && temp !== undefined && temp > 0) {
                 swal({
@@ -358,7 +555,6 @@
                 onNotify('<span class="fa fa-exclamation fa-lg"></span>', 'DEBE DE ELEGIR UN REGISTRO', 'danger');
             }
         });
-
         btnNuevo.click(function () {
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
@@ -379,14 +575,12 @@
             pnlDatos.find("#Estilo")[0].selectize.focus();
             pnlDatos.find("#FechaAlta").prop("readonly", false);
         });
-
         btnCancelar.click(function () {
             pnlTablero.removeClass("d-none");
             pnlDatos.addClass('d-none');
             pnlDetalle.addClass('d-none');
             validaSelect = false;
         });
-
         btnEditarRenglon.click(function () {
             isValid('mdlEditarArticulo');
             if (valido) {
@@ -407,15 +601,12 @@
                 });
             }
         });
-
         getRecords();
         getEstilos();
         getPiezas();
         getArticulos();
         handleEnter();
     });
-
-
     function getFichaTecnicaDetalleByID(Estilo, Color) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblFichaTecnicaDetalle')) {
@@ -491,12 +682,11 @@
                             /*ELIMINAR*/
                             c.addClass('text-danger');
                             break;
-
                     }
                 });
             },
             "footerCallback": function (row, data, start, end, display) {
-                var api = this.api();//Get access to Datatable API
+                var api = this.api(); //Get access to Datatable API
                 // Update footer
                 var total = api.column(5).data().reduce(function (a, b) {
                     var ax = 0, bx = 0;
@@ -530,18 +720,15 @@
                 },
                 dataSrc: "DeptoCat"
             },
-
             "initComplete": function (x, y) {
                 HoldOn.close();
             }
         });
-
         tblFichaTecnicaDetalle.find('tbody').on('click', 'tr', function () {
             HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
             tblFichaTecnicaDetalle.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = FichaTecnicaDetalle.row(this).data();
-
             HoldOn.close();
             mdlEditarArticulo.find("input").val("");
             $.each(mdlEditarArticulo.find("select"), function (k, v) {
@@ -552,13 +739,10 @@
                 mdlEditarArticulo.find("[name='" + k + "']").val(v);
             });
             (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
-
             mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addItem(dtm.Pieza_ID, true);
             mdlEditarArticulo.find("[name='Articulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
             mdlEditarArticulo.find('#eArticulo')[0].selectize.focus();
-
         });
-
     }
 
     function getRecords() {
@@ -611,7 +795,6 @@
             }
         });
         $('#tblFichaTecnica_filter input[type=search]').focus();
-
         tblFichaTecnica.find('tbody').on('click', 'tr', function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             nuevo = false;
@@ -637,7 +820,6 @@
                     console.log(x, y, z);
                 }).always(function () {
                 });
-
                 pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
                 getFotoXEstilo(dtm.EstiloId);
                 getFichaTecnicaDetalleByID(dtm.EstiloId, dtm.ColorId);
@@ -648,7 +830,6 @@
                 pnlControlesDetalle.find("[name='Articulo']")[0].selectize.clear(true);
                 pnlControlesDetalle.find("[name='Articulo']")[0].selectize.clearOptions();
                 pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
-
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             }).always(function () {

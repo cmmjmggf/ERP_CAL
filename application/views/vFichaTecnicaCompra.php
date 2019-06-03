@@ -1,4 +1,4 @@
-<div class="modal " id="mdlFichaTecnicaCompra"  role="dialog">
+<div class="modal animated flipInY" id="mdlFichaTecnicaCompra"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">

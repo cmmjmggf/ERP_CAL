@@ -214,7 +214,7 @@ class ParesAsignadosControl_model extends CI_Model {
             $USUARIO_ASIGNA = $this->session->ID;
             $FECHA = Date('d/m/Y h:i:s a');
             $this->db->trans_start();
-            $sql = "INSERT INTO `lobo_solo`.`modulosxusuario` (`Modulo`, `Usuario`, `UsuarioAsigna`, `Fecha`) 
+            $sql = "INSERT INTO `modulosxusuario` (`Modulo`, `Usuario`, `UsuarioAsigna`, `Fecha`) 
                 SELECT A.ID AS MODULO,  $USUARIO AS USUARIO, $USUARIO_ASIGNA AS `USUARIO_ASIGNA`,'$FECHA' AS FECHA 
                 FROM modulos AS A WHERE A.ID NOT IN (SELECT B.Modulo FROM modulosxusuario B WHERE B.Usuario = $USUARIO);";
             $this->db->query($sql);

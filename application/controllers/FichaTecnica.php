@@ -82,6 +82,17 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function getEstilosFoto() {
+        try {
+            $burl = base_url();
+            print json_encode(
+                            $this->db->select('E.Clave AS CLAVE, CONCAT("' . $burl . '",E.Foto) AS URL, REPLACE(E.Foto,"uploads/Estilos/","") AS FOTO ', false)
+                                    ->from('estilos AS E')->group_by('E.Foto')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPiezas() {
         try {
             print json_encode($this->Fichatecnica_model->getPiezas());
