@@ -18,7 +18,10 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Nombre</th>
-                                            <th>Importe</th>
+                                            <th>Ahorro</th>
+                                            <th>Préstamo</th>
+                                            <th>Abono</th>
+                                            <th>Saldo</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -48,22 +51,47 @@
 
         mdlLimpiaCajaAhorroPrestamosEmpleados.on('shown.bs.modal', function () {
             getEmpleadosParaLimpiarAhorraPrestamosPLimpiarCampos();
+            //mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').focus();
         });
 
         mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').on("click", function () {
-
-            HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
-            $.ajax({
-                url: base_url + 'index.php/Empleados/onModificarExt',
-                type: "POST"
-            }).done(function (data, x, jq) {
-                EmpleadosParaLimpiarAhorraPrestamos.ajax.reload();
-                HoldOn.close();
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x, y, z);
-                HoldOn.close();
+            swal({
+                title: "ESTÁS SEGURO?",
+                text: 'Esta acción reiniciará los valores de los préstamos y cajas de ahorro de todos los empleados',
+                icon: "warning",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                buttons: {
+                    cancelar: {
+                        text: "Cancelar",
+                        value: "cancelar"
+                    },
+                    eliminar: {
+                        text: "Continuar",
+                        value: "aceptar"
+                    }
+                }
+            }).then((value) => {
+                switch (value) {
+                    case "aceptar":
+                        HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
+                        $.ajax({
+                            url: base_url + 'index.php/Empleados/onLimpiarCamposAhorroPrestamo',
+                            type: "POST"
+                        }).done(function (data, x, jq) {
+                            EmpleadosParaLimpiarAhorraPrestamos.ajax.reload();
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x, y, z);
+                            HoldOn.close();
+                        });
+                    case "cancelar":
+                        swal.close();
+                        break;
+                }
             });
+
         });
 
 
@@ -88,7 +116,11 @@
             "columns": [
                 {"data": "Clave"},
                 {"data": "Nombre"},
-                {"data": "Ahorro"}
+                {"data": "Ahorro"},
+                {"data": "PressAcum"},
+                {"data": "AbonoPres"},
+                {"data": "SaldoPres"}
+
             ],
             language: lang,
             "autoWidth": true,
@@ -107,22 +139,10 @@
                 HoldOn.close();
             }
         });
-        $('#tblEmpleadosParaLimpiarAhorraPrestamos_filter input[type=search]').addClass('selectNotEnter');
+        $('#tblEmpleadosParaLimpiarAhorraPrestamos_filter input[type=search]').focus();
         tblEmpleadosParaLimpiarAhorraPrestamos.find('tbody').on('click', 'tr', function () {
             tblEmpleadosParaLimpiarAhorraPrestamos.find("tbody tr").removeClass("success");
             $(this).addClass("success");
-        });
-    }
-
-    function getEmpleadosCajaAhorroSelect() {
-        $.getJSON(base_url + 'index.php/Empleados/getEmpleadosCajaAhorro', ).done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlLimpiaCajaAhorroPrestamosEmpleados.find("#Empleado")[0].selectize.addOption({text: v.Clave + ' ' + v.Nombre, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
-            HoldOn.close();
         });
     }
 

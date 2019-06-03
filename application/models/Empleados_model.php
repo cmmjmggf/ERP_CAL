@@ -36,7 +36,8 @@ class Empleados_model extends CI_Model {
     public function getEmpleadosCajaAhorro() {
         try {
             return $this->db->select("E.Numero AS Clave, "
-                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, E.Ahorro "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                                    . "E.Ahorro, E.SaldoPres, E.PressAcum, E.AbonoPres "
                                     . "  ", false)
                             ->from('empleados AS E')->where('E.Ahorro > 0', null, false)->where('E.altabaja', 1)->order_by('Clave', 'ASC')->get()->result();
         } catch (Exception $exc) {
