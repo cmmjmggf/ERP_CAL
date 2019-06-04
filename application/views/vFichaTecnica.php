@@ -36,36 +36,7 @@
 
                 <div class="col-12 col-sm-12 col-md-10" align="right">
 
-                    <button type="button" class="btn btn-info btn-sm" id="btnColor" >
-                        <span class="fa fa-fill-drip"></span> Color comb.
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnArticulos" >
-                        <span class="fa fa-swatchbook"></span> Articulos
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm" id="btnEliminarFT" >
-                        <span class="fa fa-trash-alt"></span> Elimina F.T.
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnEstilos" >
-                        <span class="fa fa-palette"></span> Estilos
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnImprimeCostoFT" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">
-                        <span class="fa fa-palette"></span> Imp.costo F.T
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnFotos" >
-                        <span class="fa fa-images"></span> Fotos
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnCopyFTaFT" >
-                        <span class="fa fa-paste"></span> Copy F.T - F.T
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm" id="btnMatSemProd" >
-                        <span class="fa fa-boxes"></span> Mat.sem.Prod
-                    </button>   
-                    <button type="button" class="btn btn-info btn-sm" id="btnSupleMaFT ">
-                        <span class="fa fa-magic"></span> Suple mat
-                    </button>             
-                    <button type="button" class="btn btn-info btn-sm" id="btnSupleMaXLinFT">
-                        <span class="fa fa-magic"></span> Suple mat X linea
-                    </button>
+
 
                     <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                         <span class="fa fa-arrow-left" ></span> REGRESAR
@@ -81,6 +52,48 @@
             </div>
 
             <div class=" row">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center my-2">
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnColor" >
+                        <span class="fa fa-fill-drip"></span> Color comb.
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArticulos" >
+                        <span class="fa fa-swatchbook"></span> Articulos
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm my-1" id="btnEliminarFT" >
+                        <span class="fa fa-trash-alt"></span> Elimina F.T.
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnEstilos" >
+                        <span class="fa fa-palette"></span> Estilos
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnImprimeCostoFT" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">
+                        <span class="fa fa-palette"></span> Imp.costo F.T
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnFotos" >
+                        <span class="fa fa-images"></span> Fotos
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnCopyFTaFT" >
+                        <span class="fa fa-paste"></span> Copy F.T - F.T
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnMatSemProd" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
+                        <span class="fa fa-boxes"></span> Mat.sem.Prod
+                    </button>   
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT ">
+                        <span class="fa fa-magic"></span> Suple mat
+                    </button>             
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaXLinFT">
+                        <span class="fa fa-magic"></span> Suple mat X linea
+                    </button>     
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArtConsumoXEstiloColor">
+                        <span class="fa fa-chart-pie"></span> Art. y consumo x estilo color
+                    </button> 
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnActualizaConsumoEstiloFT">
+                        <span class="fa fa-band-aid"></span> Actualiza consumo estilo/ficha técnica
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnAdicionaMatXLin">
+                        <span class="fa fa-capsules"></span> Adiciona material X linea
+                    </button>
+                </div>
+
                 <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                     <label for="Estilo">Estilo*</label>
                     <select class="form-control form-control-sm required " id="Estilo" name="Estilo" required>
@@ -274,18 +287,91 @@
                         <select id="EstiloFoto" name="EstiloFoto" class="form-control"></select>
                     </div>
                     <div class="col-8 text-center">
-                        <a href="image.jpg"  data-fancybox data-caption="Caption for single image">
+                        <a href="image.jpg"  data-fancybox="images" data-caption="">
                             <img src="<?php print base_url('img/LS.png'); ?>" class="img-thumbnail" id="imgsrc" >
                         </a>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal animated flipInX" id="mdlEliminaFTXEstilo">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar fichas tecnicas x estilo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" id="EstiloElimina" name="EstiloElimina" class="form-control" placeholder="Estilo...">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" id="btnEliminarFichasXEstilo" class="btn btn-danger">
+                            <span class="fa fa-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal animated fadeIn" id="mdlCopiarFT">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Copia ficha tecnica a ficha tecnica</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-danger font-weight-bold">Copiar Estilo/Color </p>
+                    </div>
+                    <div class="col-12">
+                        <label>Estilo</label>
+                        <input type="text" id="EstiloACopiar" name="EstiloACopiar" class="form-control" maxlength="8" placeholder="Estilo...">
+                    </div>
+                    <div class="col-12">
+                        <label>Color</label>
+                        <input type="text" id="ColorACopiar" name="ColorACopiar" class="form-control" maxlength="4" placeholder="Color...">
+                    </div>
+                    <div class="col-12 my-2">
+                        <p class="text-danger font-weight-bold">Al Estilo/Color</p>
+                    </div>
+                    <div class="col-12">
+                        <label>Estilo</label>
+                        <input type="text" id="EstiloAReemplazar" name="EstiloAReemplazar" class="form-control" maxlength="8" placeholder="Estilo...">
+                    </div> 
+                    <div class="col-12">
+                        <label>Color</label>
+                        <input type="text" id="ColorAReemplazar" name="ColorAReemplazar" class="form-control" maxlength="4" placeholder="Color...">
+                    </div> 
+                </div>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     var master_url = base_url + 'index.php/FichaTecnica/';
     var pnlDatos = $("#pnlDatos");
@@ -311,8 +397,13 @@
     var btnArticulos = pnlDatos.find("#btnArticulos"),
             btnEstilos = pnlDatos.find("#btnEstilos"),
             btnColor = pnlDatos.find("#btnColor"),
-            btnFotos = pnlDatos.find("#btnFotos"), mdlEstilosFotos = $("#mdlEstilosFotos");
-    var EstiloFotos = mdlEstilosFotos.find("#EstiloFoto");
+            btnEliminarFT = pnlDatos.find("#btnEliminarFT"),
+            btnFotos = pnlDatos.find("#btnFotos"), btnCopyFTaFT = pnlDatos.find("#btnCopyFTaFT"),
+            mdlEstilosFotos = $("#mdlEstilosFotos");
+    var EstiloFotos = mdlEstilosFotos.find("#EstiloFoto"),
+            mdlEliminaFTXEstilo = $("#mdlEliminaFTXEstilo"),
+            mdlCopiarFT = $("#mdlCopiarFT"), btnAceptarCopiar = mdlCopiarFT.find("#btnAceptar"),
+            btnMatSemProd = pnlDatos.find("#btnMatSemProd");
 
     var Selectizer = function () {
         return {
@@ -355,11 +446,143 @@
 
     $(document).ready(function () {
 
+
+
+        btnAceptarCopiar.click(function () {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Espere...'
+            });
+            if (mdlCopiarFT.find("#EstiloACopiar").val() && mdlCopiarFT.find("#ColorACopiar").val() &&
+                    mdlCopiarFT.find("#ColorAReemplazar").val() && mdlCopiarFT.find("#EstiloAReemplazar").val()) {
+                $.getJSON('<?php print base_url('FichaTecnica/getFichasXEstilo'); ?>',
+                        {ESTILO: mdlCopiarFT.find("#EstiloAReemplazar").val()}).done(function (a) {
+                    console.log(a);
+                    if (parseInt(a[0].FICHAS_X_ESTILO) > 0) {
+                        swal('ATENCIÓN', 'NO SE PUEDE COPIAR LA FICHA TECNICA DE ESTE ESTILO-COLOR A ESTE ESTILO-COLOR, PORQUE YA TIENE ESTABLECIDAS FICHAS TECNICAS', 'warning').then((value) => {
+                            mdlCopiarFT.find("#EstiloACopiar").focus().select();
+                        });
+                    } else {
+                        $.post('<?php print base_url('FichaTecnica/onCopiarFT'); ?>',
+                                {
+                                    ESTILOACOPIAR: mdlCopiarFT.find("#EstiloACopiar").val(),
+                                    COLORACOPIAR: mdlCopiarFT.find("#ColorACopiar").val(),
+                                    ESTILO: mdlCopiarFT.find("#EstiloAReemplazar").val(),
+                                    COLOR: mdlCopiarFT.find("#ColorAReemplazar").val()
+                                }).done(function (a) {
+                            console.log(a);
+                            swal('ATENCIÓN', 'SE HA COPIADO LA FICHA TÉCNICA CON EL ESTILO ' + mdlCopiarFT.find("#EstiloACopiar").val() + ' COLOR ' + mdlCopiarFT.find("#ColorACopiar").val(), 'warning')
+                                    .then((value) => {
+                                        mdlCopiarFT.find("#EstiloACopiar").val('');
+                                        mdlCopiarFT.find("#ColorACopiar").val('');
+                                        mdlCopiarFT.find("#EstiloAReemplazar").val('');
+                                        mdlCopiarFT.find("#ColorAReemplazar").val('');
+                                    });
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        });
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
+                    mdlCopiarFT.find("#EstiloACopiar").focus().select();
+                });
+            }
+        });
+
+        mdlCopiarFT.on('shown.bs.modal', function () {
+            mdlCopiarFT.find("#EstiloACopiar").val('');
+            mdlCopiarFT.find("#EstiloACopiar").focus();
+        });
+
+        btnCopyFTaFT.click(function () {
+            mdlCopiarFT.modal('show');
+        });
+
+        mdlEliminaFTXEstilo.find("#btnEliminarFichasXEstilo").click(function () {
+            if (mdlEliminaFTXEstilo.find("#EstiloElimina").val()) {
+                $.getJSON('<?php print base_url('FichaTecnica/getFichasAEliminarXEstilo'); ?>', {
+                    ESTILO: mdlEliminaFTXEstilo.find("#EstiloElimina").val()
+                }).done(function (a, b, c) {
+                    console.log(a);
+                    if (parseInt(a[0]) > 0) {
+                        swal({
+                            title: "Se eliminarán " + a[0].FICHAS_A_ELIMINAR + " fichas técnicas, ¿Estas seguro?",
+                            text: "Nota: Esta acción no se puede deshacer",
+                            icon: "warning",
+                            buttons: {
+                                cancelar: {
+                                    text: "Cancelar",
+                                    value: "no"
+                                },
+                                cambiar: {
+                                    text: "Aceptar",
+                                    value: "ok"
+                                }
+                            }
+                        }).then((value) => {
+                            switch (value) {
+                                case "ok":
+                                    HoldOn.open({
+                                        theme: 'sk-rect',
+                                        message: 'Eliminando...'
+                                    })
+                                    $.post('<?php print base_url('FichaTecnica/onEliminarFTXEstilo'); ?>', {
+                                        ESTILO: mdlEliminaFTXEstilo.find("#EstiloElimina").val()
+                                    }).done(function (aa, bb, cc) {
+                                        mdlEliminaFTXEstilo.find("#EstiloElimina").val('');
+                                        swal('ATENCIÓN', 'SE HAN ELIMINADO ' + a[0].FICHAS_A_ELIMINAR + ' FICHAS TECNICAS', 'success');
+                                    }).always(function () {
+                                        HoldOn.close();
+                                    });
+                                    break;
+                                case "cancelar":
+                                    swal.close();
+                                    HoldOn.close();
+                                    break;
+                            }
+                        });
+                    } else {
+                        swal('ATENCION', 'ESTE ESTILO NO TIENE NINGUNA FICHA TECNICA ESTABLECIDA', 'warning').then((value) => {
+                            mdlEliminaFTXEstilo.find("#EstiloElimina").focus().select();
+                        });
+                    }
+                });
+
+            } else {
+                swal('ATENCION', 'ES NECESARIO ESTABLECER UN ESTILO', 'warning').then((value) => {
+                    mdlEliminaFTXEstilo.find("#EstiloElimina").focus().select();
+                });
+            }
+        });
+
+        mdlEliminaFTXEstilo.on('shown.bs.modal', function () {
+            mdlEliminaFTXEstilo.find("#EstiloElimina").val('');
+            mdlEliminaFTXEstilo.find("#EstiloElimina").focus();
+        });
+
+        btnEliminarFT.click(function () {
+            mdlEliminaFTXEstilo.modal('show');
+        });
+
         $.fancybox.defaults.animationEffect = "zoom-in-out";
 
-        $("#mdlEstilosFotos").find("#EstiloFoto").change(function () {
+        mdlEstilosFotos.find('[data-fancybox="images"]').fancybox({
+            keyboard: true,
+            arrows: true,
+            transitionEffect: "rotate",
+            buttons: true
+        });
+
+        EstiloFotos.change(function () {
             console.log($(this).val());
+            mdlEstilosFotos.find("#imgsrc").parent().attr('data-caption', $(this).find("option:selected").text());
             mdlEstilosFotos.find("#imgsrc").attr('src', $(this).val());
+            mdlEstilosFotos.find("#imgsrc").parent().attr('href', $(this).val());
         });
 
         btnFotos.click(function () {
@@ -1050,4 +1273,9 @@
         -webkit-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
+    .btn-info-blue{
+        color: #fff;
+        background-color: #3F51B5 !important;
+        border-color: #3F51B5 !important;
+    } 
 </style>

@@ -39,7 +39,7 @@ class AvancePespunteMaquila_model extends CI_Model {
                             ->from('controles AS C')
                             ->join('controlpes AS CPS', 'CPS.Control = C.Control', 'left')
                             ->join('avance AS AV', 'AV.Control = C.Control')
-                            ->where('CPS.ID IS NOT NULL', null, false)
+                            ->where('CPS.ID IS NOT NULL', null, false)->limit(999)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -61,6 +61,7 @@ class AvancePespunteMaquila_model extends CI_Model {
 
     public function getEmpleados() {
         try {
+            /* es necesario modificar aqui ya que algunos no estan en este puesto pero si son pespuntadores , cambiarlo por el depto */
             return $this->db->select("E.Numero AS CLAVE, "
                                     . "CONCAT(E.Numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ',E.Materno) AS EMPLEADO", false)
                             ->from('empleados AS E')
@@ -85,16 +86,32 @@ class AvancePespunteMaquila_model extends CI_Model {
         }
     }
 
-    public function getControlesParaPespunte() {
+    public function getControlesParaPespunte($MAQUILA) {
         try {
-            return $this->db->select("C.ID, C.Control AS CONTROL, C.Estilo AS ESTILO, "
-                                    . "C.Color AS COLOR, C.Pares AS PARES, "
-                                    . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
-                            ->from('controles AS C')
-                            ->join('pedidox AS P', 'C.Control = P.Control')
-                            ->join('controlpes AS CP', 'CP.Control = C.Control', 'left')
-                            ->where('CP.ID IS NULL', null, false)
-                            ->get()->result();
+//            print "\n";
+//            print (strlen($MAQUILA) <= 0 )." - ". ($MAQUILA === '' )." -- ". ($MAQUILA == NULL) ." --- ". ($MAQUILA === 'NULL');
+//            print "\n";
+            $this->db->select("C.ID, C.Control AS CONTROL, C.Estilo AS ESTILO, "
+                            . "C.Color AS COLOR, C.Pares AS PARES, "
+                            . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
+                    ->from('controles AS C')
+                    ->join('pedidox AS P', 'C.Control = P.Control')
+                    ->join('controlpes AS CP', 'CP.Control = C.Control', 'left')
+                    ->where('CP.ID IS NULL', null, false);
+            if (strlen($MAQUILA) <= 0 && $MAQUILA === '' && $MAQUILA == NULL) {
+                $this->db->limit(999);
+            } else {
+                $this->db->where('C.Maquila', $MAQUILA);
+                $this->db->limit(9999);
+            }
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+//            print $str;
+            $data = $query->result();
+            return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

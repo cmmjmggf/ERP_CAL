@@ -93,6 +93,80 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function onCopiarFT() {
+        try {
+            $ESTILOACOPIAR = $this->input->post('ESTILOACOPIAR');
+            $COLORACOPIAR = $this->input->post('COLORACOPIAR');
+
+            $ESTILO = $this->input->post('ESTILO');
+            $COLOR = $this->input->post('COLOR');
+            $ft = $this->db->select("FT.Estilo, FT.Color, FT.Pieza, FT.Articulo, FT.Precio, FT.Consumo, FT.PzXPar, FT.Estatus, FT.FechaAlta, FT.AfectaPV ")
+                            ->from("fichatecnica AS FT")
+                            ->where("Estilo LIKE '$ESTILOACOPIAR' AND Color = $COLORACOPIAR", null, false)
+                            ->get()->result();
+            foreach ($ft as $k => $v) {
+                $nft = array(
+                    'Estilo' => $ESTILO,
+                    'Color' => $COLOR,
+                    'Pieza' => $v->Pieza,
+                    'Articulo' => $v->Articulo,
+                    'Precio' => $v->Precio,
+                    'Consumo' => $v->Consumo,
+                    'PzXPar' => $v->PzXPar,
+                    'Estatus' => $v->Estatus,
+                    'FechaAlta' => Date('d/m/Y'),
+                    'AfectaPV' => $v->AfectaPV
+                );
+                $this->db->insert('fichatecnica', $nft);
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFichasXEstilo() {
+        try {
+            $Estilo = $this->input->get('ESTILO');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS FICHAS_X_ESTILO FROM "
+                                    . "(SELECT COUNT(*) FROM fichatecnica AS FT "
+                                    . "WHERE FT.Estilo LIKE '$Estilo' "
+                                    . "GROUP BY FT.Estilo, FT.Color) AS X")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFichasAEliminarXEstilo() {
+        try {
+            $Estilo = $this->input->get('ESTILO');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS FICHAS_A_ELIMINAR FROM "
+                                    . "(SELECT COUNT(*) FROM fichatecnica AS FT "
+                                    . "WHERE FT.Estilo LIKE '$Estilo' "
+                                    . "GROUP BY FT.Estilo, FT.Color) AS X")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarFTXEstilo() {
+        try {
+            $Estilo = $this->input->post('ESTILO');
+            $x = $this->db;
+            $x->trans_begin();
+            $this->db->where('Estilo', $Estilo);
+            $this->db->delete('fichatecnica');
+            if ($x->trans_status() === FALSE) {
+                $x->trans_rollback();
+            } else {
+                $x->trans_commit();
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPiezas() {
         try {
             print json_encode($this->Fichatecnica_model->getPiezas());

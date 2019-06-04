@@ -48,6 +48,9 @@
                         <legend >Empleado</legend>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
+                        <button type="button" class="btn btn-foto btn-sm" id="btnCredencial" >
+                            <span class="fa fa-images" ></span> CAMBIAR FOTO
+                        </button>
                         <button type="button" class="btn btn-lobo btn-sm" id="btnCredencial" >
                             <span class="fa fa-id-card" ></span> CREDENCIAL
                         </button>
@@ -778,5 +781,10 @@
         color: #fff;
         background-color: #795548;
         border-color: #4E342E;
+    }
+    .btn-foto{
+        color: #fff;
+        background-color: #99cc00;
+        border: 2px solid #99cc00; 
     }
 </style>
