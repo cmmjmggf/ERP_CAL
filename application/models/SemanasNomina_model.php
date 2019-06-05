@@ -10,6 +10,14 @@ class SemanasNomina_model extends CI_Model {
         parent::__construct();
     }
 
+    public function onComprobarSemanaNomina($Clave, $Ano) {
+        try {
+            return $this->db->select("G.Sem")->from("semanasnomina AS G")->where("G.Sem", $Clave)->where("G.Ano", $Ano)->where("G.Estatus", "ACTIVO")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             $this->db->select("U.Ano AS 'Año',U.Estatus  ", false);
@@ -121,9 +129,9 @@ class SemanasNomina_model extends CI_Model {
 
     public function getSemanaByFecha($fecha) {
         try {
-            $this->db->select('U.Sem', false);
+            $this->db->select('U.sem', false);
             $this->db->from('semanasnomina AS U');
-            $this->db->where('\'' . $fecha . '\' BETWEEN CONVERT(DATE,U.FechaIni) AND CONVERT(DATE,U.FechaFin)');
+            $this->db->where("str_to_date('$fecha','%d/%m/%Y') BETWEEN str_to_date(FechaIni,'%d/%m/%Y') AND str_to_date(FechaFin,'%d/%m/%Y')", null, false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

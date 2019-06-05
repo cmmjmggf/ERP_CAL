@@ -34,6 +34,14 @@ class Semanas extends CI_Controller {
         }
     }
 
+    public function onComprobarSemanaNomina() {
+        try {
+            print json_encode($this->SemanasNomina_model->onComprobarSemanaNomina($this->input->get('Clave'), $this->input->get('Ano')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             $data = $this->SemanasNomina_model->getRecords();

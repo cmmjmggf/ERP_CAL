@@ -125,7 +125,7 @@
             language: lang,
             "autoWidth": true,
             "colReorder": false,
-            "displayLength": 50,
+            "displayLength": 500,
             scrollY: 260,
             "bLengthChange": false,
             "deferRender": true,
