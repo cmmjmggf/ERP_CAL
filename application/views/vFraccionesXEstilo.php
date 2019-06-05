@@ -5,10 +5,10 @@
                 <legend class="float-left">Fracciones por Estilo</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-success" id="btnAumentaPrecioFracciones" >
+                <button type="button" class="btn btn-success btn-sm" id="btnAumentaPrecioFracciones" >
                     <span class="fa fa-dollar-sign"></span> AUMENTA PRECIO FRACCIONES
                 </button>
-                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span> NUEVO</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span> NUEVO</button>
             </div>
         </div>
         <div class="card-block">
@@ -40,6 +40,15 @@
                     </button>
                     <button type="button" class="btn btn-warning btn-sm d-none" id="btnImprimirFraccionesXEstilo">
                         <span class="fa fa-file-invoice fa-1x"></span> IMPRIMIR
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" id="btnEstilos" >
+                        <span class="fa fa-boxes" ></span> ESTILOS
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" id="btnFracciones" >
+                        <span class="fa fa-file-alt" ></span> FRACCIONES
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" id="btnFichaTecnica" >
+                        <span class="fa fa-capsules" ></span> FICHAS TÉCNICAS
                     </button>
                 </div>
             </div>
@@ -259,6 +268,10 @@
     var mdlEditarRenglon = $('#mdlEditarRenglon');
     var btnEditarRenglon = mdlEditarRenglon.find('#btnEditarRenglon');
 
+    var btnFichaTecnica = $('#btnFichaTecnica');
+    var btnFracciones = $('#btnFracciones');
+    var btnEstilos = $('#btnEstilos');
+
 
     var mdlAumentaPrecioFracciones = $('#mdlAumentaPrecioFracciones');
     var btnAceptaAumentoPrecio = mdlAumentaPrecioFracciones.find('#btnAceptaAumentoPrecio');
@@ -271,6 +284,87 @@
         setFocusSelectToSelectOnChange('#Departamento', '#Fraccion', pnlDatos);
         setFocusSelectToInputOnChange('#Fraccion', '#CostoMO', pnlDatos);
         setFocusSelectToInputOnChange('#EstiloAum', '#PorAum', mdlAumentaPrecioFracciones);
+
+        btnEstilos.click(function () {
+            $.fancybox.open({
+                src: base_url + '/Estilos/?origen=FICHASTECNICAS',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "85%",
+                            height: "85%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        btnFracciones.click(function () {
+            $.fancybox.open({
+                src: base_url + '/Fracciones/?origen=PRODUCCION',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "85%",
+                            height: "85%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        btnFichaTecnica.click(function () {
+            $.fancybox.open({
+                src: base_url + '/FichaTecnica/?origen=MATERIALES',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "85%",
+                            height: "85%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
 
         btnAumentaPrecioFracciones.click(function () {
             mdlAumentaPrecioFracciones.modal('show');

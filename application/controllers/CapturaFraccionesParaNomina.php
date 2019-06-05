@@ -24,7 +24,8 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         $parametros["sem"] = $this->input->post('Sem');
         $parametros["emp"] = $this->input->post('Emp');
 
-        $report_name = "jrxml\nomina\\{$Reporte}.jasper";
+        $report_name = "jrxml\destajos\\{$Reporte}.jasper";
+
 
         $jc->setJasperurl($report_name);
         $jc->setParametros($parametros);
@@ -128,6 +129,15 @@ class CapturaFraccionesParaNomina extends CI_Controller {
     public function getEmpleados() {
         try {
             print json_encode($this->CapturaFraccionesParaNomina_model->getEmpleados());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getControlesNominaRastreo() {
+        try {
+            print json_encode($this->CapturaFraccionesParaNomina_model->getControlesNominaRastreo(
+                                    $this->input->get('Control'), $this->input->get('Ano'), $this->input->get('Sem'), $this->input->get('Emp')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

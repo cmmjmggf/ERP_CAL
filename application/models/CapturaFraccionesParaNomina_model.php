@@ -30,6 +30,28 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
         }
     }
 
+    public function getControlesNominaRastreo($Control, $Ano, $Sem, $Empleado) {
+        try {
+            $this->db->select("*"
+                            . "")
+                    ->from("fracpagnomina")
+                    ->like('control', $Control)
+                    ->like('anio', $Ano)
+                    ->like('semana', $Sem)
+                    ->like('numeroempleado', $Empleado, 'after')->limit(1500);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords($Ano, $Sem) {
         try {
             $this->db->select("ID, numeroempleado, semana, date_format(fecha,'%d/%m/%Y') as fecha, control, estilo ,numfrac, pares, "

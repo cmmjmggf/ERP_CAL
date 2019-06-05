@@ -5,48 +5,29 @@
                 <legend class="float-left">Captura fracciones para nómina</legend>
             </div>
             <div class="col-12 col-sm-8 col-md-8 animated bounceInLeft" align="right" id="Acciones">
-                <button type="button" class="btn btn-primary btn-sm " id="btnBuscar" >
-                    <span class="fa fa-search" ></span> BUSCA DOC
+                <button type="button" class="btn btn-primary btn-sm " id="btnVerFracciones" >
+                    <span class="fa fa-search" ></span> FRACCIONES
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm " id="btnVerDefectos" >
-                    <span class="fa fa-check-double" ></span> DEFECTOS
+                <button type="button" class="btn btn-secondary btn-sm " id="btnVerAvance" >
+                    <span class="fa fa-check-double" ></span> AVANCE
                 </button>
-                <button type="button" class="btn btn-info btn-sm " id="btnVerDetalles" >
-                    <span class="fa fa-cube" ></span> DETALLES
+                <button type="button" class="btn btn-warning btn-sm" id="btnAvanceAnt" >
+                    <span class="fa fa-check-double" ></span> AVANCE ANT.
                 </button>
-                <button type="button" class="btn btn-warning btn-sm" id="btnListaPrecios" >
-                    <span class="fa fa-dollar-sign" ></span> LISTA PRECIOS
+                <button type="button" class="btn btn-info btn-sm " id="btnRastreoControl" >
+                    <span class="fa fa-cube" ></span> RAST/ CONTROL
                 </button>
-                <button type="button" class="btn btn-success btn-sm" id="btnGeneralListaPrecios" >
-                    <span class="fa fa-dollar-sign" ></span> GEN PRECIOS A MAQ-1
+                <button type="button" class="btn btn-info btn-sm " id="btnRastreoConcepto" >
+                    <span class="fa fa-cube" ></span> RAST/ CONCEPTO
+                </button>
+
+                <button type="button" class="btn btn-success btn-sm" id="btnValesComida" >
+                    <span class="fa fa-dollar-sign" ></span> VALES/COMIDA
                 </button>
                 <button type="button" class="btn btn-danger btn-sm" id="btnDevClientes" >
                     <span class="fa fa-ban" ></span> DEV. DE CLIENTES
                 </button>
 
-            </div>
-            <div class="col-12 col-sm-6 col-md-6 d-none animated flipInX" id="Busqueda">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-4">
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="MaqB" placeholder="Maq">
-                        </div>
-                        <div class="col-4">
-                            <input type="text" class="form-control form-control-sm numbersOnly" id="DocB" placeholder="Documento">
-                        </div>
-                        <div class="col-4 text-right">
-                            <button type="button" id="btnAceptarBusqueda" class="btn btn-primary btn-sm ">
-                                <span class="fa fa-check"></span> ACEPTAR
-                            </button>
-                            <button type="button" class="btn btn-success btn-sm" id="btnImprimirB">
-                                <i class="fa fa-print"></i> RE-IMPRIMIR
-                            </button>
-                            <button type="button" id="btnCancelarBusqueda" class="btn btn-secondary btn-sm " data-toggle="tooltip" data-placement="top" title="Cancelar Busqueda">
-                                <span class="fa fa-arrow-left"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -136,7 +117,7 @@
             </div>
             <div class="col-12 col-sm-12 col-md-3">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="cImprimeSemCompletaDest" >
+                    <input type="checkbox" class="custom-control-input selectNotEnter" id="cImprimeSemCompletaDest" >
                     <label class="custom-control-label text-info labelCheck" for="cImprimeSemCompletaDest">Imprime toda la semana</label>
                 </div>
                 <button type="button" id="btnAceptar" class="btn btn-primary btn-sm selectNotEnter">
@@ -149,21 +130,17 @@
         </div>
     </div>
 </div>
-
-
 <script>
     var master_url = base_url + 'index.php/CapturaFraccionesParaNomina/';
     var pnlTablero = $("#pnlTablero div.card-body");
     var Maq = pnlTablero.find("#Maq"), Control = pnlTablero.find("#Control"),
             FraccionesNomina, tblFraccionesNomina = pnlTablero.find("#tblFraccionesNomina"),
             btnAceptar = pnlTablero.find("#btnAceptar"), btnImprimir = pnlTablero.find("#btnImprimir");
-    var btnVerDefectos = pnlTablero.find('#btnVerDefectos');
-    var btnVerOrdPrd = pnlTablero.find('#btnVerOrdPrd');
-    var btnVerDetalles = pnlTablero.find('#btnVerDetalles');
-    var btnListaPrecios = pnlTablero.find('#btnListaPrecios');
-    var btnGeneralListaPrecios = pnlTablero.find('#btnGeneralListaPrecios');
-    var btnDevClientes = pnlTablero.find('#btnDevClientes');
-    var btnBuscarControl = pnlTablero.find('#btnBuscarControl');
+    var btnVerFracciones = pnlTablero.find('#btnVerFracciones');
+    var btnVerAvance = pnlTablero.find('#btnVerAvance');
+
+    var btnRastreoControl = pnlTablero.find('#btnRastreoControl');
+
 
     var nuevo = true;
     var pCelula = 0, DeptoEmp = 0, ParesPed = 0;
@@ -413,6 +390,69 @@
                 });
             }
 
+        });
+
+        btnVerFracciones.click(function () {
+            if (seg === 0) {
+                swal('ATENCIÓN', 'USUARIO NO AUTORIZADO PARA VER ESTE MÓDULO', 'error');
+            } else {
+                $.fancybox.open({
+                    src: base_url + '/FraccionesXEstilo/?origen=PRODUCCION',
+                    type: 'iframe',
+                    opts: {
+                        afterShow: function (instance, current) {
+                            console.info('done!');
+                        },
+                        iframe: {
+                            // Iframe template
+                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                            preload: true,
+                            // Custom CSS styling for iframe wrapping element
+                            // You can use this to set custom iframe dimensions
+                            css: {
+                                width: "95%",
+                                height: "95%"
+                            },
+                            // Iframe tag attributes
+                            attr: {
+                                scrolling: "auto"
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+
+        btnVerAvance.click(function () {
+            $.fancybox.open({
+                src: base_url + '/Avance.shoes/?origen=PRODUCCION',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        btnRastreoControl.click(function () {
+            $('#mdlRastreoControlNomina').modal('show');
         });
     });
 
@@ -750,6 +790,8 @@
         $.getJSON(master_url + 'getSemanaByFecha', {Fecha: fecha}).done(function (data) {
             if (data.length > 0) {
                 pnlTablero.find("#Sem").val(data[0].sem);
+                $('#mdlRastreoControlNomina').find("#SemRastreo").val(data[0].sem);
+                sem_ini = data[0].sem;
                 getRecords(new Date().getFullYear(), data[0].sem);
             } else {
                 swal('ERROR', 'NO EXISTE SEMANA', 'info');
@@ -818,3 +860,5 @@
         font-size: 16px !important;
     }
 </style>
+<?php
+$this->load->view('vRastreoControlNomina');
