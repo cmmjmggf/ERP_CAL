@@ -206,6 +206,15 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function getLineas() {
+        try {
+           print json_encode(
+                            $this->db->query("SELECT  L.Clave AS CLAVE, L.Descripcion AS LINEA FROM lineas AS L ORDER BY L.Clave ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getNumPiezasASuplir() {
         try {
             $PZA = $this->input->get('PZA');
@@ -286,6 +295,33 @@ class FichaTecnica extends CI_Controller {
             if ($MATERIAL !== '') {
                 $this->db->where('FT.Articulo', $MATERIAL);
             } else {
+                $this->db->limit(2000);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPiezasMaterialXLinea() {
+        try {
+            $LINEA = $this->input->get('LINEA');
+            $MATERIAL = $this->input->get('MATERIAL');
+            $this->db->select('FT.ID,FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave');
+            if ($LINEA !== '') {
+                $this->db->where('E.Linea', $LINEA);
+            }  
+            if ($MATERIAL !== '') {
+                $this->db->where('FT.Articulo', $MATERIAL);
+            }  
+            if ($LINEA === '' && $MATERIAL === '') { 
                 $this->db->limit(2000);
             }
             print json_encode($this->db->get()->result());

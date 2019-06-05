@@ -77,10 +77,16 @@
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnMatSemProd" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
                         <span class="fa fa-boxes"></span> Mat.sem.Prod
                     </button>   
+                    <button type="button" class="btn btn-danger btn-sm my-1" id="btnAdicionaMaterialFijo" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
+                        <span class="fa fa-plus"></span> Adiciona material fijo
+                    </button>   
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT " data-toggle="modal" data-target="#mdlSuplePiezaEnFT">
+                        <span class="fa fa-magic"></span> Suple pieza x pieza en F.T
+                    </button>      
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT " data-toggle="modal" data-target="#mdlSupleMaterialEnFT">
                         <span class="fa fa-magic"></span> Suple mat
                     </button>             
-                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaXLinFT" data-toggle="modal" data-target="#mdlSupleMaterialEnFT">
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaXLinFTLinea" data-toggle="modal" data-target="#mdlSupleMaterialEnFTXLinea">
                         <span class="fa fa-magic"></span> Suple mat X linea
                     </button>     
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArtConsumoXEstiloColor">
@@ -270,8 +276,6 @@
 </div>
 
 <!--SCRIPT-->
-
-
 <div class="modal" id="mdlEstilosFotos">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -425,7 +429,6 @@
     </div>
 </div>
 
-
 <div class="modal animated fadeIn" id="mdlSupleMaterialEnFT">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -456,6 +459,66 @@
                     </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table id="tblDetalleFTMaterial" class="table table-hover table-sm" style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Col</th>
+                                    <th scope="col">Pza</th>
+                                    <th scope="col">-</th>
+                                    <th scope="col">Sec</th>
+                                    <th scope="col">Art</th>
+                                    <th scope="col">-</th>
+                                    <th scope="col">Cons</th>
+                                    <th scope="col">Rango</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>  
+                </div>
+                <div class="modal-footer"> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal animated fadeIn" id="mdlSupleMaterialEnFTXLinea">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-retweet"></span> Suple material en ficha tecnica x linea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label>Linea</label>
+                        <select id="LineaDefinidora" name="LineaDefinidora" class="form-control"></select>
+                    </div>  
+                    <div class="col-5">
+                        <label>Material a suplir</label>
+                        <select id="MaterialASuplirXLinea" name="MaterialASuplirXLinea" class="form-control"></select>
+                    </div>  
+                    <div class="col-5">
+                        <label>Material nuevo</label>
+                        <select id="MaterialNuevoXLinea" name="MaterialNuevoXLinea" class="form-control"></select>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" id="btnSuplirMaterialXLinea" name="btnSuplirMaterialXLinea" class="btn btn-info-blue mt-3">
+                            Suplir
+                        </button>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 text-center mt-2">
+                        <p class="text-danger font-weight-bold">Detalle de la ficha técnica</p>
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="tblDetalleFTMaterialXLinea" class="table table-hover table-sm" style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -559,8 +622,91 @@
             MaterialNuevo = mdlSupleMaterialEnFT.find("#MaterialNuevo"),
             btnSuplirMaterial = mdlSupleMaterialEnFT.find("#btnSuplirMaterial"),
             tblDetalleFTMaterial = mdlSupleMaterialEnFT.find("#tblDetalleFTMaterial"), DetalleFTMaterial;
+            var mdlSupleMaterialEnFTXLinea = $("#mdlSupleMaterialEnFTXLinea"), 
+            MaterialASuplirXLinea = mdlSupleMaterialEnFTXLinea.find("#MaterialASuplirXLinea"),
+            MaterialNuevoXLinea = mdlSupleMaterialEnFTXLinea.find("#MaterialNuevoXLinea"),
+            btnSuplirMaterialXLinea = mdlSupleMaterialEnFTXLinea.find("#btnSuplirMaterialXLinea"),
+            tblDetalleFTMaterialXLinea = mdlSupleMaterialEnFTXLinea.find("#tblDetalleFTMaterialXLinea"),
+            LineaDefinidora = mdlSupleMaterialEnFTXLinea.find("#LineaDefinidora"),
+            DetalleFTMaterialXLinea;
 
     $(document).ready(function () {
+
+        mdlSupleMaterialEnFTXLinea.on('shown.bs.modal', function () {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Cargando...'
+            });
+            MaterialASuplirXLinea[0].selectize.clear(true);
+            MaterialNuevoXLinea[0].selectize.clear(true);
+            if ($.fn.DataTable.isDataTable('#tblDetalleFTMaterialXLinea')) {
+                DetalleFTMaterialXLinea.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            } else {
+                var coldefs = [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ];
+                DetalleFTMaterialXLinea = tblDetalleFTMaterialXLinea.DataTable({
+                    "dom": 'ritp',
+                    "ajax": {
+                        "url": '<?php print base_url('FichaTecnica/getPiezasMaterialXLinea'); ?>',
+                        "contentType": "application/json",
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.LINEA = (LineaDefinidora.val().trim());
+                            d.MATERIAL = (MaterialASuplirXLinea.val().trim());
+                        }
+                    },
+                    buttons: buttons,
+                    "columns": [
+                        {"data": "ID"}/*0*/,
+                        {"data": "ESTILO"}/*1*/,
+                        {"data": "COLOR"}/*2*/,
+                        {"data": "PIEZA"}/*4*/,
+                        {"data": "PIEZAT"}/*5*/,
+                        {"data": "SEC"}/*6*/,
+                        {"data": "ARTICULO"}/*7*/,
+                        {"data": "ARTICULOT"}/*8*/,
+                        {"data": "CONSUMO"}/*10*/,
+                        {"data": "RANGO"}/*11*/
+                    ],
+                    "columnDefs": coldefs,
+                    language: lang,
+                    select: true,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 99999999,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "bSort": true,
+                    "scrollY": "498px",
+                    "scrollX": true,
+                    "aaSorting": [
+                        [0, 'desc']
+                    ],
+                    initComplete: function () {
+                        $.when($.getJSON(master_url + 'getArticulosSuplex').done(function (data, x, jq) {
+                            pnlDatos.find("#LineaDefinidora")[0].selectize.clear(true);
+                            $.each(data, function (k, v) {
+                                MaterialASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                                MaterialNuevo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                            });
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        })).done(function (a) {
+                            HoldOn.close();
+                            onNotifyOld('<span><span>', 'SE HAN ACTUALIZADO LOS ARTICULOS', 'info');
+                        });
+                    }
+                });
+            }
+        });
 
         btnSuplirMaterial.click(function () {
             if (MaterialASuplir.val() && MaterialNuevo.val()) {
