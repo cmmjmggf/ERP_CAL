@@ -6,13 +6,12 @@ class FichaTecnica extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session')->model('Fichatecnica_model');
+        $this->load->library('session')->model('Fichatecnica_model', 'ftm');
     }
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
-            $this->load->view('vFondo');
+            $this->load->view('vEncabezado')->view('vFondo');
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
@@ -21,23 +20,18 @@ class FichaTecnica extends CI_Controller {
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
                     if ($Origen === 'FICHASTECNICAS') {
-                        $this->load->view('vMenuFichasTecnicas');
-                        $this->load->view('vFichaTecnica');
+                        $this->load->view('vMenuFichasTecnicas')->view('vFichaTecnica');
                     } else if ($Origen === 'MATERIALES') {
-                        $this->load->view('vMenuMateriales');
-                        $this->load->view('vFichaTecnicaConsulta');
+                        $this->load->view('vMenuMateriales')->view('vFichaTecnicaConsulta');
                     } else {
-                        $this->load->view('vMenuPrincipal');
-                        $this->load->view('vFichaTecnica');
+                        $this->load->view('vMenuPrincipal')->view('vFichaTecnica');
                     }
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vMenuFichasTecnicas');
-                    $this->load->view('vFichaTecnica');
+                    $this->load->view('vMenuFichasTecnicas')->view('vFichaTecnica');
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vMenuMateriales');
-                    $this->load->view('vFichaTecnicaConsulta');
+                    $this->load->view('vMenuMateriales')->view('vFichaTecnicaConsulta');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');
@@ -47,20 +41,17 @@ class FichaTecnica extends CI_Controller {
                         $this->load->view('vFichaTecnicaConsulta');
                     }
             }
-
             $this->load->view('vFooter');
         } else {
-            $this->load->view('vEncabezado');
-            $this->load->view('vSesion');
-            $this->load->view('vFooter');
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 
     public function getRecords() {
         try {
-            $this->Fichatecnica_model->onLimpiarTabla();
-            $this->Fichatecnica_model->onGenerarRecords();
-            print json_encode($this->Fichatecnica_model->getRecords());
+            $this->ftm->onLimpiarTabla();
+            $this->ftm->onGenerarRecords();
+            print json_encode($this->ftm->getRecords());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -68,7 +59,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getArticulosRequeridos() {
         try {
-            print json_encode($this->Fichatecnica_model->getArticulosRequeridos($this->input->get('Grupo')));
+            print json_encode($this->ftm->getArticulosRequeridos($this->input->get('Grupo')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -76,7 +67,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getGrupos() {
         try {
-            print json_encode($this->Fichatecnica_model->getGrupos());
+            print json_encode($this->ftm->getGrupos());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -93,9 +84,83 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function onCopiarFT() {
+        try {
+            $ESTILOACOPIAR = $this->input->post('ESTILOACOPIAR');
+            $COLORACOPIAR = $this->input->post('COLORACOPIAR');
+
+            $ESTILO = $this->input->post('ESTILO');
+            $COLOR = $this->input->post('COLOR');
+            $ft = $this->db->select("FT.Estilo, FT.Color, FT.Pieza, FT.Articulo, FT.Precio, FT.Consumo, FT.PzXPar, FT.Estatus, FT.FechaAlta, FT.AfectaPV ")
+                            ->from("fichatecnica AS FT")
+                            ->where("Estilo LIKE '$ESTILOACOPIAR' AND Color = $COLORACOPIAR", null, false)
+                            ->get()->result();
+            foreach ($ft as $k => $v) {
+                $nft = array(
+                    'Estilo' => $ESTILO,
+                    'Color' => $COLOR,
+                    'Pieza' => $v->Pieza,
+                    'Articulo' => $v->Articulo,
+                    'Precio' => $v->Precio,
+                    'Consumo' => $v->Consumo,
+                    'PzXPar' => $v->PzXPar,
+                    'Estatus' => $v->Estatus,
+                    'FechaAlta' => Date('d/m/Y'),
+                    'AfectaPV' => $v->AfectaPV
+                );
+                $this->db->insert('fichatecnica', $nft);
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFichasXEstilo() {
+        try {
+            $Estilo = $this->input->get('ESTILO');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS FICHAS_X_ESTILO FROM "
+                                    . "(SELECT COUNT(*) FROM fichatecnica AS FT "
+                                    . "WHERE FT.Estilo LIKE '$Estilo' "
+                                    . "GROUP BY FT.Estilo, FT.Color) AS X")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFichasAEliminarXEstilo() {
+        try {
+            $Estilo = $this->input->get('ESTILO');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS FICHAS_A_ELIMINAR FROM "
+                                    . "(SELECT COUNT(*) FROM fichatecnica AS FT "
+                                    . "WHERE FT.Estilo LIKE '$Estilo' "
+                                    . "GROUP BY FT.Estilo, FT.Color) AS X")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarFTXEstilo() {
+        try {
+            $Estilo = $this->input->post('ESTILO');
+            $x = $this->db;
+            $x->trans_begin();
+            $this->db->where('Estilo', $Estilo);
+            $this->db->delete('fichatecnica');
+            if ($x->trans_status() === FALSE) {
+                $x->trans_rollback();
+            } else {
+                $x->trans_commit();
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPiezas() {
         try {
-            print json_encode($this->Fichatecnica_model->getPiezas());
+            print json_encode($this->ftm->getPiezas());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -103,7 +168,15 @@ class FichaTecnica extends CI_Controller {
 
     public function getArticulos() {
         try {
-            print json_encode($this->Fichatecnica_model->getArticulos());
+            print json_encode($this->ftm->getArticulos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getArticulosSuplex() {
+        try {
+            print json_encode($this->ftm->getArticulosSuplex());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -111,7 +184,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getArticulosByClave() {
         try {
-            print json_encode($this->Fichatecnica_model->getArticulosByClave($this->input->post('Articulo')));
+            print json_encode($this->ftm->getArticulosByClave($this->input->post('Articulo')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -119,7 +192,7 @@ class FichaTecnica extends CI_Controller {
 
     public function onComprobarExisteEstiloColor() {
         try {
-            print json_encode($this->Fichatecnica_model->onComprobarExisteEstiloColor($this->input->get('Estilo'), $this->input->get('Color')));
+            print json_encode($this->ftm->onComprobarExisteEstiloColor($this->input->get('Estilo'), $this->input->get('Color')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -127,7 +200,131 @@ class FichaTecnica extends CI_Controller {
 
     public function getEstilos() {
         try {
-            print json_encode($this->Fichatecnica_model->getEstilos());
+            print json_encode($this->ftm->getEstilos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getLineas() {
+        try {
+           print json_encode(
+                            $this->db->query("SELECT  L.Clave AS CLAVE, L.Descripcion AS LINEA FROM lineas AS L ORDER BY L.Clave ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getNumPiezasASuplir() {
+        try {
+            $PZA = $this->input->get('PZA');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS PIEZAS_A_SUPLIR FROM (SELECT FT.ID FROM fichatecnica AS FT WHERE Pieza = $PZA GROUP BY Estilo, Color) AS PIEZAS_A_SUPLIR;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getNumMaterialesASuplir() {
+        try {
+            $MATERIAL = $this->input->get('MATERIAL');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS MATERIALES_A_SUPLIR FROM (SELECT FT.ID FROM fichatecnica AS FT WHERE Articulo = $MATERIAL GROUP BY Estilo, Color) AS MATERIALES_A_SUPLIR;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onSuplirPieza() {
+        try {
+            $PZA = $this->input->post('PZA');
+            $PZANUEVA = $this->input->post('PZANUEVA');
+            $this->db->set('Pieza', $PZANUEVA)
+                    ->where('Pieza', $PZA)
+                    ->update('fichatecnica');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onSuplirMaterialArticulo() {
+        try {
+            $MATERIAL = $this->input->post('MATERIAL');
+            $MATERIALNUEVO = $this->input->post('MATERIALNUEVO');
+            $this->db->set('Articulo', $MATERIALNUEVO)
+                    ->where('Articulo', $MATERIAL)
+                    ->update('fichatecnica');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPiezasTable() {
+        try {
+            $PZA = $this->input->get('PZA');
+            $this->db->select('FT.ID,FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave');
+            if ($PZA !== '') {
+                $this->db->where('FT.Pieza', $PZA);
+            } else {
+                $this->db->limit(999);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPiezasMaterial() {
+        try {
+            $MATERIAL = $this->input->get('MATERIAL');
+            $this->db->select('FT.ID,FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave');
+            if ($MATERIAL !== '') {
+                $this->db->where('FT.Articulo', $MATERIAL);
+            } else {
+                $this->db->limit(2000);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPiezasMaterialXLinea() {
+        try {
+            $LINEA = $this->input->get('LINEA');
+            $MATERIAL = $this->input->get('MATERIAL');
+            $this->db->select('FT.ID,FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave');
+            if ($LINEA !== '') {
+                $this->db->where('E.Linea', $LINEA);
+            }  
+            if ($MATERIAL !== '') {
+                $this->db->where('FT.Articulo', $MATERIAL);
+            }  
+            if ($LINEA === '' && $MATERIAL === '') { 
+                $this->db->limit(2000);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -135,7 +332,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getEstilosByLinea() {
         try {
-            print json_encode($this->Fichatecnica_model->getEstilosByLinea($this->input->get('Linea')));
+            print json_encode($this->ftm->getEstilosByLinea($this->input->get('Linea')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -143,7 +340,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getEstiloByID() {
         try {
-            print json_encode($this->Fichatecnica_model->getEstiloByID($this->input->get('Estilo')));
+            print json_encode($this->ftm->getEstiloByID($this->input->get('Estilo')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -151,7 +348,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getColoresXEstilo() {
         try {
-            print json_encode($this->Fichatecnica_model->getColoresXEstilo($this->input->get('Estilo')));
+            print json_encode($this->ftm->getColoresXEstilo($this->input->get('Estilo')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -159,7 +356,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getFichaTecnicaDetalleByID() {
         try {
-            print json_encode($this->Fichatecnica_model->getFichaTecnicaDetalleByID($this->input->get('Estilo'), $this->input->get('Color')));
+            print json_encode($this->ftm->getFichaTecnicaDetalleByID($this->input->get('Estilo'), $this->input->get('Color')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -167,7 +364,7 @@ class FichaTecnica extends CI_Controller {
 
     public function getFichaTecnicaByEstiloByColor() {
         try {
-            print json_encode($this->Fichatecnica_model->getFichaTecnicaByEstiloByColor($this->input->get('Estilo'), $this->input->get('Color')));
+            print json_encode($this->ftm->getFichaTecnicaByEstiloByColor($this->input->get('Estilo'), $this->input->get('Color')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -176,7 +373,7 @@ class FichaTecnica extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
-            $PRECIO = $this->Fichatecnica_model->getPrecioPorArticuloByID($x->post('Articulo'));
+            $PRECIO = $this->ftm->getPrecioPorArticuloByID($x->post('Articulo'));
             $data = array(
                 'Estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
                 'Color' => ($x->post('Color') !== NULL) ? $x->post('Color') : NULL,
@@ -192,7 +389,7 @@ class FichaTecnica extends CI_Controller {
             } else {
                 $data["Precio"] = 0;
             }
-            $ID = $this->Fichatecnica_model->onAgregar($data);
+            $ID = $this->ftm->onAgregar($data);
             print $ID;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -209,7 +406,7 @@ class FichaTecnica extends CI_Controller {
                 'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
                 'AfectaPV' => ($x->post('AfectaPV') !== NULL) ? $x->post('AfectaPV') : 0,
             );
-            $this->Fichatecnica_model->onModificar($this->input->post('ID'), $data);
+            $this->ftm->onModificar($this->input->post('ID'), $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -217,7 +414,7 @@ class FichaTecnica extends CI_Controller {
 
     public function onEliminar() {
         try {
-            $this->Fichatecnica_model->onEliminar($this->input->post('ID'));
+            $this->ftm->onEliminar($this->input->post('ID'));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -225,7 +422,7 @@ class FichaTecnica extends CI_Controller {
 
     public function onEliminarRenglonDetalle() {
         try {
-            $this->Fichatecnica_model->onEliminarRenglonDetalle($this->input->post('ID'));
+            $this->ftm->onEliminarRenglonDetalle($this->input->post('ID'));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

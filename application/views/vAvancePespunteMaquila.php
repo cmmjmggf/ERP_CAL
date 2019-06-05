@@ -111,6 +111,16 @@
     $(document).ready(function () {
         getMaquilas();
 
+        Maquila.on('change', function () {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Espere...'
+            });
+            ControlesListosParaPespunte.ajax.reload(function () {
+                HoldOn.close();
+            });
+        });
+
         Frac.on('keydown', function (e) {
             if (Control.val() && e.keyCode === 13) {
                 Frac.val(297);/*297 PESPUNTE A MAQUILA*/
@@ -203,7 +213,14 @@
                 getColoresXEstilo($(this).val(), null);
             }
         });
+        getRecords();
+    });
 
+    function getRecords() {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Cargando...'
+        });
         var cols = [
             {"data": "ID"}/*0*/, {"data": "CONTROL"}/*1*/,
             {"data": "ESTILO"}/*2*/, {"data": "COLOR"},
@@ -221,9 +238,11 @@
             "dom": 'rit',
             "ajax": {
                 "url": '<?php print base_url('AvancePespunteMaquila/getControlesParaPespunte'); ?>',
-                "type": "POST",
                 "contentType": "application/json",
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MAQUILA = (Maquila.val()) ? Maquila.val() : '';
+                }
             },
             buttons: buttons,
             "columns": cols,
@@ -284,10 +303,13 @@
             createdRow: function (row, data, dataIndex) {
                 console.log(row, data);
                 $(row).find("td:eq(8)").html('<button class="btn btn-danger" onclick="onEliminarAvanceMaquila(' + data.ID + ',' + data.IDA + ')"><span class="fa fa-trash"></span></button>');
+            },
+            initComplete: function () {
+                HoldOn.close();
             }
         };
         ControlesEntregados = tblControlesEntregados.DataTable(xxoptions);
-    });
+    }
 
     function getColoresXEstilo(e, rq) {
         $.getJSON("<?php print base_url('avance_a_pespunte_x_maquila_colores_x_estilo') ?>", {ESTILO: e}).done(function (x, y, z) {

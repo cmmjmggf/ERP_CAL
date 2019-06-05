@@ -203,6 +203,19 @@ class Fichatecnica_model extends CI_Model {
         }
     }
 
+    public function getArticulosSuplex() {
+        try {
+            return $this->db->select("CAST(A.Clave AS SIGNED ) AS ID, CONCAT(A.Clave,' - ',IFNULL(A.Descripcion,'')) AS Descripcion ", false)
+                            ->from('articulos AS A')->join('fichatecnica AS FT', 'A.Clave = FT.Articulo')
+                            ->where_in('A.Estatus', 'ACTIVO')
+                            ->group_by('A.Clave')
+                            ->order_by('ID', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEstilos() {
         try {
             return $this->db->select("E.Clave AS Clave, CONCAT(E.Clave,' - ',IFNULL(E.Descripcion,'')) AS Estilo")

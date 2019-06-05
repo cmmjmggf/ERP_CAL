@@ -64,7 +64,7 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function getControlesParaPespunte() {
         try {
-            print json_encode($this->apm->getControlesParaPespunte());
+            print json_encode($this->apm->getControlesParaPespunte($this->input->get('MAQUILA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
