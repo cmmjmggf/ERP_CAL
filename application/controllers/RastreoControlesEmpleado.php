@@ -56,7 +56,7 @@ class RastreoControlesEmpleado extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->RastreoControlesEmpleado_model->getRecords());
+            print json_encode($this->RastreoControlesEmpleado_model->getRecords($this->input->get('EMPLEADO'),$this->input->get('ANIO'),$this->input->get('SEMANA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
