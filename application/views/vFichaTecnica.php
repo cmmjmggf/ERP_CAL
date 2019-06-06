@@ -89,7 +89,7 @@
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaXLinFTLinea" data-toggle="modal" data-target="#mdlSupleMaterialEnFTXLinea">
                         <span class="fa fa-magic"></span> Suple mat X linea
                     </button>     
-                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArtConsumoXEstiloColor">
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArtConsumoXEstiloColor" data-toggle="modal" data-target="#mdlArticuloYConsumoXEstiloColor">
                         <span class="fa fa-chart-pie"></span> Art. y consumo x estilo color
                     </button> 
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnActualizaConsumoEstiloFT">
@@ -563,25 +563,25 @@
                     <div class="col-4">
                         <label>Estilo</label>
                         <select id="EstiloConsumo" name="EstiloConsumo" class="form-control"></select>
-                    </div>   
+                    </div>
                     <div class="col-4">
                         <label>Pieza</label>
                         <select id="PiezaConsumo" name="PiezaConsumo" class="form-control"></select>
-                    </div>  
+                    </div>
                     <div class="col-4">
                         <label>Material</label>
                         <select id="MaterialConsumo" name="MaterialConsumo" class="form-control"></select>
-                    </div>  
+                    </div>
                     <div class="col-4">
                         <label>Consumo</label>
-                        <input type="text" id="ConsumoXLinea" name="ConsumoXLinea" class="form-control form-control-sm numbersOnly" maxlength="8">
+                        <input type="text" id="ConsumoXLineaEstiloColor" name="ConsumoXLineaEstiloColor" class="form-control form-control-sm numbersOnly" maxlength="8">
                     </div>
                     <div class="col-4">
                         <label>Consumo nuevo</label>
-                        <input type="text" id="ConsumoXLinea" name="ConsumoXLinea" class="form-control form-control-sm numbersOnly" maxlength="8">
-                    </div> 
-                    <div class="col-12" align="right">
-                        <button type="button" id="btnSupleConsumo" name="btnSupleConsumo" class="btn btn-info-blue mt-3">
+                        <input type="text" id="ConsumoNuevoXLineaEstiloColor" name="ConsumoNuevoXLineaEstiloColor" class="form-control form-control-sm numbersOnly" maxlength="8">
+                    </div>
+                    <div class="col-4" align="center">
+                        <button type="button" id="btnSupleConsumo" name="btnSupleConsumo" class="btn btn-info-blue mt-4">
                             Suplir
                         </button>
                     </div>
@@ -701,20 +701,141 @@
             tblDetalleFTMaterialXLinea = mdlSupleMaterialEnFTXLinea.find("#tblDetalleFTMaterialXLinea"),
             LineaDefinidora = mdlSupleMaterialEnFTXLinea.find("#LineaDefinidora"), ConsumoXLinea = mdlSupleMaterialEnFTXLinea.find("#ConsumoXLinea"),
             DetalleFTMaterialXLinea;
-    var mdlArticuloYConsumoXEstiloColor = $("#mdlArticuloYConsumoXEstiloColor");
 
+    var mdlArticuloYConsumoXEstiloColor = $("#mdlArticuloYConsumoXEstiloColor"),
+            EstiloConsumo = mdlArticuloYConsumoXEstiloColor.find("#EstiloConsumo"),
+            PiezaConsumo = mdlArticuloYConsumoXEstiloColor.find("#PiezaConsumo"),
+            MaterialConsumo = mdlArticuloYConsumoXEstiloColor.find("#MaterialConsumo"),
+            ConsumoXLineaEstiloColor = mdlArticuloYConsumoXEstiloColor.find("#ConsumoXLineaEstiloColor"),
+            ConsumoNuevoXLineaEstiloColor = mdlArticuloYConsumoXEstiloColor.find("#ConsumoNuevoXLineaEstiloColor"),
+            btnSupleConsumo = mdlArticuloYConsumoXEstiloColor.find("#btnSupleConsumo"),
+            tblDetalleFTConsumo = mdlArticuloYConsumoXEstiloColor.find("#tblDetalleFTConsumo"),
+            DetalleFTConsumo;
+    var onSuplirConsumo = function () {
+        if (EstiloConsumo.val() && PiezaConsumo.val() &&
+                MaterialConsumo.val() && ConsumoXLineaEstiloColor.val() &&
+                ConsumoNuevoXLineaEstiloColor.val()) {
+            btnSupleConsumo.attr('disabled', false);
+        } else {
+            btnSupleConsumo.attr('disabled', true);
+        }
+    };
     $(document).ready(function () {
+
+        ConsumoNuevoXLineaEstiloColor.on('keydown keyup', function () {
+            onSuplirConsumo();
+        });
+
+        ConsumoXLineaEstiloColor.on('keydown keyup', function () {
+            onSuplirConsumo();
+        });
+
+        btnSupleConsumo.click(function () {
+            if (EstiloConsumo.val() && PiezaConsumo.val() &&
+                    MaterialConsumo.val() && ConsumoXLineaEstiloColor.val() &&
+                    ConsumoNuevoXLineaEstiloColor.val()) {
+                $.getJSON('<?php print base_url('FichaTecnica/getNumMaterialesASuplirXConsumo'); ?>', {
+                    ESTILO: EstiloConsumo.val(), PZA: PiezaConsumo.val(),
+                    MATERIAL: MaterialConsumo.val()
+                }).done(function (a) {
+                    swal({
+                        title: "Se suplirán el consumo de " + a[0].MATERIALES_A_SUPLIR + " materiales/articulos, ¿Estas seguro?",
+                        text: "Nota: Esta acción no se puede deshacer",
+                        icon: "warning",
+                        buttons: {
+                            cancelar: {
+                                text: "Cancelar",
+                                value: "no"
+                            },
+                            cambiar: {
+                                text: "Aceptar",
+                                value: "ok"
+                            }
+                        }
+                    }).then((value) => {
+                        switch (value) {
+                            case "ok":
+                                HoldOn.open({
+                                    theme: 'sk-rect',
+                                    message: 'Supliendo...'
+                                });
+                                $.post('<?php print base_url('FichaTecnica/onSuplirConsumos'); ?>', {
+                                    ESTILO: EstiloConsumo.val(), PIEZA: PiezaConsumo.val(),
+                                    MATERIAL: MaterialConsumo.val(), CONSUMO: ConsumoXLinea.val(), 
+                                    NUEVOCONSUMO: ConsumoNuevoXLineaEstiloColor.val()
+                                }).done(function (aa, bb, cc) {
+                                    swal('ATENCIÓN', 'SE HAN SUPLIDO  ' + a[0].MATERIALES_A_SUPLIR + '  FICHAS TECNICAS', 'success');
+                                }).always(function () {
+                                    HoldOn.close();
+                                });
+                                break;
+                            case "cancelar":
+                                swal.close();
+                                HoldOn.close();
+                                break;
+                        }
+                    });
+                }).fail(function (x, y, z) {
+                    getError(x);
+                });
+            } else {
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODOS LOS CAMPOS', 'warning');
+            }
+        });
+
         /*CONSUMO*/
+        MaterialConsumo.change(function () {
+            if (EstiloConsumo.val() || PiezaConsumo.val() ||
+                    MaterialConsumo.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                DetalleFTConsumo.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
+        });
+
+        PiezaConsumo.change(function () {
+            if (EstiloConsumo.val() || PiezaConsumo.val() ||
+                    MaterialConsumo.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                DetalleFTConsumo.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
+        });
+
+        EstiloConsumo.change(function () {
+            if (EstiloConsumo.val() || PiezaConsumo.val() ||
+                    MaterialConsumo.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                DetalleFTConsumo.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
+        });
 
         mdlArticuloYConsumoXEstiloColor.on('shown.bs.modal', function () {
+            btnSupleConsumo.attr('disabled', true);
             HoldOn.open({
                 theme: 'sk-rect',
                 message: 'Cargando...'
             });
-            MaterialASuplirXLinea[0].selectize.clear(true);
-            MaterialNuevoXLinea[0].selectize.clear(true);
-            if ($.fn.DataTable.isDataTable('#tblDetalleFTMaterialXLinea')) {
-                DetalleFTMaterialXLinea.ajax.reload(function () {
+
+            EstiloConsumo[0].selectize.clear(true);
+            PiezaConsumo[0].selectize.clear(true);
+            MaterialConsumo[0].selectize.clear(true);
+
+            if ($.fn.DataTable.isDataTable('#tblDetalleFTConsumo')) {
+                DetalleFTConsumo.ajax.reload(function () {
                     HoldOn.close();
                 });
             } else {
@@ -725,15 +846,16 @@
                         "searchable": false
                     }
                 ];
-                DetalleFTMaterialXLinea = tblDetalleFTMaterialXLinea.DataTable({
+                DetalleFTConsumo = tblDetalleFTConsumo.DataTable({
                     "dom": 'ritp',
                     "ajax": {
-                        "url": '<?php print base_url('FichaTecnica/getPiezasMaterialXLinea'); ?>',
+                        "url": '<?php print base_url('FichaTecnica/getPiezasMaterialXConsumos'); ?>',
                         "contentType": "application/json",
                         "dataSrc": "",
                         "data": function (d) {
-                            d.LINEA = (LineaDefinidora.val().trim());
-                            d.MATERIAL = (MaterialASuplirXLinea.val().trim());
+                            d.ESTILO = (EstiloConsumo.val() ? EstiloConsumo.val() : '');
+                            d.PIEZA = (PiezaConsumo.val() ? PiezaConsumo.val() : '');
+                            d.MATERIAL = (MaterialConsumo.val() ? MaterialConsumo.val() : '');
                         }
                     },
                     buttons: buttons,
@@ -765,22 +887,19 @@
                         [0, 'desc']
                     ],
                     initComplete: function () {
-                        $.when($.getJSON('<?php print base_url('FichaTecnica/getLineas'); ?>').done(function (data, x, jq) {
-                            LineaDefinidora[0].selectize.clear(true);
+                        $.when($.getJSON('<?php print base_url('FichaTecnica/getEstilosConsumos'); ?>').done(function (data, x, jq) {
+                            EstiloConsumo[0].selectize.clear(true);
                             $.each(data, function (k, v) {
-                                LineaDefinidora[0].selectize.addOption({text: v.LINEA, value: v.CLAVE});
+                                EstiloConsumo[0].selectize.addOption({text: v.ESTILO, value: v.CLAVE});
                             });
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         })).done(function (a) {
-                            HoldOn.close();
                         });
                         $.when($.getJSON(master_url + 'getArticulosSuplex').done(function (data, x, jq) {
-                            MaterialASuplirXLinea[0].selectize.clear(true);
-                            MaterialNuevoXLinea[0].selectize.clear(true);
+                            MaterialConsumo[0].selectize.clear(true);
                             $.each(data, function (k, v) {
-                                MaterialASuplirXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                                MaterialNuevoXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                                MaterialConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                             });
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
@@ -1093,8 +1212,7 @@
                         $.when($.getJSON(master_url + 'getArticulosSuplex').done(function (data, x, jq) {
                             pnlDatos.find("#Articulo")[0].selectize.clear(true);
                             $.each(data, function (k, v) {
-                                MaterialASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                                MaterialNuevo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                                MaterialConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                             });
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
@@ -1866,6 +1984,7 @@
                 mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 PiezaASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 PiezaNueva[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                PiezaConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
