@@ -1,21 +1,19 @@
 <div class="card mt-2 mx-2 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
-        <div class="row m-4" style="margin-right: 0px;">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+        <div class="row m-4" style="margin-right: 0px;"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-12">
                 <h3 class="font-weight-bold">Avance</h3>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
                 </button>
-                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
                     <span class="fa fa-globe"></span> 
                     Rastreo X Control
                 </button>
-                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
                     <span class="fa fa-paint-brush"></span> 
                     Desarrollo de muestras
                 </button>

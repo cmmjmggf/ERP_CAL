@@ -208,8 +208,8 @@ class FichaTecnica extends CI_Controller {
 
     public function getLineas() {
         try {
-           print json_encode(
-                            $this->db->query("SELECT  L.Clave AS CLAVE, L.Descripcion AS LINEA FROM lineas AS L ORDER BY L.Clave ASC;")->result());
+            print json_encode(
+                            $this->db->query("SELECT  L.Clave AS CLAVE, CONCAT(L.Clave,\" \",L.Descripcion) AS LINEA FROM lineas AS L ORDER BY L.Clave ASC;")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -235,6 +235,17 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function getNumMaterialesASuplirXLinea() {
+        try {
+            $LINEA = $this->input->get('LINEA');
+            $MATERIAL = $this->input->get('MATERIAL');
+            print json_encode(
+                            $this->db->query("SELECT COUNT(*) AS MATERIALES_A_SUPLIR_X_LIN FROM (SELECT FT.ID FROM fichatecnica AS FT INNER JOIN estilos AS E ON FT.Estilo = E.Clave  WHERE FT.Articulo = $MATERIAL AND E.Linea = $LINEA GROUP BY FT.Estilo, FT.Color) AS MATERIALES_A_SUPLIR_X_LIN;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onSuplirPieza() {
         try {
             $PZA = $this->input->post('PZA');
@@ -254,6 +265,28 @@ class FichaTecnica extends CI_Controller {
             $this->db->set('Articulo', $MATERIALNUEVO)
                     ->where('Articulo', $MATERIAL)
                     ->update('fichatecnica');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onSuplirMaterialArticuloXLinea() {
+        try {
+            $LINEA = $this->input->post('LINEA');
+            $MATERIAL = $this->input->post('MATERIAL');
+            $MATERIALNUEVO = $this->input->post('MATERIALNUEVO');
+            $CONSUMO = $this->input->post('CONSUMO');
+            if ($CONSUMO !== '' && intval($CONSUMO) > 0) {
+                $this->db->query("UPDATE fichatecnica AS FT 
+                INNER JOIN estilos AS E ON FT.Estilo = E.Clave 
+                SET FT.Articulo = {$MATERIALNUEVO} 
+            WHERE E.Linea = {$LINEA}  AND FT.Articulo = $MATERIAL;");
+            } else {
+                $this->db->query("UPDATE fichatecnica AS FT 
+                INNER JOIN estilos AS E ON FT.Estilo = E.Clave 
+                SET FT.Articulo = {$MATERIALNUEVO} , FT.Consumo = {$CONSUMO}
+            WHERE E.Linea = {$LINEA}  AND FT.Articulo = {$MATERIAL};");
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -314,14 +347,15 @@ class FichaTecnica extends CI_Controller {
                             . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
                     ->from('fichatecnica AS FT')
                     ->join('piezas AS P', 'FT.Pieza = P.Clave')
-                    ->join('articulos AS A', 'FT.Articulo = A.Clave');
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                    ->join('estilos AS E', 'FT.Estilo = E.Clave');
             if ($LINEA !== '') {
                 $this->db->where('E.Linea', $LINEA);
-            }  
+            }
             if ($MATERIAL !== '') {
                 $this->db->where('FT.Articulo', $MATERIAL);
-            }  
-            if ($LINEA === '' && $MATERIAL === '') { 
+            }
+            if ($LINEA === '' && $MATERIAL === '') {
                 $this->db->limit(2000);
             }
             print json_encode($this->db->get()->result());

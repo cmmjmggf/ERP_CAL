@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-8 float-left">
-                <legend class="float-left">Rastreo de controles por empelado</legend>
+                <legend class="float-left">Rastreo de controles por empleado</legend>
             </div>
             <div class="col-sm-4" align="right">
                 <button type="button" class="btn btn-warning" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
@@ -56,8 +56,10 @@
     var master_url = base_url + 'index.php/RastreoControlesEmpleado/';
     var tblRegistros = $('#tblRegistros');
     var Registros;
-    var pnlTablero = $("#pnlTablero");
+    var pnlTablero = $("#pnlTablero"), Empleado = pnlTablero.find("#Empleado"),
+            Ano = pnlTablero.find("#Ano"), Sem = pnlTablero.find("#Sem");
     $(document).ready(function () {
+
         /*FUNCIONES INICIALES*/
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToInputOnChange('#Empleado', '#Ano', pnlTablero);
@@ -77,15 +79,39 @@
 
 
         pnlTablero.find("#Empleado").change(function () {
-            Registros.column(7).search($(this).val()).draw();
+            if ($(this).val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                Registros.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
         });
 
         pnlTablero.find("#Sem").keyup(function (e) {
-            Registros.column(3).search($(this).val()).draw();
+            if ($(this).val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                Registros.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
         });
 
         pnlTablero.find("#Ano").keyup(function (e) {
-            Registros.column(2).search($(this).val()).draw();
+            if ($(this).val() && $(this).val().length > 3) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Cargando...'
+                });
+                Registros.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            }
         });
 
         pnlTablero.find("#Sem").change(function () {
@@ -146,7 +172,11 @@
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "type": "POST"
+                "data": function (d) {
+                    d.EMPLEADO = (Empleado.val() ? Empleado.val() : '');
+                    d.ANIO = (Ano.val() ? Ano.val() : '');
+                    d.SEMANA = (Sem.val() ? Sem.val() : '');
+                }
             },
             "columns": [
                 {"data": "Control"},
@@ -168,9 +198,7 @@
             ],
             rowGroup: {
                 startRender: function (rows, group) {
-
-                    return $('<tr>')
-                            .append('<td colspan="7">Fraccion: ' + group + '</td></tr>');
+                    return $('<tr>').append('<td colspan="7">Fraccion: ' + group + '</td></tr>');
                 },
                 dataSrc: "Fraccion"
             },
@@ -184,7 +212,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [0, 'asc']
+                [1, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -207,6 +235,7 @@
                 });
             },
             initComplete: function (a, b) {
+                Ano.val(new Date().getFullYear());
                 HoldOn.close();
 
             }

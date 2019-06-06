@@ -10,7 +10,7 @@ class RastreoControlesEmpleado_model extends CI_Model {
         parent::__construct();
     }
 
-    public function getRecords() {
+    public function getRecords($EMPLEADO, $ANIO, $SEMANA) {
         try {
             $this->db->select("OC.control AS Control,"
                             . "OC.numfrac AS Fraccion, "
@@ -22,12 +22,21 @@ class RastreoControlesEmpleado_model extends CI_Model {
                             . "OC.numeroempleado AS Empleado  "
                             . "", false)
                     ->from("fracpagnomina AS OC");
+            if ($EMPLEADO !== '' && $ANIO === '' && $SEMANA === '') {
+                $this->db->where('OC.numeroempleado', $EMPLEADO);
+            } else if ($EMPLEADO !== '' && $ANIO !== '' && $SEMANA == '') {
+                $this->db->where('OC.numeroempleado', $EMPLEADO)->where('OC.anio', $ANIO);
+            } else if ($EMPLEADO !== '' && $ANIO !== '' && $SEMANA !== '') {
+                $this->db->where('OC.numeroempleado', $EMPLEADO)->where('OC.anio', $ANIO)->where('OC.semana', $SEMANA);
+            } else {
+                $this->db->limit(9999);
+            }
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
              */
             $str = $this->db->last_query();
-            //print $str;
+//            print $str;
             $data = $query->result();
             return $data;
         } catch (Exception $exc) {
@@ -39,8 +48,10 @@ class RastreoControlesEmpleado_model extends CI_Model {
         try {
             return $this->db->select("CAST(D.Numero AS SIGNED ) AS ID,CONCAT(D.Numero,'-',D.Busqueda) AS Empleado")
                             ->from("empleados AS D")
-                            ->where("D.Estatus", "A")
+                            ->join("fracpagnomina AS FPN", "D.Numero = FPN.numeroempleado")
+                            ->where("D.Estatus", "ACTIVO")
                             ->where("D.AltaBaja", "1")
+                            ->group_by('D.Numero')
                             ->order_by('ID', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
