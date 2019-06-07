@@ -77,7 +77,7 @@
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnMatSemProd" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
                         <span class="fa fa-boxes"></span> Mat.sem.Prod
                     </button>   
-                    <button type="button" class="btn btn-danger btn-sm my-1" id="btnAdicionaMaterialFijo" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
+                    <button type="button" class="btn btn-danger btn-sm my-1" id="btnAdicionaMaterialFijo" disabled="">
                         <span class="fa fa-plus"></span> Adiciona material fijo
                     </button>   
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT " data-toggle="modal" data-target="#mdlSuplePiezaEnFT">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-2">
                     <label for="Articulo">Articulo</label>
-                    <select class="form-control form-control-sm NotSelectize" id="Articulo"   name="Articulo">
+                    <select class="form-control form-control-sm" id="Articulo"   name="Articulo">
                         <option value=""></option>
                     </select>
                 </div>
@@ -243,7 +243,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <label>Articulo</label>
-                            <select class="form-control form-control-sm required" id="eArticulo"   name="Articulo">
+                            <select class="form-control form-control-sm required" id="eArticulo"   name="eArticulo">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -317,7 +317,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-10">
-                        <input type="text" id="EstiloElimina" name="EstiloElimina" class="form-control" placeholder="Estilo...">
+                        <input type="text" id="EstiloElimina" name="EstiloElimina" autofocus="" class="form-control" placeholder="Estilo...">
                     </div>
                     <div class="col-2">
                         <button type="button" id="btnEliminarFichasXEstilo" class="btn btn-danger">
@@ -649,12 +649,6 @@
                         <label>Piezas x par</label>
                         <input type="text" id="PiezasXParAdiciona" name="PiezasXParAdiciona" class="form-control form-control-sm numbersOnly" maxlength="8">
                     </div>
-                    <div class="col-4">
-                        <div class="custom-control custom-checkbox mt-4"  align="center" style="cursor: pointer !important;">
-                            <input type="checkbox" class="custom-control-input selectNotEnter" id="NoAfecta" name="NoAfecta" style="cursor: pointer !important;">
-                            <label class="custom-control-label text-danger labelCheck" for="NoAfecta" style="cursor: pointer !important;">No afecta</label>
-                        </div>
-                    </div>
                     <div class="col-12" align="right">
                         <button type="button" id="btnAdiciona" name="btnAdiciona" class="btn btn-info-blue mt-4">
                             Adiciona
@@ -693,6 +687,7 @@
 </div>
 
 <script>
+    var hoy = '<?php print Date('d/m/Y'); ?>';
     var master_url = base_url + 'index.php/FichaTecnica/';
     var pnlDatos = $("#pnlDatos");
     var pnlControlesDetalle = $('#pnlControlesDetalle');
@@ -713,7 +708,7 @@
     var FichaTecnica;
     var mdlEditarArticulo = $('#mdlEditarArticulo');
     var btnEditarRenglon = mdlEditarArticulo.find('#btnEditarRenglon');
-
+    var FechaAlta = pnlDatos.find("#FechaAlta");
     var Selectizer = function () {
         return {
             loadOptions: function (query, callback) {
@@ -793,8 +788,11 @@
             PiezaAdiciona = mdlAdicionaMaterialXLinea.find("#PiezaAdiciona"),
             ArticuloAdiciona = mdlAdicionaMaterialXLinea.find("#ArticuloAdiciona"),
             ConsumoAdiciona = mdlAdicionaMaterialXLinea.find("#ConsumoAdiciona"),
+            btnAdiciona = mdlAdicionaMaterialXLinea.find("#btnAdiciona"),
             tblDetalleFTAdiciona = mdlAdicionaMaterialXLinea.find("#tblDetalleFTAdiciona"),
             DetalleFTAdiciona;
+
+    var btnAdicionaMaterialFijo = pnlDatos.find("#btnAdicionaMaterialFijo");
 
     var onSuplirConsumo = function () {
         if (EstiloConsumo.val() && PiezaConsumo.val() &&
@@ -807,6 +805,59 @@
     };
 
     $(document).ready(function () {
+
+        btnAdicionaMaterialFijo.click(function () {
+            if (Estilo.val() && Color.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Trabajando en ello... por favor espere'
+                });
+                $.post('<?php print base_url('FichaTecnica/getFichaTecnicaFija'); ?>', {ESTILO: Estilo.val(), COLOR: Color.val()}).done(function (a) {
+                    console.log(a);
+                    var dtm = {
+                        EstiloId: Estilo.val(),
+                        ColorId: Color.val()
+                    };
+                    getFichaTecnicaByEstiloByColor(dtm);
+                    btnAdicionaMaterialFijo.attr('disabled', true);
+                    swal('ATENCIÓN', 'SE HA GUARDADO LA FICHA TECNICA CON LOS MATERIALES FIJOS', 'success').then((value) => {
+                        pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL ESTILO, COLOR Y FECHA DE ALTA', 'warning');
+            }
+        });
+
+        btnAdiciona.click(function () {
+            if (LineaAdiciona.val() && PiezaAdiciona.val() && ArticuloAdiciona.val()) {
+
+            } else {
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR LA LINEA, PIEZA, ARTICULO/MATERIAL, CONSUMO Y EL NUEVO CONSUMO', 'warning');
+            }
+        });
+
+        ArticuloAdiciona.change(function () {
+            if ($(this).val()) {
+                DetalleFTAdiciona.ajax.reload();
+            }
+        });
+
+        PiezaAdiciona.change(function () {
+            if ($(this).val()) {
+                DetalleFTAdiciona.ajax.reload();
+            }
+        });
+
+        LineaAdiciona.change(function () {
+            if ($(this).val()) {
+                DetalleFTAdiciona.ajax.reload();
+            }
+        });
 
         mdlAdicionaMaterialXLinea.on('shown.bs.modal', function () {
 
@@ -1041,7 +1092,6 @@
                         {
                             LINEA: LineaDefinidora.val(), MATERIAL: MaterialASuplirXLinea.val()
                         }).done(function (a) {
-                    console.log(a);
                     if (parseInt(a[0].MATERIALES_A_SUPLIR_X_LIN) > 0) {
                         swal({
                             title: "Se suplirán " + a[0].MATERIALES_A_SUPLIR_X_LIN + " materiales/articulos, ¿Estas seguro?",
@@ -1478,6 +1528,7 @@
                     HoldOn.close();
                 });
             } else {
+                HoldOn.close();
                 swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
                     mdlCopiarFT.find("#EstiloACopiar").focus().select();
                 });
@@ -1499,7 +1550,7 @@
                     ESTILO: mdlEliminaFTXEstilo.find("#EstiloElimina").val()
                 }).done(function (a, b, c) {
                     console.log(a);
-                    if (parseInt(a[0]) > 0) {
+                    if (parseInt(a[0].FICHAS_A_ELIMINAR) > 0) {
                         swal({
                             title: "Se eliminarán " + a[0].FICHAS_A_ELIMINAR + " fichas técnicas, ¿Estas seguro?",
                             text: "Nota: Esta acción no se puede deshacer",
@@ -1525,7 +1576,9 @@
                                         ESTILO: mdlEliminaFTXEstilo.find("#EstiloElimina").val()
                                     }).done(function (aa, bb, cc) {
                                         mdlEliminaFTXEstilo.find("#EstiloElimina").val('');
-                                        swal('ATENCIÓN', 'SE HAN ELIMINADO ' + a[0].FICHAS_A_ELIMINAR + ' FICHAS TECNICAS', 'success');
+                                        swal('ATENCIÓN', 'SE HAN ELIMINADO ' + a[0].FICHAS_A_ELIMINAR + ' FICHAS TECNICAS', 'success').then((value) => {
+                                            mdlEliminaFTXEstilo.find("#EstiloElimina").focus().select();
+                                        });
                                     }).always(function () {
                                         HoldOn.close();
                                     });
@@ -1557,6 +1610,7 @@
 
         btnEliminarFT.click(function () {
             mdlEliminaFTXEstilo.modal('show');
+            mdlEliminaFTXEstilo.find("#EstiloElimina").focus();
         });
 
         $.fancybox.defaults.animationEffect = "zoom-in-out";
@@ -1585,7 +1639,6 @@
                 mdlEstilosFotos.modal('show');
             });
         });
-
 
         btnEstilos.click(function () {
             $.fancybox.open({
@@ -1741,6 +1794,9 @@
         pnlDatos.find("[name='Color']").change(function () {
             if (nuevo) {
                 onComprobarExisteEstiloColor(pnlDatos.find("[name='Estilo']").val(), $(this).val());
+                btnAdicionaMaterialFijo.attr('disabled', true);
+            } else {
+                btnAdicionaMaterialFijo.attr('disabled', false);
             }
         });
         btnEliminar.click(function () {
@@ -1787,6 +1843,7 @@
             }
             pnlDatos.find("#Estilo")[0].selectize.focus();
             pnlDatos.find("#FechaAlta").prop("readonly", false);
+            FechaAlta.val(hoy);
         });
         btnCancelar.click(function () {
             pnlTablero.removeClass("d-none");
@@ -1834,9 +1891,11 @@
             console.log(x, y, z);
         })).done(function (a) {
             HoldOn.close();
-        });   
+        });
         $.when($.getJSON(master_url + 'getArticulosSuplex').done(function (data, x, jq) {
             MaterialConsumo[0].selectize.clear(true);
+            MaterialASuplir[0].selectize.clear(true);
+            MaterialNuevo[0].selectize.clear(true);
             MaterialASuplirXLinea[0].selectize.clear(true);
             MaterialNuevoXLinea[0].selectize.clear(true);
             ArticuloAdiciona[0].selectize.clear(true);
@@ -1844,6 +1903,8 @@
                 ArticuloAdiciona[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 MaterialASuplirXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 MaterialNuevoXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                MaterialASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                MaterialNuevo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 MaterialConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
@@ -1859,7 +1920,7 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         })).done(function (a) {
-        }); 
+        });
     }
 
     function getFichaTecnicaDetalleByID(Estilo, Color) {
@@ -1995,11 +2056,14 @@
             });
             (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
             mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addItem(dtm.Pieza_ID, true);
-            mdlEditarArticulo.find("[name='Articulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
+            mdlEditarArticulo.find("[name='eArticulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
             mdlEditarArticulo.find('#eArticulo')[0].selectize.focus();
         });
     }
 
+    function onEliminarArticuloFijo(e) {
+        FichaTecnicaDetalle.row(e).remove();
+    }
     function getRecords() {
         HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         temp = 0;
@@ -2056,42 +2120,42 @@
             tblFichaTecnica.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = FichaTecnica.row(this).data();
-            $.getJSON(master_url + 'getFichaTecnicaByEstiloByColor', {Estilo: dtm.EstiloId, Color: dtm.ColorId}).done(function (data, x, jq) {
-                pnlDatos.find("input").val("");
-                $.each(pnlDatos.find("select"), function (k, v) {
-                    pnlDatos.find("select")[k].selectize.clear(true);
-                });
-                Estilo[0].selectize.disable();
-                Color[0].selectize.disable();
-                pnlDatos.find("#FechaAlta").prop("readonly", true);
-                $.getJSON(master_url + 'getColoresXEstilo', {Estilo: dtm.EstiloId}).done(function (data, x, jq) {
-                    $.each(data, function (k, v) {
-                        pnlDatos.find("[name='Color']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                    });
-                    pnlDatos.find("[name='Color']")[0].selectize.addItem(dtm.ColorId, true);
-                }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    console.log("\n");
-                    console.log(x, y, z);
-                }).always(function () {
-                });
-                pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
-                getFotoXEstilo(dtm.EstiloId);
-                getFichaTecnicaDetalleByID(dtm.EstiloId, dtm.ColorId);
-                pnlTablero.addClass("d-none");
-                pnlDetalle.removeClass('d-none');
-                pnlControlesDetalle.removeClass('d-none');
-                pnlDatos.removeClass('d-none');
-                pnlControlesDetalle.find("[name='Articulo']")[0].selectize.clear(true);
-                pnlControlesDetalle.find("[name='Articulo']")[0].selectize.clearOptions();
-                pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
-            }).fail(function (x, y, z) {
-                console.log(x, y, z);
-            }).always(function () {
-            });
+            getFichaTecnicaByEstiloByColor(dtm);
         });
     }
 
+    function getFichaTecnicaByEstiloByColor(dtm) {
+        $.getJSON(master_url + 'getFichaTecnicaByEstiloByColor', {Estilo: dtm.EstiloId, Color: dtm.ColorId}).done(function (data, x, jq) {
+            pnlDatos.find("input").val("");
+            $.each(pnlDatos.find("select"), function (k, v) {
+                pnlDatos.find("select")[k].selectize.clear(true);
+            });
+            Estilo[0].selectize.disable();
+            Color[0].selectize.disable();
+            pnlDatos.find("#FechaAlta").prop("readonly", true);
+            $.getJSON(master_url + 'getColoresXEstilo', {Estilo: dtm.EstiloId}).done(function (data, x, jq) {
+                $.each(data, function (k, v) {
+                    pnlDatos.find("[name='Color']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                });
+                pnlDatos.find("[name='Color']")[0].selectize.addItem(dtm.ColorId, true);
+            }).fail(function (x, y, z) {
+                getError(x);
+            }).always(function () {
+            });
+            pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
+            getFotoXEstilo(dtm.EstiloId);
+            getFichaTecnicaDetalleByID(dtm.EstiloId, dtm.ColorId);
+            pnlTablero.addClass("d-none");
+            pnlDetalle.removeClass('d-none');
+            pnlControlesDetalle.removeClass('d-none');
+            pnlDatos.removeClass('d-none');
+
+            pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+        });
+    }
     function getEstilos() {
         $.getJSON(master_url + 'getEstilos').done(function (data, x, jq) {
             $.each(data, function (k, v) {
@@ -2120,7 +2184,8 @@
     function getArticulos() {
         $.getJSON(master_url + 'getArticulos').done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlEditarArticulo.find("[name='Articulo']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                pnlControlesDetalle.find("#Articulo")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                mdlEditarArticulo.find("[name='eArticulo']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -2129,7 +2194,6 @@
 
     function getColoresXEstilo(Estilo) {
         $.getJSON(master_url + 'getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
-            console.log(data);
             $.each(data, function (k, v) {
                 pnlDatos.find("[name='Color']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
@@ -2169,7 +2233,9 @@
                 onNotify('<span class="fa fa-exclamation fa-lg"></span>', 'EL ESTILO YA HA SIDO CAPTURADO', 'danger');
                 pnlDatos.find("[name='Estilo']")[0].selectize.clear();
                 //pnlDatos.find("[name='Color']")[0].selectize.focus();
+                btnAdicionaMaterialFijo.attr('disabled', true);
             } else {
+                btnAdicionaMaterialFijo.attr('disabled', false);
                 getFotoXEstilo(Estilo);
             }
         }).fail(function (x, y, z) {
@@ -2259,7 +2325,6 @@
         pnlControlesDetalle.find("[name='Precio']").val('');
         pnlControlesDetalle.find("[name='Consumo']").val('');
         pnlControlesDetalle.find("[name='PzXPar']").val('');
-        pnlControlesDetalle.find("[name='Grupo']")[0].selectize.clear(true);
     }
 
     function onEliminarArticuloID(IDX) {

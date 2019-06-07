@@ -246,7 +246,6 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
-
     public function getNumMaterialesASuplirXConsumo() {
         try {
             $ESTILO = $this->input->get('ESTILO');
@@ -304,15 +303,15 @@ class FichaTecnica extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function onSuplirConsumos() {
         try {
             $ESTILO = $this->input->get('ESTILO');
             $PZA = $this->input->get('PZA');
-            $MATERIAL = $this->input->get('MATERIAL');  
-            $NUEVOCONSUMO = $this->input->get('NUEVOCONSUMO'); 
-            
-            $this->db->set('Consumo', $NUEVOCONSUMO) 
+            $MATERIAL = $this->input->get('MATERIAL');
+            $NUEVOCONSUMO = $this->input->get('NUEVOCONSUMO');
+
+            $this->db->set('Consumo', $NUEVOCONSUMO)
                     ->where('Estilo', $ESTILO)
                     ->where('Pieza', $PZA)
                     ->where('Articulo', $MATERIAL)
@@ -473,14 +472,42 @@ class FichaTecnica extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getEstilosConsumos() {
         try {
             print json_encode(
-                    $this->db->select('E.Clave AS CLAVE, CONCAT(E.Clave," - ",E.Descripcion) AS ESTILO ',false)
-                    ->from('fichatecnica AS FT')
-                    ->join('estilos AS E','FT.Estilo = E.Clave')
-                    ->group_by('FT.Estilo')->get()->result());
+                            $this->db->select('E.Clave AS CLAVE, CONCAT(E.Clave," - ",E.Descripcion) AS ESTILO ', false)
+                                    ->from('fichatecnica AS FT')
+                                    ->join('estilos AS E', 'FT.Estilo = E.Clave')
+                                    ->group_by('FT.Estilo')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFichaTecnicaFija() {
+        try {
+
+            $ESTILO = $this->input->post('ESTILO');
+            $COLOR = $this->input->post('COLOR');
+
+            $ftf = $this->db->select("(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO,
+                            FTF.Pieza AS CLAVE_PIEZA, P.Descripcion AS PIEZA, 
+                            FTF.Articulo AS CLAVE_ARTICULO, A.Descripcion AS ARTICULO,
+                            A.UnidadMedida AS UNIDAD,  FTF.Consumo AS CONSUMO, 0 AS pzXPar, 0 AS ID,
+                            CONCAT(D.Clave, ' - ', D.Descripcion) AS DeptoCat, D.Clave AS DEPTO", false)
+                            ->from('fichatecnicafija AS FTF')
+                            ->join('piezas AS P', 'FTF.Pieza = P.Clave')
+                            ->join('articulos AS A', 'A.Clave = FTF.Articulo')
+                            ->join('departamentos AS D', 'D.Clave = P. Departamento')
+                            ->get()->result();
+
+            foreach ($ftf as $k => $v) {
+                $ftf = array('Estilo' => $ESTILO, 'Color' => $COLOR,
+                    'Pieza' => $v->CLAVE_PIEZA, 'Articulo' => $v->CLAVE_ARTICULO,
+                    'Precio' => $v->PRECIO, 'Consumo' => $v->CONSUMO, 'PzXPar' => 0, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
+                $this->db->insert('fichatecnica', $ftf);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
