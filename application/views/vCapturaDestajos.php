@@ -24,8 +24,8 @@
                 <button type="button" class="btn btn-success btn-sm" id="btnValesComida" >
                     <span class="fa fa-dollar-sign" ></span> VALES/COMIDA
                 </button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnDevClientes" >
-                    <span class="fa fa-ban" ></span> DEV. DE CLIENTES
+                <button type="button" class="btn btn-danger btn-sm" id="btnCapturaDestajosPiochas" >
+                    <span class="fa fa-ban" ></span> DESTAJOS PIOCHAS
                 </button>
 
             </div>
@@ -139,7 +139,10 @@
     var btnVerFracciones = pnlTablero.find('#btnVerFracciones');
     var btnVerAvance = pnlTablero.find('#btnVerAvance');
 
+
     var btnRastreoControl = pnlTablero.find('#btnRastreoControl');
+    var btnRastreoConcepto = pnlTablero.find('#btnRastreoConcepto');
+
 
 
     var nuevo = true;
@@ -178,12 +181,10 @@
         });
         pnlTablero.find("#Empleado").change(function () {
             if ($(this).val()) {
-
                 getDepartamentoByEmpleado($(this).val());
                 pnlTablero.find("#Fraccion")[0].selectize.clear(true);
                 FraccionesNomina.column(1).search('^' + $(this).val() + '$', true, false).draw();
             }
-
         });
         pnlTablero.find("#Fraccion").change(function () {
             var Fraccion = pnlTablero.find("#Fraccion").val();
@@ -391,7 +392,6 @@
             }
 
         });
-
         btnVerFracciones.click(function () {
             if (seg === 0) {
                 swal('ATENCIÓN', 'USUARIO NO AUTORIZADO PARA VER ESTE MÓDULO', 'error');
@@ -423,7 +423,6 @@
             }
 
         });
-
         btnVerAvance.click(function () {
             $.fancybox.open({
                 src: base_url + '/Avance.shoes/?origen=PRODUCCION',
@@ -450,10 +449,13 @@
                 }
             });
         });
-
         btnRastreoControl.click(function () {
             $('#mdlRastreoControlNomina').modal('show');
         });
+        btnRastreoConcepto.click(function () {
+            $('#mdlRastreoConceptoNomina').modal('show');
+        });
+
     });
 
     function onImprimirReportes(nombre, ano, sem, empleado) {
@@ -862,3 +864,4 @@
 </style>
 <?php
 $this->load->view('vRastreoControlNomina');
+$this->load->view('vRastreoConceptoNomina');

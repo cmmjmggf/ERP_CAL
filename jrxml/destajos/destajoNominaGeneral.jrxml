@@ -20,7 +20,6 @@ E.Busqueda AS nomemp,
 sum(FPN.subtot) as subtot
 from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
-join fracciones F on F.Clave = FPN.numfrac
 where FPN.semana = $P{sem} and FPN.anio =  $P{ano}
 group by FPN.depto, FPN.numeroempleado
 order by FPN.depto ASC,FPN.numeroempleado asc]]>

@@ -32,13 +32,41 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
 
     public function getControlesNominaRastreo($Control, $Ano, $Sem, $Empleado) {
         try {
-            $this->db->select("*"
+            $this->db->select("FPN.numeroempleado, FPN.control, FPN.numfrac, FPN.preciofrac, FPN.estilo,concat(F.Clave,' ',F.Descripcion) as nomfrac, "
+                            . "date_format(FPN.fecha,'%d/%m/%Y') as fecha, FPN.semana, FPN.pares, cast(FPN.subtot as decimal(10,2)) as subtot "
                             . "")
-                    ->from("fracpagnomina")
-                    ->like('control', $Control)
-                    ->like('anio', $Ano)
-                    ->like('semana', $Sem)
-                    ->like('numeroempleado', $Empleado, 'after')->limit(1500);
+                    ->from("fracpagnomina FPN")
+                    ->join("fracciones F", 'on F.Clave = FPN.numfrac ')
+                    ->like('FPN.control', $Control)
+                    ->like('FPN.anio', $Ano)
+                    ->like('FPN.semana', $Sem)
+                    ->like('FPN.numeroempleado', $Empleado, 'after')->limit(900);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getConceptosNominaRastreo($Ano, $Empleado) {
+        try {
+            $this->db->select("PN.numsem, "
+                            . "PN.numemp, "
+                            . "PN.numcon, "
+                            . " date_format(PN.fecha, '%d/%m/%Y') as fecha, "
+                            . " (case when PN.tpcon = 1 then PN.tpcon else PN.tpcond end) as PerDed , "
+                            . " cast((case when PN.tpcon = 1 then PN.importe else -PN.imported end)as decimal(10,2)) as Importe "
+                            . " ")
+                    ->from("prenomina PN")
+                    ->where('PN.Año', $Ano)
+                    ->where('PN.numemp', $Empleado)
+                    ->limit(900);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -177,6 +205,28 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
                                     . "CONCAT(E.numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
                             ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Clave', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadosGeneral() {
+        try {
+            return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
+                                    . "CONCAT(E.numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
+                            ->from("empleados AS E")->where("E.altabaja", "1")->order_by('Clave', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getConceptosNomina() {
+        try {
+            return $this->db->select("CAST(E.Clave AS SIGNED ) AS Clave, "
+                                    . "CONCAT(E.Clave,' ',E.Descripcion) AS Concepto ")
+                            ->from("conceptosnomina AS E")->where("E.Estatus", "ACTIVO")->order_by('Clave', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

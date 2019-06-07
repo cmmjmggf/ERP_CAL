@@ -43,9 +43,15 @@
                                 <table id="tblControlesNominaRastreo" class="table table-sm  " style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
-                                            <th>Nombre</th>
-                                            <th>Importe</th>
+                                            <th>Control</th>
+                                            <th>Empl</th>
+                                            <th>Estilo</th>
+                                            <th>Fracc</th>
+                                            <th>Fecha</th>
+                                            <th>Sem</th>
+                                            <th>Pares</th>
+                                            <th>Precio</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -56,7 +62,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-primary" id="btnImprimir">IMPRIMIR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -93,8 +99,8 @@
                     buttons: false,
                     timer: 1000
                 }).then((action) => {
-                    mdlRastreoControlNomina.find("#AnoRastro").val("");
-                    mdlRastreoControlNomina.find("#AnoRastro").focus();
+                    mdlRastreoControlNomina.find("#AnoRastreo").val("");
+                    mdlRastreoControlNomina.find("#AnoRastreo").focus();
                 });
             } else {
                 anoRastreo = $(this).val();
@@ -117,37 +123,91 @@
             getControlesNominaRastreo(contRastreo, anoRastreo, semRastreo, empRastreo);
 
         });
-        mdlRastreoControlNomina.find("#ControlRastreo").change(function () {
-            if ($(this).val()) {
-                var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val();
-                var contRastreo = $(this).val();
-                var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
-                var empRastreo = mdlRastreoControlNomina.find("#EmpleadoRastreo").val();
-                getControlesNominaRastreo(contRastreo, anoRastreo, semRastreo, empRastreo);
+        mdlRastreoControlNomina.find("#ControlRastreo").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val();
+                    var contRastreo = $(this).val();
+                    var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
+                    var empRastreo = mdlRastreoControlNomina.find("#EmpleadoRastreo").val();
+
+                    $.getJSON(master_url + 'getControl', {
+                        Control: $(this).val()
+                    }).done(function (data) {
+                        if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
+                            mdlRastreoControlNomina.find("#EstatusProduccionRastreo").val(data[0].Depto + '  ' + data[0].DeptoT);
+                            getControlesNominaRastreo(contRastreo, anoRastreo, semRastreo, empRastreo);
+                        } else { //Si el control no existe
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "EL CONTROL NO EXISTE EN PRODUCCIÓN ",
+                                icon: "warning",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false
+                            }).then((action) => {
+                                if (action) {
+                                    mdlRastreoControlNomina.find("#ControlRastreo").val('').focus();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
         mdlRastreoControlNomina.find('#btnImprimir').on("click", function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
-            var empleado = mdlRastreoControlNomina.find("#Empleado").val();
-            var importe = mdlRastreoControlNomina.find("#Importe").val();
-            HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
+            var frm = new FormData();
+            frm.append('Control', mdlRastreoControlNomina.find("#ControlRastreo").val());
+
             $.ajax({
-                url: base_url + 'index.php/Empleados/onModificarExt',
+                url: master_url + 'onImprimirReporteRastreoControl',
                 type: "POST",
-                data: {
-                    Numero: empleado,
-                    Ahorro: importe
-                }
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
             }).done(function (data, x, jq) {
-                ControlesNominaRastreo.ajax.reload();
-                mdlRastreoControlNomina.find("input").val("");
-                $.each(mdlRastreoControlNomina.find("select"), function (k, v) {
-                    mdlRastreoControlNomina.find("select")[k].selectize.clear(true);
-                });
+                console.log(data);
+                if (data.length > 0) {
+
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "100%",
+                                    height: "100%"
+                                },
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
+                                }
+                            }
+                        }
+                    });
+
+
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        pnlTablero.find('#btnImprimir').focus();
+                    });
+                }
                 HoldOn.close();
-                mdlRastreoControlNomina.find('#Empleado')[0].selectize.focus();
             }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x, y, z);
                 HoldOn.close();
             });
@@ -175,7 +235,13 @@
             "columns": [
                 {"data": "control"},
                 {"data": "numeroempleado"},
-                {"data": "estilo"}
+                {"data": "estilo"},
+                {"data": "numfrac"},
+                {"data": "fecha"},
+                {"data": "semana"},
+                {"data": "pares"},
+                {"data": "preciofrac"},
+                {"data": "subtot"}
             ],
             language: lang,
             "autoWidth": true,
@@ -190,6 +256,34 @@
             "aaSorting": [
 
             ],
+            "createdRow": function (row, data, index) {
+                $.each($(row).find("td"), function (k, v) {
+                    var c = $(v);
+                    var index = parseInt(k);
+                    switch (index) {
+                        case 0:
+                            /*UNIDAD*/
+                            c.addClass('text-info text-strong');
+                            break;
+                        case 1:
+                            /*CONSUMO*/
+                            c.addClass('text-success text-strong');
+                            break;
+                        case 3:
+                            /*PZXPAR*/
+                            c.addClass('text-strong ');
+                            break;
+                        case 5:
+                            /*PZXPAR*/
+                            c.addClass('text-strong ');
+                            break;
+                        case 8:
+                            /*ELIMINAR*/
+                            c.addClass('text-strong');
+                            break;
+                    }
+                });
+            },
             "initComplete": function (x, y) {
                 HoldOn.close();
             }
@@ -198,7 +292,14 @@
         tblControlesNominaRastreo.find('tbody').on('click', 'tr', function () {
             tblControlesNominaRastreo.find("tbody tr").removeClass("success");
             $(this).addClass("success");
+
+            var dtm = ControlesNominaRastreo.row(this).data();
+            mdlRastreoControlNomina.find("#FraccionRastreo").val(dtm.nomfrac);
+            mdlRastreoControlNomina.find("#EmpleadoRastreo")[0].selectize.addItem(dtm.numeroempleado, true);
+            mdlRastreoControlNomina.find("#ControlRastreo").val(dtm.control);
+            mdlRastreoControlNomina.find("#SemRastreo").val(dtm.semana);
         });
+
     }
 
     function getEmpleadosRastreoControl() {

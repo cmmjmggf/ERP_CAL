@@ -92,10 +92,6 @@
 
         pnlTablero.find("#Sem").keyup(function (e) {
             if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
                 Registros.ajax.reload(function () {
                     HoldOn.close();
                 });
@@ -104,10 +100,6 @@
 
         pnlTablero.find("#Ano").keyup(function (e) {
             if ($(this).val() && $(this).val().length > 3) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
                 Registros.ajax.reload(function () {
                     HoldOn.close();
                 });
@@ -165,7 +157,7 @@
             tblRegistros.DataTable().destroy();
         }
         Registros = tblRegistros.DataTable({
-            "dom": 'Brtip',
+            "dom": 'Bfrtip',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
