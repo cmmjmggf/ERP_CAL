@@ -60,7 +60,7 @@
 
 <div id="frmLogin" class="row div-login d-none" aling="center"> 
     <div id="frmtitulo" class="col-12 text-center d-none">
-        <h4 class="mb-3 text-white text-shadow">CONTROL DE ACCESO</h4>
+        <h4 class="mb-3">CONTROL DE ACCESO</h4>
     </div>
     <div class="col-12 d-none">
         <form id="frmIngresar" class="card div-login text-center box-helper">
@@ -68,7 +68,7 @@
             <input type="password" id="Contrasena" name="Contrasena" class="form-control mt-3" placeholder="Contraseña" required>
             <button class="btn btn-primary btn-block mt-3" id="btnIngresar" type="button">Ingresar</button>
             <button class="btn btn-warning btn-block mt-2" id="btnOlvidasteContrasena" type="button">Olvidaste tu contraseña?</button>
-            <p class="mt-3 mb-3 text-muted">&copy; <?php echo date("Y") . ' All Rights Reserved for <br> CALZADO LOBO SA de CV'; ?></p>
+            <h6 class="mt-3 mb-3 text-primary">&copy; <?php echo date("Y") . ' All Rights Reserved for <br> CALZADO LOBO SA de CV'; ?></h6>
         </form>
     </div>
 </div>
@@ -131,22 +131,22 @@
         $("#frmIngresar").addClass("card-transparent");
 
         $("body").css("background", "none");
-        $("body").vegas({
-            delay: 9000,
-            slides: [
-                {src: "<?php print base_url('img/vg/1.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/2.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/3.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/4.jpg'); ?>"}, 
-                {src: "<?php print base_url('img/vg/6.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/7.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/8.jpg'); ?>"},
-                {src: "<?php print base_url('img/vg/9.jpg'); ?>"}
-            ],
-            animation: ['fade', 'kenburnsUp', 'kenburnsDown', 'kenburnsLeft', 'kenburnsRight'],
-            transitionDuration: 1500,
-            overlay: '<?php print base_url('/js/vegas/overlays/07.png'); ?>'
-        });
+//        $("body").vegas({
+//            delay: 9000,
+//            slides: [
+//                {src: "<?php print base_url('img/vg/1.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/2.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/3.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/4.jpg'); ?>"}, 
+//                {src: "<?php print base_url('img/vg/6.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/7.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/8.jpg'); ?>"},
+//                {src: "<?php print base_url('img/vg/9.jpg'); ?>"}
+//            ],
+//            animation: ['fade', 'kenburnsUp', 'kenburnsDown', 'kenburnsLeft', 'kenburnsRight'],
+//            transitionDuration: 1500,
+//            overlay: '<?php print base_url('/js/vegas/overlays/07.png'); ?>'
+//        });
 
         handleEnter();
         Usuario.val("");

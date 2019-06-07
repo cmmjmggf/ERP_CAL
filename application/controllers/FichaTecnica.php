@@ -426,6 +426,38 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function getLineaPiezasMaterialXConsumos() {
+        try {
+            $LINEA = $this->input->get('LINEA');
+            $PIEZA = $this->input->get('PIEZA');
+            $MATERIAL = $this->input->get('MATERIAL');
+            $this->db->select('FT.ID,E.Linea AS LINEA, FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                    ->join('estilos AS E', 'FT.Estilo = E.Clave');
+            if ($LINEA !== '') {
+                $this->db->where('E.Linea', $LINEA);
+            }
+            if ($PIEZA !== '') {
+                $this->db->where('FT.Pieza', $PIEZA);
+            }
+            if ($MATERIAL !== '') {
+                $this->db->where('FT.Articulo', $MATERIAL);
+            }
+            if ($LINEA === '' && $PIEZA === '' && $MATERIAL === '') {
+                $this->db->limit(2000);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEstilosByLinea() {
         try {
             print json_encode($this->ftm->getEstilosByLinea($this->input->get('Linea')));
