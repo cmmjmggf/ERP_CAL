@@ -629,7 +629,7 @@ class FichaTecnica extends CI_Controller {
                     'Pieza' => $PIEZA, 'Articulo' => $ARTICULO,
                     'Precio' => $v->PRECIO, 'Consumo' => $CONSUMO,
                     'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
-//                $this->db->insert('fichatecnica',$FT);
+                $this->db->insert('fichatecnica',$FT);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
