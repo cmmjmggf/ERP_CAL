@@ -200,9 +200,41 @@ class Empleados extends CI_Controller {
         }
     }
 
+    public function getEmpleadosComidas() {
+        try {
+            print json_encode($this->Empleados_model->getEmpleadosComidas());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadosComidasSelect() {
+        try {
+            print json_encode($this->Empleados_model->getEmpleadosComidasSelect());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleadosCajaAhorro() {
         try {
             print json_encode($this->Empleados_model->getEmpleadosCajaAhorro());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onActualizarCampoGeneral() {
+        try {
+            $x = $this->input;
+            $data = array();
+            foreach ($this->input->post() as $key => $v) {
+                //print "$key  = $v \n";
+                if ($v !== '') {
+                    $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
+                }
+            }
+            $this->db->update("empleados", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

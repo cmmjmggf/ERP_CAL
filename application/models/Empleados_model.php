@@ -33,6 +33,30 @@ class Empleados_model extends CI_Model {
         }
     }
 
+    public function getEmpleadosComidas() {
+        try {
+            return $this->db->select("E.Numero AS Clave, "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                                    . "E.Comida "
+                                    . "  ", false)
+                            ->from('empleados AS E')->where('E.Comida > 0', null, false)->where('E.altabaja', 1)->order_by('Clave', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEmpleadosComidasSelect() {
+        try {
+            return $this->db->select("E.Numero AS Clave, "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                                    . " "
+                                    . "  ", false)
+                            ->from('empleados AS E')->where('E.altabaja', 1)->where('E.Comedor', 1)->order_by('Clave', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleadosCajaAhorro() {
         try {
             return $this->db->select("E.Numero AS Clave, "

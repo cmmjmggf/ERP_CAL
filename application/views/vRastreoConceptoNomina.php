@@ -122,7 +122,7 @@
             "dom": 'rt',
             buttons: buttons,
             "ajax": {
-                "url": master_url + 'getConceptosNominaRastreo',
+                "url": base_url + 'index.php/CapturaFraccionesParaNomina/getConceptosNominaRastreo',
                 "dataType": "json",
                 "type": 'GET',
                 "data": {Ano: ano, Emp: empleado},
@@ -219,7 +219,7 @@
     }
 
     function getEmpleadosConceptosNomina() {
-        $.getJSON(master_url + 'getEmpleadosGeneral', ).done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getEmpleadosGeneral', ).done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlRastreoConceptoNomina.find("#EmpleadoConcepto")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
             });
@@ -231,7 +231,7 @@
     }
 
     function getConceptosNomina() {
-        $.getJSON(master_url + 'getConceptosNomina', ).done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getConceptosNomina', ).done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlRastreoConceptoNomina.find("#Concepto")[0].selectize.addOption({text: v.Concepto, value: v.Clave});
             });

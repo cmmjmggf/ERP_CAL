@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
-class CapturaFraccionesParaNomina extends CI_Controller {
+class CapturaFraccionesParaNominaPiochas extends CI_Controller {
 
     function __construct() {
         parent::__construct();
@@ -37,7 +37,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                     $is_valid = true;
                     break;
             }
-            $this->load->view('vCapturaDestajos')->view('vFooter');
+            $this->load->view('vCapturaDestajosPiochas')->view('vFooter');
         }
         if (!$is_valid) {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');

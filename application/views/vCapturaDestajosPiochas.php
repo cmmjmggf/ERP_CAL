@@ -2,32 +2,9 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-4 col-md-4 float-left">
-                <legend class="float-left">Captura fracciones para nómina</legend>
+                <legend class="float-left">Captura fracciones para nómina (PIOCHAS)</legend>
             </div>
-            <div class="col-12 col-sm-8 col-md-8 animated bounceInLeft" align="right" id="Acciones">
-                <button type="button" class="btn btn-primary btn-sm " id="btnVerFracciones" >
-                    <span class="fa fa-search" ></span> FRACCIONES
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm " id="btnVerAvance" >
-                    <span class="fa fa-check-double" ></span> AVANCE
-                </button>
-                <button type="button" class="btn btn-warning btn-sm" id="btnAvanceAnt" >
-                    <span class="fa fa-check-double" ></span> AVANCE ANT.
-                </button>
-                <button type="button" class="btn btn-info btn-sm " id="btnRastreoControl" >
-                    <span class="fa fa-cube" ></span> RAST/ CONTROL
-                </button>
-                <button type="button" class="btn btn-info btn-sm " id="btnRastreoConcepto" >
-                    <span class="fa fa-cube" ></span> RAST/ CONCEPTO
-                </button>
-                <button type="button" class="btn btn-success btn-sm" id="btnCapturaComida" >
-                    <span class="fa fa-dollar-sign" ></span> VALES/COMIDA
-                </button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnCapturaDestajosPiochas" >
-                    <span class="fa fa-ban" ></span> DESTAJOS PIOCHAS
-                </button>
 
-            </div>
         </div>
     </div>
     <hr>
@@ -115,10 +92,6 @@
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-3">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input selectNotEnter" id="cImprimeSemCompletaDest" >
-                    <label class="custom-control-label text-info labelCheck" for="cImprimeSemCompletaDest">Imprime toda la semana</label>
-                </div>
                 <button type="button" id="btnAceptar" class="btn btn-primary btn-sm selectNotEnter">
                     <span class="fa fa-check"></span> ACEPTAR
                 </button>
@@ -130,19 +103,11 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/CapturaFraccionesParaNomina/';
+    var master_url = base_url + 'index.php/CapturaFraccionesParaNominaPiochas/';
     var pnlTablero = $("#pnlTablero div.card-body");
     var Maq = pnlTablero.find("#Maq"), Control = pnlTablero.find("#Control"),
             FraccionesNomina, tblFraccionesNomina = pnlTablero.find("#tblFraccionesNomina"),
             btnAceptar = pnlTablero.find("#btnAceptar"), btnImprimir = pnlTablero.find("#btnImprimir");
-    var btnVerFracciones = pnlTablero.find('#btnVerFracciones');
-    var btnVerAvance = pnlTablero.find('#btnVerAvance');
-
-
-    var btnRastreoControl = pnlTablero.find('#btnRastreoControl');
-    var btnRastreoConcepto = pnlTablero.find('#btnRastreoConcepto');
-    var btnCapturaComida = pnlTablero.find('#btnCapturaComida');
-    var btnCapturaDestajosPiochas = pnlTablero.find('#btnCapturaDestajosPiochas');
 
     var nuevo = true;
     var pCelula = 0, DeptoEmp = 0, ParesPed = 0;
@@ -190,29 +155,8 @@
             var Control = pnlTablero.find("#Control").val();
             var Empleado = pnlTablero.find("#Empleado").val();
             if (Empleado !== '') {
-                $.getJSON(master_url + 'onVerificarFraccionCapturada', {Fraccion: Fraccion, Control: Control, Empleado: Empleado}).done(function (data) {
-
-                    if (data.length > 0) {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "EL --> CONTROL/FRACCIÓN/EMPLEADO <-- YA HA SIDO CAPTURADO",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            if (action) {
-                                pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                                pnlTablero.find("#Fraccion")[0].selectize.focus();
-                            }
-                        });
-                    } else {
-                        var estilo = pnlTablero.find("#Estilo").val();
-                        getPrecioFraccion(pnlTablero.find("#Fraccion").val(), estilo);
-                    }
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                var estilo = pnlTablero.find("#Estilo").val();
+                getPrecioFraccion(pnlTablero.find("#Fraccion").val(), estilo);
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -354,27 +298,22 @@
             var reporte = '';
 
             if (ano !== '' && sem !== '') {
-                if (pnlTablero.find("#cImprimeSemCompletaDest")[0].checked) {//Imprime sem completa
-                    reporte = 'destajoNominaGeneral';
+                if (emp) {
+                    reporte = 'destajoNominaEmpleado';
                     onImprimirReportes(reporte, ano, sem, emp);
                 } else {
-                    if (emp) {
-                        reporte = 'destajoNominaEmpleado';
-                        onImprimirReportes(reporte, ano, sem, emp);
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "DEBE CAPTURAR EL EMPLEADO",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            if (action) {
-                                pnlTablero.find("#Empleado")[0].selectize.clear(true);
-                                pnlTablero.find("#Empleado")[0].selectize.focus();
-                            }
-                        });
-                    }
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBE CAPTURAR EL EMPLEADO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        if (action) {
+                            pnlTablero.find("#Empleado")[0].selectize.clear(true);
+                            pnlTablero.find("#Empleado")[0].selectize.focus();
+                        }
+                    });
                 }
             } else {
                 swal({
@@ -390,98 +329,6 @@
                 });
             }
 
-        });
-        btnCapturaDestajosPiochas.click(function () {
-            $.fancybox.open({
-                src: base_url + '/CapturaFraccionesParaNominaPiochas',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "95%",
-                            height: "95%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
-            });
-        });
-        btnVerFracciones.click(function () {
-            if (seg === 0) {
-                swal('ATENCIÓN', 'USUARIO NO AUTORIZADO PARA VER ESTE MÓDULO', 'error');
-            } else {
-                $.fancybox.open({
-                    src: base_url + '/FraccionesXEstilo/?origen=PRODUCCION',
-                    type: 'iframe',
-                    opts: {
-                        afterShow: function (instance, current) {
-                            console.info('done!');
-                        },
-                        iframe: {
-                            // Iframe template
-                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                            preload: true,
-                            // Custom CSS styling for iframe wrapping element
-                            // You can use this to set custom iframe dimensions
-                            css: {
-                                width: "95%",
-                                height: "95%"
-                            },
-                            // Iframe tag attributes
-                            attr: {
-                                scrolling: "auto"
-                            }
-                        }
-                    }
-                });
-            }
-
-        });
-        btnVerAvance.click(function () {
-            $.fancybox.open({
-                src: base_url + '/Avance.shoes/?origen=PRODUCCION',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
-            });
-        });
-        btnRastreoControl.click(function () {
-            $('#mdlRastreoControlNomina').modal('show');
-        });
-        btnRastreoConcepto.click(function () {
-            $('#mdlRastreoConceptoNomina').modal('show');
-        });
-        btnCapturaComida.click(function () {
-            $('#mdlCapturaComidaEmpleados').modal('show');
         });
     });
 
@@ -889,7 +736,3 @@
         font-size: 16px !important;
     }
 </style>
-<?php
-$this->load->view('vRastreoControlNomina');
-$this->load->view('vRastreoConceptoNomina');
-$this->load->view('vCapturaComidaEmpleados');

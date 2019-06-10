@@ -131,7 +131,7 @@
                     var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
                     var empRastreo = mdlRastreoControlNomina.find("#EmpleadoRastreo").val();
 
-                    $.getJSON(master_url + 'getControl', {
+                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControl', {
                         Control: $(this).val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
@@ -161,7 +161,7 @@
             frm.append('Control', mdlRastreoControlNomina.find("#ControlRastreo").val());
 
             $.ajax({
-                url: master_url + 'onImprimirReporteRastreoControl',
+                url: base_url + 'index.php/CapturaFraccionesParaNomina/onImprimirReporteRastreoControl',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -226,7 +226,7 @@
             "dom": 'frtip',
             buttons: buttons,
             "ajax": {
-                "url": master_url + 'getControlesNominaRastreo',
+                "url": base_url + 'index.php/CapturaFraccionesParaNomina/getControlesNominaRastreo',
                 "dataType": "json",
                 "type": 'GET',
                 "data": {Control: cont, Ano: ano, Sem: sem, Emp: empl},
@@ -303,7 +303,7 @@
     }
 
     function getEmpleadosRastreoControl() {
-        $.getJSON(master_url + 'getEmpleados', ).done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getEmpleados', ).done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlRastreoControlNomina.find("#EmpleadoRastreo")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
             });
