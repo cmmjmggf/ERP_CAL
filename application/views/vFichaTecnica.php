@@ -333,47 +333,6 @@
     </div>
 </div>
 
-<div class="modal animated fadeIn" id="mdlCopiarFT">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Copia ficha tecnica a ficha tecnica</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <p class="text-danger font-weight-bold">Copiar Estilo/Color </p>
-                    </div>
-                    <div class="col-12">
-                        <label>Estilo</label>
-                        <input type="text" id="EstiloACopiar" name="EstiloACopiar" class="form-control" maxlength="8" placeholder="Estilo...">
-                    </div>
-                    <div class="col-12">
-                        <label>Color</label>
-                        <input type="text" id="ColorACopiar" name="ColorACopiar" class="form-control" maxlength="4" placeholder="Color...">
-                    </div>
-                    <div class="col-12 my-2">
-                        <p class="text-danger font-weight-bold">Al Estilo/Color</p>
-                    </div>
-                    <div class="col-12">
-                        <label>Estilo</label>
-                        <input type="text" id="EstiloAReemplazar" name="EstiloAReemplazar" class="form-control" maxlength="8" placeholder="Estilo...">
-                    </div> 
-                    <div class="col-12">
-                        <label>Color</label>
-                        <input type="text" id="ColorAReemplazar" name="ColorAReemplazar" class="form-control" maxlength="4" placeholder="Color...">
-                    </div> 
-                </div>
-            </div>
-            <div class="modal-footer"> 
-                <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal animated fadeIn" id="mdlSuplePiezaEnFT">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -430,125 +389,7 @@
     </div>
 </div>
 
-<div class="modal animated fadeIn" id="mdlSupleMaterialEnFT">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><span class="fa fa-retweet"></span> Suple material en ficha tecnica</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-5">
-                        <label>Material a suplir</label>
-                        <select id="MaterialASuplir" name="MaterialASuplir" class="form-control"></select>
-                    </div>  
-                    <div class="col-5">
-                        <label>Material nuevo</label>
-                        <select id="MaterialNuevo" name="MaterialNuevo" class="form-control"></select>
-                    </div>
-                    <div class="col-2">
-                        <button type="button" id="btnSuplirMaterial" name="btnSuplirMaterial" class="btn btn-info-blue mt-3">
-                            Suplir
-                        </button>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="col-12 text-center mt-2">
-                        <p class="text-danger font-weight-bold">Detalle de la ficha técnica</p>
-                    </div> 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblDetalleFTMaterial" class="table table-hover table-sm" style="width: 100% !important;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Estilo</th>
-                                    <th scope="col">Col</th>
-                                    <th scope="col">Pza</th>
-                                    <th scope="col">-</th>
-                                    <th scope="col">Sec</th>
-                                    <th scope="col">Art</th>
-                                    <th scope="col">-</th>
-                                    <th scope="col">Cons</th>
-                                    <th scope="col">Rango</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>  
-                </div>
-                <div class="modal-footer"> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal animated fadeIn" id="mdlSupleMaterialEnFTXLinea">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><span class="fa fa-retweet"></span> Suple material en ficha tecnica x linea</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-6">
-                        <label>Linea</label>
-                        <select id="LineaDefinidora" name="LineaDefinidora" class="form-control"></select>
-                    </div>  
-                    <div class="w-100"></div>
-                    <div class="col-5">
-                        <label>Material a suplir</label>
-                        <select id="MaterialASuplirXLinea" name="MaterialASuplirXLinea" class="form-control"></select>
-                    </div>  
-                    <div class="col-5">
-                        <label>Material nuevo</label>
-                        <select id="MaterialNuevoXLinea" name="MaterialNuevoXLinea" class="form-control"></select>
-                    </div>  
-                    <div class="col-2">
-                        <label>Consumo</label>
-                        <input type="text" id="ConsumoXLinea" name="ConsumoXLinea" class="form-control form-control-sm numbersOnly" maxlength="8">
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="col-12" align="right">
-                        <button type="button" id="btnSuplirMaterialXLinea" name="btnSuplirMaterialXLinea" class="btn btn-info-blue mt-3">
-                            Suplir
-                        </button>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="col-12 text-center">
-                        <p class="text-danger font-weight-bold">Detalle de la ficha técnica</p>
-                    </div> 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblDetalleFTMaterialXLinea" class="table table-hover table-sm" style="width: 100% !important;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Estilo</th>
-                                    <th scope="col">Col</th>
-                                    <th scope="col">Pza</th>
-                                    <th scope="col">-</th>
-                                    <th scope="col">Sec</th>
-                                    <th scope="col">Art</th>
-                                    <th scope="col">-</th>
-                                    <th scope="col">Cons</th>
-                                    <th scope="col">Rango</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>  
-                </div>
-                <div class="modal-footer"> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal animated fadeIn" id="mdlArticuloYConsumoXEstiloColor">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -755,23 +596,13 @@
             btnFotos = pnlDatos.find("#btnFotos"), btnCopyFTaFT = pnlDatos.find("#btnCopyFTaFT"),
             mdlEstilosFotos = $("#mdlEstilosFotos"),
             EstiloFotos = mdlEstilosFotos.find("#EstiloFoto"),
-            mdlEliminaFTXEstilo = $("#mdlEliminaFTXEstilo"),
-            mdlCopiarFT = $("#mdlCopiarFT"), btnAceptarCopiar = mdlCopiarFT.find("#btnAceptar"),
-            btnMatSemProd = pnlDatos.find("#btnMatSemProd"), mdlSuplePiezaEnFT = $("#mdlSuplePiezaEnFT"),
+            mdlEliminaFTXEstilo = $("#mdlEliminaFTXEstilo");
+    var btnMatSemProd = pnlDatos.find("#btnMatSemProd"), mdlSuplePiezaEnFT = $("#mdlSuplePiezaEnFT"),
             PiezaASuplir = mdlSuplePiezaEnFT.find("#PiezaASuplir"), PiezaNueva = mdlSuplePiezaEnFT.find("#PiezaNueva"),
             btnSuplirPieza = mdlSuplePiezaEnFT.find("#btnSuplirPieza"),
-            tblDetalleFT = mdlSuplePiezaEnFT.find("#tblDetalleFT"), DetalleFT,
-            mdlSupleMaterialEnFT = $("#mdlSupleMaterialEnFT"), MaterialASuplir = mdlSupleMaterialEnFT.find("#MaterialASuplir"),
-            MaterialNuevo = mdlSupleMaterialEnFT.find("#MaterialNuevo"),
-            btnSuplirMaterial = mdlSupleMaterialEnFT.find("#btnSuplirMaterial"),
-            tblDetalleFTMaterial = mdlSupleMaterialEnFT.find("#tblDetalleFTMaterial"), DetalleFTMaterial;
-    var mdlSupleMaterialEnFTXLinea = $("#mdlSupleMaterialEnFTXLinea"),
-            MaterialASuplirXLinea = mdlSupleMaterialEnFTXLinea.find("#MaterialASuplirXLinea"),
-            MaterialNuevoXLinea = mdlSupleMaterialEnFTXLinea.find("#MaterialNuevoXLinea"),
-            btnSuplirMaterialXLinea = mdlSupleMaterialEnFTXLinea.find("#btnSuplirMaterialXLinea"),
-            tblDetalleFTMaterialXLinea = mdlSupleMaterialEnFTXLinea.find("#tblDetalleFTMaterialXLinea"),
-            LineaDefinidora = mdlSupleMaterialEnFTXLinea.find("#LineaDefinidora"), ConsumoXLinea = mdlSupleMaterialEnFTXLinea.find("#ConsumoXLinea"),
-            DetalleFTMaterialXLinea;
+            tblDetalleFT = mdlSuplePiezaEnFT.find("#tblDetalleFT"), DetalleFT;
+
+ 
 
     var mdlArticuloYConsumoXEstiloColor = $("#mdlArticuloYConsumoXEstiloColor"),
             EstiloConsumo = mdlArticuloYConsumoXEstiloColor.find("#EstiloConsumo"),
@@ -783,15 +614,7 @@
             tblDetalleFTConsumo = mdlArticuloYConsumoXEstiloColor.find("#tblDetalleFTConsumo"),
             DetalleFTConsumo;
 
-    var mdlAdicionaMaterialXLinea = $("#mdlAdicionaMaterialXLinea"),
-            LineaAdiciona = mdlAdicionaMaterialXLinea.find("#LineaAdiciona"),
-            PiezaAdiciona = mdlAdicionaMaterialXLinea.find("#PiezaAdiciona"),
-            ArticuloAdiciona = mdlAdicionaMaterialXLinea.find("#ArticuloAdiciona"),
-            ConsumoAdiciona = mdlAdicionaMaterialXLinea.find("#ConsumoAdiciona"),
-            PiezasXParAdiciona = mdlAdicionaMaterialXLinea.find("#PiezasXParAdiciona"),
-            btnAdiciona = mdlAdicionaMaterialXLinea.find("#btnAdiciona"),
-            tblDetalleFTAdiciona = mdlAdicionaMaterialXLinea.find("#tblDetalleFTAdiciona"),
-            DetalleFTAdiciona;
+
 
     var btnAdicionaMaterialFijo = pnlDatos.find("#btnAdicionaMaterialFijo");
 
@@ -832,114 +655,6 @@
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL ESTILO, COLOR Y FECHA DE ALTA', 'warning');
             }
         });
-
-        btnAdiciona.click(function () {
-            if (LineaAdiciona.val() && PiezaAdiciona.val() && ArticuloAdiciona.val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Guardando...'
-                });
-                $.post('<?php print base_url('FichaTecnica/onAdicionaXLinea'); ?>', {
-                    LINEA: LineaAdiciona.val(), PIEZA: PiezaAdiciona.val(), ARTICULO: ArticuloAdiciona.val(),
-                    CONSUMO: ConsumoAdiciona.val(), PZASXPAR: PiezasXParAdiciona.val()
-                }).done(function (a) {
-                    swal('ATENCIÓN', 'SE HAN ADICIONADO LOS MATERIALES A LA LINEA ' + LineaAdiciona.val(), 'success');
-                    LineaAdiciona[0].selectize.clear(true);
-                    PiezaAdiciona[0].selectize.clear(true);
-                    ArticuloAdiciona[0].selectize.clear(true);
-                    ConsumoAdiciona.val('');
-                    PiezasXParAdiciona.val('');
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
-            } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR LA LINEA, PIEZA, ARTICULO/MATERIAL, CONSUMO Y EL NUEVO CONSUMO', 'warning');
-            }
-        });
-
-        ArticuloAdiciona.change(function () {
-            if ($(this).val()) {
-                DetalleFTAdiciona.ajax.reload();
-            }
-        });
-
-        PiezaAdiciona.change(function () {
-            if ($(this).val()) {
-                DetalleFTAdiciona.ajax.reload();
-            }
-        });
-
-        LineaAdiciona.change(function () {
-            if ($(this).val()) {
-                DetalleFTAdiciona.ajax.reload();
-            }
-        });
-
-        mdlAdicionaMaterialXLinea.on('shown.bs.modal', function () {
-            LineaAdiciona[0].selectize.clear(true);
-            PiezaAdiciona[0].selectize.clear(true);
-            ArticuloAdiciona[0].selectize.clear(true);
-            ConsumoAdiciona.val('');
-            PiezasXParAdiciona.val('');
-            if ($.fn.DataTable.isDataTable('#tblDetalleFTAdiciona')) {
-                DetalleFTAdiciona.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            } else {
-                var coldefs = [
-                    {
-                        "targets": [0],
-                        "visible": false,
-                        "searchable": false
-                    }
-                ];
-                DetalleFTAdiciona = tblDetalleFTAdiciona.DataTable({
-                    "dom": 'ritp',
-                    "ajax": {
-                        "url": '<?php print base_url('FichaTecnica/getLineaPiezasMaterialXConsumos'); ?>',
-                        "contentType": "application/json",
-                        "dataSrc": "",
-                        "data": function (d) {
-                            d.LINEA = (LineaAdiciona.val() ? LineaAdiciona.val() : '');
-                        }
-                    },
-                    buttons: buttons,
-                    "columns": [
-                        {"data": "ID"}/*0*/,
-                        {"data": "LINEA"}/*1*/,
-                        {"data": "ESTILO"}/*1*/,
-                        {"data": "COLOR"}/*2*/,
-                        {"data": "PIEZA"}/*4*/,
-                        {"data": "PIEZAT"}/*5*/,
-                        {"data": "SEC"}/*6*/,
-                        {"data": "ARTICULO"}/*7*/,
-                        {"data": "ARTICULOT"}/*8*/,
-                        {"data": "CONSUMO"}/*10*/,
-                        {"data": "RANGO"}/*11*/
-                    ],
-                    "columnDefs": coldefs,
-                    language: lang,
-                    select: true,
-                    "autoWidth": true,
-                    "colReorder": true,
-                    "displayLength": 99999999,
-                    "bLengthChange": false,
-                    "deferRender": true,
-                    "scrollCollapse": false,
-                    "bSort": true,
-                    "scrollY": "498px",
-                    "scrollX": true,
-                    "aaSorting": [
-                        [0, 'desc']
-                    ],
-                    initComplete: function () {
-                    }
-                });
-            }
-        });
-
         /*CONSUMO*/
         ConsumoNuevoXLineaEstiloColor.on('keydown keyup', function () {
             onSuplirConsumo();
@@ -980,7 +695,7 @@
                                 });
                                 $.post('<?php print base_url('FichaTecnica/onSuplirConsumos'); ?>', {
                                     ESTILO: EstiloConsumo.val(), PIEZA: PiezaConsumo.val(),
-                                    MATERIAL: MaterialConsumo.val(), CONSUMO: ConsumoXLinea.val(),
+                                    MATERIAL: MaterialConsumo.val(), CONSUMO: ConsumoXLineaEstiloColor.val(),
                                     NUEVOCONSUMO: ConsumoNuevoXLineaEstiloColor.val()
                                 }).done(function (aa, bb, cc) {
                                     swal('ATENCIÓN', 'SE HAN SUPLIDO  ' + a[0].MATERIALES_A_SUPLIR + '  FICHAS TECNICAS', 'success');
@@ -1105,284 +820,12 @@
                 });
             }
         });
-        /*LINEA*/
-        btnSuplirMaterialXLinea.click(function () {
-            if (LineaDefinidora.val() && MaterialASuplirXLinea.val() && MaterialNuevoXLinea.val()) {
-                $.getJSON('<?php print base_url('FichaTecnica/getNumMaterialesASuplirXLinea'); ?>',
-                        {
-                            LINEA: LineaDefinidora.val(), MATERIAL: MaterialASuplirXLinea.val()
-                        }).done(function (a) {
-                    if (parseInt(a[0].MATERIALES_A_SUPLIR_X_LIN) > 0) {
-                        swal({
-                            title: "Se suplirán " + a[0].MATERIALES_A_SUPLIR_X_LIN + " materiales/articulos, ¿Estas seguro?",
-                            text: "Nota: Esta acción no se puede deshacer",
-                            icon: "warning",
-                            buttons: {
-                                cancelar: {
-                                    text: "Cancelar",
-                                    value: "no"
-                                },
-                                cambiar: {
-                                    text: "Aceptar",
-                                    value: "ok"
-                                }
-                            }
-                        }).then((value) => {
-                            switch (value) {
-                                case "ok":
-                                    HoldOn.open({
-                                        theme: 'sk-rect',
-                                        message: 'Supliendo...'
-                                    });
-                                    $.post('<?php print base_url('FichaTecnica/onSuplirMaterialArticuloXLinea'); ?>', {
-                                        LINEA: LineaDefinidora.val(), MATERIAL: MaterialASuplirXLinea.val(),
-                                        MATERIALNUEVO: MaterialNuevo.val(), CONSUMO: ConsumoXLinea.val()
-                                    }).done(function (aa, bb, cc) {
-                                        swal('ATENCIÓN', 'SE HAN SUPLIDO  ' + a[0].MATERIALES_A_SUPLIR_X_LIN + '  FICHAS TECNICAS', 'success');
-                                    }).always(function () {
-                                        HoldOn.close();
-                                    });
-                                    break;
-                                case "cancelar":
-                                    swal.close();
-                                    HoldOn.close();
-                                    break;
-                            }
-                        });
-                    } else {
-                        swal('ATENCIÓN', 'NO EXISTEN MATERIALES A SUPLIR, ELIJA OTRA LINEA U OTRO MATERIAL', 'warning').then((value) => {
-                            MaterialASuplirXLinea[0].selectize.focus();
-                        });
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
-            } else {
-                onBeep(2);
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UNA LINEA, UN MATERIAL A SUPLIR Y EL NUEVO MATERIAL, EL CONSUMO PUEDE QUEDAR VACIO EN CASO DE QUE NO QUIERA MODIFICARLO', 'warning');
-            }
-        });
 
-        MaterialASuplirXLinea.change(function () {
-            if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
-                DetalleFTMaterialXLinea.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            }
-        });
-
-        LineaDefinidora.change(function () {
-            if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
-                DetalleFTMaterialXLinea.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            }
-        });
-
-        mdlSupleMaterialEnFTXLinea.on('shown.bs.modal', function () {
-            MaterialASuplirXLinea[0].selectize.clear(true);
-            MaterialNuevoXLinea[0].selectize.clear(true);
-            if ($.fn.DataTable.isDataTable('#tblDetalleFTMaterialXLinea')) {
-                DetalleFTMaterialXLinea.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            } else {
-                var coldefs = [
-                    {
-                        "targets": [0],
-                        "visible": false,
-                        "searchable": false
-                    }
-                ];
-                DetalleFTMaterialXLinea = tblDetalleFTMaterialXLinea.DataTable({
-                    "dom": 'ritp',
-                    "ajax": {
-                        "url": '<?php print base_url('FichaTecnica/getPiezasMaterialXLinea'); ?>',
-                        "contentType": "application/json",
-                        "dataSrc": "",
-                        "data": function (d) {
-                            d.LINEA = (LineaDefinidora.val().trim());
-                            d.MATERIAL = (MaterialASuplirXLinea.val().trim());
-                        }
-                    },
-                    buttons: buttons,
-                    "columns": [
-                        {"data": "ID"}/*0*/,
-                        {"data": "ESTILO"}/*1*/,
-                        {"data": "COLOR"}/*2*/,
-                        {"data": "PIEZA"}/*4*/,
-                        {"data": "PIEZAT"}/*5*/,
-                        {"data": "SEC"}/*6*/,
-                        {"data": "ARTICULO"}/*7*/,
-                        {"data": "ARTICULOT"}/*8*/,
-                        {"data": "CONSUMO"}/*10*/,
-                        {"data": "RANGO"}/*11*/
-                    ],
-                    "columnDefs": coldefs,
-                    language: lang,
-                    select: true,
-                    "autoWidth": true,
-                    "colReorder": true,
-                    "displayLength": 99999999,
-                    "bLengthChange": false,
-                    "deferRender": true,
-                    "scrollCollapse": false,
-                    "bSort": true,
-                    "scrollY": "498px",
-                    "scrollX": true,
-                    "aaSorting": [
-                        [0, 'desc']
-                    ],
-                    initComplete: function () {
-                    }
-                });
-            }
-        });
-
-        /*MATERIAL*/
-        btnSuplirMaterial.click(function () {
-            if (MaterialASuplir.val() && MaterialNuevo.val()) {
-                $.getJSON('<?php print base_url('FichaTecnica/getNumMaterialesASuplir'); ?>',
-                        {MATERIAL: MaterialASuplir.val()}).done(function (a) {
-                    console.log(a);
-                    if (parseInt(a[0].MATERIALES_A_SUPLIR) > 0) {
-                        swal({
-                            title: "Se suplirán " + a[0].MATERIALES_A_SUPLIR + " materiales/articulos, ¿Estas seguro?",
-                            text: "Nota: Esta acción no se puede deshacer",
-                            icon: "warning",
-                            buttons: {
-                                cancelar: {
-                                    text: "Cancelar",
-                                    value: "no"
-                                },
-                                cambiar: {
-                                    text: "Aceptar",
-                                    value: "ok"
-                                }
-                            }
-                        }).then((value) => {
-                            switch (value) {
-                                case "ok":
-                                    HoldOn.open({
-                                        theme: 'sk-rect',
-                                        message: 'Supliendo...'
-                                    });
-                                    $.post('<?php print base_url('FichaTecnica/onSuplirMaterialArticulo'); ?>', {
-                                        MATERIAL: MaterialASuplir.val(), MATERIALNUEVO: MaterialNuevo.val()
-                                    }).done(function (aa, bb, cc) {
-                                        swal('ATENCIÓN', 'SE HAN SUPLIDO  ' + a[0].MATERIALES_A_SUPLIR + '  FICHAS TECNICAS', 'success');
-                                    }).always(function () {
-                                        HoldOn.close();
-                                    });
-                                    break;
-                                case "cancelar":
-                                    swal.close();
-                                    HoldOn.close();
-                                    break;
-                            }
-                        });
-                    } else {
-                        swal('ATENCIÓN', 'NO EXISTEN PIEZAS A SUPLIR, ELIJA OTRA PIEZA', 'warning').then((value) => {
-                            MaterialASuplir[0].selectize.focus();
-                        });
-                    }
-                });
-            } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR LOS MATERIALES', 'warning');
-            }
-        });
-
-        MaterialASuplir.change(function () {
-            console.log($(this).val());
-            if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
-                DetalleFTMaterial.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            } else {
-                DetalleFTMaterial.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            }
-        });
-
-        mdlSupleMaterialEnFT.on('shown.bs.modal', function () {
-            MaterialASuplir[0].selectize.clear(true);
-            MaterialNuevo[0].selectize.clear(true);
-            if ($.fn.DataTable.isDataTable('#tblDetalleFTMaterial')) {
-                DetalleFTMaterial.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            } else {
-                var coldefs = [
-                    {
-                        "targets": [0],
-                        "visible": false,
-                        "searchable": false
-                    }
-                ];
-                DetalleFTMaterial = tblDetalleFTMaterial.DataTable({
-                    "dom": 'ritp',
-                    "ajax": {
-                        "url": '<?php print base_url('FichaTecnica/getPiezasMaterial'); ?>',
-                        "contentType": "application/json",
-                        "dataSrc": "",
-                        "data": function (d) {
-                            d.MATERIAL = (MaterialASuplir.val().trim());
-                        }
-                    },
-                    buttons: buttons,
-                    "columns": [
-                        {"data": "ID"}/*0*/,
-                        {"data": "ESTILO"}/*1*/,
-                        {"data": "COLOR"}/*2*/,
-                        {"data": "PIEZA"}/*4*/,
-                        {"data": "PIEZAT"}/*5*/,
-                        {"data": "SEC"}/*6*/,
-                        {"data": "ARTICULO"}/*7*/,
-                        {"data": "ARTICULOT"}/*8*/,
-                        {"data": "CONSUMO"}/*10*/,
-                        {"data": "RANGO"}/*11*/
-                    ],
-                    "columnDefs": coldefs,
-                    language: lang,
-                    select: true,
-                    "autoWidth": true,
-                    "colReorder": true,
-                    "displayLength": 99999999,
-                    "bLengthChange": false,
-                    "deferRender": true,
-                    "scrollCollapse": false,
-                    "bSort": true,
-                    "scrollY": "498px",
-                    "scrollX": true,
-                    "aaSorting": [
-                        [0, 'desc']
-                    ],
-                    initComplete: function () {
-                    }
-                });
-            }
-        });
-
+        /*PIEZA*/
         btnSuplirPieza.click(function () {
             if (PiezaASuplir.val() && PiezaNueva.val()) {
                 $.getJSON('<?php print base_url('FichaTecnica/getNumPiezasASuplir'); ?>',
                         {PZA: PiezaASuplir.val()}).done(function (a) {
-                    console.log(a);
                     if (parseInt(a[0].PIEZAS_A_SUPLIR) > 0) {
                         swal({
                             title: "Se suplirán " + a[0].PIEZAS_A_SUPLIR + " piezas, ¿Estas seguro?",
@@ -1508,57 +951,7 @@
             }
         });
 
-        btnAceptarCopiar.click(function () {
-            HoldOn.open({
-                theme: 'sk-rect',
-                message: 'Espere...'
-            });
-            if (mdlCopiarFT.find("#EstiloACopiar").val() && mdlCopiarFT.find("#ColorACopiar").val() &&
-                    mdlCopiarFT.find("#ColorAReemplazar").val() && mdlCopiarFT.find("#EstiloAReemplazar").val()) {
-                $.getJSON('<?php print base_url('FichaTecnica/getFichasXEstilo'); ?>',
-                        {ESTILO: mdlCopiarFT.find("#EstiloAReemplazar").val()}).done(function (a) {
-                    console.log(a);
-                    if (parseInt(a[0].FICHAS_X_ESTILO) > 0) {
-                        swal('ATENCIÓN', 'NO SE PUEDE COPIAR LA FICHA TECNICA DE ESTE ESTILO-COLOR A ESTE ESTILO-COLOR, PORQUE YA TIENE ESTABLECIDAS FICHAS TECNICAS', 'warning').then((value) => {
-                            mdlCopiarFT.find("#EstiloACopiar").focus().select();
-                        });
-                    } else {
-                        $.post('<?php print base_url('FichaTecnica/onCopiarFT'); ?>',
-                                {
-                                    ESTILOACOPIAR: mdlCopiarFT.find("#EstiloACopiar").val(),
-                                    COLORACOPIAR: mdlCopiarFT.find("#ColorACopiar").val(),
-                                    ESTILO: mdlCopiarFT.find("#EstiloAReemplazar").val(),
-                                    COLOR: mdlCopiarFT.find("#ColorAReemplazar").val()
-                                }).done(function (a) {
-                            console.log(a);
-                            swal('ATENCIÓN', 'SE HA COPIADO LA FICHA TÉCNICA CON EL ESTILO ' + mdlCopiarFT.find("#EstiloACopiar").val() + ' COLOR ' + mdlCopiarFT.find("#ColorACopiar").val(), 'warning')
-                                    .then((value) => {
-                                        mdlCopiarFT.find("#EstiloACopiar").val('');
-                                        mdlCopiarFT.find("#ColorACopiar").val('');
-                                        mdlCopiarFT.find("#EstiloAReemplazar").val('');
-                                        mdlCopiarFT.find("#ColorAReemplazar").val('');
-                                    });
-                        }).fail(function (x, y, z) {
-                            getError(x);
-                        });
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
-            } else {
-                HoldOn.close();
-                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    mdlCopiarFT.find("#EstiloACopiar").focus().select();
-                });
-            }
-        });
 
-        mdlCopiarFT.on('shown.bs.modal', function () {
-            mdlCopiarFT.find("#EstiloACopiar").val('');
-            mdlCopiarFT.find("#EstiloACopiar").focus();
-        });
 
         btnCopyFTaFT.click(function () {
             mdlCopiarFT.modal('show');
@@ -1900,32 +1293,12 @@
         getCombos();
     });
 
-    function getCombos() {
-        $.when($.getJSON('<?php print base_url('FichaTecnica/getLineas'); ?>').done(function (data, x, jq) {
-            LineaAdiciona[0].selectize.clear(true);
-            LineaDefinidora[0].selectize.clear(true);
-            $.each(data, function (k, v) {
-                LineaAdiciona[0].selectize.addOption({text: v.LINEA, value: v.CLAVE});
-                LineaDefinidora[0].selectize.addOption({text: v.LINEA, value: v.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        })).done(function (a) {
-            HoldOn.close();
-        });
+    function getCombos() { 
         $.when($.getJSON(master_url + 'getArticulosSuplex').done(function (data, x, jq) {
             MaterialConsumo[0].selectize.clear(true);
-            MaterialASuplir[0].selectize.clear(true);
-            MaterialNuevo[0].selectize.clear(true);
-            MaterialASuplirXLinea[0].selectize.clear(true);
-            MaterialNuevoXLinea[0].selectize.clear(true);
-            ArticuloAdiciona[0].selectize.clear(true);
-            $.each(data, function (k, v) {
-                ArticuloAdiciona[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                MaterialASuplirXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                MaterialNuevoXLinea[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+            MaterialASuplir[0].selectize.clear(true);  
+            $.each(data, function (k, v) {  
                 MaterialASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                MaterialNuevo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 MaterialConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
@@ -2195,7 +1568,6 @@
                 PiezaASuplir[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 PiezaNueva[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                 PiezaConsumo[0].selectize.addOption({text: v.Descripcion, value: v.ID});
-                PiezaAdiciona[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);

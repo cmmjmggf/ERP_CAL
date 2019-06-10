@@ -16,6 +16,8 @@
     });
 </script>
 <?php
+$this->load->view('vAdicionaMaterialXLinea')->view('vCopyFTaFT')
+        ->view('vSupleMatXMat')->view('vSupleMatXLinea'); 
 $this->load->view('vFichaTecnicaCompra');
 $this->load->view('vReporteCorteHiloTejer');
 $this->load->view('vReporteParesPreAsignados');
