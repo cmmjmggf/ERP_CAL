@@ -428,8 +428,6 @@ class FichaTecnica extends CI_Controller {
     public function getLineaPiezasMaterialXConsumos() {
         try {
             $LINEA = $this->input->get('LINEA');
-            $PIEZA = $this->input->get('PIEZA');
-            $MATERIAL = $this->input->get('MATERIAL');
             $this->db->select('FT.ID,E.Linea AS LINEA, FT.Estilo AS ESTILO, FT.Color AS COLOR, '
                             . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
                             . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
@@ -442,13 +440,7 @@ class FichaTecnica extends CI_Controller {
             if ($LINEA !== '') {
                 $this->db->where('E.Linea', $LINEA);
             }
-            if ($PIEZA !== '') {
-                $this->db->where('FT.Pieza', $PIEZA);
-            }
-            if ($MATERIAL !== '') {
-                $this->db->where('FT.Articulo', $MATERIAL);
-            }
-            if ($LINEA === '' && $PIEZA === '' && $MATERIAL === '') {
+            if ($LINEA === '') {
                 $this->db->limit(2000);
             }
             print json_encode($this->db->get()->result());
@@ -487,10 +479,8 @@ class FichaTecnica extends CI_Controller {
 
     public function getFichaTecnicaFija() {
         try {
-
             $ESTILO = $this->input->post('ESTILO');
             $COLOR = $this->input->post('COLOR');
-
             $ftf = $this->db->select("(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO,
                             FTF.Pieza AS CLAVE_PIEZA, P.Descripcion AS PIEZA, 
                             FTF.Articulo AS CLAVE_ARTICULO, A.Descripcion AS ARTICULO,
@@ -501,7 +491,6 @@ class FichaTecnica extends CI_Controller {
                             ->join('articulos AS A', 'A.Clave = FTF.Articulo')
                             ->join('departamentos AS D', 'D.Clave = P. Departamento')
                             ->get()->result();
-
             foreach ($ftf as $k => $v) {
                 $ftf = array('Estilo' => $ESTILO, 'Color' => $COLOR,
                     'Pieza' => $v->CLAVE_PIEZA, 'Articulo' => $v->CLAVE_ARTICULO,
@@ -598,6 +587,50 @@ class FichaTecnica extends CI_Controller {
     public function onEliminarArticuloID() {
         try {
             $this->db->where('ID', $this->input->post('ID'))->delete('fichatecnica');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAdicionaXLinea() {
+        try {
+
+            $X = $this->input;
+
+            $LINEA = $X->post('LINEA');
+            $PIEZA = $X->post('PIEZA');
+            $ARTICULO = $X->post('ARTICULO');
+            $CONSUMO = $X->post('CONSUMO');
+            $PZASXPAR = $X->post('PZASXPAR');
+
+            $dbx = $this->db;
+
+            $dbx->select('FT.ID,E.Linea AS LINEA, FT.Estilo AS ESTILO, FT.Color AS COLOR, '
+                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                            . 'A.Descripcion AS ARTICULOT, '
+                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO, '
+                            . '(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                    ->join('estilos AS E', 'FT.Estilo = E.Clave');
+
+            if ($LINEA !== '') {
+                $dbx->where('E.Linea', $LINEA);
+            }
+            $dbx->group_by(array('FT.Estilo', 'FT.Color'));
+            if ($LINEA === '') {
+                $dbx->limit(2000);
+            }
+            $result = $dbx->get()->result();
+            foreach ($result as $k => $v) {
+                $FT = array('Estilo' => $v->ESTILO, 'Color' => $v->COLOR,
+                    'Pieza' => $PIEZA, 'Articulo' => $ARTICULO,
+                    'Precio' => $v->PRECIO, 'Consumo' => $CONSUMO,
+                    'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
+//                $this->db->insert('fichatecnica',$FT);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

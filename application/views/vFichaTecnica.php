@@ -31,7 +31,7 @@
         <form id="frmNuevo">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-2 float-left">
-                    <legend class="float-left">Ficha Técnica</legend>
+                    <legend class="float-left">Ficha Técnica</legend> 
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-10" align="right">
@@ -788,6 +788,7 @@
             PiezaAdiciona = mdlAdicionaMaterialXLinea.find("#PiezaAdiciona"),
             ArticuloAdiciona = mdlAdicionaMaterialXLinea.find("#ArticuloAdiciona"),
             ConsumoAdiciona = mdlAdicionaMaterialXLinea.find("#ConsumoAdiciona"),
+            PiezasXParAdiciona = mdlAdicionaMaterialXLinea.find("#PiezasXParAdiciona"),
             btnAdiciona = mdlAdicionaMaterialXLinea.find("#btnAdiciona"),
             tblDetalleFTAdiciona = mdlAdicionaMaterialXLinea.find("#tblDetalleFTAdiciona"),
             DetalleFTAdiciona;
@@ -813,7 +814,6 @@
                     message: 'Trabajando en ello... por favor espere'
                 });
                 $.post('<?php print base_url('FichaTecnica/getFichaTecnicaFija'); ?>', {ESTILO: Estilo.val(), COLOR: Color.val()}).done(function (a) {
-                    console.log(a);
                     var dtm = {
                         EstiloId: Estilo.val(),
                         ColorId: Color.val()
@@ -835,7 +835,25 @@
 
         btnAdiciona.click(function () {
             if (LineaAdiciona.val() && PiezaAdiciona.val() && ArticuloAdiciona.val()) {
-
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Guardando...'
+                });
+                $.post('<?php print base_url('FichaTecnica/onAdicionaXLinea'); ?>', {
+                    LINEA: LineaAdiciona.val(), PIEZA: PiezaAdiciona.val(), ARTICULO: ArticuloAdiciona.val(),
+                    CONSUMO: ConsumoAdiciona.val(), PZASXPAR: PiezasXParAdiciona.val()
+                }).done(function (a) {
+                    swal('ATENCIÓN', 'SE HAN ADICIONADO LOS MATERIALES A LA LINEA ' + LineaAdiciona.val(), 'success');
+                    LineaAdiciona[0].selectize.clear(true);
+                    PiezaAdiciona[0].selectize.clear(true);
+                    ArticuloAdiciona[0].selectize.clear(true);
+                    ConsumoAdiciona.val('');
+                    PiezasXParAdiciona.val('');
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
             } else {
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR LA LINEA, PIEZA, ARTICULO/MATERIAL, CONSUMO Y EL NUEVO CONSUMO', 'warning');
             }
@@ -860,7 +878,11 @@
         });
 
         mdlAdicionaMaterialXLinea.on('shown.bs.modal', function () {
-
+            LineaAdiciona[0].selectize.clear(true);
+            PiezaAdiciona[0].selectize.clear(true);
+            ArticuloAdiciona[0].selectize.clear(true);
+            ConsumoAdiciona.val('');
+            PiezasXParAdiciona.val('');
             if ($.fn.DataTable.isDataTable('#tblDetalleFTAdiciona')) {
                 DetalleFTAdiciona.ajax.reload(function () {
                     HoldOn.close();
@@ -881,8 +903,6 @@
                         "dataSrc": "",
                         "data": function (d) {
                             d.LINEA = (LineaAdiciona.val() ? LineaAdiciona.val() : '');
-                            d.PIEZA = (PiezaAdiciona.val() ? PiezaAdiciona.val() : '');
-                            d.MATERIAL = (ArticuloAdiciona.val() ? ArticuloAdiciona.val() : '');
                         }
                     },
                     buttons: buttons,
@@ -1825,6 +1845,7 @@
             }
         });
         btnNuevo.click(function () {
+            onBeep(1);
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
             pnlDatos.find("input").val("");
