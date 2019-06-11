@@ -7,9 +7,7 @@ class Avance7 extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')
-                ->model('Avance7_model', 'avm')
-                ->helper('jaspercommand_helper');
+        $this->load->library('session')->model('Avance7_model', 'avm')->helper('jaspercommand_helper');
     }
 
     public function getXLS() {
@@ -81,7 +79,7 @@ class Avance7 extends CI_Controller {
 
     public function onComprobarAvanceXControl() {
         try {
-            
+
             print json_encode($this->avm->onComprobarAvanceXControl($this->input->get('CONTROL')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -175,7 +173,7 @@ class Avance7 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 70,
                                 'DepartamentoT' => 'PREL-CORTE',
-                                'FechaAvance' => Date('d/m/Y'),
+                                'FechaAvance' => $x->post('FECHA'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -210,6 +208,4 @@ class Avance7 extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-
-    /* JASPER */
 }
