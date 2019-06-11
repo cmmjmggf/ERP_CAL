@@ -14,13 +14,44 @@
     $(document).ready(function () {
         getMenu(4);
     });
+
+
+    function onLoadListaDePreciosDeCompraAMaq() {
+        $.fancybox.open({
+            src: '<?php print base_url('ListasPrecioMaquilas.shoes/?origen=FT'); ?>',
+            type: 'iframe',
+            opts: {
+                afterShow: function (instance, current) {
+                    console.info('done!');
+                },
+                afterClose: function () {
+                },
+                iframe: {
+                    // Iframe template
+                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                    preload: true,
+                    // Custom CSS styling for iframe wrapping element
+                    // You can use this to set custom iframe dimensions
+                    css: {
+                        width: "100%",
+                        height: "100%"
+                    },
+                    // Iframe tag attributes
+                    attr: {
+                        scrolling: "auto"
+                    }
+                }
+            }
+        });
+    }
 </script>
 <?php
 $this->load->view('vAdicionaMaterialXLinea')->view('vCopyFTaFT')
-        ->view('vSupleMatXMat')->view('vSupleMatXLinea'); 
+        ->view('vSupleMatXMat')->view('vSupleMatXLinea')
+        ->view('vSupleMatXEstilo')->view('vSuplePiezaXPieza')->view('vEliminaFichaTecnica');
 $this->load->view('vFichaTecnicaCompra');
 $this->load->view('vReporteCorteHiloTejer');
 $this->load->view('vReporteParesPreAsignados');
 $this->load->view('vEtiTrazabilidad');
-$this->load->view('vEtiZapica'); 
+$this->load->view('vEtiZapica');
 $this->load->view('vMaterialSemanaProduccionEstilo');

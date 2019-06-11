@@ -26,6 +26,8 @@ class ListasPrecioMaquilas extends CI_Controller {
                         $this->load->view('vMenuClientes');
                     } else if ($Origen === 'PRODUCCION') {
                         $this->load->view('vMenuProduccion');
+                    }else if ($Origen === 'FT') {
+                        $this->load->view('vMenuFichasTecnicas');
                     }
                     //Cuando no viene de ningun modulo y lo teclean
                     else {
