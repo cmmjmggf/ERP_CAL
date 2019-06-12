@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="etiquetaZapica" language="groovy" pageWidth="291" pageHeight="144" orientation="Landscape" columnWidth="291" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f25ff50b-3839-4f90-ac26-a3b4b4fd72b5">
+	<property name="ireport.zoom" value="2.415765000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="depto" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+E.Numero,
+CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO,
+D.Descripcion AS DEPARTAMENTO
+FROM empleados E
+join departamentos AS D on D.Clave = E.DepartamentoFisico
+where E.DepartamentoFisico = $P{depto}
+and E.Altabaja = 1
+order by E.Numero asc]]>
+	</queryString>
+	<field name="Numero" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE_COMPLETO" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<detail>
+		<band height="141" splitType="Stretch">
+			<textField>
+				<reportElement x="9" y="37" width="197" height="18" uuid="48be1421-1733-4d41-9365-ea9524b7fe43"/>
+				<textElement verticalAlignment="Top">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_COMPLETO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="57" width="58" height="16" uuid="1a560d85-ed2e-4ec6-b911-d2e3c836d353"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="73" width="134" height="16" uuid="9ff6871f-32cb-48f4-9eba-b3bc00fb4c4e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="73" width="58" height="16" uuid="c75e8d8b-323f-41c0-9df6-d20f8c5252a3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Depto.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="57" width="134" height="16" uuid="fedfaf88-2ecc-44d2-b2e3-e9600cbcb176"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement mode="Transparent" x="9" y="8" width="41" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="23a5df36-fae9-4247-ba9b-d78adc9e04c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="211" y="8" width="71" height="42" uuid="516167ef-591b-42c6-bdad-2768c17012e4"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="9" y="92" width="273" height="42" uuid="cc51b79e-7999-4502-927d-255de0be3104"/>
+			</rectangle>
+			<textField>
+				<reportElement x="54" y="8" width="150" height="16" uuid="40ee4b4c-bab4-48fd-af8e-5ed2eafca146"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="9" y="36" width="195" height="1" uuid="25b80427-b45b-47d3-a944-d091127cb478"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

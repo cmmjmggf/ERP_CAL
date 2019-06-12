@@ -114,7 +114,7 @@ class Empleados_model extends CI_Model {
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
                                     . "D.Descripcion AS DEPARTAMENTO", false)
                             ->from('empleados AS E')
-                            ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico', 'left')
+                            ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
                             ->where('E.Numero', $ID)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -127,7 +127,7 @@ class Empleados_model extends CI_Model {
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
                                     . "D.Descripcion AS DEPARTAMENTO", false)
                             ->from('empleados AS E')
-                            ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico', 'left')
+                            ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
                             // ->where('E.AltaBaja', '1')
                             ->where("cast(E.DepartamentoFisico as signed) between $dDepto and $ADepto ", null, false)
                             ->order_by('cast(E.DepartamentoFisico as signed)', 'ASC')

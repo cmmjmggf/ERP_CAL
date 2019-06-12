@@ -51,5 +51,6 @@
 $this->load->view('vCopiarFraccionEstiloaEstilo');
 $this->load->view('vCapturaCajaAhorroDirecta');
 $this->load->view('vLimpiaCajaAhorroPrestamosEmpleados');
-
 $this->load->view('vCapturaComidaEmpleados');
+$this->load->view('vImprimirCredenciales');
+$this->load->view('vEtiquetasLockers');
