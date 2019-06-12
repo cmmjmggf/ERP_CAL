@@ -1,4 +1,4 @@
-<div class="card border-0 animated fadeIn" id="pnlTablero">
+<div class="card border-0 animated fadeIn" id="pnlTablero" style="box-shadow: none !important; background-color: #f5f5f5 !important;">
     <div class="card-body ">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 float-left text-center">
@@ -13,15 +13,15 @@
                 </div>
                 <div id="" class="col-12 col-sm-12 col-md-12 col-xl-8 col-lg-8">
                     <div id="ProfileName" class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-                        <h1 class="display-1">-</h1>
+                        <h1 class="display-3"> - </h1>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group"> 
                             <div class="form-group">
                                 <div class="input-group mb-3"> 
-                                    <input type="text" class="form-control" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="">
+                                    <input type="text" class="form-control noBorders" placeholder="####" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="">
                                     <div class="input-group-append">
-                                        <button type="button" id="btnAcceso" class="btn btn-primary"><span class="fa fa-check"></span></button> 
+                                        <button type="button" id="btnAcceso" class="btn btn-primary d-none"><span class="fa fa-check"></span></button> 
                                         <button type="button" id="btnReset" class="btn btn-danger"><span class="fa fa-trash"></span></button>
                                     </div>
                                 </div>
@@ -48,6 +48,7 @@
 
         NumeroEmpleado.keyup(function (e) {
             if (e.keyCode === 13 && typed) {
+                onBeep(6);
                 onLogIn();
                 NumeroEmpleado.val('');
                 typed = false;
@@ -103,23 +104,30 @@
                     var info = JSON.parse(data);
                     console.log('* DATA *', info[0]);
                     $("#ProfilePicture h1").text(ne);
-                    $("#ProfilePicture > img ").attr('src', (info[0].FOTO !== null ? base_url + info[0].FOTO : base_url + 'img/LOSO.png'));
-                    $("#ProfileName > h1 ").text(info[0].Empleado);
-                    swal({
-                        title: 'GRACIAS',
-                        text: 'BIENVENIDO',
-                        timer: 700,
-                        buttons: false,
-                        closeOnEsc: true,
-                        closeOnClickOutside: true,
-                        icon: 'success'
+                    var ext = getExt(info[0].FOTO);
+                    $.ajax({
+                        url: base_url + info[0].FOTO,
+                        type: 'HEAD',
+                        error: function ()
+                        {
+                            $("#ProfilePicture > img ").attr('src', '<?php print base_url('img/empleado_sin_foto.png'); ?>');
+                        },
+                        success: function ()
+                        {
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
+                                $("#ProfilePicture > img ").attr('src', base_url + info[0].FOTO);
+                            } else {
+                                $("#ProfilePicture > img ").attr('src', '<?php print base_url('img/empleado_sin_foto.png'); ?>');
+                            }
+                        }
                     });
-                    onBeep(6);
+                    $("#ProfileName > h1 ").text(info[0].Empleado);
                 } else {
                     onBeep(2);
                     swal({
                         title: 'EL EMPLEADO NO EXISTE',
                         text: '',
+                        timer: 750,
                         buttons: false,
                         closeOnEsc: true,
                         closeOnClickOutside: true
@@ -189,7 +197,7 @@
     .card-body > .row{
         color: #fff;
         background-color: #645625;
-        box-shadow: 0 8px 4px -2px #666666;
+        box-shadow: none !important;
     }
     legend{
         text-shadow: 2px 2px 4px #000000;
