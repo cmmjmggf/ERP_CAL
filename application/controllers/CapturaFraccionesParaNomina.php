@@ -10,7 +10,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         date_default_timezone_set('America/Mexico_City');
         setlocale(LC_ALL, "");
         setlocale(LC_TIME, 'spanish');
-        $this->load->model('CapturaFraccionesParaNomina_model')->model('SemanasNomina_model')->helper('file')->helper('jaspercommand_helper');
+        $this->load->model('CapturaFraccionesParaNomina_model')->model('SemanasNomina_model')->model('Departamentos_model')->helper('file')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -42,6 +42,20 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         if (!$is_valid) {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
+    }
+
+    public function onImprimirReporteEntregaControlesMaquilas() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["docto"] = $this->input->post('Docto');
+        $jc->setJasperurl('jrxml\produccion\entregaControlesMaquilas.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_ENTREGA_CONTROLES_MAQUILAS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
     }
 
     public function onImprimirReporteDestajos() {
@@ -140,6 +154,14 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         }
     }
 
+    public function getDepartamentosAvanceAnterior() {
+        try {
+            print json_encode($this->Departamentos_model->getDepartamentosAvanceAnterior());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleados() {
         try {
             print json_encode($this->CapturaFraccionesParaNomina_model->getEmpleados());
@@ -194,6 +216,35 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         try {
 
             $this->CapturaFraccionesParaNomina_model->onEliminarDetalleByID($this->input->post('Control'), $this->input->post('Empleado'), $this->input->post('Fraccion'));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAgregarAvanceAnt() {
+        try {
+            $x = $this->input;
+
+
+            $origFecha = $x->post('Fecha');
+            $fecha = str_replace('/', '-', $origFecha);
+            $nuevaFecha = date("Y-m-d", strtotime($fecha));
+
+            $this->db->insert('avance', array(
+                'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
+                'FechaAvance' => Date('Y-m-d h:i:s'),
+                'Departamento' => ($x->post('DeptoClave') !== NULL) ? $x->post('DeptoClave') : NULL,
+                'DepartamentoT' => ($x->post('DeptoNombre') !== NULL) ? $x->post('DeptoNombre') : NULL,
+                'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
+                'Docto' => ($x->post('Docto') !== NULL) ? $x->post('Docto') : NULL,
+                'Estatus' => 'A',
+                'Usuario' => $this->session->userdata('ID'),
+                'Fecha' => Date('d/m/Y'),
+                'Hora' => Date('h:i:s a')
+            ));
+            $this->db->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('controles');
+            $this->db->set('stsavan', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('pedidox');
+            $this->db->set('almpesp', $x->post('Docto'))->set('status', $x->post('stsavaprd'))->set($x->post('Campo'), $nuevaFecha)->where('contped', $x->post('Control'))->update('avaprd');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

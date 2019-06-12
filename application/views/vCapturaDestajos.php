@@ -138,7 +138,7 @@
     var btnVerFracciones = pnlTablero.find('#btnVerFracciones');
     var btnVerAvance = pnlTablero.find('#btnVerAvance');
 
-
+    var btnAvanceAnt = pnlTablero.find('#btnAvanceAnt');
     var btnRastreoControl = pnlTablero.find('#btnRastreoControl');
     var btnRastreoConcepto = pnlTablero.find('#btnRastreoConcepto');
     var btnCapturaComida = pnlTablero.find('#btnCapturaComida');
@@ -390,6 +390,9 @@
                 });
             }
 
+        });
+        btnAvanceAnt.click(function () {
+            $('#mdlAvanceAnterior').modal('show');
         });
         btnCapturaDestajosPiochas.click(function () {
             $.fancybox.open({
@@ -893,3 +896,4 @@
 $this->load->view('vRastreoControlNomina');
 $this->load->view('vRastreoConceptoNomina');
 $this->load->view('vCapturaComidaEmpleados');
+$this->load->view('vAvanceAnterior');

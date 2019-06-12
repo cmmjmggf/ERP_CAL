@@ -257,20 +257,145 @@ class Empleados extends CI_Controller {
         }
     }
 
+    public function getCredenciales() {
+        try {
+            $pdf = new PDF('P', 'mm', array(215.9, 299.4));
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(false, 40);
+            $x = $this->input;
+            $Y_INI = 5;
+            $Cont = 1;
+
+            $Empleados = $this->Empleados_model->getEmpleadosByDepartamentos($x->get('dDepto'), $x->get('aDepto'));
+            if (!empty($Empleados)) {
+                foreach ($Empleados as $key => $Empleado) {
+
+                    if ($Cont > 5) {
+                        $pdf->AddPage();
+                        $Y_INI = 5;
+                        $Cont = 1;
+                    }
+
+                    $pdf->SetLineWidth(.8);
+                    $pdf->Image(base_url() . '/img/banner.png', 12, $Y_INI + 1, 36);
+
+                    $pdf->SetFont('Calibri', 'B', 12);
+                    $pdf->Rect(10, $Y_INI, 86/* ANCHO */, 51.5/* ALTO */);
+                    $pdf->Line(10, $Y_INI + 20, 65, $Y_INI + 20);
+                    $pdf->Rect(119.7, $Y_INI, 86/* ANCHO */, 51.5/* ALTO */);
+                    $pdf->Line(119.7/* Y1 */, $Y_INI + 47/* Y1 */, 205.7/* Y2 */, $Y_INI + 47/* X2 */);
+                    $pdf->SetFont('Calibri', 'B', 13);
+
+                    $path = $Empleado->Foto;
+
+                    if ($Empleado->Foto !== '') {
+                        if (!is_file($path)) {
+                            // $pdf->Image(base_url() . 'uploads/Empleados/9999.jpg', 68, 11, 30);
+                            $pdf->SetLineWidth(.4);
+                            $pdf->Rect(67, $Y_INI + 1, 28/* ANCHO */, 28/* ALTO */);
+                            $pdf->SetY($Y_INI + 11);
+                            $pdf->SetX(67);
+                            $pdf->SetFont('Calibri', 'BI', 13);
+                            $pdf->setTextColor(220, 0, 0);
+                            $pdf->MultiCell(28, 6, 'Empleado sin foto', 0/* BORDE */, 'C');
+                        } else {
+                            $pdf->Image(base_url() . $Empleado->Foto, 67, $Y_INI + 1, 28);
+                        }
+                    }
+
+                    $pdf->SetLineWidth(.8);
+                    $pdf->setTextColor(0, 0, 0);
+                    $pdf->SetY($Y_INI + 22);
+                    $pdf->SetX(12);
+                    $pdf->SetFont('Calibri', 'B', 12);
+                    $pdf->Cell(20, 5, utf8_decode('No. Empleado'), 0/* BORDE */, 0/* SALTO */, 'L');
+                    $pdf->SetFont('Calibri', 'B', 17);
+                    $pdf->SetX(40);
+                    $pdf->Cell(20, 5, utf8_decode($Empleado->NUMERO), 0/* BORDE */, 1/* SALTO */, 'L');
+                    $pdf->SetFont('Calibri', 'BIU', 12);
+                    $pdf->SetY($Y_INI + 28);
+                    $pdf->SetX(12);
+                    $pdf->Cell(90, 9.5, utf8_decode($Empleado->NOMBRE_COMPLETO), 0/* BORDE */, 1/* SALTO */, 'L');
+                    $pdf->SetFont('Calibri', 'B', 12);
+                    $pdf->SetY($Y_INI + 35);
+                    $pdf->SetX(10);
+                    $pdf->Cell(70, 7, utf8_decode($Empleado->DEPARTAMENTO), 0/* BORDE */, 0/* SALTO */, 'C');
+
+                    /* Código Barras */
+                    $pdf->SetFont('Calibri', 'B', 10);
+                    $pdf->SetY($Y_INI + 41.5);
+                    $pdf->SetX(12);
+                    $pdf->Code128(25, $pdf->GetY(), $Empleado->NUMERO, 42.5, 8.5);
+
+                    $pdf->SetY($Y_INI + 38.5);
+                    $pdf->SetX(77);
+                    $pdf->Cell(20, 5, utf8_decode('VIGENCIA'), 0/* BORDE */, 1/* SALTO */, 'C');
+
+                    $pdf->SetFont('Calibri', 'B', 8);
+                    $pdf->SetX(77);
+                    $pdf->Cell(20, 4, utf8_decode('01/01/' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
+                    $pdf->SetX(77);
+                    $pdf->Cell(20, 4, utf8_decode('31/12/' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
+
+
+                    /*                     * ******************** SEGUNDA HOJA *************************** */
+                    $pdf->SetFont('Calibri', 'B', 17);
+                    $pdf->SetY($Y_INI);
+                    $pdf->SetX(119.7);
+                    $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
+                    $pdf->Image(base_url() . '/img/watermark.png', 138, $Y_INI + 5, 45);
+                    $pdf->SetY($Y_INI + 7);
+                    $pdf->SetX(119.7);
+                    $pdf->SetFont('Calibri', 'B', 16);
+                    $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
+                    $pdf->SetFont('Calibri', '', 11.5);
+                    $pdf->SetY($Y_INI + 18);
+                    $pdf->SetX(119.7);
+                    $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
+                    $pdf->SetFont('Calibri', 'B', 9);
+                    $pdf->SetY($Y_INI + 46.3);
+                    $pdf->SetX(119.5);
+                    $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                    $pdf->SetX(161);
+                    $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+                    $pdf->SetY(51.3);
+
+                    $Y_INI += $pdf->GetY() + 1.3;
+                    $Cont++;
+                }
+                /* FIN RESUMEN */
+                $path = 'uploads/Reportes/Empleados';
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                if (delete_files('uploads/Reportes/Empleados/')) {
+                    /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+                }
+                $url = $path . '/CredencialesDeptos.pdf';
+                /* Borramos el archivo anterior */
+
+                $pdf->Output($url);
+                print ('{"URL":"' . base_url() . $url . '"}');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getCredencial() {
         try {
             $x = $this->input;
             $Empleado = $this->Empleados_model->getEmpleadoByNumero($x->get('ID'));
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
             $pdf->SetLineWidth(.8);
-            $pdf->setLogo(base_url() . '/img/banner.png');
+            $pdf->Image(base_url() . '/img/banner.png', 12, 11, 36);
             $pdf->AddPage();
+
             $pdf->SetFont('Calibri', 'B', 12);
-            $pdf->Rect(10, 10, 90/* ANCHO */, 60/* ALTO */);
+            $pdf->Rect(10, 10, 86/* ANCHO */, 51.5/* ALTO */);
             $pdf->Line(10, 30, 65, 30);
-            $pdf->Rect(110, 10, 90/* ANCHO */, 60/* ALTO */);
-            $pdf->Line(110, 17, 200, 17);
-            $pdf->Line(110/* Y1 */, 65/* Y1 */, 200/* Y2 */, 65/* X2 */);
+            $pdf->Rect(119.7, 10, 86/* ANCHO */, 51.5/* ALTO */);
+            $pdf->Line(119.7/* Y1 */, 57/* Y1 */, 205.7/* Y2 */, 57/* X2 */);
             $pdf->SetFont('Calibri', 'B', 13);
 
 
@@ -279,65 +404,71 @@ class Empleados extends CI_Controller {
             if ($Empleado[0]->Foto !== '') {
                 if (!is_file($path)) {
                     // $pdf->Image(base_url() . 'uploads/Empleados/9999.jpg', 68, 11, 30);
-                    $pdf->Rect(68, 12, 30/* ANCHO */, 30/* ALTO */);
+                    $pdf->SetLineWidth(.4);
+                    $pdf->Rect(67, 11, 28/* ANCHO */, 28/* ALTO */);
                     $pdf->SetY(21);
-                    $pdf->SetX(68);
-                    $pdf->SetFont('Calibri', 'BI', 14);
+                    $pdf->SetX(67);
+                    $pdf->SetFont('Calibri', 'BI', 13);
                     $pdf->setTextColor(220, 0, 0);
-                    $pdf->MultiCell(30, 6, 'Empleado sin foto', 0/* BORDE */, 'C');
+                    $pdf->MultiCell(28, 6, 'Empleado sin foto', 0/* BORDE */, 'C');
                 } else {
-                    $pdf->Image(base_url() . $Empleado[0]->Foto, 68, 11, 30);
+                    $pdf->Image(base_url() . $Empleado[0]->Foto, 67, 11, 28);
                 }
             }
 
-
+            $pdf->SetLineWidth(.8);
             $pdf->setTextColor(0, 0, 0);
             $pdf->SetY(32);
             $pdf->SetX(12);
-            $pdf->Cell(20, 5, utf8_decode('Empleado'), 0/* BORDE */, 0/* SALTO */, 'L');
-            $pdf->SetFont('Calibri', 'B', 16);
-            $pdf->SetX(35);
+            $pdf->SetFont('Calibri', 'B', 12);
+            $pdf->Cell(20, 5, utf8_decode('No. Empleado'), 0/* BORDE */, 0/* SALTO */, 'L');
+            $pdf->SetFont('Calibri', 'B', 17);
+            $pdf->SetX(40);
             $pdf->Cell(20, 5, utf8_decode($x->get('ID')), 0/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetFont('Calibri', 'BIU', 14);
-            $pdf->SetY(40);
+            $pdf->SetFont('Calibri', 'BIU', 12);
+            $pdf->SetY(38);
             $pdf->SetX(12);
             $pdf->Cell(90, 9.5, utf8_decode($Empleado[0]->NOMBRE_COMPLETO), 0/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetFont('Calibri', 'B', 14);
-            $pdf->SetY(48);
+            $pdf->SetFont('Calibri', 'B', 12);
+            $pdf->SetY(45);
             $pdf->SetX(10);
             $pdf->Cell(70, 7, utf8_decode($Empleado[0]->DEPARTAMENTO), 0/* BORDE */, 0/* SALTO */, 'C');
+
+            /* Código Barras */
             $pdf->SetFont('Calibri', 'B', 10);
-
-            $pdf->SetY(55);
+            $pdf->SetY(51.5);
             $pdf->SetX(12);
-            $pdf->Code128(25, $pdf->GetY(), $x->get('ID'), 42.5, 12);
+            $pdf->Code128(25, $pdf->GetY(), $x->get('ID'), 42.5, 8.5);
 
-            $pdf->SetY(55);
-            $pdf->SetX(80);
+            $pdf->SetY(48.5);
+            $pdf->SetX(77);
             $pdf->Cell(20, 5, utf8_decode('VIGENCIA'), 0/* BORDE */, 1/* SALTO */, 'C');
 
             $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->SetX(80);
-            $pdf->Cell(20, 4, utf8_decode('01/01' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
-            $pdf->SetX(80);
-            $pdf->Cell(20, 4, utf8_decode('31/12' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
+            $pdf->SetX(77);
+            $pdf->Cell(20, 4, utf8_decode('01/01/' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
+            $pdf->SetX(77);
+            $pdf->Cell(20, 4, utf8_decode('31/12/' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
+
+
+            /*             * ******************** SEGUNDA HOJA *************************** */
             $pdf->SetFont('Calibri', 'B', 17);
             $pdf->SetY(10);
-            $pdf->SetX(110);
-            $pdf->Cell(90, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
-            $pdf->Image(base_url() . '/img/watermark.png', 130, 15, 50);
-            $pdf->SetX(110);
+            $pdf->SetX(119.7);
+            $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
+            $pdf->Image(base_url() . '/img/watermark.png', 138, 15, 45);
+            $pdf->SetX(119.7);
             $pdf->SetFont('Calibri', 'B', 16);
             $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
-            $pdf->SetFont('Calibri', '', 14);
-            $pdf->SetY(25);
-            $pdf->SetX(110);
-            $pdf->MultiCell(90/* ANCHO */, 5/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros clientes."), 0/* BORDE */, 'J'/* ALINEACION */, false);
-            $pdf->SetFont('Calibri', '', 11);
-            $pdf->SetY(65);
-            $pdf->SetX(110);
+            $pdf->SetFont('Calibri', '', 11.5);
+            $pdf->SetY(28);
+            $pdf->SetX(119.7);
+            $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
+            $pdf->SetFont('Calibri', 'B', 9);
+            $pdf->SetY(56.3);
+            $pdf->SetX(119.5);
             $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
-            $pdf->SetX(147);
+            $pdf->SetX(161);
             $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Empleados';

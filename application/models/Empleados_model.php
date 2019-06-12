@@ -121,6 +121,23 @@ class Empleados_model extends CI_Model {
         }
     }
 
+    public function getEmpleadosByDepartamentos($dDepto, $ADepto) {
+        try {
+            return $this->db->select("E.ID, E.Numero as NUMERO, "
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
+                                    . "D.Descripcion AS DEPARTAMENTO", false)
+                            ->from('empleados AS E')
+                            ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico', 'left')
+                            // ->where('E.AltaBaja', '1')
+                            ->where("cast(E.DepartamentoFisico as signed) between $dDepto and $ADepto ", null, false)
+                            ->order_by('cast(E.DepartamentoFisico as signed)', 'ASC')
+                            ->order_by('NUMERO', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAgregar($array) {
         try {
             $this->db->insert("empleados", $array);
