@@ -7,8 +7,8 @@
         </div>
         <div class="card-block">
             <div class="row" align="center">
-                <div id="ProfilePicture" class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-4" >
-                    <img src="<?php print base_url('img/LOSO.png'); ?>" class="img-rounded img-fluid" width="350" height="350" alt="Empleado">
+                <div id="ProfilePicture" class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 my-5" >
+                    <img src="<?php print base_url('img/empleado_sin_foto.png'); ?>" class="img-rounded img-fluid" width="350" height="350" alt="Empleado">
                     <h1 class="display-1">0000</h1>
                 </div>
                 <div id="" class="col-12 col-sm-12 col-md-12 col-xl-8 col-lg-8">
@@ -35,11 +35,13 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/Asistencia/';
-    var NumeroEmpleado = $("#NumeroEmpleado");
+    var master_url = '<?php print base_url('RelojChecador'); ?>', pnlTablero = $("#pnlTablero");
+    var NumeroEmpleado = pnlTablero.find("#NumeroEmpleado");
     var Semana = 0;
     var typed = false;
+
     $(document).ready(function () {
+
         NumeroEmpleado.keypress(function () {
             typed = true;
         });
@@ -51,6 +53,7 @@
                 typed = false;
             }
         });
+
         $("#btnReset").click(function () {
             NumeroEmpleado.val('');
         });
@@ -66,7 +69,7 @@
         }
         NumeroEmpleado.focus();
         var hora = new Date().getHours();
-        $("#Tiempo").html('<div class="row"><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-danger">SEMANA ' + Semana + ' </h1></div><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-info">' + formattedDate() + '</h1></div></div><h1 class="text-default display-1 lead">' + hora + ':' + checkTime(new Date().getMinutes()) + ':' + checkTime(new Date().getSeconds()) + ' ' + (hora >= 12 ? 'pm' : 'am') + '</h1>');
+        $("#Tiempo").html('<div class="row"><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-danger semana_actual">SEMANA ' + Semana + ' </h1></div><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-info">' + formattedDate() + '</h1></div></div><h1 class="text-default display-1 lead">' + hora + ':' + checkTime(new Date().getMinutes()) + ':' + checkTime(new Date().getSeconds()) + ' ' + (hora >= 12 ? 'pm' : 'am') + '</h1>');
         setTimeout(loop, 50);
     }
 
@@ -92,9 +95,9 @@
 
     function onLogIn() {
         var ne = NumeroEmpleado.val();
-        console.log(ne, typed);
+
         if ($.isNumeric(ne)) {
-            $.post(base_url + 'index.php/Asistencia/onAcceder', {Numero: parseInt(ne)}).done(function (data) {
+            $.post('<?php print base_url('RelojChecador/onAcceder'); ?>', {Numero: parseInt(ne), Semana: Semana}).done(function (data) {
                 console.log(data);
                 if (data.length > 0) {
                     var info = JSON.parse(data);
@@ -104,11 +107,12 @@
                     $("#ProfileName > h1 ").text(info[0].Empleado);
                     swal({
                         title: 'GRACIAS',
-                        text: '',
-                        timer: 350,
+                        text: 'BIENVENIDO',
+                        timer: 700,
                         buttons: false,
                         closeOnEsc: true,
-                        closeOnClickOutside: true
+                        closeOnClickOutside: true,
+                        icon: 'success'
                     });
                     onBeep(6);
                 } else {
@@ -132,8 +136,7 @@
     }
 
     function getInformacionSemana() {
-        $.getJSON(master_url + 'getInformacionSemana').done(function (data) {
-            console.log("\n * SEMANA * \n", data);
+        $.getJSON('<?php print base_url('RelojChecador/getInformacionSemana'); ?>').done(function (data) {
             Semana = data[0].SEMANA;
         }).fail(function (x, y, z) {
             console.log(x, x.responseText);
@@ -141,6 +144,7 @@
 
         });
     }
+
     function onValidarPantallaCompleta() {
         if (ValidaPantallaCompleta === '1') {
             $.ajax({url: master_url + 'onCambiarSesion',
@@ -157,6 +161,23 @@
     }
 </script>
 <style>
+    .card{
+        background-color: #f9f9f9;
+        border-width: 1px 2px 2px;
+        border-style: solid; 
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
+        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+    }
+    .card-header{ 
+        background-color: transparent;
+        border-bottom: 0px;
+    }
+    .card-body{
+        padding-top: 10px;
+    }
+    .card-header{
+        padding: 0px;
+    }
     body{
         background-color: #FFF;
     }
@@ -183,17 +204,5 @@
     }
     h1 { 
         text-shadow: 2px 2px 4px #000000;
-    } 
-    .swal-title{
-        color: #fff;
-        font-size: 80px;
-        text-shadow: 2px 2px 4px #000000;
-    }
-    .swal-modal {
-        background-color: rgba(100,86,37,0);
-        border: none;
-    }
-    .swal-overlay {
-        background-color: rgba(100,86,37,0.45);
-    }
+    }  
 </style>
