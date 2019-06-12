@@ -24,6 +24,9 @@
                 <button id="btnAsignaTodo" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
                     <span class="fa fa-shield-alt"></span>
                 </button>
+                <button id="btnAsignaAvaPRD" type="button" class="btn btn-primary d-none"  data-toggle="tooltip" data-placement="top" title="ASIGNAR AVAPRD">
+                    <span class="fa fa-shield-alt"></span>
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -302,6 +305,20 @@
             btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo");
 
     $(document).ready(function () {
+        pnlTableroBody.find("#btnAsignaAvaPRD").click(function () {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Asignando...'
+            });
+            $.post('<?php print base_url('Accesos/onAsignaAvaPRD') ?>').done(function (x) {
+                console.log(x);
+                
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
+        });
 
         btnAsignaTodo.click(function () {
             if (mxu.val()) {

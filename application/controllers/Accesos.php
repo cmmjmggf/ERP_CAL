@@ -394,4 +394,95 @@ class Accesos extends CI_Controller {
         }
     }
 
+    public function onAsignaAvaPRD() {
+        try {
+            $dtm = $this->db->select('ID, contped, status, fec1, fec2, fec3, fec33, '
+                                    . 'fec4, fec40, fec42, fec44, fec5, '
+                                    . 'fec55, fec6, fec7, fec8, fec9, '
+                                    . 'fec10, fec11, fec12, programado, corte, '
+                                    . 'rayado, rebajado, foleado, pespunte, ensuelado, '
+                                    . 'almpesp, tejido, almtejido, montado, adorno, '
+                                    . 'almadorno, terminado, fec13, fec14, fec15, '
+                                    . 'fec16, fec17, fec18', false)->from('avaprd AS A')
+                            ->get()->result();
+            $deptos = array('fec1', 'fec2', 'fec3', 'fec33', 'fec4', 'fec40', 'fec42',
+                'fec44', 'fec5', 'fec55', 'fec6', 'fec7', 'fec8', 'fec9', 'fec10', 'fec11', 'fec12');
+            foreach ($dtm as $key => $v) {
+                foreach ($deptos as $kk => $vv) {
+                    $depto = 0;
+                    $fecha_depto = "";
+                    if ($v->{$vv} !== '1899-12-30 00:00:00') {
+                        switch ($vv) {
+                            case 'fec1':
+                                $depto = 0;
+                                break;
+                            case 'fec2':
+                                $depto = 10;
+                                break;
+                            case 'fec3':
+                                $depto = 20;
+                                break;
+                            case 'fec33':
+                                $depto = 30;
+                                break;
+                            case 'fec4':
+                                $depto = 40;
+                                break;
+                            case 'fec40':
+                                $depto = 90;
+                                break;
+                            case 'fec42':
+                                $depto = 100;
+                                break;
+                            case 'fec44':
+                                $depto = 105;
+                                break;
+                            case 'fec5':
+                                $depto = 110;
+                                break;
+                            case 'fec55':
+                                $depto = 140;
+                                break;
+                            case 'fec6':
+                                $depto = 130;
+                                break;
+                            case 'fec7':
+                                $depto = 150;
+                                break;
+                            case 'fec8':
+                                $depto = 160;
+                                break;
+                            case 'fec9':
+                                $depto = 180;
+                                break;
+                            case 'fec10':
+                                $depto = 210;
+                                break;
+                            case 'fec11':
+                                $depto = 230;
+                                break;
+                            case 'fec12':
+                                $depto = 240;
+                                break;
+                        }
+                        $avance = array('Control' => $v->contped,
+                            'FechaAProduccion' => '01/01/2000',
+                            'Departamento' => $depto,
+                            'FechaAvance' => $v->{$vv},
+                            'Estatus' => 'A',
+                            'Usuario' => 999,
+                            'Fecha' => '01/01/2000',
+                            'Hora' => '12:00:00 AM',
+                            'Fraccion' => NULL,
+                            'Docto' => $v->almpesp);
+                        $this->db->insert('avance', $avance);
+                    }
+                }
+            }
+            $this->db->query('UPDATE erp_cal.avance AS A INNER JOIN departamentos AS D ON A.Departamento = D.Clave SET A.DepartamentoT = D.Descripcion WHERE A.ID > 0;');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
