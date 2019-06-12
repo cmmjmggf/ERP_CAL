@@ -12,14 +12,15 @@
                     <h1 class="display-1">0000</h1>
                 </div>
                 <div id="" class="col-12 col-sm-12 col-md-12 col-xl-8 col-lg-8">
-                    <div id="ProfileName" class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-                        <h1 class="display-3"> - </h1>
+                    <div id="ProfileName" class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 my-5">
+                        <h1 class="display-3 my-5"> - </h1>
                     </div>
+                    
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group"> 
                             <div class="form-group">
                                 <div class="input-group mb-3"> 
-                                    <input type="text" class="form-control noBorders" placeholder="####" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="">
+                                    <input type="text" class="form-control noBorders" placeholder="####" autocomplete="off" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="">
                                     <div class="input-group-append">
                                         <button type="button" id="btnAcceso" class="btn btn-primary d-none"><span class="fa fa-check"></span></button> 
                                         <button type="button" id="btnReset" class="btn btn-danger"><span class="fa fa-trash"></span></button>
@@ -29,6 +30,18 @@
                         </div>
                     </div>
                     <div id="Tiempo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"></div> 
+
+                    <?php
+                    if (intval($vigilancia) === 1) {
+                        ?> 
+                        <div class="col-12">
+                            <button id="btnSalir" class="btn btn-danger btn-lg" onclick="onSalirReloj()">
+                                <span class="fa fa-arrow-left"></span> SALIR
+                            </button>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -48,7 +61,8 @@
 
         NumeroEmpleado.keyup(function (e) {
             if (e.keyCode === 13 && typed) {
-                onBeep(6);
+                2803
+
                 onLogIn();
                 NumeroEmpleado.val('');
                 typed = false;
@@ -61,7 +75,13 @@
         loop();
         getInformacionSemana();
     });
-
+    function onSalirReloj() {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: 'Espere...'
+        });
+        location.href = "<?php print base_url('Sesion/onSalir'); ?>";
+    }
     function loop() {
         if (NumeroEmpleado.val() !== '' && parseInt(NumeroEmpleado.val()) > 0 && !typed) {
             console.log('Empleado', NumeroEmpleado.val());
@@ -69,9 +89,16 @@
             NumeroEmpleado.val('');
         }
         NumeroEmpleado.focus();
-        var hora = new Date().getHours();
-        $("#Tiempo").html('<div class="row"><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-danger semana_actual">SEMANA ' + Semana + ' </h1></div><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"><h1 class="text-info">' + formattedDate() + '</h1></div></div><h1 class="text-default display-1 lead">' + hora + ':' + checkTime(new Date().getMinutes()) + ':' + checkTime(new Date().getSeconds()) + ' ' + (hora >= 12 ? 'pm' : 'am') + '</h1>');
-        setTimeout(loop, 50);
+        var hora = formatAMPM(new Date());
+        $("#Tiempo").html('<div class="row">' +
+                '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
+                '<h1 class="text-danger semana_actual">SEMANA ' + Semana + ' </h1>' +
+                '</div><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
+                '<h1 class="text-info">' + formattedDate() + '</h1>' +
+                '</div>' +
+                '</div>' +
+                '<h1 class="text-default display-1 lead">' + hora + '</h1>');
+        setTimeout(loop, 30);
     }
 
     function formattedDate(d = new Date) {
@@ -85,6 +112,19 @@
             day = '0' + day;
 
         return `${day}/${month}/${year}`;
+    }
+
+    /*12 HOURS*/
+    function formatAMPM(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = checkTime(hours) + ':' + checkTime(minutes) + ':' + checkTime(seconds) + ' ' + ampm;
+        return strTime;
     }
 
     function checkTime(i) {

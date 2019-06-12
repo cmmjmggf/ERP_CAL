@@ -7,11 +7,11 @@ class RelojChecador extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('RelojChecador_model','ASM');
+        $this->load->library('session')->model('RelojChecador_model', 'ASM');
     }
 
     public function index() {
-        $this->load->view('vEncabezado')->view('vRelojChecador')->view('vFooter');
+        $this->load->view('vEncabezado')->view('vRelojChecador', array('vigilancia' => 0))->view('vFooter');
     }
 
     public function getInformacionSemana() {
@@ -27,8 +27,8 @@ class RelojChecador extends CI_Controller {
             $fecha = Date('Y-m-d');
             $Entrada_Salida = $this->ASM->onComprobarEntrada($this->input->post('Numero'), $fecha);
             $info_empleado = $this->ASM->getInformacionPorEmpleado($this->input->post('Numero'));
-            $dtm = json_decode(json_encode($info_empleado), FALSE); 
-                    
+            $dtm = json_decode(json_encode($info_empleado), FALSE);
+
             if (count($dtm) > 0) {
                 $es = array(
                     'numemp' => $this->input->post('Numero'),
