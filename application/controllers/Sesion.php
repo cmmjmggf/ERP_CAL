@@ -118,6 +118,14 @@ class Sesion extends CI_Controller {
                     }
                     $is_valid = true;
                     break;
+                case 'RELOJ':
+                    switch ($this->session->USERNAME) {
+                        case '99':
+                            $this->load->view('vEncabezado')->view('vRelojChecador', array('vigilancia' => 1));
+                            $is_valid = true;
+                            break;
+                    }
+                    break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);
         }
