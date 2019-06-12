@@ -56,6 +56,14 @@ class Departamentos extends CI_Controller {
         }
     }
 
+    public function getDepartamentos() {
+        try {
+            print json_encode($this->Departamentos_model->getDepartamentos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getFracciones() {
         try {
             print json_encode($this->Departamentos_model->getFracciones());
