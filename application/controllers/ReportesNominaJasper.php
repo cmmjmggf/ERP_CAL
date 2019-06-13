@@ -34,10 +34,10 @@ class ReportesNominaJasper extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["depto"] = $this->input->get('Depto');
+        $parametros["empleado"] = $this->input->get('Empleado');
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\nominas\reporteEtiquetasLockers.jasper');
-        $jc->setFilename('ETIQUETAS_LOCKERS_' . Date('h_i_s'));
+        $jc->setJasperurl('jrxml\nominas\valeZapatosTdas.jasper');
+        $jc->setFilename('VALE_ZAPATOS_TIENDAS_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }

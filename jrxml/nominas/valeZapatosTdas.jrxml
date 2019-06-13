@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.0276506581568183"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="empleado" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select Numero, Busqueda from empleados where numero = $P{empleado};]]>
+	</queryString>
+	<field name="Numero" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Busqueda" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="169" splitType="Stretch">
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="1" y="158" width="126" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<graphicElement>
+					<pen lineWidth="2.75" lineStyle="Dashed" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="49" width="46" height="13" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement x="209" y="30" width="83" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="72" height="42" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="77" y="15" width="159" height="14" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="77" y="1" width="172" height="14" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vale para compra de calzado en tiendas ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="126" y="153" width="41" height="11" forecolor="#000000" uuid="16fb4816-8aab-4804-8a65-5bb88034bbe2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Corte aquí]]></text>
+			</staticText>
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="168" y="159" width="139" height="1" uuid="4639e7f1-36a3-4ec1-bc99-4290714f895c"/>
+				<graphicElement>
+					<pen lineWidth="2.75" lineStyle="Dashed" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="62" width="46" height="12" forecolor="#000000" uuid="920ed92b-18f6-4086-bb8f-650475b8cdc9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="1" y="79" width="291" height="58" uuid="0acd99ef-8856-452f-812d-f8723bebaf05"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="236" y="54" width="56" height="25" uuid="4ebbbfe4-bc82-4328-937d-fde1c145736f"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" x="236" y="54" width="56" height="11" forecolor="#000000" uuid="abf1f433-3461-4f40-aff1-1fe12895e73f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="156" y="30" width="53" height="12" forecolor="#000000" uuid="e5b8270d-196f-4870-8c4d-fa67b5bb9404"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="1" y="138" width="100" height="10" forecolor="#000000" uuid="78f52cea-5f4c-42fd-a36f-d99ba2209e4b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Firma Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="101" y="138" width="79" height="10" forecolor="#000000" uuid="e452ff2b-04fc-421b-9df0-3fdb98d1222e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sello Empresa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="180" y="138" width="112" height="10" forecolor="#000000" uuid="86df8a6d-d002-4191-b4ea-32cfc9028387"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Firma Recursos Humanos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="46" y="49" width="55" height="13" uuid="11e7ecef-7823-4329-8768-6732e359496b"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="62" width="163" height="12" uuid="82dd8c7d-9360-443e-8559-a5eb1155bb17"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Busqueda}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="307" y="-12" width="1" height="181" uuid="69faefdd-b09a-4fcf-93f2-bfd594a700a3"/>
+			</line>
+		</band>
+	</columnHeader>
+</jasperReport>
