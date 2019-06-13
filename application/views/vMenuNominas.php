@@ -54,3 +54,4 @@ $this->load->view('vLimpiaCajaAhorroPrestamosEmpleados');
 $this->load->view('vCapturaComidaEmpleados');
 $this->load->view('vImprimirCredenciales');
 $this->load->view('vEtiquetasLockers');
+$this->load->view('vValesZapatoTiendas');

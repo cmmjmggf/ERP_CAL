@@ -28,4 +28,18 @@ class ReportesNominaJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirValeZapTda() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["depto"] = $this->input->get('Depto');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\reporteEtiquetasLockers.jasper');
+        $jc->setFilename('ETIQUETAS_LOCKERS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

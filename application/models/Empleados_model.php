@@ -23,6 +23,16 @@ class Empleados_model extends CI_Model {
         }
     }
 
+    public function getInfoEmpleadoZapTda($ID) {
+        try {
+            return $this->db->select("E.ZapatosTDA, datediff(now(),E.FechaIngreso) as DiasAlta  ", false)
+                            ->from('empleados AS E')
+                            ->where('E.Numero', $ID)->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleadoByNumeroExt($ID) {
         try {
             return $this->db->select("E.Ahorro", false)

@@ -180,6 +180,14 @@ class Empleados extends CI_Controller {
 
     /* Funciones para mndificaciones desde otros modulos */
 
+    public function getInfoEmpleadoZapTda() {
+        try {
+            print json_encode($this->Empleados_model->getInfoEmpleadoZapTda($this->input->get('Empleado')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onLimpiarCamposAhorroPrestamo() {
         try {
             $this->db->set('Ahorro', 0)
