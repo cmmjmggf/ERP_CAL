@@ -138,7 +138,7 @@ class Empleados_model extends CI_Model {
                                     . "D.Descripcion AS DEPARTAMENTO", false)
                             ->from('empleados AS E')
                             ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
-                            // ->where('E.AltaBaja', '1')
+                            ->where('E.AltaBaja', '1')
                             ->where("cast(E.DepartamentoFisico as signed) between $dDepto and $ADepto ", null, false)
                             ->order_by('cast(E.DepartamentoFisico as signed)', 'ASC')
                             ->order_by('NUMERO', 'ASC')

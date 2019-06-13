@@ -317,10 +317,10 @@ class Empleados extends CI_Controller {
                     $pdf->SetX(12);
                     $pdf->SetFont('Calibri', 'B', 12);
                     $pdf->Cell(20, 5, utf8_decode('No. Empleado'), 0/* BORDE */, 0/* SALTO */, 'L');
-                    $pdf->SetFont('Calibri', 'B', 17);
+                    $pdf->SetFont('Calibri', 'B', 16);
                     $pdf->SetX(40);
                     $pdf->Cell(20, 5, utf8_decode($Empleado->NUMERO), 0/* BORDE */, 1/* SALTO */, 'L');
-                    $pdf->SetFont('Calibri', 'BIU', 12);
+                    $pdf->SetFont('Calibri', 'BIU', 10);
                     $pdf->SetY($Y_INI + 28);
                     $pdf->SetX(12);
                     $pdf->Cell(90, 9.5, utf8_decode($Empleado->NOMBRE_COMPLETO), 0/* BORDE */, 1/* SALTO */, 'L');
@@ -396,9 +396,9 @@ class Empleados extends CI_Controller {
             $Empleado = $this->Empleados_model->getEmpleadoByNumero($x->get('ID'));
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
             $pdf->SetLineWidth(.8);
-            $pdf->Image(base_url() . '/img/banner.png', 12, 11, 36);
-            $pdf->AddPage();
 
+            $pdf->AddPage();
+            $pdf->Image(base_url() . '/img/banner.png', 12, 11, 36);
             $pdf->SetFont('Calibri', 'B', 12);
             $pdf->Rect(10, 10, 86/* ANCHO */, 51.5/* ALTO */);
             $pdf->Line(10, 30, 65, 30);
@@ -430,10 +430,10 @@ class Empleados extends CI_Controller {
             $pdf->SetX(12);
             $pdf->SetFont('Calibri', 'B', 12);
             $pdf->Cell(20, 5, utf8_decode('No. Empleado'), 0/* BORDE */, 0/* SALTO */, 'L');
-            $pdf->SetFont('Calibri', 'B', 17);
+            $pdf->SetFont('Calibri', 'B', 16);
             $pdf->SetX(40);
             $pdf->Cell(20, 5, utf8_decode($x->get('ID')), 0/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetFont('Calibri', 'BIU', 12);
+            $pdf->SetFont('Calibri', 'BIU', 10);
             $pdf->SetY(38);
             $pdf->SetX(12);
             $pdf->Cell(90, 9.5, utf8_decode($Empleado[0]->NOMBRE_COMPLETO), 0/* BORDE */, 1/* SALTO */, 'L');
