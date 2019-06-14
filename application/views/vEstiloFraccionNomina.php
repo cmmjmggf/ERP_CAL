@@ -45,7 +45,7 @@
             mdlEstiloFraccionNomina.find('#Ano').focus();
         });
         mdlEstiloFraccionNomina.find('#btnImprimir').on("click", function () {
-            onImprimirReporte();
+            onImprimirReporteConciliaFraccion();
         });
         mdlEstiloFraccionNomina.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -72,7 +72,7 @@
         });
     });
 
-    function onImprimirReporte() {
+    function onImprimirReporteConciliaFraccion() {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
         var frm = new FormData(mdlEstiloFraccionNomina.find("#frmCaptura")[0]);
         $.ajax({

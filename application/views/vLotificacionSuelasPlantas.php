@@ -73,7 +73,7 @@
             $.each(mdlLotificacionSuelasPlantas.find("select"), function (k, v) {
                 mdlLotificacionSuelasPlantas.find("select")[k].selectize.clear(true);
             });
-            getSuelasPlantas();
+            onImprimirReporteLotifSuelas();
             mdlLotificacionSuelasPlantas.find('#Ano').focus();
         });
         mdlLotificacionSuelasPlantas.find('#btnImprimir').on("click", function () {
@@ -239,7 +239,7 @@
         });
     });
 
-    function onImprimirReporte(reporte, frm) {
+    function onImprimirReporteLotifSuelas(reporte, frm) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
         $.ajax({

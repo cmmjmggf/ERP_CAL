@@ -43,6 +43,37 @@
             }
         });
     }
+    function onVerRastreoControlesPorEmpleado() {
+        $.fancybox.open({
+            src: '<?php print base_url('RastreoControlesEmpleado.shoes'); ?>',
+            type: 'iframe',
+            opts: {
+                afterShow: function (instance, current) {
+                    console.info('done!');
+                },
+                afterClose: function () {
+                },
+                iframe: {
+                    // Iframe template
+                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                    preload: true,
+                    // Custom CSS styling for iframe wrapping element
+                    // You can use this to set custom iframe dimensions
+                    css: {
+                        width: "100%",
+                        height: "100%"
+                    },
+                    // Iframe tag attributes
+                    attr: {
+                        scrolling: "auto"
+                    }
+                }
+            }
+        });
+    }
+
+
+
 </script>
 
 
@@ -55,3 +86,8 @@ $this->load->view('vCapturaComidaEmpleados');
 $this->load->view('vImprimirCredenciales');
 $this->load->view('vEtiquetasLockers');
 $this->load->view('vValesZapatoTiendas');
+$this->load->view('vRastreoControlNomina');
+$this->load->view('vRastreoConceptoNomina');
+$this->load->view('vEstiloFraccionNomina');
+
+

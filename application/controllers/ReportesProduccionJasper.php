@@ -141,6 +141,9 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/produccion/';
+
         $parametros["ano"] = $this->input->post('Ano');
         $parametros["sem"] = $this->input->post('Sem');
         $parametros["maq"] = $this->input->post('Maq');

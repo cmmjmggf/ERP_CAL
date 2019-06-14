@@ -41,7 +41,7 @@
             mdlManoObraDirecta.find('#Ano').focus();
         });
         mdlManoObraDirecta.find('#btnImprimir').on("click", function () {
-            onImprimirReporte();
+            onImprimirReporteManoObraDirecta();
         });
         mdlManoObraDirecta.find("#Ano").change(function () {
             if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -65,7 +65,7 @@
         });
     });
 
-    function onImprimirReporte() {
+    function onImprimirReporteManoObraDirecta() {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
         var frm = new FormData(mdlManoObraDirecta.find("#frmCaptura")[0]);
         $.ajax({

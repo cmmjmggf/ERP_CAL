@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="conciliaFraccionEstiloNomina" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="291" columnSpacing="10" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="a7da0111-f879-4848-8c29-681462a8d7c9">
 	<property name="ireport.zoom" value="2.357947691000021"/>
-	<property name="ireport.x" value="141"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\wamp64\\www\\ERP_CAL\\jrxml\\produccion\\"]]></defaultValueExpression>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
