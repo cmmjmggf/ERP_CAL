@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Pagare" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2cf8afc5-021c-4b82-8503-5919bdef0ee3">
+	<property name="ireport.zoom" value="1.542173157718129"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="14"/>
+	<parameter name="PAGARE" class="java.lang.String"/>
+	<parameter name="FECHAPAGARE" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="LUGAREXPEDICION" class="java.lang.String"/>
+	<parameter name="NUMEROENLETRA" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare,P.sem,P.fechapre,P.preemp,P.aboemp,P.salemp,P.pesos,P.fecpag,P.sempag FROM erp_cal.prestamos AS P]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numemp" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomemp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pagare" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sem" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fechapre" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="preemp" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="aboemp" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="salemp" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pesos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecpag" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sempag" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="6255a8a2-4017-4858-9a2e-fb882524d66a"/>
+			</line>
+			<line>
+				<reportElement x="0" y="1" width="1" height="40" uuid="ad2eb708-5721-4ae4-ae4b-90b48cd4d776"/>
+			</line>
+			<line>
+				<reportElement x="554" y="1" width="1" height="40" uuid="f5726272-1854-463f-b7b7-cd435de74660"/>
+			</line>
+			<staticText>
+				<reportElement x="1" y="1" width="100" height="20" uuid="2d6fb2a9-16eb-4478-aeac-d9a3862fb812"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[P A G A R E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="1" width="25" height="20" uuid="3061c636-039e-4523-b56e-4e6f54064c10"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="1" width="153" height="20" uuid="afbc11ee-24ae-4879-bd37-cf9efaae37d6"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Bueno por $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="153" y="21" width="248" height="20" uuid="3c3c9c64-4b5a-4878-b228-7e42b75008fd"/>
+				<text><![CDATA[Lugar y fecha de expedición, León, Gto., Mex.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="261" y="1" width="100" height="20" uuid="27685081-06a5-4e03-8276-590da5f382be"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{PAGARE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="21" width="153" height="20" uuid="ec6d1288-b1db-4798-b89d-aece1e428b91"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{FECHAPAGARE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="254" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="335" height="15" uuid="ec6ff6bb-c2ec-4c16-a591-370ed088ff9f"/>
+				<textElement textAlignment="Right">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Debe(mos) y pagare(mos) incondicionalmente por este Pagare a la orden]]></text>
+			</staticText>
+			<line>
+				<reportElement x="336" y="15" width="219" height="1" uuid="22d51dd0-55d3-484f-a986-7ef3df9ea98c"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="117" uuid="1e95ab21-6b30-457e-aab5-4ee0bc6de878"/>
+			</line>
+			<textField>
+				<reportElement x="336" y="0" width="218" height="15" uuid="e7938c7d-df4e-4f25-90d5-9e261fa3b305"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="29" y="31" width="67" height="15" uuid="4b1b2e5c-ada3-4fc2-84dd-d18353c6d7dd"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lugar del pago]]></text>
+			</staticText>
+			<line>
+				<reportElement x="96" y="45" width="100" height="1" uuid="92579b4a-1436-4408-84fc-c9fb2245bf17"/>
+			</line>
+			<textField>
+				<reportElement x="96" y="31" width="100" height="14" uuid="3b803e83-7d41-4c0e-aeb1-859b788591c8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{LUGAREXPEDICION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="196" y="31" width="67" height="15" uuid="105ecb63-1f54-4a2d-a091-57e5c80aae39"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha del pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="29" y="61" width="67" height="15" uuid="87f32bbe-cce1-49d6-b727-1841520b87d6"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[La cantidad de : ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="96" y="75" width="458" height="1" uuid="be15798c-c139-4e60-8e61-f758928ece88"/>
+			</line>
+			<textField>
+				<reportElement x="96" y="61" width="458" height="14" uuid="728b9615-5975-4675-a912-fdf30bac7794"/>
+				<textFieldExpression><![CDATA[$P{NUMEROENLETRA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="554" y="0" width="1" height="254" uuid="ee15c3a4-8abf-4ade-8d2d-93de18b81fa2"/>
+			</line>
+			<staticText>
+				<reportElement x="29" y="91" width="511" height="108" uuid="435c0acb-9ce2-4d0b-8244-c3fa7996c5d5"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor recibido a mi (nuestra) entera satisfacción. Este pagare forma parte de una serie numerada de ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>
