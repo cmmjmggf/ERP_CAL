@@ -58,7 +58,7 @@
                     theme: 'sk-rect',
                     message: 'Espere un momento por favor...'
                 });
-                $.post('<?php print base_url('PrestamosEmpleados/getPagare'); ?>', {PAGARE: pagare, FECHA: fecha}).done(function (a) {
+                $.post('<?php print base_url('PrestamosEmpleados/getPagares'); ?>', {PAGARE: pagare, FECHA: fecha}).done(function (a) {
                     onImprimirReporteFancy('<?php print base_url('js/pdf.js-gh-pages/web/viewer.html?file='); ?>' + a + '#pagemode=thumbs');
                 }).fail(function (x) {
                     getError(x);

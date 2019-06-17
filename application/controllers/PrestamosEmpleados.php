@@ -196,4 +196,47 @@ class PrestamosEmpleados extends CI_Controller {
         }
     }
 
+    public function getPagares() {
+        try {
+            $x = $this->input;
+            /* PAGARE X NUMERO */
+            if ($x->post('FECHA') !== '' && $x->post('PAGARE') !== '') {
+                $this->getPagare();
+            } else
+            if ($x->post('FECHA') !== '' && $x->post('PAGARE') === '') {
+                /* PAGARE X FECHA */
+                $pagare_info = $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
+                                        . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
+                                        . "P.aboemp,P.salemp,"
+                                        . "P.pesos AS PRESTAMOLETRAS,"
+                                        . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
+                                ->from('prestamos AS P')
+                                ->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$x->post('FECHA')}\" ", null, false)
+                                ->get()->result();
+
+                $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "
+                                        . "E.Direccion AS DIRECCION,"
+                                        . "E.Colonia AS COLONIA,"
+                                        . "E.Ciudad AS CIUDAD,"
+                                        . "E.Tel AS TEL", false)
+                                ->from('empleados AS E')
+                                ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
+
+                $jc = new JasperCommand();
+                $jc->setFolder('rpt/' . $this->session->USERNAME);
+                $p = array();
+                $p["FECHAPAGARES"] = $x->post('FECHA');
+                $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
+                $p["LUGAREXPEDICION"] = "LEON GTO";
+                $jc->setParametros($p);
+                $jc->setJasperurl('jrxml\prestamos\PagareMultiple.jasper');
+                $jc->setFilename('Pagare_' . Date('h_i_s'));
+                $jc->setDocumentformat('pdf');
+                PRINT $jc->getReport();
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
