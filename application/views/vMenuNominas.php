@@ -75,19 +75,10 @@
 
 
 </script>
-
-
-
 <?php
-$this->load->view('vCopiarFraccionEstiloaEstilo');
-$this->load->view('vCapturaCajaAhorroDirecta');
-$this->load->view('vLimpiaCajaAhorroPrestamosEmpleados');
-$this->load->view('vCapturaComidaEmpleados');
-$this->load->view('vImprimirCredenciales');
-$this->load->view('vEtiquetasLockers');
-$this->load->view('vValesZapatoTiendas');
-$this->load->view('vRastreoControlNomina');
-$this->load->view('vRastreoConceptoNomina');
-$this->load->view('vEstiloFraccionNomina');
-
-
+$this->load->view('vCopiarFraccionEstiloaEstilo')->view('vCapturaCajaAhorroDirecta')
+        ->view('vLimpiaCajaAhorroPrestamosEmpleados')->view('vCapturaComidaEmpleados')
+        ->view('vImprimirCredenciales')->view('vEtiquetasLockers')
+        ->view('vValesZapatoTiendas')->view('vRastreoControlNomina')
+        ->view('vRastreoConceptoNomina')->view('vEstiloFraccionNomina')
+        ->view('vReimprimePagare');

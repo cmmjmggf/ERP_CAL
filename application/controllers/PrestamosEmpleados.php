@@ -9,7 +9,7 @@ class PrestamosEmpleados extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('PrestamosEmpleados_model', 'pem');
+        $this->load->library('session')->model('PrestamosEmpleados_model', 'pem')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -40,6 +40,14 @@ class PrestamosEmpleados extends CI_Controller {
     public function getPrestamos() {
         try {
             print json_encode($this->pem->getPrestamos($this->input->get('EMPLEADO')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPrestamosConsulta() {
+        try {
+            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -103,6 +111,86 @@ class PrestamosEmpleados extends CI_Controller {
                 'fecpag' => $fecha_final['FDP'],
                 'sempag' => $semanas
             ));
+            $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "
+                                    . "E.Direccion AS DIRECCION,"
+                                    . "E.Colonia AS COLONIA,"
+                                    . "E.Ciudad AS CIUDAD,"
+                                    . "E.Tel AS TEL", false)
+                            ->from('empleados AS E')
+                            ->where('E.Numero', $x->post('EMPLEADO'))->get()->result();
+            /* PAGARE */
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["PAGARE"] = $x->post('PAGARE');
+            $p["FECHAPAGARE"] = Date('d/m/Y');
+            $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
+            $p["LUGAREXPEDICION"] = "LEON GTO";
+            $p["NUMEROENLETRA"] = $x->post('PRESTAMOLETRA');
+            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
+            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
+            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
+            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["FECHAPAGO"] = date("d/m/Y", strtotime($fecha_final['FDP']));
+            $p["MONTO"] = '$' . number_format($x->post('PRESTAMO'), 2, ".", ",");
+            $jc->setParametros($p);
+            $jc->setJasperurl('jrxml\prestamos\Pagare.jasper');
+            $jc->setFilename('Pagare_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPagare() {
+        try {
+            /* PAGARE */
+            $x = $this->input;
+            $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
+                            . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
+                            . "P.aboemp,P.salemp,"
+                            . "P.pesos AS PRESTAMOLETRAS,"
+                            . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
+                    ->from('prestamos AS P')
+                    ->where('P.pagare', $x->post('PAGARE'));
+            if ($x->post('FECHA') !== '') {
+                $pagare_info = $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$x->post('FECHA')}\" ", null, false)
+                                ->get()->result();
+            } else {
+                $pagare_info = $this->db->get()->result();
+            }
+
+
+            $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "
+                                    . "E.Direccion AS DIRECCION,"
+                                    . "E.Colonia AS COLONIA,"
+                                    . "E.Ciudad AS CIUDAD,"
+                                    . "E.Tel AS TEL", false)
+                            ->from('empleados AS E')
+                            ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["PAGARE"] = $x->post('PAGARE');
+            $p["FECHAPAGARE"] = Date('d/m/Y');
+            $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
+            $p["LUGAREXPEDICION"] = "LEON GTO";
+            $p["NUMEROENLETRA"] = $pagare_info[0]->PRESTAMOLETRAS;
+            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
+            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
+            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
+            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["FECHAPAGO"] = date("d/m/Y", strtotime($pagare_info[0]->FECHA_PAGARE));
+            $p["MONTO"] = '$' . number_format($pagare_info[0]->MONTO, 2, ".", ",");
+            $jc->setParametros($p);
+            $jc->setJasperurl('jrxml\prestamos\Pagare.jasper');
+            $jc->setFilename('Pagare_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

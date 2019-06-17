@@ -36,6 +36,28 @@ class PrestamosEmpleados_model extends CI_Model {
         }
     }
 
+    public function getPrestamosConsulta($PAGARE, $FECHA) {
+        try {
+            $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
+                            . "P.pagare AS PAGARE,P.sem AS SEM, P.fechapre AS FECHA, "
+                            . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
+                            . "P.pesos,P.fecpag,P.sempag")
+                    ->from("prestamos AS P");
+            if ($FECHA !== '') {  
+                $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$FECHA}\" ",null,false);
+            }
+            if ($PAGARE !== '') {
+                $this->db->where('P.pagare', $PAGARE);
+            }
+            if ($PAGARE === '' && $FECHA === '') {
+                $this->db->limit(200);
+            }
+            return $this->db->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPrestamosPagos($EMPLEADO) {
         try {
             $this->db->select("PP.ID AS ID, PP.numemp AS EMPLEADO, PP.año, "
@@ -51,7 +73,7 @@ class PrestamosEmpleados_model extends CI_Model {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getInformacionSemana($Fecha) {
         try {
             return $this->db->select("S.ID ID, S.Ano ANIO, S.Sem AS SEMANA, "

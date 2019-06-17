@@ -5,7 +5,7 @@
                 <legend class="float-left">Prestamos a empleados <span class="fa fa-coins"></span></legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
+                <button type="button" class="btn btn-info" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="left" title="Reimprimir"><span class="fa fa-print"></span><br></button>
             </div>
         </div>
         <div class="card-block mt-4">
@@ -158,9 +158,14 @@
             PrestamosPagos, tblPrestamosPagos = pnlTablero.find("#tblPrestamosPagos"),
             NuevoPrestamo = pnlTablero.find("#NuevoPrestamo"),
             NuevoPrestamoAbono = pnlTablero.find("#NuevoPrestamoAbono"),
-            SaldoFinal = pnlTablero.find("#SaldoFinal"), Semana = pnlTablero.find("#Semana");
+            SaldoFinal = pnlTablero.find("#SaldoFinal"), Semana = pnlTablero.find("#Semana"),
+            btnReimprimirPagare = pnlTablero.find("#btnReimprimirPagare");
 
     $(document).ready(function () {
+
+        btnReimprimirPagare.click(function () {
+            $("#mdlReimprimePagare").modal('show');
+        });
 
         NuevoPrestamoAbono.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -183,6 +188,10 @@
                     }).then((value) => {
                         switch (value) {
                             case "aceptar":
+                                HoldOn.open({
+                                    theme: 'sk-rect',
+                                    message: 'Generando pagare...'
+                                });
                                 $.post('<?php print base_url('PrestamosEmpleados/onAgregarPrestamosEmpleados'); ?>',
                                         {
                                             EMPLEADO: Empleado.val(),
@@ -191,24 +200,27 @@
                                             PRESTAMO: NuevoPrestamo.val(),
                                             ABONO: NuevoPrestamoAbono.val(),
                                             SALDO: SaldoFinal.val(),
-                                            PRESTAMOLETRA: NumeroALetras(NuevoPrestamo.val()),
-
+                                            PRESTAMOLETRA: NumeroALetras(NuevoPrestamo.val())
                                         }).done(function (a) {
                                     console.log(a);
                                     pnlTablero.find("input:not(#Semana)").val('');
-                                    Prestamos.ajax.reload(function () {
-                                        PrestamosPagos.ajax.reload();
-                                    });
                                     pnlTablero.find("#PrestamoAcumulado").val(0);
                                     pnlTablero.find("#Abono").val(0);
                                     pnlTablero.find("#Saldo").val(0);
-                                    NuevoPrestamo.focus().select();
+                                    Empleado[0].selectize.clear(true);
+                                    Prestamos.ajax.reload(function () {
+                                        PrestamosPagos.ajax.reload(function () {
+                                            Empleado[0].selectize.focus();
+                                            Empleado[0].selectize.open();
+                                        });
+                                    });
                                     /*IMPRIMIR PAGARE*/
-                                    onImprimirReporteFancy()
                                     onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + a + '#pagemode=thumbs');
                                 }).fail(function (x, y, z) {
                                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                                     console.log(x.responseText);
+                                }).always(function () {
+                                    HoldOn.close();
                                 });
                                 break;
                             case "cancelar":
@@ -467,4 +479,4 @@
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-</style>
+</style> 
