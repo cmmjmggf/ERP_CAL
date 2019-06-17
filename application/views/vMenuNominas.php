@@ -14,7 +14,7 @@
     $(document).ready(function () {
         getMenu(7);
     });
-    handleEnter();
+    //handleEnter();
     function onCargarRelojChecador() {
         $.fancybox.open({
             src: '<?php print base_url('RelojChecador.shoes'); ?>',
