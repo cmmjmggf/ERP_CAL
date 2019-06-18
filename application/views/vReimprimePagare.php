@@ -10,6 +10,10 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
+                        <label>Empleado</label>
+                        <select id="EmpleadoConsulta" name="EmpleadoConsulta class="form-control form-control-sm"></select>
+                    </div> 
+                    <div class="col-12">
                         <label>Pagare</label>
                         <input type="text" id="NumPagare" name="NumPagare" autofocus="" placeholder="" autocomplete="off" class="form-control form-control-sm numbersOnly">
                     </div> 
@@ -50,6 +54,10 @@
 
     $(document).ready(function () {
 
+        mdlReimprimePagare.find("#EmpleadoConsulta").change(function () {
+            PrestamosConsulta.ajax.reload();
+        });
+
         mdlReimprimePagare.find("#btnImprimePagare").click(function () {
             var pagare = mdlReimprimePagare.find("#NumPagare").val(),
                     fecha = mdlReimprimePagare.find("#Fecha").val();
@@ -69,26 +77,11 @@
         });
 
         mdlReimprimePagare.find("#Fecha").on('keydown keyup', function (e) {
-            if (mdlReimprimePagare.find("#NumPagare").val() && $(this).val() && e.keyCode === 13) {
-                PrestamosConsulta.ajax.reload();
-                mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', false);
-            } else if ($(this).val() && e.keyCode === 13) {
-                PrestamosConsulta.ajax.reload();
-                mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', false);
-            } else {
-                mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', true);
-            }
+            onValidarReimpresionPagares();
         });
 
         mdlReimprimePagare.find("#NumPagare").on('keydown keyup', function (e) {
-            if ($(this).val()) {
-                mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', false);
-            } else {
-                mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', true);
-            }
-            if (e.keyCode === 13) {
-                PrestamosConsulta.ajax.reload();
-            }
+            onValidarReimpresionPagares();
         });
 
         mdlReimprimePagare.on('shown.bs.modal', function () {
@@ -96,9 +89,30 @@
             mdlReimprimePagare.find("#Fecha").val('');
             mdlReimprimePagare.find("#NumPagare").focus();
             getPrestamosConsulta();
+            $.getJSON('<?php print base_url('PrestamosEmpleados/getEmpleadosEnPagares'); ?>').done(function (a) {
+                mdlReimprimePagare.find("#EmpleadoConsulta")[0].selectize.clear(true);
+                mdlReimprimePagare.find("#EmpleadoConsulta")[0].selectize.clearOptions();
+                a.forEach(function (v) {
+                    mdlReimprimePagare.find("#EmpleadoConsulta")[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                });
+            }).fail(function (x, y, z) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
         });
     });
-
+    
+    function onValidarReimpresionPagares() {
+        if (mdlReimprimePagare.find("#NumPagare").val() || mdlReimprimePagare.find("#Fecha").val()) {
+            mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', false);
+            PrestamosConsulta.ajax.reload();
+        } else if (mdlReimprimePagare.find("#NumPagare").val() === '' ||
+                mdlReimprimePagare.find("#Fecha").val() === '') {
+            mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', true);
+            PrestamosConsulta.ajax.reload();
+        }
+    }
     function getPrestamosConsulta() {
         if ($.fn.DataTable.isDataTable('#tblPrestamosConsulta')) {
             PrestamosConsulta.ajax.reload(function () {
@@ -119,6 +133,7 @@
                     "contentType": "application/json",
                     "dataSrc": "",
                     "data": function (d) {
+                        d.EMPLEADO = mdlReimprimePagare.find("#EmpleadoConsulta").val();
                         d.PAGARE = mdlReimprimePagare.find("#NumPagare").val();
                         d.FECHA = mdlReimprimePagare.find("#Fecha").val();
                     }

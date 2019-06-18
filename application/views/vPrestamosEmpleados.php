@@ -5,7 +5,11 @@
                 <legend class="float-left">Prestamos a empleados <span class="fa fa-coins"></span></legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-info" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="left" title="Reimprimir"><span class="fa fa-print"></span><br></button>
+                <button type="button" class="btn btn-danger" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
+
+                <button type="button" class="btn btn-primary" id="btnEmpleadosConsulta" data-toggle="tooltip" data-placement="bottom" title="Empleados"><span class="fa fa-user-circle"></span> EMPLEADOS <br></button>
+
+                <button type="button" class="btn btn-info" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="bottom" title="Reimprimir"><span class="fa fa-print"></span> REIMPRESIÓN DE PAGARES<br></button>
             </div>
         </div>
         <div class="card-block mt-4">
@@ -60,6 +64,11 @@
                 </div>
                 <div class="col-2"> 
                     <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
+                </div>
+                <div class="col-2"> 
+                    <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-primary">
+                        <span class="fa fa-check"></span>
+                    </button>
                 </div>
                 <div class="w-100 my-2"></div>
                 <div class="col-1">
@@ -133,17 +142,17 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-4">
-                    <p class="font-weight-bold  display-4">Total prestamos</p>
+                    <h3 class="font-weight-bold">Total prestamos</h3>
                     <input type="text" id="TotalPrestamos" name="TotalPrestamos" class="form-control d-none" readonly="">
                     <p id="TotalPrestamosParrafo" class="font-weight-bold text-danger display-4">$ 0.0</p>
                 </div>
                 <div class="col-4">
-                    <p class="font-weight-bold  display-4">Total abonos</p>
+                    <h3 class="font-weight-bold">Total abonos</h3>
                     <input type="text" id="TotalAbonos" name="TotalAbonos" class="form-control d-none" readonly="">
                     <p id="TotalAbonosParrafo" class="font-weight-bold text-success display-4">$ 0.0</p>
                 </div>
                 <div class="col-4">
-                    <p class="font-weight-bold  display-4">Saldo movimientos</p>
+                    <h3 class="font-weight-bold">Saldo movimientos</h3>
                     <input type="text" id="SaldoMovimientos" name="SaldoMovimientos" class="d-none form-control" readonly="">
                     <p id="SaldoMovimientosParrafo" class="font-weight-bold text-info display-4">$ 0.0</p>
                 </div>
@@ -151,7 +160,29 @@
         </div>
     </div>
 </div>
-
+<div class="modal" id="mdlInteresPrestamos">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Interes para prestamos en nomina</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label>Interes %</label>
+                        <input type="text" id="InteresPrestamos" name="InteresPrestamos" maxlength="3" class="form-control form-control-sm numbersOnly" autofocus="" autocomplete="off"> 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptaInteresPrestamo"><span class="fa fa-check"></span> Aceptar</button> 
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"), Empleado = pnlTablero.find("#Empleado"),
             Prestamos, tblPrestamos = pnlTablero.find("#tblPrestamos"),
@@ -159,9 +190,66 @@
             NuevoPrestamo = pnlTablero.find("#NuevoPrestamo"),
             NuevoPrestamoAbono = pnlTablero.find("#NuevoPrestamoAbono"),
             SaldoFinal = pnlTablero.find("#SaldoFinal"), Semana = pnlTablero.find("#Semana"),
-            btnReimprimirPagare = pnlTablero.find("#btnReimprimirPagare");
+            btnReimprimirPagare = pnlTablero.find("#btnReimprimirPagare"),
+            mdlInteresPrestamos = $("#mdlInteresPrestamos"),
+            NuevoSaldoPrestamo = pnlTablero.find("#NuevoSaldoPrestamo"),
+            PrestamoAcumulado = pnlTablero.find("#PrestamoAcumulado"),
+            btnGuardarNP = pnlTablero.find("#btnGuardarNP");
 
     $(document).ready(function () {
+        btnGuardarNP.click(function () {
+            onGuardarNuevoPrestamo();
+        });
+
+        mdlInteresPrestamos.find("#btnAceptaInteresPrestamo").click(function () {
+            console.log('ok');
+            if (mdlInteresPrestamos.find("#InteresPrestamos").val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Modificando intereses...'
+                });
+                $.post('<?php print base_url('PrestamosEmpleados/ModificaInteresPrestamos'); ?>', {INTERES: mdlInteresPrestamos.find("#InteresPrestamos").val()}).done(function (a) {
+                    onBeep(1);
+                    swal('ATENCIÓN', 'SE HAN MODIFICADO LOS INTERESES', 'success').then((value) => {
+                        mdlInteresPrestamos.find("#InteresPrestamos").val('');
+                        mdlInteresPrestamos.find("#InteresPrestamos").focus().select();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                onBeep(2);
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN INTERÉS', 'warning').then((value) => {
+                    mdlInteresPrestamos.find("#InteresPrestamos").focus().select();
+                });
+            }
+        });
+
+        pnlTablero.find("#btnEmpleadosConsulta").click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('Empleados'); ?>',
+                type: 'iframe',
+                opts: {
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
 
         btnReimprimirPagare.click(function () {
             $("#mdlReimprimePagare").modal('show');
@@ -169,67 +257,7 @@
 
         NuevoPrestamoAbono.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                getSaldoActual();
-                if (NuevoPrestamo.val() && NuevoPrestamoAbono.val()) {
-                    swal({
-                        title: 'SE HARÁ UN PRESTAMO AL EMPLEADO(A) "' + Empleado.val() + '" POR UN MONTO DE $ ' + ($.number(NuevoPrestamo.val(), 2, '.', ',')) + ', \n¿ESTÁS SEGURO(A)?',
-                        text: "Los abonos quedaran de $ " + ($.number(parseFloat(NuevoPrestamoAbono.val()), 2, '.', ',')) + "",
-                        icon: "warning",
-                        buttons: {
-                            aceptar: {
-                                text: "Aceptar",
-                                value: "aceptar"
-                            },
-                            cancelar: {
-                                text: "Cancelar",
-                                value: "cancelar"
-                            }
-                        }
-                    }).then((value) => {
-                        switch (value) {
-                            case "aceptar":
-                                HoldOn.open({
-                                    theme: 'sk-rect',
-                                    message: 'Generando pagare...'
-                                });
-                                $.post('<?php print base_url('PrestamosEmpleados/onAgregarPrestamosEmpleados'); ?>',
-                                        {
-                                            EMPLEADO: Empleado.val(),
-                                            PAGARE: pnlTablero.find("#PagareNo").val(),
-                                            SEMANA: Semana.val(),
-                                            PRESTAMO: NuevoPrestamo.val(),
-                                            ABONO: NuevoPrestamoAbono.val(),
-                                            SALDO: SaldoFinal.val(),
-                                            PRESTAMOLETRA: NumeroALetras(NuevoPrestamo.val())
-                                        }).done(function (a) {
-                                    console.log(a);
-                                    pnlTablero.find("input:not(#Semana)").val('');
-                                    pnlTablero.find("#PrestamoAcumulado").val(0);
-                                    pnlTablero.find("#Abono").val(0);
-                                    pnlTablero.find("#Saldo").val(0);
-                                    Empleado[0].selectize.clear(true);
-                                    Prestamos.ajax.reload(function () {
-                                        PrestamosPagos.ajax.reload(function () {
-                                            Empleado[0].selectize.focus();
-                                            Empleado[0].selectize.open();
-                                        });
-                                    });
-                                    /*IMPRIMIR PAGARE*/
-                                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + a + '#pagemode=thumbs');
-                                }).fail(function (x, y, z) {
-                                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                                    console.log(x.responseText);
-                                }).always(function () {
-                                    HoldOn.close();
-                                });
-                                break;
-                            case "cancelar":
-                                swal.close();
-                                break;
-                        }
-                    });
-
-                }
+                onGuardarNuevoPrestamo();
             }
         });
 
@@ -254,7 +282,7 @@
 //                    ULTIMO DIGITO DEL AÑO, MES, DIA,NUMERO DE EMPLEADO
 
                     pnlTablero.find("#PagareNo").val(nopagare + '' + Empleado.val());
-                    pnlTablero.find("#PrestamoAcumulado").val(a[0].PRESTAMO);
+                    PrestamoAcumulado.val(a[0].PRESTAMO);
                     pnlTablero.find("#Abono").val(a[0].ABONO);
                     pnlTablero.find("#Saldo").val((a[0].SALDO) ? a[0].SALDO : a[0].PRESTAMO);
                     NuevoPrestamo.focus().select();
@@ -270,7 +298,7 @@
                     } else {
                         /*NUEVO PRESTAMO / NUEVO EMPLEADO PIDIENDO PRESTADO*/
                         pnlTablero.find("#PagareNo").val(nopagare + '' + Empleado.val());
-                        pnlTablero.find("#PrestamoAcumulado").val(0);
+                        PrestamoAcumulado.val(0);
                         pnlTablero.find("#Abono").val(0);
                         pnlTablero.find("#Saldo").val(0);
                         NuevoPrestamo.focus().select();
@@ -289,13 +317,78 @@
         getInformacionSemana();
     });
 
+    function onGuardarNuevoPrestamo() {
+        getSaldoActual();
+        if (NuevoPrestamo.val() && NuevoPrestamoAbono.val()) {
+            swal({
+                title: 'SE HARÁ UN PRESTAMO AL EMPLEADO(A) "' + Empleado.val() + '" POR UN MONTO DE $ ' + ($.number(NuevoPrestamo.val(), 2, '.', ',')) + ', \n¿ESTÁS SEGURO(A)?',
+                text: "Los abonos quedaran de $ " + ($.number(parseFloat(NuevoPrestamoAbono.val()), 2, '.', ',')) + "",
+                icon: "warning",
+                buttons: {
+                    aceptar: {
+                        text: "Aceptar",
+                        value: "aceptar"
+                    },
+                    cancelar: {
+                        text: "Cancelar",
+                        value: "cancelar"
+                    }
+                }
+            }).then((value) => {
+                switch (value) {
+                    case "aceptar":
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Generando pagare...'
+                        });
+                        $.post('<?php print base_url('PrestamosEmpleados/onAgregarPrestamosEmpleados'); ?>',
+                                {
+                                    EMPLEADO: Empleado.val(),
+                                    PAGARE: pnlTablero.find("#PagareNo").val(),
+                                    SEMANA: Semana.val(),
+                                    PRESTAMO: NuevoPrestamo.val(),
+                                    ABONO: NuevoPrestamoAbono.val(),
+                                    SALDO: SaldoFinal.val(),
+                                    PRESTAMOLETRA: NumeroALetras(NuevoPrestamo.val()),
+                                    ULTIMOSALDO: NuevoSaldoPrestamo.val()
+                                }).done(function (a) {
+                            console.log(a);
+                            pnlTablero.find("input:not(#Semana)").val('');
+                            PrestamoAcumulado.val(0);
+                            pnlTablero.find("#Abono").val(0);
+                            pnlTablero.find("#Saldo").val(0);
+                            Empleado[0].selectize.clear(true);
+                            Prestamos.ajax.reload(function () {
+                                PrestamosPagos.ajax.reload(function () {
+                                    Empleado[0].selectize.focus();
+                                    Empleado[0].selectize.open();
+                                });
+                            });
+                            /*IMPRIMIR PAGARE*/
+                            onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + a + '#pagemode=thumbs');
+                        }).fail(function (x, y, z) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                        break;
+                    case "cancelar":
+                        swal.close();
+                        break;
+                }
+            });
+
+        }
+    }
+
     function getSaldoActual() {
         if (NuevoPrestamo.val()) {
             var Saldo = parseFloat(pnlTablero.find("#Saldo").val());
-            var PrestamoAcumulado = parseFloat(pnlTablero.find("#PrestamoAcumulado").val());
+            var PrestamoAcumuladox = parseFloat(PrestamoAcumulado.val());
             var Prestamo = parseFloat(NuevoPrestamo.val());
-            var NuevoSaldoPrestamo = PrestamoAcumulado + Prestamo;
-            pnlTablero.find("#NuevoSaldoPrestamo").val(NuevoSaldoPrestamo);
+            var NuevoSaldoPrestamox = PrestamoAcumuladox + Prestamo;
+            NuevoSaldoPrestamo.val(NuevoSaldoPrestamox);
             pnlTablero.find("#SaldoFinal").val(Saldo + Prestamo);
             pnlTablero.find("#TotalEnLetra p").text(NumeroALetras(Prestamo));
         } else {

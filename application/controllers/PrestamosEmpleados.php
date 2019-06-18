@@ -37,6 +37,14 @@ class PrestamosEmpleados extends CI_Controller {
         }
     }
 
+    public function getEmpleadosEnPagares() {
+        try {
+            print json_encode($this->pem->getEmpleadosEnPagares());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPrestamos() {
         try {
             print json_encode($this->pem->getPrestamos($this->input->get('EMPLEADO')));
@@ -47,7 +55,7 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPrestamosConsulta() {
         try {
-            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA')));
+            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA'), $this->input->get('EMPLEADO')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -170,6 +178,14 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
+            
+            /* EMPLEADOS : PresAcum, AbonoPres y SaldoPres */
+
+            $this->db->set('PresAcum', $x->post('ULTIMOSALDO'))
+                    ->set('AbonoPres', $x->post('ABONO'))
+                    ->set('SaldoPres', $x->post('SALDO'))
+                    ->where('Numero', $pagare_info[0]->EMPLEADO)
+                    ->update('empleados');
 
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -196,11 +212,19 @@ class PrestamosEmpleados extends CI_Controller {
         }
     }
 
+    public function ModificaInteresPrestamos($param) {
+        try {
+            $this->db->set('PP.interes', $this->input->post('INTERES'))->update('prestamos AS PP');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPagares() {
         try {
             $x = $this->input;
             /* PAGARE X NUMERO */
-            if ($x->post('FECHA') !== '' && $x->post('PAGARE') !== '') {
+            if ($x->post('FECHA') === '' && $x->post('PAGARE') !== '') {
                 $this->getPagare();
             } else
             if ($x->post('FECHA') !== '' && $x->post('PAGARE') === '') {
