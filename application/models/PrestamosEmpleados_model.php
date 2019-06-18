@@ -20,10 +20,21 @@ class PrestamosEmpleados_model extends CI_Model {
         }
     }
 
+    public function getEmpleadosEnPagares() {
+        try {
+            return $this->db->select("E.Numero AS CLAVE, "
+                                    . "CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+                            ->from("empleados AS E")->join('prestamos AS P','E.Numero = P.numemp')
+                    ->where('E.AltaBaja', 1)->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPrestamos($EMPLEADO) {
         try {
             $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
-                            . "P.pagare AS PAGARE,P.sem AS SEM, P.fechapre AS FECHA, "
+                            . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
                             . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
                             . "P.pesos,P.fecpag,P.sempag")
                     ->from("prestamos AS P");
@@ -36,10 +47,10 @@ class PrestamosEmpleados_model extends CI_Model {
         }
     }
 
-    public function getPrestamosConsulta($PAGARE, $FECHA) {
+    public function getPrestamosConsulta($PAGARE, $FECHA,$EMPLEADO) {
         try {
             $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
-                            . "P.pagare AS PAGARE,P.sem AS SEM, P.fechapre AS FECHA, "
+                            . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
                             . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
                             . "P.pesos,P.fecpag,P.sempag")
                     ->from("prestamos AS P");
@@ -49,8 +60,11 @@ class PrestamosEmpleados_model extends CI_Model {
             if ($PAGARE !== '') {
                 $this->db->where('P.pagare', $PAGARE);
             }
+            if ($EMPLEADO !== '') {
+                $this->db->where('P.numemp', $EMPLEADO);
+            }
             if ($PAGARE === '' && $FECHA === '') {
-                $this->db->limit(200);
+                $this->db->limit(900);
             }
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -61,7 +75,7 @@ class PrestamosEmpleados_model extends CI_Model {
     public function getPrestamosPagos($EMPLEADO) {
         try {
             $this->db->select("PP.ID AS ID, PP.numemp AS EMPLEADO, PP.año, "
-                            . "PP.sem AS SEM, PP.fecha AS FECHA, PP.preemp, "
+                            . "PP.sem AS SEM, DATE_FORMAT(PP.fecha,\"%d/%m/%Y\") AS FECHA, PP.preemp, "
                             . "PP.aboemp AS ABONO, PP.saldoemp, PP.interes AS INTERES, "
                             . "PP.status AS ESTATUS")
                     ->from("prestamospag AS PP");
