@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
                     <label>Importe</label>
-                    <input type="text" id="Importe" name="Importe" maxlength="10" class="form-control form-control-sm" required="">
+                    <input type="text" id="Importe" name="Importe" maxlength="10" class="form-control form-control-sm numbersOnly" required="">
                 </div>
                 <div class="col-12 col-sm-6 col-md-1 mt-4">
                     <button type="button" id="btnAceptar" class="btn btn-primary btn-sm">
@@ -88,9 +88,8 @@
 <script>
     var master_url = base_url + 'index.php/ConceptosVariablesNomina/';
     var pnlTablero = $("#pnlTablero div.card-body");
-    var Maq = pnlTablero.find("#Maq"), Control = pnlTablero.find("#Control"),
-            ConceptosVariables, tblConceptosVariables = pnlTablero.find("#tblConceptosVariables"),
-            btnAceptar = pnlTablero.find("#btnAceptar"), btnImprimir = pnlTablero.find("#btnImprimir");
+    var ConceptosVariables, tblConceptosVariables = pnlTablero.find("#tblConceptosVariables"),
+            btnAceptar = pnlTablero.find("#btnAceptar");
     var btnVerConceptos = pnlTablero.find('#btnVerConceptos');
     var btnVerEmpleados = pnlTablero.find('#btnVerEmpleados');
     var nuevo = true;
@@ -182,7 +181,7 @@
                 });
             }
         });
-        pnlTablero.find("#Importe").keyup(function (e) {
+        pnlTablero.find("#Importe").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     btnAceptar.focus();
@@ -350,20 +349,6 @@
                 });
             }
         }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-
-    function getDepartamentoByEmpleado(Empleado) {
-        $.getJSON(master_url + 'getDepartamentoByEmpleado', {Empleado: Empleado}).done(function (data) {
-            if (data.length > 0) {
-                pCelula = data[0].CelulaPorcentaje;
-                DeptoEmp = data[0].Depto;
-            } else {
-                swal('ERROR', 'EMPLEADO INCORRECTO', 'info');
-            }
-        }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         });
