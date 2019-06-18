@@ -64,11 +64,27 @@ class ConceptosVariablesNomina extends CI_Controller {
         }
     }
 
+    public function getTipoConcepto() {
+        try {
+            print json_encode($this->ConceptosVariablesNomina_model->getTipoConcepto($this->input->get('Concepto')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getDiasAsistenciaXEmpleadoSem() {
         try {
             print json_encode($this->ConceptosVariablesNomina_model->getDiasAsistenciaXEmpleadoSem(
                                     $this->input->get('Empleado'), $this->input->get('Ano'), $this->input->get('Sem')
             ));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDepartamentoByEmpleado() {
+        try {
+            print json_encode($this->ConceptosVariablesNomina_model->getDepartamentoByEmpleado($this->input->get('Empleado')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -122,28 +138,133 @@ class ConceptosVariablesNomina extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
+            $PN = $this->ConceptosVariablesNomina_model->onVerificarConceptoCapturado($x->post('Concepto'), $x->post('Ano'), $x->post('Sem'), $x->post('Empleado'));
 
-            $origFecha = $x->post('Fecha');
-            $fecha = str_replace('/', '-', $origFecha);
-            $nuevaFecha = date("Y-m-d", strtotime($fecha));
+            /* PRENOMINA */
+            if (!empty($PN)) {
+                $this->db->where('numemp', $x->post('Empleado'))->where('numsem', $x->post('Sem'))->where('año', $x->post('Ano')->where('numcon', $x->post('Concepto')));
+                $this->db->update("prenomina", array(
+                    'tpcon' => ($x->post('tpcon') === '1') ? $x->post('tpcon') : 0,
+                    'tpcond' => ($x->post('tpcon') === '2') ? $x->post('tpcon') : 0,
+                    'importe' => ($x->post('tpcon') === '1') ? $x->post('Importe') : 0,
+                    'imported' => ($x->post('tpcon') === '2') ? $x->post('Importe') : 0
+                ));
+            } else {
+                $this->db->insert("prenomina", array(
+                    'numsem' => $x->post('Sem'),
+                    'numemp' => $x->post('Empleado'),
+                    'numcon' => $x->post('Concepto'),
+                    'año' => $x->post('Ano'),
+                    'tpcon' => ($x->post('tpcon') === '1') ? $x->post('tpcon') : 0,
+                    'tpcond' => ($x->post('tpcon') === '2') ? $x->post('tpcon') : 0,
+                    'importe' => ($x->post('tpcon') === '1') ? $x->post('Importe') : 0,
+                    'imported' => ($x->post('tpcon') === '2') ? $x->post('Importe') : 0,
+                    'diasemp' => $x->post('diasemp'),
+                    'fecha' => Date('Y-m-d'),
+                    'tpomov' => 1,
+                    'status' => 1,
+                    'depto' => $x->post('deptoemp')
+                ));
+            }
 
+            /* PRENOMINA L */
+            $PNL = $this->ConceptosVariablesNomina_model->getPrenominaLinea($x->post('Empleado'), $x->post('Sem'), $x->post('Ano'));
 
-            $data = array(
-                'numeroempleado' => ($x->post('Empleado') !== NULL) ? $x->post('Empleado') : NULL,
-                'maquila' => 2,
-                'control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
-                'numfrac' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
-                'preciofrac' => ($x->post('Precio') !== NULL) ? $x->post('Precio') : NULL,
-                'pares' => ($x->post('Pares') !== NULL) ? $x->post('Pares') : NULL,
-                'subtot' => ($x->post('Subtotal') !== NULL) ? $x->post('Subtotal') : NULL,
-                'depto' => ($x->post('DeptoEmp') !== NULL) ? $x->post('DeptoEmp') : NULL,
-                'fecha' => $nuevaFecha,
-                'status' => 1,
-                'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
-                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL
-            );
-            $this->ConceptosVariablesNomina_model->onAgregar($data);
+            if (!empty($PNL)) {
+
+                $this->db->where('numemp', $x->post('Empleado'))->where('numsem', $x->post('Sem'))->where('año', $x->post('Ano'));
+
+                $this->db->set('diasemp', $x->post('diasemp'));
+                $this->db->set('tpomov', 1);
+                $this->db->set('status', 1);
+                $this->db->set('depto', $x->post('deptoemp'));
+                $this->db->set('año', $x->post('Ano'));
+
+                switch ($x->post('Concepto')) {
+                    case '1':
+                        $this->db->set('salario', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '5':
+                        $this->db->set('salariod', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '10':
+                        $this->db->set('horext', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '15':
+                        $this->db->set('otrper', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '20':
+                        $this->db->set('otrper1', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '50':
+                        $this->db->set('infon', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '51':
+                        $this->db->set('impu', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '55':
+                        $this->db->set('imss', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '60':
+                        $this->db->set('impu', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '65':
+                        $this->db->set('precaha', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '70':
+                        $this->db->set('cajhao', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '75':
+                        $this->db->set('vtazap', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '80':
+                        $this->db->set('zapper', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '85':
+                        $this->db->set('fune', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '90':
+                        $this->db->set('cargo', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '95':
+                        $this->db->set('fonac', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '100':
+                        $this->db->set('otrde', $x->post('Importe'))->update("prenominal");
+                        break;
+                    case '105':
+                        $this->db->set('otrde1', $x->post('Importe'))->update("prenominal");
+                        break;
+                }
+            } else {
+                $this->db->insert("prenominal", array(
+                    'numsem' => $x->post('Sem'),
+                    'numemp' => $x->post('Empleado'),
+                    'diasemp' => $x->post('diasemp'),
+                    'tpomov' => 1,
+                    'status' => 1,
+                    'año' => $x->post('Ano'),
+                    'depto' => $x->post('deptoemp'),
+                    'salario' => ($x->post('Concepto') === '1') ? $x->post('Importe') : 0,
+                    'salariod' => ($x->post('Concepto') === '5') ? $x->post('Importe') : 0,
+                    'horext' => ($x->post('Concepto') === '10') ? $x->post('Importe') : 0,
+                    'otrper' => ($x->post('Concepto') === '15') ? $x->post('Importe') : 0,
+                    'otrper1' => ($x->post('Concepto') === '20') ? $x->post('Importe') : 0,
+                    'infon' => ($x->post('Concepto') === '50') ? $x->post('Importe') : 0,
+                    'impu' => ($x->post('Concepto') === '51') ? $x->post('Importe') : 0,
+                    'imss' => ($x->post('Concepto') === '55') ? $x->post('Importe') : 0,
+                    'impu' => ($x->post('Concepto') === '60') ? $x->post('Importe') : 0,
+                    'precaha' => ($x->post('Concepto') === '65') ? $x->post('Importe') : 0,
+                    'cajhao' => ($x->post('Concepto') === '70') ? $x->post('Importe') : 0,
+                    'vtazap' => ($x->post('Concepto') === '75') ? $x->post('Importe') : 0,
+                    'zapper' => ($x->post('Concepto') === '80') ? $x->post('Importe') : 0,
+                    'fune' => ($x->post('Concepto') === '85') ? $x->post('Importe') : 0,
+                    'cargo' => ($x->post('Concepto') === '90') ? $x->post('Importe') : 0,
+                    'fonac' => ($x->post('Concepto') === '95') ? $x->post('Importe') : 0,
+                    'otrde' => ($x->post('Concepto') === '100') ? $x->post('Importe') : 0,
+                    'otrde1' => ($x->post('Concepto') === '105') ? $x->post('Importe') : 0
+                ));
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

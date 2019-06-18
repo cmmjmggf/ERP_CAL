@@ -17,7 +17,7 @@
     </div>
     <hr>
     <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
-        <form id="frmCapturaDestajo">
+        <form id="frmCaptura">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                     <label>Año</label>
@@ -29,22 +29,22 @@
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required selectNotEnter notEnter" >
+                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
                         <option value=""></option>
                     </select>
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
                     <label for="" >Concepto</label>
-                    <select id="Concepto" name="Concepto" class="form-control form-control-sm required selectNotEnter">
+                    <select id="Concepto" name="Concepto" class="form-control form-control-sm required">
                         <option value=""></option>
                     </select>
                 </div>
                 <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
                     <label>Importe</label>
-                    <input type="text" id="Importe" name="Importe" maxlength="10" class="form-control form-control-sm numbersOnly selectNotEnter" required="">
+                    <input type="text" id="Importe" name="Importe" maxlength="10" class="form-control form-control-sm" required="">
                 </div>
                 <div class="col-12 col-sm-6 col-md-1 mt-4">
-                    <button type="button" id="btnAceptar" class="btn btn-primary btn-sm selectNotEnter">
+                    <button type="button" id="btnAceptar" class="btn btn-primary btn-sm">
                         <span class="fa fa-check"></span> ACEPTAR
                     </button>
                 </div>
@@ -96,6 +96,7 @@
     var nuevo = true;
     var diasAsistencia = 0;
     var tpConcepto = 0;
+    var DeptoEmp = 0;
     $(document).ready(function () {
         //validacionSelectPorContenedor(pnlTablero);
         init();
@@ -130,23 +131,20 @@
             var Sem = pnlTablero.find("#Sem").val();
             var Empleado = pnlTablero.find("#Empleado").val();
             if ($(this).val()) {
-                $.getJSON(master_url + 'getDiasAsistenciaXEmpleadoSem', {Empleado: $(this).val(), Ano: Ano, Sem: Sem}).done(function (data) {
+                pnlTablero.find("#Concepto")[0].selectize.focus();
+                getRecords(Empleado, Ano, Sem);
+                $.getJSON(master_url + 'getDiasAsistenciaXEmpleadoSem', {Empleado: Empleado, Ano: Ano, Sem: Sem}).done(function (data) {
                     if (data.length > 0) {
                         diasAsistencia = data[0].numasistencias;
-
                     } else {
                         diasAsistencia = 0;
                     }
-                    pnlTablero.find("#Concepto")[0].selectize.focus();
-
-                    getRecords(Empleado, Ano, Sem);
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
-
+                getDepartamentoByEmpleado($(this).val());
             }
-
         });
         pnlTablero.find("#Concepto").change(function () {
             var Concepto = pnlTablero.find("#Concepto").val();
@@ -169,15 +167,14 @@
                             }
                         });
                     } else {
-
+                        pnlTablero.find("#Importe").focus();
                         //Obtener el tipo de concepto
                         $.getJSON(master_url + 'getTipoConcepto', {Concepto: Concepto}).done(function (data) {
-                            pnlTablero.find("#Importe").focus();
+                            tpConcepto = data[0].Tipo;
                         }).fail(function (x) {
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);
                         });
-
                     }
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -185,8 +182,7 @@
                 });
             }
         });
-
-        pnlTablero.find("#Importe").keydown(function (e) {
+        pnlTablero.find("#Importe").keyup(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     btnAceptar.focus();
@@ -375,10 +371,10 @@
 
     function onAgregar() {
         //inserta nuevo
-
-        var frm = new FormData(pnlTablero.find("#frmCapturaDestajo")[0]);
-        frm.append('DeptoEmp', DeptoEmp);
-
+        var frm = new FormData(pnlTablero.find("#frmCaptura")[0]);
+        frm.append('tpcon', tpConcepto);
+        frm.append('deptoemp', DeptoEmp);
+        frm.append('diasemp', diasAsistencia);
         $.ajax(master_url + 'onAgregar', {
             type: "POST",
             cache: false,
@@ -390,6 +386,7 @@
             ConceptosVariables.ajax.reload();
             diasAsistencia = 0;
             tpConcepto = 0;
+            DeptoEmp = 0;
             pnlTablero.find("#Importe").val("");
             pnlTablero.find("#Concepto")[0].selectize.clear(true);
             pnlTablero.find("#Empleado")[0].selectize.clear(true);
@@ -401,7 +398,7 @@
     }
 
     function getRecords(Empleado, Ano, Sem) {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+        // HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblConceptosVariables')) {
@@ -490,7 +487,7 @@
             keys: false,
             "bSort": true,
             "aaSorting": [
-                [1, 'desc']/*ID*/, [4, 'desc']/*ID*/
+                [1, 'asc']/*ID*/, [4, 'desc']/*ID*/
             ],
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
@@ -537,6 +534,7 @@
         nuevo = true;
         diasAsistencia = 0;
         tpConcepto = 0;
+        DeptoEmp = 0;
         getEmpleados();
         getConceptos();
         pnlTablero.find("#Ano").val(new Date().getFullYear()).focus().select();
@@ -601,6 +599,19 @@
             }
         });
 
+    }
+
+    function getDepartamentoByEmpleado(Empleado) {
+        $.getJSON(master_url + 'getDepartamentoByEmpleado', {Empleado: Empleado}).done(function (data) {
+            if (data.length > 0) {
+                DeptoEmp = data[0].Depto;
+            } else {
+                swal('ERROR', 'EMPLEADO INCORRECTO', 'info');
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
     }
 </script>
 <style>

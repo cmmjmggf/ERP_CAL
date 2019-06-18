@@ -10,17 +10,6 @@ class ConceptosVariablesNomina_model extends CI_Model {
         parent::__construct();
     }
 
-    public function onAgregar($array) {
-        try {
-            $this->db->insert("fracpagnomina", $array);
-            $query = $this->db->query('SELECT LAST_INSERT_ID() AS IDL');
-            $row = $query->row_array();
-            return $row['IDL'];
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function onEliminarDetalleByID($Empleado, $Ano, $Sem, $Conc) {
         try {
             $this->db->where('numemp', $Empleado)->where('numsem', $Sem)->where('año', $Ano)->where('numcon', $Conc);
@@ -61,6 +50,26 @@ class ConceptosVariablesNomina_model extends CI_Model {
                             . "")
                     ->from("prenomina")
                     ->where("año", $ano)->where("numsem", $sem)->where("numemp", $emp);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPrenominaLinea($Emp, $Sem, $Ano) {
+        try {
+            $this->db->select(" numemp "
+                            . " ")
+                    ->from(" prenominal ")
+                    ->where("año", $Ano)->where("numsem", $Sem)->where("numemp", $Emp);
+
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -156,10 +165,30 @@ class ConceptosVariablesNomina_model extends CI_Model {
         }
     }
 
+    public function getTipoConcepto($con) {
+        try {
+            return $this->db->select("Tipo ")
+                            ->from("conceptosnomina")->where("Clave", $con)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getSemanasNomina($Ano) {
         try {
             return $this->db->select("Sem, concat(Sem,' (', FechaIni,' - ',FechaFin,')') AS Semana  ")
                             ->from("semanasnomina")->where("Ano", $Ano)->where("Estatus", "ACTIVO")->order_by('Sem', 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDepartamentoByEmpleado($Empleado) {
+        try {
+            return $this->db->select("P.DepartamentoFisico as Depto, P.CelulaPorcentaje ", false)
+                            ->from('empleados AS P')->where("P.Numero", $Empleado)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
