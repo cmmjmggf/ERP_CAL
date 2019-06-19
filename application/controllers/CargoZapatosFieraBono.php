@@ -101,7 +101,7 @@ class CargoZapatosFieraBono extends CI_Controller {
                             'Importe' => $IMPORTE,
                             'Abonos' => $PAGOS,
                             'Registro' => Date('d/m/Y h:i:s a')));
-            }
+            } 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

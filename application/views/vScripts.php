@@ -793,8 +793,7 @@
     }
 
 
-    function handleEnterDiv(divParent) {
-        console.log(divParent);
+    function handleEnterDiv(divParent) { 
         $('input:not(.notEnter)').keyup(function () {
             $(this).val($(this).val().toUpperCase());
         });

@@ -81,4 +81,5 @@ $this->load->view('vCopiarFraccionEstiloaEstilo')->view('vCapturaCajaAhorroDirec
         ->view('vImprimirCredenciales')->view('vEtiquetasLockers')
         ->view('vValesZapatoTiendas')->view('vRastreoControlNomina')
         ->view('vRastreoConceptoNomina')->view('vEstiloFraccionNomina')
-        ->view('vReimprimePagare')->view('vCargoZapatosFieraBono');
+        ->view('vReimprimePagare')->view('vCargoZapatosFieraBono')
+        ->view('vDiaFestivo');

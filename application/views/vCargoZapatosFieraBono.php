@@ -65,7 +65,6 @@
 
     $(document).ready(function () {
 
-        handleEnter();
 
         btnGuardarValeFiera.click(function () {
             if (EmpleadoVZFB.val() && ValeZapatoFieraBono.val() &&
@@ -81,7 +80,14 @@
                             IMPORTE: ImporteVZFB.val(),
                             PAGOS: DescuentoPagosVZFB.val()
                         }).done(function (a) {
-                    console.log(a)
+                    ValesVZFB.ajax.reload();
+                    DescuentoPagosVZFB.val('');
+                    ImporteVZFB.val('');
+                    ValeZapatoFieraBono[0].selectize.clear(true);
+                    EmpleadoVZFB[0].selectize.clear(true);
+                    EmpleadoVZFB[0].selectize.focus();
+                    EmpleadoVZFB[0].selectize.open();
+
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -89,29 +95,29 @@
                 });
             } else {
                 onBeep(2);
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL EMPLEADO, TIPO DE DOCUMENTO, IMPORTE Y LOS PAGOS', 'warning');
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL EMPLEADO, TIPO DE DOCUMENTO, IMPORTE Y LOS PAGOS', 'warning').then((value) => {
+                    EmpleadoVZFB[0].selectize.focus();
+                    EmpleadoVZFB[0].selectize.open();
+                });
             }
         });
 
         mdlCargoZapatosFieraBono.on('shown.bs.modal', function () {
-            getEmpleados();
-            getValesDeZapatosFieraBono();
-        });
-    });
-
-    function getEmpleados() {
-        $.getJSON('<?php print base_url('CargoZapatosFieraBono/getEmpleados'); ?>').done(function (data) {
-            EmpleadoVZFB[0].selectize.clear(true);
-            EmpleadoVZFB[0].selectize.clearOptions();
-            data.forEach(function (v) {
-                EmpleadoVZFB[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+            $.getJSON('<?php print base_url('CargoZapatosFieraBono/getEmpleados'); ?>').done(function (data) {
+                EmpleadoVZFB[0].selectize.clear(true);
+                EmpleadoVZFB[0].selectize.clearOptions();
+                data.forEach(function (v) {
+                    EmpleadoVZFB[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                });
+            }).fail(function (x, y, z) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
             });
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
+            getValesDeZapatosFieraBono();
+            handleEnterDiv(mdlCargoZapatosFieraBono);
         });
-    }
-
+    }); 
+    
     function getValesDeZapatosFieraBono() {
         if ($.fn.DataTable.isDataTable('#tblValesVZFB')) {
             ValesVZFB.ajax.reload(function () {
