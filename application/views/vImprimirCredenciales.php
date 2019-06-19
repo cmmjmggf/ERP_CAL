@@ -58,6 +58,8 @@
     var btnVerEmpleadosCredenciales = $("#btnVerEmpleadosCredenciales");
     $(document).ready(function () {
         mdlImprimirCredenciales.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlImprimirCredenciales);
+            validacionSelectPorContenedor(mdlImprimirCredenciales);
             mdlImprimirCredenciales.find("input").val("");
             $.each(mdlImprimirCredenciales.find("select"), function (k, v) {
                 mdlImprimirCredenciales.find("select")[k].selectize.clear(true);

@@ -31,6 +31,8 @@
     var mdlValesZapatoTiendas = $('#mdlValesZapatoTiendas');
     $(document).ready(function () {
         mdlValesZapatoTiendas.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlValesZapatoTiendas);
+            validacionSelectPorContenedor(mdlValesZapatoTiendas);
             mdlValesZapatoTiendas.find("input").val("");
             $.each(mdlValesZapatoTiendas.find("select"), function (k, v) {
                 mdlValesZapatoTiendas.find("select")[k].selectize.clear(true);

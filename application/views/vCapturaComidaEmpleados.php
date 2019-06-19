@@ -139,6 +139,8 @@
         });
 
         mdlCapturaComidaEmpleados.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCapturaComidaEmpleados);
+            validacionSelectPorContenedor(mdlCapturaComidaEmpleados);
             mdlCapturaComidaEmpleados.find("input").not('#SemComida').val("");
             $.each(mdlCapturaComidaEmpleados.find("select"), function (k, v) {
                 mdlCapturaComidaEmpleados.find("select")[k].selectize.clear(true);

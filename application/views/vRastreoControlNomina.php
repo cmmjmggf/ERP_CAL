@@ -77,15 +77,20 @@
     var sem_ini = 0;
     $(document).ready(function () {
 
+
         mdlRastreoControlNomina.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlRastreoControlNomina);
+            validacionSelectPorContenedor(mdlRastreoControlNomina);
             mdlRastreoControlNomina.find("input").not('#SemRastreo').val("");
             $.each(mdlRastreoControlNomina.find("select"), function (k, v) {
                 mdlRastreoControlNomina.find("select")[k].selectize.clear(true);
             });
             mdlRastreoControlNomina.find("#AnoRastreo").val(new Date().getFullYear());
+            getSemanaByFechaRastreoControlNom(getFechaActualConDiagonales());
+            mdlRastreoControlNomina.find('#SemRastreo').focus().select();
             getControlesNominaRastreo('', new Date().getFullYear(), sem_ini, '');
             getEmpleadosRastreoControl();
-            mdlRastreoControlNomina.find('#SemRastreo').focus().select();
+
         });
 
         mdlRastreoControlNomina.find("#AnoRastreo").change(function () {
@@ -203,7 +208,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        pnlTablero.find('#btnImprimir').focus();
+                        mdlRastreoControlNomina.find('#btnImprimir').focus();
                     });
                 }
                 HoldOn.close();
@@ -214,6 +219,19 @@
         });
 
     });
+
+    function getSemanaByFechaRastreoControlNom(fecha) {
+        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getSemanaByFecha', {Fecha: fecha}).done(function (data) {
+            if (data.length > 0) {
+                mdlRastreoControlNomina.find('#SemRastreo').val(data[0].sem);
+            } else {
+                swal('ERROR', 'NO EXISTE SEMANA', 'info');
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
 
     function getControlesNominaRastreo(cont, ano, sem, empl) {
         //HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});

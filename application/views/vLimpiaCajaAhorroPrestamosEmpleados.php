@@ -50,6 +50,7 @@
 
 
         mdlLimpiaCajaAhorroPrestamosEmpleados.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlLimpiaCajaAhorroPrestamosEmpleados);
             getEmpleadosParaLimpiarAhorraPrestamosPLimpiarCampos();
             //mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').focus();
         });

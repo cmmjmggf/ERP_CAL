@@ -64,8 +64,11 @@
     var ConceptosNominaRastreo;
 
     $(document).ready(function () {
+
         setFocusSelectToSelectOnChange('#EmpleadoConcepto', '#Concepto', mdlRastreoConceptoNomina);
         mdlRastreoConceptoNomina.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlRastreoConceptoNomina);
+            validacionSelectPorContenedor(mdlRastreoConceptoNomina);
             mdlRastreoConceptoNomina.find("input").val("");
             $.each(mdlRastreoConceptoNomina.find("select"), function (k, v) {
                 mdlRastreoConceptoNomina.find("select")[k].selectize.clear(true);

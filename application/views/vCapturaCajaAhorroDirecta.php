@@ -88,6 +88,8 @@
         });
 
         mdlCapturaCajaAhorroDirecta.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCapturaCajaAhorroDirecta);
+            validacionSelectPorContenedor(mdlCapturaCajaAhorroDirecta);
             mdlCapturaCajaAhorroDirecta.find("input").val("");
             $.each(mdlCapturaCajaAhorroDirecta.find("select"), function (k, v) {
                 mdlCapturaCajaAhorroDirecta.find("select")[k].selectize.clear(true);

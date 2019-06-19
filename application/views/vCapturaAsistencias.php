@@ -120,17 +120,27 @@
                             pnlTablero.find("#Sem").val() + ' del año ' + pnlTablero.find("#Ano").val(),
                     content: 'input'
                 }).then((value) => {
-                    HoldOn.open({theme: 'sk-cube', message: 'GUARDANDO DATOS, POR FAVOR ESPERE...'});
-                    $.post(master_url + 'onAgregarAsistenciaTodos', {
-                        NumAsistencias: value,
-                        Ano: pnlTablero.find("#Ano").val(),
-                        Sem: pnlTablero.find("#Sem").val()
-                    }).done(function (data) {
-                        swal('ATENCIÓN', '* PROCESO COMPLETADO CORRECTAMENTE *', 'success');
-                        HoldOn.close();
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    });
+                    if (parseInt(value) < 8 && parseInt(value) > 0) {
+                        HoldOn.open({theme: 'sk-cube', message: 'GUARDANDO DATOS, POR FAVOR ESPERE...'});
+                        $.post(master_url + 'onAgregarAsistenciaTodos', {
+                            NumAsistencias: value,
+                            Ano: pnlTablero.find("#Ano").val(),
+                            Sem: pnlTablero.find("#Sem").val()
+                        }).done(function (data) {
+                            swal('ATENCIÓN', '* PROCESO COMPLETADO CORRECTAMENTE *', 'success');
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        });
+                    } else {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "NÚMERO DE DÍAS INCORRECTO",
+                            icon: "warning",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        });
+                    }
                 });
                 $('.swal-modal').find('input.swal-content__input').val('0').focus().select();
 

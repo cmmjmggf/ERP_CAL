@@ -32,6 +32,8 @@
     var btnVerEmpleadosLockers = $("#btnVerEmpleadosLockers");
     $(document).ready(function () {
         mdlEtiquetasLockers.on('shown.bs.modal', function () {
+            validacionSelectPorContenedor(mdlEtiquetasLockers);
+            handleEnterDiv(mdlEtiquetasLockers);
             mdlEtiquetasLockers.find("input").val("");
             $.each(mdlEtiquetasLockers.find("select"), function (k, v) {
                 mdlEtiquetasLockers.find("select")[k].selectize.clear(true);

@@ -44,6 +44,8 @@
     var mdlCopiaFraccionesEstilo = $('#mdlCopiaFraccionesEstilo');
     $(document).ready(function () {
         mdlCopiaFraccionesEstilo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCopiaFraccionesEstilo);
+            validacionSelectPorContenedor(mdlCopiaFraccionesEstilo);
             mdlCopiaFraccionesEstilo.find("input").val("");
             $.each(mdlCopiaFraccionesEstilo.find("select"), function (k, v) {
                 mdlCopiaFraccionesEstilo.find("select")[k].selectize.clear(true);

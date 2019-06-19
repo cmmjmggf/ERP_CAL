@@ -38,6 +38,8 @@
     var mdlEstiloFraccionNomina = $('#mdlEstiloFraccionNomina');
     $(document).ready(function () {
         mdlEstiloFraccionNomina.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEstiloFraccionNomina);
+            validacionSelectPorContenedor(mdlEstiloFraccionNomina);
             mdlEstiloFraccionNomina.find("input").val("");
             $.each(mdlEstiloFraccionNomina.find("select"), function (k, v) {
                 mdlEstiloFraccionNomina.find("select")[k].selectize.clear(true);
