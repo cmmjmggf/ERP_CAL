@@ -44,7 +44,52 @@
     $(document).ready(function () {
 
         SemanaGDF.on('keydown', function () {
-            
+            /*CHECAR QUE LA SEMANA NO ESTE CERRADA EN PRENOMINA !== 2 === 1*/
+            if (SemanaGDF.val() && parseInt(SemanaGDF.val()) > 0 && parseInt(SemanaGDF.val()) < 54) {
+                /*REVISAR QUE LA SEMANA EXISTA*/
+                $.getJSON('<?php print base_url('DiaFestivo/onComprobarSemanaNomina'); ?>', {ANO: AnioGDF.val(), SEMANA: SemanaGDF.val()})
+                        .done(function (a) {
+                            if (a.length > 0) {
+                                $.getJSON('<?php print base_url('DiaFestivo/onVerificarSemanaNominaCerrada'); ?>', {SEMANA: SemanaGDF.val()})
+                                        .done(function (aa) {
+                                            if (aa.length > 0) {
+                                                if (parseInt(aa[0].status) === 2) {
+                                                    swal({
+                                                        title: "ATENCIÓN",
+                                                        text: "LA NÓMINA DE LA SEMANA " + SemanaGDF.val() + " DEL " + AnioGDF.val() + " " + "ESTÁ CERRADA",
+                                                        icon: "warning",
+                                                        buttons: {
+                                                            botonsito: {
+                                                                text: "Aceptar",
+                                                                value: "aceptar"
+                                                            }
+                                                        }
+                                                    }).then((value) => {
+                                                        switch (value) {
+                                                            case "aceptar":
+                                                                swal.close();
+                                                                SemanaGDF.focus().select();
+                                                                break;
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
+                                    HoldOn.close();
+                                });
+                            } else {
+                                swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA, NO EXISTE O ES INVÁLIDA', 'warning').then((value) => {
+                                    SemanaGDF.focus().select();
+                                });
+                            }
+                        }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            }
         });
 
         btnGuardarGDF.click(function () {
@@ -59,8 +104,10 @@
                     FECHA_INICIAL: FechaInicialGDF.val(),
                     FECHA_FINAL: FechaFinalGDF.val()
                 };
-                $.post('<?php print base_url('DiaFestivo/onAnadirDiaFestivo') ?>', ops).done(function (a) {
-                    console.log(a);
+                $.post('<?php print base_url('DiaFestivo/onAnadirDiaFestivo'); ?>', ops).done(function (a) {
+                    swal('ATENCIÓN', 'SE HA HAN ASIGNADO LOS DIAS FESTIVOS PARA LA SEMANA ' + SemanaGDF.val() + ' DEL AÑO ' + AnioGDF.val(), 'success').then((value) => {
+                        AnioGDF.focus().select();
+                    });
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -99,7 +146,7 @@
 
     });
 
-function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNomina(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
