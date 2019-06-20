@@ -28,7 +28,7 @@ class RastreoControlesEmpleado extends CI_Controller {
                     $this->load->view('vMenuContabilidad');
                     break;
                 case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuRecursosHumanos');
+                    $this->load->view('vMenuNomina');
                     break;
                 case 'INGENIERIA':
                     $this->load->view('vMenuIngenieria');

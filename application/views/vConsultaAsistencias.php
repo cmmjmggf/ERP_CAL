@@ -2,26 +2,26 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-8 float-left">
-                <legend class="float-left">Rastreo de controles por empleado</legend>
+                <legend class="float-left">Consulta de Entradas/Salidas por Año-Semana-Empleado</legend>
             </div>
             <div class="col-sm-4" align="right">
-                <button type="button" class="btn btn-warning btn-sm" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
-                    <i class="fa fa-trash"></i>
+                <button type="button" class="btn btn-warning" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
+                    <i class="fa fa-trash"></i> BUSCAR OTRO EMPLEADO
                 </button>
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-4 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
                 <label>Empleado</label>
                 <select id="Empleado" name="Empleado" class="form-control form-control-sm required">
                     <option value=""></option>
                 </select>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <label>Año</label>
                 <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <label>Sem</label>
                 <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
             </div>
@@ -33,14 +33,15 @@
                         <table id="tblRegistros" class="table table-sm display " style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Control</th>
-                                    <th>Fracción</th>
+                                    <th>Número</th>
+                                    <th>Nombre</th>
+                                    <th>Día</th>
+                                    <th>Hora</th>
+                                    <th>Turno</th>
+                                    <th>AM/PM</th>
+                                    <th>Sem</th>
                                     <th>Año</th>
-                                    <th>Semana</th>
-                                    <th>Estilo</th>
-                                    <th>Pares</th>
-                                    <th>Fecha</th>
-                                    <th>Empleado</th>
+                                    <th>Fec</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -53,7 +54,7 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/RastreoControlesEmpleado/';
+    var master_url = base_url + 'index.php/ConsultaAsistencias/';
     var tblRegistros = $('#tblRegistros');
     var Registros;
     var pnlTablero = $("#pnlTablero"), Empleado = pnlTablero.find("#Empleado"),
@@ -74,35 +75,26 @@
             $.each(pnlTablero.find("select"), function (k, v) {
                 pnlTablero.find("select")[k].selectize.clear(true);
             });
+            getRecords('');
             $(':input:text:enabled:visible:first').focus();
-        });
 
+        });
 
         pnlTablero.find("#Empleado").change(function () {
             if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
-                Registros.ajax.reload(function () {
-                    HoldOn.close();
-                });
+                getRecords($(this).val());
             }
         });
 
         pnlTablero.find("#Sem").keyup(function (e) {
             if ($(this).val()) {
-                Registros.ajax.reload(function () {
-                    HoldOn.close();
-                });
+                Registros.column(6).search('^' + $(this).val() + '$', true, false).draw();
             }
         });
 
         pnlTablero.find("#Ano").keyup(function (e) {
             if ($(this).val() && $(this).val().length > 3) {
-                Registros.ajax.reload(function () {
-                    HoldOn.close();
-                });
+                Registros.column(7).search('^' + $(this).val() + '$', true, false).draw();
             }
         });
 
@@ -143,68 +135,68 @@
     });
 
     function init() {
-        getRecords();
+        getRecords('');
         getEmpleados();
+        pnlTablero.find("#Ano").val(new Date().getFullYear());
     }
-    function getRecords() {
+    function getRecords(Empleado) {
+        //console.log(Empleado);
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
+//        HoldOn.open({
+//            theme: 'sk-cube',
+//            message: 'CARGANDO...'
+//        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblRegistros')) {
             tblRegistros.DataTable().destroy();
         }
         Registros = tblRegistros.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'Bfrt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "data": function (d) {
-                    d.EMPLEADO = (Empleado.val() ? Empleado.val() : '');
-                    d.ANIO = (Ano.val() ? Ano.val() : '');
-                    d.SEMANA = (Sem.val() ? Sem.val() : '');
+                "data": {
+                    Empleado: Empleado
                 }
             },
             "columns": [
-                {"data": "Control"},
-                {"data": "Fraccion"},
-                {"data": "Ano"},
-                {"data": "Semana"},
-                {"data": "Estilo"},
-                {"data": "Pares"},
-                {"data": "Fecha"},
-                {"data": "Empleado"}
+                {"data": "numemp"},
+                {"data": "nomemp"},
+                {"data": "Dia"},
+                {"data": "hora"},
+                {"data": "turno"},
+                {"data": "ampm"},
+                {"data": "semana"},
+                {"data": "año"},
+                {"data": "fecalta"}
 
             ],
             "columnDefs": [
                 {
-                    "targets": [7],
+                    "targets": [4],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [8],
                     "visible": false,
                     "searchable": true
                 }
             ],
-            rowGroup: {
-                startRender: function (rows, group) {
-                    return $('<tr>').append('<td colspan="7">Fraccion: ' + group + '</td></tr>');
-                },
-                dataSrc: "Fraccion"
-            },
             language: lang,
-
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 500,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
+            "scrollY": 350,
             "aaSorting": [
-                [1, 'asc']
+                [7, 'desc'], [6, 'desc'], [8, 'asc'], [4, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -215,19 +207,27 @@
                             /*FECHA ORDEN*/
                             c.addClass('text-strong');
                             break;
-                        case 4:
+                        case 2:
+                            /*fecha conf*/
+                            c.addClass('text-success text-strong');
+                            break;
+                        case 3:
                             /*fecha conf*/
                             c.addClass('text-info text-strong');
                             break;
-                        case 5:
+                        case 6:
                             /*fecha conf*/
                             c.addClass('text-warning text-strong');
+                            break;
+                        case 7:
+                            /*FECHA ORDEN*/
+                            c.addClass('text-strong');
                             break;
                     }
                 });
             },
             initComplete: function (a, b) {
-                Ano.val(new Date().getFullYear());
+
                 HoldOn.close();
 
             }
