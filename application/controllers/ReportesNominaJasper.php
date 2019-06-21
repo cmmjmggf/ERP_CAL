@@ -42,4 +42,20 @@ class ReportesNominaJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirAsistenciasF() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('AnoAsistenciaF');
+        $parametros["sem"] = $this->input->post('SemAsistenciaF');
+        $parametros["empleado"] = $this->input->post('EmpleadoAsistenciaF');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\asistencias\asistenciasRelojChecadorF.jasper');
+        $jc->setFilename('ASISTENCIAS_RELOJ_CHECADOR_F_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }
