@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" maxlength="10" class="form-control" autofocus="">
+                        <input type="text" id="Estilo" name="Estilo" maxlength="10" class="form-control form-control-sm" autofocus="">
                         <input type="text" id="EstiloT" name="EstiloT" class="form-control d-none" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
@@ -579,7 +579,6 @@
     }
 
 </script>
-
 <style>
     .card{
         background-color: #f9f9f9;
@@ -624,7 +623,7 @@
     }
 
     /*LEATHER THEME*/
-    /*    .text-success.navbar-brand{
+        .text-success.navbar-brand{
             color: #FFEB3B !important;
         }
         nav > .btn-primary, nav li > .btn-primary{
@@ -646,5 +645,5 @@
             background-color: transparent;
             background-image: url(http://127.0.0.1/ERP_CAL/css/images/leather.jpg) !important;
             background-size: contain;
-        }*/
+        }
 </style>

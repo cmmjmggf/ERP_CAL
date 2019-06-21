@@ -76,6 +76,8 @@ class ParesAsignadosControl extends CI_Controller {
         }
 
         /* 2 PARES ASIGNADOS X LINEA */
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/asignados/';
+        $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\asignados\ParesAsignadosXLinea.jasper');
         $jc->setFilename('ParesAsignadosXLinea_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');

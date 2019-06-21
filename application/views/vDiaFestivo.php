@@ -94,25 +94,31 @@
 
         btnGuardarGDF.click(function () {
             if (AnioGDF.val() && SemanaGDF.val() && FechaInicialGDF.val() && FechaFinalGDF.val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: ''
-                });
-                var ops = {
-                    ANIO: AnioGDF.val(),
-                    SEMANA: SemanaGDF.val(),
-                    FECHA_INICIAL: FechaInicialGDF.val(),
-                    FECHA_FINAL: FechaFinalGDF.val()
-                };
-                $.post('<?php print base_url('DiaFestivo/onAnadirDiaFestivo'); ?>', ops).done(function (a) {
-                    swal('ATENCIÓN', 'SE HA HAN ASIGNADO LOS DIAS FESTIVOS PARA LA SEMANA ' + SemanaGDF.val() + ' DEL AÑO ' + AnioGDF.val(), 'success').then((value) => {
+                if (parseInt(AnioGDF.val()) > 2000 && parseInt(SemanaGDF.val()) > 0) {
+                    HoldOn.open({
+                        theme: 'sk-rect',
+                        message: ''
+                    });
+                    var ops = {
+                        ANIO: AnioGDF.val(),
+                        SEMANA: SemanaGDF.val(),
+                        FECHA_INICIAL: FechaInicialGDF.val(),
+                        FECHA_FINAL: FechaFinalGDF.val()
+                    };
+                    $.post('<?php print base_url('DiaFestivo/onAnadirDiaFestivo'); ?>', ops).done(function (a) {
+                        swal('ATENCIÓN', 'SE HA HAN ASIGNADO LOS DIAS FESTIVOS PARA LA SEMANA ' + SemanaGDF.val() + ' DEL AÑO ' + AnioGDF.val(), 'success').then((value) => {
+                            AnioGDF.focus().select();
+                        });
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
+                } else {
+                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR EL AÑO, SEMANA Y LAS FECHAS', 'warning').then((value) => {
                         AnioGDF.focus().select();
                     });
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
+                }
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR EL AÑO, SEMANA Y LAS FECHAS', 'warning').then((value) => {
                     AnioGDF.focus().select();
@@ -140,7 +146,7 @@
                     FechaFinalGDF.val(a[0].FECHAFIN);
                 } else {
                     onBeep(2);
-                    swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA','warning');
+                    swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');
                 }
             }).fail(function (x) {
                 getError(x);
