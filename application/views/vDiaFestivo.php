@@ -19,11 +19,11 @@
                     </div>
                     <div class="col-6">
                         <label>Fecha Inicial</label>
-                        <input type="text" id="FechaInicialGDF" name="FechaInicialGDF" maxlength="12" class="form-control date">
+                        <input type="text" id="FechaInicialGDF" name="FechaInicialGDF" maxlength="12" class="form-control date" readonly="">
                     </div>
                     <div class="col-6">
                         <label>Fecha Final</label>
-                        <input type="text" id="FechaFinalGDF" name="FechaFinalGDF" maxlength="12" class="form-control date">
+                        <input type="text" id="FechaFinalGDF" name="FechaFinalGDF" maxlength="12" class="form-control date" readonly="">
                     </div>  
                 </div>
             </div>
@@ -134,7 +134,14 @@
             });
             $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
                     {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
-                SemanaGDF.val(a[0].SEMANA);
+                if (a.length > 0) {
+                    SemanaGDF.val(a[0].SEMANA);
+                    FechaInicialGDF.val(a[0].FECHAINI);
+                    FechaFinalGDF.val(a[0].FECHAFIN);
+                } else {
+                    onBeep(2);
+                    swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA','warning');
+                }
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
