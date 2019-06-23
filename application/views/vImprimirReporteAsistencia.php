@@ -110,41 +110,41 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
-//                    if (data.length > 0) {
-//
-//                        $.fancybox.open({
-//                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-//                            type: 'iframe',
-//                            opts: {
-//                                afterShow: function (instance, current) {
-//                                    console.info('done!');
-//                                },
-//                                iframe: {
-//                                    // Iframe template
-//                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-//                                    preload: true,
-//                                    // Custom CSS styling for iframe wrapping element
-//                                    // You can use this to set custom iframe dimensions
-//                                    css: {
-//                                        width: "100%",
-//                                        height: "100%"
-//                                    },
-//                                    // Iframe tag attributes
-//                                    attr: {
-//                                        scrolling: "auto"
-//                                    }
-//                                }
-//                            }
-//                        });
-//                    } else {
-//                        swal({
-//                            title: "ATENCIÓN",
-//                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-//                            icon: "error"
-//                        }).then((action) => {
-//                            mdlImprimirReporteAsistencia.find('#btnImprimir').focus();
-//                        });
-//                    }
+                    if (data.length !== '0') {
+
+                        $.fancybox.open({
+                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                            type: 'iframe',
+                            opts: {
+                                afterShow: function (instance, current) {
+                                    console.info('done!');
+                                },
+                                iframe: {
+                                    // Iframe template
+                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                    preload: true,
+                                    // Custom CSS styling for iframe wrapping element
+                                    // You can use this to set custom iframe dimensions
+                                    css: {
+                                        width: "100%",
+                                        height: "100%"
+                                    },
+                                    // Iframe tag attributes
+                                    attr: {
+                                        scrolling: "auto"
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                            icon: "error"
+                        }).then((action) => {
+                            mdlImprimirReporteAsistencia.find('#btnImprimir').focus();
+                        });
+                    }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);

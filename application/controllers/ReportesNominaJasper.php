@@ -87,7 +87,7 @@ class ReportesNominaJasper extends CI_Controller {
                 join empleados E on E.Numero = RC.numemp
                 left join departamentos D on D.Clave = E.DepartamentoFisico
                 where RC.semana = $sem and RC.año = 2019 and E.DepartamentoFisico like '%$depto%'
-                order by clavedepto asc,RC.nomemp asc, RC.fecalta asc, RC.turno asc limit 100 ";
+                order by clavedepto asc,RC.nomemp asc, RC.fecalta asc, RC.turno asc  ";
         $Movimientos = $this->db->query($query2)->result();
 
         //Iteramos en los registros para hacer el insert/update
@@ -255,7 +255,6 @@ class ReportesNominaJasper extends CI_Controller {
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
             $parametros["ano"] = $ano;
             $parametros["sem"] = $sem;
-            $parametros["depto"] = $depto;
             $jc->setParametros($parametros);
             $jc->setJasperurl('jrxml\asistencias\asistenciasRelojChecador.jasper');
             $jc->setFilename('ASISTENCIAS_RELOJ_CHECADOR_' . Date('h_i_s'));

@@ -32,8 +32,8 @@ class RelojChecador extends CI_Controller {
             if (count($dtm) > 0) {
                 $es = array(
                     'numemp' => $this->input->post('Numero'),
-                    'fecalta' => Date('Y-m-d h:i:s'),
-                    'hora' => Date('h:i:s a'),
+                    'fecalta' => Date('Y-m-d H:i:s'),
+                    'hora' => Date('H:i:s'),
                     'nomemp' => $dtm[0]->Empleado,
                     'numdep' => $dtm[0]->DEPTO,
                     'nomdep' => $dtm[0]->DEPTOT,
