@@ -793,7 +793,7 @@
     }
 
 
-    function handleEnterDiv(divParent) { 
+    function handleEnterDiv(divParent) {
         $('input:not(.notEnter)').keyup(function () {
             $(this).val($(this).val().toUpperCase());
         });
@@ -1263,7 +1263,7 @@
                         opcion += '</li>';
                     } else {
                         opcion += '<li class="nav-item mx-1">';
-                        opcion += '<a class="btn btn-' + v.Class + '" href="' + (burl + v.Ref) + '"><span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
+                        opcion += '<a class="btn btn-sm btn-' + v.Class + '" href="' + (burl + v.Ref) + '"><span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
                         opcion += '</li>';
                     }
                 });
