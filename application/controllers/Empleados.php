@@ -61,7 +61,7 @@ class Empleados extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->Empleados_model->getRecords());
+            print json_encode($this->Empleados_model->getRecords($this->input->get('Estatus')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -91,8 +91,29 @@ class Empleados extends CI_Controller {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
+
+            //Formateo de fechas para guardarlas
+            unset($data['FechaIngreso']);
+            unset($data['Nacimiento']);
+            unset($data['FechaIMSS']);
+
+            $origFechaIng = $this->input->post('FechaIngreso');
+            $fechaIng = str_replace('/', '-', $origFechaIng);
+            $data["FechaIngreso"] = date("Y-m-d", strtotime($fechaIng));
+
+            $origFechaNac = $this->input->post('Nacimiento');
+            $fechaNac = str_replace('/', '-', $origFechaNac);
+            $data["Nacimiento"] = date("Y-m-d", strtotime($fechaNac));
+
+            $origFechaImss = $this->input->post('FechaIMSS');
+            $fechaIMSS = str_replace('/', '-', $origFechaImss);
+            $data["FechaIMSS"] = date("Y-m-d", strtotime($fechaIMSS));
+
             $data["Registro"] = Date('d/m/Y h:i:s a');
             $data["Estatus"] = 'ACTIVO';
+
+            var_dump($data);
+
             $ID = $this->Empleados_model->onAgregar($data);
             $Foto = $this->input->post('Foto');
             if (empty($Foto)) {
@@ -140,6 +161,26 @@ class Empleados extends CI_Controller {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
+
+            //Formateo de fechas para guardarlas
+
+            unset($data['FechaIngreso']);
+            unset($data['Nacimiento']);
+            unset($data['FechaIMSS']);
+
+            $origFechaIng = $this->input->post('FechaIngreso');
+            $fechaIng = str_replace('/', '-', $origFechaIng);
+            $data["FechaIngreso"] = date("Y-m-d", strtotime($fechaIng));
+
+            $origFechaNac = $this->input->post('Nacimiento');
+            $fechaNac = str_replace('/', '-', $origFechaNac);
+            $data["Nacimiento"] = date("Y-m-d", strtotime($fechaNac));
+
+            $origFechaImss = $this->input->post('FechaIMSS');
+            $fechaIMSS = str_replace('/', '-', $origFechaImss);
+            $data["FechaIMSS"] = date("Y-m-d", strtotime($fechaIMSS));
+
+
             unset($data["ID"]);
             $this->db->where('ID', $x->post('ID'))->update("empleados", $data);
             $ID = $x->post('ID');

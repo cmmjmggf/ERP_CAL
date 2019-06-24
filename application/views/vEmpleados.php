@@ -4,11 +4,14 @@
             <div class="col-sm-2 float-left">
                 <legend class="float-left">Empleados</legend>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-5">
                 <input type="text" id="NumeroEmpleado" name="NumeroEmpleado" class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="####">
             </div>
-            <div class="col-sm-1 float-right" align="right">
+            <div class="col-sm-5 float-right" align="right">
                 <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
+                <button type="button" class="btn btn-success selectNotEnter" id="btnVerTodos" data-toggle="tooltip" data-placement="left" title="Ver todos">
+                    <span class="fa fa-eye"></span> VER TODOS
+                </button>
             </div>
         </div>
         <div class="card-block mt-4">
@@ -48,7 +51,10 @@
                         <legend >Empleado</legend>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
-                        <button type="button" class="btn btn-foto btn-sm" id="btnCredencial" >
+                        <button type="button" class="btn btn-info btn-sm" id="btnImprimeContrato" >
+                            <span class="fa fa-file-pdf" ></span> CONTRATO
+                        </button>
+                        <button type="button" class="btn btn-foto btn-sm" id="btnCambiarFoto" >
                             <span class="fa fa-images" ></span> CAMBIAR FOTO
                         </button>
                         <button type="button" class="btn btn-lobo btn-sm" id="btnCredencial" >
@@ -172,6 +178,26 @@
                                         <label for="FechaIMSS" >Fecha IMSS*</label>
                                         <input type="text" id="FechaIMSS" name="FechaIMSS"  class="form-control form-control-sm date notEnter" placeholder="" >
                                     </div>
+                                    <div class="w-100"></div>
+
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 d-none" id="dIncapacidad">
+                                        <div class="card text-white bg-info ml-3" >
+                                            <div class="card-header">Capture el periodo de incapacidad</div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label for="FeIniInc" >Fecha Inicio</label>
+                                                        <input type="text" id="FechaIncapacidad" name="FechaIncapacidad"  class="form-control form-control-sm date notEnter">
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label for="FeIniInc" >Fecha Fin</label>
+                                                        <input type="text" id="FechaIncapacidadFin" name="FechaIncapacidadFin"  class="form-control form-control-sm date notEnter">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="w-100"></div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <label for="Sexo" >Sexo*</label>
@@ -365,11 +391,14 @@
 </div>
 <script>
     var master_url = base_url + 'index.php/Empleados/';
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
+    var btnNuevo = $("#btnNuevo"), btnVerTodos = $("#btnVerTodos"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
     var tblEmpleados = $("#tblEmpleados"), Empleados;
     var Foto = $("#Foto"), FotoPerfil = $("#FotoPerfil");
     var btnCredencial = $("#btnCredencial");
+    var btnCambiarFoto = $("#btnCambiarFoto");
+    var btnImprimeContrato = $("#btnImprimeContrato");
+
     var NumeroEmpleado = pnlTablero.find("#NumeroEmpleado");
     var nuevo = false;
     var tfoto;
@@ -377,7 +406,7 @@
 
     $(document).ready(function () {
         handleEnter();
-        getRecords();
+        getRecords(1);
         getEstados();
         getDepartamentos();
         pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').addClass('selectNotEnter');
@@ -385,9 +414,82 @@
         NumeroEmpleado.on('keydown keyup', function (e) {
             onBuscar($(this).val(), e, tblEmpleados, Empleados, getEmpleadoByID, $(this), 1);
         });
+        btnVerTodos.click(function () {
+            getRecords(2);
+        });
+
+        btnCambiarFoto.click(function () {
+            FotoPerfil.trigger('click');
+        });
+
+        btnImprimeContrato.click(function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData();
+            frm.append('Empleado', pnlDatos.find('#Numero').val());
+            $.ajax({
+                url: base_url + 'index.php/ReportesNominaJasper/onImprimirContrato',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length !== '0') {
+
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "100%",
+                                    height: "100%"
+                                },
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        btnImprimeContrato.focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
 
         btnCredencial.click(function () {
             getCredencial();
+        });
+
+
+        pnlDatos.find("#Incapacitado").change(function () {
+            if ($("#pnlDatos").find("#Incapacitado")[0].checked) {
+                pnlDatos.find("#dIncapacidad").removeClass('d-none');
+                pnlDatos.find('#FechaIncapacidad').focus().select();
+            } else {
+                pnlDatos.find("#dIncapacidad").addClass('d-none');
+                pnlDatos.find('#FechaIngreso').focus().select();
+            }
         });
 
         pnlDatos.find("#Cel").keydown(function (e) {
@@ -433,7 +535,7 @@
         });
 
         btnGuardar.click(function () {
-            console.log('guardando...');
+            //console.log('guardando...');
             if (tfoto) {
                 isValid('pnlDatos');
                 if (valido) {
@@ -553,7 +655,7 @@
     });
 
 
-    function getRecords() {
+    function getRecords(altabaja) {
         temp = 0;
         HoldOn.open({
             theme: 'sk-cube',
@@ -568,7 +670,10 @@
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getRecords',
-                "dataSrc": ""
+                "dataSrc": "",
+                "dataType": "json",
+                "type": 'GET',
+                "data": {Estatus: altabaja}
             },
             "columns": [
                 {"data": "ID"}, {"data": "No"}, {"data": "Nombre"}, {"data": "Dire"}, {"data": "Col"},
@@ -596,6 +701,7 @@
             ],
             initComplete: function (a, b) {
                 HoldOn.close();
+                NumeroEmpleado.focus();
             }
         });
 
@@ -625,7 +731,7 @@
     function getEmpleadoByID(XXX) {
         $.getJSON(master_url + 'getEmpleadoByID', {ID: XXX}).done(function (data) {
             nuevo = false;
-            console.log(data);
+            //console.log(data);
             var dtm = data[0];
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
@@ -785,6 +891,6 @@
     .btn-foto{
         color: #fff;
         background-color: #99cc00;
-        border: 2px solid #99cc00; 
+        border: 2px solid #99cc00;
     }
 </style>

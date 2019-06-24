@@ -282,4 +282,18 @@ class ReportesNominaJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirContrato() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/nominas/';
+        $parametros["empleado"] = $this->input->post('Empleado');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\contratoIndividualTiempoIndefinido.jasper');
+        $jc->setFilename('CONTRATO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

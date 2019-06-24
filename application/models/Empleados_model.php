@@ -79,20 +79,38 @@ class Empleados_model extends CI_Model {
         }
     }
 
-    public function getRecords() {
+    public function getRecords($Estatus) {
         try {
-            return $this->db->select("E.ID, E.Numero AS No, E.NumFis, E.Egresos, E.Activos, "
-                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
-                                    . "E.Busqueda, E.Direccion AS Dire, E.Colonia AS Col, E.Ciudad AS Ciu, E.Estado, E.CP, "
-                                    . "E.RFC, E.CURP, E.NoIMSS AS Seg, E.FechaIngreso, E.Nacimiento, E.FechaIMSS, "
-                                    . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, E.DepartamentoFisico, E.DepartamentoCostos, "
-                                    . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
-                                    . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
-                                    . "E.Sueldo, E.IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
-                                    . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
-                                    . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
-                                    . "E.Foto, E.Registro, E.Estatus", false)
-                            ->from('empleados AS E')->get()->result();
+            $this->db->select("E.ID, "
+                            . "E.Numero AS No, "
+                            . "E.NumFis, E.Egresos, E.Activos, "
+                            . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                            . "E.Busqueda, "
+                            . "E.Direccion AS Dire, "
+                            . "E.Colonia AS Col, "
+                            . "E.Ciudad AS Ciu, "
+                            . "E.Estado, "
+                            . "E.CP, "
+                            . "E.RFC, E.CURP, E.NoIMSS AS Seg, "
+                            . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
+                            . "E.Nacimiento, "
+                            . "E.FechaIMSS, "
+                            . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, E.DepartamentoFisico, E.DepartamentoCostos, "
+                            . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
+                            . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
+                            . "E.Sueldo, E.IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
+                            . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
+                            . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
+                            . "E.Foto, E.Registro, E.Estatus ", false)
+                    ->from('empleados AS E');
+            if ($Estatus === '1') {
+                $this->db->where('E.altabaja', '1');
+            } else {
+                $this->db->where_in('E.altabaja', array('1', '2'));
+            }
+
+
+            return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -101,17 +119,34 @@ class Empleados_model extends CI_Model {
     public function getEmpleadoByID($ID) {
         try {
             return
-                            $this->db->select("E.ID, E.Numero, E.NumFis, E.Egresos, E.Activos, "
-                                    . "E.PrimerNombre, E.SegundoNombre,E.Paterno, E.Materno, "
-                                    . "E.Busqueda, E.Direccion, E.Colonia, E.Ciudad, E.Estado, E.CP, "
-                                    . "E.RFC, E.CURP, E.NoIMSS, E.FechaIngreso, E.Nacimiento, E.FechaIMSS, "
+                            $this->db->select("E.ID, "
+                                    . "E.Numero, "
+                                    . "E.NumFis, "
+                                    . "E.Egresos, "
+                                    . "E.Activos, "
+                                    . "E.PrimerNombre, "
+                                    . "E.SegundoNombre,"
+                                    . "E.Paterno, "
+                                    . "E.Materno, "
+                                    . "E.Busqueda, "
+                                    . "E.Direccion, "
+                                    . "E.Colonia, "
+                                    . "E.Ciudad, "
+                                    . "E.Estado, "
+                                    . "E.CP, "
+                                    . "E.RFC, "
+                                    . "E.CURP, "
+                                    . "E.NoIMSS, "
+                                    . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
+                                    . "date_format(str_to_date(E.Nacimiento,'%Y-%m-%d'),'%d/%m/%Y') as Nacimiento, "
+                                    . "date_format(str_to_date(E.FechaIMSS,'%Y-%m-%d'),'%d/%m/%Y') as FechaIMSS, "
                                     . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, E.DepartamentoFisico, E.DepartamentoCostos, "
                                     . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
                                     . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
                                     . "E.Sueldo, E.IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
                                     . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
                                     . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
-                                    . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado", false)
+                                    . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado, E.FechaIncapacidad, E.FechaIncapacidadFin ", false)
                             ->from('empleados AS E')->where('E.ID', $ID)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
