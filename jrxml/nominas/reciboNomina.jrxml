@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.0276506581568405"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="ano" class="java.lang.String"/>
+	<parameter name="sem" class="java.lang.String"/>
+	<parameter name="depto" class="java.lang.String"/>
+	<parameter name="empleado" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+PN.diasemp,
+PN.numsem,
+SN.FechaIni,
+SN.FechaFin,
+PN.numemp,
+E.Busqueda AS nomemp,
+PN.numcon,
+CN.Descripcion,
+cast(ifnull(D.Clave,'999')as signed) as clavedepto,
+ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto,
+cast(PN.importe as decimal(10,2)) as percepciones,
+cast(PN.imported as decimal(10,2)) as deducciones
+from prenomina PN
+join empleados E on E.numero = PN.numemp
+join semanasnomina SN on SN.Sem = PN.numsem and SN.Ano = PN.año
+join conceptosnomina CN on CN.Clave = PN.numcon
+left join departamentos D on E.departamentofisico = D.Clave
+where PN.año = $P{ano}
+and PN.numsem = $P{sem}
+and PN.numemp like concat ('%',$P{empleado},'')
+and E.departamentofisico like concat('%',$P{depto},'')
+order by clavedepto ASC, PN.numemp ASC, PN.tpcon DESC,PN.tpcond ASC, PN.numcon asc]]>
+	</queryString>
+	<field name="diasemp" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numsem" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FechaIni" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FechaFin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numemp" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomemp" class="java.lang.String"/>
+	<field name="numcon" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clavedepto" class="java.lang.Long"/>
+	<field name="nomdepto" class="java.lang.String"/>
+	<field name="percepciones" class="java.math.BigDecimal"/>
+	<field name="deducciones" class="java.math.BigDecimal"/>
+	<variable name="percepciones_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Empleado" calculation="Sum">
+		<variableExpression><![CDATA[$F{percepciones}]]></variableExpression>
+	</variable>
+	<variable name="deducciones_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Empleado" calculation="Sum">
+		<variableExpression><![CDATA[$F{deducciones}]]></variableExpression>
+	</variable>
+	<group name="Empleado" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{numemp}]]></groupExpression>
+		<groupFooter>
+			<band height="120">
+				<staticText>
+					<reportElement style="Column header" x="187" y="6" width="61" height="11" forecolor="#000000" uuid="4989c711-67e5-4777-8dcf-f5c7f788934c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Subtotales:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="461" y="6" width="57" height="11" forecolor="#000000" uuid="9247bb89-9770-4f63-9299-7b6ca2019177"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total a pagar:]]></text>
+				</staticText>
+				<line>
+					<reportElement style="Title" positionType="FixRelativeToBottom" x="102" y="1" width="485" height="1" uuid="151a13cf-dff8-4f53-9d9d-7d2f734fa67f"/>
+					<graphicElement>
+						<pen lineWidth="1.0" lineColor="#000000"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement style="Title" positionType="FixRelativeToBottom" x="391" y="95" width="196" height="1" uuid="c204e1fc-5db8-49bd-8704-d07f1aa79c01"/>
+					<graphicElement>
+						<pen lineWidth="1.0" lineColor="#000000"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement style="Column header" x="391" y="108" width="196" height="11" forecolor="#000000" uuid="419679cb-2336-474a-a9fe-41f3eab08f2c"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Firma del empleado]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="391" y="95" width="196" height="13" uuid="9b915a41-2e3f-4b2b-a871-1500e8056780"/>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomemp}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="18" y="37" width="342" height="47" uuid="77e59431-2947-412a-bfc4-79ea2dd22f68"/>
+					<textElement textAlignment="Justified">
+						<font size="9" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Recibí de "+ $P{empresa} +" la cantidad indicada que cubre a la fecha el importe de mi salario, tiempo extra, séptimo día y todas las percepciones y prestaciones a las que tengo derecho, sin que se me adeude alguna cantidad por otro concepto."]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="250" y="6" width="68" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="58dad119-81a4-41f7-91c7-7d9c55168984"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{percepciones_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="360" y="6" width="65" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f6bde761-1831-470c-8d51-a37a232e1564"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{deducciones_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="518" y="6" width="44" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f25d1358-8644-4393-a79d-483c8ccdb4f1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{percepciones_1}-$V{deducciones_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="107" splitType="Stretch">
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="104" width="588" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement x="470" y="6" width="117" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="6" width="72" height="42" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="77" y="4" width="159" height="14" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="77" y="16" width="190" height="14" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recibo de Nómina Semanal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="360" y="93" width="65" height="11" forecolor="#000000" uuid="37b7b08d-3077-4086-9564-38f36b13aef1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deducciones (-)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="250" y="93" width="68" height="11" forecolor="#000000" uuid="04e6df7d-cd82-40ff-bc78-7a6c873c20b1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Percepciones (+)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="77" y="30" width="37" height="12" forecolor="#000000" uuid="eff27a2a-935d-4841-924a-8d5ee9e104d5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Semana]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="134" y="30" width="22" height="12" forecolor="#000000" uuid="9d7817b7-a859-4c23-a895-67f663d16a33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[del]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="205" y="30" width="16" height="12" forecolor="#000000" uuid="d8c86976-4c98-4cb8-8f01-8997259a6e4d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="432" y="6" width="38" height="12" forecolor="#000000" uuid="bb2bd2ab-cd1b-4a89-8080-2b7f50843ec9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="381" y="29" width="30" height="12" uuid="43b41167-50d5-41af-bc19-84e0c68f4aee"/>
+				<textElement textAlignment="Right">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numemp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="29" width="172" height="12" uuid="48339a82-d272-4218-92cc-b9c9d04b6c81"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomemp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="298" y="29" width="80" height="12" forecolor="#000000" uuid="381cda94-a7a6-4711-a3df-84761be7023c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="298" y="41" width="80" height="12" forecolor="#000000" uuid="e0eeaa2e-e8bb-41ef-be47-13f3014842a0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="381" y="41" width="30" height="12" uuid="9aa1202a-efd3-494e-b512-5b3fd4f2a96f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clavedepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="41" width="172" height="12" uuid="5c742037-80a5-46de-b4e7-36978a02a329"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomdepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="30" width="20" height="12" uuid="2e5f40e1-f9bd-4bb4-84c1-5e95b7a7b360"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numsem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="156" y="30" width="49" height="12" uuid="e247b067-f44c-41a8-ac1e-b941d32ffb92"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaIni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="221" y="30" width="48" height="12" uuid="dc9eb7bf-7d9d-4d68-99b8-9b6ec3beb114"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaFin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="298" y="53" width="80" height="12" forecolor="#000000" uuid="51316a7a-27b8-438f-a80d-f1e7356db604"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Días a pagar:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="381" y="53" width="30" height="12" uuid="dac9175c-6a0a-47f9-a0e0-57bfc4b63eaa"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diasemp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="100" y="93" width="68" height="11" forecolor="#000000" uuid="9c5859ec-c965-4e26-9a3b-ab18a8b4a483"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="130" y="0" width="116" height="11" isPrintInFirstWholeBand="true" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="360" y="0" width="65" height="11" uuid="0b9cf1d6-174f-4703-be5c-0fd550562dad">
+					<printWhenExpression><![CDATA[$F{deducciones} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deducciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="100" y="0" width="27" height="11" isPrintInFirstWholeBand="true" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numcon}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="250" y="0" width="68" height="11" uuid="b4af8305-4081-4038-855d-434e1d202caa">
+					<printWhenExpression><![CDATA[$F{percepciones} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{percepciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

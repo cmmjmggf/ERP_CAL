@@ -265,4 +265,21 @@ class ReportesNominaJasper extends CI_Controller {
         }
     }
 
+    public function onImprimirRecibos() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('AnoRecibos');
+        $parametros["sem"] = $this->input->post('SemRecibos');
+        $parametros["depto"] = $this->input->post('DeptoRecibos');
+        $parametros["empleado"] = $this->input->post('EmpleadoRecibos');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\reciboNomina.jasper');
+        $jc->setFilename('RECIBOS_NOMINAS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

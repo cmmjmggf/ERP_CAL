@@ -41,7 +41,7 @@
 </div>
 <script>
     var mdlImprimirReporteAsistenciaF = $('#mdlImprimirReporteAsistenciaF');
-    var ControlesNominaRastreo;
+
 
     $(document).ready(function () {
         mdlImprimirReporteAsistenciaF.on('shown.bs.modal', function () {
