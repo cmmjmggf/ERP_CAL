@@ -39,10 +39,19 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["FECHAFIN"] = $x->post('FECHAFIN');
             $p["ANIO"] = $x->post('ANIO');
             $jc->setParametros($p);
+
+            $reports = array();
+
             $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
-            $jc->setFilename('GeneraNominaDeSemana' . Date('h_i_s'));
+            $jc->setFilename('GeneraNominaDeSemana_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            PRINT $jc->getReport();
+            $reports['GENERANOMINADESEMANA'] = $jc->getReport();
+
+            $jc->setJasperurl('jrxml\prenomina\prenomlt.jasper');
+            $jc->setFilename('GeneraNominaDeSemanaXDepto_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['GENERANOMINADESEMANAXDEPTO'] = $jc->getReport();
+            print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

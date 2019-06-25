@@ -123,8 +123,12 @@
                                 FECHAINI: FechaInicialGNS.val(),
                                 FECHAFIN: FechaFinalGNS.val()
                             }).done(function (a) {
-                                console.log(a)
-                        onImprimirReporteFancy('<?php print base_url('js/pdf.js-gh-pages/web/viewer.html?file='); ?>' + a + '#pagemode=thumbs');
+                        console.log(a)
+                        if (a.length > 0) {
+                            onImprimirReporteFancyArray(JSON.parse(a));
+                        } else {
+                            swal('ATENCIÓN','NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS','warning');
+                        }
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {

@@ -97,7 +97,7 @@ class PrestamosEmpleados extends CI_Controller {
         try {
             $x = $this->input;
             $E = $this->db->select("E.Numero AS CLAVE, "
-                                    . "CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
                             ->from("empleados AS E")
                             ->where('E.Numero', $x->post('EMPLEADO'))
                             ->where('E.AltaBaja', 1)->get()->result();
@@ -126,6 +126,13 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
                             ->where('E.Numero', $x->post('EMPLEADO'))->get()->result();
+            
+            $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))
+                    ->set('AbonoPres', $x->post('ABONO'))
+                    ->set('SaldoPres', $x->post('SALDO'))
+                    ->where('Numero', $x->post('EMPLEADO'))
+                    ->update('empleados');
+            
             /* PAGARE */
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -179,9 +186,9 @@ class PrestamosEmpleados extends CI_Controller {
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
             
-            /* EMPLEADOS : PresAcum, AbonoPres y SaldoPres */
+            /* EMPLEADOS : PressAcum, AbonoPres y SaldoPres */
 
-            $this->db->set('PresAcum', $x->post('ULTIMOSALDO'))
+            $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))
                     ->set('AbonoPres', $x->post('ABONO'))
                     ->set('SaldoPres', $x->post('SALDO'))
                     ->where('Numero', $pagare_info[0]->EMPLEADO)

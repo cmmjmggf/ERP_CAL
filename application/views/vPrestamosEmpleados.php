@@ -197,6 +197,7 @@
             btnGuardarNP = pnlTablero.find("#btnGuardarNP");
 
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
         btnGuardarNP.click(function () {
             onGuardarNuevoPrestamo();
         });
