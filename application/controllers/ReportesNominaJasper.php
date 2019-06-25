@@ -296,4 +296,25 @@ class ReportesNominaJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirIngreEgre() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('AnoIngreEgre');
+        $parametros["dsem"] = $this->input->post('dSemIngreEgre');
+        $parametros["asem"] = $this->input->post('aSemIngreEgre');
+        $parametros["fechaIni"] = $this->input->post('FechaIniIngreEgre');
+        $parametros["fechaFin"] = $this->input->post('FechaFinIngreEgre');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\reporteEstIngre.jasper');
+        if ($this->input->post('TipoEstIngEg') === '2') {
+            $jc->setJasperurl('jrxml\nominas\reporteEstEgre.jasper');
+        }
+        $jc->setFilename('EST_ING_EGRE_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }
