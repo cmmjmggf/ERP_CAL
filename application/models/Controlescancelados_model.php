@@ -56,6 +56,7 @@ class Controlescancelados_model extends CI_Model {
                             ->join('colores AS C', 'PD.color = C.Clave AND C.Estilo = E.Clave')
                             ->join('series AS S', 'E.Serie = S.Clave')
                             ->join('controles AS CT', 'CT.pedidodetalle = PD.ID')
+                            ->limit(999)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

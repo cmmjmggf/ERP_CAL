@@ -19,4 +19,17 @@ class GeneraNominaDeSemana_model extends CI_Model {
         }
     }
 
+    public function getSemanaPrenomina($SEMANA, $ANIO) {
+        try {
+            return $this->db->select("PN.*", false)
+                            ->from('prenomina AS PN')
+                            ->where("PN.numsem = {$SEMANA} AND "
+                                    . "PN.año = {$ANIO} "
+                                    . "AND PN.status = 2", null, false)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
