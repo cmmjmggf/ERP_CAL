@@ -86,7 +86,7 @@ class ControlesCancelados extends CI_Controller {
             foreach ($controles as $k => $v) {
                 $this->db->set('Cancelacion', Date('d/m/Y h:i:s a'))
                         ->set('Estatus', 'C')
-                        ->set('Departamento', '490')
+                        ->set('Departamento', '270')
                         ->set('Motivo', strtoupper($v->Motivo))
                         ->where('Pedido', $v->Pedido)
                         ->where('PedidoDetalle', $v->PedidoDetalle)->update('Controles');

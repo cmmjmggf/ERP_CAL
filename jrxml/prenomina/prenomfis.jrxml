@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomfis" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82c06bc2-fd12-4810-b55f-bf6126804875">
+	<property name="ireport.zoom" value="4.177248169415661"/>
+	<property name="ireport.x" value="1070"/>
+	<property name="ireport.y" value="116"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="SEMANA" class="java.lang.Integer"/>
+	<parameter name="FECHAINI" class="java.lang.String"/>
+	<parameter name="FECHAFIN" class="java.lang.String"/>
+	<parameter name="ANIO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT D.Clave AS CLAVE, D.Descripcion AS DEPARTAMENTO, E.Numero AS CLAVE_EMPLEADO,
+CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_EMPLEADO, (CASE WHEN E.TBanamex = 0 THEN "" ELSE E.TBanamex END) AS CUENTA,
+(PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
+PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
+(CASE
+WHEN E.SueldoFijo > (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
+PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)  THEN 0 ELSE E.SueldoFijo END) AS ABONO_FIS,
+(CASE
+WHEN (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
+PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) > E.SueldoFijo THEN
+((PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) - E.SueldoFijo)
+ELSE
+(PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)
+END) AS ABONO_NOMINA
+
+FROM empleados AS E INNER JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
+ON E.Numero = PNL.numemp
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
+	</queryString>
+	<field name="CLAVE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="CLAVE_EMPLEADO" class="java.lang.Integer"/>
+	<field name="NOMBRE_EMPLEADO" class="java.lang.String"/>
+	<field name="CUENTA" class="java.lang.String"/>
+	<field name="SUELDO_NETO" class="java.lang.Double"/>
+	<field name="SUELDO_FIS" class="java.lang.Float"/>
+	<field name="ABONO_FIS" class="java.lang.Double"/>
+	<field name="ABONO_NOMINA" class="java.lang.Double"/>
+	<variable name="SUELDO_NETO_1" class="java.lang.Double" resetType="Group" resetGroup="DEPARTAMENTO" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUELDO_NETO}]]></variableExpression>
+	</variable>
+	<variable name="SUELDO_FIS_1" class="java.lang.Float" resetType="Group" resetGroup="DEPARTAMENTO" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUELDO_FIS}]]></variableExpression>
+	</variable>
+	<variable name="ABONO_FIS_1" class="java.lang.Double" resetType="Group" resetGroup="DEPARTAMENTO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABONO_FIS}]]></variableExpression>
+	</variable>
+	<variable name="ABONO_NOMINA_1" class="java.lang.Double" resetType="Group" resetGroup="DEPARTAMENTO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABONO_NOMINA}]]></variableExpression>
+	</variable>
+	<variable name="SUELDO_NETO_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUELDO_NETO}]]></variableExpression>
+	</variable>
+	<variable name="SUELDO_FIS_2" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUELDO_FIS}]]></variableExpression>
+	</variable>
+	<variable name="ABONO_FIS_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABONO_FIS}]]></variableExpression>
+	</variable>
+	<variable name="ABONO_NOMINA_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABONO_NOMINA}]]></variableExpression>
+	</variable>
+	<group name="DEPARTAMENTO">
+		<groupExpression><![CDATA[$F{DEPARTAMENTO}]]></groupExpression>
+		<groupHeader>
+			<band height="10">
+				<textField>
+					<reportElement x="0" y="0" width="30" height="10" uuid="41d17729-446c-4ebd-852d-8b3a3bc8d06c"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLAVE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="30" y="0" width="117" height="10" uuid="3f4bd097-e982-4370-a64e-6db3051a7680"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="12">
+				<staticText>
+					<reportElement x="0" y="0" width="217" height="12" uuid="845e16ec-01c0-48fd-987c-8a44a6b52df7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total por departamento]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Transparent" x="217" y="0" width="122" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="be8747c6-9c5f-49cd-b1f9-198ca55f81a7"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="339" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2c0ce575-aa28-4609-a1a6-721454f98981"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUELDO_NETO_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="394" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="97d82888-8c53-45d6-b8eb-dc7369a7792e"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUELDO_FIS_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="448" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="744cdb1c-29f0-4a27-aeea-178a43605e11"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ABONO_FIS_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="502" y="0" width="53" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5657d5d1-3925-4794-8b33-ea19ccd6f071"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ABONO_NOMINA_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="69">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="72" y="16" width="145" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de nomina de la semana]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="72" y="0" width="246" height="16" isPrintInFirstWholeBand="true" uuid="acf1674d-8383-4182-83a8-ad3cf9bb07b9"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="541" y="0" width="15" height="12" isPrintInFirstWholeBand="true" uuid="9564d570-f4af-4b3a-bc73-1a39ce64dd69"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="417" y="11" width="139" height="12" isPrintInFirstWholeBand="true" uuid="f87076c2-ccc5-4d14-ab98-47d775e84bfb"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="460" y="0" width="80" height="12" isPrintInFirstWholeBand="true" uuid="e79e7db9-b308-43e2-bbe6-2c01c9007f6e"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="081844f8-8ac6-4d18-88e3-8e7eec18f17c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="217" y="16" width="30" height="14" uuid="f75fcca0-2d3b-4675-bf94-ca341021bf29"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SEMANA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="73" y="30" width="22" height="14" isPrintInFirstWholeBand="true" uuid="a4633bcd-e475-4946-b246-89361862844e"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="30" width="64" height="14" uuid="e76f8ee1-d119-4142-bb30-60b2ab3d7c5a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHAINI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="160" y="30" width="22" height="14" isPrintInFirstWholeBand="true" uuid="0520504e-6198-4666-82ce-344fd1e1b07e"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="184" y="30" width="75" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b8d1dfd7-acae-4163-8aea-58b873cdcde9"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHAFIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="259" y="20" width="121" height="18" isPrintInFirstWholeBand="true" uuid="7469c58d-1cca-4ebf-a422-1da63a7f605e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Administración]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="58" width="268" height="10" isPrintInFirstWholeBand="true" uuid="63be3c30-5071-4ebe-bb11-1e6e1ace8626"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="267" y="58" width="73" height="10" isPrintInFirstWholeBand="true" uuid="c31786c5-705a-4842-a581-047887ae065f"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. de cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="339" y="58" width="55" height="10" isPrintInFirstWholeBand="true" uuid="4d1416a9-282d-435d-b526-153fdd1a1c4e"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Neto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="393" y="58" width="55" height="10" isPrintInFirstWholeBand="true" uuid="15a83e13-351e-42a1-925b-72ea56518010"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="447" y="58" width="55" height="10" isPrintInFirstWholeBand="true" uuid="233267e5-1420-4c3d-8b04-5c66832d6d5b"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="501" y="58" width="55" height="10" isPrintInFirstWholeBand="true" uuid="39fe8834-8d07-42a3-a2b6-2ffa7e691c48"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nomina]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="68" width="555" height="1" uuid="140d3a99-b24d-4380-90ac-bc639631871f"/>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="339" y="49" width="109" height="10" isPrintInFirstWholeBand="true" uuid="6c79c978-ff27-4dfa-a462-4aa799dfcb8b"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sueldo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="447" y="49" width="109" height="10" isPrintInFirstWholeBand="true" uuid="133742f3-91c9-40fd-8078-dfad33f11c5c"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abonos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="117" y="0" width="30" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="e56e84c3-380c-4f14-81ee-f21c56608dbb"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLAVE_EMPLEADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="147" y="0" width="121" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1c700aa4-e5f2-4de0-9171-45ad484bb817"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_EMPLEADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="268" y="0" width="71" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="90a0db45-e6d1-4d44-a285-9628dc331d83"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad01d54-90de-4b47-8c61-bd72df72f566"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUELDO_NETO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="393" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1edf75d3-55ad-4e74-952c-7e037ad90cfd"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUELDO_FIS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="447" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b3216804-7633-4603-b08c-714907376538"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABONO_FIS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="501" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABONO_NOMINA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="117" y="10" width="438" height="1" uuid="cf56394f-cf2c-499f-aae8-df7689ab0516"/>
+			</line>
+		</band>
+	</detail>
+	<summary>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="328" height="11" isPrintInFirstWholeBand="true" uuid="4d416caf-f767-417f-95fb-d0aab9423727"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total general de nomina]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="241662b0-84f7-4ca5-999e-b9505ee6ace2"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUELDO_NETO_2}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="247" y="0" width="308" height="1" uuid="f600c4d0-f51d-4681-924b-34dd3198aa10"/>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="394" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="140d6e2d-8863-4af5-9461-d96992318d1a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUELDO_FIS_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="448" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8c166553-e47c-4b60-a9fd-35f7ba9a45a5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ABONO_FIS_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="502" y="0" width="53" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8adcf2c6-dae9-40be-b7fe-c5320ea7e237"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ABONO_NOMINA_2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

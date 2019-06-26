@@ -623,8 +623,9 @@
     }
 
     /*LEATHER THEME*/
-        .text-success.navbar-brand{
+        /*.text-success.navbar-brand{
             color: #FFEB3B !important;
+            text-shadow: 2px 2px 8px #000000;
         }
         nav > .btn-primary, nav li > .btn-primary{
             background-color: transparent !important; 
@@ -645,5 +646,5 @@
             background-color: transparent;
             background-image: url(http://127.0.0.1/ERP_CAL/css/images/leather.jpg) !important;
             background-size: contain;
-        }
+        }*/
 </style>
