@@ -84,4 +84,5 @@ $this->load->view('vCopiarFraccionEstiloaEstilo')->view('vCapturaCajaAhorroDirec
         ->view('vReimprimePagare')->view('vCargoZapatosFieraBono')
         ->view('vDiaFestivo')->view('vGeneraNominaDeSemana')
         ->view('vImprimirReporteAsistenciaF')->view('vImprimirReporteAsistencia')
-        ->view('vRecibosNomina')->view('vEstadisticasIngresosEgresos');
+        ->view('vRecibosNomina')->view('vEstadisticasIngresosEgresos')
+        ->view('vCajaAhorroPrestamos');

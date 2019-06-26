@@ -317,4 +317,111 @@ class ReportesNominaJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirCajaAhorroPrestamos() {
+        $x = $this->input;
+        $demp = $x->post('dEmpleadoAhorroPrestamos');
+        $aemp = $x->post('aEmpleadoAhorroPrestamos');
+        $ano = $x->post('AnoAhorroPrestamos');
+
+        $tipoReporte = $x->post('TipoAhorroPrestamos');
+        $tipoReportePrestamos = $x->post('TipoPrestamos');
+
+        /* Limpiamos la tabla temporal */
+        $this->db->query('truncate table prescaha');
+
+        $query_empleados = '';
+        if ($tipoReporte === '2') {//Ahorro
+            $query_empleados = "select "
+                    . "E.Numero, "
+                    . "E.Busqueda, "
+                    . "ifnull(D.Clave,'999') as numdepto,"
+                    . "ifnull(D.Descripcion,'REVISAR DEPTO EXISTE') as nomdepto, "
+                    . "E.Ahorro  "
+                    . "from empleados E left join departamentos D on D.clave = E.DepartamentoFisico "
+                    . "where E.numero between $demp and $aemp and E.Ahorro > 0 and E.AltaBaja = 1  ";
+        } else {
+            $query_empleados = "select "
+                    . "E.Numero, "
+                    . "E.Busqueda, "
+                    . "ifnull(D.Clave,'999') as numdepto,"
+                    . "ifnull(D.Descripcion,'REVISAR DEPTO EXISTE') as nomdepto, "
+                    . "E.Ahorro  "
+                    . "from empleados E left join departamentos D on D.clave = E.DepartamentoFisico "
+                    . "where E.numero between $demp and $aemp and E.PressAcum > 0 and E.AltaBaja = 1  ";
+        }
+        $Empleados = $this->db->query($query_empleados)->result();
+
+        //Iteramos en los registros para hacer el insert/update
+        if (!empty($Empleados)) {
+            foreach ($Empleados as $M) {
+
+                $numemp = $M->Numero;
+                $nomemp = $M->Busqueda;
+                $depto = $M->numdepto;
+                $ahorro = $M->Ahorro;
+                $nomdepto = $M->nomdepto;
+                $query_prestamos = '';
+                $PrestamoAcum = 0;
+
+                //Si es prestamos consultamos la tabla para obtener el acumulado
+                if ($tipoReporte === '1') {
+                    $query_prestamos = "SELECT ifnull(sum(preemp),0) as preemp FROM prestamos  WHERE numemp  = $numemp ";
+                    $PrestamoAcum = $this->db->query($query_prestamos)->result()[0]->preemp;
+                }
+
+                //Agregamos el registro a tabla temp
+                $this->db->insert("prescaha", array(
+                    'numemp' => $numemp,
+                    'nomemp' => $nomemp,
+                    'depto' => $depto,
+                    'nomdepto' => $nomdepto,
+                    'presta' => ($tipoReporte === '1') ? $PrestamoAcum : $ahorro
+                ));
+
+                //Validamos que tipo de reporte es para obtener los importes
+                if ($tipoReporte === '1') {
+                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 65 ";
+                } else {
+                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 70 ";
+                }
+                $Importes = $this->db->query($query_importes)->result();
+                if (!empty($Importes)) {
+                    //Actualizamos la tabla con total por linea
+                    $Total_Acum = 0;
+                    foreach ($Importes as $I) {
+                        if (floatval($I->imported) > 0) {
+                            $no_sem = $I->numsem;
+                            $Total_Acum += floatval($I->imported);
+                            $this->db->where('numemp', $numemp);
+                            $this->db->update("prescaha", array(
+                                "s$no_sem" => $I->imported,
+                                "total" => $Total_Acum
+                            ));
+                        }
+                    }
+                }
+            }
+
+
+            //Imprimir reportes
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["ano"] = $ano;
+            $jc->setParametros($parametros);
+            if ($tipoReporte === '1') {
+                $jc->setJasperurl('jrxml\nominas\reportePrestamos.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\nominas\reporteCajaAhorros.jasper');
+            }
+            $jc->setFilename('REPORTE_PRESTAMOS_CAJA_AHORROS_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } else {//Si no trae nada mandamos 0
+            print 0;
+        }
+    }
+
 }
