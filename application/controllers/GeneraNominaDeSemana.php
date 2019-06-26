@@ -46,31 +46,43 @@ class GeneraNominaDeSemana extends CI_Controller {
             $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
             $jc->setFilename('GenNomDeSem_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENNOMDESEM'] = $jc->getReport();
+            $reports['1UNO'] = $jc->getReport();
 
             /*2. REPORTE DE PRENOMINA POR DEPARTAMENTO*/
             $jc->setJasperurl('jrxml\prenomina\prenomlt.jasper');
             $jc->setFilename('GenNomDeSemXDepto_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENNOMDESEMXDEPTO'] = $jc->getReport();
+            $reports['2DOS'] = $jc->getReport();
 
             /*3. REPORTE DE TEJIDO*/
             $jc->setJasperurl('jrxml\prenomina\prenomltej.jasper');
             $jc->setFilename('GenNomDeSemXDeptoTej_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENNOMDESEMXDEPTOTEJ'] = $jc->getReport();
+            $reports['3TRES'] = $jc->getReport();
 
             /*4. REPORTE SIN TARJETA*/
             $jc->setJasperurl('jrxml\prenomina\prenomlst.jasper');
             $jc->setFilename('GenNomDeSemSinTarjeta_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENNOMDESEMSINTARJETA'] = $jc->getReport();
+            $reports['4CUATRO'] = $jc->getReport();
 
             /*5. REPORTE PRENOMINA FIS*/
             $jc->setJasperurl('jrxml\prenomina\prenomfis.jasper');
             $jc->setFilename('GenNomDeSemPreNomFis_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENNOMDESEMPRENOMFIS'] = $jc->getReport();
+            $reports['5CINCO'] = $jc->getReport();
+
+            /*6. REPORTE PRENOMINA FIS DOS (TJ = 1,ABONO_FIS = 0)*/
+            $jc->setJasperurl('jrxml\prenomina\prenomfiszero.jasper');
+            $jc->setFilename('GenNomDeSemPreNomFisZero_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['6SEIS'] = $jc->getReport();
+
+            /*7. REPORTE PRENOMINA BANAMEX (ABONO NETO)*/
+            $jc->setJasperurl('jrxml\prenomina\prenomfisbanamex.jasper');
+            $jc->setFilename('GenNomDeSemPreNomBanamex_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['7SIETE'] = $jc->getReport();
             
             print json_encode($reports);
         } catch (Exception $exc) {
