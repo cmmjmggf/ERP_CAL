@@ -42,15 +42,36 @@ class GeneraNominaDeSemana extends CI_Controller {
 
             $reports = array();
 
+            /*1. REPORTE DE PRENOMINA COMPLETO*/
             $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
-            $jc->setFilename('GeneraNominaDeSemana_' . Date('his'));
+            $jc->setFilename('GenNomDeSem_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENERANOMINADESEMANA'] = $jc->getReport();
+            $reports['GENNOMDESEM'] = $jc->getReport();
 
+            /*2. REPORTE DE PRENOMINA POR DEPARTAMENTO*/
             $jc->setJasperurl('jrxml\prenomina\prenomlt.jasper');
-            $jc->setFilename('GeneraNominaDeSemanaXDepto_' . Date('his'));
+            $jc->setFilename('GenNomDeSemXDepto_' . Date('his'));
             $jc->setDocumentformat('pdf');
-            $reports['GENERANOMINADESEMANAXDEPTO'] = $jc->getReport();
+            $reports['GENNOMDESEMXDEPTO'] = $jc->getReport();
+
+            /*3. REPORTE DE TEJIDO*/
+            $jc->setJasperurl('jrxml\prenomina\prenomltej.jasper');
+            $jc->setFilename('GenNomDeSemXDeptoTej_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['GENNOMDESEMXDEPTOTEJ'] = $jc->getReport();
+
+            /*4. REPORTE SIN TARJETA*/
+            $jc->setJasperurl('jrxml\prenomina\prenomlst.jasper');
+            $jc->setFilename('GenNomDeSemSinTarjeta_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['GENNOMDESEMSINTARJETA'] = $jc->getReport();
+
+            /*5. REPORTE PRENOMINA FIS*/
+            $jc->setJasperurl('jrxml\prenomina\prenomfis.jasper');
+            $jc->setFilename('GenNomDeSemPreNomFis_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['GENNOMDESEMPRENOMFIS'] = $jc->getReport();
+            
             print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
