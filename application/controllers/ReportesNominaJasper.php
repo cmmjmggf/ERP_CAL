@@ -14,6 +14,83 @@ class ReportesNominaJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteAltasBanco() {
+        $x = $this->input;
+        $fechaI = $x->get('FechaIni');
+        $fechaF = $x->get('FechaFin');
+        $query = "select
+                    CONCAT(
+                    '95100000000000000000000AHNOM  ' ,
+                    concat('0000000000000000R',      RPAD(  concat(E.PrimerNombre,'/',E.Paterno)  ,24,' ')      ),
+                    RPAD(E.PrimerNombre,19,' ') ,
+                    RPAD(E.SegundoNombre,25,' '),
+                    RPAD(E.Paterno,25,' ') ,
+                    RPAD(E.Materno,30,' ') ,
+                    case when E.sexo = 'M' then 'MASCULINO' when E.sexo = 'F' then 'FEMENINO ' ELSE 'NODEFINID' END ,
+                    date_format(str_to_date(E.Nacimiento,'%Y-%m-%d'),'%Y%m%d'),
+                    RPAD(E.RFC,13,' ')
+                    ) AS Col1,
+                    CONCAT(
+                    RPAD(E.Direccion,35,' '),
+                    RPAD(E.Colonia,35,' '),
+                    RPAD(E.Ciudad,35,' '),
+                    'GTO 01240004',
+                    RPAD(E.CP,5,' ') ,
+                    '477',
+                    case when E.Tel = '0' then '1464646'  ELSE RPAD(E.Tel,7,' ') END ,
+                    E.EstadoCivil
+                    ) AS Col2,
+                    CONCAT(
+                    RPAD(E.Beneficiario,30,' ') ,
+                    RPAD(E.Parentesco,10,' ') ,
+                    E.Porcentaje,
+                    '0'
+                    '                                        0000',
+                    '                                        0000'
+                    ) AS Col3
+                    from empleados E
+                    where str_to_date(E.fechaingreso,'%Y-%m-%d')
+                    between str_to_date('$fechaI','%d/%m/%Y')
+                    and str_to_date('$fechaF','%d/%m/%Y')
+                    order by E.Numero asc ";
+        $Ingresos = $this->db->query($query)->result();
+
+        if (!empty($Ingresos)) {
+            $filename = 'A8149010.' . Date('nj') . '.txt';
+            $handle = fopen($filename, "w");
+            $txt = "9500000000064266210201000008149CALZADO LOBO, S.A. DE C.V.                               RIO SANTIAGO 245            SAN MIGUEL                  LEON                        373900024CARRANZ" . "\n";
+            fwrite($handle, $txt);
+            foreach ($Ingresos as $M) {
+                $txt = $M->Col1 . $M->Col2 . $M->Col3 . "\n";
+                fwrite($handle, $txt);
+            }
+            fclose($handle);
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $filename);
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filename));
+            readfile($filename);
+            exit;
+        }
+    }
+
+    public function onReporteAltasBancoPDF() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $this->input->get('FechaIni');
+        $parametros["fechaFin"] = $this->input->get('FechaFin');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\reporteAltaEmpleadosBanco.jasper');
+        $jc->setFilename('ALTAS_EMPLEADOS_BANCO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onImprimirEtiquetasLockers() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
