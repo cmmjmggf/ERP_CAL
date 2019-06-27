@@ -52,12 +52,20 @@ class ReportesNominaJasper extends CI_Controller {
                     where str_to_date(E.fechaingreso,'%Y-%m-%d')
                     between str_to_date('$fechaI','%d/%m/%Y')
                     and str_to_date('$fechaF','%d/%m/%Y')
+                    and E.altabaja = 1
                     order by E.Numero asc ";
         $Ingresos = $this->db->query($query)->result();
 
+        header("Content-Description: File Transfer");
+        //Tipo de archivo
+        $filename = 'A8149010.' . Date('nj') . '.txt';
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . $filename);
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
         if (!empty($Ingresos)) {
-            $filename = 'A8149010.' . Date('nj') . '.txt';
-            $handle = fopen($filename, "w");
+            $handle = fopen('php://output', "w");
             $txt = "9500000000064266210201000008149CALZADO LOBO, S.A. DE C.V.                               RIO SANTIAGO 245            SAN MIGUEL                  LEON                        373900024CARRANZ" . "\n";
             fwrite($handle, $txt);
             foreach ($Ingresos as $M) {
@@ -65,13 +73,6 @@ class ReportesNominaJasper extends CI_Controller {
                 fwrite($handle, $txt);
             }
             fclose($handle);
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . $filename);
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($filename));
-            readfile($filename);
             exit;
         }
     }
@@ -82,8 +83,8 @@ class ReportesNominaJasper extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["fechaIni"] = $this->input->get('FechaIni');
-        $parametros["fechaFin"] = $this->input->get('FechaFin');
+        $parametros["fechaIni"] = $this->input->post('FechaIni');
+        $parametros["fechaFin"] = $this->input->post('FechaFin');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\nominas\reporteAltaEmpleadosBanco.jasper');
         $jc->setFilename('ALTAS_EMPLEADOS_BANCO_' . Date('h_i_s'));
