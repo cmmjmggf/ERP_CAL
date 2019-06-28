@@ -48,27 +48,34 @@
                             </strong> 
                         </div>
                     </div>
-                    <div class="col-12 mt-2">
-                        <div class="alert alert-dismissible alert-warning">
-                            <strong>
-                                Semanas a procesar de vacaciones o aguinaldos para destajos
-                            </strong> 
+                    <!--ESTO SOLO APLICA CUANDO PONEN LA SEM 99 (VACACIONES) Y 98 (AGUINALDO)-->
+                    <div class="row d-none m-1 animated fadeIn" id="SeccionVacacionesAguinaldosParaDestajo">
+                        <div class="col-12 mt-2">
+                            <div class="alert alert-dismissible alert-warning">
+                                <strong>
+                                    Semanas a procesar de vacaciones o aguinaldos para destajos
+                                </strong> 
+                            </div>
+                        </div>
+                        <div class="col-3"> 
+                            <input type="text" id="SemanaUnoGNS" name="SemanaUnoGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
+                        </div>
+                        <div class="col-3"> 
+                            <input type="text" id="SemanaDosGNS" name="SemanaDosGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
+                        </div>
+                        <div class="col-3"> 
+                            <input type="text" id="SemanaTresGNS" name="SemanaTresGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
+                        </div>
+                        <div class="col-3"> 
+                            <input type="text" id="SemanaCuatroGNS" name="SemanaCuatroGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                            <label>Fecha de corte para aguinaldo</label>
+                            <input type="text" id="FechaCorteAguinaldoGNS" name="FechaCorteAguinaldoGNS" maxlength="12" class="form-control date form-control-sm notEnter">
                         </div>
                     </div>
-                    <div class="col-4"> 
-                        <input type="text" id="SemanaUnoGNS" name="SemanaUnoGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off">
-                    </div>
-                    <div class="col-4"> 
-                        <input type="text" id="SemanaDosGNS" name="SemanaDosGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off">
-                    </div>
-                    <div class="col-4"> 
-                        <input type="text" id="SemanaTresGNS" name="SemanaTresGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off">
-                    </div>
-                    <div class="col-6">
-                        <label>Fecha de corte para aguinaldo</label>
-                        <input type="text" id="FechaCorteAguinaldoGNS" name="FechaCorteAguinaldoGNS" maxlength="12" class="form-control date form-control-sm">
-                    </div>
-
                     <div class="w-100 my-2"></div>
                     <div class="col-6">
                         <button type="button" class="btn btn-primary btn-sm btn-block" id="btnGeneraGNS">
@@ -101,16 +108,66 @@
     var mdlGeneraNominaDeSemana = $("#mdlGeneraNominaDeSemana"),
             AnioGNS = mdlGeneraNominaDeSemana.find("#AnioGNS"),
             SemanaGNS = mdlGeneraNominaDeSemana.find("#SemanaGNS"),
+            SemanaUnoGNS = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS"),
+            SemanaDosGNS = mdlGeneraNominaDeSemana.find("#SemanaDosGNS"),
+            SemanaTresGNS = mdlGeneraNominaDeSemana.find("#SemanaTresGNS"),
+            SemanaCuatroGNS = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS"),
             FechaInicialGNS = mdlGeneraNominaDeSemana.find("#FechaInicialGNS"),
             FechaFinalGNS = mdlGeneraNominaDeSemana.find("#FechaFinalGNS"),
+            FechaCorteAguinaldoGNS = mdlGeneraNominaDeSemana.find("#FechaCorteAguinaldoGNS"),
             ConsultaNominaCerrada = mdlGeneraNominaDeSemana.find("#ConsultaNominaCerrada"),
-            btnGeneraGNS = mdlGeneraNominaDeSemana.find("#btnGeneraGNS");
+            btnGeneraGNS = mdlGeneraNominaDeSemana.find("#btnGeneraGNS"),
+            SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo");
 
     $(document).ready(function () {
 
+        handleEnterDiv(mdlGeneraNominaDeSemana);
         btnGeneraGNS.click(function () {
+            var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
+                FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
+            console.log(parms);
+            console.log(parms);
             if (SemanaGNS.val() && AnioGNS.val()) {
+                switch (parseInt(SemanaGNS.val())) {
+                    case 98:
+                        /* SEMANA 98  = AGUINALDOS*/
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Generando aguinaldos...'
+                        });
+                        parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+                        parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+                        parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+                        $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
+                            console.log(a);
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                        break;
+                    case 99:
+                        /* SEMANA 99  = VACACIONES*/
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Generando vacaciones...'
+                        });
+                        parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+                        parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+                        parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+                        $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
+                            swal('ATENCIÓN', 'SE HAN GENERADO LAS VACACIONES', 'success');
+                            SVacacionesAguinaldosParaDestajo.addClass("d-none");
+                            console.log(a);
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                        break;
+                }
                 if (ConsultaNominaCerrada[0].checked) {
+                    /* CONSULTA NOMINA CERRADA */
                     onBeep(1);
                     HoldOn.open({
                         theme: 'sk-rect',
@@ -127,7 +184,7 @@
                         if (a.length > 0) {
                             onImprimirReporteFancyArray(JSON.parse(a));
                         } else {
-                            swal('ATENCIÓN','NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS','warning');
+                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -135,6 +192,7 @@
                         HoldOn.close();
                     });
                 } else {
+                    /* GENERA NOMINA POR SEMANA, AÑO */
 
                 }
             } else {
@@ -143,39 +201,83 @@
                 });
             }
         });
-
         SemanaGNS.on('keydown', function (e) {
-            if (SemanaGNS.val() && e.keyCode === 13) {
-                getSemanaPrenomina();
+            if (SemanaGNS.val() && e.keyCode === 13 && parseInt(SemanaGNS.val()) !== 99 && parseInt(SemanaGNS.val()) !== 98) {
+                SVacacionesAguinaldosParaDestajo.addClass("d-none");
+                getSemanaNomina();
+            } else if (SemanaGNS.val() && e.keyCode === 13 && parseInt(SemanaGNS.val()) === 99) {
+
+                $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
+                        {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
+                    if (a.length > 0) {
+                        var sm = parseInt(a[0].SEMANA);
+                        SemanaCuatroGNS.val(sm);
+                        SemanaTresGNS.val(sm - 1);
+                        SemanaDosGNS.val(sm - 2);
+                        SemanaUnoGNS.val(sm - 3);
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+                SVacacionesAguinaldosParaDestajo.removeClass("d-none");
+            } else if (SemanaGNS.val() && e.keyCode === 13 && parseInt(SemanaGNS.val()) === 98) {
+                SVacacionesAguinaldosParaDestajo.removeClass("d-none");
             }
         });
-
         mdlGeneraNominaDeSemana.on('shown.bs.modal', function () {
             AnioGNS.val('<?php print Date('Y'); ?>');
-            $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
-                    {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
-                if (a.length > 0) {
-                    SemanaGNS.val(a[0].SEMANA);
-                    FechaInicialGNS.val(a[0].FECHAINI);
-                    FechaFinalGNS.val(a[0].FECHAFIN);
-                } else {
-                    onBeep(2);
-                    swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');
-                }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-                HoldOn.close();
-            });
+            getSemanaNomina();
         });
     });
-
     function getSemanaPrenomina() {
         $.getJSON('<?php print base_url('DiaFestivo/getSemanaPrenomina'); ?>',
                 {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val()}).done(function (a) {
             if (a.length <= 0) {
                 onBeep(2);
                 swal('ATENCIÓN', 'LA SEMANA DE PRENOMINA PARA ESTE AÑO Y SEMANA YA ESTA CERRADA O NO SE HAN GENERADO LAS SEMANAS DE PRENOMINA', 'warning');
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+
+    function getSemanaNomina() {
+        $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
+                {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
+            if (a.length > 0) {
+                SemanaGNS.val(a[0].SEMANA);
+                FechaInicialGNS.val(a[0].FECHAINI);
+                FechaFinalGNS.val(a[0].FECHAFIN);
+                AnioGNS.focus().select();
+            } else {
+                onBeep(2);
+                swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
+
+    function getFechasXSemanaNomina(s) {
+        $.getJSON('<?php print base_url('DiaFestivo/getFechasXSemanaNomina'); ?>',
+                {SEMANA: parseInt(s)}).done(function (a) {
+            if (a.length > 0) {
+                SemanaGNS.val(a[0].SEMANA);
+                FechaInicialGNS.val(a[0].FECHAINI);
+                FechaFinalGNS.val(a[0].FECHAFIN);
+                var sems = a[0].SEMANA;
+                SemanaUnoGNS.val(sems - 3);
+                SemanaDosGNS.val(sems - 3);
+                SemanaTresGNS.val(sems - 1);
+            } else {
+                onBeep(2);
+                swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');
             }
         }).fail(function (x) {
             getError(x);
