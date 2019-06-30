@@ -129,7 +129,7 @@ class SemanasNomina_model extends CI_Model {
 
     public function getSemanaByFecha($fecha) {
         try {
-            $this->db->select('U.sem', false);
+            $this->db->select('U.sem, U.FechaIni, U.FechaFin ', false);
             $this->db->from('semanasnomina AS U');
             $this->db->where("str_to_date('$fecha','%d/%m/%Y') BETWEEN str_to_date(FechaIni,'%d/%m/%Y') AND str_to_date(FechaFin,'%d/%m/%Y')", null, false);
             $query = $this->db->get();
