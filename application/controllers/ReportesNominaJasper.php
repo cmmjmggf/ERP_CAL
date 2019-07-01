@@ -14,6 +14,187 @@ class ReportesNominaJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteAguinaldos() {
+        $x = $this->input;
+        $fechaAp = $x->post('FechaAplicacionAguinaldos');
+        $ano = $x->post('AnoAguinaldos');
+        $sem = $x->post('SemAguinaldos');
+        $this->db->query('truncate table nominabanco');
+        $query = "SELECT
+                    truncate(
+                    (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    ,0) as Neto,
+                     truncate(P.salfis,0) as SueldoFiscal,
+                    '02' as col1,
+                    '90' as col3,
+                    date_format(now(),'%Y%m%d') as col4,
+                    '000030' as col5,
+                    date_format(str_to_date('$fechaAp','%d/%m/%Y'),'%Y%m%d') as col6,
+                    '00' as col7,
+                    '00000000064266210201' as ctafislobo,
+                    '00000000107241850201' as ctaintlobo,
+                    ' 00' col8,
+                    LPAD(E.TBanbajio,'20','0') as col9,
+                    ' ' as col10,
+                    LPAD(P.numemp,'7','0') as col11,
+                    '                         ABONO EN NOMINA' as concepfis,
+                    '                    DEPOSITO EN EFECTIVO' as conceptint,
+                    '0000000000000000000000000000000000000000' as col12
+                    FROM prenominal P
+                    join empleados E on E.Numero = P.numemp
+                    where P.año = $ano and P.numsem = $sem
+                    order by cast(E.DepartamentoFisico as signed) asc, P.numemp asc
+                     ";
+        $Registros = $this->db->query($query)->result();
+
+        if (!empty($Registros)) {
+            $cont1 = 2;
+            $cont2 = 2;
+            $ImporteFiscal = 0;
+            $ImporteInterno = 0;
+
+            foreach ($Registros as $M) {
+                if (floatval($M->Neto) > 0) {
+                    $ImporteInterno = floatval($M->Neto);
+                    $txt = $M->col1 .
+                            str_pad($cont2, 7, "0", STR_PAD_LEFT) .
+                            $M->col3 .
+                            $M->col4 .
+                            $M->col5 .
+                            str_pad($ImporteInterno, 13, "0", STR_PAD_LEFT) . '00' .
+                            $M->col6 .
+                            $M->col7 .
+                            $M->ctaintlobo .
+                            $M->col8 .
+                            $M->col9 .
+                            $M->col10 .
+                            $M->col11 .
+                            $M->conceptint .
+                            $M->col12 .
+                            "\n";
+                    //Agregamos el registro
+                    $this->db->insert("nominabanco", array(
+                        'consecutivo' => $cont2,
+                        'col1' => $txt,
+                        'tipo' => 2,
+                        'importe' => $ImporteInterno
+                    ));
+                    $cont2 ++;
+                }
+                if (floatval($M->SueldoFiscal) > 0) {
+                    $ImporteFiscal = floatval($M->SueldoFiscal);
+                    $txt = $M->col1 .
+                            str_pad($cont1, 7, "0", STR_PAD_LEFT) .
+                            $M->col3 .
+                            $M->col4 .
+                            $M->col5 .
+                            str_pad($ImporteFiscal, 13, "0", STR_PAD_LEFT) . '00' .
+                            $M->col6 .
+                            $M->col7 .
+                            $M->ctafislobo .
+                            $M->col8 .
+                            $M->col9 .
+                            $M->col10 .
+                            $M->col11 .
+                            $M->concepfis .
+                            $M->col12 .
+                            "\n";
+                    //Agregamos el registro
+                    $this->db->insert("nominabanco", array(
+                        'consecutivo' => $cont1,
+                        'col1' => $txt,
+                        'tipo' => 1,
+                        'importe' => $ImporteFiscal
+                    ));
+                    $cont1 ++;
+                }
+            }
+        }
+    }
+
+    public function onReporteAguinaldosPDF() {
+        $x = $this->input;
+        $fechaAp = $x->post('FechaAplicacionAguinaldos');
+        $ano = $x->post('AnoAguinaldos');
+        $sem = $x->post('SemAguinaldos');
+        $this->db->query('truncate table nominabanco');
+        $query = "SELECT
+                    truncate(
+                    (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    ,0) as Neto,
+                    truncate(P.salfis,0) as SueldoFiscal,
+                    E.numero as numemp,
+                    E.busqueda as nomemp,
+                    E.TBanbajio,
+                    ifnull(D.Clave,'999') as numdepto,
+                    ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto
+                    FROM prenominal P
+                    join empleados E on E.Numero = P.numemp
+                    left join departamentos D on D.Clave = E.DepartamentoFisico
+                    where P.año = $ano and P.numsem = $sem
+                    order by cast(E.DepartamentoFisico as signed) asc, P.numemp asc
+                     ";
+        $Registros = $this->db->query($query)->result();
+
+        if (!empty($Registros)) {
+
+            foreach ($Registros as $M) {
+                if (floatval($M->Neto) > 0) {
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 2,
+                        'importe' => floatval($M->Neto),
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'DEPÓSITO EN EFECTIVO',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
+                }
+                if (floatval($M->SueldoFiscal) > 0) {
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 1,
+                        'importe' => floatval($M->SueldoFiscal),
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'ABONO EN NÓMINA',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
+                }
+            }
+            //Imprimimos el reporte
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            switch ($sem) {
+                case '97':
+                    $parametros["nombre"] = 'Depositos de caja de ahorro del';
+                    break;
+                case '98':
+                    $parametros["nombre"] = 'Depositos de aguinaldos del';
+                    break;
+                case '99':
+                    $parametros["nombre"] = 'Depositos de vacaciones del';
+                    break;
+            }
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\nominas\reporteAguinaldoBanco.jasper');
+            $jc->setFilename('AGUINALDO_VACACIONES_BANCO_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        }
+    }
+
     public function onReporteNominaBancoPDF() {
         $x = $this->input;
         $fechaAp = $x->post('FechaAplicacionNomina');
@@ -22,12 +203,10 @@ class ReportesNominaJasper extends CI_Controller {
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
                     truncate(
-                    cast(
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    as decimal(6,2))
                     ,0) as Neto,
-                    truncate(cast(E.SueldoFijo as decimal(6,2)),0) as SueldoFiscal,
+                    truncate(E.SueldoFijo,0) as SueldoFiscal,
                     E.numero as numemp,
                     E.busqueda as nomemp,
                     E.TBanbajio,
@@ -47,7 +226,7 @@ class ReportesNominaJasper extends CI_Controller {
             $ImporteInterno = 0;
 
             foreach ($Registros as $M) {
-                if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
+                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
                     if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
                         $ImporteInterno = floatval($M->Neto);
                         //Agregamos el registro
@@ -111,6 +290,21 @@ class ReportesNominaJasper extends CI_Controller {
                             ));
                         }
                     }
+                } else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
+                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                    //Agregamos el registro
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 1,
+                        'importe' => $ImporteFiscal,
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'ABONO EN NÓMINA',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
                 }
             }
             //Imprimimos el reporte
@@ -205,12 +399,10 @@ class ReportesNominaJasper extends CI_Controller {
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
                     truncate(
-                    cast(
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    as decimal(6,2))
                     ,0) as Neto,
-                    truncate(cast(E.SueldoFijo as decimal(6,2)),0) as SueldoFiscal,
+                    truncate(E.SueldoFijo,0) as SueldoFiscal,
                     '02' as col1,
                     '90' as col3,
                     date_format(now(),'%Y%m%d') as col4,
@@ -241,7 +433,7 @@ class ReportesNominaJasper extends CI_Controller {
             $ImporteInterno = 0;
 
             foreach ($Registros as $M) {
-                if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
+                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
                     if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
                         $ImporteInterno = floatval($M->Neto);
 
@@ -351,6 +543,33 @@ class ReportesNominaJasper extends CI_Controller {
                             $cont2 ++;
                         }
                     }
+                } else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
+                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+
+                    $txt = $M->col1 .
+                            str_pad($cont1, 7, "0", STR_PAD_LEFT) .
+                            $M->col3 .
+                            $M->col4 .
+                            $M->col5 .
+                            str_pad($ImporteFiscal, 13, "0", STR_PAD_LEFT) . '00' .
+                            $M->col6 .
+                            $M->col7 .
+                            $M->ctafislobo .
+                            $M->col8 .
+                            $M->col9 .
+                            $M->col10 .
+                            $M->col11 .
+                            $M->concepfis .
+                            $M->col12 .
+                            "\n";
+                    //Agregamos el registro
+                    $this->db->insert("nominabanco", array(
+                        'consecutivo' => $cont1,
+                        'col1' => $txt,
+                        'tipo' => 1,
+                        'importe' => $ImporteFiscal
+                    ));
+                    $cont1 ++;
                 }
             }
         }
