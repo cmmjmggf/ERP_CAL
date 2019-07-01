@@ -104,6 +104,7 @@
         </div>
     </div>
 </div>
+
 <script>
     var mdlGeneraNominaDeSemana = $("#mdlGeneraNominaDeSemana"),
             AnioGNS = mdlGeneraNominaDeSemana.find("#AnioGNS"),
@@ -117,11 +118,69 @@
             FechaCorteAguinaldoGNS = mdlGeneraNominaDeSemana.find("#FechaCorteAguinaldoGNS"),
             ConsultaNominaCerrada = mdlGeneraNominaDeSemana.find("#ConsultaNominaCerrada"),
             btnGeneraGNS = mdlGeneraNominaDeSemana.find("#btnGeneraGNS"),
-            SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo");
+            SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo"),
+            btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"),
+            btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
+            btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS");
 
     $(document).ready(function () {
 
+        btnEliminaMovGenGNS.click(function () {
+            if (AnioGNS.val() && SemanaGNS.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Eliminando...'
+                });
+                $.post('<?php print base_url('GeneraNominaDeSemana/onEliminarMovimientos'); ?>', {
+                    ANIO: AnioGNS.val(),
+                    SEMANA: SemanaGNS.val()
+                }).done(function (a) {
+                    onNotify('<span class="fa fa-success"></span>', 'MOVIMIENTOS ELIMINADOS', 'danger');
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                swal('ATENCIÓN', 'EL AÑO Y SEMANA SON NECESARIOS, PARA PODER ELIMINAR LOS MOVIMIENTOS', 'warning').then((value) => {
+                    AnioGNS.focus().select();
+                });
+            }
+        });
+
+        btnSemanasGNS.click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('Semanas.shoes'); ?>',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "95%",
+                            height: "95%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        btnCierraNominaGNS.click(function () {
+            $("#mdlCerrarNominaDeSemana").modal('show');
+        });
+
         handleEnterDiv(mdlGeneraNominaDeSemana);
+
         btnGeneraGNS.click(function () {
             var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
                 FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
@@ -131,20 +190,26 @@
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
                         /* SEMANA 98  = AGUINALDOS*/
-                        HoldOn.open({
-                            theme: 'sk-rect',
-                            message: 'Generando aguinaldos...'
-                        });
-                        parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
-                        parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
-                        parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
-                        $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
-                            console.log(a);
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
-                            HoldOn.close();
-                        });
+                        if (FechaCorteAguinaldoGNS.val()) {
+                            HoldOn.open({
+                                theme: 'sk-rect',
+                                message: 'Generando aguinaldos...'
+                            });
+                            parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+                            parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+                            parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+                            $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
+                                console.log(a);
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                                HoldOn.close();
+                            });
+                        } else {
+                            swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
+                                FechaCorteAguinaldoGNS.focus().select();
+                            });
+                        }
                         break;
                     case 99:
                         /* SEMANA 99  = VACACIONES*/
@@ -201,6 +266,7 @@
                 });
             }
         });
+
         SemanaGNS.on('keydown', function (e) {
             if (SemanaGNS.val() && e.keyCode === 13 && parseInt(SemanaGNS.val()) !== 99 && parseInt(SemanaGNS.val()) !== 98) {
                 SVacacionesAguinaldosParaDestajo.addClass("d-none");

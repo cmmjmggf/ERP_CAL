@@ -106,17 +106,15 @@ class GeneraNominaDeSemana extends CI_Controller {
             $sueldin = 0;
 
             /* 1 ELIMINAR TODO REGISTRO QUE YA TENGA LA SEMANA, AÑO EN PRENOMINA Y PRENOMINAL */
-//            $this->db->where('numsem', $x->post('SEMANA'))
-//                    ->where('año', $x->post('ANIO'))
-//                    ->delete('prenomina');
-//            $this->db->where('numsem', $x->post('SEMANA'))
-//                    ->where('año', $x->post('ANIO'))
-//                    ->delete('prenominal');
+            $this->db->where('numsem', $x->post('SEMANA'))
+                    ->where('año', $x->post('ANIO'))
+                    ->delete('prenomina');
+            $this->db->where('numsem', $x->post('SEMANA'))
+                    ->where('año', $x->post('ANIO'))
+                    ->delete('prenominal');
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
             $empleados = $this->db->select('E.*')->from('empleados AS E')
-                            ->where('E.Numero', 2805)
                             ->where('E.AltaBaja', 1)
-                            ->where('E.FijoDestajoAmbos', 1)
                             ->order_by('E.DepartamentoFisico', 'ASC')
                             ->order_by('E.Numero', 'ASC')
                             ->order_by('E.FijoDestajoAmbos', 'ASC')
@@ -233,10 +231,10 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where("FPN.anio", $x->post('ANIO'))
                                 ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
                                 ->get()->result();
-                if (intval($v->FijoDestajoAmbos) === 1 && intval($v->Numero) === 2805) {
+                if (intval($v->FijoDestajoAmbos) === 1) {
                     /* EMPLEADOS FIJOS */
                 }
-                if (intval($v->FijoDestajoAmbos) === 2 && intval($v->Numero) === 2805) {
+                if (intval($v->FijoDestajoAmbos) === 2) {
                     /* EMPLEADOS POR DESTAJO */
                     if (!empty($SUELDO_CUATRO_SEM) && $S1 !== '' && $S4 !== '') {
                         /* 2 SE DIVIDE ENTRE 4 Y SE SACA EL SALARIO DIARIO POR DIA */
@@ -248,7 +246,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $sueldin = $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
                     }
                 }
-                if (intval($v->FijoDestajoAmbos) === 3 && intval($v->Numero) === 2805) {
+                if (intval($v->FijoDestajoAmbos) === 3) {
                     /* EMPLEADOS FIJOS Y POR DESTAJO */
                     if (!empty($SUELDO_CUATRO_SEM) && $S1 !== '' && $S4 !== '') {
                         /* 2 SE DIVIDE ENTRE 4 Y SE SACA EL SALARIO DIARIO POR DIA */
@@ -261,61 +259,61 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $sueldin = $sueldin + $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
                     }
                 }
-                if (intval($v->Numero) === 2805) {
-                    $prima = $total_vacaciones * 0.25;
-                    /* GRABAR VACACIONES */
-                    $vp = array(
-                        "numsem" => $x->post('SEMANA'),
-                        "año" => $x->post('ANIO'),
-                        "numemp" => $v->Numero,
-                        "diasemp" => $dias_trabajados_pagados,
-                        "numcon" => 25 /* 25 CONCEPTOS DE NOMINA */,
-                        "tpcon" => 1,
-                        "tpcond" => 0,
-                        "importe" => $total_vacaciones,
-                        "imported" => $sueldin,
-                        "fecha" => Date('Y-m-d h:i:s'),
-                        "registro" => 0,
-                        "status" => 1,
-                        "tpomov" => 0,
-                        "depto" => $v->DepartamentoFisico
-                    );
-                    $this->db->insert('prenomina', $vp);
-                    /* GRABA PRE-NOMINA-L */
-                    $pnl = array(
-                        "numsem" => $x->post('SEMANA'),
-                        "año" => $x->post('ANIO'),
-                        "numemp" => $v->Numero,
-                        "salario" => $sueldin,
-                        "horext" => $dias_trabajados_pagados,
-                        "pares" => 0,
-                        "otrper" => $prima,
-                        "otrper1" => $total_vacaciones,
-                        "imss" => 0,
-                        "impu" => 0,
-                        "precaha" => 0,
-                        "cajhao" => 0,
-                        "vtazap" => 0,
-                        "zapper" => 0,
-                        "fune" => 0,
-                        "cargo" => 0,
-                        "fonac" => 0,
-                        "otrde" => 0,
-                        "otrde1" => 0,
-                        "registro" => 0,
-                        "status" => 1,
-                        "tpomov" => 0,
-                        "depto" => $v->DepartamentoFisico
-                    );
+                // if (intval($v->Numero) === 2805) {/*PARA EFECTO DE PRUEBAS*/
+                $prima = $total_vacaciones * 0.25;
+                /* GRABAR VACACIONES */
+                $vp = array(
+                    "numsem" => $x->post('SEMANA'),
+                    "año" => $x->post('ANIO'),
+                    "numemp" => $v->Numero,
+                    "diasemp" => $dias_trabajados_pagados,
+                    "numcon" => 25 /* 25 CONCEPTOS DE NOMINA */,
+                    "tpcon" => 1,
+                    "tpcond" => 0,
+                    "importe" => $total_vacaciones,
+                    "imported" => $sueldin,
+                    "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0,
+                    "status" => 1,
+                    "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                );
+                $this->db->insert('prenomina', $vp);
+                /* GRABA PRE-NOMINA-L */
+                $pnl = array(
+                    "numsem" => $x->post('SEMANA'),
+                    "año" => $x->post('ANIO'),
+                    "numemp" => $v->Numero,
+                    "salario" => $sueldin,
+                    "horext" => $dias_trabajados_pagados,
+                    "pares" => 0,
+                    "otrper" => $prima,
+                    "otrper1" => $total_vacaciones,
+                    "imss" => 0,
+                    "impu" => 0,
+                    "precaha" => 0,
+                    "cajhao" => 0,
+                    "vtazap" => 0,
+                    "zapper" => 0,
+                    "fune" => 0,
+                    "cargo" => 0,
+                    "fonac" => 0,
+                    "otrde" => 0,
+                    "otrde1" => 0,
+                    "registro" => 0,
+                    "status" => 1,
+                    "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                );
 
-                    $this->db->insert('prenominal', $pnl);
+                $this->db->insert('prenominal', $pnl);
 
-                    /* GRABA PRIMA-VACACIONAL */
-                    $vp["numcon"] = 26;
-                    $vp["importe"] = $total_vacaciones * 0.25;
-                    $vp["imported"] = 0;
-                    $this->db->insert('prenomina', $vp);
-                }
+                /* GRABA PRIMA-VACACIONAL */
+                $vp["numcon"] = 26;
+                $vp["importe"] = $total_vacaciones * 0.25;
+                $vp["imported"] = 0;
+                $this->db->insert('prenomina', $vp);
+                //}/*PARA EFECTO DE PRUEBAS*/
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -325,7 +323,9 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function getAguinaldos() {
         try {
             $x = $this->input;
-            
+
+            $S1 = intval($x->post('S1'));
+            $S4 = intval($x->post('S4'));
             /* 1 ELIMINAR REGISTROS EN PRENOMINA Y PRENOMINAL DE LA SEMANA Y AÑO ESPECIFICADO */
             //            $this->db->where('numsem', $x->post('SEMANA'))
 //                    ->where('año', $x->post('ANIO'))
@@ -333,55 +333,114 @@ class GeneraNominaDeSemana extends CI_Controller {
 //            $this->db->where('numsem', $x->post('SEMANA'))
 //                    ->where('año', $x->post('ANIO'))
 //                    ->delete('prenominal');
-            
+
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
-            $empleados = $this->db->select('E.*')->from('empleados AS E')
-                            ->where('E.Numero', 2805)
+            $empleados = $this->db->select("E.*, DATEDIFF(DATE_FORMAT("
+                                    . "str_to_date(\"{$x->post('FECHACORTE')}\",\"%d/%m/%Y\"),\"%Y-%m-%d\"), "
+                                    . "DATE_FORMAT(E.FechaIngreso,\"%Y-%m-%d\")) AS DIASFC ", false)
+                            ->from('empleados AS E')
                             ->where('E.AltaBaja', 1)
-                            ->where('E.FijoDestajoAmbos', 1)
                             ->order_by('E.DepartamentoFisico', 'ASC')
                             ->order_by('E.Numero', 'ASC')
                             ->order_by('E.FijoDestajoAmbos', 'ASC')
                             ->get()->result();
-            
-            
-            /*
-              'saca los empleados activos con tipo de salario 1  y 3------------------------------------------------------------------------------------------------------------------------------------------
-              diai = Mid(Date, 1, 2): mesi = Mid(Date, 4, 2) * 30.41: añoi = Mid(Date, 7, 4) * 365: diah = Val(diai) + Val(mesi) + Val(añoi)
-              txtstsemp = 1: Data2.RecordSource = "SELECT * FROM empleados  WHERE stsemp = " & 1 & "and tiposdo = " & 1 & " or tiposdo= " & 3 & "  order by numemp":  Data2.Refresh
-              Do While Not Data2.Recordset.EOF
-              txtsaldia = Data2.Recordset.Fields("sdbemp"): txtnumemp = Data2.Recordset.Fields("numemp"):
-              ingreso = Data2.Recordset.Fields("feiemp"): txtdepto = Data2.Recordset.Fields("depemp"):
-              fechafina = DateValue(fechaco) - DateValue(ingreso)
+            $it = 0;
+            $ita = 0;
+            $dias = 15;
+            $dias_a_pagar = 0;
+            $total_aguinaldo = 0;
+            foreach ($empleados as $k => $v) {
+                $it += 1;
+                /* VALIDAR EL TIPO DE SALARIO 1 = (FIJO), 2 (DESTAJO) y 3 (FIJO-DESTAJO) */
+                if (intval($v->DepartamentoFisico) === 1 || intval($v->DepartamentoFisico) === 3) {
+                    /* 1 SI EL EMPLEADO TIENE MAS DE 365 O IGUAL SE LE PAGAN 15 DIAS DE SALARIO */
+                    if (intval($v->DIASFC) >= 365) {
+                        print "NO.EMPLEADO: {$v->Numero}, INGRESO: {$v->FechaIngreso}, "
+                                . "DEPARTAMENTO: {$v->DepartamentoFisico}, SUELDO: {$v->Sueldo},"
+                                . "FECHACORTE: {$x->post('FECHACORTE')}, DIAS : {$v->DIASFC} \n";
+                        $ita += 1;
+                        $total_aguinaldo = $v->Sueldo * $dias;
+                        $dias_a_pagar = $dias;
+                    } else {
+                        /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
+                        $dias_x_quince = intval($v->DIASFC) * $dias;
+                        $dias_a_pagar = $dias_x_quince / 365;
+                        $total_aguinaldo = $v->Sueldo * $dias_a_pagar;
+                    }
+                } else if (intval($v->DepartamentoFisico) === 2) {
+                    /* CALCULAR EL SALARIO DE LAS ULTIMAS CUATRO SEMANAS */
+                    $SUELDO_CUATRO_SEM = $this->db->select("SUM(FPN.subtot) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
+                                    ->where("FPN.numeroempleado", $v->Numero)
+                                    ->where("FPN.anio", $x->post('ANIO'))
+                                    ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
+                                    ->get()->result();
+                    if (intval($v->DIASFC) >= 365) {
+                        print "NO.EMPLEADO: {$v->Numero}, INGRESO: {$v->FechaIngreso}, "
+                                . "DEPARTAMENTO: {$v->DepartamentoFisico}, SUELDO: {$v->Sueldo},"
+                                . "FECHACORTE: {$x->post('FECHACORTE')}, DIAS : {$v->DIASFC} \n";
+                        $ita += 1;
+                        $total_aguinaldo = $v->Sueldo * $dias;
+                        $dias_a_pagar = $dias;
+                    } else {
+                        /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
+                        $dias_x_quince = intval($v->DIASFC) * $dias;
+                        $dias_a_pagar = $dias_x_quince / 365;
+                        $total_aguinaldo = $v->Sueldo * $dias_a_pagar;
+                    }
+                }
+                /* AGREGAR A PRENOMINA */
+                $this->db->insert('prenomina', array("numsem" => $x->post('SEMANA'),
+                    "año" => $x->post('ANIO'),
+                    "numemp" => $v->Numero,
+                    "diasemp" => $dias_a_pagar,
+                    "numcon" => 27, "tpcon" => 1,
+                    "importe" => $total_aguinaldo,
+                    "imported" => $v->Sueldo,
+                    "fecha" => Date('Y-m-d h:i:s'),
+                    "status" => 1, "tpomov" => 0));
+                /* AGREGAR A PRENOMINAL */
+                $this->db->insert('prenominal', array(
+                    "numsem" => $x->post('SEMANA'), "año" => $x->post('ANIO'),
+                    "numemp" => $v->Numero, "salario" => $v->Sueldo,
+                    "otrper" => intval($v->DIASFC),
+                    "horext" => $dias_a_pagar,
+                    "pares" => 0, "status" => 1, "tpomov" => 0,
+                    "otrper1" => $total_aguinaldo,
+                ));
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
-              If Val(fechafina) > 365 Then txtimporte = Val(txtsaldia) * 15: diast = 15 Else di1 = Val(fechafina) * 15: di2 = Val(di1) / 365: txtimporte = Val(txtsaldia) * di2: diast = di2
-              gravaagiu
-              Data2.Recordset.MoveNext
-              Loop
-              'saca los empleados activos con tipo de salario 2 ------------------------------------------------------------------------------------------------------------------------------------------
-              diai = Mid(Date, 1, 2): mesi = Mid(Date, 4, 2) * 30.41: añoi = Mid(Date, 7, 4) * 365: diah = Val(diai) + Val(mesi) + Val(añoi)
-              txtstsemp = 1: Data2.RecordSource = "SELECT * FROM empleados  WHERE stsemp = " & Val(txtstsemp) & " and tiposdo = " & 2 & " order by numemp": Data2.Refresh
-              Do While Not Data2.Recordset.EOF
-              txtnumemp = Data2.Recordset.Fields("numemp"): ingreso = Data2.Recordset.Fields("feiemp"): txtdepto = Data2.Recordset.Fields("depemp"):
-              saldia = 0: Data3.RecordSource = "SELECT * FROM prenomina  WHERE numemp = " & Val(txtnumemp) & " and año = " & Val(año) & " and numsem >= " & Val(txtsemv1) & " and numsem <= " & Val(txtsemv4) & "  and numcon = " & 5 & " order by numemp": Data3.Refresh
-              Do While Not Data3.Recordset.EOF
-              saldia = Val(saldia) + Val(Data3.Recordset.Fields("importe"))
-              Data3.Recordset.MoveNext
-              Loop
+    public function onAgregarAguinaldo($aguinaldo) {
+        try {
+            $this->db->insert('prenomina', array(
+                "numsem" => $this->input->post('SEMANA'),
+                "año" => $this->input->post('ANIO'),
+                "numemp" => $aguinaldo["NUMERO"],
+                "diasemp" => $aguinaldo["DIAS"],
+                "numemp" => $aguinaldo["NUMERO"],
+                "numemp" => $aguinaldo["NUMERO"],
+                "numemp" => $aguinaldo["NUMERO"],
+                "numemp" => $aguinaldo["NUMERO"]));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
-              saldiar = Val(saldia) / 4: txtsaldia = Val(saldiar) / 7: fechafina = DateValue(fechaco) - DateValue(ingreso)
-
-              If Val(fechafina) > 365 Then txtimporte = Val(txtsaldia) * 15: diast = 15 Else di1 = Val(fechafina) * 15: di2 = Val(di1) / 365: txtimporte = Val(txtsaldia) * di2: diast = di2
-              gravaagiu
-              Data2.Recordset.MoveNext
-              Loop
-              cristal.ReportFileName = pathc & "prenomagui.rpt"
-              cristal.DataFiles(0) = PATHB & "bdshoesysnomi.MDB"
-              cristal.Formulas(0) = "NOMCIA='" & txtnomcia & "'"
-              cristal.SelectionFormula = "{prenominal.numsem} =" & Val(txtnumsem) & " and {prenominal.año} =" & Val(año) & ""
-              cristal.PrintReport
-              Screen.MousePointer = vbIconPointer
-              End Sub */
+    public function onEliminarMovimientos() {
+        try {
+            $x = $this->input;
+            $this->db->where('año', $x->post('ANIO'))
+                    ->where('numsem', $x->post('SEMANA'))
+                    ->where('tpomov', 0)
+                    ->delete('prenomina');
+            $this->db->set('precaha', 0)
+                    ->where('año', $x->post('ANIO'))
+                    ->where('numsem', $x->post('SEMANA'))
+                    ->where('tpomov', 0)
+                    ->update('prenominal');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
