@@ -96,7 +96,7 @@ class ReportesProduccion_model extends CI_Model {
         try {
             $this->db->query("set sql_mode=''");
             return $this->db->query("
-                SELECT fpn.depto,fpn.control, fpn.pares, fpn.subtot,  DATE_FORMAT(fpn.fecha, '%Y-%m-%d') as fecha ,
+                SELECT fpn.depto,fpn.control, fpn.pares, fpn.subtot,  DATE_FORMAT(fpn.fecha, '%Y-%m-%d') as fecha , fpn.numfrac,
                 ifnull(D.Descripcion,'N/A FALTA ENLAZAR NUEVOS DEPTOS') AS NombreDepto
                         from fracpagnomina fpn
                         left join departamentos D on fpn.depto = D.Clave
@@ -113,26 +113,26 @@ class ReportesProduccion_model extends CI_Model {
         try {
             $this->db->query("set sql_mode=''");
             $this->db->select("
-depto, nombreDepto,
-ifnull(cast(tpares1 as decimal(7,0)),0) as tp1,
-ifnull(cast(tpesos1 as decimal(7,2)),0) as tpe1,
-ifnull(cast(tpares2 as decimal(7)),0) as tp2,
-ifnull(cast(tpesos2 as decimal(7,2)),0) as tpe2,
-ifnull(cast(tpares3 as decimal(7)),0) as tp3,
-ifnull(cast(tpesos3 as decimal(7,2)),0) as tpe3,
-ifnull(cast(tpares4 as decimal(7)),0) as tp4,
-ifnull(cast(tpesos4 as decimal(7,2)),0) as tpe4,
-ifnull(cast(tpares5 as decimal(7)),0) as tp5,
-ifnull(cast(tpesos5 as decimal(7,2)),0) as tpe5,
-ifnull(cast(tpares6 as decimal(7)),0) as tp6,
-ifnull(cast(tpesos6 as decimal(7,2)),0) as tpe6,
-ifnull(cast(tpares7 as decimal(7)),0) as tp7,
-ifnull(cast(tpesos7 as decimal(7,2)),0) as tpe7,
-ifnull(tpares1,0)+ifnull(tpares2,0)+ifnull(tpares3,0)+ifnull(tpares4,0)+ifnull(tpares5,0)+ifnull(tpares6,0)+ifnull(tpares7,0) as total_pares,
-cast(ifnull(tpesos1,0)+ifnull(tpesos2,0)+ifnull(tpesos3,0)+ifnull(tpesos4,0)+ifnull(tpesos5,0)+ifnull(tpesos6,0)+ifnull(tpesos7,0)as decimal (10,2))  as total_pesos
-FROM
-costomanoobratemp
-order by depto asc "
+                            depto, nombreDepto,
+                            ifnull(cast(tpares1 as decimal(7,0)),0) as tp1,
+                            ifnull(cast(tpesos1 as decimal(7,2)),0) as tpe1,
+                            ifnull(cast(tpares2 as decimal(7)),0) as tp2,
+                            ifnull(cast(tpesos2 as decimal(7,2)),0) as tpe2,
+                            ifnull(cast(tpares3 as decimal(7)),0) as tp3,
+                            ifnull(cast(tpesos3 as decimal(7,2)),0) as tpe3,
+                            ifnull(cast(tpares4 as decimal(7)),0) as tp4,
+                            ifnull(cast(tpesos4 as decimal(7,2)),0) as tpe4,
+                            ifnull(cast(tpares5 as decimal(7)),0) as tp5,
+                            ifnull(cast(tpesos5 as decimal(7,2)),0) as tpe5,
+                            ifnull(cast(tpares6 as decimal(7)),0) as tp6,
+                            ifnull(cast(tpesos6 as decimal(7,2)),0) as tpe6,
+                            ifnull(cast(tpares7 as decimal(7)),0) as tp7,
+                            ifnull(cast(tpesos7 as decimal(7,2)),0) as tpe7,
+                            ifnull(tpares1,0)+ifnull(tpares2,0)+ifnull(tpares3,0)+ifnull(tpares4,0)+ifnull(tpares5,0)+ifnull(tpares6,0)+ifnull(tpares7,0) as total_pares,
+                            cast(ifnull(tpesos1,0)+ifnull(tpesos2,0)+ifnull(tpesos3,0)+ifnull(tpesos4,0)+ifnull(tpesos5,0)+ifnull(tpesos6,0)+ifnull(tpesos7,0)as decimal (10,2))  as total_pesos
+                            FROM
+                            costomanoobratemp
+                            order by depto asc "
                     . " ", false);
 
 

@@ -11,6 +11,7 @@
         align-items: center;
         padding-top: 40px;
         padding-bottom: 40px;
+        background: none !important;
     }
     .div-login {
         width: 100%;
@@ -28,7 +29,7 @@
 </style>
 <div id="mdlOlvideContrasena" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog  modal-content ">
-        <div class="modal-header">  
+        <div class="modal-header">
             <h5 class="modal-title">Confirmar</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -49,22 +50,22 @@
     </div>
 </div>
 
-<div class="w-s content-hidden">
+<!--<div class="w-s content-hidden">
     <div class="content-wrap">
         <ul class="fly-in-text">
-            <li><img src="<?php print base_url('img/lobo.png');?>"</li>
-            <li><img src="<?php print base_url('img/solo.png');?>"</li>
-        </ul> 
+            <li><img src="<?php print base_url('img/lobo.png'); ?>"</li>
+            <li><img src="<?php print base_url('img/solo.png'); ?>"</li>
+        </ul>
     </div>
-</div>
+</div>-->
 
-<div id="frmLogin" class="row div-login d-none" aling="center"> 
-    <div id="frmtitulo" class="col-12 text-center d-none">
+<div id="frmLogin" class="row div-login" aling="center">
+    <div id="frmtitulo" class="col-12 text-center">
         <h4 class="mb-3">CONTROL DE ACCESO</h4>
     </div>
-    <div class="col-12 d-none">
-        <form id="frmIngresar" class="card div-login text-center box-helper">
-            <input type="email" id="Usuario" name="Usuario" class="form-control" placeholder="Usuario" required autofocus=""> 
+    <div class="col-12 ">
+        <form id="frmIngresar" class="card-transparent div-login text-center box-helper">
+            <input type="email" id="Usuario" name="Usuario" class="form-control" placeholder="Usuario" required autofocus="">
             <input type="password" id="Contrasena" name="Contrasena" class="form-control mt-3" placeholder="Contraseña" required>
             <button class="btn btn-primary btn-block mt-3" id="btnIngresar" type="button">Ingresar</button>
             <button class="btn btn-warning btn-block mt-2" id="btnOlvidasteContrasena" type="button">Olvidaste tu contraseña?</button>
@@ -115,29 +116,29 @@
     }
     $(document).ready(function () {
 
-        var welcomeSection = $('.w-s');
-        setTimeout(function () {
-            welcomeSection.removeClass('content-hidden');
-        }, 500);
-        
-        setTimeout(function () {
-            welcomeSection.addClass('content-hidden').fadeOut();
-            $("#frmLogin").removeClass("d-none");
-        }, 2500);
-        
-        $("#frmtitulo").removeClass('d-none');
-        $("#frmIngresar").parent().removeClass('d-none');
+//        var welcomeSection = $('.w-s');
+//        setTimeout(function () {
+//            welcomeSection.removeClass('content-hidden');
+//        }, 500);
 
-        $("#frmIngresar").addClass("card-transparent");
+//        setTimeout(function () {
+//            welcomeSection.addClass('content-hidden').fadeOut();
+//            $("#frmLogin").removeClass("d-none");
+//        }, 2500);
 
-        $("body").css("background", "none");
+//        $("#frmtitulo").removeClass('d-none');
+//        $("#frmIngresar").parent().removeClass('d-none');
+//
+//        $("#frmIngresar").addClass("card-transparent");
+
+        //$("body").css("background", "none");
 //        $("body").vegas({
 //            delay: 9000,
 //            slides: [
 //                {src: "<?php print base_url('img/vg/1.jpg'); ?>"},
 //                {src: "<?php print base_url('img/vg/2.jpg'); ?>"},
 //                {src: "<?php print base_url('img/vg/3.jpg'); ?>"},
-//                {src: "<?php print base_url('img/vg/4.jpg'); ?>"}, 
+//                {src: "<?php print base_url('img/vg/4.jpg'); ?>"},
 //                {src: "<?php print base_url('img/vg/6.jpg'); ?>"},
 //                {src: "<?php print base_url('img/vg/7.jpg'); ?>"},
 //                {src: "<?php print base_url('img/vg/8.jpg'); ?>"},
@@ -194,8 +195,8 @@
             });
         });
     });
-</script> 
-<style> 
+</script>
+<style>
     body{
         background-color: #222222;
     }
@@ -206,18 +207,18 @@
     .card-transparent{
         background-color: transparent !important;
         color: #fff !important;
-        border: none !important; 
+        border: none !important;
         box-shadow:none !important;
     }
 
-    .text-shadow{ 
+    .text-shadow{
         text-shadow: 3px 4px 5px #000000;
     }
 
     .text-muted{
         color:#fff !important;
         text-shadow: 3px 4px 5px #000000;
-    } 
+    }
     #overlay {
         position: fixed;
         display: none;
@@ -239,11 +240,11 @@
         color: white;
         transform: translate(-50%,-50%);
         -ms-transform: translate(-50%,-50%);
-    } 
+    }
     * {
         margin: 0;
         padding: 0;
-    } 
+    }
     .w-s {
         position: absolute;
         width: 100%;

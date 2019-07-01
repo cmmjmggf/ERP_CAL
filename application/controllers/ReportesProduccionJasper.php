@@ -159,132 +159,138 @@ class ReportesProduccionJasper extends CI_Controller {
 
 
         $this->db->query("truncate table costomanoobratemp");
-        $Fechas = $cm->getFechas($this->input->post('Ano'), $this->input->post('Sem'));
+        //$Fechas = $cm->getFechas($this->input->post('Ano'), $this->input->post('Sem'));
+        $Ano = $this->input->post('Ano');
+        $Sem = $this->input->post('Sem');
+        $Fechas = $this->db->query("select
+                STR_TO_DATE(FechaIni, '%d/%m/%Y') AS Dia1,
+                DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 1 DAY) AS Dia2,
+                DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 2 DAY) AS Dia3,
+                DATE_ADD(STR_TO_DATE(FechaIni,'%d/%m/%Y'),INTERVAL 3 DAY) AS Dia4,
+                DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 4 DAY) AS Dia5,
+                DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 5 DAY) AS Dia6,
+                DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 6 DAY) AS Dia7
+                from semanasnomina where Ano = $Ano and Sem = $Sem and Estatus = 'ACTIVO'
+                ")->result();
 
-        $Totales_Pares = $cm->getControlesParesByDeptoAnoSemanaFecha($this->input->post('Ano'), $this->input->post('Sem'));
+
+        //$Totales_Pares = $cm->getControlesParesByDeptoAnoSemanaFecha($this->input->post('Ano'), $this->input->post('Sem'));
+
+
+        $Totales_Pares = $this->db->query("
+                        SELECT fpn.depto,fpn.control, fpn.pares, fpn.subtot,  DATE_FORMAT(fpn.fecha, '%Y-%m-%d') as fecha , fpn.numfrac,
+                        ifnull(D.Descripcion,'N/A FALTA ENLAZAR NUEVOS DEPTOS') AS NombreDepto
+                        from fracpagnomina fpn
+                        left join departamentos D on fpn.depto = D.Clave
+                        where fpn.anio = $Ano
+                        and fpn.semana = $Sem
+                        and fpn.depto > 0
+                        order by  fpn.fecha asc, fpn.depto asc ,fpn.control asc
+                ")->result();
+
         $Pares = 0;
-        $control = '';
+        $sql = '';
         foreach ($Totales_Pares as $key => $v) {
-            if ($v->control !== $control) {
-                $Pares = $v->pares;
-            } else {
-                $Pares = 0;
-            }
-            $control = $v->control;
-            $Temp = $cm->getTablaTemporal($v->depto);
+
+            $Pares = ($v->numfrac === '99') ? 0 : $v->pares;
+            $Temp = $this->db->query("select depto from costomanoobratemp where depto = $v->depto ")->result();
             if (empty($Temp)) { //si no existe inserta
-                if ($Fechas[0]->Dia1 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares1' => $Pares,
-                        'tpesos1' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia2 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares2' => $Pares,
-                        'tpesos2' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia3 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares3' => $Pares,
-                        'tpesos3' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia4 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares4' => $Pares,
-                        'tpesos4' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia5 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares5' => $Pares,
-                        'tpesos5' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia6 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares6' => $Pares,
-                        'tpesos6' => $v->subtot,
-                    ));
-                }
-                if ($Fechas[0]->Dia7 === $v->fecha) {
-                    $this->db->insert("costomanoobratemp", array(
-                        'depto' => $v->depto,
-                        'nombreDepto' => $v->NombreDepto,
-                        'tpares7' => $Pares,
-                        'tpesos7' => $v->subtot,
-                    ));
-                }
+                $this->db->insert("costomanoobratemp", array(
+                    'depto' => $v->depto,
+                    'nombreDepto' => $v->NombreDepto,
+                    'tpares1' => ($Fechas[0]->Dia1 === $v->fecha) ? $Pares : NULL,
+                    'tpesos1' => ($Fechas[0]->Dia1 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares2' => ($Fechas[0]->Dia2 === $v->fecha) ? $Pares : NULL,
+                    'tpesos2' => ($Fechas[0]->Dia2 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares3' => ($Fechas[0]->Dia3 === $v->fecha) ? $Pares : NULL,
+                    'tpesos3' => ($Fechas[0]->Dia3 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares4' => ($Fechas[0]->Dia4 === $v->fecha) ? $Pares : NULL,
+                    'tpesos4' => ($Fechas[0]->Dia4 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares5' => ($Fechas[0]->Dia5 === $v->fecha) ? $Pares : NULL,
+                    'tpesos5' => ($Fechas[0]->Dia5 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares6' => ($Fechas[0]->Dia6 === $v->fecha) ? $Pares : NULL,
+                    'tpesos6' => ($Fechas[0]->Dia6 === $v->fecha) ? $v->subtot : NULL,
+                    'tpares7' => ($Fechas[0]->Dia7 === $v->fecha) ? $Pares : NULL,
+                    'tpesos7' => ($Fechas[0]->Dia7 === $v->fecha) ? $v->subtot : NULL,
+                ));
             } else { // si existe acumula
-                if ($Fechas[0]->Dia1 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares1 = $Pares + ifnull(tpares1,0), "
-                            . "tpesos1 = $v->subtot + ifnull(tpesos1,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia2 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares2 = $Pares + ifnull(tpares2,0), "
-                            . "tpesos2 = $v->subtot + ifnull(tpesos2,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia3 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares3 = $Pares + ifnull(tpares3,0), "
-                            . "tpesos3 = $v->subtot + ifnull(tpesos3,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia4 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares4 = $Pares + ifnull(tpares4,0), "
-                            . "tpesos4 = $v->subtot + ifnull(tpesos4,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia5 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares5 = $Pares + ifnull(tpares5,0), "
-                            . "tpesos5 = $v->subtot + ifnull(tpesos5,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia6 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares6 = $Pares + ifnull(tpares6,0), "
-                            . "tpesos6 = $v->subtot + ifnull(tpesos6,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
-                }
-                if ($Fechas[0]->Dia7 === $v->fecha) {
-                    $sql = "UPDATE costomanoobratemp "
-                            . "SET tpares7 = $Pares + ifnull(tpares7,0), "
-                            . "tpesos7 = $v->subtot + ifnull(tpesos7,0) "
-                            . "WHERE depto = $v->depto ";
-                    $this->db->query($sql);
+                switch ($v->fecha) {
+                    case $Fechas[0]->Dia1:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares1 = $Pares + ifnull(tpares1,0), "
+                                . "tpesos1 = $v->subtot + ifnull(tpesos1,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia2:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares2 = $Pares + ifnull(tpares2,0), "
+                                . "tpesos2 = $v->subtot + ifnull(tpesos2,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia3:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares3 = $Pares + ifnull(tpares3,0), "
+                                . "tpesos3 = $v->subtot + ifnull(tpesos3,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia4:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares4 = $Pares + ifnull(tpares4,0), "
+                                . "tpesos4 = $v->subtot + ifnull(tpesos4,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia5:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares5 = $Pares + ifnull(tpares5,0), "
+                                . "tpesos5 = $v->subtot + ifnull(tpesos5,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia6:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares6 = $Pares + ifnull(tpares6,0), "
+                                . "tpesos6 = $v->subtot + ifnull(tpesos6,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
+                    case $Fechas[0]->Dia7:
+                        $sql = "UPDATE costomanoobratemp "
+                                . "SET tpares7 = $Pares + ifnull(tpares7,0), "
+                                . "tpesos7 = $v->subtot + ifnull(tpesos7,0) "
+                                . "WHERE depto = $v->depto ";
+                        $this->db->query($sql);
+                        break;
                 }
             }
         }
 
-
         /* Reporte */
-        $Registros = $cm->getManoObraDestajo();
+        $Registros = $this->db->query("
+                       select depto, nombreDepto,
+                        ifnull(cast(tpares1 as decimal(7,0)),0) as tp1,
+                        ifnull(cast(tpesos1 as decimal(7,2)),0) as tpe1,
+                        ifnull(cast(tpares2 as decimal(7)),0) as tp2,
+                        ifnull(cast(tpesos2 as decimal(7,2)),0) as tpe2,
+                        ifnull(cast(tpares3 as decimal(7)),0) as tp3,
+                        ifnull(cast(tpesos3 as decimal(7,2)),0) as tpe3,
+                        ifnull(cast(tpares4 as decimal(7)),0) as tp4,
+                        ifnull(cast(tpesos4 as decimal(7,2)),0) as tpe4,
+                        ifnull(cast(tpares5 as decimal(7)),0) as tp5,
+                        ifnull(cast(tpesos5 as decimal(7,2)),0) as tpe5,
+                        ifnull(cast(tpares6 as decimal(7)),0) as tp6,
+                        ifnull(cast(tpesos6 as decimal(7,2)),0) as tpe6,
+                        ifnull(cast(tpares7 as decimal(7)),0) as tp7,
+                        ifnull(cast(tpesos7 as decimal(7,2)),0) as tpe7,
+                        ifnull(tpares1,0)+ifnull(tpares2,0)+ifnull(tpares3,0)+ifnull(tpares4,0)+ifnull(tpares5,0)+ifnull(tpares6,0)+ifnull(tpares7,0) as total_pares,
+                        cast(ifnull(tpesos1,0)+ifnull(tpesos2,0)+ifnull(tpesos3,0)+ifnull(tpesos4,0)+ifnull(tpesos5,0)+ifnull(tpesos6,0)+ifnull(tpesos7,0)as decimal (10,2))  as total_pesos
+                        FROM
+                        costomanoobratemp
+                        order by depto asc
+                ")->result();
         if (!empty($Registros)) {
 
             $pdf = new PDFManoObra('L', 'mm', array(215.9, 279.4));

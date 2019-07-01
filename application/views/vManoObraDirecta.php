@@ -34,6 +34,7 @@
     var mdlManoObraDirecta = $('#mdlManoObraDirecta');
     $(document).ready(function () {
         mdlManoObraDirecta.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlManoObraDirecta);
             mdlManoObraDirecta.find("input").val("");
             $.each(mdlManoObraDirecta.find("select"), function (k, v) {
                 mdlManoObraDirecta.find("select")[k].selectize.clear(true);

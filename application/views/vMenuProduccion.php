@@ -62,3 +62,4 @@ $this->load->view('vEtiZapica');
 $this->load->view('vEstatusPedidoXGrupoAgente');
 $this->load->view('vFichaTecnicaCompra');
 $this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
+$this->load->view('vCostoManoObraGeneral');
