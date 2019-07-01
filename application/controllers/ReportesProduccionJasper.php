@@ -155,11 +155,8 @@ class ReportesProduccionJasper extends CI_Controller {
     }
 
     public function onReporteConciliaCostoManoObraDestajo() {
-        $cm = $this->ReportesProduccion_model;
-
 
         $this->db->query("truncate table costomanoobratemp");
-        //$Fechas = $cm->getFechas($this->input->post('Ano'), $this->input->post('Sem'));
         $Ano = $this->input->post('Ano');
         $Sem = $this->input->post('Sem');
         $Fechas = $this->db->query("select
@@ -172,11 +169,6 @@ class ReportesProduccionJasper extends CI_Controller {
                 DATE_ADD(STR_TO_DATE(FechaIni, '%d/%m/%Y'),INTERVAL 6 DAY) AS Dia7
                 from semanasnomina where Ano = $Ano and Sem = $Sem and Estatus = 'ACTIVO'
                 ")->result();
-
-
-        //$Totales_Pares = $cm->getControlesParesByDeptoAnoSemanaFecha($this->input->post('Ano'), $this->input->post('Sem'));
-
-
         $Totales_Pares = $this->db->query("
                         SELECT fpn.depto,fpn.control, fpn.pares, fpn.subtot,  DATE_FORMAT(fpn.fecha, '%Y-%m-%d') as fecha , fpn.numfrac,
                         ifnull(D.Descripcion,'N/A FALTA ENLAZAR NUEVOS DEPTOS') AS NombreDepto

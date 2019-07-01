@@ -163,6 +163,7 @@ class ConceptosVariablesNomina extends CI_Controller {
                     'fecha' => Date('Y-m-d'),
                     'tpomov' => 1,
                     'status' => 1,
+                    'registro' => 999,
                     'depto' => $x->post('deptoemp')
                 ));
             }
@@ -244,6 +245,7 @@ class ConceptosVariablesNomina extends CI_Controller {
                     'tpomov' => 1,
                     'status' => 1,
                     'año' => $x->post('Ano'),
+                    'registro' => 999,
                     'depto' => $x->post('deptoemp'),
                     'salario' => ($x->post('Concepto') === '1') ? $x->post('Importe') : 0,
                     'salariod' => ($x->post('Concepto') === '5') ? $x->post('Importe') : 0,

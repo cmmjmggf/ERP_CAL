@@ -221,7 +221,6 @@
     function onAgregar() {
         //inserta nuevo
         var frm = new FormData(pnlTablero.find("#frmCaptura")[0]);
-        frm.append('deptoemp', DeptoEmp);
         $.ajax(master_url + 'onAgregar', {
             type: "POST",
             cache: false,
