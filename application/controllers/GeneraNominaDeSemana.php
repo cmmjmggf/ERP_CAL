@@ -123,7 +123,9 @@ class GeneraNominaDeSemana extends CI_Controller {
             foreach ($empleados as $k => $v) {
                 $sueldin = $v->Sueldo; /* SUELDO DIARIO */
                 $fecha = Date('Y-m-d'); /**/
-                $dias = $this->db->select("DATEDIFF(\"{$fecha}\", E.FechaIngreso) AS DIAS", false)
+                $dias = $this->db->select("DATEDIFF(DATE_FORMAT("
+                                        . "str_to_date(\"{$x->post('FECHACORTE')}\",\"%d/%m/%Y\"),\"%Y-%m-%d\"), "
+                                        . "DATE_FORMAT(E.FechaIngreso,\"%Y-%m-%d\")) AS DIAS", false)
                                 ->from("empleados AS E")
                                 ->where("E.Numero", $v->Numero)
                                 ->where('E.AltaBaja', 1)
@@ -327,12 +329,12 @@ class GeneraNominaDeSemana extends CI_Controller {
             $S1 = intval($x->post('S1'));
             $S4 = intval($x->post('S4'));
             /* 1 ELIMINAR REGISTROS EN PRENOMINA Y PRENOMINAL DE LA SEMANA Y AÑO ESPECIFICADO */
-            //            $this->db->where('numsem', $x->post('SEMANA'))
-//                    ->where('año', $x->post('ANIO'))
-//                    ->delete('prenomina');
-//            $this->db->where('numsem', $x->post('SEMANA'))
-//                    ->where('año', $x->post('ANIO'))
-//                    ->delete('prenominal');
+            $this->db->where('numsem', $x->post('SEMANA'))
+                    ->where('año', $x->post('ANIO'))
+                    ->delete('prenomina');
+            $this->db->where('numsem', $x->post('SEMANA'))
+                    ->where('año', $x->post('ANIO'))
+                    ->delete('prenominal');
 
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
             $empleados = $this->db->select("E.*, DATEDIFF(DATE_FORMAT("
@@ -349,44 +351,70 @@ class GeneraNominaDeSemana extends CI_Controller {
             $dias = 15;
             $dias_a_pagar = 0;
             $total_aguinaldo = 0;
+            $SUELDO_FINAL = 0;
             foreach ($empleados as $k => $v) {
+                $SUELDO_FINAL = $v->Sueldo;
                 $it += 1;
                 /* VALIDAR EL TIPO DE SALARIO 1 = (FIJO), 2 (DESTAJO) y 3 (FIJO-DESTAJO) */
-                if (intval($v->DepartamentoFisico) === 1 || intval($v->DepartamentoFisico) === 3) {
+                if (intval($v->DepartamentoFisico) === 1) {
                     /* 1 SI EL EMPLEADO TIENE MAS DE 365 O IGUAL SE LE PAGAN 15 DIAS DE SALARIO */
                     if (intval($v->DIASFC) >= 365) {
-                        print "NO.EMPLEADO: {$v->Numero}, INGRESO: {$v->FechaIngreso}, "
-                                . "DEPARTAMENTO: {$v->DepartamentoFisico}, SUELDO: {$v->Sueldo},"
-                                . "FECHACORTE: {$x->post('FECHACORTE')}, DIAS : {$v->DIASFC} \n";
                         $ita += 1;
-                        $total_aguinaldo = $v->Sueldo * $dias;
+                        $total_aguinaldo = $SUELDO_FINAL * $dias;
                         $dias_a_pagar = $dias;
                     } else {
                         /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
                         $dias_x_quince = intval($v->DIASFC) * $dias;
                         $dias_a_pagar = $dias_x_quince / 365;
-                        $total_aguinaldo = $v->Sueldo * $dias_a_pagar;
+                        $total_aguinaldo = $SUELDO_FINAL * $dias_a_pagar;
                     }
                 } else if (intval($v->DepartamentoFisico) === 2) {
                     /* CALCULAR EL SALARIO DE LAS ULTIMAS CUATRO SEMANAS */
-                    $SUELDO_CUATRO_SEM = $this->db->select("SUM(FPN.subtot) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
+                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(importe)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
                                     ->where("FPN.numeroempleado", $v->Numero)
                                     ->where("FPN.anio", $x->post('ANIO'))
                                     ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
                                     ->get()->result();
+                    $SUELDO_FINAL = $SUELDO_CUATRO_SEM[0]->SUBTOTAL;
                     if (intval($v->DIASFC) >= 365) {
-                        print "NO.EMPLEADO: {$v->Numero}, INGRESO: {$v->FechaIngreso}, "
-                                . "DEPARTAMENTO: {$v->DepartamentoFisico}, SUELDO: {$v->Sueldo},"
-                                . "FECHACORTE: {$x->post('FECHACORTE')}, DIAS : {$v->DIASFC} \n";
                         $ita += 1;
-                        $total_aguinaldo = $v->Sueldo * $dias;
+                        $total_aguinaldo = $SUELDO_FINAL * $dias;
+                        $dias_a_pagar = $dias; 
+                    } else {
+                        /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
+                        $dias_x_quince = intval($v->DIASFC) * $dias;
+                        $dias_a_pagar = $dias_x_quince / 365;
+                        $total_aguinaldo = $SUELDO_FINAL * $dias_a_pagar;
+                    }
+                } else if (intval($v->DepartamentoFisico) === 3) {
+                    /*PROCESAR POR FIJO*/
+                    $SUELDO_FIJO_FINAL = $v->Sueldo;
+                     if (intval($v->DIASFC) >= 365) { 
+                        $total_aguinaldo = $SUELDO_FIJO_FINAL * $dias;
                         $dias_a_pagar = $dias;
                     } else {
                         /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
                         $dias_x_quince = intval($v->DIASFC) * $dias;
                         $dias_a_pagar = $dias_x_quince / 365;
-                        $total_aguinaldo = $v->Sueldo * $dias_a_pagar;
+                        $total_aguinaldo = $SUELDO_FIJO_FINAL * $dias_a_pagar;
                     }
+                    /*PROCESAR POR DESTAJO*/
+                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(importe)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
+                                    ->where("FPN.numeroempleado", $v->Numero)
+                                    ->where("FPN.anio", $x->post('ANIO'))
+                                    ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
+                                    ->get()->result();
+                    $SUELDO_FINAL = $SUELDO_CUATRO_SEM[0]->SUBTOTAL;
+                    if (intval($v->DIASFC) >= 365) {
+                        $ita += 1;
+                        $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias);
+                        $dias_a_pagar = $dias; 
+                    } else {
+                        /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
+                        $dias_x_quince = intval($v->DIASFC) * $dias;
+                        $dias_a_pagar = $dias_x_quince / 365;
+                        $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias_a_pagar);
+                    } 
                 }
                 /* AGREGAR A PRENOMINA */
                 $this->db->insert('prenomina', array("numsem" => $x->post('SEMANA'),
@@ -395,13 +423,13 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "diasemp" => $dias_a_pagar,
                     "numcon" => 27, "tpcon" => 1,
                     "importe" => $total_aguinaldo,
-                    "imported" => $v->Sueldo,
+                    "imported" => $SUELDO_FINAL,
                     "fecha" => Date('Y-m-d h:i:s'),
                     "status" => 1, "tpomov" => 0));
                 /* AGREGAR A PRENOMINAL */
                 $this->db->insert('prenominal', array(
                     "numsem" => $x->post('SEMANA'), "año" => $x->post('ANIO'),
-                    "numemp" => $v->Numero, "salario" => $v->Sueldo,
+                    "numemp" => $v->Numero, "salario" => $SUELDO_FINAL,
                     "otrper" => intval($v->DIASFC),
                     "horext" => $dias_a_pagar,
                     "pares" => 0, "status" => 1, "tpomov" => 0,

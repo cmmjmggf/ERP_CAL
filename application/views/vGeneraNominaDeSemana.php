@@ -135,7 +135,7 @@
                     ANIO: AnioGNS.val(),
                     SEMANA: SemanaGNS.val()
                 }).done(function (a) {
-                    onNotify('<span class="fa fa-success"></span>', 'MOVIMIENTOS ELIMINADOS', 'danger');
+                    onNotifyOld('<span class="fa fa-success"></span>', 'MOVIMIENTOS ELIMINADOS', 'danger').t;
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
