@@ -59,7 +59,7 @@
     var mdlRecibosNomina = $('#mdlRecibosNomina');
     $(document).ready(function () {
         mdlRecibosNomina.on('shown.bs.modal', function () {
-            handleEnterDiv($('#selectEmpRecibos'));
+            handleEnterDiv(mdlRecibosNomina);
             mdlRecibosNomina.find("input").not('#SemRecibos').val("");
             $.each(mdlRecibosNomina.find("select"), function (k, v) {
                 mdlRecibosNomina.find("select")[k].selectize.clear(true);

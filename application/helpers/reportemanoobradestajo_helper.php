@@ -82,28 +82,20 @@ class PDFManoObraGeneral extends FPDF {
         $this->Cell(12, 4, utf8_decode('Total'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Viernes'), 1/* BORDE */, 0, 'C');
+        $this->Cell(36, 4, utf8_decode('Salarios'), 1/* BORDE */, 0, 'C');
+
+
+
+        $this->SetX($this->GetX() + 30);
+        $this->Cell(22, 4, utf8_decode('Total'), 1/* BORDE */, 0, 'C');
+
+        $this->SetX($this->GetX() + 22);
+        $this->Cell(22, 4, utf8_decode('Costo'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Sábado'), 1/* BORDE */, 0, 'C');
+        $this->Cell(18, 4, utf8_decode('%'), 1/* BORDE */, 0, 'C');
 
-        $this->SetX($this->GetX());
-        $this->Cell(20, 4, utf8_decode('Domingo'), 1/* BORDE */, 0, 'C');
 
-        $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Lunes'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Martes'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Miércoles'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(27, 4, utf8_decode('Totales'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Costo'), 1/* BORDE */, 0, 'C');
 
         $this->SetY(22);
         $this->SetX(5);
@@ -113,36 +105,24 @@ class PDFManoObraGeneral extends FPDF {
         $this->Cell(12, 4, utf8_decode('Personal'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(18, 4, utf8_decode('Fijos'), 'LBT'/* BORDE */, 0, 'C');
+        $this->Cell(18, 4, utf8_decode('Destajos'), 'RBT'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, utf8_decode('Bonos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, utf8_decode('Extras'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(10, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(10, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(22, 4, utf8_decode('Mano Obra'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(22, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
+        $this->Cell(22, 4, utf8_decode('MO depto'), 1/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(12, 4, utf8_decode('Pares'), 1/* BORDE */, 0, 'C');
-        $this->Cell(15, 4, utf8_decode('Pesos'), 1/* BORDE */, 0, 'C');
-
-        $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('M.Obra'), 1/* BORDE */, 1, 'C');
-
+        $this->Cell(18, 4, utf8_decode('Total'), 1/* BORDE */, 1, 'C');
 
         $this->SetLineWidth(0.2);
     }

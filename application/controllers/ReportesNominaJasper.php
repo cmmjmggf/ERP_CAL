@@ -68,7 +68,7 @@ class ReportesNominaJasper extends CI_Controller {
 //        }
         /* reporte */
 
-        $Total = $this->db->query("
+        $Total_Col_Por = $this->db->query("
 select
 SUM(
 ifnull((ifnull(CMT.salario,0)+ifnull(CMT.salariod,10)+ifnull(CMT.bonos,0)+ifnull(CMT.extras,0))/
@@ -221,8 +221,6 @@ else
 end),0) as costoMo
 FROM costomanoobratemp CMT
                 ")->result();
-
-
         if (!empty($Registros)) {
 
             $pdf = new PDFManoObraGeneral('L', 'mm', array(215.9, 279.4));
@@ -239,124 +237,78 @@ FROM costomanoobratemp CMT
             $TPe2 = 0;
             $TP3 = 0;
             $TPe3 = 0;
-            $TP4 = 0;
             $TPe4 = 0;
             $TP5 = 0;
-            $TPe5 = 0;
-            $TP6 = 0;
-            $TPe6 = 0;
-            $TP7 = 0;
-            $TPe7 = 0;
-            $TP = 0;
-            $TPe = 0;
-            $MO = 0;
 
             $pdf->SetFont('Calibri', '', 8);
+            $Porcentaje = 0;
             foreach ($Registros as $key => $R) {
 
+                //Calcula por renglon
+                $Porcentaje = $R->costoMo / $Total_Col_Por * 100;
 
                 $pdf->SetX(5);
-                $pdf->Cell(43, 4, mb_strimwidth(utf8_decode($R->depto . ' ' . $R->nombreDepto), 0, 20, ""), 'B'/* BORDE */, 0, 'L');
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp1 <> 0) ? number_format($R->tp1, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe1 <> 0) ? number_format($R->tpe1, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp2 <> 0) ? number_format($R->tp2, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe2 <> 0) ? number_format($R->tpe2, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp3 <> 0) ? number_format($R->tp3, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe3 <> 0) ? number_format($R->tpe3, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(10, 4, ($R->tp4 <> 0) ? number_format($R->tp4, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(10, 4, ($R->tp4 <> 0) ? number_format($R->tp4, 0, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp5 <> 0) ? number_format($R->tp5, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe5 <> 0) ? number_format($R->tpe5, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp6 <> 0) ? number_format($R->tp6, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe6 <> 0) ? number_format($R->tpe6, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->tp7 <> 0) ? number_format($R->tp7, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->tpe7 <> 0) ? number_format($R->tpe7, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(12, 4, ($R->total_pares <> 0) ? number_format($R->total_pares, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
-//                $pdf->Cell(15, 4, ($R->total_pesos <> 0) ? number_format($R->total_pesos, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-//
-//
-//                $pdf->SetX($pdf->GetX());
-//                $pdf->Cell(18, 4, ($R->total_pesos / $R->total_pares <> 0) ? number_format($R->total_pesos / $R->total_pares, 2, ".", ",") : '', 1/* BORDE */, 1, 'C');
-//
-//                $TP1 += $R->tp1;
-//                $TPe1 += $R->tpe1;
-//                $TP2 += $R->tp2;
-//                $TPe2 += $R->tpe2;
-//                $TP3 += $R->tp3;
-//                $TPe3 += $R->tpe3;
-//                $TP4 += $R->tp4;
-//                $TPe4 += $R->tpe4;
-//                $TP5 += $R->tp5;
-//                $TPe5 += $R->tpe5;
-//                $TP6 += $R->tp6;
-//                $TPe6 += $R->tpe6;
-//                $TP7 += $R->tp7;
-//                $TPe7 += $R->tpe7;
-//                $TP += $R->total_pares;
-//                $TPe += $R->total_pesos;
-//                $MO += $R->total_pesos / $R->total_pares;
+                $pdf->Cell(43, 4, utf8_decode(mb_strimwidth($R->depto . ' ' . $R->nombreDepto, 0, 20, "")), 'B'/* BORDE */, 0, 'L');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(12, 4, ($R->totalemp <> 0) ? number_format($R->totalemp, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 4, ($R->salario <> 0) ? '$' . number_format($R->salario, 0, ".", ",") : '', 'LBT'/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($R->salariod <> 0) ? '$' . number_format($R->salariod, 0, ".", ",") : '', 'RBT'/* BORDE */, 0, 'R');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(15, 4, ($R->bonos <> 0) ? '$' . number_format($R->bonos, 0, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                $pdf->Cell(15, 4, ($R->extras <> 0) ? '$' . number_format($R->extras, 0, ".", ",") : '', 1/* BORDE */, 0, 'R');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(22, 4, ($R->total <> 0) ? '$' . number_format($R->total, 0, ".", ",") : '', 1/* BORDE */, 0, 'R');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(22, 4, ($R->pares <> 0) ? number_format($R->pares, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(22, 4, ($R->costoMo <> 0) ? number_format($R->costoMo, 2, ".", ",") : '', 1/* BORDE */, 0, 'C');
+
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 4, ($Porcentaje <> 0) ? '%' . number_format($Porcentaje, 2, ".", ",") : '', 1/* BORDE */, 1, 'C');
+
+
+                $TP1 += $R->totalemp;
+                $TPe1 += $R->salario;
+                $TP2 += $R->salariod;
+                $TPe2 += $R->bonos;
+                $TP3 += $R->extras;
+                $TPe3 += $R->total;
+                $TPe4 += $R->costoMo;
+                $TP5 += $Porcentaje;
             }
             /* Total general */
-//            $pdf->SetFont('Calibri', 'B', 8);
-//            $pdf->SetX(5);
-//            $pdf->Cell(43, 5, utf8_decode('Total general:'), 0/* BORDE */, 0, 'C');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP1 <> 0) ? number_format($TP1, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe1 <> 0) ? number_format($TPe1, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP2 <> 0) ? number_format($TP2, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe2 <> 0) ? number_format($TPe2, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP3 <> 0) ? number_format($TP3, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe3 <> 0) ? number_format($TPe3, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(10, 5, ($TP4 <> 0) ? number_format($TP4, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(10, 5, ($TPe4 <> 0) ? number_format($TPe4, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP5 <> 0) ? number_format($TP5, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe5 <> 0) ? number_format($TPe5, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP6 <> 0) ? number_format($TP6, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe6 <> 0) ? number_format($TPe6, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP7 <> 0) ? number_format($TP7, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe7 <> 0) ? number_format($TPe7, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(12, 5, ($TP <> 0) ? number_format($TP, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
-//            $pdf->Cell(15, 5, ($TPe <> 0) ? number_format($TPe, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
-//
-//            $pdf->SetX($pdf->GetX());
-//            $pdf->Cell(18, 5, ($MO <> 0) ? number_format($MO, 2, ".", ",") : '', 0/* BORDE */, 1, 'C');
+            $pdf->SetFont('Calibri', 'B', 8);
+            $pdf->SetX(5);
+            $pdf->Cell(43, 5, utf8_decode('Total general:'), 0/* BORDE */, 0, 'C');
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(12, 4, ($TP1 <> 0) ? number_format($TP1, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(18, 4, ($TPe1 <> 0) ? '$' . number_format($TPe1, 0, ".", ",") : '', 0/* BORDE */, 0, 'R');
+            $pdf->Cell(18, 4, ($TP2 <> 0) ? '$' . number_format($TP2, 0, ".", ",") : '', 0/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 4, ($TPe2 <> 0) ? '$' . number_format($TPe2, 0, ".", ",") : '', 0/* BORDE */, 0, 'R');
+            $pdf->Cell(15, 4, ($TP3 <> 0) ? '$' . number_format($TP3, 0, ".", ",") : '', 0/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(22, 4, ($TPe3 <> 0) ? '$' . number_format($TPe3, 0, ".", ",") : '', 0/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(22, 4, '', 0/* BORDE */, 0, 'C');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(22, 4, ($TPe4 <> 0) ? number_format($TPe4, 2, ".", ",") : '', 0/* BORDE */, 0, 'C');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(18, 4, ($TP5 <> 0) ? '%' . number_format($TP5, 2, ".", ",") : '', 0/* BORDE */, 1, 'C');
 
 
             /* FIN RESUMEN */
