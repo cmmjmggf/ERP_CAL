@@ -34,8 +34,17 @@ join conceptosnomina CN on CN.Clave = PN.numcon
 left join departamentos D on E.departamentofisico = D.Clave
 where PN.año = $P{ano}
 and PN.numsem = $P{sem}
-and PN.numemp like concat ('%',$P{empleado},'')
-and E.departamentofisico like concat('%',$P{depto},'')
+
+and (
+case
+when $P{empleado} <> '' then PN.numemp = $P{empleado}
+when $P{empleado} = '' then PN.numemp like '%%' end)
+
+and (
+case
+when $P{depto} <> '' then E.departamentofisico = $P{depto}
+when $P{depto} = '' then E.departamentofisico like '%%' end)
+
 order by clavedepto ASC, PN.numemp ASC, PN.tpcon DESC,PN.tpcond ASC, PN.numcon asc]]>
 	</queryString>
 	<field name="diasemp" class="java.lang.Integer">
@@ -61,7 +70,9 @@ order by clavedepto ASC, PN.numemp ASC, PN.tpcon DESC,PN.tpcond ASC, PN.numcon a
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="clavedepto" class="java.lang.Long"/>
-	<field name="nomdepto" class="java.lang.String"/>
+	<field name="nomdepto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="percepciones" class="java.math.BigDecimal"/>
 	<field name="deducciones" class="java.math.BigDecimal"/>
 	<variable name="percepciones_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Empleado" calculation="Sum">

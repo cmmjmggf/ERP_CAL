@@ -2,12 +2,13 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
+require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
 class ReportesNominaJasper extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session')->helper('jaspercommand_helper')->helper('file');
+        $this->load->library('session')->helper('jaspercommand_helper')->helper('file')->helper('ReporteManoObraDestajo_helper');
         date_default_timezone_set('America/Mexico_City');
 
         setlocale(LC_ALL, "");
@@ -16,56 +17,362 @@ class ReportesNominaJasper extends CI_Controller {
 
     public function onImprimirCostoMOGen() {
 
-        $this->db->query("truncate table costomanoobratemp");
+        //$this->db->query("truncate table costomanoobratemp");
         $Ano = $this->input->post('AnoCostoMOGen');
         $Sem = $this->input->post('SemCostoMOGen');
 
-        $RegistrosNomina = $this->db->query("
-                        SELECT  p.salario,
-                                p.salariod,
-                                p.horext,
-                                p.otrper,
-                                cast(ifnull(D.Clave,'999')as signed) as numdepto,
-                                ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto,
-                                E.FijoDestajoAmbos as tiposal,
-                                p.numemp
-                        from prenominal p
-                        join empleados E on E.numero =  p.numemp
-                        left join departamentos D on E.DepartamentoFisico = D.Clave
-                        where p.año = $Ano
-                        and p.numsem = $Sem
-                        order by  numdepto asc ")->result();
-
-        $sql = '';
-        foreach ($RegistrosNomina as $key => $v) {
-
-            $salario = floatval($v->salario);
-            $salariod = floatval($v->salariod);
-            $bonos = floatval($v->horext);
-            $extras = floatval($v->otrper);
-
-
-            $Temp = $this->db->query("select depto from costomanoobratemp where depto = $v->numdepto ")->result();
-            if (empty($Temp)) { //si no existe inserta
-                $this->db->insert("costomanoobratemp", array(
-                    'depto' => $v->numdepto,
-                    'nombreDepto' => $v->nomdepto,
-                    'salario' => $salario,
-                    'salariod' => $salariod,
-                    'bonos' => $bonos,
-                    'extras' => $extras
-                ));
-            } else { // si existe acumula
-                $sql = "UPDATE costomanoobratemp set "
-                        . "salariod = ifnull(salariod,0) + $salariod  , "
-                        . "salario = ifnull(salario,0) + $salario  , "
-                        . "bonos = ifnull(bonos,0) + $bonos , "
-                        . "extras =ifnull(extras,0) + $extras "
-                        . "WHERE depto = $v->numdepto ";
-                $this->db->query($sql);
-            }
-        }
+//        $RegistrosNomina = $this->db->query("
+//                        SELECT  p.salario,
+//                                p.salariod,
+//                                p.horext,
+//                                p.otrper,
+//                                cast(ifnull(D.Clave,'999')as signed) as numdepto,
+//                                ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto,
+//                                E.FijoDestajoAmbos as tiposal,
+//                                p.numemp
+//                        from prenominal p
+//                        join empleados E on E.numero =  p.numemp
+//                        left join departamentos D on E.DepartamentoFisico = D.Clave
+//                        where p.año = $Ano
+//                        and p.numsem = $Sem
+//                        order by  numdepto asc ")->result();
+//
+//        $sql = '';
+//        foreach ($RegistrosNomina as $key => $v) {
+//
+//            $salario = floatval($v->salario);
+//            $salariod = floatval($v->salariod);
+//            $bonos = floatval($v->horext);
+//            $extras = floatval($v->otrper);
+//
+//
+//            $Temp = $this->db->query("select depto from costomanoobratemp where depto = $v->numdepto ")->result();
+//            if (empty($Temp)) { //si no existe inserta
+//                $this->db->insert("costomanoobratemp", array(
+//                    'depto' => $v->numdepto,
+//                    'nombreDepto' => $v->nomdepto,
+//                    'salario' => $salario,
+//                    'salariod' => $salariod,
+//                    'bonos' => $bonos,
+//                    'extras' => $extras
+//                ));
+//            } else { // si existe acumula
+//                $sql = "UPDATE costomanoobratemp set "
+//                        . "salariod = ifnull(salariod,0) + $salariod  , "
+//                        . "salario = ifnull(salario,0) + $salario  , "
+//                        . "bonos = ifnull(bonos,0) + $bonos , "
+//                        . "extras =ifnull(extras,0) + $extras "
+//                        . "WHERE depto = $v->numdepto ";
+//                $this->db->query($sql);
+//            }
+//        }
         /* reporte */
+
+        $Total = $this->db->query("
+select
+SUM(
+ifnull((ifnull(CMT.salario,0)+ifnull(CMT.salariod,10)+ifnull(CMT.bonos,0)+ifnull(CMT.extras,0))/
+(case
+when CMT.depto = 10 then -- corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 10 and fpn.numeroempleado <> 2721 and fpn.numfrac <> 99
+    ),0)
+when CMT.depto = 70 then -- prel corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 70 and fpn.numfrac = 60
+    ),0)
+when CMT.depto = 80 then  -- rayado contado
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 80 and fpn.numfrac = 102
+    ),0)
+when CMT.depto = 110 then  -- pespunte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 300
+    ),0)
+when CMT.depto = 170 then -- choferes
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+when CMT.depto > 220 then -- todo ls que es mayor a adorno b
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+else
+    ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = CMT.depto
+    ),0)
+end),0)
+)AS totalCostoMo
+FROM costomanoobratemp CMT
+")->result()[0]->totalCostoMo;
+
+        $Registros = $this->db->query("
+select
+(select count(numero) from empleados where departamentofisico = CMT.depto and altabaja = 1) as totalemp,
+CMT.depto,
+CMT.nombreDepto,
+CMT.salario,
+CMT.salariod,
+CMT.bonos,
+CMT.extras,
+ifnull(CMT.salario,0)+ifnull(CMT.salariod,10)+ifnull(CMT.bonos,0)+ifnull(CMT.extras,0) as total,
+case
+when CMT.depto = 10 then -- corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 10 and fpn.numeroempleado <> 2721 and fpn.numfrac <> 99
+    ),0)
+when CMT.depto = 70 then -- prel corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 70 and fpn.numfrac = 60
+    ),0)
+when CMT.depto = 80 then  -- rayado contado
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 80 and fpn.numfrac = 102
+    ),0)
+when CMT.depto = 110 then  -- pespunte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 300
+    ),0)
+when CMT.depto = 170 then -- choferes
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+when CMT.depto > 220 then -- todo ls que es mayor a adorno b
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+else
+    ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = CMT.depto
+    ),0)
+end as pares,
+ifnull((ifnull(CMT.salario,0)+ifnull(CMT.salariod,10)+ifnull(CMT.bonos,0)+ifnull(CMT.extras,0))/
+(case
+when CMT.depto = 10 then -- corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 10 and fpn.numeroempleado <> 2721 and fpn.numfrac <> 99
+    ),0)
+when CMT.depto = 70 then -- prel corte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 70 and fpn.numfrac = 60
+    ),0)
+when CMT.depto = 80 then  -- rayado contado
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = 80 and fpn.numfrac = 102
+    ),0)
+when CMT.depto = 110 then  -- pespunte
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 300
+    ),0)
+when CMT.depto = 170 then -- choferes
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+when CMT.depto > 220 then -- todo ls que es mayor a adorno b
+	ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and fpn.numfrac = 600
+    ),0)
+else
+    ifnull((
+	SELECT sum(fpn.pares) FROM fracpagnomina fpn
+	join empleados E  on fpn.numeroempleado = E.numero
+	where fpn.anio = $Ano and fpn.semana = $Sem and E.DepartamentoFisico = CMT.depto
+    ),0)
+end),0) as costoMo
+FROM costomanoobratemp CMT
+                ")->result();
+
+
+        if (!empty($Registros)) {
+
+            $pdf = new PDFManoObraGeneral('L', 'mm', array(215.9, 279.4));
+            $pdf->setSem($Sem);
+            $pdf->setAno($Ano);
+
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(true, 6);
+            $pdf->SetLineWidth(0.2);
+
+            $TP1 = 0;
+            $TPe1 = 0;
+            $TP2 = 0;
+            $TPe2 = 0;
+            $TP3 = 0;
+            $TPe3 = 0;
+            $TP4 = 0;
+            $TPe4 = 0;
+            $TP5 = 0;
+            $TPe5 = 0;
+            $TP6 = 0;
+            $TPe6 = 0;
+            $TP7 = 0;
+            $TPe7 = 0;
+            $TP = 0;
+            $TPe = 0;
+            $MO = 0;
+
+            $pdf->SetFont('Calibri', '', 8);
+            foreach ($Registros as $key => $R) {
+
+
+                $pdf->SetX(5);
+                $pdf->Cell(43, 4, mb_strimwidth(utf8_decode($R->depto . ' ' . $R->nombreDepto), 0, 20, ""), 'B'/* BORDE */, 0, 'L');
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp1 <> 0) ? number_format($R->tp1, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe1 <> 0) ? number_format($R->tpe1, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp2 <> 0) ? number_format($R->tp2, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe2 <> 0) ? number_format($R->tpe2, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp3 <> 0) ? number_format($R->tp3, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe3 <> 0) ? number_format($R->tpe3, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(10, 4, ($R->tp4 <> 0) ? number_format($R->tp4, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(10, 4, ($R->tp4 <> 0) ? number_format($R->tp4, 0, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp5 <> 0) ? number_format($R->tp5, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe5 <> 0) ? number_format($R->tpe5, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp6 <> 0) ? number_format($R->tp6, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe6 <> 0) ? number_format($R->tpe6, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->tp7 <> 0) ? number_format($R->tp7, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->tpe7 <> 0) ? number_format($R->tpe7, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(12, 4, ($R->total_pares <> 0) ? number_format($R->total_pares, 0, ".", ",") : '', 1/* BORDE */, 0, 'C');
+//                $pdf->Cell(15, 4, ($R->total_pesos <> 0) ? number_format($R->total_pesos, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+//
+//
+//                $pdf->SetX($pdf->GetX());
+//                $pdf->Cell(18, 4, ($R->total_pesos / $R->total_pares <> 0) ? number_format($R->total_pesos / $R->total_pares, 2, ".", ",") : '', 1/* BORDE */, 1, 'C');
+//
+//                $TP1 += $R->tp1;
+//                $TPe1 += $R->tpe1;
+//                $TP2 += $R->tp2;
+//                $TPe2 += $R->tpe2;
+//                $TP3 += $R->tp3;
+//                $TPe3 += $R->tpe3;
+//                $TP4 += $R->tp4;
+//                $TPe4 += $R->tpe4;
+//                $TP5 += $R->tp5;
+//                $TPe5 += $R->tpe5;
+//                $TP6 += $R->tp6;
+//                $TPe6 += $R->tpe6;
+//                $TP7 += $R->tp7;
+//                $TPe7 += $R->tpe7;
+//                $TP += $R->total_pares;
+//                $TPe += $R->total_pesos;
+//                $MO += $R->total_pesos / $R->total_pares;
+            }
+            /* Total general */
+//            $pdf->SetFont('Calibri', 'B', 8);
+//            $pdf->SetX(5);
+//            $pdf->Cell(43, 5, utf8_decode('Total general:'), 0/* BORDE */, 0, 'C');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP1 <> 0) ? number_format($TP1, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe1 <> 0) ? number_format($TPe1, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP2 <> 0) ? number_format($TP2, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe2 <> 0) ? number_format($TPe2, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP3 <> 0) ? number_format($TP3, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe3 <> 0) ? number_format($TPe3, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(10, 5, ($TP4 <> 0) ? number_format($TP4, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(10, 5, ($TPe4 <> 0) ? number_format($TPe4, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP5 <> 0) ? number_format($TP5, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe5 <> 0) ? number_format($TPe5, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP6 <> 0) ? number_format($TP6, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe6 <> 0) ? number_format($TPe6, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP7 <> 0) ? number_format($TP7, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe7 <> 0) ? number_format($TPe7, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(12, 5, ($TP <> 0) ? number_format($TP, 0, ".", ",") : '', 0/* BORDE */, 0, 'C');
+//            $pdf->Cell(15, 5, ($TPe <> 0) ? number_format($TPe, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+//
+//            $pdf->SetX($pdf->GetX());
+//            $pdf->Cell(18, 5, ($MO <> 0) ? number_format($MO, 2, ".", ",") : '', 0/* BORDE */, 1, 'C');
+
+
+            /* FIN RESUMEN */
+            $path = 'uploads/Reportes/Produccion';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "REPORTE MANO OBRA GENERAL " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.pdf';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Produccion/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $pdf->Output($url);
+            print base_url() . $url;
+        }
     }
 
     public function onReporteAguinaldos() {
