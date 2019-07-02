@@ -11,13 +11,13 @@
                 <div class="row">
                     <div class="col-6">
                         <label>Año</label>
-                        <input type="text" id="AnioGNS" name="AnioGNS" max="2050"  maxlength="4" class="form-control form-control-sm numeric" autofocus="" autocomplete="off">
+                        <input type="text" id="AnioGNS" name="AnioGNS" max="2050"  maxlength="4" class="form-control form-control-sm numeric" autocomplete="off">
                     </div>
                     <div class="col-6">
                         <br>
                         <div class="custom-control custom-checkbox"  align="left" style="cursor: pointer !important;">
-                            <input type="checkbox" class="custom-control-input selectNotEnter" id="ConsultaNominaCerrada" name="ConsultaNominaCerrada" style="cursor: pointer !important;">
-                            <label class="custom-control-label text-danger labelCheck" for="ConsultaNominaCerrada" style="cursor: pointer !important;">Consulta nomina cerrada</label>
+                            <input type="checkbox" class="custom-control-input" id="ConsultaNominaCerrada" name="ConsultaNominaCerrada" style="cursor: pointer !important;">
+                            <label class="custom-control-label text-danger" for="ConsultaNominaCerrada" style="cursor: pointer !important;">Consulta nomina cerrada</label>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -28,8 +28,8 @@
                     <div class="w-100"></div>
                     <div class="col-12">
                         <div class="custom-control custom-checkbox"  align="left" style="cursor: pointer !important;">
-                            <input type="checkbox" class="custom-control-input selectNotEnter" id="GeneraDiezPorcientoDeptos" name="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">
-                            <label class="custom-control-label text-danger labelCheck" for="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">Genera 10 % depto 90 (ENTRETELADO), 120 (PREL-PESPUNTE), 140 (ENSUELADO)</label>
+                            <input type="checkbox" class="custom-control-input" id="GeneraDiezPorcientoDeptos" name="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">
+                            <label class="custom-control-label text-danger" for="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">Genera 10 % depto 90 (ENTRETELADO), 120 (PREL-PESPUNTE), 140 (ENSUELADO)</label>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -121,7 +121,8 @@
             SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo"),
             btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"),
             btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
-            btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS");
+            btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS"),
+            GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos");
 
     $(document).ready(function () {
 
@@ -179,7 +180,7 @@
             $("#mdlCerrarNominaDeSemana").modal('show');
         });
 
-        handleEnterDiv(mdlGeneraNominaDeSemana);
+//        handleEnterDiv(mdlGeneraNominaDeSemana);
 
         btnGeneraGNS.click(function () {
             var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
@@ -258,7 +259,31 @@
                     });
                 } else {
                     /* GENERA NOMINA POR SEMANA, AÑO */
-
+                    /* CONSULTA NOMINA CERRADA */
+                    onBeep(1);
+                    HoldOn.open({
+                        theme: 'sk-rect',
+                        message: 'Por favor espere...'
+                    });
+                    $.post('<?php print base_url('GeneraNominaDeSemana/onGeneraNomina'); ?>',
+                            {
+                                SEMANA: SemanaGNS.val(),
+                                ANIO: AnioGNS.val(),
+                                FECHAINI: FechaInicialGNS.val(),
+                                FECHAFIN: FechaFinalGNS.val(),
+                                GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
+                            }).done(function (a) {
+                        console.log(a)
+                        if (a.length > 0) {
+//                            onImprimirReporteFancyArray(JSON.parse(a));
+                        } else {
+                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
                 }
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA SEMANA Y UN AÑO', 'warning').then((value) => {
@@ -318,7 +343,7 @@
                 SemanaGNS.val(a[0].SEMANA);
                 FechaInicialGNS.val(a[0].FECHAINI);
                 FechaFinalGNS.val(a[0].FECHAFIN);
-                AnioGNS.focus().select();
+                AnioGNS.focus();
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');

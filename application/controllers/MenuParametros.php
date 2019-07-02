@@ -26,7 +26,7 @@ class MenuParametros extends CI_Controller {
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }
-            $this->load->view('vFooter')->view('vWatermark', $dt);
+            $this->load->view('vParametros')->view('vFooter')->view('vWatermark', $dt);
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
