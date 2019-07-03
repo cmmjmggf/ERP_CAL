@@ -246,11 +246,11 @@
                                 FECHAINI: FechaInicialGNS.val(),
                                 FECHAFIN: FechaFinalGNS.val()
                             }).done(function (a) {
-                        console.log(a)
+                        console.log(a);
                         if (a.length > 0) {
                             onImprimirReporteFancyArray(JSON.parse(a));
                         } else {
-                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+//                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -273,7 +273,7 @@
                                 FECHAFIN: FechaFinalGNS.val(),
                                 GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
                             }).done(function (a) {
-                        console.log(a)
+                        console.log(a);
                         if (a.length > 0) {
 //                            onImprimirReporteFancyArray(JSON.parse(a));
                         } else {
