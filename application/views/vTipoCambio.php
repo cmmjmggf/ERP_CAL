@@ -61,6 +61,7 @@
             }
         });
         mdlTipoCambio.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlTipoCambio);
             mdlTipoCambio.find("input").val("");
             getTipoCambio();
 
@@ -88,7 +89,7 @@
                 HoldOn.close();
             });
         });
-        handleEnter();
+
     });
 
     function getTipoCambio() {

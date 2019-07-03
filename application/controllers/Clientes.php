@@ -39,9 +39,29 @@ class Clientes extends CI_Controller {
         }
     }
 
+    public function getClientesBloqueados() {
+        try {
+            print json_encode($this->db->query("select cliente, motivo, date_format(fecha,'%d/%m/%Y') as fecha, "
+                                    . "case when status = 1 then 'BLOQUEADO' ELSE '' END AS status, "
+                                    . "case when statusped = 1 then 'BLOQUEADO' ELSE '' END AS statusped "
+                                    . "from bloqueovta "
+                                    . "order by cliente asc")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getClienteByID() {
         try {
             print json_encode($this->Clientes_model->getClienteByID($this->input->get('ID')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getClienteBloqueado() {
+        try {
+            print json_encode($this->Clientes_model->getClienteBloqueado($this->input->get('Cliente')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -58,6 +78,14 @@ class Clientes extends CI_Controller {
     public function onComprobarClave() {
         try {
             print json_encode($this->Clientes_model->onComprobarClave($this->input->get('Clave')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getClientes() {
+        try {
+            print json_encode($this->Clientes_model->getClientes());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -130,6 +158,63 @@ class Clientes extends CI_Controller {
     public function getListasDePrecios() {
         try {
             print json_encode($this->Clientes_model->getListasDePrecios());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onGuardarBloqueoAut() {
+        try {
+            $x = $this->input;
+            $CarteraCte = $this->db->query('SELECT cliente, max(datediff(now(),fecha)) as dias FROM cartcliente  WHERE pagos = 0 and saldo > 0 group by cliente order by cliente,fecha ')->result();
+            if (empty($CarteraCte)) {
+                print 1;
+            } else {
+                foreach ($CarteraCte as $v) {
+                    if (intval($v->dias) > intval($x->post('Dias'))) {//Si los días superan a los días seleccionados hacer accion
+                        $data = array(
+                            'cliente' => $v->cliente,
+                            'motivo' => "TEST B.A.DIAS >= " . $x->post('Dias'),
+                            'fecha' => Date('Y-m-d'),
+                            'status' => $x->post('Facturacion'),
+                            'statusped' => $x->post('Pedido')
+                        );
+
+                        $ExisteBloq = $this->db->query("SELECT cliente FROM bloqueovta WHERE cliente = $v->cliente ")->result();
+
+                        if (empty($ExisteBloq)) {
+                            //Insert
+                            $this->db->insert('bloqueovta', $data);
+                        } else {
+                            //update
+                            unset($data["cliente"]);
+                            $this->db->where('cliente', $v->cliente)->update("bloqueovta", $data);
+                        }
+                    }
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onGuardarBloqueoInd() {
+        try {
+            $x = $this->input;
+            $data = array(
+                'cliente' => $x->post('ClienteBloqInd'),
+                'motivo' => strtoupper($x->post('MotivoBloqInd')),
+                'fecha' => Date('Y-m-d'),
+                'status' => $x->post('statusBloqInd'),
+                'statusped' => $x->post('statusPedBloqInd')
+            );
+
+            if ($x->post('Existe') === '1') {
+                unset($data["cliente"]);
+                $this->db->where('cliente', $x->post('ClienteBloqInd'))->update("bloqueovta", $data);
+            } else {
+                $this->db->insert('bloqueovta', $data);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -32,3 +32,6 @@
 
 <?php
 $this->load->view('vTipoCambio');
+$this->load->view('vBloqueoClientesXCliente');
+$this->load->view('vBloqueoClientesAutomatico');
+

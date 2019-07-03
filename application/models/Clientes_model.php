@@ -26,6 +26,16 @@ class Clientes_model extends CI_Model {
         }
     }
 
+    public function getClientes() {
+        try {
+            return $this->db->select("cast(E.Clave as signed) as ID, CONCAT(E.Clave, \"-\", E.RazonS) AS Cliente", false)
+                            ->from('clientes AS E')
+                            ->where_in('E.Estatus', 'ACTIVO')->order_by('ID', 'ASC')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onComprobarClave($C) {
         try {
             return $this->db->select("G.Clave")->from("clientes AS G")->where("G.Clave", $C)->where("G.Estatus", "ACTIVO")->get()->result();
@@ -158,6 +168,14 @@ class Clientes_model extends CI_Model {
     public function getClienteByID($ID) {
         try {
             return $this->db->select('U.*', false)->from('clientes AS U')->where('U.ID', $ID)->where_in('U.Estatus', 'ACTIVO')->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getClienteBloqueado($Cliente) {
+        try {
+            return $this->db->select('U.*', false)->from('bloqueovta AS U')->where('U.cliente', $Cliente)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
