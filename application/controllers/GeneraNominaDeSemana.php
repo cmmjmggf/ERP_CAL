@@ -26,6 +26,212 @@ class GeneraNominaDeSemana extends CI_Controller {
         }
     }
 
+    public function onGeneraNomina() {
+        try {
+            $x = $this->input->post();
+//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
+                            
+            $empleados = $this->db->select('E.*')->from('empleados AS E')
+                            ->where_in('E.AltaBaja', 1)
+                            ->order_by('E.DepartamentoFisico', 'ASC')
+                            ->order_by('E.Numero', 'ASC')
+                            ->order_by('E.FijoDestajoAmbos', 'ASC')
+                            ->get()->result();
+            /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
+            $this->db->where('numsem', $x['SEMANA'])
+                    ->where('año', $x['ANIO'])
+                    ->where_not_in('registro', 999)
+                    ->delete('prenomina');
+            $this->db->where('numsem', $x['SEMANA'])
+                    ->where('año', $x['ANIO'])
+                    ->where_not_in('registro', 999)
+                    ->delete('prenominal');
+
+            foreach ($empleados as $k => $v) {
+
+                $FijoDestajoAmbos = intval($v->FijoDestajoAmbos);
+
+                /* CONSULTAR ASISTENCIAS POR # EMPLEADO */
+                $ASISTENCIAS_SIETE = $this->db->select('A.numasistencias AS ASISTENCIAS')
+                                ->from('asistencia AS A')
+                                ->where('A.numsem', $x['SEMANA'])
+                                ->where('A.año', $x['ANIO'])
+                                ->where('A.numemp', $v->Numero)
+                                ->get()->result();
+                if (empty($ASISTENCIAS_SIETE)) {
+                    $ASISTENCIAS = 0;
+                } else {
+                    $ASISTENCIAS = $ASISTENCIAS_SIETE[0]->ASISTENCIAS;
+                }
+
+                if ($FijoDestajoAmbos === 1 && intval($ASISTENCIAS) > 0) {
+                    /* 1 FIJO */
+                    /*                     * * * * * * * * * * * * * * SALARIO * * * * * * * * * * * * * * */
+                    $SUELDO_FINAL = 0;
+                    $SUELDO_FINAL = $v->Sueldo * intval($ASISTENCIAS);
+                    /* INSERT PARA EL CONCEPTO 1 = SALARIO */
+                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    if (empty($EXISTE_EN_PRENOMINA)) {
+                        print "\n  FIJO : AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
+                        $this->db->insert('prenomina', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "numcon" => 1 /* 1 SALARIO */, "tpcon" => 1 /* PERCEPCION */,
+                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL,
+                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "registro" => 0, "status" => 1, "tpomov" => 0,
+                            "depto" => $v->DepartamentoFisico
+                        ));
+                    }
+                    print "\n";
+                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    if (!empty($EXISTE_EN_PRENOMINAL)) {
+                        print "\n MODIFICAR REGISTRO EN PRENOMINAL {$v->Numero}";
+                        $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
+                                ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                ->where('numemp', $v->Numero)->update('prenominal');
+                    } else {
+                        print "\n FIJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINAL {$v->Numero}";
+                        $this->db->insert('prenominal', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "salario" => $SUELDO_FINAL, "depto" => $v->DepartamentoFisico,
+                            "status" => 1, "tpomov" => 0
+                        ));
+                    }
+                } else if ($FijoDestajoAmbos === 2 && intval($ASISTENCIAS) > 0) {
+                    /* 2 DESTAJO */
+                    $SUELDO_DESTAJO = $this->db->select("CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL", false)
+                                    ->from('fracpagnomina AS FPN')
+                                    ->where("FPN.numeroempleado", $v->Numero)
+                                    ->where("FPN.anio", $x['ANIO'])
+                                    ->where("FPN.semana", $x['SEMANA'])
+                                    ->get()->result();
+                    PRINT "\n SUELDO DESTAJO \n";
+                    var_dump($SUELDO_DESTAJO);
+                    PRINT "\n FIN SUELDO DESTAJO {$SUELDO_DESTAJO[0]->SUBTOTAL}, {$v->CelulaPorcentaje} " . (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0);
+                    $SUELDO_FINAL_DESTAJO = 0;
+
+                    if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
+                        $CELULA = $this->db->select('E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL', false)->from('empleados AS E')
+                                        ->where('E.DepartamentoFisico', $v->DepartamentoFisico)
+                                        ->where("E.Busqueda LIKE '%CELULA%'", null, false)
+                                        ->get()->result();
+                        $SUELDO_DESTAJO = $this->db->select("SUM(subtot) AS SUBTOTAL", false)
+                                        ->from('fracpagnomina AS FPN')
+                                        ->where("FPN.numeroempleado", $CELULA[0]->NUMERO)
+                                        ->where("FPN.anio", $x['ANIO'])
+                                        ->where("FPN.semana", $x['SEMANA'])
+                                        ->get()->result();
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
+                        print "\n\n PERTENECE A UNA CELULA {$v->Numero} {$SUELDO_DESTAJO[0]->SUBTOTAL} * {$v->CelulaPorcentaje} \n";
+                    } else {
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
+                    }
+                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    if (empty($EXISTE_EN_PRENOMINA)) {
+                        print "\n DESTAJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
+                        $this->db->insert('prenomina', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 2 /* PERCEPCION */,
+                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
+                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "registro" => 0, "status" => 1, "tpomov" => 0,
+                            "depto" => $v->DepartamentoFisico
+                        ));
+                        print_r(array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "numcon" => 1 /* 1 SALARIO */, "tpcon" => 2 /* PERCEPCION */,
+                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
+                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "registro" => 0, "status" => 1, "tpomov" => 0,
+                            "depto" => $v->DepartamentoFisico
+                        ));
+                    }
+                } else if ($FijoDestajoAmbos === 3 && intval($ASISTENCIAS) > 0) {
+                    /* 3 FIJO Y DESTAJO */
+                    /* CALCULAR EL SUELDO FIJO */
+                    $SUELDO_FINAL = 0;
+                    $SUELDO_FINAL = $v->Sueldo * intval($ASISTENCIAS);
+                    /* INSERT PARA EL CONCEPTO 1 = SALARIO */
+                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    if (empty($EXISTE_EN_PRENOMINA)) {
+//                        print "\n MODIFICAR REGISTRO EN PRENOMINA {$v->Numero}";
+//                        print_r($EXISTE_EN_PRENOMINA);
+//                    } else {
+                        print "\n FIJODESTAJO AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
+                        $this->db->insert('prenomina', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "numcon" => 1 /* 1 SALARIO */, "tpcon" => 1 /* PERCEPCION */,
+                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL,
+                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "registro" => 0, "status" => 1, "tpomov" => 0,
+                            "depto" => $v->DepartamentoFisico
+                        ));
+                    }
+                    print "\n";
+                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    if (!empty($EXISTE_EN_PRENOMINAL)) {
+                        print "\n MODIFICAR REGISTRO EN PRENOMINAL {$v->Numero}";
+                        $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
+                                ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                ->where('numemp', $v->Numero)->update('prenominal');
+                    } else {
+                        print "\n FIJODESTAJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINAL {$v->Numero}";
+                        $this->db->insert('prenominal', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "salario" => $SUELDO_FINAL, "depto" => $v->DepartamentoFisico,
+                            "status" => 1, "tpomov" => 0
+                        ));
+                    }
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCajaDeAhorro($ANIO, $SEM, $EMPLEADO, $CAJA) {
+        try {
+            if ($CAJA > 0) {
+                
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onExisteEnPrenomina($ANIO, $SEMANA, $EMP, $TP) {
+        try {
+            return $this->db->select('PN.*', false)
+                            ->from('prenomina AS PN')
+                            ->where('PN.año', $ANIO)
+                            ->where('PN.numsem', $SEMANA)
+                            ->where('PN.numemp', $EMP)
+                            ->where('PN.tpcon', $TP)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onExisteEnPrenominaL($ANIO, $SEMANA, $EMP) {
+        try {
+            return $this->db->select('PNL.*', false)
+                            ->from('prenominal AS PNL')
+                            ->where('PNL.año', $ANIO)
+                            ->where('PNL.numsem', $SEMANA)
+                            ->where('PNL.numemp', $EMP)
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getNominaCerrada() {
         try {
             $this->benchmark->mark('code_start');
@@ -379,7 +585,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     if (intval($v->DIASFC) >= 365) {
                         $ita += 1;
                         $total_aguinaldo = $SUELDO_FINAL * $dias;
-                        $dias_a_pagar = $dias; 
+                        $dias_a_pagar = $dias;
                     } else {
                         /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
                         $dias_x_quince = intval($v->DIASFC) * $dias;
@@ -387,9 +593,9 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $total_aguinaldo = $SUELDO_FINAL * $dias_a_pagar;
                     }
                 } else if (intval($v->DepartamentoFisico) === 3) {
-                    /*PROCESAR POR FIJO*/
+                    /* PROCESAR POR FIJO */
                     $SUELDO_FIJO_FINAL = $v->Sueldo;
-                     if (intval($v->DIASFC) >= 365) { 
+                    if (intval($v->DIASFC) >= 365) {
                         $total_aguinaldo = $SUELDO_FIJO_FINAL * $dias;
                         $dias_a_pagar = $dias;
                     } else {
@@ -398,7 +604,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $dias_a_pagar = $dias_x_quince / 365;
                         $total_aguinaldo = $SUELDO_FIJO_FINAL * $dias_a_pagar;
                     }
-                    /*PROCESAR POR DESTAJO*/
+                    /* PROCESAR POR DESTAJO */
                     $SUELDO_CUATRO_SEM = $this->db->select("((SUM(importe)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
                                     ->where("FPN.numeroempleado", $v->Numero)
                                     ->where("FPN.anio", $x->post('ANIO'))
@@ -408,13 +614,13 @@ class GeneraNominaDeSemana extends CI_Controller {
                     if (intval($v->DIASFC) >= 365) {
                         $ita += 1;
                         $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias);
-                        $dias_a_pagar = $dias; 
+                        $dias_a_pagar = $dias;
                     } else {
                         /* 2. SI EL EMPLEADO TIENE MENOS DE 365 DIAS SE LE CALCULA */
                         $dias_x_quince = intval($v->DIASFC) * $dias;
                         $dias_a_pagar = $dias_x_quince / 365;
                         $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias_a_pagar);
-                    } 
+                    }
                 }
                 /* AGREGAR A PRENOMINA */
                 $this->db->insert('prenomina', array("numsem" => $x->post('SEMANA'),
