@@ -35,7 +35,7 @@
                         <p class="font-weight-bold">FECHAS DEL PEDIDO</p>
                     </div>
                     <div class="w-100"></div> 
-                    <table id="tblFechasDelPedido" class="table table-hover" style="width:100%">
+                    <table id="tblFechasDelPedido" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -53,7 +53,7 @@
                         <p class="font-weight-bold">FECHAS DE FACTURACIÓN</p>
                     </div>
                     <div class="w-100"></div>
-                    <table id="tblFechasDeFacturacion" class="table table-hover" style="width:100%">
+                    <table id="tblFechasDeFacturacion" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -71,7 +71,7 @@
                         <p class="font-weight-bold">FECHAS DEVOLUCIÓN</p>
                     </div>
                     <div class="w-100"></div>
-                    <table id="tblFechasDevolucion" class="table table-hover" style="width:100%">
+                    <table id="tblFechasDevolucion" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -91,7 +91,7 @@
                         <p class="font-weight-bold">FECHAS DE AVANCE</p>
                     </div>
                     <div class="w-100"></div>
-                    <table id="tblFechasDeAvance" class="table table-hover" style="width:100%">
+                    <table id="tblFechasDeAvance" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">Corte</th>
@@ -119,7 +119,7 @@
                         <p class="font-weight-bold">RASTREO DE CONTROLES EN NOMINA</p>
                     </div>
                     <div class="w-100"></div>
-                    <table id="tblRastreoDeControlesEnNomina" class="table table-hover" style="width:100%">
+                    <table id="tblRastreoDeControlesEnNomina" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>

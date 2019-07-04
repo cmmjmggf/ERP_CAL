@@ -297,7 +297,6 @@
                 SVacacionesAguinaldosParaDestajo.addClass("d-none");
                 getSemanaNomina();
             } else if (SemanaGNS.val() && e.keyCode === 13 && parseInt(SemanaGNS.val()) === 99) {
-
                 $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
                         {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
                     if (a.length > 0) {
