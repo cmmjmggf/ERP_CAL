@@ -26,7 +26,7 @@
                         <input type="text" id="SemanaGNS" name="SemanaGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off">
                     </div>
                     <div class="w-100"></div>
-                    <div class="col-12">
+                    <div class="col-12 d-none">
                         <div class="custom-control custom-checkbox"  align="left" style="cursor: pointer !important;">
                             <input type="checkbox" class="custom-control-input" id="GeneraDiezPorcientoDeptos" name="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">
                             <label class="custom-control-label text-danger" for="GeneraDiezPorcientoDeptos" style="cursor: pointer !important;">Genera 10 % depto 90 (ENTRETELADO), 120 (PREL-PESPUNTE), 140 (ENSUELADO)</label>
@@ -275,7 +275,7 @@
                             }).done(function (a) {
                         console.log(a);
                         if (a.length > 0) {
-//                            onImprimirReporteFancyArray(JSON.parse(a));
+                            onImprimirReporteFancyArray(JSON.parse(a));
                         } else {
                             swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
                         }

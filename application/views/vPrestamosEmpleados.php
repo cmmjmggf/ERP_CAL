@@ -441,7 +441,7 @@
                 }
             ];
             Prestamos = tblPrestamos.DataTable({
-                "dom": 'ritp',
+                "dom": 'fritp',
                 "ajax": {
                     "url": '<?php print base_url('PrestamosEmpleados/getPrestamos'); ?>',
                     "contentType": "application/json",
@@ -508,7 +508,7 @@
                 }
             ];
             PrestamosPagos = tblPrestamosPagos.DataTable({
-                "dom": 'ritp',
+                "dom": 'fritp',
                 "ajax": {
                     "url": '<?php print base_url('PrestamosEmpleados/getPrestamosPagos'); ?>',
                     "contentType": "application/json",
