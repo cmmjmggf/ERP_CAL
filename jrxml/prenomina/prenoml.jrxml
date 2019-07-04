@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenoml" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
 	<property name="ireport.zoom" value="1.3310000000000413"/>
-	<property name="ireport.x" value="33"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -36,7 +36,8 @@ PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1 - PNL.infon -
 
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero INNER JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}
+ORDER BY ABS(D.Clave) ASC , E.Numero ASC ]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -133,7 +134,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="CELULA_PORCENTAJE" class="java.lang.Float"/>
-	<field name="SAL_DI" class="java.lang.Float"/>
+	<field name="SAL_DI" class="java.lang.Double"/>
 	<field name="PERCEPCIONES" class="java.lang.Double"/>
 	<field name="TOTAL_DEDUCCIONES" class="java.lang.Double"/>
 	<field name="NETO" class="java.lang.Double"/>

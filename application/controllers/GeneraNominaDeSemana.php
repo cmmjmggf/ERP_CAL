@@ -29,50 +29,43 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
-//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
-                            
-            $empleados = $this->db->select('E.*')->from('empleados AS E')
-                            ->where_in('E.AltaBaja', 1)
-                            ->order_by('E.DepartamentoFisico', 'ASC')
-                            ->order_by('E.Numero', 'ASC')
-                            ->order_by('E.FijoDestajoAmbos', 'ASC')
-                            ->get()->result();
+//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */)) 
+            $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
+            /* ELIMINAR EN PRENOMINA */
             $this->db->where('numsem', $x['SEMANA'])
                     ->where('año', $x['ANIO'])
                     ->where_not_in('registro', 999)
                     ->delete('prenomina');
+            /* ELIMINAR EN PRENOMINAL */
             $this->db->where('numsem', $x['SEMANA'])
                     ->where('año', $x['ANIO'])
                     ->where_not_in('registro', 999)
                     ->delete('prenominal');
+            /* ELIMINAR EN PRESTAMOSPAG */
+            $this->db->where('sem', $x['SEMANA'])
+                    ->where('año', $x['ANIO'])
+                    ->delete('prestamospag');
 
             foreach ($empleados as $k => $v) {
 
                 $FijoDestajoAmbos = intval($v->FijoDestajoAmbos);
 
                 /* CONSULTAR ASISTENCIAS POR # EMPLEADO */
-                $ASISTENCIAS_SIETE = $this->db->select('A.numasistencias AS ASISTENCIAS')
-                                ->from('asistencia AS A')
-                                ->where('A.numsem', $x['SEMANA'])
-                                ->where('A.año', $x['ANIO'])
-                                ->where('A.numemp', $v->Numero)
-                                ->get()->result();
+                $ASISTENCIAS_SIETE = $this->db->query("SELECT A.numasistencias AS ASISTENCIAS FROM asistencia AS A WHERE  A.numsem = {$x['SEMANA']} AND A.año = {$x['ANIO']} AND A.numemp = {$v->Numero}")->result();
                 if (empty($ASISTENCIAS_SIETE)) {
                     $ASISTENCIAS = 0;
                 } else {
                     $ASISTENCIAS = $ASISTENCIAS_SIETE[0]->ASISTENCIAS;
                 }
-
+                /* SALARIOS : FIJO, DESTAJO, DESTAJO (CELULA), FIJO Y DESTAJO */
                 if ($FijoDestajoAmbos === 1 && intval($ASISTENCIAS) > 0) {
                     /* 1 FIJO */
-                    /*                     * * * * * * * * * * * * * * SALARIO * * * * * * * * * * * * * * */
                     $SUELDO_FINAL = 0;
                     $SUELDO_FINAL = $v->Sueldo * intval($ASISTENCIAS);
-                    /* INSERT PARA EL CONCEPTO 1 = SALARIO */
+                    /* 1.1 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) */
                     $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
                     if (empty($EXISTE_EN_PRENOMINA)) {
-                        print "\n  FIJO : AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
@@ -83,15 +76,13 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "depto" => $v->DepartamentoFisico
                         ));
                     }
-                    print "\n";
+                    /* 1.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
                     $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
-                        print "\n MODIFICAR REGISTRO EN PRENOMINAL {$v->Numero}";
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                 ->where('numemp', $v->Numero)->update('prenominal');
                     } else {
-                        print "\n FIJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINAL {$v->Numero}";
                         $this->db->insert('prenominal', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
@@ -101,36 +92,26 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                 } else if ($FijoDestajoAmbos === 2 && intval($ASISTENCIAS) > 0) {
                     /* 2 DESTAJO */
-                    $SUELDO_DESTAJO = $this->db->select("CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL", false)
-                                    ->from('fracpagnomina AS FPN')
-                                    ->where("FPN.numeroempleado", $v->Numero)
-                                    ->where("FPN.anio", $x['ANIO'])
-                                    ->where("FPN.semana", $x['SEMANA'])
-                                    ->get()->result();
-                    PRINT "\n SUELDO DESTAJO \n";
-                    var_dump($SUELDO_DESTAJO);
-                    PRINT "\n FIN SUELDO DESTAJO {$SUELDO_DESTAJO[0]->SUBTOTAL}, {$v->CelulaPorcentaje} " . (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0);
-                    $SUELDO_FINAL_DESTAJO = 0;
+                    /* 2.1 OBTENER EL SUELDO POR DESTAJO HECHO EN LA SEMANA */
+                    $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado LIKE '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
 
+                    /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
+                    $SUELDO_FINAL_DESTAJO = 0;
                     if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
-                        $CELULA = $this->db->select('E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL', false)->from('empleados AS E')
-                                        ->where('E.DepartamentoFisico', $v->DepartamentoFisico)
-                                        ->where("E.Busqueda LIKE '%CELULA%'", null, false)
-                                        ->get()->result();
-                        $SUELDO_DESTAJO = $this->db->select("SUM(subtot) AS SUBTOTAL", false)
-                                        ->from('fracpagnomina AS FPN')
-                                        ->where("FPN.numeroempleado", $CELULA[0]->NUMERO)
-                                        ->where("FPN.anio", $x['ANIO'])
-                                        ->where("FPN.semana", $x['SEMANA'])
-                                        ->get()->result();
-                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                        print "\n\n PERTENECE A UNA CELULA {$v->Numero} {$SUELDO_DESTAJO[0]->SUBTOTAL} * {$v->CelulaPorcentaje} \n";
+                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} E.Busqueda LIKE '%CELULA%'")->result();
+                        if (!empty($CELULA)) {
+                            $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                            $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
+                        } else {
+                            $SUELDO_FINAL_DESTAJO = 0;
+                        }
                     } else {
+                        /* 2.3 SI EL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
                     }
+                    /* 2.4 VERIFICAR SI ESTA EN PRENOMINA */
                     $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
                     if (empty($EXISTE_EN_PRENOMINA)) {
-                        print "\n DESTAJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
@@ -140,28 +121,29 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
-                        print_r(array(
+                    }
+                    /* 2.5 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
+                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    if (!empty($EXISTE_EN_PRENOMINAL)) {
+                        $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL_DESTAJO)
+                                ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                ->where('numemp', $v->Numero)->update('prenominal');
+                    } else {
+                        $this->db->insert('prenominal', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
-                            "numcon" => 1 /* 1 SALARIO */, "tpcon" => 2 /* PERCEPCION */,
-                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
-                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
-                            "registro" => 0, "status" => 1, "tpomov" => 0,
-                            "depto" => $v->DepartamentoFisico
+                            "salariod" => $SUELDO_FINAL_DESTAJO, "depto" => $v->DepartamentoFisico,
+                            "status" => 1, "tpomov" => 0
                         ));
                     }
                 } else if ($FijoDestajoAmbos === 3 && intval($ASISTENCIAS) > 0) {
                     /* 3 FIJO Y DESTAJO */
-                    /* CALCULAR EL SUELDO FIJO */
+                    /* 3.0 FIJO */
                     $SUELDO_FINAL = 0;
                     $SUELDO_FINAL = $v->Sueldo * intval($ASISTENCIAS);
-                    /* INSERT PARA EL CONCEPTO 1 = SALARIO */
+                    /* 3.1 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) */
                     $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
                     if (empty($EXISTE_EN_PRENOMINA)) {
-//                        print "\n MODIFICAR REGISTRO EN PRENOMINA {$v->Numero}";
-//                        print_r($EXISTE_EN_PRENOMINA);
-//                    } else {
-                        print "\n FIJODESTAJO AGREGAR UN NUEVO REGISTRO EN PRENOMINA {$v->Numero}";
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
@@ -172,15 +154,13 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "depto" => $v->DepartamentoFisico
                         ));
                     }
-                    print "\n";
+                    /* 3.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
                     $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
-                        print "\n MODIFICAR REGISTRO EN PRENOMINAL {$v->Numero}";
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                 ->where('numemp', $v->Numero)->update('prenominal');
                     } else {
-                        print "\n FIJODESTAJO: AGREGAR UN NUEVO REGISTRO EN PRENOMINAL {$v->Numero}";
                         $this->db->insert('prenominal', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
@@ -188,17 +168,290 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "status" => 1, "tpomov" => 0
                         ));
                     }
+                    /* 3.3 INSERT PARA EL CONCEPTO 5 = SALARIO DESTAJO */
+                    $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado ={$v->Numero} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+
+                    /* 3.4 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE  */
+                    $SUELDO_FINAL_DESTAJO = 0;
+                    if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
+                        /* 3.4.1 SI EL EMPLEADO NO TIENE MOVIMIENTOS EN FRACPAGNOM 
+                         * Y TIENE UN PORCENTAJE PERTENECE A UNA CELULA, 
+                         * PARA SABER CUAL CELULA ES EN LA QUE ESTA TRABAJANDO,
+                         * OBTENGO SU DEPTO FISICO, BUSCO EL EMPLEADO POR ESTE DEPTO FISICO Y POR LA COINCIDENCIA DE BUSQUEDA "CELULA", 
+                         * OBTENIENDO DE ESTA FORMA EL DEPTO DE LA CELULA Y EL NUMERO DEL EMPLEADO CON EL CUAL INGRESAN LAS FRACCIONES */
+                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico ={$v->DepartamentoFisico} AND E.Busqueda LIKE '%CELULA%'")->result();
+                        /* 3.4.2  UNA VEZ OBTENIDO EL DEPTO DE LA CELULA Y EL NUMERO,
+                         *  SE BUSCA EN FRACPAGNOMINA PARA SABER EL TOTAL GENERAL */
+                        if (!empty($CELULA)) {
+                            $SUELDO_DESTAJO = $this->db->query("SELECT SUM(subtot) AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado ={$CELULA[0]->NUMERO} AND FPN.anio ={$x['ANIO']} AND FPN.semana ={$x['SEMANA']}")->result();
+                        } else {
+                            $SUELDO_FINAL_DESTAJO = 0;
+                            /* ES POSIBLE QUE ESTE EMPLEADO ESTE POR CELULA PERO NO HAYA HECHO AUN NADA O JAMAS SE PRESENTO A LABORAR */
+                        }
+                        /* 3.4.3  FINALMENTE EL SUBTOTAL GENERADO POR ESA CELULA 
+                         * SE MULTIPLICA POR EL PORCENTAJE DEL EMPLEADO */
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
+                    } else {
+                        /* 3.5 EL SUELDO FINAL CORRESPONDE AL SUBTOTAL DE FRACPAGNOMINA, 
+                         * EN CASO DE NO PERTENECER A NINGUNA CELULA SOLO SE LE PAGA LO QUE HIZO 
+                         * Y REGISTRO DENTRO DEL SISTEMA */
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
+                    }
+
+                    /* 3.6 INSERT PARA EL CONCEPTO 5 = SALARIO DESTAJO */
+                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    if (empty($EXISTE_EN_PRENOMINA)) {
+                        $this->db->insert('prenomina', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 2 /* PERCEPCION */,
+                            "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
+                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "registro" => 0, "status" => 1, "tpomov" => 0,
+                            "depto" => $v->DepartamentoFisico
+                        ));
+                    }
+                    /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
+                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    if (!empty($EXISTE_EN_PRENOMINAL)) {
+                        $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL_DESTAJO)
+                                ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                ->where('numemp', $v->Numero)->update('prenominal');
+                    } else {
+                        $this->db->insert('prenominal', array(
+                            "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                            "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                            "salariod" => $SUELDO_FINAL_DESTAJO, "depto" => $v->DepartamentoFisico,
+                            "status" => 1, "tpomov" => 0
+                        ));
+                    }
                 }
+                /* CALCULAR SI TIENE O NO CAJA DE AHORRO */
+                $this->onCajaDeAhorro($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO INFONAVIT */
+                $this->onInfonavit($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO COMIDAS */
+                $this->onComida($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO FUNERAL */
+                $this->onFuneral($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO IMSS */
+                $this->onIMSS($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO FIERABONO */
+                $this->onFieraBono($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO FONACOT */
+                $this->onFonacot($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO ZAPATOS TIENDA/UNIFORMES */
+                $this->onZapatosTienda($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO SALDO DE PRESTAMOS */
+                $this->onAbonoPrestamo($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+            }
+            /* OBTENER REPORTES */
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["logo"] = base_url() . $this->session->LOGO;
+            $p["empresa"] = $this->session->EMPRESA_RAZON;
+            $p["SEMANA"] = $x['SEMANA'];
+            $p["FECHAINI"] = $x['FECHAINI'];
+            $p["FECHAFIN"] = $x['FECHAFIN'];
+            $p["ANIO"] = $x['ANIO'];
+            $jc->setParametros($p);
+            $this->getReportes($jc);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCajaDeAhorro($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Ahorro) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 70 /* 70 CAJADEAHORRO */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Ahorro, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, cajhao
+                $this->db->set('cajhao', $v->Ahorro)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function onCajaDeAhorro($ANIO, $SEM, $EMPLEADO, $CAJA) {
+    public function onInfonavit($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
-            if ($CAJA > 0) {
-                
+            if (floatval($v->Infonavit) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 50 /* 1 SALARIO */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Infonavit, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp,   infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+                $this->db->set('infon', $v->Infonavit)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComida($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Comida) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 80 /* 1 SALARIO */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Comida, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onFuneral($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Funeral) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 85 /* 85 FUNERAL */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Funeral, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+                $this->db->set('fune', $v->Funeral)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onIMSS($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->IMSS) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 55 /* 55 IMSS */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->IMSS, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+                $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onFieraBono($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Fierabono) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 60 /* 60 FIERABONO */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Fierabono, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+//                $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
+//                ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onFonacot($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Fonacot) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 95 /* 95 FONACOT */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->Fonacot, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+                $this->db->set('fonac', $v->Fonacot)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onZapatosTienda($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->ZapatosTDA) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 76 /* 76 UNIFORMES/TIENDAS */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->ZapatosTDA, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, vtazap, zapper
+//                $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
+//                ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAbonoPrestamo($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->SaldoPres) > 0) {
+                $SALDO_FINAL_PRESTAMO = 0;
+                $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero}", false)->result();
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero}", false)->result();
+                if (!empty($ACUMULADO_DE_PRESTAMOS) && !empty($ACUMULADO_DE_PRESTAMOS)) {
+                    if ($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO)
+                        $SALDO_FINAL_PRESTAMO = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
+                }
+//                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
+                $this->db->insert('prestamospag', array(
+                    "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d h:i:s'),
+                    "preemp" => $v->PressAcum, "aboemp" => $v->{"AbonoPres"}, "saldoemp" => $SALDO_FINAL_PRESTAMO,
+                    "interes" => 0, "status" => 2
+                ));
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 65 /* 65 PRESTAMO C-AH */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -207,13 +460,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onExisteEnPrenomina($ANIO, $SEMANA, $EMP, $TP) {
         try {
-            return $this->db->select('PN.*', false)
-                            ->from('prenomina AS PN')
-                            ->where('PN.año', $ANIO)
-                            ->where('PN.numsem', $SEMANA)
-                            ->where('PN.numemp', $EMP)
-                            ->where('PN.tpcon', $TP)
-                            ->get()->result();
+            return $this->db->query("SELECT PN.* FROM prenomina AS PN WHERE PN.año ={$ANIO} AND PN.numsem = {$SEMANA} AND PN.numemp = {$EMP} AND PN.tpcon ={$TP}")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -221,12 +468,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onExisteEnPrenominaL($ANIO, $SEMANA, $EMP) {
         try {
-            return $this->db->select('PNL.*', false)
-                            ->from('prenominal AS PNL')
-                            ->where('PNL.año', $ANIO)
-                            ->where('PNL.numsem', $SEMANA)
-                            ->where('PNL.numemp', $EMP)
-                            ->get()->result();
+            return $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$ANIO} AND PNL.numsem = {$SEMANA} AND PNL.numemp = {$EMP} ")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -234,7 +476,6 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function getNominaCerrada() {
         try {
-            $this->benchmark->mark('code_start');
             $x = $this->input;
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -246,7 +487,14 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["FECHAFIN"] = $x->post('FECHAFIN');
             $p["ANIO"] = $x->post('ANIO');
             $jc->setParametros($p);
+            $this->getReportes($jc);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
+    public function getReportes($jc) {
+        try {
             $reports = array();
 
             /* 1. REPORTE DE PRENOMINA COMPLETO */
@@ -291,9 +539,8 @@ class GeneraNominaDeSemana extends CI_Controller {
             $jc->setDocumentformat('pdf');
             $reports['7SIETE'] = $jc->getReport();
 
-            print json_encode($reports);
-            $this->benchmark->mark('code_end');
 //            echo $this->benchmark->elapsed_time('code_start', 'code_end');
+            print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
