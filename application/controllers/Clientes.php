@@ -253,4 +253,31 @@ class Clientes extends CI_Controller {
         }
     }
 
+    /* captura cajas p' flete */
+
+    public function onVerificarExistePedidoFactura() {
+        try {
+            $x = $this->input;
+            $Tp = $x->get('Tp');
+            $Cliente = $x->get('Cliente');
+            $Doc = $x->get('Doc');
+            print json_encode($this->db->query("select factura from facturacion where tp = $Tp and factura = $Doc and cliente = $Cliente ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCapturarCajasFlete() {
+        try {
+            $x = $this->input;
+            $Tp = $x->post('TpCajaFlete');
+            $Cliente = $x->post('ClienteCajasFlete');
+            $Doc = $x->post('DocCajasFlete');
+            $Cajas = $x->post('CajasFlete');
+            $this->db->query("update facturacion set cajas = $Cajas where tp = $Tp and factura = $Doc and cliente = $Cliente ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

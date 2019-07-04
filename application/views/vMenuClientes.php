@@ -34,4 +34,6 @@
 $this->load->view('vTipoCambio');
 $this->load->view('vBloqueoClientesXCliente');
 $this->load->view('vBloqueoClientesAutomatico');
+$this->load->view('vCajasFlete');
+$this->load->view('vGeneraPinAutoClientes');
 
