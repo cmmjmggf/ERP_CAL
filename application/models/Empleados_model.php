@@ -146,7 +146,7 @@ class Empleados_model extends CI_Model {
                                     . "E.Sueldo, E.IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
                                     . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
                                     . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
-                                    . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado, E.FechaIncapacidad, E.FechaIncapacidadFin ", false)
+                                    . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado, E.FechaIncapacidad, E.FechaIncapacidadFin, E.MotivoBaja ", false)
                             ->from('empleados AS E')->where('E.ID', $ID)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

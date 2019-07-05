@@ -51,6 +51,12 @@
                         <legend >Empleado</legend>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
+                        <div class="card text-white bg-danger mb-2 d-none" id="dMotivoBaja">
+                            <div class="card-header">Motivo de Baja: <span id="tMotivoBaja"></span></div>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm d-none" id="btnBajaEmpleado" >
+                            <span class="fa fa-user-times" ></span> DAR DE BAJA
+                        </button>
                         <button type="button" class="btn btn-info btn-sm" id="btnImprimeContrato" >
                             <span class="fa fa-file-pdf" ></span> CONTRATO
                         </button>
@@ -323,8 +329,16 @@
                                         <input type="text" id="Ahorro" name="Ahorro" class="form-control form-control-sm numbersOnly">
                                     </div>
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                        <label for="PressAcum" >Saldo Pres.*</label>
-                                        <input type="text" id="PressAcum" name="PressAcum" class="form-control form-control-sm numbersOnly" required="">
+                                        <label for="PressAcum" >Press Acum</label>
+                                        <input type="text" id="PressAcum" name="PressAcum" class="form-control form-control-sm numbersOnly" readonly="">
+                                    </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="AbonoPres" >Abono Pres</label>
+                                        <input type="text" id="AbonoPres" name="AbonoPres" class="form-control form-control-sm numbersOnly">
+                                    </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="SaldoPres" >Saldo Pres.</label>
+                                        <input type="text" id="SaldoPres" name="SaldoPres" class="form-control form-control-sm numbersOnly" readonly="">
                                     </div>
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="Comida" >Comida*</label>
@@ -376,7 +390,7 @@
                              onclick="onCambiarImagen(this)">
                         <input type="file" id="Foto" name="Foto" class="d-none">
                     </div>
-                    <div class="row pt-2">
+                    <div class="row pt-2 pl-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <h6 class="text-danger">Los campos con * son obligatorios</h6>
                         </div>
@@ -389,6 +403,7 @@
         </form>
     </div>
 </div>
+
 <script>
     var master_url = base_url + 'index.php/Empleados/';
     var btnNuevo = $("#btnNuevo"), btnVerTodos = $("#btnVerTodos"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
@@ -398,11 +413,12 @@
     var btnCredencial = $("#btnCredencial");
     var btnCambiarFoto = $("#btnCambiarFoto");
     var btnImprimeContrato = $("#btnImprimeContrato");
-
+    var btnBajaEmpleado = $("#btnBajaEmpleado");
     var NumeroEmpleado = pnlTablero.find("#NumeroEmpleado");
     var nuevo = false;
     var tfoto;
-
+    var numeroEmp = 0;
+    var prestamo, zaptda;
 
     $(document).ready(function () {
         handleEnter();
@@ -416,6 +432,25 @@
         });
         btnVerTodos.click(function () {
             getRecords(2);
+        });
+
+        btnBajaEmpleado.click(function () {
+            if (zaptda > 0 && prestamo > 0) {
+                swal('ATENCIÓN', 'USUARIO CON PRÉSTAMO O CARGO DE ZAPATOS, IMPOSIBLE DAR DE BAJA', 'error');
+            } else {
+                swal({
+                    buttons: ["Cancelar", "Aceptar"],
+                    title: 'Estás Seguro?',
+                    text: "Esta acción no se puede revertir",
+                    icon: "warning",
+                    closeOnEsc: false,
+                    closeOnClickOutside: false
+                }).then((action) => {
+                    if (action) {
+                        $('#mdlBajaEmpleado').modal('show');
+                    }
+                });
+            }
         });
 
         btnCambiarFoto.click(function () {
@@ -648,6 +683,8 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             });
+            btnBajaEmpleado.addClass('d-none');
+            pnlDatos.find('#dMotivoBaja').addClass('d-none');
             pnlDatos.find("#Numero").focus().select();
 
 
@@ -715,6 +752,7 @@
             $(this).addClass("success");
             var dtm = Empleados.row(this).data();
             temp = parseInt(dtm.ID);
+
             FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
@@ -733,10 +771,26 @@
             nuevo = false;
             //console.log(data);
             var dtm = data[0];
+            numeroEmp = parseInt(dtm.Numero);
+            zaptda = data[0].ZapatosTDA;
+            prestamo = data[0].SaldoPres;
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
+
+            /*Si es baja puede consultar*/
+            if (data[0].AltaBaja === '1') {
+                btnBajaEmpleado.removeClass('d-none');
+                btnGuardar.removeClass('d-none');
+                pnlDatos.find('#dMotivoBaja').addClass('d-none');
+            } else {
+                btnGuardar.addClass('d-none');
+                btnBajaEmpleado.addClass('d-none');
+                pnlDatos.find('#dMotivoBaja').removeClass('d-none');
+                pnlDatos.find('#tMotivoBaja').html(data[0].MotivoBaja);
+            }
+
             $.each(data[0], function (k, v) {
                 pnlDatos.find("[name='" + k + "']").val(v);
                 if (pnlDatos.find("[name='" + k + "']").is('select')) {
@@ -894,3 +948,5 @@
         border: 2px solid #99cc00;
     }
 </style>
+<?php
+$this->load->view('vBajaEmpleado');

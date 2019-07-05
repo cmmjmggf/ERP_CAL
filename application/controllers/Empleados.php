@@ -300,6 +300,7 @@ class Empleados extends CI_Controller {
                 }
             }
             unset($data["Numero"]);
+            var_dump($x->post('Numero'));
             $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
