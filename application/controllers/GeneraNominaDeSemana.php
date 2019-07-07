@@ -29,6 +29,7 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
+            $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */)) 
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
@@ -98,7 +99,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
                     $SUELDO_FINAL_DESTAJO = 0;
                     if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
-                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} E.Busqueda LIKE '%CELULA%'")->result();
+                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} AND E.Busqueda LIKE '%CELULA%'")->result();
                         if (!empty($CELULA)) {
                             $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                             $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
@@ -912,16 +913,78 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onEliminarMovimientos() {
         try {
-            $x = $this->input;
-            $this->db->where('año', $x->post('ANIO'))
-                    ->where('numsem', $x->post('SEMANA'))
-                    ->where('tpomov', 0)
-                    ->delete('prenomina');
-            $this->db->set('precaha', 0)
-                    ->where('año', $x->post('ANIO'))
-                    ->where('numsem', $x->post('SEMANA'))
-                    ->where('tpomov', 0)
-                    ->update('prenominal');
+            $x = $this->input->post();
+            $SEM = $x['SEMANA'];
+            $AÑO = $x['ANIO'];
+            $this->db->trans_start();
+            $this->db->query("DELETE FROM prenomina WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
+            $this->db->query("UPDATE prenominal SET precaha = 0 WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
+            $this->db->query("DELETE FROM fracpagnominatmp WHERE semana = {$SEM} AND año = {$AÑO}")->result();
+            $this->db->query("DELETE FROM fracpagnomina WHERE semana = {$SEM} AND año = {$AÑO}")->result();
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $this->db->trans_commit();
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onNominaPreliminaresPespunte($ANIO, $SEM) {
+        try {
+            $this->db->where('semana', $SEM)->where('anio', $ANIO)->delete('fracpagnomina');
+            $this->db->where('semana', $SEM)->where('año', $ANIO)->delete('fracpagnominatmp');
+            $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
+            $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
+            $query .= "AND FPN.numfrac BETWEEN 299 AND 300 ";
+            $query .= "AND FPN.numeroempleado BETWEEN 994 AND 1002";
+            $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
+            $fracciones = $this->db->query($query)->result();
+            $celulas = array(
+                994 => 107, 899 => 101, 997 => 101, 995 => 101, 996 => 101,
+                998 => 101, 999 => 101, 1000 => 101, 1001 => 101, 1002 => 101
+            );
+            foreach ($fracciones as $k => $v) {
+                if (array_key_exists(intval($v->numeroempleado), $celulas)) {
+                    $CEL = $celulas[$v->numeroempleado];
+                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM erp_cal.fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}");
+                    $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
+
+                    $this->db->insert('fracpagnominatmp', array(
+                        "numemp" => 0,
+                        "nummaq" => $CEL,
+                        "numcont" => $v->control,
+                        "numest" => $v->estilo,
+                        "numfrac" => $fraccion /* 304 */,
+                        "prefrac" => $precio_fraccion[0]->CostoMO,
+                        "pares" => $v->pares,
+                        "subtot" => $subtotal,
+                        "fecha" => $v->fecha,
+                        "semana" => $v->semana,
+                        "depto" => 120/* 120 = PREL-PESPUNTE */,
+                        "registro" => 0,
+                        "año" => $v->anio
+                    ));
+
+                    $this->db->insert('fracpagnomina', array(
+                        "numemp" => 0,
+                        "nummaq" => $CEL,
+                        "numcont" => $v->control,
+                        "numest" => $v->estilo,
+                        "numfrac" => $fraccion /* 304 */,
+                        "prefrac" => $precio_fraccion[0]->CostoMO,
+                        "pares" => $v->pares,
+                        "subtot" => $subtotal,
+                        "fecha" => $v->fecha,
+                        "semana" => $v->semana,
+                        "depto" => 120/* 120 = PREL-PESPUNTE */,
+                        "registro" => 0,
+                        "año" => $v->anio
+                    ));
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -87,4 +87,5 @@ $this->load->view('vCopiarFraccionEstiloaEstilo')->view('vCapturaCajaAhorroDirec
         ->view('vRecibosNomina')->view('vEstadisticasIngresosEgresos')
         ->view('vCajaAhorroPrestamos')->view('vCerrarNominaSemanal')
         ->view('vGeneraReporteAltasBanco')->view('vGeneraNominaBanco')
-        ->view('vCostoManoObraGeneral')->view('vManoObraDirecta');
+        ->view('vCostoManoObraGeneral')->view('vManoObraDirecta')
+        ->view('vPrenominaPreliminaresPespunte');
