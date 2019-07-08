@@ -113,7 +113,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
         try {
             $this->db->select('C.Clave AS CLAVE_CLIENTE, '
                             . 'CONCAT(C.Clave," - ",C.RazonS) AS CLIENTE', false)
-                    ->from('clientes AS C')->where('C.Estatus', 'ACTIVO');
+                    ->from('clientes AS C')->where('C.Estatus', 'ACTIVO')
+                    ->order_by('ABS(C.Clave)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -137,7 +138,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                 $this->db->where("P.Semana", $S);
             }
             $this->db->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false);
-            return $this->db->group_by('P.Estilo')->get()->result();
+            return $this->db->group_by('P.Estilo')
+                            ->order_by('ABS(P.Estilo)', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -149,6 +151,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                     ->from('pedidox AS P')
                     ->join('estilos AS E', 'P.Estilo = E.Clave')
                     ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false)
+                    ->order_by('ABS(E.Clave)', 'ASC')
                     ->group_by('P.Estilo');
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -193,7 +196,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                     ->join('estilos AS E', 'P.Estilo = E.Clave')
                     ->join('lineas AS L', 'E.Linea = L.Clave')
                     ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false)
-                    ->group_by('L.Clave');
+                    ->group_by('L.Clave')
+                    ->order_by('ABS(L.Clave)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -222,8 +226,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                     ->join('maquilas AS M', 'P.Maquila = M.Clave')
                     ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false)
                     ->group_by(array('M.Nombre'))
-                    ->order_by('P.Maquila', 'ASC')
-                    ->order_by('P.Semana', 'ASC');
+                    ->order_by('ABS(P.Maquila)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
