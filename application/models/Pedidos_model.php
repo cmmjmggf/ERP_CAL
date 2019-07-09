@@ -92,7 +92,7 @@ class Pedidos_model extends CI_Model {
                                     CONCAT('$ini',(CASE WHEN S.T21 = 0 THEN '-' ELSE S.T21 END),'$mid',CASE WHEN P.C21 = 0 THEN '-' ELSE P.C21 END,'$end') AS T21,
                                     CONCAT('$ini',(CASE WHEN S.T22 = 0 THEN '-' ELSE S.T22 END),'$mid',CASE WHEN P.C22 = 0 THEN '-' ELSE P.C22 END,'$end') AS T22,
 
-                                    CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span></button>') AS ELIMINAR", false)
+                                    CONCAT('<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span></button>') AS ELIMINAR", false)
                             ->from('pedidox AS P')
                             ->join('series AS S', 'P.Serie = S.Clave')
                             ->where('P.Clave', $ID)
