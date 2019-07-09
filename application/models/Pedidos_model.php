@@ -95,9 +95,9 @@ class Pedidos_model extends CI_Model {
                                     CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span></button>') AS ELIMINAR", false)
                             ->from('pedidox AS P')
                             ->join('series AS S', 'P.Serie = S.Clave')
-                            ->order_by('abs(S.Clave)', 'ASC')
                             ->where('P.Clave', $ID)
                             ->where('P.Cliente', $CLIENTE)
+                            ->order_by('abs(S.Clave)', 'ASC')
                             ->get()->result();
 //            print $this->db->last_query();
             return $data;
