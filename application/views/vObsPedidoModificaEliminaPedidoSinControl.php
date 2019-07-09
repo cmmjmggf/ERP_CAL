@@ -233,12 +233,7 @@
     function getDatosPedidoDetalle(ID) {
         $.getJSON(base_url + 'index.php/ModificaEliminaPedidoSinControl/getPedidosByID', {ID: ID}).done(function (data) {
             var dt = data[0];//Encabezado
-            $.each(data[0], function (k, v) {
 
-                if (!mdlObsPedidoModificaEliminaPedidoSinControl.find("[name='" + k + "']").is('select')) {
-                    mdlObsPedidoModificaEliminaPedidoSinControl.find("[name='" + k + "']").val(v);
-                }
-            });
             $.getJSON(base_url + 'index.php/ModificaEliminaPedidoSinControl/getClientes').done(function (data) {
                 $.each(data, function (k, v) {
                     mdlObsPedidoModificaEliminaPedidoSinControl.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
@@ -270,6 +265,12 @@
             }).fail(function (x) {
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x.responseText);
+            });
+
+            $.each(data[0], function (k, v) {
+                if (!mdlObsPedidoModificaEliminaPedidoSinControl.find("[name='" + k + "']").is('select')) {
+                    mdlObsPedidoModificaEliminaPedidoSinControl.find("[name='" + k + "']").val(v);
+                }
             });
 
         }).fail(function (x) {
