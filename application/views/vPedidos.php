@@ -6,11 +6,11 @@
             </div>
             <div class="col-sm-5">
                 <label>Cliente</label>
-                <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" autofocus=""></select>
+                <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" ></select>
             </div>
             <div class="col-sm-4">
                 <label>Pedido</label>
-                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm  noBorders notEnter numbersOnly" autofocus="" placeholder="# # # # #">
+                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm  noBorders notEnter numbersOnly" placeholder="# # # # #">
             </div>
             <div class="col-sm-1 float-right" align="right">
                 <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar">
@@ -26,7 +26,7 @@
                             <th>ID</th>
                             <th>Pedidos</th>
                             <th>Cliente</th>
-                            <th>Agente</th>  
+                            <th>Agente</th>
                             <th>Pares</th>
                             <th>Fecha de entrega</th>
                         </tr>
@@ -162,7 +162,7 @@
                                     <input type="text" id="ObservacionDetalle" name="ObservacionDetalle" class="form-control form-control-sm" placeholder="Descripción" maxlength="99">
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <!--TALLAS-->
                         <div class="col-12">
                             <div class="row">
@@ -193,7 +193,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-5" align="left">
-                                    <button type="button" class="btn btn-primary" id="btnAgregarDetalle"><span class="fa fa-check"></span></button> 
+                                    <button type="button" class="btn btn-primary" id="btnAgregarDetalle"><span class="fa fa-check"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
             <div class="card  m-3 ">
                 <div class="card-body">
                     <div class="row">
-                        <table id="tblPedidoDetalle" class="table table-hover"  style="width: 100% !important;">
+                        <table id="tblPedidoDetalle" class="table table-hover table-sm"  style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th><!--0-->
@@ -269,7 +269,7 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
-                        </table> 
+                        </table>
                     </div><!--ROW-->
                     <div class="row mt-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 font-weight-bold "></div>
@@ -289,7 +289,7 @@
 <div id="mdlAviso" class="modal fade">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"> 
+            <div class="modal-header">
                 <h5 class="modal-title">AVISO</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -299,10 +299,10 @@
                 <div class="comment">
                     /* load ide ui */
                 </div>
-            </div> 
-        </div> 
-    </div> 
-</div> 
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var master_url = base_url + 'index.php/Pedidos/';
@@ -317,7 +317,7 @@
     var mdlAviso = $("#mdlAviso");
     var btnAgregarDetalle = pnlDatos.find("#btnAgregarDetalle");
     var opciones_detalle = {
-        dom: 'Bfrtip',
+        dom: 'rt',
         buttons: buttons,
         "columns": [
             {"data": "PDID"}, {"data": "Recibido"}, {"data": "Estilo"}, {"data": "EstiloT"},
@@ -405,7 +405,7 @@
         "deferRender": true,
         "scrollCollapse": false,
         "bSort": true,
-        "scrollY": "500px",
+        "scrollY": 450,
         "scrollX": true,
         "createdRow": function (row, data, index) {
             $.each($(row).find("td"), function (k, v) {
@@ -1051,6 +1051,7 @@
     });
 
     function init() {
+
         getRecords();
         getOptions("getClientes", "Cliente", "Clave", "Cliente", pnlDatos); //Clientes
         getOptions("getClientes", "ClientePedido", "Clave", "Cliente", pnlTablero); //Clientes
@@ -1061,7 +1062,7 @@
 
     function getRecords() {
         HoldOn.open({
-            theme:'sk-rect',
+            theme: 'sk-rect',
             message: 'Cargando...'
         });
         temp = 0;
@@ -1103,7 +1104,7 @@
             ],
             initComplete: function (x, y) {
                 HoldOn.close();
-                $("#NumeroDePedido").focus();
+                pnlTablero.find('#ClientePedido')[0].selectize.focus();
             }
         });
         tblPedidos.find('tbody').on('click', 'tr', function () {
@@ -1549,17 +1550,20 @@
         transition: all .2s ease-in-out;
     }
     .zoom:hover{
-        transform-origin: 100% 0;
-        width:40%;
-        height:100%;
-        float:left;
-        z-index:4;
-        position:relative;
-        -webkit-transform: scale(2);
-        transform: scale(2);
-        top:-10px;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
-        cursor: pointer;
+        /*        transform-origin: 100% 0;
+                width:40%;
+                height:100%;
+                float:left;
+                z-index:4;
+                position:relative;
+                -webkit-transform: scale(2);
+                transform: scale(2);
+                top:-10px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
+                cursor: pointer;*/
+
+        color:#fff !important;
+        background-color: #3498DB !important;
     }
 
     div.zoom:hover{

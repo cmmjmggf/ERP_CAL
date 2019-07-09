@@ -39,7 +39,7 @@
         validacionSelectPorContenedor(mdlReimprimirPedido);
         setFocusSelectToInputOnChange('#ClienteVisPed', '#Pedido', mdlReimprimirPedido);
 
-
+        handleEnterDiv(mdlReimprimirPedido);
 
         mdlReimprimirPedido.on('shown.bs.modal', function () {
             mdlReimprimirPedido.find("input").val("");

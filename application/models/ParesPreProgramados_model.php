@@ -211,8 +211,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                     ->join('maquilas AS M', 'P.Maquila = M.Clave')
                     ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false)
                     ->group_by(array('M.Nombre'))
-                    ->order_by('P.Maquila', 'ASC')
-                    ->order_by('P.Semana', 'ASC');
+                    ->order_by('abs(P.Maquila)', 'ASC')
+                    ->order_by('abs(P.Semana)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -254,7 +254,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($SEMANA !== '') {
                 $this->db->where("P.Semana", $SEMANA);
             }
-            $this->db->group_by(array('M.Nombre'))->order_by('P.Maquila', 'ASC')->order_by('P.Semana', 'ASC');
+            $this->db->group_by(array('M.Nombre'))->order_by('abs(P.Maquila)', 'ASC')->order_by('abs(P.Semana)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -285,8 +285,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                 $this->db->where("P.Semana", $SEMANA);
             }
             $this->db->group_by(array('M.Nombre', 'P.Semana'))
-                    ->order_by('P.Maquila', 'ASC')
-                    ->order_by('P.Semana', 'ASC');
+                    ->order_by('abs(P.Maquila)', 'ASC')
+                    ->order_by('abs(P.Semana)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
