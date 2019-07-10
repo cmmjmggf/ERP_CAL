@@ -31,9 +31,7 @@
 </script>
 
 <?php
-$this->load->view('vTipoCambio');
-$this->load->view('vBloqueoClientesXCliente');
-$this->load->view('vBloqueoClientesAutomatico');
-$this->load->view('vCajasFlete');
-$this->load->view('vGeneraPinAutoClientes');
+$this->load->view('vTipoCambio')->view('vBloqueoClientesXCliente')
+        ->view('vBloqueoClientesAutomatico')->view('vCajasFlete')
+        ->view('vGeneraPinAutoClientes')->view('vCapturaPrecioDeVtaXListaLinea');
 

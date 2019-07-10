@@ -11,14 +11,11 @@
                 <button type="button" id="btnVerClientes" name="btnVerClientes" class="btn btn-info">
                     <span class="fa fa-user"></span> Clientes
                 </button>
-                <button type="button" id="btnObservaciones" name="btnObservaciones" class="btn btn-info">
+                <button type="button" id="btnObservaciones" name="btnObservaciones" class="btn btn-info d-none">
                     <span class="fa fa-eye"></span> Observaciones
                 </button>
                 <button type="button" id="btnImprimePedido" name="btnImprimePedido" class="btn btn-info">
                     <span class="fa fa-user"></span> Imprime ped.
-                </button>
-                <button type="button" id="btnObservacionesCancelacion" name="btnObservacionesCancelacion" class="btn btn-primary">
-                    <span class="fa fa-eye"></span> Obser.cancel
                 </button>
                 <button type="button" id="btnCtrlCancelados" name="btnCtrlCancelados" class="btn btn-info">
                     <span class="fa fa-eye"></span> Ctr-cancelados
@@ -209,7 +206,7 @@
                 theme: 'sk-bounce',
                 message: 'Por favor espere...'
             });
-            $.post('<?php print base_url('ModificaEliminaPedidoSinControl/getParesPreProgramados');?>').done(function (data, x, jq) {
+            $.post('<?php print base_url('ModificaEliminaPedidoSinControl/getParesPreProgramados'); ?>').done(function (data, x, jq) {
                 console.log(data);
                 onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
                 HoldOn.close();
@@ -343,7 +340,7 @@
                         theme: 'sk-rect',
                         message: 'Eliminando...'
                     });
-                    $.post('<?php print base_url('ModificaEliminaPedidoConControl/onEliminar'); ?>',
+                    $.getJSON('<?php print base_url('ModificaEliminaPedidoConControl/onEliminar'); ?>',
                             {ID: p.PDID, CLAVE: p.Pedido, CONTROL: p.Control})
                             .done(function (a) {
                                 onBeep(1);
@@ -392,6 +389,9 @@
 <style>
     #tblPedidoDetalle table tbody{
         height: 300px !important;
+    }
+    table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
+        background-color: #000 !important;
     }
 
     #tblPedidoDetalle tbody td{

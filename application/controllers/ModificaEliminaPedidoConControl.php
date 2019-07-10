@@ -94,7 +94,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                                     CONCAT('{$ini}',(CASE WHEN S.T22 = 0 THEN '-' ELSE S.T22 END),'{$mid}',CASE WHEN P.C22 = 0 THEN '-' ELSE P.C22 END,'{$end}') AS T22,
                                     CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span></button>') AS ELIMINAR ", false)->
                     from("pedidox AS P")->join("series AS S", "P.Serie = S.Clave");
-            $this->db->where("P.Control <> 0", null, false);
+            $this->db->where("P.Control <> 0 AND P.stsavan <> 14", null, false);
             if ($CONTROL !== '' && $CONTROL !== "") {
                 $this->db->where("P.Control", $CONTROL);
             } else if ($CLIENTE !== '' && $CLIENTE !== "") {
@@ -122,26 +122,37 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
               controlterm
               historialcontroles
              */
-            $C = $this->input->post('CONTROL');
+            $X = 0;
+            $C = $this->input->get('CONTROL');
             $sql = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END";
-            $PEDIDOX = $this->db->query("{$sql} AS TIENE_PEDIDO FROM pedidox AS PE WHERE PE.Control LIKE '{$C}'")->result();
-            $CONTROLES = $this->db->query("{$sql} AS TIENE_PEDIDO FROM controles AS C WHERE C.Control LIKE '{$C}'")->result();
-            $AVAPRD = $this->db->query("{$sql} AS TIENE_AVAPRD FROM avaprd AS AV WHERE AV.contped LIKE '{$C}'")->result();
-            $AVANCE = $this->db->query("{$sql} AS TIENE_AVANCE FROM avance AS AVC WHERE AVC.Control LIKE '{$C}'")->result();
-            $ASIGNAPFTSACXC = $this->db->query("{$sql} AS TIENE_ASIGNAPFTS FROM asignapftsacxc AS ASPFST WHERE ASPFST.Control LIKE '{$C}'")->result();
-            $CONTROLPES = $this->db->query("{$sql} AS TIENE_CONTROLPES FROM controlpes AS CPS WHERE CPS.Control LIKE '{$C}'")->result();
-            $CONTROLPLA = $this->db->query("{$sql} AS TIENE_CONTROLPLA FROM controlpla AS CPL WHERE CPL.Control LIKE '{$C}'")->result();
-            $CONTROLTEJ = $this->db->query("{$sql} AS TIENE_CONTROLTEJ FROM controltej AS CTEJ WHERE CTEJ.Control LIKE '{$C}'")->result();
-            $CONTROLTERM = $this->db->query("{$sql} AS TIENE_CONTROLTERM FROM controlterm AS CTERM WHERE CTERM.Control LIKE '{$C}'")->result();
+            $PEDIDOX = $this->db->query("{$sql} AS TOTAL FROM pedidox AS PE WHERE PE.Control LIKE '{$C}'")->result();
+            $CONTROLES = $this->db->query("{$sql} AS TOTAL FROM controles AS C WHERE C.Control LIKE '{$C}'")->result();
+            $AVAPRD = $this->db->query("{$sql} AS TOTAL FROM avaprd AS AV WHERE AV.contped LIKE '{$C}'")->result();
+            $AVANCE = $this->db->query("{$sql} AS TOTAL FROM avance AS AVC WHERE AVC.Control LIKE '{$C}'")->result();
+            $ASIGNAPFTSACXC = $this->db->query("{$sql} AS TOTAL FROM asignapftsacxc AS ASPFST WHERE ASPFST.Control LIKE '{$C}'")->result();
+            $CONTROLPES = $this->db->query("{$sql} AS TOTAL FROM controlpes AS CPS WHERE CPS.Control LIKE '{$C}'")->result();
+            $CONTROLPLA = $this->db->query("{$sql} AS TOTAL FROM controlpla AS CPL WHERE CPL.Control LIKE '{$C}'")->result();
+            $CONTROLTEJ = $this->db->query("{$sql} AS TOTAL FROM controltej AS CTEJ WHERE CTEJ.Control LIKE '{$C}'")->result();
+            $CONTROLTERM = $this->db->query("{$sql} AS TOTAL FROM controlterm AS CTERM WHERE CTERM.Control LIKE '{$C}'")->result();
 
 //            $PEDIDOX = $this->db->query("SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS TIENE_PEDIDO FROM historialcontroles AS PE WHERE PE.Control LIKE '{$this->input->post('CONTROL')}'")->result();
-//            $this->db->where('ID', $this->input->post('ID'))
-//                    ->where('Clave', $this->input->post('CLAVE'))
-//                    ->where('Control', $this->input->post('CONTROL'))
-//                    ->delete('pedidox');
-            var_dump($PEDIDOX, $CONTROLES, $AVAPRD, $AVANCE, $ASIGNAPFTSACXC, $CONTROLPES, $CONTROLPLA, $CONTROLTEJ, $CONTROLTERM);
+
+
+            $X = intval($PEDIDOX[0]->TOTAL) + intval($CONTROLES[0]->TOTAL) +
+                    intval($AVAPRD[0]->TOTAL) + intval($AVANCE[0]->TOTAL) + intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) + intval($CONTROLTERM[0]->TOTAL);
+            if ($X > 0) {
+                print json_encode(array("DELETED" => 0, "CONTROL" => $C, "MATCHES" => $X));
+            } else {
+                print json_encode(array("DELETED" => 1, "CONTROL" => $C, "MATCHES" => $X));
+                $this->db->set('stsavan', 14)->where('ID', $this->input->post('ID'))
+                        ->where('Clave', $this->input->post('CLAVE'))
+                        ->where('Control', $this->input->post('CONTROL'))
+                        ->update('pedidox');
+            }
+//            var_dump($PEDIDOX, $CONTROLES, $AVAPRD, $AVANCE, $ASIGNAPFTSACXC, $CONTROLPES, $CONTROLPLA, $CONTROLTEJ, $CONTROLTERM);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    } 
+    }
+
 }
