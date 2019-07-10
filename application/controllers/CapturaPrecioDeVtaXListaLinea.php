@@ -77,4 +77,48 @@ class CapturaPrecioDeVtaXListaLinea extends CI_Controller {
         }
     }
 
+    public function onModificarPrecioXEstiloLista() {
+        try {
+            $x = $this->input->post();
+            if ($x['LISTAUNO'] !== '') {
+                $this->db->set('preaut', $x['LISTAUNO'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 1)
+                        ->update('costovaria');
+            }
+            if ($x['LISTADOS'] !== '') {
+                $this->db->set('preaut', $x['LISTADOS'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 2)
+                        ->update('costovaria');
+            }
+            if ($x['LISTATRES'] !== '') {
+                $this->db->set('preaut', $x['LISTATRES'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 3)
+                        ->update('costovaria');
+            }
+            if ($x['LISTASEIS'] !== '') {
+                $this->db->set('preaut', $x['LISTATRES'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 6)
+                        ->update('costovaria');
+            }
+            if ($x['LISTADOCE'] !== '') {
+                $this->db->set('preaut', $x['LISTADOCE'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 12)
+                        ->update('costovaria');
+            }
+            if ($x['LISTADOSCINCO'] !== '') {
+                $this->db->set('preaut', $x['LISTADOSCINCO'])
+                        ->where('estilo', $x['ESTILO'])
+                        ->where('lista', 25)
+                        ->update('costovaria');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

@@ -2,13 +2,23 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Captura precio de venta X lista linea </h5>
+                <div class="row">
+                    <div class="col-7">
+                        <h5 class="modal-title">Captura precio de venta X lista linea </h5>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnPorListasDePrecios" class="btn btn-primary">Por listas de precios 1,2,3 y 12</button>
+                        <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
+                            <span class="fa fa-arrow-left"></span> Volver
+                        </button>
+                    </div>
+                </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row animated fadeIn" id="mdlPanelUno">
                     <div class="col-12">
                         <label for="">Lista</label>
                         <select id="ListaCPVTAXLTA" name="ListaCPVTAXLTA" class="form-control"></select>
@@ -17,6 +27,47 @@
                         <label for="">Linea</label>
                         <select id="LineaCPVTAXLTA" name="LineaCPVTAXLTA" class="form-control"></select>
                     </div>
+                </div>
+                <div class="row d-none animated fadeIn" id="mdlPanelDos">
+                    <div class="col-12">
+                        <label for="">Estilo</label>
+                        <input type="text" id="EstiloCPVTAXLTA" name="EstiloCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 text-center mt-2">
+                        <h3>Listas de precios</h3>
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-1</label>
+                        <input type="text" id="ListaUnoCPVTAXLTA" name="ListaUnoCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-2</label>
+                        <input type="text" id="ListaDosCPVTAXLTA" name="ListaDosCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-3</label>
+                        <input type="text" id="ListaTresCPVTAXLTA" name="ListaTresCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-6</label>
+                        <input type="text" id="ListaSeisCPVTAXLTA" name="ListaSeisCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-12</label>
+                        <input type="text" id="ListaDoceCPVTAXLTA" name="ListaDoceCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-4">
+                        <label for="">Lta-25</label>
+                        <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                    </div>
+                    <div class="col-12 mt-2" align="right">
+                        <button type="button" id="btnAceptaListaXEstilo" name="btnAceptaListaXEstilo" class="btn btn-primary">
+                            <span class="fa fa-check"></span> Acepta
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12">
                         <table id="tblListaDePrecios" class="table table-sm table-hover" style="width: 100% !important;">
                             <thead>
@@ -39,7 +90,6 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-12" align="left">
-                        <button type="button" id="btnPorListasDePrecios" class="btn btn-primary">Por listas de precios 1,2,3 y 12</button>
                     </div> 
                 </div>
             </div>
@@ -51,7 +101,18 @@
             ListaCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaCPVTAXLTA"),
             LineaCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#LineaCPVTAXLTA"),
             ListaDePrecios, IDX = 0,
-            tblListaDePrecios = mdlCapturaDeVtaXListaLinea.find("#tblListaDePrecios");
+            tblListaDePrecios = mdlCapturaDeVtaXListaLinea.find("#tblListaDePrecios"),
+            btnPorListasDePreciosVolver = mdlCapturaDeVtaXListaLinea.find("#btnPorListasDePreciosVolver"),
+            btnPorListasDePrecios = mdlCapturaDeVtaXListaLinea.find("#btnPorListasDePrecios"),
+            EstiloCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#EstiloCPVTAXLTA"),
+            btnAceptaListaXEstilo = mdlCapturaDeVtaXListaLinea.find("#btnAceptaListaXEstilo"),
+            ListaUnoCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaUnoCPVTAXLTA"),
+            ListaDosCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaDosCPVTAXLTA"),
+            ListaTresCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaTresCPVTAXLTA"),
+            ListaSeisCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaSeisCPVTAXLTA"),
+            ListaDoceCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaDoceCPVTAXLTA"),
+            ListaDosCincoCPVTAXLTA = mdlCapturaDeVtaXListaLinea.find("#ListaDosCincoCPVTAXLTA");
+
 
     var opciones_detalle = {
         dom: 'rtip',
@@ -90,11 +151,68 @@
         }
     };
     $(document).ready(function () {
+        handleEnterDiv(mdlCapturaDeVtaXListaLinea);
+
+        btnAceptaListaXEstilo.click(function () {
+            if (EstiloCPVTAXLTA.val()) {
+                if (ListaUnoCPVTAXLTA.val() || ListaDosCPVTAXLTA.val() || ListaTresCPVTAXLTA.val()
+                        || ListaSeisCPVTAXLTA.val() || ListaDoceCPVTAXLTA.val() || ListaDosCincoCPVTAXLTA.val()) {
+                    HoldOn.open({
+                        theme: 'sk-rect',
+                        message: 'Modificando precios...por favor espere'
+                    });
+                    var params = {
+                        ESTILO: EstiloCPVTAXLTA.val(),
+                        LISTAUNO: ListaUnoCPVTAXLTA.val() ? ListaUnoCPVTAXLTA.val() : '',
+                        LISTADOS: ListaDosCPVTAXLTA.val() ? ListaDosCPVTAXLTA.val() : '',
+                        LISTATRES: ListaTresCPVTAXLTA.val() ? ListaTresCPVTAXLTA.val() : '',
+                        LISTASEIS: ListaSeisCPVTAXLTA.val() ? ListaSeisCPVTAXLTA.val() : '',
+                        LISTADOCE: ListaDoceCPVTAXLTA.val() ? ListaDoceCPVTAXLTA.val() : '',
+                        LISTADOSCINCO: ListaDosCincoCPVTAXLTA.val() ? ListaDosCincoCPVTAXLTA.val() : ''
+                    };
+                    $.post('<?php print base_url('CapturaPrecioDeVtaXListaLinea/onModificarPrecioXEstiloLista'); ?>', params).done(function (a) {
+                        onBeep(1);
+                        onNotifyOld('<span class="fa fa-check"></span>', 'SE HAN ACTUALIZADO LOS PRECIOS EN SUS LISTAS CORRESPONDIENTES', 'success');
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
+                    console.log(listas);
+                } else {
+                    console.log("NINGUNO");
+                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN PRECIO PARA LAS LISTA 1,2,3,6,12 Y 25', 'warning').then((value) => {
+                        ListaUnoCPVTAXLTA.focus().select();
+                    });
+                }
+            } else {
+                swal('ATENCION', 'DEBE DE ESPECIFICAR UN ESTILO', 'warning').then((value) => {
+                    EstiloCPVTAXLTA.focus().select();
+                });
+            }
+        });
+
+        btnPorListasDePreciosVolver.click(function () {
+            btnPorListasDePrecios.removeClass("d-none");
+            btnPorListasDePreciosVolver.addClass("d-none");
+            mdlCapturaDeVtaXListaLinea.find("#mdlPanelUno").removeClass("d-none");
+            mdlCapturaDeVtaXListaLinea.find("#mdlPanelDos").addClass("d-none");
+            ListaCPVTAXLTA[0].selectize.focus();
+        });
+
+        btnPorListasDePrecios.click(function () {
+            btnPorListasDePrecios.addClass("d-none");
+            btnPorListasDePreciosVolver.removeClass("d-none");
+            mdlCapturaDeVtaXListaLinea.find("#mdlPanelUno").addClass("d-none");
+            mdlCapturaDeVtaXListaLinea.find("#mdlPanelDos").removeClass("d-none");
+            EstiloCPVTAXLTA.focus();
+        });
 
         mdlCapturaDeVtaXListaLinea.on('shown.bs.modal', function () {
             getRecords();
             getListasDePrecios();
             getLineas();
+            ListaCPVTAXLTA[0].selectize.focus();
         });
 
         ListaCPVTAXLTA.change(function () {
@@ -178,7 +296,7 @@
                     }
                 }
             }).then((value) => {
-                onBeep(1); 
+                onBeep(1);
                 if (value.length > 0) {
                     $.post('<?php print base_url('CapturaPrecioDeVtaXListaLinea/onModificarPrecio') ?>', {
                         ID: IDX, PRECIO: value
