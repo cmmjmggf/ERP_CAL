@@ -278,7 +278,7 @@
             tblDocumentosDirectos.DataTable().destroy();
         }
         DocumentosDirectos = tblDocumentosDirectos.DataTable({
-            "dom": 'rtip',
+            "dom": 'rt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
@@ -319,8 +319,9 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 999,
             "scrollX": true,
+            "scrollY": 380,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -365,54 +366,6 @@
         tblDocumentosDirectos.find('tbody').on('click', 'tr', function () {
             tblDocumentosDirectos.find("tbody tr").removeClass("success");
             $(this).addClass("success");
-            isValid('pnlTablero');
-            if (valido) {
-                var dtm = DocumentosDirectos.row(this).data();
-                temp = parseInt(dtm.ID);
-                var fact = pnlTablero.find('#Factura').val();
-                var fecFact = pnlTablero.find('#FechaFactura').val();
-                var tp = pnlTablero.find("#Tp").val();
-                var oc = pnlTablero.find("#col2_filter").val();
-                var prov = pnlTablero.find("#Proveedor").val();
-                var can_pen = dtm.Cantidad - dtm.Recibida;
-                swal({
-                    title: dtm.Articulo,
-                    text: "CANTIDAD RECIBIDA: ",
-                    content: 'input'
-                }).then((value) => {
-                    if (value === '') {
-                        value = can_pen;
-                    }
-                    $.post(master_url + 'onModificarCantidadRecibidaByID', {
-                        ID: temp,
-                        CantidadRecibida: value,
-                        Factura: fact,
-                        FechaFactura: fecFact,
-
-                        Articulo: dtm.ClaveArticulo,
-                        Proveedor: prov,
-                        OC: oc,
-                        Tp: tp,
-                        Precio: dtm.Precio,
-                        Subtotal: dtm.Precio * value,
-                        Maq: dtm.Maq,
-                        Sem: dtm.Sem,
-                        Departamento: dtm.Tipo,
-                        TpOrdenCompra: dtm.Tp
-                    }).done(function (data) {
-                        onNotifyOld('fa fa-check', 'CANTIDAD ACTUALIZADA', 'info');
-                        DocumentosDirectos.ajax.reload();
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    });
-
-                });
-
-                $('.swal-modal').find('input.swal-content__input').val(can_pen).focus().select();
-            } else {
-                swal('ATENCION', 'Completa los campos requeridos', 'warning');
-            }
-
         });
     }
     function onVerificarTp(v) {
