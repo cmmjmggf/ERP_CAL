@@ -166,47 +166,8 @@
 
         });
     });
-    function getTipoCambio(mnda) {
-        $.getJSON(master_url + 'getTipoCambio').done(function (data) {
-            if (data.length > 0) {
-                switch (mnda) {
-                    case 'MXN':
-                        pnlTablero.find('#TipoCambio').val(1);
-                        break;
-                    case 'USD':
-                        pnlTablero.find('#TipoCambio').val(data[0].Dolar);
-                        break;
-                    case 'EUR':
-                        pnlTablero.find('#TipoCambio').val(data[0].Euro);
-                        break;
-                    case 'LIB':
-                        pnlTablero.find('#TipoCambio').val(data[0].Libra);
-                        break;
-                    case 'JEN':
-                        pnlTablero.find('#TipoCambio').val(data[0].Jen);
-                        break;
-                    default:
-                        pnlTablero.find('#TipoCambio').val(1);
-                }
-            }
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-    function getTipoCont(gpo) {
-        $.getJSON(master_url + 'getTipoCont', {
-            Grupo: gpo
-        }).done(function (data) {
-            if (data.length > 0) {
-                pnlTablero.find('#TipoCont').val(data[0].Tipo);
-                pnlTablero.find('#Flete')[0].selectize.focus();
-            }
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
+
+
     function onVerificarExisteDocumento(tp, cte, v) {
         $.getJSON(master_url + 'onVerificarExisteDocumento', {
             Doc: $(v).val(),

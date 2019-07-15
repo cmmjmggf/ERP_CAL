@@ -5,12 +5,12 @@ header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
-class CapturaDepositosCliente extends CI_Controller {
+class AplicaDepositosCliente extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('CapturaDepositosCliente_model', 'cdc')->helper('jaspercommand_helper')->helper('file');
+        $this->load->library('session')->model('AplicaDepositosCliente_model', 'adc')->helper('jaspercommand_helper')->helper('file');
     }
 
     public function index() {
@@ -28,7 +28,7 @@ class CapturaDepositosCliente extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFondo')->view('vCapturaDepositosCliente')->view('vFooter');
+            $this->load->view('vFondo')->view('vAplicaDepositosCliente')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -36,7 +36,7 @@ class CapturaDepositosCliente extends CI_Controller {
 
     public function getBancos() {
         try {
-            print json_encode($this->cdc->getBancos($this->input->get('Tp')));
+            print json_encode($this->adc->getBancos($this->input->get('Tp')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
