@@ -3,15 +3,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-12">
                         <h5 class="modal-title">Captura precio de venta X lista linea </h5>
-                    </div>
-                    <div class="col-4">
-                        <button type="button" id="btnPorListasDePrecios" class="btn btn-primary">Por listas de precios 1,2,3 y 12</button>
-                        <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
-                            <span class="fa fa-arrow-left"></span> Volver
-                        </button>
-                    </div>
+                    </div> 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -61,11 +55,19 @@
                         <label for="">Lta-25</label>
                         <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
                     </div>
-                    <div class="col-12 mt-2" align="right">
+                    <div class="col-6 mt-2" align="left">   
+                        <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
+                            <span class="fa fa-arrow-left"></span> Volver
+                        </button>  
+                    </div>
+                    <div class="col-6 mt-2" align="right">    
                         <button type="button" id="btnAceptaListaXEstilo" name="btnAceptaListaXEstilo" class="btn btn-primary">
                             <span class="fa fa-check"></span> Acepta
                         </button>
                     </div>
+                </div>
+                <div class="col-12"  align="left">  
+                    <button type="button" id="btnPorListasDePrecios" class="btn btn-primary">Por listas de precios 1,2,3 y 12</button>
                 </div>
                 <div class="row">
                     <div class="col-12">

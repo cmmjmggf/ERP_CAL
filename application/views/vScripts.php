@@ -6,6 +6,10 @@
         /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6); */
         box-shadow: 0 0 0 0 transparent !important;
     }
+    .navbar.navbar-expand-lg{
+        /*padding: 4px 4px 4px 4px !important;*/
+        padding: 2px 2px 2px 2px !important;
+    }
 </style>
 <script>
     var valido = false;
@@ -1119,7 +1123,7 @@
     function getMenu(m) {
         getQuickMenu(2);
         onComprobarModulos(2);
-        $.post('<?= base_url('menu_opciones_modulos'); ?>', {MOD: m}).done(function (data) {
+        $.post('<?php print base_url('menu_opciones_modulos'); ?>', {MOD: m}).done(function (data) {
             var dtm = JSON.parse(data);
             if (dtm.length > 0) {
                 var uniqueNames = [], menus = [];
@@ -1384,5 +1388,24 @@
     function getError(x) {
         console.log(x.responseText);
         swal('ERROR', 'HA OCURRIDO UN ERROR, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+    }
+
+    /**
+     * @function getVR
+     * 
+     * Valida un campo por medio de la variable, devuelve el valor o un valor vacio
+     * 
+     * @param e Nombre de variable a validar
+     * @return type
+     */
+
+    /**
+     * @syntax getVR(e)
+     * @param {Object} e 
+     * @returns {String}
+     * @static
+     */
+    function getVR(e) {
+        return e.val() ? e.val() : '';
     }
 </script>

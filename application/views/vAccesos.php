@@ -303,8 +303,9 @@
             btnAsignarItemsXOpcionXModulo = pnlTableroBody.find("#btnAsignarItemsXOpcionXModulo"),
             btnAsignarSubItemsXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubItemsXItemXOpcionXModulo"),
             btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo");
-
+    var usr = '<?php PRINT $this->session->ID; ?>';
     $(document).ready(function () {
+        console.log(usr);
         pnlTableroBody.find("#btnAsignaAvaPRD").click(function () {
             HoldOn.open({
                 theme: 'sk-rect',
@@ -312,7 +313,7 @@
             });
             $.post('<?php print base_url('Accesos/onAsignaAvaPRD') ?>').done(function (x) {
                 console.log(x);
-                
+
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
@@ -783,7 +784,9 @@
             });
         }).fail(function (x, y, z) {
             console.log(x.responseText);
-        });
+        }).always(function () {
+            mxu[0].selectize.setValue(usr);
+        })
 
         $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {
             $.each(dx, function (k, v) {
@@ -1257,6 +1260,13 @@
 
 </script>
 <style>
+    .card{
+        background-color: #f9f9f9;
+        border-width: 1px 2px 2px;
+        border-style: solid; 
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
+        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+    }
     .btn-default{
         background-color: #8BC34A;
         color: #fff;

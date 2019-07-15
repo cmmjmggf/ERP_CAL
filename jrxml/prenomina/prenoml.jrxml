@@ -34,10 +34,9 @@ PNL.infon + PNL.imss + PNL.impu + PNL.precaha + PNL.cajhao + PNL.vtazap + PNL.za
 PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1
 ) AS NETO
 
-
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero INNER JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}
-ORDER BY ABS(D.Clave) ASC , E.Numero ASC ]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Activos = 1
+ORDER BY ABS(D.Clave) ASC , E.Busqueda ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
