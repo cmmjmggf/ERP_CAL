@@ -32,6 +32,7 @@
                 <label for="">Cliente</label>
                 <select id="ClientePDC" name="ClientePDC" class="form-control form-control-sm">                        
                 </select>
+                <input type="text" id="AgentePDC" name="AgentePDC" class="d-none" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <label for="">Deposito</label>
@@ -123,9 +124,12 @@
                 </div>
             </div> 
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1 mt-2 d-flex align-items-stretch">
-                <label for="">DIAS</label>
-                <input type="text" id="Dias" name="Dias" placeholder="" style="font-size: 80px !important;" maxlength="2" class="form-control form-control-sm numeric display-1" autocomplete="off">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1  d-flex align-items-stretch">               
+                <div class="row">
+                    <label for="">DIAS</label>
+                    <div class="w-100"></div>
+                    <input type="text" id="Dias" name="Dias" placeholder="" style="font-size: 80px !important;" maxlength="3" readonly="" class="form-control form-control-sm numeric display-1" autocomplete="off">
+                </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-5 col-xl-5 ">
                 <div class="row">
@@ -196,7 +200,8 @@
                 <input type="text" id="Cuenta" name="Cuenta" class="form-control form-control-sm" maxlength="99">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
-                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary">
+                <br>
+                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary btn-sm btn-block">
                     Acepta
                 </button>
             </div>
@@ -239,8 +244,18 @@
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
-                <label for="">Saldo del deposito</label>
-                <input type="text" id="SaldoDelDeposito" name="SaldoDelDeposito" class="form-control form-control-sm" readonly="" >
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12">
+                        <label for="">Saldo del deposito</label>
+                        <input type="text" id="SaldoDelDeposito" name="SaldoDelDeposito" class="form-control form-control-sm" readonly="" >
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 mt-2">
+                        <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
+                            <input type="checkbox" class="custom-control-input selectNotEnter" id="Minicartera" name="Minicartera" style="cursor: pointer !important;">
+                            <label class="custom-control-label text-danger labelCheck" for="Minicartera" style="cursor: pointer !important;">Minicartera</label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="w-100"></div>
             <!--TABLA DE DOCUMENTOS CON SALDO POR CLIENTE-->
@@ -277,6 +292,7 @@
     var pnlTablero = $("#pnlTablero"),
             DepositoPDC = pnlTablero.find("#DepositoPDC"),
             DoctoPDC = pnlTablero.find("#DoctoPDC"),
+            AgentePDC = pnlTablero.find("#AgentePDC"),
             TPPDC = pnlTablero.find("#TPPDC"),
             CapturaPDC = pnlTablero.find("#CapturaPDC"),
             ImportePDC = pnlTablero.find("#ImportePDC"),
@@ -299,6 +315,8 @@
             FolioFiscal = pnlTablero.find("#FolioFiscal"),
             Banco = pnlTablero.find("#Banco"),
             Cuenta = pnlTablero.find("#Cuenta"),
+            SaldoActual = pnlTablero.find("#SaldoActual"),
+            Posfechado = pnlTablero.find("#Posfechado"),
             PagosDeEsteDocumento,
             tblPagosDeEsteDocumento = pnlTablero.find("#tblPagosDeEsteDocumento"),
             ClientePDC = pnlTablero.find("#ClientePDC"),
@@ -307,83 +325,217 @@
             SaldoTotalPendiente = pnlTablero.find("#SaldoTotalPendiente"),
             FechaActual = '<?php print Date('d/m/Y'); ?>', DepositoFecha = pnlTablero.find("#DepositoFecha"),
             SaldoDelDeposito = pnlTablero.find("#SaldoDelDeposito"),
-            btnAceptaPagos = pnlTablero.find("#btnAceptaPagos");
+            btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), btnMovimientos = pnlTablero.find("#btnMovimientos");
 
     $(document).ready(function () {
+        btnMovimientos.click(function () {
+            $.fancybox.open({
+                src: '<?php print base_url('MovimientosCliente'); ?>',
+                type: 'iframe',
+                opts: {
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        ImporteUno.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                onRecalcularSaldoActual(1);
+            }
+        });
+
+        ImporteDos.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                onRecalcularSaldoActual(2);
+            }
+        });
+
+        ImporteTres.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                onRecalcularSaldoActual(3);
+            }
+        });
+
+        ImporteCuatro.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                onRecalcularSaldoActual(4);
+            }
+        });
+
+        MovCuatro.change(function (e) {
+            getRefPorMov(MovCuatro.val(), RefCuatro, ImporteCuatro);
+            getDescuentoXCliente(ClientePDC, MovCuatro, RefCuatro);
+        });
+
+        MovTres.change(function (e) {
+            getRefPorMov(MovTres.val(), RefTres, ImporteTres);
+            getDescuentoXCliente(ClientePDC, MovTres, RefTres);
+        });
+
+        MovDos.change(function (e) {
+            getRefPorMov(MovDos.val(), RefDos, ImporteDos);
+            getDescuentoXCliente(ClientePDC, MovDos, RefDos);
+        });
+
+        MovUno.change(function (e) {
+            getRefPorMov(MovUno.val(), RefUno, ImporteUno);
+            getDescuentoXCliente(ClientePDC, MovUno, RefUno);
+        });
+
+        RefTres.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                MovCuatro[0].selectize.focus();
+            }
+        });
+
+        RefDos.on('keydown keyup', function (e) {
+            if (e.keyCode === 13) {
+                MovTres[0].selectize.focus();
+            }
+        });
+
         RefUno.on('keydown keyup', function (e) {
             if (RefUno.val() && e.keyCode === 13) {
                 MovDos[0].selectize.focus();
             }
         });
+
         btnAceptaPagos.click(function () {
-            if (ClientePDC.val() && DepositoPDC.val() && DoctoPDC.val() && FechaPDC.val() && TPPDC.val() && CapturaPDC.val()) {
-                var p = {
-                    CLIENTE: ClientePDC.val(),
-                    NUMERO_RF: DoctoPDC.val(),
-                    FECHA: FechaPDC.val(),
-                    TIPO: TPPDC.val(),
-                    MOVIMIENTO: MovUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                    IMPORTE: ImporteUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                    REF: RefUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                    CLAVE_BANCO: Banco.val() ? Banco.val() : ''
-                };
-                var npagos = 0;
-                if (MovUno.val() && ImporteUno.val() && RefUno.val()) {
-                    npagos += 1;
-                    onPagoCliente(p);
-                }
-                if (MovDos.val() && ImporteDos.val() && RefDos.val()) {
-                    npagos += 1;
-                    onPagoCliente(p);
-                }
-                if (MovTres.val() && ImporteTres.val() && RefTres.val()) {
-                    npagos += 1;
-                    onPagoCliente(p);
-                }
-                if (MovCuatro.val() && ImporteCuatro.val() && RefCuatro.val()) {
-                    npagos += 1;
-                    onPagoCliente(p);
-                }
-                console.log('PAGOS : ' + npagos);
-                if (npagos > 0) {
-                    console.log("\n P CONTIENE \n", p);
-                } else {
-                    onBeep(2);
-                    swal('ATENCIÓN', 'ES NECESARIO AÑADIR LOS DATOS DEL PAGO', 'warning').then((value) => {
-                        MovUno[0].selectize.focus();
-                        MovUno[0].selectize.open();
-                    });
-                }
-                /*ACTUALIZAR SALDO EN CARTCLIENTE*/
-
-                /*TERMINAR PROCESO */
-
-                pnlTablero.find("input").val('');
-                $.each(pnlTablero.find("select"), function (k, v) {
-                    $(v)[0].selectize.clear(true);
-                });
-                if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
-                    getPagosDocumento();
-                } else {
-                    PagosDeEsteDocumento.ajax.reload();
-                }
-                if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
-                    getDocumentosConSaldoXClientes();
-                } else {
-                    DocumentosConSaldoXClientes.ajax.reload();
-                }
-                ClientePDC[0].selectize.focus();
-                ClientePDC[0].selectize.open();
-            } else {
-                swal('ATENCIÓN', 'ES NECESARIO CAPTURAR LA INFORMACIÓN DEL CLIENTE,DEPOSITO,DOCUMENTO,TIPO,FECHAS', 'warning')
+            var movs = [getIntVR(MovUno), getIntVR(MovDos), getIntVR(MovTres), getIntVR(MovCuatro)];
+            /*VALIDAR FECHA DEL CHEQUE POSFECHADO EN CASO DE PONER 3 Chec.posf*/
+            if (movs.indexOf(3) >= 0 && !Posfechado.val()) {
+                onBeep(2);
+                swal('ATENCIÓN', 'DEBE DE CAPTURAR LA FECHA DEL CHEQUE POSFECHADO', 'warning')
                         .then((value) => {
-                            if (!ClientePDC.val()) {
-                                ClientePDC[0].selectize.open();
-                                ClientePDC[0].selectize.focus();
-                            } else {
-                                DepositoPDC.focus().select();
-                            }
+                            Posfechado.focus().select();
                         });
+            } else {
+                /*VALIDAR BANCO EN CASO DE PONER 2 EFECTIVO O DEPOSITO*/
+                if (movs.indexOf(2) >= 0 && !Banco.val()) {
+                    onBeep(2);
+                    swal('ATENCIÓN', 'EN CASO DE EFECTIVO, DEBE DE CAPTURAR EL BANCO', 'warning')
+                            .then((value) => {
+                                Banco[0].focus();
+                                Banco[0].open();
+                            });
+                } else {
+                    if (ClientePDC.val() && DepositoPDC.val() && DoctoPDC.val() && FechaPDC.val() && TPPDC.val() && CapturaPDC.val()) {
+                        HoldOn.open({
+                            theme: 'sk-rect',
+                            message: 'Guardando pagos...'
+                        });
+                        var p = {
+                            CLIENTE: ClientePDC.val(),
+                            NUMERO_RF: DoctoPDC.val(),
+                            TP: parseInt(TPPDC.val()),
+                            FECHA: FechaPDC.val(),
+                            TIPO: TPPDC.val(),
+                            MOVIMIENTO: MovUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                            IMPORTE: ImporteUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                            REF: RefUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                            CLAVE_BANCO: Banco.val() ? Banco.val() : ''
+                        };
+                        var npagos = 0;
+                        if (MovUno.val() && ImporteUno.val() && RefUno.val()) {
+                            npagos += 1;
+                            onPagoCliente(p);
+                        }
+                        if (MovDos.val() && ImporteDos.val() && RefDos.val()) {
+                            npagos += 1;
+                            p.MOVIMIENTO = MovDos.val();
+                            p.IMPORTE = ImporteDos.val();
+                            p.REF = RefDos.val();
+                            onPagoCliente(p);
+                        }
+                        if (MovTres.val() && ImporteTres.val() && RefTres.val()) {
+                            npagos += 1;
+                            p.MOVIMIENTO = MovTres.val();
+                            p.IMPORTE = ImporteTres.val();
+                            p.REF = RefTres.val();
+                            onPagoCliente(p);
+                        }
+                        if (MovCuatro.val() && ImporteCuatro.val() && RefCuatro.val()) {
+                            npagos += 1;
+                            p.MOVIMIENTO = MovCuatro.val();
+                            p.IMPORTE = ImporteCuatro.val();
+                            p.REF = RefCuatro.val();
+                            onPagoCliente(p);
+                        }
+                        console.log('PAGOS : ' + npagos);
+                        if (npagos > 0) {
+                            console.log("\n P CONTIENE \n", p);
+
+                            /*ACTUALIZAR SALDO EN CARTCLIENTE*/
+                            $.post('<?php print base_url('PagosDeClientes/onModificaSaldoXDocumento'); ?>', {
+                                CLIENTE: ClientePDC.val(),
+                                REMISION: DoctoPDC.val(),
+                                IMPORTE_INICIAL: ImportePDC.val(),
+                                PAGADO: PagosPDC.val(),
+                                SALDO: SaldoPDC.val(),
+                                NUEVO_PAGADO: (parseFloat(ImportePDC.val()) - parseFloat(SaldoActual.val())),
+                                NUEVO_SALDO: SaldoActual.val()
+                            }).done(function (a) {
+                                console.log(a);
+                                /*TERMINAR PROCESO */
+                                pnlTablero.find("input:not(#DepositoPDC):not(#Agente)").val('');
+                                $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
+                                    $(v)[0].selectize.clear(true);
+                                });
+                                if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+                                    getPagosDocumento();
+                                } else {
+                                    PagosDeEsteDocumento.ajax.reload();
+                                }
+                                if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+                                    getDocumentosConSaldoXClientes();
+                                } else {
+                                    DocumentosConSaldoXClientes.ajax.reload();
+                                }
+                                DoctoPDC.focus().select();
+                                /*
+                                 ClientePDC[0].selectize.focus();
+                                 ClientePDC[0].selectize.open();
+                                 */
+                                onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                            });
+                        } else {
+                            onBeep(2);
+                            swal('ATENCIÓN', 'ES NECESARIO AÑADIR LOS DATOS DEL PAGO', 'warning').then((value) => {
+                                MovUno[0].selectize.focus();
+                                MovUno[0].selectize.open();
+                            });
+                        }
+                        HoldOn.close();
+                    } else {
+                        onBeep(2);
+                        swal('ATENCIÓN', 'ES NECESARIO CAPTURAR LA INFORMACIÓN DEL CLIENTE,DEPOSITO,DOCUMENTO,TIPO,FECHAS', 'warning')
+                                .then((value) => {
+                                    if (!ClientePDC.val()) {
+                                        ClientePDC[0].selectize.open();
+                                        ClientePDC[0].selectize.focus();
+                                    } else {
+                                        DepositoPDC.focus().select();
+                                    }
+                                });
+                    }
+                }
             }
         });
 
@@ -450,7 +602,12 @@
 
         getClientes();
         getBancos();
+
         ClientePDC.change(function (e) {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message:'Por favor espere...'
+            });
             pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha)").val('');
             $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
                 $(v)[0].selectize.clear(true);
@@ -465,9 +622,47 @@
             } else {
                 DocumentosConSaldoXClientes.ajax.reload();
             }
+            $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: ClientePDC.val()})
+                    .done(function (a) {
+                        if (a.length > 0) {
+                            AgentePDC.val(a[0].AGENTE);
+                        }
+                    }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
         });
 
     });
+
+    function getRefPorMov(m, e, nx)
+    {
+        console.log(m, e);
+        switch (parseInt(m)) {
+            case 2:
+                /*EFECTIVO*/
+                e.val("Efe");
+                break;
+            case 3:
+                /*CHEQUE POSFECHADO*/
+                e.val("Ch-P");
+                break;
+            case 5:
+                /*DESCUENTO*/
+                e.val("Dc17%");
+                break;
+            case 7:
+                /*DIFERENCIA*/
+                e.val("Df-P");
+                break;
+            case 9:
+                /*OTROS*/
+                e.val("Otr");
+                break;
+        }
+        nx.focus();
+    }
 
     function getPagosDocumento() {
         $.fn.dataTable.ext.errMode = 'throw';
@@ -609,6 +804,7 @@
     }
 
     function onPagoCliente(p) {
+        console.log("\n ONPAGOCLIENTE ", p.IMPORTE, p.MOVIMIENTO, p.REF);
         $.post('<?php print base_url('PagosDeClientes/onPagoCliente') ?>', p)
                 .done(function (a) {
                     console.log(a);
@@ -620,10 +816,64 @@
 
         });
     }
+
+    function onRecalcularSaldoActual(index) {
+        var saldo = parseFloat(SaldoPDC.val());
+        var total_de_pagos = 0;
+        var saldo_final = 0;
+        if (index === 1 && parseInt(MovUno.val()) === 5 && parseInt(TPPDC.val()) === 1) {
+            ImporteUno.val(getImporteSinIva(ImporteUno));
+            ImporteUno.focus().select();
+        }
+        if (index === 2 && parseInt(MovDos.val()) === 5 && parseInt(TPPDC.val()) === 1) {
+            ImporteDos.val(getImporteSinIva(ImporteDos));
+            ImporteDos.focus().select();
+        }
+        if (index === 3 && parseInt(MovTres.val()) === 5 && parseInt(TPPDC.val()) === 1) {
+            ImporteTres.val(getImporteSinIva(ImporteTres));
+            ImporteTres.focus().select();
+        }
+        if (index === 4 && parseInt(MovCuatro.val()) === 5 && parseInt(TPPDC.val()) === 1) {
+            ImporteCuatro.val(getImporteSinIva(ImporteCuatro));
+            ImporteCuatro.focus().select();
+        }
+        total_de_pagos += ImporteUno.val() ? parseFloat(ImporteUno.val()) : 0;
+        total_de_pagos += ImporteDos.val() ? parseFloat(ImporteDos.val()) : 0;
+        total_de_pagos += ImporteTres.val() ? parseFloat(ImporteTres.val()) : 0;
+        total_de_pagos += ImporteCuatro.val() ? parseFloat(ImporteCuatro.val()) : 0;
+        saldo_final = saldo - total_de_pagos;
+        SaldoActual.val(saldo_final);
+    }
+
+    function getImporteSinIva(e) {
+        var ee = e.val() ? parseFloat(e.val()) : 0;
+        return (ee / 1.16);
+    }
+
+    function getIntVR(e) {
+        return parseInt(e.val() ? e.val() : 0);
+    }
+
+    function getDescuentoXCliente(c, mov, ref) {
+        if (parseInt(mov.val()) === 5) {
+            $.getJSON('<?php print base_url('PagosDeClientes/getDescuentoXCliente'); ?>', {
+                CLIENTE: c.val()
+            }).done(function (a) {
+                if (a.length > 0) {
+                    ref.val("DC" + a[0].DESCUENTO + "%");
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+        }
+    }
 </script>
 <style>
     .card{
         background-color: #f9f9f9;
+        background-color: #f5f6fa;
         border-width: 1px 2px 2px;
         border-style: solid; 
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/

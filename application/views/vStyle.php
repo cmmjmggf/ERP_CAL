@@ -155,7 +155,7 @@
         background-color: #fff;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
-    .btn:not(.dropdown-toggle):not(.navbar-brand){
+    .btn:hover:not(.dropdown-toggle):not(.navbar-brand){
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 
@@ -286,7 +286,49 @@
         background-position: center center;
         background-size: 50% 50%;
         background-color: #2C3E50;
+    } 
+    .btn {
+        border-radius: 2rem; 
+        padding-left:  12px;
+        padding-right:   12px;
+        font-weight: 200;
     }
-
+    .btn-info:hover{
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-warning:hover{
+        color: #fff;
+        background-color: #fd7e14;
+        border-color: #fd7e14;
+    }
+    .btn-danger:hover{
+        color: #fff;
+        background-color:#dc3545;
+        border-color: #dc3545;
+    }
+    /*ROOTS*/
+/*    --blue: #007bff;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #dc3545;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #fff;
+    --gray: #868e96;
+    --gray-dark: #343a40;
+    --primary: #007bff;
+    --secondary: #868e96;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;*/
 
 </style>

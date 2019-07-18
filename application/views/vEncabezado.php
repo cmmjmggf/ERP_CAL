@@ -118,5 +118,15 @@
         <link rel="stylesheet" href="<?php echo base_url("js/EasyAutocomplete-1.3.5/easy-autocomplete.themes.min.css"); ?>">
         <!--Cargar scripts de validacion y configuraciones-->
         <?php $this->load->view('vScripts') ?>
-        <?php $this->load->view('vStyle') ?>
+        <?php $this->load->view('vStyle') ?>  
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.css" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                Waves.attach('.btn', ['waves-effect']); 
+                Waves.init();
+                $.fancybox.defaults.animationEffect = "zoom-in";
+                $.fancybox.defaults.animationEffect = "zoom-in-out";
+            });
+        </script>
     </head>
