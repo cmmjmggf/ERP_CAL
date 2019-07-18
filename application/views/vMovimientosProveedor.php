@@ -151,7 +151,7 @@
             tblDocumentosDirectos.DataTable().destroy();
         }
         DocumentosDirectos = tblDocumentosDirectos.DataTable({
-            "dom": 'rtip',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getRecords',
@@ -232,8 +232,9 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 700,
             "scrollX": true,
+            "scrollY": 390,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -273,6 +274,10 @@
             initComplete: function (a, b) {
                 HoldOn.close();
             }
+        });
+        tblDocumentosDirectos.find('tbody').on('click', 'tr', function () {
+            tblDocumentosDirectos.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
         });
     }
 

@@ -34,9 +34,97 @@ class AplicaDepositosCliente extends CI_Controller {
         }
     }
 
+    public function getRecords() {
+        try {
+            $cte = $this->input->get('Cliente');
+            $tp = $this->input->get('Tp');
+            print json_encode($this->db->query("SELECT
+                                                cliente, remicion as docto, tipo,
+                                                date_format(fecha,'%d/%m/%Y') as fecha, importe, pagos, importe-pagos as saldo,
+                                                status, datediff(now(),fecha) as dias
+                                                FROM cartcliente
+                                                where cliente like '$cte'
+                                                and tipo like '$tp'
+                                                and saldo > 1 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPagosByClienteFactTp() {
+        try {
+            $cte = $this->input->get('Cliente');
+            $tp = $this->input->get('Tp');
+            $fac = $this->input->get('Factura');
+            print json_encode($this->db->query("select cliente,remicion as docto,tipo,
+                                                date_format(fechadep,'%d/%m/%Y') as fechadep ,
+                                                date_format(fechacap,'%d/%m/%Y') as fechacap ,
+                                                importe,mov, doctopa
+                                                from cartctepagos where cliente like '$cte' and remicion like '$fac' and tipo like '$tp' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getBancos() {
         try {
             print json_encode($this->adc->getBancos($this->input->get('Tp')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getClientes() {
+        try {
+            print json_encode($this->adc->getClientes());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDocumentos() {
+        try {
+            $banco = $this->input->get('Banco');
+            $tipo = $this->input->get('Tp');
+            print json_encode($this->db->query("select docto, banco, cuenta, importe "
+                                    . "from depoctes "
+                                    . "where status < 3  and banco = $banco and tipo = $tipo "
+                                    . "and year(fecha) = year(now()) "
+                                    . "order by docto asc ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDepositobyDocto() {
+        try {
+            $doc = $this->input->get('Docto');
+            print json_encode($this->db->query("select * , date_format(fecha,'%d/%m/%Y') as fechaF "
+                                    . "from depoctes "
+                                    . "where docto = $doc  ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFolioFiscal() {
+        try {
+            $Factura = $this->input->get('Factura');
+            $tp = $this->input->get('Tp');
+            print json_encode($this->db->query("select uuid "
+                                    . "from cfdifa "
+                                    . "where factura = $Factura and numero = $tp ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDatosCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select Agente "
+                                    . "from clientes "
+                                    . "where clave = $Cliente  ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -46,7 +134,7 @@ class AplicaDepositosCliente extends CI_Controller {
         try {
             $banco = $this->input->get('Banco');
             print json_encode($this->db->query("select "
-                                    . "sctaconf "
+                                    . "CtaCheques  "
                                     . "from bancos "
                                     . "where clave = $banco  ")->result());
         } catch (Exception $exc) {
@@ -54,119 +142,58 @@ class AplicaDepositosCliente extends CI_Controller {
         }
     }
 
-    public function onVerificaExisteDepoCliente() {
-        try {
-            $doc = $this->input->get('Docto');
-            print json_encode($this->db->query("select "
-                                    . "docto  "
-                                    . "from depoctes "
-                                    . "where remicion = $doc order by docto desc ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getRecords() {
-        try {
-            $bco = $this->input->post('Banco');
-            $tp = $this->input->post('Tp');
-            $fecha = $this->input->post('Fecha');
-            $rem = ($this->input->post('Rem') !== NULL) ? $this->input->post('Rem') : 0;
-
-            print json_encode($this->db->query("SELECT tipo,banco,cuenta,date_format(fecha,'%d/%m/%Y') as fecha, docto,importe,pagos,tmnda,tcamb,importemn
-                                                FROM depoctes
-                                                where banco = $bco
-                                                and tipo = $tp
-                                                and case when $rem > 0 then remicion = $rem else '' end
-                                                and fecha = str_to_date('$fecha','%d/%m/%Y') "
-                                    . " ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onVerificarExisteDocumento() {
-        try {
-            $doc = $this->input->get('Doc');
-            $cliente = $this->input->get('Cliente');
-            $tp = $this->input->get('Tp');
-            print json_encode($this->db->query(" "
-                                    . "select remicion "
-                                    . "from cartcliente "
-                                    . "where "
-                                    . "remicion = $doc "
-                                    . "and cliente = $cliente "
-                                    . "and tipo = $tp "
-                                    . "order by ID asc  ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function onAgregar() {
         try {
-            $fecha = str_replace('/', '-', $this->input->post('FechaDoc'));
+            //Cambiamos el estatus del deposito
+            $depositoAPagar = floatval($this->input->post('ImporteAPagar'));
+            $saldoDeposito = floatval($this->input->post('SaldoDeposito'));
+            $estatusDeposito = ($saldoDeposito === $depositoAPagar) ? 3 : 2;
+            $banco = $this->input->post('Banco');
+            $docto = $this->input->post('Documento');
+            $sql = "update depoctes set status = $estatusDeposito , pagos = ifnull(pagos,0) + $depositoAPagar where banco = $banco and docto = $docto  ";
+            $this->db->query($sql);
+            //Guardamos el pago en cartclientepagos
+
+            $fecha = str_replace('/', '-', $this->input->post('FechaDeposito'));
             $nuevaFecha = date("Y-m-d", strtotime($fecha));
             $datos = array(
-                'cliente' => 0,
-                'remicion' => $this->input->post('Remi'),
-                'fecha' => $nuevaFecha,
-                'fechacap' => Date('Y-m-d'),
+                'cliente' => $this->input->post('Cliente'),
+                'remicion' => $this->input->post('DocFac'),
+                'fecha' => Date('Y-m-d'),
+                'fechacap' => $nuevaFecha,
+                'fechadep' => $nuevaFecha,
+                'importe' => $depositoAPagar,
                 'tipo' => $this->input->post('Tp'),
-                'importe' => $this->input->post('Importe'),
-                'pagos' => 0,
-                'banco' => $this->input->post('Banco'),
-                'cuenta' => $this->input->post('CtaCont'),
-                'docto' => $this->input->post('Doc'),
-                'tmnda' => $this->input->post('Moneda'),
-                'tcamb' => $this->input->post('TipoCambio'),
-                'importemn' => $this->input->post('ImporteTC')
+                'gcom' => 0,
+                'mov' => 1,
+                'doctopa' => 'Bco. ' . $banco . ' Cuenta. ' . $this->input->post('CuentaDeposito') . ' Docto. ' . $docto,
+                'numpol' => 0,
+                'agente' => $this->input->post('Agente'),
+                'status' => 1,
+                'control' => $banco,
+                'regdev' => $docto,
+                'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
             );
-            $this->db->insert('depoctes', $datos);
+
+            $this->db->insert('cartctepagos', $datos);
+            //Acualizamos la cartera de clientes
+            $importeFac = $this->input->post('ImporteDocto');
+            $pagosFac = $this->input->post('PagosDocto');
+            $saldoFac = $this->input->post('SaldoDocto');
+            $pagosAcum = floatval($pagosFac) + $depositoAPagar;
+            $saldoAcum = floatval($importeFac) - floatval($pagosAcum);
+            $estatus = ($pagosAcum >= $importeFac) ? 3 : 2;
+            $cliente = $this->input->post('Cliente');
+            $doctoFac = $this->input->post('DocFac');
+            $tp = $this->input->post('Tp');
+
+            $cartcliente = "update cartcliente set pagos = $pagosAcum , saldo = $saldoAcum , status = $estatus where cliente = $cliente and remicion = $doctoFac and tipo = $tp ";
+            $this->db->query($cartcliente);
+            $actualizaDepos = "update depoctes set status = 3 where (((importe-pagos) = 0) or ((importe-pagos) < 2)) and status < 3 ";
+            $this->db->query($actualizaDepos);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    }
-
-    public function onEliminar() {
-        try {
-            $this->db->where('docto', $this->input->post('Doc'))
-                    ->where('cuenta', $this->input->post('Cuenta'))
-                    ->where('banco', $this->input->post('Banco'))
-                    ->where('tipo', $this->input->post('Tp'))
-                    ->delete('depoctes');
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    /* Reporte */
-
-    public function onImprimirDepositoClientes() {
-        $jc = new JasperCommand();
-        $jc->setFolder('rpt/' . $this->session->USERNAME);
-        $parametros = array();
-        $parametros["logo"] = base_url() . $this->session->LOGO;
-        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["fecha"] = $this->input->post('Fecha');
-        $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\clientes\depositosCapturadosNoAplicados.jasper');
-        $jc->setFilename('DEPOSITOS_CLIENTES_NO_IDENT_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        PRINT $jc->getReport();
-    }
-
-    public function onImprimirDepositoClientesNoApli() {
-        $jc = new JasperCommand();
-        $jc->setFolder('rpt/' . $this->session->USERNAME);
-        $parametros = array();
-        $parametros["logo"] = base_url() . $this->session->LOGO;
-        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\clientes\depositosCapturadosNoAplicadosDos.jasper');
-        $jc->setFilename('DEPOSITOS_CLIENTES_NO_APLI_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        PRINT $jc->getReport();
     }
 
 }
