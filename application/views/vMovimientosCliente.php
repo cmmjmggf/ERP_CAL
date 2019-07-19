@@ -5,9 +5,18 @@
                 <legend class="float-left">Consulta de Movimientos por Cliente</legend>
             </div>
             <div class="col-sm-4" align="right">
-
+                <button type="button" class="btn btn-danger btn-sm " id="btnVerCartera" >
+                    <span class="fa fa-search" ></span> EDO. CUENTA
+                </button>
+                <button type="button" class="btn btn-info btn-sm " id="btnVerPagosClientes" >
+                    <span class="fa fa-search" ></span> PAGOS CLIENTES
+                </button>
+                <button type="button" class="btn btn-primary btn-sm " id="btnVerClientes" >
+                    <span class="fa fa-search" ></span> VER CLIENTES
+                </button>
             </div>
         </div>
+        <hr>
         <div class="row" id="Encabezado">
 
             <div class="col-12 col-sm-5 col-md-5 col-xl-3" >
@@ -25,31 +34,68 @@
                 <input type="text" class="form-control form-control-sm  " id="Doc" name="Doc" maxlength="15" required>
             </div>
         </div>
-        <div class="card-block mt-4">
-            <div id="MovimientosClientes">
-                <table id="tblMovimientosClientes" class="table table-sm display " style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="d-none">Cliente</th>
-                            <th class="d-none">Docto</th>
-                            <th class="d-none">Fecha</th>
-                            <th class="d-none">Importe</th>
-                            <th class="d-none">Pagos</th>
-                            <th class="d-none">Saldo</th>
-                            <th class="d-none">Tp</th>
-                            <th class="d-none">Sts</th>
-                            <th>Fec-Capt</th>
-                            <th>Fec-Dep</th>
-                            <th>Importe</th>
-                            <th>Mov</th>
-                            <th>Comisión</th>
-                            <th>Ref.</th>
-                            <th>Días</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+        <hr>
+        <div class="row mt-2">
+            <!--            primera tabla-->
+            <div class="col-6 border border-info border-left-0  border-bottom-0 border-top-0">
+                <label>Documentos <span class="badge badge-info" style="font-size: 13px !important;">Doble click para imprimir documento</span></label>
+                <div class="card-block mt-2">
+                    <div id="MovimientosClientes">
+                        <table id="tblMovimientosClientes" class="table table-sm display " style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Docto</th>
+                                    <th>Fecha</th>
+                                    <th>Importe</th>
+                                    <th>Pagos</th>
+                                    <th>Saldo</th>
+                                    <th>Tp</th>
+                                    <th>Sts</th>
+
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" align="center">Totales:</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th colspan="2"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
+            <!--            segunda tabla-->
+            <div class="col-6 border border-info border-left-0  border-bottom-0 border-top-0">
+                <label>Pagos</label>
+                <div class="card-block mt-2">
+                    <div id="PagosClientes">
+                        <table id="tblPagosClientes" class="table table-sm display " style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class="d-none">tipo</th>
+                                    <th class="d-none">doc</th>
+                                    <th>Fec-Capt</th>
+                                    <th>Fec-Dep</th>
+                                    <th>Importe</th>
+                                    <th>Mov</th>
+                                    <th>Comisión</th>
+                                    <th>Ref.</th>
+                                    <th>Días</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>
@@ -58,6 +104,9 @@
     var master_url = base_url + 'index.php/MovimientosCliente/';
     var tblMovimientosClientes = $('#tblMovimientosClientes');
     var MovimientosClientes;
+
+    var tblPagosClientes = $('#tblPagosClientes');
+    var PagosClientes;
     var pnlTablero = $("#pnlTablero");
     $(document).ready(function () {
 
@@ -87,11 +136,97 @@
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     MovimientosClientes.column(1).search('^' + $(this).val() + '$', true, false).draw();
+                    getPagos(pnlTablero.find("#Cliente").val(), $(this).val(), pnlTablero.find("#Tp").val());
                 } else {
                     MovimientosClientes.column(1).search('').draw();
                 }
             }
         });
+
+        pnlTablero.find("#btnVerClientes").click(function () {
+            $.fancybox.open({
+                src: base_url + '/Clientes',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+
+        pnlTablero.find("#btnVerPagosClientes").click(function () {
+            $.fancybox.open({
+                src: base_url + '/PagosDeClientes',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+        pnlTablero.find('#btnVerCartera').on("click", function () {
+            var cliente = pnlTablero.find("#Cliente").val();
+            if (cliente) {
+                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                $.ajax({
+                    url: master_url + 'imprimirReportesCartera',
+                    type: "POST",
+                    data: {
+                        Cliente: cliente
+                    }
+                }).done(function (data, x, jq) {
+                    console.log(data);
+                    onImprimirReporteFancyArray(JSON.parse(data));
+                    HoldOn.close();
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                    HoldOn.close();
+                });
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "DEBES DE SELECCIONAR UN CLIENTE",
+                    icon: "error",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                });
+            }
+        });
+
 
     });
     function getClientes() {
@@ -106,7 +241,6 @@
             console.log(x.responseText);
         });
     }
-
     function onVerificarTp(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
@@ -129,7 +263,6 @@
     }
 
     function getRecords(cliente) {
-        temp = 0;
         HoldOn.open({
             theme: 'sk-cube',
             message: 'CARGANDO...'
@@ -139,7 +272,7 @@
             tblMovimientosClientes.DataTable().destroy();
         }
         MovimientosClientes = tblMovimientosClientes.DataTable({
-            "dom": 'rtip',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getRecords',
@@ -155,34 +288,11 @@
                 {"data": "pagos"},
                 {"data": "saldo"},
                 {"data": "tipo"},
-                {"data": "status"},
-                {"data": "fechacap"},
-                {"data": "fechadep"},
-                {"data": "importeP"},
-                {"data": "mov"},
-                {"data": "pagada"},
-                {"data": "doctopa"},
-                {"data": "dias"}
+                {"data": "status"}
             ],
-            rowGroup: {
-                startRender: function (rows, group) {
-                    return 'Doc: <span class="badge badge-warning">' + group + '</span>  ' +
-                            'Fecha Fact: <span class="badge badge-warning">' + $(rows.data().pluck('fechadoc')).eq(0)[0] + '</span>  ' +
-                            '========> ' +
-                            'Importe: <span class="badge badge-info">$' + $(rows.data().pluck('importe')).eq(0)[0] + ' </span>' +
-                            ' || Pagos: <span class="badge badge-success">$' + $(rows.data().pluck('pagos')).eq(0)[0] + ' </span>' +
-                            ' || Saldo: <span class="badge badge-danger">$' + $(rows.data().pluck('saldo')).eq(0)[0] + ' </span>';
-                },
-                dataSrc: "remicion"
-            },
             "columnDefs": [
                 {
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [10],
+                    "targets": [3, 4, 5],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
@@ -199,7 +309,120 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [8, 'asc']
+                [2, 'asc'], [1, 'asc']
+            ],
+            "createdRow": function (row, data, index) {
+                $.each($(row).find("td"), function (k, v) {
+                    var c = $(v);
+                    var index = parseInt(k);
+                    switch (index) {
+
+                        case 0:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong');
+                            break;
+                        case 1:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong');
+                            break;
+                        case 7:
+                            /*fecha conf*/
+                            c.addClass('badge badge-info text-strong');
+                            break;
+                    }
+                });
+            },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api();//Get access to Datatable API
+                // Update footer
+                var importe = api.column(3).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(3).footer()).html(api.column(3, {page: 'current'}).data().reduce(function (a, b) {
+                    return '$' + $.number(parseFloat(importe), 2, '.', ',');
+                }, 0));
+                var pagos = api.column(4).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(4).footer()).html(api.column(4, {page: 'current'}).data().reduce(function (a, b) {
+                    return '$' + $.number(parseFloat(pagos), 2, '.', ',');
+                }, 0));
+                var saldo = api.column(5).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(5).footer()).html(api.column(5, {page: 'current'}).data().reduce(function (a, b) {
+                    return '$' + $.number(parseFloat(saldo), 2, '.', ',');
+                }, 0));
+            },
+            initComplete: function (a, b) {
+                HoldOn.close();
+            }
+        });
+        tblMovimientosClientes.find('tbody').on('click', 'tr', function () {
+            tblMovimientosClientes.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+        });
+    }
+
+    function getPagos(cliente, doc, tp) {
+        $.fn.dataTable.ext.errMode = 'throw';
+        if ($.fn.DataTable.isDataTable('#tblPagosClientes')) {
+            tblPagosClientes.DataTable().destroy();
+        }
+        PagosClientes = tblPagosClientes.DataTable({
+            "dom": 'rt',
+            buttons: buttons,
+            "ajax": {
+                "url": master_url + 'getPagos',
+                "dataSrc": "",
+                "data": {Cliente: cliente, Doc: doc, Tp: tp},
+                "type": "POST"
+            },
+            "columns": [
+                {"data": "tipo"},
+                {"data": "remicion"},
+                {"data": "fechacap"},
+                {"data": "fechadep"},
+                {"data": "importeP"},
+                {"data": "mov"},
+                {"data": "pagada"},
+                {"data": "doctopa"},
+                {"data": "dias"}
+            ],
+            "columnDefs": [
+                {
+                    "targets": [0, 1],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [4],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
+            ],
+            language: lang,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 100,
+            "scrollX": true,
+            "scrollY": 400,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "aaSorting": [
+                [2, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -221,7 +444,7 @@
                             break;
                         case 5:
                             /*fecha conf*/
-                            c.addClass('badge badge-info text-strong');
+                            c.addClass('text-info text-strong');
                             break;
                     }
                 });
@@ -230,8 +453,8 @@
                 HoldOn.close();
             }
         });
-        tblMovimientosClientes.find('tbody').on('click', 'tr', function () {
-            tblMovimientosClientes.find("tbody tr").removeClass("success");
+        tblPagosClientes.find('tbody').on('click', 'tr', function () {
+            tblPagosClientes.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
     }

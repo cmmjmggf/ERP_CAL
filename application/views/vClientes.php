@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="card-block">
-            <div id="Clientes" class="row">
+            <div id="Clientes">
                 <table id="tblClientes" class="table table-sm display" style="width:100%">
                     <thead>
                         <tr>
