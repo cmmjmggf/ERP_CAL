@@ -317,9 +317,7 @@
             }
         });
 
-        btnDesarrolloDeMuestras.click(function () {
-            $.fancybox.defaults.animationEffect = "zoom-in";
-            $.fancybox.defaults.animationEffect = "zoom-in-out";
+        btnDesarrolloDeMuestras.click(function () { 
             $.fancybox.open({
                 src: '<?php print base_url('DesarrolloMuestras/?origen=PRODUCCION'); ?>',
                 type: 'iframe',

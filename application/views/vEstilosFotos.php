@@ -28,9 +28,7 @@
 <script>
     var mdlEstilosFotos = $("#mdlEstilosFotos"),
             EstiloFotos = mdlEstilosFotos.find("#EstiloFoto");
-    $(document).ready(function () {
-
-        $.fancybox.defaults.animationEffect = "zoom-in-out";
+    $(document).ready(function () { 
 
         mdlEstilosFotos.find('[data-fancybox="images"]').fancybox({
             keyboard: true,

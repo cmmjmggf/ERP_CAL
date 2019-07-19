@@ -57,6 +57,14 @@ class PagosDeClientes extends CI_Controller {
         }
     }
 
+    public function getDescuentoXCliente() {
+        try {
+            print json_encode($this->db->query("SELECT (C.Descuento*100) AS DESCUENTO FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getDatosDelDocumentoConSaldo() {
         try {
             $x = $this->input->get();
@@ -102,6 +110,8 @@ class PagosDeClientes extends CI_Controller {
     public function onPagoCliente() {
         try {
             $x = $this->input->post();
+            $FECHA_FINAL = date("Y-m-d", strtotime(str_replace('/', '-', $x['FECHA'])));
+
             switch (intval($x["TP"])) {
                 case 1:
                     /* FACTURA */
@@ -109,11 +119,11 @@ class PagosDeClientes extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* FACTURA */,
-                        "fecha" => $x['FECHA'],
+                        "fecha" => $FECHA_FINAL,
                         "importe" => $TOTAL_FINAL_CON_IVA,
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
-                        "agente" => $x['CLIENTE'],
+                        "agente" => $x['AGENTE'],
                         "mov" => $x['MOVIMIENTO']/* MovUno, MovDos... */,
                         "doctopa" => $x['REF'],
                         "numpol" => 0,
@@ -121,8 +131,8 @@ class PagosDeClientes extends CI_Controller {
                         "status" => 1,
                         "posfe" => intval($x['MOVIMIENTO']) === 3 ? 1 : 0,
                         "regdev" => intval($x['MOVIMIENTO']) === 2 ? "1" . substr(Date('Y'), 1, 2) . "" . Date('Ymds') : 0,
-                        "uuid" => intval($x['MOVIMIENTO']) === 1 ? $x['UUID'] : 0,
-                        "fechadep" => $x['FECHA'],
+                        "uuid" => intval($x["TP"]) === 1 ? $x['UUID'] : 0,
+                        "fechadep" => $FECHA_FINAL,
                         "nc" => 0,
                         "control" => $x['CLAVE_BANCO'],
                         "stscont" => 0,
@@ -134,11 +144,11 @@ class PagosDeClientes extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* REMISION */,
-                        "fecha" => $x['FECHA'],
+                        "fecha" => $FECHA_FINAL,
                         "importe" => $x['IMPORTE'],
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
-                        "agente" => $x['CLIENTE'],
+                        "agente" => $x['AGENTE'],
                         "mov" => $x['MOVIMIENTO']/* MovUno, MovDos... */,
                         "doctopa" => $x['REF'],
                         "numpol" => 0,
@@ -147,7 +157,7 @@ class PagosDeClientes extends CI_Controller {
                         "posfe" => intval($x['MOVIMIENTO']) === 3 ? 1 : 0,
                         "regdev" => intval($x['MOVIMIENTO']) === 2 ? "2" . substr(Date('Y'), 1, 2) . "" . Date('Ymds') : 0,
                         "uuid" => intval($x['MOVIMIENTO']) === 1 ? $x['UUID'] : 0,
-                        "fechadep" => $x['FECHA'],
+                        "fechadep" => $FECHA_FINAL,
                         "nc" => 0,
                         "control" => $x['CLAVE_BANCO'],
                         "stscont" => 0,
@@ -157,8 +167,8 @@ class PagosDeClientes extends CI_Controller {
             }
             if (intval($x['MOVIMIENTO']) === 3) {
                 $this->db->insert('chequeposf', array('cliente' => $x['CLIENTE'],
-                    'remicion' => $x['NUMERO'], 'fecha' => $x['FECHA'],
-                    "fechadep" => $x['FECHA'], 'importe' => $x['IMPORTE'],
+                    'remicion' => $x['NUMERO'], 'fecha' => $FECHA_FINAL,
+                    "fechadep" => $FECHA_FINAL, 'importe' => $x['IMPORTE'],
                     'tipo' => 1, 'status' => 1, 'doctopa' => $x['DOCUMENTO']));
             }
         } catch (Exception $exc) {
@@ -177,6 +187,29 @@ class PagosDeClientes extends CI_Controller {
     public function getCtaCheques() {
         try {
             print json_encode($this->db->query("SELECT B.CtaCheques AS CTACHEQUE FROM bancos AS B WHERE B.Clave = {$this->input->get('CLAVE_BANCO')}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getAgenteXCliente() {
+        try {
+            print json_encode($this->db->query(
+                    "SELECT C.agente AS AGENTE "
+                    . "FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificaSaldoXDocumento() {
+        try {
+            $x = $this->input->post();
+            $this->db->set('saldo', $x['NUEVO_SALDO'])
+                    ->set('pagos', $x['NUEVO_PAGADO'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->where('remicion', $x['REMISION'])
+                    ->update('cartcliente');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -655,8 +655,7 @@
             console.log(data);
             var ext = getExt(data);
             if (data.length > 0) {
-                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
-                    $.fancybox.defaults.animationEffect = "zoom-in-out";
+                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") { 
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                         type: 'iframe',

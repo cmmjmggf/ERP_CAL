@@ -17,7 +17,6 @@
     var isMobile = false;
     var seg = <?php print (isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : 0); ?>;
     function onImprimirReporteFancy(url) {
-        $.fancybox.defaults.animationEffect = "zoom-in-out";
         $.fancybox.open({
             toolbar: false,
             smallBtn: true,
@@ -76,8 +75,6 @@
                 }
             });
         });
-
-        $.fancybox.defaults.animationEffect = "zoom-in-out";
         $.fancybox.open(files);
     }
 
