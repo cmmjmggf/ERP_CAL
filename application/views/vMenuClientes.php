@@ -33,5 +33,9 @@
 <?php
 $this->load->view('vTipoCambio')->view('vBloqueoClientesXCliente')
         ->view('vBloqueoClientesAutomatico')->view('vCajasFlete')
-        ->view('vGeneraPinAutoClientes')->view('vCapturaPrecioDeVtaXListaLinea');
+        ->view('vGeneraPinAutoClientes')->view('vCapturaPrecioDeVtaXListaLinea')
+        ->view('vFichaTecnicaCompra')->view('vColoresEstiloVista');
+
+$this->load->view('vAvanceProduccion');
+$this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
 

@@ -16,12 +16,14 @@ class Colores extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                        $this->load->view('vNavGeneral');
+                    $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
                     if ($Origen === 'FICHASTECNICAS') {
                         $this->load->view('vMenuFichasTecnicas');
+                    } else if ($Origen === 'CONSULTA') {
+
                     }
                     //Cuando no viene de ningun modulo y lo teclean
                     else {

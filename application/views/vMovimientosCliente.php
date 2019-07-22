@@ -1,10 +1,10 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-8 float-left">
-                <legend class="float-left">Consulta de Movimientos por Cliente</legend>
+            <div class="col-sm-6 float-left">
+                <legend class="float-left">Consulta de Movimientos Clientes</legend>
             </div>
-            <div class="col-sm-4" align="right">
+            <div class="col-sm-6" align="right">
                 <button type="button" class="btn btn-danger btn-sm " id="btnVerCartera" >
                     <span class="fa fa-search" ></span> EDO. CUENTA
                 </button>
