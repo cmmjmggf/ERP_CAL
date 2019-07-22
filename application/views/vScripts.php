@@ -1325,7 +1325,7 @@
         setTimeout(function () {
             getQuickMenu(type);
             onComprobarModulos(type);
-        }, 100000);
+        }, 600000);/*cada 10 min*/
     }
 
     function getQuickMenu(type) {
@@ -1404,5 +1404,19 @@
      */
     function getVR(e) {
         return e.val() ? e.val() : '';
+    }
+    function getidsInputSelect(padre) {
+        var inputs_selects = padre.find("input:not(input[id$='selectized']), select");
+        var i = 1;
+        console.log("var ");
+        $.each(inputs_selects, function (k, v) {
+            var xxx = $(v).attr('id') + " = " + padre.attr('id') + ".find('#" + $(v).attr('id') + "')";
+            if (i === inputs_selects.length) {
+                console.log(xxx + ";\n");
+            } else {
+                console.log(xxx + ",\n");
+                i += 1;
+            }
+        });
     }
 </script>

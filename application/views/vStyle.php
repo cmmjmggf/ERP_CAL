@@ -287,7 +287,7 @@
         background-size: 50% 50%;
         background-color: #2C3E50;
     } 
-    .btn {
+    .btn:not(.buttons-html5):not(.buttons-collection) {
         border-radius: 2rem; 
         padding-left:  12px;
         padding-right:   12px;

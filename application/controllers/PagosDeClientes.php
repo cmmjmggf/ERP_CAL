@@ -68,7 +68,7 @@ class PagosDeClientes extends CI_Controller {
     public function getDatosDelDocumentoConSaldo() {
         try {
             $x = $this->input->get();
-            $documento = $this->db->query("SELECT  CC.importe AS IMPORTE, CC.pagos AS PAGOS, CC.Fecha AS FECHA, CC.saldo AS SALDO,CC.tipo AS TIPO, DATEDIFF(NOW(),fecha) AS DIAS FROM cartcliente AS CC WHERE CC.remicion LIKE '{$x['DOCUMENTO']}'")->result();
+            $documento = $this->db->query("SELECT CC.cliente AS CLIENTE, CC.importe AS IMPORTE, CC.pagos AS PAGOS, CC.Fecha AS FECHA, CC.saldo AS SALDO,CC.tipo AS TIPO, DATEDIFF(NOW(),fecha) AS DIAS FROM cartcliente AS CC WHERE CC.remicion LIKE '{$x['DOCUMENTO']}'")->result();
             print json_encode($documento);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

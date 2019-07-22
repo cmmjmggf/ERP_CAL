@@ -6,7 +6,16 @@
             </div>
             <div class="col-sm-5">
                 <label>Cliente</label>
-                <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" ></select>
+                <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" >
+                    <option></option>
+                    <?php
+                    $clientes = $this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
+                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
+                    foreach ($clientes as $k => $v) {
+                        print "<option value=\"{$v->Clave}\">{$v->Cliente}</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div class="col-sm-4">
                 <label>Pedido</label>
@@ -75,6 +84,12 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                             <label for="Cliente" >Cliente*</label>
                             <select class="form-control form-control-sm" id="Cliente" name="Cliente" required="" placeholder="">
+                                <option></option>
+                                <?php
+                                foreach ($clientes as $k => $v) {
+                                    print "<option value=\"{$v->Clave}\">{$v->Cliente}</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
@@ -113,7 +128,13 @@
                     <div class="row">
                         <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
                             <label for="Estilo" >Estilo*</label>
-                            <select class="form-control form-control-sm NotSelectize" id="Estilo" name="Estilo" required placeholder="">
+                            <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
+                                <option></option>
+                                <?php
+                                foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  INNER JOIN fichatecnica AS FT ON FT.Estilo = E.Clave  INNER JOIN fraccionesxestilo AS FE ON FE.Estilo = E.Clave WHERE E.Estatus LIKE 'ACTIVO' GROUP BY FT.Estilo")->result() as $k => $v) {
+                                    print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                         <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
@@ -518,24 +539,7 @@
                 tblPedidos.DataTable().column(2).search('').draw();
             }
         });
-        /*BUSCA CONFORME VA ESCRIBIENDO, DE INICIO NO TIENE NINGUN DATO, HASTA QUE ESCRIBAS*/
-        pnlDatos.find('#Estilo').selectize({
-            valueField: 'Clave',
-            labelField: 'Estilo',
-            searchField: ['Estilo', 'Clave'],
-            create: false,
-            maxItems: 1,
-            sortField: [
-                {
-                    field: 'Clave',
-                    direction: 'asc'
-                }
-            ],
-            loadingClass: 'loading',
-            render: {option: Selectizer.renderOptions},
-            remoteUrl: master_url + 'getEstilos',
-            load: Selectizer.loadOptions
-        });
+ 
 
         btnAgregarDetalle.click(function () {
             if (pedido_valido) {
@@ -1053,8 +1057,8 @@
     function init() {
 
         getRecords();
-        getOptions("getClientes", "Cliente", "Clave", "Cliente", pnlDatos); //Clientes
-        getOptions("getClientes", "ClientePedido", "Clave", "Cliente", pnlTablero); //Clientes
+//        getOptions("getClientes", "Cliente", "Clave", "Cliente", pnlDatos); //Clientes
+//        getOptions("getClientes", "ClientePedido", "Clave", "Cliente", pnlTablero); //Clientes
         getOptions("getAgentes", "Agente", "Clave", "Agente", pnlDatos); //Agentes
         //getOptions("getEstilos", "Estilo", "Clave", "Estilo"); //Estilos
         getOptions("getMaquilas", "Maquila", "Clave", "Maquila", pnlDatos); //Maquilas
