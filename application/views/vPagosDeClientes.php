@@ -328,28 +328,9 @@
             btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), btnMovimientos = pnlTablero.find("#btnMovimientos");
 
     $(document).ready(function () {
+        0
         btnMovimientos.click(function () {
-            $.fancybox.open({
-                src: '<?php print base_url('MovimientosCliente'); ?>',
-                type: 'iframe',
-                opts: {
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
-            });
+            onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
 
         ImporteUno.on('keydown keyup', function (e) {

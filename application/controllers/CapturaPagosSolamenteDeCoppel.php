@@ -247,17 +247,13 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             $IMPORTE_COMPLETO = floatval($x['SALDO']) - $IMPORTE_COMPLETO_CALCULADO;
             if ($IMPORTE_COMPLETO <= 0.5) {
                 $this->db->set('pagos', $IMPORTE_COMPLETO_CALCULADO)
-                        ->set('saldo', 0)
-                        ->set('status', 3)
-                        ->where('cliente', 2121)
-                        ->where('remicion', $x['DOCUMENTO'])
+                        ->set('saldo', 0)->set('status', 3)
+                        ->where('cliente', 2121)->where('remicion', $x['DOCUMENTO'])
                         ->update('cartcliente');
             } else {
                 $this->db->set('pagos', $IMPORTE_COMPLETO_CALCULADO)
-                        ->set('saldo', 0)
-                        ->set('status', 2)
-                        ->where('cliente', 2121)
-                        ->where('remicion', $x['DOCUMENTO'])
+                        ->set('saldo', 0)->set('status', 2)
+                        ->where('cliente', 2121)->where('remicion', $x['DOCUMENTO'])
                         ->update('cartcliente');
             }
 
@@ -265,6 +261,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             $this->db->set('status', 2)->set("monletra", $x['MONTO_LETRA'])->set("hora", Date('h:i:s a'))
                     ->where('nc', $x['FOLIO_NC'])->where('status', 1)->where('numfac', $x['DOCUMENTO'])
                     ->update('notcred');
+
             /* VALIDAR LOS DEPOSITOS */
             if (floatval($x['SALDO']) > floatval($x['DEPOSITO_REAL'])) {
                 $this->db->set('status', 2)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');

@@ -225,10 +225,16 @@
             FolioFiscal = pnlTablero.find('#FolioFiscal'), Hoy = '<?php print Date('d/m/Y'); ?>', PagosDeEsteDocumento,
             tblPagosDeEsteDocumento = pnlTablero.find("#tblPagosDeEsteDocumento"), DocumentosConSaldoXClientes,
             tblDocumentosConSaldoXClientes = pnlTablero.find("#tblDocumentosConSaldoXClientes"),
-            btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), DocumentoBancario = pnlTablero.find("#DocumentoBancario");
+            btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), DocumentoBancario = pnlTablero.find("#DocumentoBancario"),
+            btnMovimientos = pnlTablero.find("#btnMovimientos");
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+
+        btnMovimientos.click(function () {
+            onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
+        });
+
         btnAceptaPagos.click(function () {
             if (DoctoPDC.val()) {
                 if (FolioFiscal.val()) {
@@ -259,7 +265,7 @@
                         pnlTablero.find("input:not(#Agente)").val('');
                         $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
                             $(v)[0].selectize.clear(true);
-                        }); 
+                        });
                         TPPDC[0].selectize.focus();
                         onBeep(1);
                     }).fail(function (x) {
