@@ -22,9 +22,9 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
     public function getPedidos() {
         try {
             return$this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
-                                    . "PX.FechaEntrega AS ENTREGA, PX.FechaRecepcion AS CAPTURA, "
-                                    . "PX.FechaProg AS PRODUCCION", false)
-                            ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->limit(3999)->get()->result();
+                                    . " PX.FechaEntrega  AS ENTREGA,  PX.FechaRecepcion AS CAPTURA, "
+                                    . "date_format(PX.FechaProg,'%d/%m/%Y') AS PRODUCCION", false)
+                            ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->limit(5000)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -33,7 +33,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
     public function getControlesEnNomina($CONTROL, $EMPLEADO, $FRACCION) {
         try {
             $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
-                FPN.control AS CONTROL, FPN.fecha AS FECHA, 
+                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA, 
                 FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
                 FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
                     ->from('fracpagnomina AS FPN');
@@ -46,7 +46,10 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
             if ($FRACCION !== '') {
                 $this->db->where('FPN.fraccion', $FRACCION);
             }
-            return $this->db->limit(999)->get()->result();
+            if ($CONTROL === '' && $EMPLEADO === '' && $FRACCION === '') {
+                $this->db->limit(999);
+            }
+            return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -26,7 +26,15 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <label>Cliente</label>
-                    <select id="Cliente" name="Cliente" class="form-control"></select>
+                    <select id="Cliente" name="Cliente" class="form-control">
+                        <option></option>
+                        <?php
+                        foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
+                                ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                            print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -94,6 +102,8 @@
                     <table id="tblFechasDeAvance" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">CONTROL</th>
                                 <th scope="col">Corte</th>
                                 <th scope="col">Rayado</th>
                                 <th scope="col">Rebajado</th>
@@ -110,7 +120,8 @@
                                 <th scope="col">Terminado</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody> 
+                        </tbody>
                     </table>
                 </div>
                 <div class="w-100"></div>
@@ -145,7 +156,19 @@
                         <div class="w-100"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Empleado</label>
-                            <select id="Empleado" name="Empleado" class="form-control"></select>
+                            <select id="Empleado" name="Empleado" class="form-control">
+                                <option></option>
+                                <?php
+                                foreach ($this->db->select("E.Numero AS CLAVE, "
+                                                . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
+                                                . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
+                                                . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
+                                                . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
+                                        ->from("empleados AS E")->where('E.DepartamentoFisico', 10)->where('E.AltaBaja', 1)->get()->result() as $kk => $vv) {
+                                    print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Fracción</label>
@@ -170,8 +193,7 @@
             RastreoDeControlesEnNomina, tblRastreoDeControlesEnNomina = pnlTablero.find("#tblRastreoDeControlesEnNomina");
 
     $(document).ready(function () {
-        getClientes();
-        getEmpleados();
+
         Control.focus();
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
@@ -199,7 +221,7 @@
             }
         ];
         FechasDelPedido = tblFechasDelPedido.DataTable({
-            "dom": 'frit',
+            "dom": 'rit',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getPedidos'); ?>',
@@ -220,11 +242,61 @@
             "scrollY": "250px",
             "scrollX": true
         });
-        FechasDeFacturacion = tblFechasDeFacturacion.DataTable();
-        FechasDevolucion = tblFechasDevolucion.DataTable();
-        FechasDeAvance = tblFechasDeAvance.DataTable();
+        FechasDeFacturacion = tblFechasDeFacturacion.DataTable({
+            "dom": 'rit'
+            });
+        FechasDevolucion = tblFechasDevolucion.DataTable({
+            "dom": 'rit'
+            });
+        FechasDeAvance = tblFechasDeAvance.DataTable({
+            "dom": 'rit',
+            buttons: buttons,
+            "ajax": {
+                "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFechasDeAvance'); ?>',
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = (Control.val().trim());
+                    d.EMPLEADO = (Empleado.val().trim());
+                    d.FRACCION = (Fraccion.val().trim());
+                }
+            },
+            "columns": [
+                {"data": "ID"}/*0*/, {"data": "CONTROL"}/*1*/,
+                {"data": "CORTE"}/*2*/, {"data": "RAYADO"},
+                {"data": "REBAJADO"}/*4*/, {"data": "FOLEADO"},
+                {"data": "ENTRETELADO"}/*6*/, {"data": "ALM-CORTE"},
+                {"data": "PESPUNTE"}/*6*/, {"data": "ALM-PESP"},
+                {"data": "TEJIDO"}/*6*/, {"data": "ALM-TEJIDO"},
+                {"data": "MONTADO"}/*6*/, {"data": "ADORNO"},
+                {"data": "ALM-ADORNO"}/*6*/, {"data": "TERMINADO"}
+            ],
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [1],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true
+        });
         RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
-            "dom": 'frit',
+            "dom": 'rit',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getControlesEnNomina'); ?>',
@@ -269,6 +341,7 @@
             }
         });
     });
+
     function getClientes() {
         Cliente[0].selectize.clear(true);
         Cliente[0].selectize.clearOptions();
@@ -334,6 +407,7 @@
                 Cliente[0].selectize.setValue(xx.Cliente);
                 EstatusProduccion.val(xx.EstatusProduccion);
                 RastreoDeControlesEnNomina.ajax.reload();
+                FechasDeAvance.ajax.reload();
             }
         }).fail(function (x, y, z) {
             getError(x);
@@ -342,3 +416,12 @@
         });
     }
 </script>
+<style>
+    .card{ 
+        background-color: #fff;
+        border-width: 1px 2px 2px;
+        border-style: solid; 
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
+        border-image: linear-gradient(to bottom,  #0099cc, #003366, rgb(0,0,0,0)) 1 100% ;
+    }
+</style>
