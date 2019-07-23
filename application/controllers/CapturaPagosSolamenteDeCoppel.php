@@ -264,13 +264,19 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
             /* VALIDAR LOS DEPOSITOS */
             if (floatval($x['SALDO']) > floatval($x['DEPOSITO_REAL'])) {
-                $this->db->set('status', 2)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');
+                $this->db->query("UPDATE depoctes SET status = 2, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
+                        ->result();
             }
             if (floatval($x['SALDO']) == floatval($x['DEPOSITO_REAL'])) {
-                $this->db->set('status', 3)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');
+                $this->db->query("UPDATE depoctes SET status = 3, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
+                        ->result();
             }
-            if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) {
-                $this->db->set('status', 2)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');
+            if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) { 
+                $this->db->query("UPDATE depoctes SET status = 2, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
+                        ->result();
             }
             /* SALDAR IMPORTES MENORES A 2 PESOS */
             $this->db->set('status', 3)->where('status <', 3)->where('(importe - pagos) < 2', null, false)->update('depoctes');

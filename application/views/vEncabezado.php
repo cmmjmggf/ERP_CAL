@@ -123,7 +123,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js"></script>
         <script>
             $(document).ready(function () {
-                Waves.attach('.btn', ['waves-effect']); 
+                Waves.attach('.btn:not(.btn-float)', ['waves-effect']); 
                 Waves.init();
                 $.fancybox.defaults.animationEffect = "zoom-in";
                 $.fancybox.defaults.animationEffect = "zoom-in-out";

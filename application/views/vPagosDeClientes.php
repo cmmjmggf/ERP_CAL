@@ -327,8 +327,7 @@
             SaldoDelDeposito = pnlTablero.find("#SaldoDelDeposito"),
             btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), btnMovimientos = pnlTablero.find("#btnMovimientos");
 
-    $(document).ready(function () {
-        0
+    $(document).ready(function () { 
         btnMovimientos.click(function () {
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
