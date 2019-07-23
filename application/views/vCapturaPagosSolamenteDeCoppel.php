@@ -254,7 +254,13 @@
                     /*DOSTRES PORCIENTO*/
                     $.post('<?php print base_url('CapturaPagosSolamenteDeCoppel/onAgregarPagoDosTresTotal'); ?>', dostres).done(function () {
                         onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
-
+                        PagosDeEsteDocumento.ajax.reload();
+                        DocumentosConSaldoXClientes.ajax.reload();
+                        pnlTablero.find("input:not(#Agente)").val('');
+                        $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
+                            $(v)[0].selectize.clear(true);
+                        }); 
+                        TPPDC[0].selectize.focus();
                         onBeep(1);
                     }).fail(function (x) {
                         getError(x);
