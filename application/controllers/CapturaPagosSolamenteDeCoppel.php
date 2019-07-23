@@ -269,7 +269,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             if (floatval($x['SALDO']) > floatval($x['DEPOSITO_REAL'])) {
                 $this->db->set('status', 2)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');
             }
-            if (floatval($x['SALDO']) = floatval($x['DEPOSITO_REAL'])) {
+            if (floatval($x['SALDO']) == floatval($x['DEPOSITO_REAL'])) {
                 $this->db->set('status', 3)->set('pagos', 2)->where("docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE '{$x['BANCO']}", null, false)->update('depoctes');
             }
             if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) {
