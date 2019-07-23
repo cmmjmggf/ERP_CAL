@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
-class AplicaDepositosCliente extends CI_Controller {
+class PagosConCincoDescuento extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -28,7 +28,7 @@ class AplicaDepositosCliente extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFondo')->view('vAplicaDepositosCliente')->view('vFooter');
+            $this->load->view('vFondo')->view('vPagosConCincoDescuento')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -62,6 +62,25 @@ class AplicaDepositosCliente extends CI_Controller {
                                                 date_format(fechacap,'%d/%m/%Y') as fechacap ,
                                                 importe,mov, doctopa
                                                 from cartctepagos where cliente like '$cte' and remicion like '$fac' and tipo like '$tp' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFolioNC() {
+        try {
+            $tp = $this->input->get('Tp');
+            print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp and nc < 10000 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificaExisteNC() {
+        try {
+            $tp = $this->input->get('Tp');
+            $nc = $this->input->get('NC');
+            print json_encode($this->db->query("select nc from notcred where tp = $tp and nc = $nc ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -152,17 +171,62 @@ class AplicaDepositosCliente extends CI_Controller {
             $banco = $this->input->post('Banco');
             $docto = $this->input->post('Documento');
             $sql = "update depoctes set status = $estatusDeposito , pagos = ifnull(pagos,0) + $depositoAPagar where banco = $banco and docto = $docto  ";
-            $this->db->query($sql);
-            //Guardamos el pago en cartclientepagos
 
-            $fecha = str_replace('/', '-', $this->input->post('FechaDeposito'));
-            $nuevaFecha = date("Y-m-d", strtotime($fecha));
-            $datos = array(
+            $this->db->query($sql);
+            //Guardamos el pago del descuento solamente 5%
+
+            $fechadep = str_replace('/', '-', $this->input->post('FechaDeposito'));
+            $nuevaFechaDep = date("Y-m-d", strtotime($fechadep));
+            $datosPagoDescuento = array(
                 'cliente' => $this->input->post('Cliente'),
                 'remicion' => $this->input->post('DocFac'),
                 'fecha' => Date('Y-m-d'),
-                'fechacap' => $nuevaFecha,
-                'fechadep' => $nuevaFecha,
+                'fechacap' => $nuevaFechaDep,
+                'fechadep' => $nuevaFechaDep,
+                'importe' => $this->input->post('DescuentoDocto'),
+                'tipo' => $this->input->post('Tp'),
+                'gcom' => 0,
+                'mov' => 5,
+                'doctopa' => 'Dc5%',
+                'numpol' => 0,
+                'agente' => $this->input->post('Agente'),
+                'status' => 1,
+                'control' => $banco,
+                'nc' => $this->input->post('FolioNC'),
+                'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
+            );
+            $this->db->insert('cartctepagos', $datosPagoDescuento);
+
+            //Guardamos el pago del IVA desglosado del descuento
+            $datosIVA = array(
+                'cliente' => $this->input->post('Cliente'),
+                'remicion' => $this->input->post('DocFac'),
+                'fecha' => Date('Y-m-d'),
+                'fechacap' => $nuevaFechaDep,
+                'fechadep' => $nuevaFechaDep,
+                'importe' => $this->input->post('IvaDocto'),
+                'tipo' => $this->input->post('Tp'),
+                'gcom' => 0,
+                'mov' => 5,
+                'doctopa' => "IVA  N-C " . $this->input->post('FolioNC'),
+                'numpol' => 0,
+                'agente' => $this->input->post('Agente'),
+                'status' => 1,
+                'control' => $banco,
+                'pagada' => 0,
+                'posfe' => 0,
+                'nc' => $this->input->post('FolioNC'),
+                'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
+            );
+            $this->db->insert('cartctepagos', $datosIVA);
+
+            //Guardamos el pago normal(sobrante despues de aplicar descuento) como pago normal
+            $datosPagoNormal = array(
+                'cliente' => $this->input->post('Cliente'),
+                'remicion' => $this->input->post('DocFac'),
+                'fecha' => Date('Y-m-d'),
+                'fechacap' => $nuevaFechaDep,
+                'fechadep' => $nuevaFechaDep,
                 'importe' => $depositoAPagar,
                 'tipo' => $this->input->post('Tp'),
                 'gcom' => 0,
@@ -172,26 +236,54 @@ class AplicaDepositosCliente extends CI_Controller {
                 'agente' => $this->input->post('Agente'),
                 'status' => 1,
                 'control' => $banco,
-                'regdev' => $docto,
+                'pagada' => 0,
+                'posfe' => 0,
+                'nc' => $this->input->post('FolioNC'),
                 'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
             );
+            $this->db->insert('cartctepagos', $datosPagoNormal);
 
-            $this->db->insert('cartctepagos', $datos);
+
+            //Guardamos la nota de credito
+            $fechaNC = str_replace('/', '-', $this->input->post('FechaCapturaNC'));
+            $nuevaFechaNC = date("Y-m-d", strtotime($fechaNC));
+            $datosNC = array(
+                'nc' => $this->input->post('FolioNC'),
+                'cliente' => $this->input->post('Cliente'),
+                'numfac' => $this->input->post('DocFac'),
+                'tp' => $this->input->post('Tp'),
+                'orden' => 5,
+                'fecha' => $nuevaFechaNC,
+                'hora' => Date('H:i:s'),
+                'cant' => 1,
+                'descripcion' => 'Desc.5% Nc-' . $this->input->post('FolioNC'),
+                'precio' => $this->input->post('DescuentoDocto'),
+                'subtot' => $this->input->post('DescuentoDocto'),
+                'concepto' => 0,
+                'defecto' => 0,
+                'detalle' => 0,
+                'status' => ($this->input->post('Tp') === '1') ? 0 : 2
+            );
+            $this->db->insert('notcred', $datosNC);
+
+
+
             //Acualizamos la cartera de clientes
-            $importeFac = $this->input->post('ImporteDocto');
-            $pagosFac = $this->input->post('PagosDocto');
-            $saldoFac = $this->input->post('SaldoDocto');
-            $pagosAcum = floatval($pagosFac) + $depositoAPagar;
-            $saldoAcum = floatval($importeFac) - floatval($pagosAcum);
-            $estatus = ($pagosAcum >= $importeFac) ? 3 : 2;
+            $importeFac = floatval($this->input->post('MontoDocto'));
+            $descuento = $this->input->post('DescuentoDocto');
+            $iva = $this->input->post('IvaDocto');
+            $pagosAcum = floatval($descuento) + $depositoAPagar + floatval($iva);
+            $saldoAcum = $importeFac - $pagosAcum;
             $cliente = $this->input->post('Cliente');
             $doctoFac = $this->input->post('DocFac');
             $tp = $this->input->post('Tp');
-
-            $cartcliente = "update cartcliente set pagos = $pagosAcum , saldo = $saldoAcum , status = $estatus where cliente = $cliente and remicion = $doctoFac and tipo = $tp ";
+            $cartcliente = "";
+            if ($saldoAcum <= 0.9) {
+                $cartcliente = "update cartcliente set pagos = $pagosAcum , saldo = 0 , status = 3 where cliente = $cliente and remicion = $doctoFac and tipo = $tp ";
+            } else {
+                $cartcliente = "update cartcliente set pagos = $pagosAcum , saldo = $saldoAcum , status = 2 where cliente = $cliente and remicion = $doctoFac and tipo = $tp ";
+            }
             $this->db->query($cartcliente);
-            $actualizaDepos = "update depoctes set status = 3 where (((importe-pagos) = 0) or ((importe-pagos) < 2)) and status < 3 ";
-            $this->db->query($actualizaDepos);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -165,7 +165,7 @@
                 HoldOn.close();
             });
         });
-        handleEnter();
+        handleEnterDiv(mdlFichaTecnicaCompra);
         getEstilosReporte();
         getMaquilasCostosEstilos();
     });

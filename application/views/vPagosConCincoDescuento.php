@@ -2,15 +2,9 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Aplica Depósitos de Clientes</legend>
+                <legend class="float-left">Pagos a clientes con el 5% de descuento automático</legend>
             </div>
             <div class="col-sm-6" align="right">
-                <button type="button" class="btn btn-primary btn-sm " id="btnAplicarDepositos" >
-                    <span class="fa fa-users" ></span> ACTUALIZA DESCUENTOS
-                </button>
-                <button type="button" class="btn btn-danger btn-sm " id="btnImprimir" >
-                    <span class="fa fa-file-pdf" ></span> NOTAS DE CRÉDITO
-                </button>
                 <button type="button" class="btn btn-success btn-sm " id="btnVerMovimientos" >
                     <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
                 </button>
@@ -42,19 +36,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <div class="w-100"></div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Importe</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="ImporteDeposito" name="ImporteDeposito" maxlength="10"  required="" >
-                    </div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Aplicado</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="PagosDeposito" name="PagosDeposito" maxlength="10" required=""  >
-                    </div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Saldo</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="SaldoDeposito" name="SaldoDeposito" maxlength="10" required=""  >
-                    </div>
+
                     <div class="w-100 border border-info mt-1 border-right-0  border-left-0 border-bottom-0"></div>
                     <!--Primer tabla-->
                     <div class="col-12 mt-1" >
@@ -109,15 +91,27 @@
             <!--segunda columna-->
             <div class="col-3 border border-info border-right-0  border-left-0 border-bottom-0">
                 <div class="row">
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
+                        <label>Importe</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="ImporteDeposito" name="ImporteDeposito" maxlength="10"  required="" >
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
+                        <label>Aplicado</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="PagosDeposito" name="PagosDeposito" maxlength="10" required=""  >
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
+                        <label>Saldo</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="SaldoDeposito" name="SaldoDeposito" maxlength="10" required=""  >
+                    </div>
                     <div class="col-6 col-sm-2 col-md-2 col-lg-4 col-xl-8" >
-                        <label>Depósito</label>
+                        <label>Fecha Depósito</label>
                         <input type="text" class="form-control form-control-sm " id="FechaDeposito" name="FechaDeposito" readonly=""  required="" >
                     </div>
-                    <div class="col-6 col-sm-2 col-md-2 col-lg-4 col-xl-4" >
+                    <div class="col-6 col-sm-2 col-md-2 col-lg-4 col-xl-4 d-none" >
                         <label>Cuenta</label>
                         <input type="text" class="form-control form-control-sm " id="CuentaDeposito" name="CuentaDeposito" readonly=""  required="" >
                     </div>
-                    <div class="col-6 col-sm-3 col-md-2 col-lg-2 col-xl-6" >
+                    <div class="col-6 col-sm-3 col-md-2 col-lg-2 col-xl-6 d-none" >
                         <label>Estatus</label>
                         <input type="text" class="form-control form-control-sm  " id="EstatusDeposito" name="EstatusDeposito" readonly="" required="" >
                     </div>
@@ -136,22 +130,37 @@
                         <input type="text" class="form-control form-control-sm " readonly="" id="FolioDeposito" name="FolioDeposito" required="" >
                     </div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
-                        <label>Importe</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="ImporteDocto" name="ImporteDocto" required="" >
+                        <label>Monto</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="MontoDocto" name="MontoDocto" required="" >
                     </div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
-                        <label>Pagos</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="PagosDocto" name="PagosDocto" required="" >
+                        <label>5% Desc</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="DescuentoDocto" name="DescuentoDocto" required="" >
                     </div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
-                        <label>Saldo</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="SaldoDocto" name="SaldoDocto" required="" >
+                        <label>Iva Desc</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="IvaDocto" name="IvaDocto" required="" >
                     </div>
                     <div class="w-100 border border-info mt-2 border-right-0  border-left-0 border-bottom-0"></div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-12 col-xl-6" >
-                        <label>Importe a pagar:</label>
+                        <label>Deposito</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="DepoSugerido" name="DepoSugerido" required="" >
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-12 col-xl-6" >
+                        <label>Deposito real</label>
                         <input type="text" class="form-control form-control-sm numbersOnly" id="ImporteAPagar" name="ImporteAPagar" required="" >
                     </div>
+                    <div class="w-100"></div>
+
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
+                        <label>Captura</label>
+                        <input type="text" class="form-control form-control-sm date notnotEnter" id="FechaCapturaNC" name="FechaCapturaNC" required="" >
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
+                        <label>Nota Cred.</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="FolioNC" name="FolioNC" required="" >
+                    </div>
+
                     <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4 pt-2">
                         <button type="button" class="btn btn-primary btn-sm" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Capturar Documento">
                             <i class="fa fa-save"></i> ACEPTAR
@@ -163,7 +172,7 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/AplicaDepositosCliente/';
+    var master_url = base_url + 'index.php/PagosConCincoDescuento/';
     var tblAplicaDepositosCliente = $('#tblAplicaDepositosCliente');
     var AplicaDepositosCliente;
     var tblPagosDocto = $('#tblPagosDocto');
@@ -177,6 +186,7 @@
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
+        pnlTablero.find("#FechaCapturaNC").val(getToday());
         getClientes();
         getRecords('', '');
         getPagosByClienteFactTp('', '', '')
@@ -250,11 +260,11 @@
         pnlTablero.find("#ImporteAPagar").keypress(function (e) {
             var importeaPag = parseFloat(pnlTablero.find("#ImporteAPagar").val());
             var saldo = parseFloat(pnlTablero.find("#SaldoDeposito").val());
-            var saldoDoc = parseFloat(pnlTablero.find("#SaldoDocto").val());
+            var depoSugerido = parseFloat(pnlTablero.find("#DepoSugerido").val());
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     /*valida la cantidad a pagar sea menor al saldo del deposito y menor al saldo del docto*/
-                    if (importeaPag > saldo || importeaPag > saldoDoc) {
+                    if (importeaPag > saldo || importeaPag > depoSugerido) {
                         swal({
                             title: "ATENCIÓN",
                             text: "EL IMPORTE DE LA APLICACIÓN DEBE DE SER MENOR AL DEL DEPOSITO Y MENOR AL DEL DOCUMENTO",
@@ -265,8 +275,44 @@
                             $(this).val('').focus();
                         });
                     } else {
-                        btnGuardar.focus();
+                        pnlTablero.find("#FechaCapturaNC").focus();
                     }
+                }
+            }
+        });
+        pnlTablero.find("#FechaCapturaNC").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    pnlTablero.find("#FolioNC").focus().select();
+                }
+            }
+        });
+        pnlTablero.find("#FolioNC").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = pnlTablero.find("#Tp").val();
+                if ($(this).val()) {
+                    $.getJSON(master_url + 'onVerificaExisteNC', {Tp: tp, NC: $(this).val()}).done(function (data) {
+                        if (data.length > 0) {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "NOTA DE CRÉDITO YA EXISTE",
+                                icon: "error",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false
+                            }).then((action) => {
+                                pnlTablero.find("#FolioNC").val('').focus();
+                            });
+                        } else {
+                            btnGuardar.focus();
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+
+                } else {
+                    getFolioNC(tp);
+                    btnGuardar.focus();
                 }
             }
         });
@@ -275,9 +321,9 @@
             if (valido) {
                 var importeaPag = parseFloat(pnlTablero.find("#ImporteAPagar").val());
                 var saldo = parseFloat(pnlTablero.find("#SaldoDeposito").val());
-                var saldoDoc = parseFloat(pnlTablero.find("#SaldoDocto").val());
+                var depoSugerido = parseFloat(pnlTablero.find("#DepoSugerido").val());
 
-                if (importeaPag > saldo || importeaPag > saldoDoc) {
+                if (importeaPag > saldo || importeaPag > depoSugerido) {
                     swal({
                         title: "ATENCIÓN",
                         text: "EL IMPORTE DE LA APLICACIÓN DEBE DE SER MENOR AL DEL DEPOSITO Y MENOR AL DEL DOCUMENTO",
@@ -310,9 +356,11 @@
                                 CuentaDeposito: pnlTablero.find("#CuentaDeposito").val(),
                                 Agente: agente,
                                 UUID: pnlTablero.find("#FolioDeposito").val(),
-                                ImporteDocto: pnlTablero.find("#ImporteDocto").val(),
-                                PagosDocto: pnlTablero.find("#PagosDocto").val(),
-                                SaldoDocto: pnlTablero.find("#SaldoDocto").val()
+                                MontoDocto: pnlTablero.find("#MontoDocto").val(),
+                                DescuentoDocto: pnlTablero.find("#DescuentoDocto").val(),
+                                IvaDocto: pnlTablero.find("#IvaDocto").val(),
+                                FolioNC: pnlTablero.find("#FolioNC").val(),
+                                FechaCapturaNC: pnlTablero.find("#FechaCapturaNC").val(),
                             }).done(function (data) {
 
                                 var saldoActDepo = parseFloat(pnlTablero.find("#SaldoDeposito").val()) - parseFloat(pnlTablero.find("#ImporteAPagar").val());
@@ -321,11 +369,14 @@
                                     pnlTablero.find("#SaldoDeposito").val(saldoActDepo.toFixed(2));
                                     pnlTablero.find("#Docto").val('');
                                     pnlTablero.find("#FechaDocto").val('');
-                                    pnlTablero.find("#ImporteDocto").val('');
-                                    pnlTablero.find("#PagosDocto").val('');
-                                    pnlTablero.find("#SaldoDocto").val('');
+                                    pnlTablero.find("#MontoDocto").val('');
+                                    pnlTablero.find("#DescuentoDocto").val('');
+                                    pnlTablero.find("#DepoSugerido").val('');
                                     pnlTablero.find("#FolioDeposito").val('');
                                     pnlTablero.find("#ImporteAPagar").val('');
+                                    pnlTablero.find("#IvaDocto").val('');
+                                    pnlTablero.find("#FolioNC").val('');
+                                    pnlTablero.find("#FechaCapturaNC").val('');
                                 } else if (saldoActDepo <= 0) {
                                     agente = 0;
                                     ctaCheques = 0;
@@ -348,7 +399,6 @@
                 }
             }
         });
-
         pnlTablero.find("#btnVerMovimientos").click(function () {
             $.fancybox.open({
                 src: base_url + '/MovimientosCliente',
@@ -489,18 +539,34 @@
                 if (data.length > 0) {
                     pnlTablero.find("#FolioDeposito").val(data[0].uuid);
                 } else {
-                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'error')
+                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'info');
                 }
             });
             pnlTablero.find("#Tp").val(dtm.tipo);
             pnlTablero.find("#Docto").val(dtm.docto);
             pnlTablero.find("#FechaDocto").val(dtm.fecha);
-            pnlTablero.find("#ImporteDocto").val(parseFloat(dtm.importe).toFixed(2));
-            pnlTablero.find("#PagosDocto").val(parseFloat(dtm.pagos).toFixed(2));
-            pnlTablero.find("#SaldoDocto").val(parseFloat(dtm.saldo).toFixed(2));
-            pnlTablero.find("#ImporteAPagar").val(parseFloat(dtm.saldo).toFixed(2)).focus().select();
+            pnlTablero.find("#MontoDocto").val(parseFloat(dtm.saldo).toFixed(2)); //saldo de la factura
+            pnlTablero.find("#DescuentoDocto").val(((parseFloat(dtm.saldo) * 0.05) / 1.16).toFixed(2)); //el descuento neto del 5% sin iva se divide entre 1.16
+            pnlTablero.find("#IvaDocto").val(((parseFloat(dtm.saldo) * 0.05) - ((parseFloat(dtm.saldo) * 0.05) / 1.16)).toFixed(2)); //al saldo neto le restamos el saldo sin iva y nos da el iva
+            //Ponemos el saldo restante menos el descuento en la captura sugerida
+            var total_sugerido_con_desc = parseFloat(pnlTablero.find("#MontoDocto").val()) - parseFloat(pnlTablero.find("#DescuentoDocto").val()) - parseFloat(pnlTablero.find("#IvaDocto").val());
+            pnlTablero.find("#DepoSugerido").val(parseFloat(total_sugerido_con_desc).toFixed(2));
+            pnlTablero.find("#ImporteAPagar").val(parseFloat(total_sugerido_con_desc).toFixed(2)).focus().select();
 
+            getFolioNC(dtm.tipo);
             getPagosByClienteFactTp(dtm.cliente, dtm.docto, dtm.tipo);
+        });
+    }
+    function getFolioNC(tp) {
+        $.getJSON(master_url + 'getFolioNC', {Tp: tp}).done(function (data) {
+            if (data.length > 0) {
+                pnlTablero.find("#FolioNC").val(data[0].nc);
+            } else {
+                pnlTablero.find("#FolioNC").val('1');
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
         });
     }
     function getPagosByClienteFactTp(cliente, docfac, tp) {
@@ -591,14 +657,15 @@
         });
     }
     function onVerificarTp(v) {
+
         var tp = parseInt($(v).val());
-        if (tp === 1 || tp === 2) {
+        if (tp === 1) {
             getBancos(tp);
             pnlTablero.find('#Banco')[0].selectize.focus();
         } else {
             swal({
                 title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                text: "EL TP SÓLO PUEDE SER 1 PARA ESTE MÓDULO",
                 icon: "error",
                 closeOnClickOutside: false,
                 closeOnEsc: false

@@ -8,7 +8,7 @@
                 <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><span class="fa fa-plus"></span><br></button>
             </div>
         </div>
-        <div  id="tblRegistros" class="row"></div>
+        <div  id="tblRegistros" class=""></div>
     </div>
 </div>
 <div class="card m-3 border-0  d-none" id="pnlDatos">
