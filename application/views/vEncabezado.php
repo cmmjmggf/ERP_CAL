@@ -119,8 +119,8 @@
         <!--Cargar scripts de validacion y configuraciones-->
         <?php $this->load->view('vScripts') ?>
         <?php $this->load->view('vStyle') ?>  
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.css" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="<?php print base_url('js/waves/waves.min.css'); ?>" />
+        <script type="text/javascript" src="<?php print base_url('js/waves/waves.min.js'); ?>"></script>
         <script>
             $(document).ready(function () {
                 Waves.attach('.btn:not(.btn-float)', ['waves-effect']); 
