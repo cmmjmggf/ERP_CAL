@@ -31,6 +31,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                     break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
+//            $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -70,7 +71,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                 date_format(A.fec11,'%d/%m/%Y') AS \"TERMINADO\", date_format(A.fec12,'%d/%m/%Y'), A.programado, A.corte, A.rayado, A.rebajado, A.foleado, A.pespunte, A.ensuelado, A.almpesp, A.tejido, A.almtejido, A.montado, A.adorno, A.almadorno, A.terminado, A.fec13, A.fec14, A.fec15, A.fec16, A.fec17, A.fec18", false)->from("avaprd AS A");
             if ($x['CONTROL'] !== '') {
                 $this->db->where('contped', $x['CONTROL']);
-            }else{
+            } else {
                 $this->db->limit(99);
             }
             print json_encode($this->db->get()->result());
@@ -104,6 +105,23 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
     public function getInfoXControl() {
         try {
             print json_encode($this->rced->getInfoXControl($this->input->get('CONTROL')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFacturas() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("F.ID AS ID, F.cliente AS CLIENTE, F.factura AS FACTURA, "
+                            . "date_format(F.fecha,'%d/%m/%Y') AS FECHA, F.staped AS ESTATUS", false)
+                    ->from("facturacion AS F");
+            if ($x['CLIENTE'] !== '') {
+                $this->db->where('F.cliente', $x['CLIENTE']);
+            } else {
+                $this->db->limit(99);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -1292,13 +1292,12 @@
                         opcion += '</li>';
                     } else {
                         opcion += '<li class="nav-item mx-1">';
-                        opcion += '<a class="btn btn-sm btn-' + v.Class + '" href="' + (burl + v.Ref) + '"><span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
+                        opcion += '<a class="btn btn-sm btn-' + v.Class + '" href="' + (burl + v.Ref) + '" style="margin-top: 4px;"><span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
                         opcion += '</li>';
                     }
                 });
-
             } else {
-                swal('ATENCIÓN', 'LO SENTIMOS, NO PUDIMOS CONECTAR CON LA BASE DE DATOS', 'error');
+                onSalirSinItems();
             }
         }, "json").fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1351,6 +1350,27 @@
         }, 600000);/*cada 10 min*/
     }
 
+    function onSalirSinItems() {
+        swal({
+            title: "ATENCIÓN",
+            text: "LO SENTIMOS, NO PUDIMOS CONECTAR CON LA BASE DE DATOS O NO TIENE ITEMS ASIGNADOS",
+            icon: "warning",
+            buttons: {
+                eliminar: {
+                    text: "Cerrar sesión",
+                    value: "aceptatudestino"
+                }
+            }
+        }).then((value) => {
+            switch (value) {
+                case "aceptatudestino":
+                    location.href = '<?php print base_url('Sesion/onSalir'); ?>';
+                    break;
+                default:
+                    location.href = '<?php print base_url('Sesion/onSalir'); ?>';
+            }
+        });
+    }
     function getQuickMenu(type) {
         var burl = '<?= base_url(); ?>';
         $.getJSON('<?php print base_url('menu_modulos'); ?>').done(function (data) {
@@ -1396,7 +1416,7 @@
                             break;
                     }
                 } else {
-                    swal('ATENCIÓN', 'LO SENTIMOS, NO PUDIMOS CONECTAR CON LA BASE DE DATOS', 'error');
+                       onSalirSinItems();
                 }
             } else if (data.length !== modulos_counter) {
                 modulos_counter = 0;

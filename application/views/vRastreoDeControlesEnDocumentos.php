@@ -191,7 +191,6 @@
             FechasDevolucion, tblFechasDevolucion = pnlTablero.find("#tblFechasDevolucion"),
             FechasDeAvance, tblFechasDeAvance = pnlTablero.find("#tblFechasDeAvance"),
             RastreoDeControlesEnNomina, tblRastreoDeControlesEnNomina = pnlTablero.find("#tblRastreoDeControlesEnNomina");
-
     $(document).ready(function () {
 
         Control.focus();
@@ -232,7 +231,9 @@
             "columnDefs": coldefs,
             language: lang,
             select: true,
+            serverSide: true,
             "autoWidth": true,
+            ordering: false,
             "colReorder": true,
             "displayLength": 99999999,
             "bLengthChange": false,
@@ -243,11 +244,45 @@
             "scrollX": true
         });
         FechasDeFacturacion = tblFechasDeFacturacion.DataTable({
-            "dom": 'rit'
-            });
+            "dom": 'rit',
+            buttons: buttons,
+            "ajax": {
+                "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFacturas'); ?>',
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CLIENTE = (Cliente.val().trim());
+                }
+            },
+            "columns": [
+                {"data": "ID"}/*0*/, {"data": "CLIENTE"}/*1*/,
+                {"data": "FACTURA"}/*2*/, {"data": "FECHA"},
+                {"data": "ESTATUS"}/*4*/
+            ],
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            language: lang,
+            select: true,
+            serverSide: true,
+            ordering: false,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true
+        });
         FechasDevolucion = tblFechasDevolucion.DataTable({
             "dom": 'rit'
-            });
+        });
         FechasDeAvance = tblFechasDeAvance.DataTable({
             "dom": 'rit',
             buttons: buttons,
@@ -285,7 +320,9 @@
             ],
             language: lang,
             select: true,
+            serverSide: true,
             "autoWidth": true,
+            ordering: false,
             "colReorder": true,
             "displayLength": 99999999,
             "bLengthChange": false,
@@ -318,7 +355,9 @@
             "columnDefs": coldefs,
             language: lang,
             select: true,
+            serverSide: true,
             "autoWidth": true,
+            ordering: false,
             "colReorder": true,
             "displayLength": 99999999,
             "bLengthChange": false,
@@ -341,7 +380,6 @@
             }
         });
     });
-
     function getClientes() {
         Cliente[0].selectize.clear(true);
         Cliente[0].selectize.clearOptions();

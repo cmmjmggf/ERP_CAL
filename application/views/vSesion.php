@@ -155,6 +155,12 @@
         btnIngresar.click(function () {
             login();
         });
+        Contrasena.on('keydown', function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode === 13) {
+                btnIngresar.trigger('click');
+            }
+        });
         btnIngresar.keypress(function (e) {
             if (e.which === 13) {
                 login();
