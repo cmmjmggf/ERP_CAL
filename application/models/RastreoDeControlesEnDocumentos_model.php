@@ -21,7 +21,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
 
     public function getPedidos() {
         try {
-            return$this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
+            return $this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
                                     . " PX.FechaEntrega  AS ENTREGA,  PX.FechaRecepcion AS CAPTURA, "
                                     . "date_format(PX.FechaProg,'%d/%m/%Y') AS PRODUCCION", false)
                             ->from('pedidox AS PX')->where('PX.Control <> 0', null, false)->limit(5000)->get()->result();

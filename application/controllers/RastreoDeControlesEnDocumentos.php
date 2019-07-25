@@ -1,11 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of RastreoDeControlesEnDocumentos
  *
@@ -55,7 +48,18 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
 
     public function getPedidos() {
         try {
-            print json_encode($this->rced->getPedidos());
+            $x = $this->input->get();
+            $this->db->select("PX.ID AS ID, PX.Clave AS PEDIDO, "
+                            . "PX.FechaEntrega  AS ENTREGA,  PX.FechaRecepcion AS CAPTURA, "
+                            . "date_format(PX.FechaProg,'%d/%m/%Y') AS PRODUCCION, "
+                            . "PX.Control AS CONTROL", false)
+                    ->from('pedidox AS PX');
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('PX.Control', $x['CONTROL']);
+            } else {
+                $this->db->where('PX.Control <> 0', null, false)->limit(5000);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -68,7 +72,8 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                 date_format(A.fec3,'%d/%m/%Y') AS RAYADO, date_format(A.fec33,'%d/%m/%Y') AS REBAJADO, date_format(A.fec4,'%d/%m/%Y') AS FOLEADO, date_format(A.fec40,'%d/%m/%Y') AS ENTRETELADO, date_format(A.fec42,'%d/%m/%Y') AS  MAQUILA, 
                 date_format(A.fec44,'%d/%m/%Y') AS \"ALM-CORTE\", date_format(A.fec5,'%d/%m/%Y') AS PESPUNTE, date_format(A.fec55,'%d/%m/%Y') AS \"ALM-PESP\", date_format(A.fec6,'%d/%m/%Y') AS TEJIDO, 
                 date_format(A.fec7,'%d/%m/%Y') AS \"ALM-TEJIDO\", date_format(A.fec8,'%d/%m/%Y') AS MONTADO, date_format(A.fec9,'%d/%m/%Y') AS  ADORNO, date_format(A.fec10,'%d/%m/%Y') AS \"ALM-ADORNO\", 
-                date_format(A.fec11,'%d/%m/%Y') AS \"TERMINADO\", date_format(A.fec12,'%d/%m/%Y'), A.programado, A.corte, A.rayado, A.rebajado, A.foleado, A.pespunte, A.ensuelado, A.almpesp, A.tejido, A.almtejido, A.montado, A.adorno, A.almadorno, A.terminado, A.fec13, A.fec14, A.fec15, A.fec16, A.fec17, A.fec18", false)->from("avaprd AS A");
+                date_format(A.fec11,'%d/%m/%Y') AS \"TERMINADO\", date_format(A.fec12,'%d/%m/%Y'), A.programado, A.corte, A.rayado, A.rebajado, A.foleado, A.pespunte, A.ensuelado, A.almpesp, A.tejido, A.almtejido, A.montado, A.adorno, A.almadorno, A.terminado, A.fec13, A.fec14, A.fec15, A.fec16, A.fec17, A.fec18", false)
+                    ->from("avaprd AS A");
             if ($x['CONTROL'] !== '') {
                 $this->db->where('contped', $x['CONTROL']);
             } else {
@@ -82,13 +87,26 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
 
     public function getControlesEnNomina() {
         try {
-            $xi = $this->input;
-            print json_encode(
-                            $this->rced->getControlesEnNomina(
-                                    $xi->get('CONTROL'),
-                                    $xi->get('EMPLEADO'),
-                                    $xi->get('FRACCION')
-            ));
+            $x = $this->input->get();
+            
+            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
+                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA, 
+                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
+                FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
+                    ->from('fracpagnomina AS FPN');
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('FPN.control', $x['CONTROL']);
+            }
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('FPN.numeroempleado', $x['EMPLEADO']);
+            }
+            if ($x['FRACCION'] !== '') {
+                $this->db->where('FPN.fraccion', $x['FRACCION']);
+            }
+            if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '' && $x['FRACCION'] === '') {
+                $this->db->limit(999);
+            }            
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -118,6 +136,22 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                     ->from("facturacion AS F");
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('F.cliente', $x['CLIENTE']);
+            } else {
+                $this->db->limit(99);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDevoluciones() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("D.ID, D.cliente AS CLIENTE, D.docto AS FACTURA, date_format(D.fecha,'%d/%m/%Y') AS FECHA", false)
+                    ->from("devolucionnp AS D");
+            if ($x['CLIENTE'] !== '') {
+                $this->db->where('D.cliente', $x['CLIENTE']);
             } else {
                 $this->db->limit(99);
             }

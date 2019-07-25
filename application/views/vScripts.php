@@ -1416,7 +1416,7 @@
                             break;
                     }
                 } else {
-                       onSalirSinItems();
+                    onSalirSinItems();
                 }
             } else if (data.length !== modulos_counter) {
                 modulos_counter = 0;
@@ -1461,5 +1461,15 @@
                 i += 1;
             }
         });
+    }
+
+    function onOpenOverlay(msg) {
+        HoldOn.open({
+            theme: 'sk-rect',
+            message: msg
+        });
+    }
+    function onCloseOverlay() {
+        HoldOn.close();
     }
 </script>

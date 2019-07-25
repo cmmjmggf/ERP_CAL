@@ -85,8 +85,6 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Factura(s)</th>
-                                <th scope="col">-</th>
-                                <th scope="col">-</th>
                                 <th scope="col">Fecha</th>
                             </tr>
                         </thead>
@@ -164,7 +162,7 @@
                                                 . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
                                                 . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
                                                 . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
-                                        ->from("empleados AS E")->where('E.DepartamentoFisico', 10)->where('E.AltaBaja', 1)->get()->result() as $kk => $vv) {
+                                        ->from("empleados AS E")->where('E.AltaBaja', 1)->get()->result() as $kk => $vv) {
                                     print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
                                 }
                                 ?>
@@ -203,8 +201,11 @@
                 getInfoXControl(Control.val());
             }
         });
-        Empleado.on('keydown', function () {
-            RastreoDeControlesEnNomina.ajax.reload();
+        Empleado.on('change', function () {
+            onOpenOverlay('Buscando...');
+            RastreoDeControlesEnNomina.ajax.reload(function () {
+                onCloseOverlay();
+            });
         });
         /*DATATABLES*/
         var cols = [
@@ -225,13 +226,15 @@
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getPedidos'); ?>',
                 "contentType": "application/json",
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = (Control.val() ? Control.val().trim() : '');
+                }
             },
             "columns": cols,
             "columnDefs": coldefs,
             language: lang,
             select: true,
-            serverSide: true,
             "autoWidth": true,
             ordering: false,
             "colReorder": true,
@@ -251,7 +254,7 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CLIENTE = (Cliente.val().trim());
+                    d.CLIENTE = (Cliente.val() ? Cliente.val().trim() : '');
                 }
             },
             "columns": [
@@ -268,7 +271,6 @@
             ],
             language: lang,
             select: true,
-            serverSide: true,
             ordering: false,
             "autoWidth": true,
             "colReorder": true,
@@ -281,7 +283,39 @@
             "scrollX": true
         });
         FechasDevolucion = tblFechasDevolucion.DataTable({
-            "dom": 'rit'
+            "dom": 'rit',
+            buttons: buttons,
+            "ajax": {
+                "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getDevoluciones'); ?>',
+                "contentType": "application/json",
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CLIENTE = (Cliente.val() ? Cliente.val().trim() : '');
+                }
+            },
+            "columns": [
+                {"data": "ID"}/*0*/, {"data": "CLIENTE"}/*1*/,
+                {"data": "FACTURA"}/*2*/, {"data": "FECHA"}
+            ],
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            ordering: false,
+            "colReorder": true,
+            "displayLength": 99999999,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true
         });
         FechasDeAvance = tblFechasDeAvance.DataTable({
             "dom": 'rit',
@@ -291,9 +325,7 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CONTROL = (Control.val().trim());
-                    d.EMPLEADO = (Empleado.val().trim());
-                    d.FRACCION = (Fraccion.val().trim());
+                    d.CONTROL = (Control.val() ? Control.val().trim() : '');
                 }
             },
             "columns": [
@@ -320,7 +352,6 @@
             ],
             language: lang,
             select: true,
-            serverSide: true,
             "autoWidth": true,
             ordering: false,
             "colReorder": true,
@@ -340,9 +371,9 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CONTROL = (Control.val().trim());
-                    d.EMPLEADO = (Empleado.val().trim());
-                    d.FRACCION = (Fraccion.val().trim());
+                    d.CONTROL = (Control.val() ? Control.val().trim() : '');
+                    d.EMPLEADO = (Empleado.val() ? Empleado.val().trim() : '');
+                    d.FRACCION = (Fraccion.val() ? Empleado.val().trim() : '');
                 }
             },
             "columns": [
@@ -355,7 +386,6 @@
             "columnDefs": coldefs,
             language: lang,
             select: true,
-            serverSide: true,
             "autoWidth": true,
             ordering: false,
             "colReorder": true,
@@ -380,35 +410,6 @@
             }
         });
     });
-    function getClientes() {
-        Cliente[0].selectize.clear(true);
-        Cliente[0].selectize.clearOptions();
-        $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentos/getClientes'); ?>').done(function (a) {
-            if (a.length > 0) {
-                a.forEach(function (x) {
-                    Cliente[0].selectize.addOption({text: x.CLIENTE, value: x.CLAVE});
-                });
-            }
-        }).fail(function (x) {
-            getError(x);
-        }).always(function () {
-        });
-    }
-
-    function getEmpleados() {
-        Empleado[0].selectize.clear(true);
-        Empleado[0].selectize.clearOptions();
-        $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentos/getEmpleados'); ?>').done(function (a) {
-            if (a.length > 0) {
-                a.forEach(function (x) {
-                    Empleado[0].selectize.addOption({text: x.EMPLEADO, value: x.CLAVE});
-                });
-            }
-        }).fail(function (x) {
-            getError(x);
-        }).always(function () {
-        });
-    }
 
     function getColoresXEstilo(e) {
         Color[0].selectize.clear(true);
@@ -425,41 +426,39 @@
     }
 
     function getInfoXControl(e) {
-        $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
-            console.log(x);
-            if (x.length > 0) {
-                var xx = x[0];
-                Estilo.val(xx.Estilo);
-                $.when($.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: xx.Estilo}).done(function (x, y, z) {
-                    x.forEach(function (i) {
-                        Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
+        if (e) { 
+            onOpenOverlay('Espere un momento por favor...');
+            $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
+                if (x.length > 0) {
+                    var xx = x[0];
+                    Estilo.val(xx.Estilo);
+                    $.when($.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: xx.Estilo}).done(function (x, y, z) {
+                        x.forEach(function (i) {
+                            Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
+                        });
+                    }).fail(function (x, y, z) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    })).done(function () {
+                        Color[0].selectize.setValue(xx.Color);
                     });
-                }).fail(function (x, y, z) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                })).done(function () {
-                    Color[0].selectize.setValue(xx.Color);
-                });
-                Pares.val(xx.Pares);
-                Cliente[0].selectize.setValue(xx.Cliente);
-                EstatusProduccion.val(xx.EstatusProduccion);
-                RastreoDeControlesEnNomina.ajax.reload();
-                FechasDeAvance.ajax.reload();
-            }
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-        });
+                    Pares.val(xx.Pares);
+                    Cliente[0].selectize.setValue(xx.Cliente);
+                    EstatusProduccion.val(xx.EstatusProduccion);
+                    FechasDelPedido.ajax.reload();
+                    FechasDeFacturacion.ajax.reload();
+                    FechasDevolucion.ajax.reload();
+                    RastreoDeControlesEnNomina.ajax.reload();
+                    FechasDeAvance.ajax.reload();
+                }
+            }).fail(function (x, y, z) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
+        } else {
+            Control.focus().select();
+        }
     }
 </script>
-<style>
-    .card{ 
-        background-color: #fff;
-        border-width: 1px 2px 2px;
-        border-style: solid; 
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #003366, rgb(0,0,0,0)) 1 100% ;
-    }
-</style>
