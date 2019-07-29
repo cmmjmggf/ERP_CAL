@@ -406,19 +406,15 @@
 
 <script>
     var master_url = base_url + 'index.php/Empleados/';
-    var btnNuevo = $("#btnNuevo"), btnVerTodos = $("#btnVerTodos"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
-    var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
-    var tblEmpleados = $("#tblEmpleados"), Empleados;
-    var Foto = $("#Foto"), FotoPerfil = $("#FotoPerfil");
-    var btnCredencial = $("#btnCredencial");
-    var btnCambiarFoto = $("#btnCambiarFoto");
-    var btnImprimeContrato = $("#btnImprimeContrato");
-    var btnBajaEmpleado = $("#btnBajaEmpleado");
-    var NumeroEmpleado = pnlTablero.find("#NumeroEmpleado");
-    var nuevo = false;
-    var tfoto;
-    var numeroEmp = 0;
-    var prestamo, zaptda;
+    var btnNuevo = $("#btnNuevo"), btnVerTodos = $("#btnVerTodos"),
+            btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar"),
+            pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos"),
+            tblEmpleados = $("#tblEmpleados"), Empleados, Foto = $("#Foto"),
+            FotoPerfil = $("#FotoPerfil"), btnCredencial = $("#btnCredencial"),
+            btnCambiarFoto = $("#btnCambiarFoto"), btnImprimeContrato = $("#btnImprimeContrato"),
+            btnBajaEmpleado = $("#btnBajaEmpleado"),
+            NumeroEmpleado = pnlTablero.find("#NumeroEmpleado"), nuevo = false, tfoto,
+            numeroEmp = 0, prestamo, zaptda;
 
     $(document).ready(function () {
         handleEnter();
@@ -428,7 +424,7 @@
         pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').addClass('selectNotEnter');
         NumeroEmpleado.unbind();
         NumeroEmpleado.on('keydown keyup', function (e) {
-            onBuscar($(this).val(), e, tblEmpleados, Empleados, getEmpleadoByID, $(this), 1);
+            onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
         });
         btnVerTodos.click(function () {
             getRecords(2);
@@ -783,9 +779,13 @@
             if (data[0].AltaBaja === '1') {
                 btnBajaEmpleado.removeClass('d-none');
                 btnGuardar.removeClass('d-none');
+                btnImprimeContrato.removeClass('d-none');
+                btnCredencial.removeClass('d-none');
                 pnlDatos.find('#dMotivoBaja').addClass('d-none');
             } else {
                 btnGuardar.addClass('d-none');
+                btnImprimeContrato.addClass('d-none');
+                btnCredencial.addClass('d-none');
                 btnBajaEmpleado.addClass('d-none');
                 pnlDatos.find('#dMotivoBaja').removeClass('d-none');
                 pnlDatos.find('#tMotivoBaja').html(data[0].MotivoBaja);
@@ -902,9 +902,13 @@
         });
     }
 
-    function onBuscar(search_value, evt, tbl, objeto, functionX, input, index_column) {
+    function onBuscar(search_value, evt, tbl, objeto, input, index_column) {
         tbl.DataTable().column(index_column).search(search_value).draw();
         if (evt.keyCode === 13) {
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Buscando...'
+            });
             tbl.DataTable().column(index_column).search("^" + search_value + "$", true, false, true).draw();
             var row_count = objeto.page.info().recordsDisplay;
             if (row_count > 0) {
@@ -914,7 +918,7 @@
                     EX = row.ID;
                     return false;
                 });
-                functionX(EX);
+                getEmpleadoByID(EX);
             } else {
                 input.focus().select();
             }

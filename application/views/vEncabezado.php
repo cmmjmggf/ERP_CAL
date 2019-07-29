@@ -121,12 +121,15 @@
         <?php $this->load->view('vStyle') ?>  
         <link rel="stylesheet" type="text/css" href="<?php print base_url('js/waves/waves.min.css'); ?>" />
         <script type="text/javascript" src="<?php print base_url('js/waves/waves.min.js'); ?>"></script>
+        <style>
+            .card{background-color:#fff;border-width:1px 2px 2px;border-style:solid;border-image:linear-gradient(to bottom,#09c,#036,rgb(0,0,0,0)) 1 100%}
+        </style>
         <script>
             $(document).ready(function () {
-                Waves.attach('.btn:not(.btn-float)', ['waves-effect']); 
+                Waves.attach('.btn:not(.btn-float)', ['waves-effect']);
                 Waves.init();
                 $.fancybox.defaults.animationEffect = "zoom-in";
                 $.fancybox.defaults.animationEffect = "zoom-in-out";
             });
-        </script>
+        </script> 
     </head>
