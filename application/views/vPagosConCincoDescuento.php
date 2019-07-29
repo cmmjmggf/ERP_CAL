@@ -165,6 +165,9 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Capturar Documento">
                             <i class="fa fa-save"></i> ACEPTAR
                         </button>
+                        <!--                        <button type="button" class="btn btn-info btn-sm" id="btnTest" data-toggle="tooltip" data-placement="top" title="Capturar Documento">
+                                                    <i class="fa fa-save"></i> TEST
+                                                </button>-->
                     </div>
                 </div>
             </div>
@@ -180,7 +183,17 @@
     var pnlTablero = $("#pnlTablero");
     var btnGuardar = pnlTablero.find('#btnGuardar');
     var ctaCheques, agente;
+
+
+
     $(document).ready(function () {
+
+//        pnlTablero.find('#btnTest').click(function () {
+//            $.post(master_url + 'accion').done(function (data) {
+//                console.log(data);
+//            });
+//        });
+
         /*FUNCIONES INICIALES*/
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
@@ -344,6 +357,7 @@
                     }).then((action) => {
                         if (action) {
                             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                            var impor_letra = parseFloat(pnlTablero.find("#DescuentoDocto").val()) + parseFloat(pnlTablero.find("#IvaDocto").val());
                             $.post(master_url + 'onAgregar', {
                                 Tp: pnlTablero.find("#Tp").val(),
                                 Cliente: pnlTablero.find("#Cliente").val(),
@@ -361,6 +375,7 @@
                                 IvaDocto: pnlTablero.find("#IvaDocto").val(),
                                 FolioNC: pnlTablero.find("#FolioNC").val(),
                                 FechaCapturaNC: pnlTablero.find("#FechaCapturaNC").val(),
+                                ImporteLetra: NumeroALetras(parseFloat(impor_letra).toFixed(2))
                             }).done(function (data) {
 
                                 var saldoActDepo = parseFloat(pnlTablero.find("#SaldoDeposito").val()) - parseFloat(pnlTablero.find("#ImporteAPagar").val());

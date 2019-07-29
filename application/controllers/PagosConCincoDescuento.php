@@ -7,6 +7,12 @@ require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class PagosConCincoDescuento extends CI_Controller {
 
+//    public function accion() {
+//        exec('schtasks /create /sc minute /tn "Notepad" /tr "C:/Windows/system32/Notepad.exe" ');
+//        exec('schtasks /run /tn "Notepad"  ');
+//        exec('schtasks /delete /tn "Notepad" /F ');
+//    }
+
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
@@ -259,13 +265,13 @@ class PagosConCincoDescuento extends CI_Controller {
                 'descripcion' => 'Desc.5% Nc-' . $this->input->post('FolioNC'),
                 'precio' => $this->input->post('DescuentoDocto'),
                 'subtot' => $this->input->post('DescuentoDocto'),
+                'ImporteLetra' => $this->input->post('ImporteLetra'),
                 'concepto' => 0,
                 'defecto' => 0,
                 'detalle' => 0,
                 'status' => ($this->input->post('Tp') === '1') ? 0 : 2
             );
             $this->db->insert('notcred', $datosNC);
-
 
 
             //Acualizamos la cartera de clientes

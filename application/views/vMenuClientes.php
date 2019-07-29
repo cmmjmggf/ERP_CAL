@@ -38,4 +38,4 @@ $this->load->view('vTipoCambio')->view('vBloqueoClientesXCliente')
 
 $this->load->view('vAvanceProduccion');
 $this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
-
+$this->load->view('vReimprimeNotaCredito');
