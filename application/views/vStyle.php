@@ -111,11 +111,11 @@
         vertical-align: bottom;
         border-bottom: 0.5px solid #dee2e6;
     }
-    table tbody tr:hover {
-        background-color: #2C3E50 !important;
-        color: #fff !important;
-        font-weight: bold !important;
-    }
+    /*    table tbody tr:hover {
+            background-color: #2C3E50 !important;
+            color: #fff !important;
+            font-weight: bold !important;
+        }*/
 
     .table>tbody>tr>td.success,
     .table>tfoot>tr>td.success,
@@ -155,7 +155,7 @@
         background-color: #fff;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
-    .btn:hover:not(.dropdown-toggle):not(.navbar-brand){
+    .btn:not(.dropdown-toggle):not(.navbar-brand){
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 
@@ -174,17 +174,37 @@
 
     .btn:not(.dropdown-toggle):not(.navbar-brand):focus {
         box-shadow: 0 0 0 0.2rem #CDDC39 !important;
+    } 
+    button.buttons-pdf, button.buttons-pdf:hover{
+        color: #fff;
+        background-color: #d32f2f;
+        border-color: #d32f2f;
     }
-    .btn-group > .btn:not(:first-child), .btn-group > .btn-group:not(:first-child) > .btn {
-
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
+    button.buttons-collection, button.buttons-collection:hover{
+        color: #fff;
+        background-color: #3f51b5;
+        border-color: #3f51b5;
+    } 
+    button.buttons-excel, button.buttons-excel:hover{
+        color: #fff;
+        background-color: #4caf50;
+        border-color: #4caf50;
+    } 
+    .dt-button-collection, .dropdown-menu {
+        color: #fff !important; 
     }
 
-
+    .dropdown-submenu:not(.show).dropdown-item {
+        color: #4a4a4a !important;
+    }
+    .nav-item > .btn-primary{
+        color: #fff;
+        background-color: #333 !important;
+        border-color: #333 !important;
+    }
     label{
         font-weight: bold;
     }
-
 
     .swal-title{
         color: #000 !important;
@@ -263,11 +283,6 @@
         color: #fff;
         background-color: #673AB7;
     }
-    table tbody tr:hover {
-        background-color: #000000 !important;
-        color: #fff !important;
-        font-weight: bold !important;
-    }
     .card {
         background-color: #dadfe4;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
@@ -293,6 +308,11 @@
         padding-right:   12px;
         font-weight: 200;
     }
+    .btn-info{
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
     .btn-info:hover{
         color: #fff;
         background-color: #007bff;
@@ -308,27 +328,38 @@
         background-color:#dc3545;
         border-color: #dc3545;
     }
+    .bg-primary {
+        background-color: #333 !important;
+    }
+    nav button.btn-primary{
+        background-color: #333 !important;
+        border-color: #333 !important;
+    }
+    .dropdown-item:hover, .dropdown-item:focus {
+        color: #fff !important;
+        text-decoration: none;
+        background-color: #333 !important;
+    }
     /*ROOTS*/
-/*    --blue: #007bff;
-    --indigo: #6610f2;
-    --purple: #6f42c1;
-    --pink: #e83e8c;
-    --red: #dc3545;
-    --orange: #fd7e14;
-    --yellow: #ffc107;
-    --green: #28a745;
-    --teal: #20c997;
-    --cyan: #17a2b8;
-    --white: #fff;
-    --gray: #868e96;
-    --gray-dark: #343a40;
-    --primary: #007bff;
-    --secondary: #868e96;
-    --success: #28a745;
-    --info: #17a2b8;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --light: #f8f9fa;
-    --dark: #343a40;*/
-
+    /*    --blue: #007bff;
+        --indigo: #6610f2;
+        --purple: #6f42c1;
+        --pink: #e83e8c;
+        --red: #dc3545;
+        --orange: #fd7e14;
+        --yellow: #ffc107;
+        --green: #28a745;
+        --teal: #20c997;
+        --cyan: #17a2b8;
+        --white: #fff;
+        --gray: #868e96;
+        --gray-dark: #343a40;
+        --primary: #007bff;
+        --secondary: #868e96;
+        --success: #28a745;
+        --info: #17a2b8;
+        --warning: #ffc107;
+        --danger: #dc3545;
+        --light: #f8f9fa;
+        --dark: #343a40;*/
 </style>

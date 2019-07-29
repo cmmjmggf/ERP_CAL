@@ -9,7 +9,6 @@
     a:focus {
         color: inherit;
         text-decoration: none;
-        transition: all 0.3s;
     }
 
     #sidebar {

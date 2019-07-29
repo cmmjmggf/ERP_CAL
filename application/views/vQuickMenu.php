@@ -26,30 +26,37 @@
         padding-left: 1px;
     }
     .card:hover img{
-        -webkit-transition: all .3s ease-in-out;
-        transition: all .3s ease-in-out;
+        -webkit-transition: all 1s ease-in-out;
+        transition: all 1s ease-in-out;
         z-index: 99  !important;
-    }
+    } 
     .card{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
-    .card:hover{
         cursor: pointer !important;
-        font-weight: bold;
-        background-color: #2384c6 !important;
+        font-weight: bold; 
+        background: #2b2b2b !important;
         color: #fff;
     }
-    .card:hover .card-body{
+    .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold;
-        background-color: #2384c6 !important;
-        color: #fff;
+        font-weight: bold;        
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+        background: #ffffff; /* Old browsers */
+        background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+        color: #333333;
     }
-    .card:hover .card-footer{
+    .card .card-footer{
         cursor: pointer !important;
         font-weight: bold;
-        background-color: #2384c6 !important;
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2b2b2b+0,272727+100 */
+        background: #2b2b2b; /* Old browsers */
+        background: -moz-linear-gradient(top,  #2b2b2b 0%, #272727 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #2b2b2b 0%,#272727 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #2b2b2b 0%,#272727 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
+
         color: #fff;
     }
     .card:hover .text-nowrap, .card:hover .figure-caption{
@@ -71,6 +78,16 @@
     }
     .card.text-center {
         background-color: #fff;
+    } 
+    .card{
+        transition: all 0.3s;
+    }
+
+    .card:hover{
+        -webkit-transform: scale(1.065);
+        transform: scale(1.065);
+        cursor: pointer !important;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
     }
 </style>
 <script>
@@ -78,117 +95,4 @@
         getQuickMenu(1);
         onComprobarModulos(1);
     });
-</script>
-
-<script>
-//    $.ajax({
-//        url: "https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js",
-//        dataType: "script",
-//        success: function () {
-//            particlesJS("particle-container", {
-//                "particles": {
-//                    "number": {
-//                        "value": 10,
-//                        "density": {
-//                            "enable": true,
-//                            "value_area": 800
-//                        }
-//                    },
-//                    "color": {
-//                        "value": ["#2C3E50", "#2C3E50"]/* "random" = cualquier color*/
-//                    },
-//                    "shape": {
-//                        "type": "image",
-//                        "image": {
-//                            "src": "<?php print base_url('img/LS.png'); ?>", // Set image path.
-//                            "width": 1, // Width and height don't decide size.
-//                            "height": 1   // They just decide aspect ratio.
-//                        }
-//                    },
-//
-//                    "opacity": {
-//                        "value": 0.5,
-//                        "random": false,
-//                        "anim": {
-//                            "enable": false,
-//                            "speed": 1,
-//                            "opacity_min": 0.1,
-//                            "sync": false
-//                        }
-//                    },
-//                    "size": {
-//                        "value": 50,
-//                        "random": true,
-//                        "anim": {
-//                            "enable": false,
-//                            "speed": 80,
-//                            "size_min": 10,
-//                            "sync": false
-//                        }
-//                    },
-//                    "line_linked": {
-//                        "enable": false,
-//                        "distance": 150,
-//                        "color": "#ffffff",
-//                        "opacity": 0.4,
-//                        "width": 1
-//                    },
-//                    "move": {
-//                        "enable": true,
-//                        "speed": 1,
-//                        "direction": "none",
-//                        "random": false,
-//                        "straight": false,
-//                        "out_mode": "out",
-//                        "bounce": true,
-//                        "attract": {
-//                            "enable": true,
-//                            "rotateX": 600,
-//                            "rotateY": 1200
-//                        }
-//                    }
-//                },
-//                "interactivity": {
-//                    "detect_on": "canvas",
-//                    "events": {
-//                        "onhover": {
-//                            "enable": false,
-//                            "mode": "repulse"
-//                        },
-//                        "onclick": {
-//                            "enable": false,
-//                            "mode": "push"
-//                        },
-//                        "resize": true
-//                    },
-//                    "modes": {
-//                        "grab": {
-//                            "distance": 400,
-//                            "line_linked": {
-//                                "opacity": 1
-//                            }
-//                        },
-//                        "bubble": {
-//                            "distance": 400,
-//                            "size": 40,
-//                            "duration": 2,
-//                            "opacity": 8,
-//                            "speed": 3
-//                        },
-//                        "repulse": {
-//                            "distance": 200,
-//                            "duration": 0.4
-//                        },
-//                        "push": {
-//                            "particles_nb": 4
-//                        },
-//                        "remove": {
-//                            "particles_nb": 2
-//                        }
-//                    }
-//                },
-//                "retina_detect": true
-//            });
-//        }
-//    });
-</script>
+</script> 

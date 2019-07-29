@@ -1,4 +1,4 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
+<div class="card m-3 animated fadeIn d-none" id="pnlTablero">
     <div class="card-body">
         <div class="row">
             <div class="col-sm-2 float-left">
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<div class="d-none animated fadeIn text-dark" id="pnlDatos">
+<div class="animated fadeIn text-dark d-none" id="pnlDatos">
     <form id="frmNuevo">
         <fieldset>
             <!--PRIMER CONTENEDOR-->
@@ -64,9 +64,9 @@
                         </div>
                         <div class="col-12 col-sm-12 col-md-3  col-lg-3" align="right">
                             <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
-                                <span class="fa fa-arrow-left" ></span> REGRESAR
+                                <span class="fa fa-arrow-left" ></span> VER PEDIDOS
                             </button>
-                            <button type="button" class="btn btn-info btn-sm" id="btnImprimir" >
+                            <button type="button" class="btn btn-info btn-sm d-none" id="btnImprimir" >
                                 <span class="fa fa-print" ></span> IMPRIMIR
                             </button>
                         </div>
@@ -79,11 +79,11 @@
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
                             <label for="Pedido" >Pedido*</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly selectNotEnter" id="Clave" required="" placeholder="">
+                            <input type="text" class="form-control form-control-sm numbersOnly selectNotEnter" id="Clave" required="" placeholder="" autofocus="">
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                             <label for="Cliente" >Cliente*</label>
-                            <select class="form-control form-control-sm" id="Cliente" name="Cliente" required="" placeholder="">
+                            <select class="form-control form-control-sm" id="PedidoxCliente" name="PedidoxCliente" required="" placeholder="">
                                 <option></option>
                                 <?php
                                 foreach ($clientes as $k => $v) {
@@ -95,6 +95,12 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <label for="Agente" >Agente*</label>
                             <select class="form-control form-control-sm" id="Agente" name="Agente" required="" placeholder="">
+                                <option></option>
+                                <?php
+                                foreach ($this->db->query("SELECT A.Clave, CONCAT(A.Clave, \" - \", A.Nombre) AS Agente FROM agentes AS A")->result() as $k => $v) {
+                                    print "<option value=\"{$v->Clave}\">{$v->Agente}</option>";
+                                }
+                                ?>                                    
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2">
@@ -131,7 +137,7 @@
                             <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
                                 <option></option>
                                 <?php
-                                foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  INNER JOIN fichatecnica AS FT ON FT.Estilo = E.Clave  INNER JOIN fraccionesxestilo AS FE ON FE.Estilo = E.Clave WHERE E.Estatus LIKE 'ACTIVO' GROUP BY FT.Estilo")->result() as $k => $v) {
+                                foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
                                     print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
                                 }
                                 ?>
@@ -213,21 +219,23 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-5" align="left">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-5 d-none" align="left">
                                     <button type="button" class="btn btn-primary" id="btnAgregarDetalle"><span class="fa fa-check"></span></button>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-5" align="right">
+                                    <button type="button" class="btn btn-primary" id="btnAcepta">
+                                        <span class="fa fa-check"></span> Acepta
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row pt-2">
-                        <!--                        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-                                                    <h6 class="text-danger">Los campos con * son obligatorios</h6>
-                                                </div>-->
+                    <div class="row pt-2"> 
                         <div class="col-6 col-sm-6 col-md-6" align="right">
                             <button type="button" class="btn btn-info btn-lg btn-float animated slideInUp d-none" disabled="" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
                                 <i class="fa fa-save"></i>
                             </button>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -251,25 +259,25 @@
 
                                     <th scope="col"></th><!--8-->
                                     <th scope="col"></th>
-                                    <th scope="col"></th><!--5-->
+                                    <th scope="col"></th><!--10-->
                                     <th scope="col"></th>
                                     <th scope="col"></th><!--12-->
 
                                     <th scope="col"></th><!--13-->
                                     <th scope="col"></th>
-                                    <th scope="col"></th><!--5-->
+                                    <th scope="col"></th><!--15-->
                                     <th scope="col"></th>
                                     <th scope="col"></th><!--17-->
 
                                     <th scope="col"></th><!--18-->
                                     <th scope="col"></th>
-                                    <th scope="col"></th><!--5-->
+                                    <th scope="col"></th><!--20-->
                                     <th scope="col"></th>
                                     <th scope="col"></th><!--22-->
 
                                     <th scope="col"></th><!--23-->
                                     <th scope="col"></th>
-                                    <th scope="col"></th><!--5-->
+                                    <th scope="col"></th><!--25-->
                                     <th scope="col"></th>
                                     <th scope="col"></th><!--27-->
 
@@ -330,8 +338,17 @@
     var tblPedidos = $('#tblPedidos');
     var Pedidos;
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos"), pnlDatosDetalle = $("#pnlDatosDetalle");
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar"), btnImprimir = pnlDatos.find("#btnImprimir");
+    var btnNuevo = pnlTablero.find("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"),
+            btnGuardar = $("#btnGuardar"), btnImprimir = pnlDatos.find("#btnImprimir");
     var PedidoDetalle, tblPedidoDetalle = pnlDatos.find("#tblPedidoDetalle");
+    var PedidoxCliente = pnlDatos.find("#PedidoxCliente"), Estilo = pnlDatos.find("#Estilo"), Clave = pnlDatos.find("#Clave"), Color = pnlDatos.find("#Color"),
+            Semana = pnlDatos.find("#Semana"), Maquila = pnlDatos.find("#Maquila"), Precio = pnlDatos.find("#Precio"),
+            btnAcepta = pnlDatos.find("#btnAcepta"), Agente = pnlDatos.find('#Agente'),
+            FechaPedido = pnlDatos.find('#FechaPedido'), FechaEntrega = pnlDatos.find('#FechaEntrega'),
+            FechaRecepcion = pnlDatos.find('#FechaRecepcion'), Recibido = pnlDatos.find('#Recibido'),
+            Recio = pnlDatos.find('#Recio'), Serie = pnlDatos.find('#Serie'), Observacion = pnlDatos.find('#Observacion'),
+            ObservacionDetalle = pnlDatos.find('#ObservacionDetalle');
+
     var nuevo = false;
     var _animate_ = {enter: 'animated fadeInLeft', exit: 'animated fadeOutDown'}, _placement_ = {from: "bottom", align: "left"};
     var Cliente = '';
@@ -341,19 +358,19 @@
         dom: 'rt',
         buttons: buttons,
         "columns": [
-            {"data": "PDID"}, {"data": "Recibido"}, {"data": "Estilo"}, {"data": "EstiloT"},
-            {"data": "Color"}, {"data": "ColorT"}, {"data": "Semana"}, {"data": "Maquila"},
-            {"data": "T1"}, {"data": "T2"}, {"data": "T3"}, {"data": "T4"},
-            {"data": "T5"}, {"data": "T6"}, {"data": "T7"}, {"data": "T8"},
-            {"data": "T9"}, {"data": "T10"}, {"data": "T11"}, {"data": "T12"},
-            {"data": "T13"}, {"data": "T14"}, {"data": "T15"}, {"data": "T16"},
-            {"data": "T17"}, {"data": "T18"}, {"data": "T19"}, {"data": "T20"},
-            {"data": "T21"}, {"data": "T22"},
-            {"data": "Precio"}, {"data": "Pares"},
-            {"data": "FechaEntrega"}, {"data": "ELIMINAR"},
-            {"data": "Recio"}, {"data": "Observacion"},
-            {"data": "ObservacionDetalle"}, {"data": "Serie"},
-            {"data": "EstatusD"}, {"data": "STT"}
+            {"data": "PDID"}/*0*/, {"data": "Recibido"}, {"data": "Estilo"}/*2*/, {"data": "EstiloT"},
+            {"data": "Color"}/*4*/, {"data": "ColorT"}, {"data": "Semana"}/*6*/, {"data": "Maquila"},
+            {"data": "T1"}/*8*/, {"data": "T2"}, {"data": "T3"}/*10*/, {"data": "T4"},
+            {"data": "T5"}/*12*/, {"data": "T6"}, {"data": "T7"}/*14*/, {"data": "T8"},
+            {"data": "T9"}/*16*/, {"data": "T10"}, {"data": "T11"}/*18*/, {"data": "T12"},
+            {"data": "T13"}/*20*/, {"data": "T14"}, {"data": "T15"}/*22*/, {"data": "T16"},
+            {"data": "T17"}/*24*/, {"data": "T18"}, {"data": "T19"}/*26*/, {"data": "T20"},
+            {"data": "T21"}/*28*/, {"data": "T22"},
+            {"data": "Precio"}/*30*/, {"data": "Pares"},
+            {"data": "FechaEntrega"}/*32*/, {"data": "ELIMINAR"},
+            {"data": "Recio"}/*34*/, {"data": "Observacion"},
+            {"data": "ObservacionDetalle"}/*36*/, {"data": "Serie"},
+            {"data": "EstatusD"}/*38*/, {"data": "STT"}/*39*/
         ],
         "columnDefs": [
             //ID
@@ -467,44 +484,114 @@
             HoldOn.close();
         }
     };
-    var Selectizer = function () {
-        return {
-            loadOptions: function (query, callback) {
-                console.log(query);
-                if (query.length >= 2) {
-                    $.getJSON(this.settings.remoteUrl, {
-                        Estilo: query
-                    }).done(function (data, x, jq) {
-                        console.log(data);
-                        callback(data);
-                    }).fail(function (x, y, z) {
-                        callback();
-                        console.log(x, y, z);
-                    }).always(function () {
-                    });
-                } else {
-                    return callback();
-                }
-            },
-            renderOptions: function (data, escape) {
-                return '<div class="list-group" style="border-bottom: 0.5px solid #000;">' +
-                        '<div class="d-flex w-100 justify-content-between">' +
-                        '<span class="text-dark" style="font-size: 14px;"><strong>' + data.Clave + '</strong></span>' +
-                        '</div>' +
-                        '<span class="text-info" style="font-size: 13px;"><strong>' + data.Estilo + '</strong></span>' +
-                        '</div>';
-            }
-        };
-    }();
 
     const isValidInput = (x) => {
         return x.val().trim().length > 0 ? true : false;
     };
 
+    $.fn.dataTable.ext.errMode = 'throw';
     $(document).ready(function () {
         init();
         handleEnter();
-        pnlTablero.find("#NumeroDePedido")
+
+        btnAcepta.click(function () {
+            if (Clave.val() && PedidoxCliente.val() && Agente.val() && FechaPedido.val()
+                    && FechaEntrega.val() && FechaRecepcion.val()) {
+                onOpenOverlay('Guardando...');
+                /*1 GUARDAR EL PRIMER REGISTRO*/
+                var p = {
+                    PEDIDO: Clave.val(), CLIENTE: PedidoxCliente.val(),
+                    AGENTE: Agente.val(), FECHA_PEDIDO: FechaPedido.val(),
+                    FECHA_RECEPCION: FechaRecepcion.val(), ESTILO: Estilo.val(),
+                    COLOR: Color.val(), FECHA_ENTREGA: FechaEntrega.val(),
+                    MAQUILA: Maquila.val(), SEMANA: Semana.val(),
+                    RECIO: Recio.val(), PRECIO: Precio.val(),
+                    OBSERVACION: Observacion.val(),
+                    OBSERVACION_DETALLE: ObservacionDetalle.val(),
+                    C1: pnlDatos.find("input[name='C1']").val(), C2: pnlDatos.find("input[name='C2']").val(),
+                    C3: pnlDatos.find("input[name='C3']").val(), C4: pnlDatos.find("input[name='C4']").val(),
+                    C5: pnlDatos.find("input[name='C5']").val(), C6: pnlDatos.find("input[name='C6']").val(),
+                    C7: pnlDatos.find("input[name='C7']").val(), C8: pnlDatos.find("input[name='C8']").val(),
+                    C9: pnlDatos.find("input[name='C9']").val(), C10: pnlDatos.find("input[name='C10']").val(),
+                    C11: pnlDatos.find("input[name='C11']").val(), C12: pnlDatos.find("input[name='C12']").val(),
+                    C13: pnlDatos.find("input[name='C13']").val(), C14: pnlDatos.find("input[name='C14']").val(),
+                    C15: pnlDatos.find("input[name='C15']").val(), C16: pnlDatos.find("input[name='C16']").val(),
+                    C17: pnlDatos.find("input[name='C17']").val(), C18: pnlDatos.find("input[name='C18']").val(),
+                    C19: pnlDatos.find("input[name='C19']").val(), C20: pnlDatos.find("input[name='C20']").val(),
+                    C21: pnlDatos.find("input[name='C21']").val(), C22: pnlDatos.find("input[name='C22']").val(),
+                    RECIBIDO: Recibido.val(), PARES: pnlDatos.find('#TPares').val(),
+                    ESTILOT: Estilo.text(), COLORT: Color.text(), SERIE: Serie.val()
+                };
+                if (nuevo) {
+                    /*NUEVO*/
+                    $.post('<?php print base_url('Pedidos/onAgregarX'); ?>', p).done(function (a) {
+                        if (a.length > 0) {
+                            nuevo = false;
+                            var xxx = JSON.parse(a);
+                            getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    /*MODIFICANDO*/
+                    $.post('<?php print base_url('Pedidos/onModificarX'); ?>', p).done(function (a) {
+                         if (a.length > 0) {
+                            nuevo = false;
+                            var xxx = JSON.parse(a);
+                            getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                }
+            } else {
+                swal('ATENCIÓN', 'DEBE DE DEFINIR UNA CLAVE DEL PEDIDO Y UN CLIENTE', 'warning').then((value) => {
+                    Clave.focus().select();
+                });
+            }
+        });
+
+        Estilo.change(function (e) {
+            if ($(this).val()) {
+                onOpenOverlay('Por favor espere...');
+                /*COMPROBAR QUE EL ESTILO TENGA DEFINIDA SU FICHA TECNICA Y LAS FRACCIONES X ESTILO*/
+                $.getJSON('<?php print base_url('Pedidos/onComprobarFichaTecnicaXEstilo'); ?>', {ESTILO: Estilo.val()})
+                        .done(function (a) {
+                            if (a.length > 0) {
+                                if (parseInt(a[0].TIENEFICHA) > 0) {
+                                    $.getJSON('<?php print base_url('Pedidos/onComprobarFraccionesXEstilo'); ?>', {ESTILO: Estilo.val()})
+                                            .done(function (a) {
+                                                if (a.length > 0) {
+                                                    /*YOUR WIN*/
+                                                } else {
+                                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE FRACCIONES DEFINIDAS', 'warning').then((value) => {
+                                                        Estilo[0].selectize.focus();
+                                                    });
+                                                }
+                                            }).fail(function (x) {
+                                        getError(x);
+                                    }).always(function () {
+                                        onCloseOverlay();
+                                    });
+                                } else {
+                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA UNA FICHA TECNICA', 'warning').then((value) => {
+                                        Estilo[0].selectize.focus();
+                                    });
+                                }
+                            }
+                        }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
+
         pnlTablero.find("#NumeroDePedido").keydown(function (e) {
             if (e.keyCode === 13 && isValidInput($(this)) &&
                     pnlTablero.find("#ClientePedido").val()) {
@@ -519,8 +606,9 @@
                         }).done(function (data) {
                     getPedidoByID(data[0].ID, data[0].Cliente);
                 }).fail(function (x, y, z) {
-                    console.log(x.responseText);
+                    getError(x);
                 }).always(function () {
+                    HoldOn.close();
                 });
             }
             if (isValidInput($(this))) {
@@ -539,12 +627,10 @@
                 tblPedidos.DataTable().column(2).search('').draw();
             }
         });
- 
 
         btnAgregarDetalle.click(function () {
             if (pedido_valido) {
                 pnlDatos.find("#Recibido")[0].selectize.enable();
-                var Estilo = pnlDatos.find("#Estilo");
                 var Color = pnlDatos.find("#Color");
                 var Semana = pnlDatos.find("#Semana");
                 var Maquila = pnlDatos.find("#Maquila");
@@ -563,58 +649,56 @@
                     //REVISAR SI ESE ESTILO/COLOR NO HA SIDO AGREGADO CON ANTERIORIDAD
                     onRevisarRegistro(Estilo.val(), Color.val());
                     if (!added) {
-                        //AÑADIR FILA
-                        var tal = '<div class="row"><div class="col-12 text-danger text-nowrap talla" align="center">';
-                        var cnt = '</div><div class="col-12 cantidad" align="center">';
-                        var dtm = [
-                            0, //ID
-                            Recibido.val(), //Recibido
-                            Estilo.val(), //EstiloID
-                            Estilo.text(), //Estilo
-                            Color.val(), //ColorID
-                            Color.text(),
-                            Semana.val(),
-                            Maquila.val(),
-                            tal + getTalla('T1') + cnt + getCantidad('C1') + '</div></div>',
-                            tal + getTalla('T2') + cnt + getCantidad('C2') + '</div></div>',
-                            tal + getTalla('T3') + cnt + getCantidad('C3') + '</div></div>',
-                            tal + getTalla('T4') + cnt + getCantidad('C4') + '</div></div>',
-                            tal + getTalla('T5') + cnt + getCantidad('C5') + '</div></div>',
-                            tal + getTalla('T6') + cnt + getCantidad('C6') + '</div></div>',
-                            tal + getTalla('T7') + cnt + getCantidad('C7') + '</div></div>',
-                            tal + getTalla('T8') + cnt + getCantidad('C8') + '</div></div>',
-                            tal + getTalla('T9') + cnt + getCantidad('C9') + '</div></div>',
-                            tal + getTalla('T10') + cnt + getCantidad('C10') + '</div></div>',
-                            tal + getTalla('T11') + cnt + getCantidad('C11') + '</div></div>',
-                            tal + getTalla('T12') + cnt + getCantidad('C12') + '</div></div>',
-                            tal + getTalla('T13') + cnt + getCantidad('C13') + '</div></div>',
-                            tal + getTalla('T14') + cnt + getCantidad('C14') + '</div></div>',
-                            tal + getTalla('T15') + cnt + getCantidad('C15') + '</div></div>',
-                            tal + getTalla('T16') + cnt + getCantidad('C16') + '</div></div>',
-                            tal + getTalla('T17') + cnt + getCantidad('C17') + '</div></div>',
-                            tal + getTalla('T18') + cnt + getCantidad('C18') + '</div></div>',
-                            tal + getTalla('T19') + cnt + getCantidad('C19') + '</div></div>',
-                            tal + getTalla('T20') + cnt + getCantidad('C20') + '</div></div>',
-                            tal + getTalla('T21') + cnt + getCantidad('C21') + '</div></div>',
-                            tal + getTalla('T22') + cnt + getCantidad('C22') + '</div></div>',
-                            Precio.val(),
-                            total_pares,
-                            FechaDeEntrega.val(),
-                            '<button type="button" class="btn btn-danger" onclick="onEliminar(this,1)"><span class="fa fa-trash"></span></button>',
-                            Recio.val(),
-                            Titulo.val(),
-                            Observaciones.val(),
-                            pnlDatos.find("#Serie").val(),
-                            'N', (total_pares * Precio.val())
-                        ];
-                        PedidoDetalle.row.add(dtm).draw(false);
+                        /*
+                         //AÑADIR FILA
+                         var tal = '<div class="row"><div class="col-12 text-danger text-nowrap talla" align="center">';
+                         var cnt = '</div><div class="col-12 cantidad" align="center">';
+                         var dtm = [
+                         0, //ID
+                         Recibido.val(), //Recibido
+                         Estilo.val(), //EstiloID
+                         Estilo.text(), //Estilo
+                         Color.val(), //ColorID
+                         Color.text(),
+                         Semana.val(),
+                         Maquila.val(),
+                         tal + getTalla('T1') + cnt + getCantidad('C1') + '</div></div>',
+                         tal + getTalla('T2') + cnt + getCantidad('C2') + '</div></div>',
+                         tal + getTalla('T3') + cnt + getCantidad('C3') + '</div></div>',
+                         tal + getTalla('T4') + cnt + getCantidad('C4') + '</div></div>',
+                         tal + getTalla('T5') + cnt + getCantidad('C5') + '</div></div>',
+                         tal + getTalla('T6') + cnt + getCantidad('C6') + '</div></div>',
+                         tal + getTalla('T7') + cnt + getCantidad('C7') + '</div></div>',
+                         tal + getTalla('T8') + cnt + getCantidad('C8') + '</div></div>',
+                         tal + getTalla('T9') + cnt + getCantidad('C9') + '</div></div>',
+                         tal + getTalla('T10') + cnt + getCantidad('C10') + '</div></div>',
+                         tal + getTalla('T11') + cnt + getCantidad('C11') + '</div></div>',
+                         tal + getTalla('T12') + cnt + getCantidad('C12') + '</div></div>',
+                         tal + getTalla('T13') + cnt + getCantidad('C13') + '</div></div>',
+                         tal + getTalla('T14') + cnt + getCantidad('C14') + '</div></div>',
+                         tal + getTalla('T15') + cnt + getCantidad('C15') + '</div></div>',
+                         tal + getTalla('T16') + cnt + getCantidad('C16') + '</div></div>',
+                         tal + getTalla('T17') + cnt + getCantidad('C17') + '</div></div>',
+                         tal + getTalla('T18') + cnt + getCantidad('C18') + '</div></div>',
+                         tal + getTalla('T19') + cnt + getCantidad('C19') + '</div></div>',
+                         tal + getTalla('T20') + cnt + getCantidad('C20') + '</div></div>',
+                         tal + getTalla('T21') + cnt + getCantidad('C21') + '</div></div>',
+                         tal + getTalla('T22') + cnt + getCantidad('C22') + '</div></div>',
+                         Precio.val(),
+                         total_pares,
+                         FechaDeEntrega.val(),
+                         '<button type="button" class="btn btn-danger" onclick="onEliminar(this,1)"><span class="fa fa-trash"></span></button>',
+                         Recio.val(),
+                         Titulo.val(),
+                         Observaciones.val(),
+                         pnlDatos.find("#Serie").val(),
+                         'N', (total_pares * Precio.val())
+                         ];
+                         PedidoDetalle.row.add(dtm).draw(false);*/
                         //CLEAR
                         total_pares = 0;
                         pnlDatos.find("#TPares").val(0);
                         pnlDatos.find("[name*='C']").val('');
-                        //Estilo[0].selectize.clear(true);
-                        //Estilo[0].selectize.open();
-                        //Estilo[0].selectize.focus();
                         FechaDeEntrega.prop('readonly', true);
                         Semana.prop('readonly', true);
                         Recibido[0].selectize.disable();
@@ -669,7 +753,7 @@
         btnImprimir.click(function () {
             if (temp !== '') {
                 HoldOn.open({message: 'Espere...', theme: 'sk-cube'});
-                $.post(master_url + 'onImprimirPedidoReducido', {ID: temp, CLIENTE: pnlDatos.find("#Cliente").val()}).done(function (data) {
+                $.post(master_url + 'onImprimirPedidoReducido', {ID: temp, CLIENTE: pnlDatos.find("#PedidoxCliente").val()}).done(function (data) {
                     //check Apple device
                     if (isAppleDevice() || isMobile) {
                         window.open(data, '_blank');
@@ -677,10 +761,7 @@
                         $.fancybox.open({
                             src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                             type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
-                                },
+                            opts: { 
                                 iframe: {
                                     // Iframe template
                                     tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
@@ -700,8 +781,7 @@
                         });
                     }
                 }).fail(function (x, y, z) {
-                    HoldOn.close();
-                    console.log(x, y, z);
+                    getError(x);
                     swal('ATENCIÓN', 'NO HA SIDO POSIBLE MOSTRAR EL PEDIDO PARA SU IMPRESIÓN,VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
                     HoldOn.close();
@@ -741,7 +821,7 @@
                     getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), data[0].Semana);
                 }
             }).fail(function (x, y, z) {
-                console.log(x, y, z);
+                getError(x);
             }).always(function () {
 
             });
@@ -749,8 +829,8 @@
 
         btnGuardar.click(function () {
             var f = new FormData();
-            f.append('Clave', pnlDatos.find("#Clave").val());
-            f.append('Cliente', pnlDatos.find("#pedcte").val());
+            f.append('Clave', Clave.val());
+            f.append('Cliente', pnlDatos.find("#PedidoxCliente").val());
             f.append('Agente', pnlDatos.find("#Agente").val());
             f.append('FechaPedido', pnlDatos.find("#FechaPedido").val());
             f.append('Observacion', pnlDatos.find("#Observacion").val());
@@ -809,8 +889,12 @@
                 f.append('ID', temp);
                 onSave('onModificar', f, function (e) {
                     nuevo = false;
-                    Pedidos.ajax.reload();
-                    getPedidoByID(temp);
+                    if ($.fn.DataTable.isDataTable('#tblPedidos')) {
+                        Pedidos.ajax.reload();
+                    } else {
+                        getRecords();
+                    }
+                    getPedidoByID(temp, pnlDatos.find("#PedidoxCliente").val());
                     pnlDatos.find("#Estilo")[0].selectize.focus();
                 });
             } else {
@@ -863,39 +947,44 @@
                 onSave('onAgregar', f, function (e) {
                     nuevo = false;
                     var dtm = JSON.parse(e);
-                    getPedidoByID(dtm.ID);
+                    getPedidoByID(dtm.ID, pnlDatos.find("#PedidoxCliente").val());
                     temp = dtm.ID;
 //                        $.each(tblPedidoDetalle.find("tbody tr"), function (k, v) {
 //                            PedidoDetalle.cell($(this), 38).data('N').draw();
 //                        });
-                    Pedidos.ajax.reload();
+
+                    if ($.fn.DataTable.isDataTable('#tblPedidos')) {
+                        Pedidos.ajax.reload();
+                    } else {
+                        getRecords();
+                    }
                     //NUEVO > MODIFICAR
-                    pnlDatos.find("#Clave").prop('readonly', true);
+                    Clave.prop('readonly', true);
                     pnlDatos.find("#FechaPedido").prop('readonly', true);
                     pnlDatos.find("#FechaRecepcion").prop('readonly', true);
                     pnlDatos.find("#FechaEntrega").prop('readonly', true);
-                    pnlDatos.find("#Cliente")[0].selectize.disable();
+                    pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
                     pnlDatos.find("#Agente")[0].selectize.disable();
                     pnlDatos.find("#Estilo")[0].selectize.focus();
                 });
             }
         });
 
-        btnNuevo.click(function () {
+        btnNuevo.click(function () { 
             nuevo = true;
             pnlDatos.find("#FechaEntrega").prop('readonly', false);
             pnlDatos.find("#Semana").prop('readonly', false);
             pnlDatos.find("#Recibido")[0].selectize.enable();
             pnlDatos.find("#Precio").prop('readonly', true);
-            pnlDatos.find("#Clave").prop('readonly', false);
-            pnlDatos.find("#Cliente")[0].selectize.enable();
+            Clave.prop('readonly', false);
+            pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
             pnlDatos.find("#FechaPedido").prop('readonly', false);
             pnlDatos.find("#FechaRecepcion").prop('readonly', false);
             pnlDatos.find("input,textarea").val("");
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass("d-none");
-            pnlDatos.find("#Clave").focus();
+            Clave.focus();
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
@@ -903,33 +992,40 @@
                 PedidoDetalle.clear().draw();
             } else {
                 PedidoDetalle = tblPedidoDetalle.DataTable(opciones_detalle);
+                $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
             }
-            PedidoDetalle.clear().draw();
             getID();
         });
 
         btnCancelar.click(function () {
             btnGuardar.prop("disabled", true);
-            pnlDatos.find("#Cliente")[0].selectize.enable();
+            pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
             pnlDatos.find("#FechaEntrega").prop('readonly', true);
             pnlDatos.find("#Semana").prop('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
-            pnlDatos.find("#Clave").prop('readonly', true);
+            Clave.prop('readonly', true);
             pnlDatos.find("#FechaPedido").prop('readonly', true);
             pnlDatos.find("#FechaRecepcion").prop('readonly', true);
             pnlTablero.removeClass("d-none");
             pnlDatos.addClass("d-none");
             btnImprimir.addClass("d-none");
-            PedidoDetalle.clear().draw();
+            if ($.fn.DataTable.isDataTable('#tblPedidos')) {
+                Pedidos.ajax.reload();
+            } else {
+                getRecords();
+            }
+            if ($.fn.DataTable.isDataTable('#tblPedidoDetalle')) {
+                PedidoDetalle.clear().draw();
+            }
             Cliente = 0;
             pnlTablero.find("#NumeroDePedido").focus().select();
         });
 
-        pnlDatos.find("#Cliente").change(function () {
+        pnlDatos.find("#PedidoxCliente").change(function () {
             if ($(this).val() !== '' && nuevo) {
                 //OBTENER AGENTE POR CLIENTE
-                Cliente = pnlDatos.find("#Cliente").val();
+                Cliente = pnlDatos.find("#PedidoxCliente").val();
                 $.getJSON(master_url + 'getAgenteXCliente', {Cliente: Cliente}).done(function (data) {
                     if (data.length > 0) {
                         pnlDatos.find("#Agente")[0].selectize.clear(true);
@@ -937,7 +1033,7 @@
                         pnlDatos.find("#Agente")[0].selectize.focus();
                     }
                 }).fail(function (x, y, z) {
-                    console.log(x, y, z);
+                    getError(x);
                 });
             } else {
                 pnlDatos.find("#Agente")[0].selectize.clear(true);
@@ -969,7 +1065,7 @@
                     pnlDatos.find("#Color").removeClass("d-none");
                     pnlDatos.find("#Color")[0].selectize.open();
                 }).fail(function (x, y, z) {
-                    console.log(x, y, z);
+                    getError(x);
                 });
                 //OBTENER MAQUILA/SERIE
                 $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: $(this).val()}).done(function (data) {
@@ -1041,7 +1137,7 @@
                         }
                     }
                 }).fail(function (x, y, z) {
-                    console.log(x, y, z);
+                    getError(x);
                 });
             } else {
                 pnlDatos.find("#Color")[0].selectize.clear(true);
@@ -1052,15 +1148,12 @@
         }).focusout(function () {
             console.log('Estilo; ', $(this).val());
         });
+        /*CALLS*/
+
+        btnNuevo.trigger('click');
     });
 
     function init() {
-
-        getRecords();
-//        getOptions("getClientes", "Cliente", "Clave", "Cliente", pnlDatos); //Clientes
-//        getOptions("getClientes", "ClientePedido", "Clave", "Cliente", pnlTablero); //Clientes
-        getOptions("getAgentes", "Agente", "Clave", "Agente", pnlDatos); //Agentes
-        //getOptions("getEstilos", "Estilo", "Clave", "Estilo"); //Estilos
         getOptions("getMaquilas", "Maquila", "Clave", "Maquila", pnlDatos); //Maquilas
     }
 
@@ -1071,60 +1164,58 @@
         });
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblPedidos')) {
-            tblPedidos.DataTable().destroy();
-        }
-        Pedidos = tblPedidos.DataTable({
-            "dom": 'Bfrtip',
-            buttons: buttons,
-            "ajax": {
-                "url": '<?php print base_url('peds'); ?>',
-                "dataSrc": ""
-            },
-            "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Cliente"},
-                {"data": "Agente"}, {"data": "Pares"}, {"data": "FechaPedido"}
-            ],
-            "columnDefs": [
-                {
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
+        if (!$.fn.DataTable.isDataTable('#tblPedidos')) {
+            Pedidos = tblPedidos.DataTable({
+                "dom": 'Bfrtip',
+                buttons: buttons,
+                "ajax": {
+                    "url": '<?php print base_url('peds'); ?>',
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {"data": "ID"}, {"data": "Clave"}, {"data": "Cliente"},
+                    {"data": "Agente"}, {"data": "Pares"}, {"data": "FechaPedido"}
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
+                language: lang,
+                select: true,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 20,
+                "scrollX": false,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                pageResize: true,
+                "aaSorting": [
+                    [1, 'ASC']
+                ],
+                initComplete: function (x, y) {
+                    HoldOn.close();
+                    pnlTablero.find('#ClientePedido')[0].selectize.focus();
                 }
-            ],
-            language: lang,
-            select: true,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 20,
-            "scrollX": false,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            pageResize: true,
-            "aaSorting": [
-                [1, 'ASC']
-            ],
-            initComplete: function (x, y) {
-                HoldOn.close();
-                pnlTablero.find('#ClientePedido')[0].selectize.focus();
-            }
-        });
-        tblPedidos.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({
-                theme: 'sk-cube',
-                message: 'Por favor espere...'
             });
-            nuevo = false;
-            tblPedidos.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = Pedidos.row(this).data();
-            temp = dtm.Clave;
-            getPedidoByID(temp, dtm.Cliente);
-        });
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblPedidoDetalle')) {
+            tblPedidos.find('tbody').on('click', 'tr', function () {
+                HoldOn.open({
+                    theme: 'sk-cube',
+                    message: 'Por favor espere...'
+                });
+                nuevo = false;
+                tblPedidos.find("tbody tr").removeClass("success");
+                $(this).addClass("success");
+                var dtm = Pedidos.row(this).data();
+                temp = dtm.Clave;
+                getPedidoByID(temp, dtm.Cliente);
+            });
+        }
+        if (!$.fn.DataTable.isDataTable('#tblPedidoDetalle')) {
             tblPedidoDetalle.DataTable().destroy();
         }
     }
@@ -1135,8 +1226,7 @@
                 parent.find("#" + comp)[0].selectize.addOption({text: v[field], value: v[key]});
             });
         }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
+            getError(x);
         });
     }
 
@@ -1161,9 +1251,9 @@
         $.getJSON(master_url + 'getID').done(function (data, x, jq) {
             if (data.length > 0) {
                 var ID = $.isNumeric(data[0].CLAVE) ? parseInt(data[0].CLAVE) + 1 : 1;
-                pnlDatos.find("#Clave").val(ID);
+                Clave.val(ID);
             } else {
-                pnlDatos.find("#Clave").val('1');
+                Clave.val('1');
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1304,9 +1394,9 @@
             var dt = data[0];//Encabezado
             //SEGURIDAD
             pnlDatos.find("#ID").val(dt.PDID);
-            pnlDatos.find("#Clave").val(dt.Clave);
+            Clave.val(dt.Clave);
             pnlDatos.find("#pedcte").val(dt.Cliente);
-            pnlDatos.find("#Cliente")[0].selectize.setValue(dt.Cliente);
+            pnlDatos.find("#PedidoxCliente")[0].selectize.setValue(dt.Cliente);
             pnlDatos.find("#FechaPedido").val(dt.FechaPedido);
             pnlDatos.find("#FechaRecepcion").val(dt.FechaRecepcion);
             pnlDatos.find("#Agente")[0].selectize.setValue(dt.Agente);
@@ -1315,16 +1405,16 @@
             pnlDatos.find("#Semana").val(dt.Semana);
             pnlDatos.find("#Recibido")[0].selectize.setValue(dt.Recibido);
 
-            pnlDatos.find("#Clave").prop('readonly', true);
+            Clave.prop('readonly', true);
             pnlDatos.find("#FechaPedido").prop('readonly', true);
             pnlDatos.find("#FechaRecepcion").prop('readonly', true);
             pnlDatos.find("#FechaEntrega").prop('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
-            pnlDatos.find("#Cliente")[0].selectize.disable();
+            pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlDatos.find("#Agente")[0].selectize.disable();
 
             btnImprimir.removeClass("d-none");
-            pnlDatos.find("#Cliente")[0].selectize.disable();
+            pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
             pnlDatos.find("#Estilo")[0].selectize.focus();
@@ -1404,10 +1494,10 @@
                     buttons: false,
                     timer: 1200
                 }).then((value) => {
-                    pnlDatos.find("#Clave").focus().select();
+                    Clave.focus().select();
                 });
             } else {
-                pnlDatos.find("#Cliente")[0].selectize.focus();
+                pnlDatos.find("#PedidoxCliente")[0].selectize.focus();
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1537,38 +1627,40 @@
     }
 
     #tblPedidoDetalle tbody td{
-        font-weight: bold;
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
+        font-weight: bold; 
         left: 20px;
         top: -5px;
+    }
+
+    #tblPedidoDetalle tbody tr td{
+        border: 2px solid #fff !important;
+    }
+    #tblPedidoDetalle tbody tr:hover td{
+        /*border: 2px solid #007bff !important;*/
+        border-width: 2px !important;
+        border-style: solid !important;
+        border-top-color: #007bff !important;
+        border-bottom-color: #007bff !important;
+        background-color: #fff !important;
+        color: #000 !important;  
+    }
+
+    #tblPedidoDetalle tbody tr:hover td:first-child{ 
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+        border-left-color: #007bff !important;
+    }
+
+    #tblPedidoDetalle tbody tr:hover td:last-child{ 
+        border-top-right-radius:  5px !important;
+        border-bottom-right-radius:  5px !important;
+        border-right-color: #007bff !important;
     }
 
     #tblPedidoDetalle tr:hover td{
         color:#000;
         background-color: #fff;
-    }
-
-    .zoom{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
-    .zoom:hover{
-        /*        transform-origin: 100% 0;
-                width:40%;
-                height:100%;
-                float:left;
-                z-index:4;
-                position:relative;
-                -webkit-transform: scale(2);
-                transform: scale(2);
-                top:-10px;
-                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
-                cursor: pointer;*/
-
-        color:#fff !important;
-        background-color: #3498DB !important;
-    }
+    } 
 
     div.zoom:hover{
         cursor: pointer;
@@ -1576,8 +1668,15 @@
     }
 
     #tblTallas tbody tr:hover {
-        background-color: #FFF;
-        color: #000 !important;
-    }
+        background-color: #333 !important;
+        color: #fff !important; 
+    } 
 
+    table.dataTable tbody>tr.selected, table.dataTable tbody>tr.selected td{
+        border-width: 2px !important;
+        border-style: solid !important;
+        border-bottom-color: #007bff !important;
+        background-color: #fff !important;
+        color: #000 !important; 
+    }
 </style>

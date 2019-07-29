@@ -28,7 +28,7 @@ class MenuProduccion extends CI_Controller {
                     $this->load->view('vMenuProduccion');
                     break;
             }
-            $this->load->view('vFooter')->view('vWatermark', $dt);
+            $this->load->view('vProduccion')->view('vFooter')->view('vWatermark', $dt);
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
