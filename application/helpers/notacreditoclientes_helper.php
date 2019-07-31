@@ -127,7 +127,7 @@ class PDFNotaCreditoClientes extends FPDF {
         $this->AddFont('Calibri', 'B');
         $this->AddFont('Calibri', 'BI');
         $this->Image($_SESSION["LOGO"], /* LEFT */ 5, 5/* TOP */, /* ANCHO */ 30);
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 11);
         $this->SetY(5);
         $this->SetX(36);
         $this->Cell(60, 4, utf8_decode($_SESSION["EMPRESA_RAZON"]), 0/* BORDE */, 1, 'L');
