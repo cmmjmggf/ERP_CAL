@@ -224,13 +224,6 @@
             minWidth: 450
         });
 
-
-        $("input[type='text']").on('keydown', function (e) {
-            if ($(this).val().length > 0) {
-                onBeep(3);
-            }
-        });
-
         mobilecheck();
         $('[data-toggle="tooltip"]').tooltip();
         $('[data-toggle="popover"]').popover();
@@ -1477,5 +1470,16 @@
     }
     function onCloseOverlay() {
         HoldOn.close();
+    }
+    function TestThisJSONURL(url) {
+        /*SIRVE PARA LOS DATATABLES, DESCARTAR QUE SEA PROBLEMA DEL SQL O UN METODO MAL EMPLEADO DEL LADO DEL SERVER*/
+        $.getJSON(url).done(function (a) {
+            console.log(a);
+            onNotifyOld('', 'REVISA LA CONSOLA', 'success');
+        }).fail(function (x,y,x) {
+            console.log(x);
+        }).always(function () {
+
+        });
     }
 </script>
