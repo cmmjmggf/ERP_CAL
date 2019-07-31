@@ -116,6 +116,10 @@
                             <label class="custom-control-label" for="rEstilo">Estilo</label>
                         </div>
                     </div>
+                    <div class="w-100"></div>
+                    <button type="button" id="btnMovimientosClientes" name="btnMovimientosClientes" class="btn btn-info btn-block font-weight-bold">
+                        MOVIMIENTOS
+                    </button>
                 </div>
             </div>
         </div>
@@ -133,11 +137,15 @@
             ParesFacturados = pnlTablero.find("#ParesFacturados"),
             Facturados, tblFacturados = pnlTablero.find("#tblFacturados"),
             Devoluciones, tblDevoluciones = pnlTablero.find("#tblDevoluciones"),
-            OrdenDevs = 0;
+            OrdenDevs = 0, btnMovimientosClientes = pnlTablero.find("#btnMovimientosClientes");
 
     $(document).ready(function () {
 
         Control.focus();
+
+        btnMovimientosClientes.click(function () {
+            onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
+        });
 
         pnlTablero.find("input[name='rOrdenar']").change(function () {
             if (pnlTablero.find("input[name='rOrdenar']:checked")) {
