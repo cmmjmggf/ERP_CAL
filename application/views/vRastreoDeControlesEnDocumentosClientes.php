@@ -10,7 +10,7 @@
             <div class="row  mb-2">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Control</label>
-                    <input type="text" id="Control" name="Control" class="form-control form-control-sm" autofocus="">
+                    <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly" autofocus="">
                 </div> 
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"></div> 
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
                     <div class="col text-center">
-                        <p class="font-weight-bold text-danger font-italic">DEVOLUCIÓNES</p>
+                        <p class="font-weight-bold text-danger font-italic">DEVOLUCIONES</p>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblDevoluciones" class="table table-sm table-hover" style="width:100%">
@@ -141,15 +141,35 @@
 
         pnlTablero.find("input[name='rOrdenar']").change(function () {
             if (pnlTablero.find("input[name='rOrdenar']:checked")) {
-
+                onOpenOverlay('Ordenando...');
+                Facturados.ajax.reload(function () {
+                    onCloseOverlay();
+                });
             } else {
                 console.log(pnlTablero.find("input[name='rOrdenar']"));
             }
         });
 
+        Docto.on('keydown', function (e) {
+            if (e.keyCode === 13 && Control.val()) {
+                onOpenOverlay('Buscando documento...');
+                Facturados.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
                 getInfoXControl(Control.val());
+            } else if (Control.val().length <= 0) {
+                Facturados.ajax.reload();
+                Devoluciones.ajax.reload();
+                ParesFabricados.val('');
+                ParesFacturados.val('');
+                ParesVendidos.val('');
+                ParesCancelados.val('');
+                ParesDevueltos.val('');
+                ParesEstatus.val('');
             }
         });
 
@@ -242,7 +262,6 @@
             onOpenOverlay('Espere un momento por favor...');
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentosClientes/getInfoXControl') ?>", {CONTROL: e}).done(function (a, b, c) {
                 if (a.length > 0) {
-                    console.log(a);
                     var xx = a[0];
                     switch (parseInt(xx.ESTATUS_PEDIDO)) {
                         case 2:
@@ -253,7 +272,6 @@
                             ParesCancelados.val(0);
                             /*PARES DEVUELTOS*/
                             $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentosClientes/getDevolucionesXControl') ?>', {CONTROL: e}).done(function (aa, bb, cc) {
-                                console.log(aa, bb, cc);
                                 if (aa.length > 0) {
                                     var xxx = aa[0];
                                     ParesDevueltos.val(xxx.PARES_DEVUELTOS);
@@ -287,8 +305,9 @@
                             ParesCancelados.val(xx.PARES);
                             break;
                     }
-                    console.log(xx);
-                    Facturados.ajax.reload();
+                    Facturados.ajax.reload(function () {
+                        Docto.focus().select();
+                    });
                     Devoluciones.ajax.reload();
                 }
             }).fail(function (x, y, z) {
