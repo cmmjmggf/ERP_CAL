@@ -1188,7 +1188,7 @@
                         opcion += '<a class="btn btn-primary dropdown-toggle" href="' + v.Ref + '" id="nav' + v.Opcion + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
                         opcion += '<span class="fas fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
                         /*START ITEMS*/
-                        opcion += '<ul class="dropdown-menu" aria-labelledby="nav' + v.Opcion + '">';
+                        opcion += '<ul class="dropdown-menu animate  slideIn" aria-labelledby="nav' + v.Opcion + '">';
                         $.each(items, function (kk, vv) {
                             if (v.Opcion === vv.Opcion) {
                                 switch (vv.ItemDropdown) {
@@ -1215,7 +1215,7 @@
                                             opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vv.Item + '</a>';
                                             var nav_subitems = 0, nav_subsubitems = 0;
                                             if (nav_subitems === 0) {
-                                                opcion += '<ul class="dropdown-menu">';
+                                                opcion += '<ul class="dropdown-menu  animate slideIn">';
                                             }
                                             /*NIVEL 2*/
                                             $.each(subitems, function (kkk, vvv) {
@@ -1250,7 +1250,7 @@
                                                                 opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vvv.SubItem + '</a>';
                                                                 /*NIVEL 3*/
                                                                 if (nav_subsubitems === 0) {
-                                                                    opcion += '<ul class="dropdown-menu">';
+                                                                    opcion += '<ul class="dropdown-menu  animate slideIn">';
                                                                 }
                                                                 $.each(subsubitems, function (kss, vss) {
                                                                     if (vss.IsSubSubItem !== null) {
@@ -1457,8 +1457,14 @@
             if (i === inputs_selects.length) {
                 console.log(xxx + ";\n");
             } else {
-                console.log(xxx + ",\n");
-                i += 1;
+                if ($(v).attr('id') === undefined) {
+                    xxx = $(v).attr('name') + " = " + padre.attr('id') + ".find('#" + $(v).attr('name') + "')";
+                    console.log(xxx + ",\n");
+                    i += 1;
+                } else {
+                    console.log(xxx + ",\n");
+                    i += 1;
+                }
             }
         });
     }

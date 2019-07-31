@@ -40,10 +40,35 @@ class Pedidos extends CI_Controller {
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }
-
-            $this->load->view('vFondo')->view('vPedidos')->view('vFooter');
+            foreach (array('vFondo', 'vPedidos', 'vFooter') as $v) {
+                $this->load->view($v);
+            }
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
+    public function onComprobarFichaTecnicaXEstilo() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->select("(CASE WHEN COUNT(F.Estilo) > 0 THEN COUNT(F.Estilo) ELSE 0 END) AS TIENEFICHA", false)
+                                    ->from("fichatecnica AS F")
+                                    ->where('F.Estilo', $x['ESTILO'])
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComprobarFraccionesXEstilo() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->select("(CASE WHEN COUNT(F.Estilo) > 0 THEN COUNT(F.Estilo) ELSE 0 END) AS TIENEFRACCIONES", false)
+                                    ->from("fraccionesxestilo AS F")
+                                    ->where('F.Estilo', $x['ESTILO'])
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 
@@ -215,6 +240,49 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function onAgregarX() {
+        try {
+            $x = $this->input->post();
+            $this->db->trans_begin();
+
+            $p = array(
+                "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],
+                "Agente" => $x['AGENTE'], "FechaPedido" => $x['FECHA_PEDIDO'],
+                "FechaRecepcion" => $x['FECHA_RECEPCION'], "Usuario" => $_SESSION["USERNAME"],
+                "Estilo" => $x['ESTILO'], "Color" => $x['COLOR'],
+                "FechaEntrega" => $x['FECHA_ENTREGA'], "Maquila" => $x['MAQUILA'],
+                "Semana" => $x['SEMANA'], "Ano" => Date('Y'),
+                "Recio" => $x['RECIO'], "Precio" => $x['PRECIO'],
+                "Observacion" => $x['OBSERVACION'],
+                "ObservacionDetalle" => $x['OBSERVACION_DETALLE'],
+                "Serie" => $x['SERIE'], "Control" => 0,
+                "C1" => $x['C1'], "C2" => $x['C2'], "C3" => $x['C3'], "C4" => $x['C4'],
+                "C5" => $x['C5'], "C6" => $x['C6'], "C7" => $x['C7'], "C8" => $x['C8'],
+                "C9" => $x['C9'], "C10" => $x['C10'], "C11" => $x['C11'], "C12" => $x['C12'],
+                "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
+                "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
+                "C21" => $x['C21'], "C22" => $x['C22'],
+                "Estatus" => 'A', "Registro" => Date('d/m/Y h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
+                "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
+                "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
+                "Empleado" => NULL, "Tiempo" => NULL, "EstatusProduccion" => NULL,
+                "DeptoProduccion" => NULL
+            );
+            $this->db->insert('pedidox', $p);
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $this->db->trans_commit();
+                print json_encode($this->db->select("ID,Clave,Cliente")
+                                        ->from('pedidox')->where('Clave', $x['PEDIDO'])
+                                        ->where('Cliente', $x['CLIENTE'])->get()->result());
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAgregar() {
         try {
             $x = $this->input;
@@ -273,7 +341,6 @@ class Pedidos extends CI_Controller {
     public function onModificar() {
         try {
             $x = $this->input;
-            var_dump($x->post());
             $usr = $_SESSION["USERNAME"];
             $clave = $x->post('Clave');
             $Detalle = json_decode($this->input->post("Detalle"));
@@ -320,6 +387,48 @@ class Pedidos extends CI_Controller {
             }
             //RETURN ID
             print '{ "ID":' . $x->post('Clave') . ',"EVT":"Agregar"}';
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificarX() {
+        try {
+            $x = $this->input->post(); 
+            $this->db->trans_begin();
+            $p = array(
+                "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],
+                "Agente" => $x['AGENTE'], "FechaPedido" => $x['FECHA_PEDIDO'],
+                "FechaRecepcion" => $x['FECHA_RECEPCION'], "Usuario" => $_SESSION["USERNAME"],
+                "Estilo" => $x['ESTILO'], "Color" => $x['COLOR'],
+                "FechaEntrega" => $x['FECHA_ENTREGA'], "Maquila" => $x['MAQUILA'],
+                "Semana" => $x['SEMANA'], "Ano" => Date('Y'),
+                "Recio" => $x['RECIO'], "Precio" => $x['PRECIO'],
+                "Observacion" => $x['OBSERVACION'],
+                "ObservacionDetalle" => $x['OBSERVACION_DETALLE'],
+                "Serie" => $x['SERIE'], "Control" => 0,
+                "C1" => $x['C1'], "C2" => $x['C2'], "C3" => $x['C3'], "C4" => $x['C4'],
+                "C5" => $x['C5'], "C6" => $x['C6'], "C7" => $x['C7'], "C8" => $x['C8'],
+                "C9" => $x['C9'], "C10" => $x['C10'], "C11" => $x['C11'], "C12" => $x['C12'],
+                "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
+                "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
+                "C21" => $x['C21'], "C22" => $x['C22'],
+                "Estatus" => 'A', "Registro" => Date('d/m/Y h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
+                "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
+                "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
+                "Empleado" => NULL, "Tiempo" => NULL, "EstatusProduccion" => NULL,
+                "DeptoProduccion" => NULL
+            );
+            $this->db->insert('pedidox', $p);
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $this->db->trans_commit();
+                print json_encode($this->db->select("ID,Clave,Cliente")
+                                        ->from('pedidox')->where('Clave', $x['PEDIDO'])
+                                        ->where('Cliente', $x['CLIENTE'])->get()->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

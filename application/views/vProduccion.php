@@ -1,11 +1,11 @@
 <div id="MnuBlock" class="col-12 row justify-content-center mt-2" align="center">
-    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Usuarios.shoes'); ?>'">
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Pedidos/?origen=PRODUCCION'); ?>'">
         <div class="card text-center">
             <div class="card-body">
-                <span class="fa fa-user-circle fa-2x mt-5"></span> 
+                <span class="fa fa-clipboard-list fa-2x mt-5"></span> 
             </div>
             <div class="card-footer">
-                <h5>USUARIOS</h5>
+                <h5>PEDIDOS</h5>
             </div>
         </div>
     </div>
@@ -20,8 +20,7 @@
         </div>
     </div>
 </div>
-<style>
-    .col-1, .col-2, .col-3, .col-4, .col-5,
+<style>.col-1, .col-2, .col-3, .col-4, .col-5,
     .col-6, .col-7, .col-8, .col-9, .col-10,
     .col-11, .col-12, .col, .col-auto, .col-sm-1,
     .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5,
@@ -58,7 +57,7 @@
         cursor: pointer !important;
         font-weight: bold;        
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
-        background: #ffffff; /* Old browsers */
+        background: #ffffff !important; /* Old browsers */
         background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
         background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
         background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
@@ -77,6 +76,9 @@
 
         color: #fff;
     }
+    .card:hover .text-nowrap, .card:hover .figure-caption{
+        color: #fff;
+    }
     .fa-2x {
         font-size: 7.5em;
     }
@@ -93,7 +95,7 @@
     }
     .card.text-center {
         background-color: #fff;
-    }
+    } 
     .card{
         transition: all 0.3s;
     }
@@ -103,5 +105,5 @@
         transform: scale(1.065);
         cursor: pointer !important;
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
-    } 
+    }
 </style>

@@ -31,35 +31,8 @@
 </script>
 
 <?php
-$this->load->view('vExplosionSemanal');
-$this->load->view('vExplosionSemanalCliente');
-$this->load->view('vExplosionSemanalArticulo');
-$this->load->view('vCotejaExplosionOrdCom');
-$this->load->view('vExplosionSemanalOrdComProyeccion');
-$this->load->view('vVisualizaPedido');
-$this->load->view('vReporteParesPreAsignados');
-$this->load->view('vEstadisticasEntrega');
-$this->load->view('vReporteCorteHiloTejer');
-$this->load->view('vReporteMatrizFraccionesEstiloLinea');
-$this->load->view('vFraccionesCapturadasNominaSem');
-$this->load->view('vLotificacionSuelasPlantas');
-$this->load->view('vEstiloFraccionNomina');
-$this->load->view('vMaterialSemanaProduccionEstilo');
-$this->load->view('vConciliaFabricaProduccion');
-$this->load->view('vConRelControlesXMaquila');
-$this->load->view('vManoObraDirecta');
-$this->load->view('vParesAsignadosMaqSemGen');
-$this->load->view('vAvanceProduccion');
-$this->load->view('vAvanceProduccionSemDia');
-$this->load->view('vAvanceProduccionPorLinea');
-$this->load->view('vAvanceProduccionPorDepto');
-$this->load->view('vDiasPromedioEntregaPorCliente');
-$this->load->view('vParesEntregadosCalidadXMaq');
-$this->load->view('vCostoInventariosProceso');
-$this->load->view('vEtiTrazabilidad');
-$this->load->view('vEtiCajasXCliente');
-$this->load->view('vEtiZapica');
-$this->load->view('vEstatusPedidoXGrupoAgente');
-$this->load->view('vFichaTecnicaCompra');
-$this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
-$this->load->view('vCostoManoObraGeneral');
+$vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalArticulo', 'vCotejaExplosionOrdCom', 'vExplosionSemanalOrdComProyeccion', 'vVisualizaPedido', 'vReporteParesPreAsignados', 'vEstadisticasEntrega', 'vReporteCorteHiloTejer', 'vReporteMatrizFraccionesEstiloLinea', 'vFraccionesCapturadasNominaSem', 'vLotificacionSuelasPlantas', 'vEstiloFraccionNomina', 'vMaterialSemanaProduccionEstilo', 'vConciliaFabricaProduccion',
+    'vConRelControlesXMaquila', 'vManoObraDirecta', 'vParesAsignadosMaqSemGen', 'vAvanceProduccion', 'vAvanceProduccionSemDia', 'vAvanceProduccionSemDia', 'vAvanceProduccionPorLinea', 'vAvanceProduccionPorDepto', 'vDiasPromedioEntregaPorCliente', 'vParesEntregadosCalidadXMaq', 'vCostoInventariosProceso', 'vEtiTrazabilidad', 'vEtiCajasXCliente', 'vEtiZapica', 'vEstatusPedidoXGrupoAgente', 'vEstatusPedidoXGrupoAgente', 'vFichaTecnicaCompra', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vCostoManoObraGeneral');
+foreach ($vs as $v) {
+    $this->load->view($v);
+}
