@@ -1057,7 +1057,7 @@
                 pnlDatos.find("#Color")[0].selectize.clear(true);
                 pnlDatos.find("#Color")[0].selectize.clearOptions();
                 //OBTENER COLORES POR ESTILO
-                $.getJSON(master_url + 'getColoresXEstilo', {Estilo: $(this).val()}).done(function (data) {
+                $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo');?>', {Estilo: $(this).val()}).done(function (data) {
                     $.each(data, function (k, v) {
                         pnlDatos.find("#Color")[0].selectize.addOption({text: v.Color, value: v.Clave});
                     });
