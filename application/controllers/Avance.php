@@ -241,7 +241,7 @@ class Avance extends CI_Controller {
             $id = 0;
             $frac = intval($x->post('FRACCION'));
             $depto = intval($x->post('DEPTO'));
-
+            /* AVANCE A "MONTADO A" O "MONTADO B" */
             if ($frac === 500 && $depto === 180 ||
                     $frac === 503 && $depto === 190) {
                 $db->insert('avance', array(
@@ -257,10 +257,17 @@ class Avance extends CI_Controller {
                     'Fraccion' => $x->post('FRACCION')
                 ));
                 $id = $this->db->insert_id();
-                $this->db->set('EstatusProduccion', ($depto === 180) ? "MONTADO A" : "MONTADO B")
-                        ->set('DeptoProduccion', $x->post('DEPTO'))
-                        ->where('Control', $x->post('CONTROL'))->update('pedidox');
+                if ($depto === 180) {
+                    $this->db->set('EstatusProduccion', "MONTADO A")
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
+                } else if ($depto === 190) {
+                    $this->db->set('EstatusProduccion', "MONTADO B")
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
+                }
             }
+            /* AVANCE A "ADORNO A" O "ADORNO B" */
             if ($frac === 600 && $depto === 210 ||
                     $frac === 600 && $depto === 220) {
                 $db->insert('avance', array(
@@ -275,6 +282,7 @@ class Avance extends CI_Controller {
                     'Hora' => Date('h:i:s a'),
                     'Fraccion' => $x->post('FRACCION')
                 ));
+                $this->db->set('stsavan', $depto)->where('Control', $x->post('CONTROL'))->update('pedidox');
                 /* DE ADORNO B PASA A ALMACEN DE ADORNO */
                 if ($depto === 220) {
                     $db->set('EstatusProduccion', 'ALMACEN ADORNO')
@@ -283,6 +291,7 @@ class Avance extends CI_Controller {
                     $db->set('EstatusProduccion', 'ALMACEN ADORNO')
                             ->set('DeptoProduccion', $x->post('DEPTO'))
                             ->where('Control', $x->post('CONTROL'))->update('pedidox');
+                    $this->db->set('stsavan', 230)->where('Control', $x->post('CONTROL'))->update('pedidox');
                 }
                 $id = $db->insert_id();
             }
@@ -401,6 +410,39 @@ class Avance extends CI_Controller {
                 'avance_id' => $id,
                 'fraccion' => $x->post('FRACCIONT'))
             );
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAvanzarControl($NUMERO_DE_AVANCE) {
+        try {
+            $AVANCES = array(
+                0 => "CAPTURADO", 1 => "PROGRAMADO",
+                10 => 'CORTE', 20 => 'RAYADO',
+                30 => 'RAYADO', 40 => 'FOLEADO',
+                50 => 'DOBLILLADO', 60 => 'LASER',
+                70 => 'PREL-CORTE', 80 => 'RAYADO CONTADO',
+                90 => 'ENTRETELADO', 100 => 'MAQUILA',
+                110 => 'PESPUNTE', 120 => 'PREL-PESPUNTE',
+                130 => 'ALMACEN PESPUNTE', 140 => 'ENSUELADO',
+                150 => 'TEJIDO', 160 => 'ALMACEN TEJIDO',
+                170 => 'CHOFERES', 180 => 'MONTADO A',
+                190 => 'MONTADO B', 200 => 'PEGADO',
+                210 => 'ADORNO A', 220 => 'ADORNO B',
+                230 => 'ALMACEN ADORNO', 240 => 'TERMINADO'
+            );
+            PRINT array_key_exists("$NUMERO_DE_AVANCE", $AVANCES) ? $AVANCES["$NUMERO_DE_AVANCE"] : "NO EXISTE";
+
+            $this->db->set('stsavan', 230)->where('Control', $x->post('CONTROL'))->update('pedidox');
+            $this->db->set('EstatusProduccion', 'ALMACEN CORTE')
+                    ->set('DeptoProduccion', 105)
+                    ->where('Control', $Control)
+                    ->update('controles');
+
+            $this->db->set('fec42', Date('Y-m-d h:i:s'))
+                    ->where('contped', $Control)
+                    ->update('avaprd');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

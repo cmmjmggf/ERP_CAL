@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="3.138428376721005"/>
+	<property name="ireport.x" value="659"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="ESTILO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLOR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLIENTE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT P.ID AS ID, P.Cliente AS CLIENTE, CONCAT(P.Cliente, " ",(SELECT C.RazonS FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1)) AS CLIENTET, P.Estilo AS ESTILO, P.Color AS COLOR, (SELECT CONCAT(CO.Clave, " ", CO.Descripcion) AS COLORF FROM colores AS CO WHERE CO.Clave = P.Color LIMIT 1) AS COLORT,
+            CAST(P.Pares AS SIGNED) AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA, P.Semana AS SEMANA,
+            P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, P.FechaEntrega AS FECHA_VENTA,
+            P.Precio AS PRECIO, (CASE
+WHEN P.stsavan = 0 THEN "CAPTURADO"
+WHEN P.stsavan = 1 THEN "PROGRAMADO"
+WHEN P.stsavan = 10 THEN "CORTE"
+WHEN P.stsavan = 20 THEN "REBAJADO"
+WHEN P.stsavan = 30 THEN "PREL-CORTE"
+WHEN P.stsavan = 40 THEN "ALMACEN-PESP"
+WHEN P.stsavan = 50 THEN "TEJIDO"
+WHEN P.stsavan = 160 THEN "ALMACEN-TEJ"
+WHEN P.stsavan = 180 THEN "MONTADO"
+WHEN P.stsavan = 190 THEN "MONTADO"
+WHEN P.stsavan = 210 THEN "ADORNO"
+WHEN P.stsavan = 220 THEN "ADORNO"
+WHEN P.stsavan = 230 THEN "ALMACEN-ADORNO"
+WHEN P.stsavan = 240 THEN "TERMINADO" END) AS AVANCE
+FROM pedidox AS P INNER JOIN facturacion AS F ON P.Control = F.contped
+WHERE P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END) AND
+ P.Cliente LIKE (CASE WHEN $P{CLIENTE} <> '' THEN $P{CLIENTE} ELSE '%%' END) AND
+ P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END) LIMIT 1 ]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLIENTE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLIENTET" class="java.lang.String"/>
+	<field name="ESTILO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLOR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLORT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PARES" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CONTROL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MAQUILA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SEMANA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PEDIDO" class="java.lang.String"/>
+	<field name="FECHA_ENTREGA" class="java.lang.String"/>
+	<field name="FECHA_VENTA" class="java.lang.String"/>
+	<field name="PRECIO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="AVANCE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="PARES_1" class="java.lang.Integer" resetType="Group" resetGroup="PARESXESTILO" calculation="Count">
+		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
+	</variable>
+	<variable name="PARES_2" class="java.lang.Integer" resetType="Group" resetGroup="PARESXESTILO" calculation="Count">
+		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
+	</variable>
+	<variable name="PARES_3" class="java.lang.Long" resetType="Group" resetGroup="PARESXESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
+	</variable>
+	<group name="PARESXESTILO">
+		<groupExpression><![CDATA[$F{ESTILO}]]></groupExpression>
+		<groupFooter>
+			<band height="12">
+				<staticText>
+					<reportElement style="Column header" isPrintRepeatedValues="false" x="371" y="0" width="49" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="cb1c9fe6-b551-4ac5-886d-90d1170afe73"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total pares]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="420" y="0" width="50" height="12" uuid="adc39971-8e63-407d-98ca-d6c328011ec1"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PARES_3}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="56" splitType="Stretch">
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="55" width="588" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="492" y="0" width="80" height="12" isPrintInFirstWholeBand="true" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="573" y="0" width="15" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="449" y="12" width="139" height="12" isPrintInFirstWholeBand="true" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="72" y="-1" width="159" height="14" isPrintInFirstWholeBand="true" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="-1" y="45" width="175" height="11" forecolor="#000000" uuid="be967398-1e18-47ca-b280-5ff2965a383e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="72" y="12" width="159" height="13" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="9cb74bf5-12bb-48a0-a0e7-cdc3946fe8d9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rastreo estilos color en pedidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="173" y="45" width="50" height="11" forecolor="#000000" uuid="4c1e4c24-e966-4d2c-9736-48b6964a8cb7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="222" y="45" width="150" height="11" forecolor="#000000" uuid="9ac3660d-a627-4006-8fc8-f3425adf700e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="371" y="45" width="50" height="11" forecolor="#000000" uuid="1d3679d2-392d-41cc-b94e-5c1f23b7101f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha-Ent]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="420" y="45" width="50" height="11" forecolor="#000000" uuid="8cd34836-3dc5-43e4-bf02-d60cf0a56776"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="469" y="45" width="60" height="11" forecolor="#000000" uuid="91e6886e-e282-4b7f-9e8a-44c409fab2ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Control]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="528" y="45" width="60" height="11" forecolor="#000000" uuid="fb427a01-6f82-4900-9f7c-83dd8f0e1930"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avance]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<textField>
+				<reportElement x="0" y="0" width="174" height="12" uuid="223cf21c-f2fb-4814-afbf-3ff2066d2618"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLIENTET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="173" y="0" width="50" height="12" uuid="5b084316-8ed2-4875-9360-3b391967640a"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="150" height="12" uuid="def30808-1858-4049-a04c-0dbf94889c54"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLORT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="50" height="12" uuid="df4f3284-5199-4352-9332-cdbbb3f961e2"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_ENTREGA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="50" height="12" uuid="bfd3cfb2-e31e-4ccf-b85c-148d9f6ba576"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="0" width="60" height="12" uuid="722067d2-58ca-4272-83a2-8ee78941bd64"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="529" y="0" width="60" height="12" uuid="20e5f86a-08c0-4eab-a89c-5012f84a94d6"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AVANCE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -203,6 +203,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         $this->db->set('EstatusProduccion', 'CORTE')
                                 ->where('Control', $x->post('CONTROL'))
                                 ->update('controles');
+                        $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
                     }
                     /* FIN DE AVANCE DE CONTROL A CORTE */
 
