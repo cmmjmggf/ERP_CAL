@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="3.138428376721005"/>
-	<property name="ireport.x" value="659"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -40,7 +40,7 @@ WHEN P.stsavan = 240 THEN "TERMINADO" END) AS AVANCE
 FROM pedidox AS P INNER JOIN facturacion AS F ON P.Control = F.contped
 WHERE P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END) AND
  P.Cliente LIKE (CASE WHEN $P{CLIENTE} <> '' THEN $P{CLIENTE} ELSE '%%' END) AND
- P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END) LIMIT 1 ]]>
+ P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END)]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -106,6 +106,9 @@ WHERE P.Estilo LIKE (CASE WHEN $P{ESTILO} <> '' THEN $P{ESTILO} ELSE '%%' END) A
 					</textElement>
 					<textFieldExpression><![CDATA[$V{PARES_3}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="0" y="0" width="588" height="1" uuid="e68358fc-66c6-4b98-bb35-a1c1939f7035"/>
+				</line>
 			</band>
 		</groupFooter>
 	</group>

@@ -29,7 +29,7 @@ class Accesos_model extends CI_Model {
     public function getUsuarios() {
         try {
             $this->db->select("U.ID AS ID, U.Usuario AS USUARIO, U.TipoAcceso AS TIPO_ACCESO", false)
-                    ->from('usuarios AS U');
+                    ->from('usuarios AS U')->order_by('ABS(U.ID)','ASC');
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

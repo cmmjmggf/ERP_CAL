@@ -322,6 +322,7 @@
         });
 
         btnAsignaTodo.click(function () {
+            onBeep(1);
             if (mxu.val()) {
                 HoldOn.open({
                     theme: 'sk-rect',
@@ -367,8 +368,7 @@
             if (ssixiu.val() && ssixim.val() && ssixio.val() && ssixit.val() && ssixis.val()) {
                 console.log('okoka');
                 var subsubitems = [];
-                $.each($("#subsubitems_to").find('option'), function (k, v) {
-                    console.log(k, v)
+                $.each($("#subsubitems_to").find('option'), function (k, v) { 
                     subsubitems.push({SUBSUBITEM: $(v).val(), SUBSUBITEMT: $(v).text()});
                 });
                 console.log('subsubitems', subsubitems);
@@ -376,7 +376,7 @@
                     onEstablecerSubSubItems(ssixiu.val(), ssixim.val(), ssixio.val(), ssixit.val(), ssixis.val(), subsubitems);
                 } else if (subsubitems.length <= 0 && $("#subsubitems option").length > 0) {
                     onBeep(2);
-                    console.log($("#subsubitems option"), $("#subsubitems option").length)
+                    console.log($("#subsubitems option"), $("#subsubitems option").length);
                     swal({
                         buttons: ["CANCELAR", "ACEPTAR"],
                         title: 'NO HA SELECCIONADO NINGÚN SUBSUBITEM ESTO VA A ELIMINAR TODOS LOS ACCESOS A LOS SUBSUBITEMS POR SUBITEM PARA ESTE USUARIO, ¿DESEA CONTINUAR?',
@@ -786,7 +786,7 @@
             console.log(x.responseText);
         }).always(function () {
             mxu[0].selectize.setValue(usr);
-        })
+        });
 
         $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {
             $.each(dx, function (k, v) {
@@ -1270,5 +1270,17 @@
     .btn-default{
         background-color: #8BC34A;
         color: #fff;
+    }
+    select.NotSelectize > option{
+        font-weight: bold !important;
+    }
+    select > option:hover, div.option:hover{
+        background-color: #007bff !important;
+        font-weight: bold !important;
+        color: #fff !important;
+    }
+    select.NotSelectize > option:hover{
+        border-radius: 5px !important;
+        cursor: pointer !important;
     }
 </style>

@@ -48,7 +48,9 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
                 $this->db->where('P.Cliente', $x['CLIENTE']);
             }
             if ($x['ESTILO'] === '' && $x['COLOR'] === '' && $x['CLIENTE'] === '') {
-                $this->db->limit(99);
+                $this->db->order_by('P.FechaPedido','DESC')->limit(99);
+            }else{
+                $this->db->order_by('P.FechaPedido','DESC');
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {

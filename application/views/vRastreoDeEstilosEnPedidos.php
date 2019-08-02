@@ -5,13 +5,21 @@
                 <legend class="float-left">Rastreo de estilos clientes en pedidos</legend>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
-                <button type="button" id="btnImprimirReporte" name="btnImprimirReporte" class="btn btn-info">
+                <button type="button" id="btnImprimirReporte" name="btnImprimirReporte" class="btn btn-info" disabled="">
                     <span class="fa fa-print"></span> Imprimir
                 </button>
             </div>
         </div>
         <div class="card-block">
             <div class="row">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <label>ESTILO</label>
+                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <label>COLOR</label>
+                    <select id="Color" name="Color" class="form-control form-control-sm" ></select>
+                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                     <label>CLIENTE</label>
                     <select id="Cliente" name="Cliente" class="form-control form-control-sm">
@@ -24,14 +32,6 @@
                         }
                         ?>
                     </select>
-                </div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                    <label>ESTILO</label>
-                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
-                </div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                    <label>COLOR</label>
-                    <select id="Color" name="Color" class="form-control form-control-sm" ></select>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <table id="tblPedidox" class="table table-sm table-hover" style="width:100%">
@@ -75,6 +75,7 @@
         handleEnterDiv(pnlTablero);
 
         btnImprimirReporte.click(function () {
+            onBeep(1);
             onOpenOverlay('Por favor espere...');
             $.post('<?php print base_url('RastreoDeEstilosEnPedidos/getReporte'); ?>',
                     {
@@ -109,6 +110,7 @@
                     getError(x);
                 }).always(function () {
                     onCloseOverlay();
+                    onRevisarRegistros();
                 });
             }
         });
@@ -117,6 +119,7 @@
             onOpenOverlay('Buscando...');
             Pedidox.ajax.reload(function () {
                 onCloseOverlay();
+                onRevisarRegistros();
             });
         });
 
@@ -124,6 +127,9 @@
             onOpenOverlay('Buscando...');
             Pedidox.ajax.reload(function () {
                 onCloseOverlay();
+                onRevisarRegistros();
+                Cliente[0].selectize.focus();
+                Cliente[0].selectize.open();
             });
         });
 
@@ -171,9 +177,21 @@
             "scrollX": true,
             initComplete: function () {
                 onCloseOverlay();
-                Cliente[0].selectize.focus();
+                Estilo.focus();
             }
         });
 
     });
+
+    function onRevisarRegistros() {
+        console.log(Estilo.val(), Color.val(), Pedidox.data().count());
+        if (Estilo.val() && Color.val() && Pedidox.data().count() > 0) {
+            btnImprimirReporte.attr('disabled', false);
+            if (Estilo.val() && Color.val() && Cliente.val()) {
+                btnImprimirReporte.focus();
+            }
+        } else {
+            btnImprimirReporte.attr('disabled', true);
+        }
+    }
 </script>

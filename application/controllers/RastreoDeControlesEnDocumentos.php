@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description of RastreoDeControlesEnDocumentos
  *
@@ -13,18 +14,39 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
     }
 
     public function index() {
+        $indice = $this->input->get();
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
-                    break;
-                case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral');
+                    switch ($indice['ORIGEN']) {
+                        case 'A':
+                            $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                            break;
+                        case 'B':
+                            $this->load->view('vNavGeneral')->view('vMenuClientes');
+                            break;
+                        default :
+                            $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                            break;
+                    }
+                    break; 
+                case 'CLIENTES':
+                    switch ($indice['ORIGEN']) {
+                        case 'A':
+                            $this->load->view('vMenuProduccion');
+                            break;
+                        case 'B':
+                            $this->load->view('vMenuClientes');
+                            break;
+                        default :
+                            $this->load->view('vMenuProduccion');
+                            break;
+                    }
                     break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
-//            $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -88,7 +110,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
     public function getControlesEnNomina() {
         try {
             $x = $this->input->get();
-            
+
             $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
                 FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA, 
                 FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
@@ -105,7 +127,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             }
             if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '' && $x['FRACCION'] === '') {
                 $this->db->limit(999);
-            }            
+            }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
