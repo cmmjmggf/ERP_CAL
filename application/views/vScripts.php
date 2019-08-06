@@ -1445,21 +1445,26 @@
         var inputs_selects = padre.find("input:not(input[id$='selectized']), select");
         var i = 1;
         console.log("var ");
+        var logs = "var ";
         $.each(inputs_selects, function (k, v) {
             var xxx = $(v).attr('id') + " = " + padre.attr('id') + ".find('#" + $(v).attr('id') + "')";
             if (i === inputs_selects.length) {
                 console.log(xxx + ";\n");
+                logs += xxx + ";\n";
             } else {
                 if ($(v).attr('id') === undefined) {
                     xxx = $(v).attr('name') + " = " + padre.attr('id') + ".find('#" + $(v).attr('name') + "')";
                     console.log(xxx + ",\n");
+                    logs += xxx + ",\n";
                     i += 1;
                 } else {
                     console.log(xxx + ",\n");
+                    logs += xxx + ",\n";
                     i += 1;
                 }
             }
         });
+        console.log(logs)
     }
 
     function onOpenOverlay(msg) {
@@ -1476,7 +1481,7 @@
         $.getJSON(url).done(function (a) {
             console.log(a);
             onNotifyOld('', 'REVISA LA CONSOLA', 'success');
-        }).fail(function (x,y,x) {
+        }).fail(function (x, y, x) {
             console.log(x);
         }).always(function () {
 

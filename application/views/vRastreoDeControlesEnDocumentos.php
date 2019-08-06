@@ -221,7 +221,7 @@
             }
         ];
         FechasDelPedido = tblFechasDelPedido.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getPedidos'); ?>',
@@ -238,7 +238,7 @@
             "autoWidth": true,
             ordering: false,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 250,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,

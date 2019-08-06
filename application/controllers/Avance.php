@@ -291,7 +291,7 @@ class Avance extends CI_Controller {
                     $db->set('EstatusProduccion', 'ALMACEN ADORNO')
                             ->set('DeptoProduccion', $x->post('DEPTO'))
                             ->where('Control', $x->post('CONTROL'))->update('pedidox');
-                    $this->db->set('stsavan', 230)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                    $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
                 }
                 $id = $db->insert_id();
             }
@@ -434,7 +434,7 @@ class Avance extends CI_Controller {
             );
             PRINT array_key_exists("$NUMERO_DE_AVANCE", $AVANCES) ? $AVANCES["$NUMERO_DE_AVANCE"] : "NO EXISTE";
 
-            $this->db->set('stsavan', 230)->where('Control', $x->post('CONTROL'))->update('pedidox');
+            $this->db->set('stsavan', 11)->where('Control', $x->post('CONTROL'))->update('pedidox');
             $this->db->set('EstatusProduccion', 'ALMACEN CORTE')
                     ->set('DeptoProduccion', 105)
                     ->where('Control', $Control)

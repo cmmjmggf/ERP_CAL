@@ -158,7 +158,7 @@ class Avance9 extends CI_Controller {
                         $this->db->set('fec3', Date('Y-m-d h:i:s'))
                                 ->where('contped', $x->post('CONTROL'))
                                 ->update('avaprd');
-                        $this->db->set('stsavan', 20)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                        $this->db->set('stsavan', 3)->where('Control', $x->post('CONTROL'))->update('pedidox');
                     }
                     /* PASO 2 : AGREGAR FRACCION PAGADA */
                     $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
@@ -205,7 +205,7 @@ class Avance9 extends CI_Controller {
                             $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
                                     ->where('Control', $x->post('CONTROL'))
                                     ->update('controles');
-                            $this->db->set('stsavan', 30)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                            $this->db->set('stsavan', 33)->where('Control', $x->post('CONTROL'))->update('pedidox');
                             print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
                         }
                     } else {

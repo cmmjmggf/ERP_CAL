@@ -135,7 +135,7 @@ class AsignaPFTSACXC extends CI_Controller {
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
             $ESTATUS = $this->db->select('COUNT(PED.stsavan) AS AVANCECORTE', false)
-                            ->from('pedidox AS PED')->where('PED.Control', $x->post('CONTROL'))->where('PED.stsavan', 10)
+                            ->from('pedidox AS PED')->where('PED.Control', $x->post('CONTROL'))->where('PED.stsavan', 2)
                             ->get()->result();
             if (intval($ESTATUS[0]->AVANCECORTE) <= 0) {
                 $this->db->set('Piocha', $x->post('ENTREGA'))->where('Control', $x->post('CONTROL'))->update('asignapftsacxc');

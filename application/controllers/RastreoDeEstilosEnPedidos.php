@@ -37,7 +37,7 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
             P.Pares AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
             P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, P.FechaEntrega AS FECHA_VENTA, 
             P.Precio AS PRECIO, P.stsavan AS AVANCE", false)->from('pedidox AS P')
-                    ->join('facturacion AS F', 'P.Control = F.contped', 'left');
+                    ->join('facturacion AS F', 'P.Control = F.contped');
             if ($x['ESTILO'] !== '') {
                 $this->db->where('P.Estilo', $x['ESTILO']);
             }
