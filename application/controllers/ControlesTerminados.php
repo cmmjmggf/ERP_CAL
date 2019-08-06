@@ -168,6 +168,9 @@ class ControlesTerminados extends CI_Controller {
                 /* Cambia de estatus prod el control */
                 $this->ctm->onModificarControlRechazado($this->input->post('Control'), $this->input->post('Maq'));
 
+                /* Cambia de estatus control en pedidox */
+                $this->ctm->onModificarControlPedidos($this->input->post('Control'), $this->input->post('Maq'));
+
                 /* Eliminamos registro de controlTerm */
                 $this->ctm->onEliminarDetalleByID($this->input->post('Control'));
 
@@ -197,6 +200,7 @@ class ControlesTerminados extends CI_Controller {
     public function onAgregarAvanceControl() {
         try {
             $x = $this->input;
+            //Agrega avance
             $this->ctm->onAgregarAvanceControl(array(
                 'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
                 'FechaAProduccion' => Date('d/m/Y'),
@@ -208,8 +212,8 @@ class ControlesTerminados extends CI_Controller {
                 'Fecha' => Date('d/m/Y'),
                 'Hora' => Date('H:i:s')
             ));
-
-            $this->ctm->onModificarControl($x->post('Control'), $x->post('DepartamentoT'));
+            //Actualiza controles y pedidox
+            $this->ctm->onModificarControl($x->post('Control'), $x->post('DepartamentoT'), $x->post('Departamento'));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

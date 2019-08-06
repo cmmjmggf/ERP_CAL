@@ -170,7 +170,17 @@ class ControlesTerminados_model extends CI_Model {
     public function onModificarControlRechazado($Control, $Maq) {
         try {
             $Depto = ($Maq === '1') ? 'ALMACEN ADORNO' : 'PESPUNTE';
-            $this->db->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
+            $NumDepto = ($Maq === '1') ? '230' : '110';
+            $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificarControlPedidos($Control, $Maq) {
+        try {
+            $Depto = ($Maq === '1') ? '11' : '5';
+            $this->db->set('stsavan', $Depto)->where('Control', $Control)->update("pedidox");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -222,9 +232,10 @@ class ControlesTerminados_model extends CI_Model {
         }
     }
 
-    public function onModificarControl($Control, $Depto) {
+    public function onModificarControl($Control, $Depto, $NumDepto) {
         try {
-            $this->db->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
+            $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
+            $this->db->set('stsavan', 12)->where('Control', $Control)->update("pedidox");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

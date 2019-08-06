@@ -47,7 +47,7 @@
         -ms-text-size-adjust: 100%;
         -ms-overflow-style: scrollbar;
         -webkit-tap-highlight-color: transparent;
-        background-color: #f5f5f5;
+        /*        background-color: #f5f5f5;*/
     }
 
     body{
@@ -111,11 +111,10 @@
         vertical-align: bottom;
         border-bottom: 0.5px solid #dee2e6;
     }
-    /*    table tbody tr:hover {
-            background-color: #2C3E50 !important;
-            color: #fff !important;
-            font-weight: bold !important;
-        }*/
+    table tbody tr:hover {
+        background-color: #2C3E50 !important;
+        color: #fff !important;
+    }
 
     .table>tbody>tr>td.success,
     .table>tfoot>tr>td.success,
@@ -174,7 +173,7 @@
 
     .btn:not(.dropdown-toggle):not(.navbar-brand):focus {
         box-shadow: 0 0 0 0.2rem #CDDC39 !important;
-    } 
+    }
     button.buttons-pdf, button.buttons-pdf:hover{
         color: #fff;
         background-color: #d32f2f;
@@ -184,14 +183,14 @@
         color: #fff;
         background-color: #3f51b5;
         border-color: #3f51b5;
-    } 
+    }
     button.buttons-excel, button.buttons-excel:hover{
         color: #fff;
         background-color: #4caf50;
         border-color: #4caf50;
-    } 
+    }
     .dt-button-collection, .dropdown-menu {
-        color: #fff !important; 
+        color: #fff !important;
     }
 
     .dropdown-submenu:not(.show).dropdown-item {
@@ -301,9 +300,9 @@
         background-position: center center;
         background-size: 50% 50%;
         background-color: #2C3E50;
-    } 
+    }
     .btn:not(.buttons-html5):not(.buttons-collection):not(.dropdown-toggle) {
-        border-radius: 2rem; 
+        border-radius: 2rem;
         padding-left:  12px;
         padding-right:   12px;
         font-weight: 200;
@@ -340,6 +339,12 @@
         text-decoration: none;
         background-color: #333 !important;
     }
+
+    label {
+        margin-top: 0.14rem;
+        margin-bottom: 0.0rem;
+    }
+
     /*ROOTS*/
     /*    --blue: #007bff;
         --indigo: #6610f2;
