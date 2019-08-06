@@ -166,7 +166,7 @@
             language: lang,
             select: true,
             "autoWidth": true,
-            ordering: false,
+            ordering: true,
             "colReorder": true,
             "displayLength": 250,
             "bLengthChange": false,

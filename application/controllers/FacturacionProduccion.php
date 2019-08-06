@@ -28,7 +28,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getListaDePreciosXCliente() {
         try {
-            print json_encode($this->db->query("SELECT * FROM ")->result());
+            print json_encode($this->db->query("SELECT C. FROM clientes AS C WHERE C.Clave = {$this->input->post('CLIENTE')}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
