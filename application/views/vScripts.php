@@ -112,6 +112,7 @@
 
 
 
+
     shortcut.add("F5", function () {
         location.reload();
     });
@@ -214,9 +215,30 @@
 //    console.log((23).padLeft(5, ' ')); //=> '   23'
 //    console.log(padLeft(23, 5, '>>'));  //=> '>>>>>>23'
 
+    function formatDateDB(inputDate) {
+        var splitDate = inputDate.split('-');
+        if (splitDate.count == 0) {
+            return null;
+        }
+
+        var year = splitDate[0];
+        var month = splitDate[1];
+        var day = splitDate[2];
+
+        return day + '/' + month + '/' + year;
+    }
 
 
     $(function () {
+
+
+
+
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        moment.locale('es');
+        $.fn.dataTable.moment('L', 'es');
+
+
 
         $('.modal-dialog').draggable();
         $('.modal-content').resizable({
@@ -1425,16 +1447,16 @@
 
     /**
      * @function getVR
-     * 
+     *
      * Valida un campo por medio de la variable, devuelve el valor o un valor vacio
-     * 
+     *
      * @param e Nombre de variable a validar
      * @return type
      */
 
     /**
      * @syntax getVR(e)
-     * @param {Object} e 
+     * @param {Object} e
      * @returns {String}
      * @static
      */
