@@ -39,3 +39,7 @@ $this->load->view('vTipoCambio')->view('vBloqueoClientesXCliente')
 $this->load->view('vAvanceProduccion');
 $this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
 $this->load->view('vReimprimeNotaCredito');
+$this->load->view('vCobranzaDiaria');
+$this->load->view('vDocsPorVencer');
+$this->load->view('vReporteDocsVencidos');
+$this->load->view('vReportePagoSeguro');
