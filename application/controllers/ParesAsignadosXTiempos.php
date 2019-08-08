@@ -50,6 +50,7 @@ class ParesAsignadosXTiempos extends CI_Controller {
         $x = $this->input;
         $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
         $parametros["SEMANA"] = intval($x->post('SEMANA'));
+        $parametros["DIA"] = intval($x->post('DIA'));
         $parametros["ANO"] = intval($x->post('ANIO'));
 
         $jc->setParametros($parametros);

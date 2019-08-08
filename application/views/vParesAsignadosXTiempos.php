@@ -33,6 +33,7 @@
     var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             Maquila = pnlTablero.find("#Maquila"),
+            Dia = pnlTablero.find("#Dia"),
             Semana = pnlTablero.find("#Semana");
 
     $(document).ready(function () {
@@ -47,6 +48,7 @@
                 $.post('<?php print base_url('ParesAsignadosXTiempos/getParesAsignadosControlXTiempos'); ?>', {
                     MAQUILA: Maquila.val().trim() !== '' ? parseInt(Maquila.val()) : '',
                     SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
+                    DIA: Dia.val().trim() !== '' ? Dia.val() : 0,
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);

@@ -386,7 +386,8 @@
             mdlControlesXFacturar = $("#mdlControlesXFacturar"), ControlesXFacturar,
             tblControlesXFacturar = mdlControlesXFacturar.find("#tblControlesXFacturar");
 
-    $("button:not(.grouped)").addClass("my-1");
+    $("button:not(.grouped)").addClass("my-1 btn-sm");
+    pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
 
     $(document).ready(function () {
 
