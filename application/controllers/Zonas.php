@@ -17,21 +17,16 @@ class Zonas extends CI_Controller {
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
                     break;
             }
 
-            $this->load->view('vFondo');
-            $this->load->view('vZonas');
-            $this->load->view('vFooter');
+            $this->load->view('vFondo')->view('vZonas')->view('vFooter');
         } else {
-            $this->load->view('vEncabezado');
-            $this->load->view('vSesion');
-            $this->load->view('vFooter');
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 

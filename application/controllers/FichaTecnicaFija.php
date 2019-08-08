@@ -17,8 +17,7 @@ class FichaTecnicaFija extends CI_Controller {
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vMenuFichasTecnicas');

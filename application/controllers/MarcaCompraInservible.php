@@ -20,8 +20,7 @@ class MarcaCompraInservible extends CI_Controller {
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuMateriales');
+                    $this->load->view('vNavGeneral')->view('vMenuMateriales');
                     break;
                 case 'ALMACEN':
                     $this->load->view('vMenuMateriales');

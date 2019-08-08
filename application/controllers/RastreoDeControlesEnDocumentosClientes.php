@@ -16,7 +16,7 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
-                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vMenuClientes');
                     break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentosClientes')->view('vFooter');

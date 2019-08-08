@@ -16,8 +16,7 @@ class Usuarios extends CI_Controller {
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuParametros');
+                    $this->load->view('vNavGeneral')->view('vMenuParametros');
                     break;
                 case 'ADMINISTRACION':
                     $this->load->view('vMenuAdministracion');
@@ -42,13 +41,9 @@ class Usuarios extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFondo');
-            $this->load->view('vUsuarios');
-            $this->load->view('vFooter');
+            $this->load->view('vFondo')->view('vUsuarios')->view('vFooter');
         } else {
-            $this->load->view('vEncabezado');
-            $this->load->view('vSesion');
-            $this->load->view('vFooter');
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 

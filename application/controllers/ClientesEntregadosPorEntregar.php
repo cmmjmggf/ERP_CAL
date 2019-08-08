@@ -19,7 +19,7 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
-                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vMenuClientes');
                     break;
             }
             $this->load->view('vClientesEntregadosPorEntregar')->view('vFooter');

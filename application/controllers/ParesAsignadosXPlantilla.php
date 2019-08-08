@@ -19,7 +19,7 @@ class ParesAsignadosXPlantilla extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
             }
             $this->load->view('vFondo')->view('vParesAsignadosXPlantilla')->view('vFooter');

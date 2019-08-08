@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row animated fadeIn" id="mdlPanelUno">
+                <div class="row" id="mdlPanelUno">
                     <div class="col-12">
                         <label for="">Lista</label>
                         <select id="ListaCPVTAXLTA" name="ListaCPVTAXLTA" class="form-control"></select>
@@ -141,7 +141,7 @@
         select: true,
         "autoWidth": true,
         "colReorder": true,
-        "displayLength": 999,
+        "displayLength": 99,
         "bLengthChange": false,
         "deferRender": true,
         "scrollCollapse": false,

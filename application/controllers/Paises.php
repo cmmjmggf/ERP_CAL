@@ -17,8 +17,7 @@ class Paises extends CI_Controller {
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');

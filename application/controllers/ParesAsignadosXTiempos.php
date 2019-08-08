@@ -29,10 +29,10 @@ class ParesAsignadosXTiempos extends CI_Controller {
                     }
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
                 case 'CLIENTES':
-                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vMenuClientes');
                     break;
             }
             $this->load->view('vFondo')->view('vParesAsignadosXTiempos')->view('vFooter');

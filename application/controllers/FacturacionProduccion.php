@@ -1,5 +1,9 @@
 <?php
 
+/* NO TOCAR */
+header('Access-Control-Allow-Origin: *');
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 class FacturacionProduccion extends CI_Controller {
 
     public function __construct() {
@@ -28,7 +32,50 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getListaDePreciosXCliente() {
         try {
-            print json_encode($this->db->query("SELECT C. FROM clientes AS C WHERE C.Clave = {$this->input->post('CLIENTE')}")->result());
+            print json_encode($this->db->query("SELECT C.ListaPrecios AS LP FROM clientes AS C WHERE C.Clave = {$this->input->post('CLIENTE')}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl() {
+        try {
+            print json_encode(
+                            $this->db->query("SELECT P.*, S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22 "
+                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}'")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getUltimaFactura() {
+        try {
+            switch (intval($this->input->get('TP'))) {
+                case 1:
+                    print json_encode(
+                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD ORDER BY FD.numfac DESC LIMIT 1")->result());
+                    break;
+                case 2:
+                    print json_encode(
+                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = 2 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                    break;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPedidosXFacturar() {
+        try {
+
+            print json_encode(
+                            $this->db->query("SELECT  P.ID, P.Control AS CONTROL, 
+                                P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
+ P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, P.Estilo AS ESTILO, P.Color AS COLOR,
+ P.Pares AS PARES, 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT 
+ FROM erp_cal.pedidox AS P WHERE P.Control NOT IN(0,1) AND P.stsavan NOT IN(13,14)
+ORDER BY P.FechaRecepcion DESC")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -67,8 +67,8 @@
                 <label>Fracción</label>
                 <select id="Fraccion" name="Fraccion" class="form-control form-control-sm NotSelectize" multiple="">
                 </select>
-                <input type="text" id="FraccionesSeleccionadas" class="form-control-sm" readonly="">
-                <button type="button" class="btn btn-primary" id="btnFraccionCheck">Obtener</button>
+                <input type="text" id="FraccionesSeleccionadas" class="form-control-sm d-none" readonly="">
+                <button type="button" class="btn btn-primary d-none" id="btnFraccionCheck">Obtener</button>
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <label>Cortador</label>
@@ -265,7 +265,7 @@
         keys: true,
         "autoWidth": true,
         "colReorder": true,
-        "displayLength": 500,
+        "displayLength": 99,
         "scrollY": "250px",
         "scrollX": true,
         "bLengthChange": false,
@@ -537,7 +537,7 @@
             keys: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 500,
+            "displayLength": 99,
             "scrollY": "250px",
             "scrollX": true,
             "bLengthChange": false,

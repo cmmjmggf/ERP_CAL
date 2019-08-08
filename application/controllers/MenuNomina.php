@@ -16,8 +16,7 @@ class MenuNomina extends CI_Controller {
             $this->load->view('vEncabezado')->view('vFondo');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuNominas');
+                    $this->load->view('vNavGeneral')->view('vMenuNominas');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');

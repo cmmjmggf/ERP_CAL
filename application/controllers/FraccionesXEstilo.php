@@ -25,8 +25,7 @@ class FraccionesXEstilo extends CI_Controller {
             $Seguridad = isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : '0';
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vFondo');
+                    $this->load->view('vNavGeneral')->view('vFondo');
 
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
