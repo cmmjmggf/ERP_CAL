@@ -129,11 +129,11 @@ class ConciliaFabricaProduccion extends CI_Controller {
 
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->Cell(15, 5, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->Cell(15, 4, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(38, 5, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(38, 4, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
 
                 $pdf->SetLineWidth(0.2);
 
@@ -154,36 +154,36 @@ class ConciliaFabricaProduccion extends CI_Controller {
                         $Diferencia_Pesos = ($D->Explosion * $D->Precio) - ($D->Entregado * $D->Precio) + ($D->Devuelto * $D->Precio);
 
 
-                        $pdf->SetFont('Calibri', '', 9);
+                        $pdf->SetFont('Calibri', '', 8);
                         $pdf->SetX(5);
-                        $pdf->Cell(10, 4, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->Cell(10, 3, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(60, 4, mb_strimwidth(utf8_decode($D->Descripcion), 0, 38, ""), 'B'/* BORDE */, 0, 'L');
+                        $pdf->Cell(60, 3, mb_strimwidth(utf8_decode($D->Descripcion), 0, 38, ""), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12.5, 4, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
+                        $pdf->Cell(12.5, 3, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12.5, 4, ($D->Talla <> 0) ? number_format($D->Talla, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
-                        $pdf->SetFont('Calibri', 'B', 9);
+                        $pdf->Cell(12.5, 3, ($D->Talla <> 0) ? number_format($D->Talla, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetFont('Calibri', 'B', 8);
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($D->Explosion <> 0) ? number_format($D->Explosion, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($D->Explosion <> 0) ? number_format($D->Explosion, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($D->Entregado <> 0) ? number_format($D->Entregado, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($D->Entregado <> 0) ? number_format($D->Entregado, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($Diferencia <> 0) ? number_format($Diferencia, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($Diferencia <> 0) ? number_format($Diferencia, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(16, 4, ($D->Devuelto <> 0) ? number_format($D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(16, 3, ($D->Devuelto <> 0) ? number_format($D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($Diferencia + $D->Devuelto <> 0) ? number_format($Diferencia + $D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($Diferencia + $D->Devuelto <> 0) ? number_format($Diferencia + $D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, number_format($D->Precio, 2, ".", ","), 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(13, 3, number_format($D->Precio, 2, ".", ","), 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($D->Explosion * $D->Precio <> 0) ? '$' . number_format($D->Explosion * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($D->Explosion * $D->Precio <> 0) ? '$' . number_format($D->Explosion * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($D->Entregado * $D->Precio <> 0) ? '$' . number_format($D->Entregado * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($D->Entregado * $D->Precio <> 0) ? '$' . number_format($D->Entregado * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($D->Devuelto * $D->Precio <> 0) ? '$' . number_format($D->Devuelto * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3, ($D->Devuelto * $D->Precio <> 0) ? '$' . number_format($D->Devuelto * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 4, ($Diferencia_Pesos <> 0) ? '$' . number_format($Diferencia_Pesos, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
+                        $pdf->Cell(18, 3, ($Diferencia_Pesos <> 0) ? '$' . number_format($Diferencia_Pesos, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
 
 
                         $GT_Explosion += $D->Explosion;
@@ -207,31 +207,31 @@ class ConciliaFabricaProduccion extends CI_Controller {
                         $T_Dif_P += $Diferencia_Pesos;
                     }
                 }
-                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetX(5);
-                $pdf->Cell(60, 5, '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(60, 4, '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(35, 5, 'Totales por Grupo:', 0/* BORDE */, 0, 'L');
+                $pdf->Cell(34, 4, 'Totales por Grupo:', 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Explosion <> 0) ? number_format($T_Explosion, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Explosion <> 0) ? number_format($T_Explosion, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Entregado <> 0) ? number_format($T_Entregado, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Entregado <> 0) ? number_format($T_Entregado, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Diferencia <> 0) ? number_format($T_Diferencia, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Diferencia <> 0) ? number_format($T_Diferencia, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(16, 5, ($T_Devol <> 0) ? number_format($T_Devol, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(16, 4, ($T_Devol <> 0) ? number_format($T_Devol, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Dif_Ex_En_Dv <> 0) ? number_format($T_Dif_Ex_En_Dv, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Dif_Ex_En_Dv <> 0) ? number_format($T_Dif_Ex_En_Dv, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(14, 5, '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 4, '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Explosion_P <> 0) ? '$' . number_format($T_Explosion_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Explosion_P <> 0) ? '$' . number_format($T_Explosion_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Entregado_P <> 0) ? '$' . number_format($T_Entregado_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Entregado_P <> 0) ? '$' . number_format($T_Entregado_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Devol_P <> 0) ? '$' . number_format($T_Devol_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(18, 4, ($T_Devol_P <> 0) ? '$' . number_format($T_Devol_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 5, ($T_Dif_P <> 0) ? '$' . number_format($T_Dif_P, 2, ".", ",") : '', 0/* BORDE */, 1, 'R');
+                $pdf->Cell(18, 4, ($T_Dif_P <> 0) ? '$' . number_format($T_Dif_P, 2, ".", ",") : '', 0/* BORDE */, 1, 'R');
             }
 
             $pdf->SetFont('Calibri', 'B', 9);

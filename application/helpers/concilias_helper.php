@@ -76,7 +76,7 @@ class Concilias extends FPDF {
         $this->AliasNbPages('{totalPages}');
 
         /* ENCABEZADO DETALLE TITULOS */
-        $this->SetFont('Calibri', 'B', 9);
+        $this->SetFont('Calibri', 'B', 8);
 
 
 

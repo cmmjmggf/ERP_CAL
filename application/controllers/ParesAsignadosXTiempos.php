@@ -14,12 +14,25 @@ class ParesAsignadosXTiempos extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+                    if ($Origen === 'PRODUCCION') {
+                        $this->load->view('vMenuProduccion');
+                    } else if ($Origen === 'CLIENTES') {
+                        $this->load->view('vMenuClientes');
+                    } else {
+                        $this->load->view('vMenuProduccion');
+                    }
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    break;
+                case 'CLIENTES':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
             }
             $this->load->view('vFondo')->view('vParesAsignadosXTiempos')->view('vFooter');
@@ -46,4 +59,5 @@ class ParesAsignadosXTiempos extends CI_Controller {
         $jc->setDocumentformat('pdf');
         print $jc->getReport();
     }
+
 }
