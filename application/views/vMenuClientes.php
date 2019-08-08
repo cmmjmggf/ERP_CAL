@@ -44,3 +44,5 @@ $this->load->view('vDocsPorVencer');
 $this->load->view('vReporteDocsVencidos');
 $this->load->view('vReportePagoSeguro');
 $this->load->view('vReportePagoPromedioClientes');
+$this->load->view('vReporteDevolucionesPorAplicar');
+

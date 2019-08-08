@@ -14,6 +14,19 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteDevolucionesPorAplicar() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\reporteDevolucionesNoAplicadas.jasper');
+        $jc->setFilename('DEVOLUCIONES_X_APLICAR_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteDiasPagoPromedio() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIni'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
