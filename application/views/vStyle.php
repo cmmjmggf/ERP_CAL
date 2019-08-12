@@ -198,8 +198,8 @@
     }
     .nav-item > .btn-primary{
         color: #fff;
-        background-color: #333 !important;
-        border-color: #333 !important;
+        background-color: #111 !important;
+        border-color: #111 !important;
     }
     label{
         font-weight: bold;
@@ -301,7 +301,7 @@
         background-size: 50% 50%;
         background-color: #2C3E50;
     }
-    .btn:not(.buttons-html5):not(.buttons-collection):not(.dropdown-toggle) {
+    .btn:not(.buttons-html5):not(.buttons-collection):not(.dropdown-toggle):not(.button-dropdown) {
         border-radius: 2rem;
         padding-left:  12px;
         padding-right:   12px;
@@ -328,16 +328,16 @@
         border-color: #dc3545;
     }
     .bg-primary {
-        background-color: #333 !important;
+        background-color: #111 !important;
     }
     nav button.btn-primary{
-        background-color: #333 !important;
-        border-color: #333 !important;
+        background-color: #111 !important;
+        border-color: #111 !important;
     }
     .dropdown-item:hover, .dropdown-item:focus {
         color: #fff !important;
         text-decoration: none;
-        background-color: #333 !important;
+        background-color: #111 !important;
     }
 
     label {
@@ -367,4 +367,13 @@
         --danger: #dc3545;
         --light: #f8f9fa;
         --dark: #343a40;*/
+    body{
+        color: #000 !important;
+    } 
+    button.navbar-brand.text-success {
+        color: #fff !important;
+    }
+    .dropdown-item {
+        color: #000 !important;
+    }
 </style>

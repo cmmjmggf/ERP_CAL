@@ -40,10 +40,25 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-            print json_encode(
-                            $this->db->query("SELECT P.*, S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22 "
+            print json_encode($this->db->query("SELECT P.*,P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
+                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22 "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
                                     . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}'")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFacturacionDiff() {
+        try {
+            print json_encode($this->db->query("SELECT "
+                                    . "F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05, "
+                                    . "F.par06, F.par07, F.par08, F.par09, F.par10, "
+                                    . "F.par11, F.par12, F.par13, F.par14, F.par15, "
+                                    . "F.par16, F.par17, F.par18, F.par19, F.par20, "
+                                    . "F.par21, F.par22, F.staped, P.Cliente AS CLIENTE "
+                                    . "FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control "
+                                    . "WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -72,10 +87,15 @@ class FacturacionProduccion extends CI_Controller {
             print json_encode(
                             $this->db->query("SELECT  P.ID, P.Control AS CONTROL, 
                                 P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
- P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, P.Estilo AS ESTILO, P.Color AS COLOR,
- P.Pares AS PARES, 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT 
- FROM erp_cal.pedidox AS P WHERE P.Control NOT IN(0,1) AND P.stsavan NOT IN(13,14)
-ORDER BY P.FechaRecepcion DESC")->result());
+                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
+                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
+                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
+                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
+                                FROM erp_cal.pedidox AS P 
+                                WHERE P.Control NOT IN(0,1) 
+                                AND P.stsavan NOT IN(13,14) 
+                                AND P.Cliente = '{$this->input->get('CLIENTE')}' 
+                                ORDER BY P.FechaRecepcion DESC")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
