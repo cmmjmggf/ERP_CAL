@@ -54,6 +54,7 @@
     var mdlEtiTrazabilidad = $('#mdlEtiTrazabilidad');
     $(document).ready(function () {
         mdlEtiTrazabilidad.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEtiTrazabilidad);
             mdlEtiTrazabilidad.find("input").val("");
 
             mdlEtiTrazabilidad.find('#Ano').focus();

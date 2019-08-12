@@ -40,6 +40,7 @@
     var mdlReporteCorteHiloTejer = $('#mdlReporteCorteHiloTejer');
     $(document).ready(function () {
         mdlReporteCorteHiloTejer.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReporteCorteHiloTejer);
             mdlReporteCorteHiloTejer.find("input").val("");
             $.each(mdlReporteCorteHiloTejer.find("select"), function (k, v) {
                 mdlReporteCorteHiloTejer.find("select")[k].selectize.clear(true);

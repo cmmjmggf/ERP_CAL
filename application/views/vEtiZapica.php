@@ -40,6 +40,7 @@
     var mdlEtiZapica = $('#mdlEtiZapica');
     $(document).ready(function () {
         mdlEtiZapica.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEtiZapica);
             mdlEtiZapica.find("input").val("");
             $.each(mdlEtiZapica.find("select"), function (k, v) {
                 mdlEtiZapica.find("select")[k].selectize.clear(true);

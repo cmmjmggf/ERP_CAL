@@ -47,6 +47,7 @@
     var mdlReporteParesPreAsignados = $('#mdlReporteParesPreAsignados');
     $(document).ready(function () {
         mdlReporteParesPreAsignados.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReporteParesPreAsignados);
             mdlReporteParesPreAsignados.find("input").val("");
             $.each(mdlReporteParesPreAsignados.find("select"), function (k, v) {
                 mdlReporteParesPreAsignados.find("select")[k].selectize.clear(true);
