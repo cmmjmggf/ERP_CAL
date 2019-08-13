@@ -262,7 +262,7 @@ class Pedidos extends CI_Controller {
                 "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
                 "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
                 "C21" => $x['C21'], "C22" => $x['C22'],
-                "Estatus" => 'A', "Registro" => Date('d/m/Y h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Estatus" => 'A', "Registro" => Date('Y-m-d h:i:s'), "Recibido" => $x['RECIBIDO'],
                 "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
                 "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
                 "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
@@ -327,7 +327,7 @@ class Pedidos extends CI_Controller {
                     "Recibido" => ($v->Recibido !== '') ? $v->Recibido : NULL
                 );
                 $data["Estatus"] = 'A';
-                $data["Registro"] = Date('d/m/Y h:i:s a');
+                $data["Registro"] = Date('Y-m-d h:i:s');
                 $this->db->insert("pedidox", $data);
                 $this->onLog("AGREGO " . $v->Pares . " PARES AL PEDIDO $clave DEL ESTILO: " . $v->EstiloT . ", COLOR: " . $v->ColorT);
             }
@@ -381,8 +381,8 @@ class Pedidos extends CI_Controller {
                     "C21" => ($v->C21 !== '') ? $v->C21 : NULL, "C22" => ($v->C22 !== '') ? $v->C22 : NULL,
                     "Recibido" => ($v->Recibido !== '') ? $v->Recibido : NULL
                 );
-                $data["Estatus"] = 'A';
-                $data["Registro"] = Date('d/m/Y h:i:s a');
+                $data["Estatus"] = 'A'; 
+                $data["Registro"] = Date('Y-m-d h:i:s');
                 $this->db->insert("pedidox", $data);
             }
             //RETURN ID
@@ -413,7 +413,7 @@ class Pedidos extends CI_Controller {
                 "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
                 "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
                 "C21" => $x['C21'], "C22" => $x['C22'],
-                "Estatus" => 'A', "Registro" => Date('d/m/Y h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Estatus" => 'A', "Registro" => Date('Y-m-d h:i:s'), "Recibido" => $x['RECIBIDO'],
                 "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
                 "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
                 "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,

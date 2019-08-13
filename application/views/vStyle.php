@@ -301,7 +301,7 @@
         background-size: 50% 50%;
         background-color: #2C3E50;
     }
-    .btn:not(.buttons-html5):not(.buttons-collection):not(.dropdown-toggle):not(.button-dropdown) {
+    .btn:not(.buttons-html5):not(.buttons-collection):not(.dropdown-toggle):not(.button-dropdown):not(.btn-no-radius) {
         border-radius: 2rem;
         padding-left:  12px;
         padding-right:   12px;

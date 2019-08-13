@@ -51,14 +51,24 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getFacturacionDiff() {
         try {
-            print json_encode($this->db->query("SELECT "
-                                    . "F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05, "
-                                    . "F.par06, F.par07, F.par08, F.par09, F.par10, "
-                                    . "F.par11, F.par12, F.par13, F.par14, F.par15, "
-                                    . "F.par16, F.par17, F.par18, F.par19, F.par20, "
-                                    . "F.par21, F.par22, F.staped, P.Cliente AS CLIENTE "
-                                    . "FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control "
-                                    . "WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+            print json_encode($this->db->query("SELECT 
+                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05, 
+                                        F.par06, F.par07, F.par08, F.par09, F.par10, 
+                                        F.par11, F.par12, F.par13, F.par14, F.par15, 
+                                        F.par16, F.par17, F.par18, F.par19, F.par20, 
+                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE 
+                                        FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
+                                        WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComprobarControlXCliente() {
+        try {
+            print json_encode($this->db->query("SELECT P.Cliente AS CLIENTE "
+                                    . "FROM pedidox AS P "
+                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -96,6 +106,48 @@ class FacturacionProduccion extends CI_Controller {
                                 AND P.stsavan NOT IN(13,14) 
                                 AND P.Cliente = '{$this->input->get('CLIENTE')}' 
                                 ORDER BY P.FechaRecepcion DESC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCerrarDocto() {
+        try {
+            $TOTAL = $x['IMPORTE_TOTAL'];
+            if (intval($x['MONEDA']) === 1) {
+                $TOTAL = $x['IMPORTE_TOTAL'] * $x['TIPO_DE_CAMBIO'];
+            }
+            $this->db->insert('cartcliente', array(
+                'C.cliente' => $x['CLIENTE'],
+                'C.remicion' => $x['FACTURA'],
+                'C.fecha' => $x['FECHA'],
+                'C.importe' => $TOTAL,
+                'C.tipo' => $x['TP_DOCTO'],
+                'C.status' => 1,
+                'C.pagos' => 0,
+                'C.saldo' => $TOTAL,
+                'C.comiesp' => 1,
+                'C.tcamb' => $x['TIPO_DE_CAMBIO'],
+                'C.tmnda' => $x['MONEDA'],
+                'C.nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
+                'C.factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)
+            ));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTipoDeCambio() {
+        try {
+            print json_encode($this->db->query('SELECT TDC.Dolar AS DOLAR, TDC.Euro AS EURO, TDC.Libra AS LIBRA, TDC.Jen AS JEN FROM tipocambio AS TDC')->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDescuentoXCliente() {
+        try {
+            print json_encode($this->db->query("SELECT C.Descuento FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
