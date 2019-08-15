@@ -81,7 +81,7 @@ class CerrarProg extends CI_Controller {
                                 'Ano' => $Y, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
                             ));
                             $Control = $Y . $S . $M . $C;
-                            $this->db->set('Control', $Control)->where('ID', $v->PedidoDetalle)->update('pedidox');
+                            $this->db->set('Control', $Control)->set('FechaProduccion', Date('Y-m-d h:i:s'))->where('ID', $v->PedidoDetalle)->update('pedidox');
 //                            print $this->db->last_query();/*QUEDA PARA PRUEBAS*/
 
                             /* AGREGAR REGISTRO EN AVAPRD (FILI) */

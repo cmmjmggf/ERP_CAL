@@ -212,7 +212,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                 $this->db->set('DiaProg', $x->post('DIA'))
                         ->set('SemProg', $x->post('Semana'))
                         ->set('AnioProg', $x->post('ANIO'))
-                        ->set('FechaProg', Date('d/m/Y'))
+                        ->set('FechaProg', Date('Y-m-d'))
                         ->set('HoraProg', Date('h:i:s'))
                         ->where('Control', $x->post('CONTROL'))
                         ->update('pedidox');
