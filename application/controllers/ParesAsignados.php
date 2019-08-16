@@ -20,7 +20,17 @@ class ParesAsignados extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+
+                    if ($Origen === 'CLIENTES') {
+                        $this->load->view('vMenuClientes');
+                    }
+                    //Cuando no viene de ningun modulo y lo teclean
+                    else {
+                        $this->load->view('vMenuProduccion');
+                    }
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
@@ -227,12 +237,13 @@ class ParesAsignados extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function onChecarSemanaValida() {
         try {
             print json_encode($this->pam->onChecarSemanaValida($this->input->get('SEMANA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    }    
+    }
+
 }

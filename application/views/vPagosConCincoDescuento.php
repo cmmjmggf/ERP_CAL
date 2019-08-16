@@ -1,4 +1,4 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
+text: "EL TP SÓLO PUEDE SER 1 ó 2",<div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
@@ -680,7 +680,7 @@
         } else {
             swal({
                 title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1 PARA ESTE MÓDULO",
+                text: "EL TP SÓLO PUEDE SER 1",
                 icon: "error",
                 closeOnClickOutside: false,
                 closeOnEsc: false

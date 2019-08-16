@@ -46,6 +46,12 @@ $this->load->view('vReportePagoSeguro');
 $this->load->view('vReportePagoPromedioClientes');
 $this->load->view('vReporteDevolucionesPorAplicar');
 $this->load->view('vEtiquetaCajas');
+$this->load->view('vPagosDiariosClientes');
 $this->load->view('vPagosDiariosClientesEfectivo');
-
+$this->load->view('vControlesVencimientoPorMaquila');
+$this->load->view('vControlesVencimientoPorCliente');
+$this->load->view('vControlesEntregadosPorFabrica');
+$this->load->view('vEstadoCuenta');
+$this->load->view('vEstadoCuenta8');
+$this->load->view('vEstadoCuentaAgente');
 

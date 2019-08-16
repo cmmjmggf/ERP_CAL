@@ -1,8 +1,8 @@
-<div class="modal " id="mdlCobranzaDiaria"  role="dialog">
+<div class="modal " id="mdlEstadoCuentaAgente"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cobranza Por Agente</h5>
+                <h5 class="modal-title">Estado de Cuenta Por Agente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,11 +12,15 @@
                     <div class="row">
                         <div class="col-12">
                             <label>Del agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="dAgente" name="dAgente" >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="dAgenteEdoCuentaAgt" name="dAgenteEdoCuentaAgt" >
                         </div>
                         <div class="col-12">
                             <label>Al agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="aAgente" name="aAgente" >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="aAgenteEdoCuentaAgt" name="aAgenteEdoCuentaAgt" >
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6">
+                            <label class="mb-1">Tp: <span class="badge badge-danger" style="font-size: 14px;">Nota: Para ver todo, dejar en blanco</span></label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="TpEdoCtaAgt" name="TpEdoCtaAgt" >
                         </div>
                     </div>
                 </form>
@@ -29,23 +33,46 @@
     </div>
 </div>
 <script>
-    var mdlCobranzaDiaria = $('#mdlCobranzaDiaria');
+    var mdlEstadoCuentaAgente = $('#mdlEstadoCuentaAgente');
     $(document).ready(function () {
 
-        mdlCobranzaDiaria.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlCobranzaDiaria);
-            mdlCobranzaDiaria.find("input").val("");
-            $.each(mdlCobranzaDiaria.find("select"), function (k, v) {
-                mdlCobranzaDiaria.find("select")[k].selectize.clear(true);
+        mdlEstadoCuentaAgente.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEstadoCuentaAgente);
+            mdlEstadoCuentaAgente.find("input").val("");
+            $.each(mdlEstadoCuentaAgente.find("select"), function (k, v) {
+                mdlEstadoCuentaAgente.find("select")[k].selectize.clear(true);
             });
-            mdlCobranzaDiaria.find('#dAgente').focus();
+            mdlEstadoCuentaAgente.find('#dAgenteEdoCuentaAgt').focus();
         });
 
-        mdlCobranzaDiaria.find('#btnImprimir').on("click", function () {
+        mdlEstadoCuentaAgente.find("#TpEdoCtaAgt").change(function () {
+            if ($(this).val()) {
+                onVerificarTp($(this));
+            } else {
+            }
+        });
+
+        function onVerificarTp(v) {
+            var tp = parseInt($(v).val());
+            if (tp === 1 || tp === 2) {
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "EL TP SÓLO PUEDE SER 1 y 2",
+                    icon: "error",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    $(v).val('').focus();
+                });
+            }
+        }
+
+        mdlEstadoCuentaAgente.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlCobranzaDiaria.find("#frmCaptura")[0]);
+            var frm = new FormData(mdlEstadoCuentaAgente.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteCobranzaDiaria',
+                url: base_url + 'index.php/ReportesClientesJasper/onReporteEdoCuentaAgentes',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -85,7 +112,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlCobranzaDiaria.find('#dAgente').focus();
+                        mdlEstadoCuentaAgente.find('#dAgenteEdoCuentaAgt').focus();
                     });
                 }
                 HoldOn.close();

@@ -1,8 +1,8 @@
-<div class="modal " id="mdlCobranzaDiaria"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+<div class="modal " id="mdlControlesEntregadosPorFabrica"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cobranza Por Agente</h5>
+                <h5 class="modal-title">Controles Entregados por Fábrica</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,14 +10,15 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-12">
-                            <label>Del agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="dAgente" name="dAgente" >
+                        <div class="col-6">
+                            <label>Del: </label>
+                            <input type="text" class="form-control form-control-sm date notEnter" id="FechaIni" name="FechaIni" >
                         </div>
-                        <div class="col-12">
-                            <label>Al agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="aAgente" name="aAgente" >
+                        <div class="col-6">
+                            <label>Hasta: </label>
+                            <input type="text" class="form-control form-control-sm date notEnter" id="FechaFin" name="FechaFin" >
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -29,23 +30,24 @@
     </div>
 </div>
 <script>
-    var mdlCobranzaDiaria = $('#mdlCobranzaDiaria');
+    var mdlControlesEntregadosPorFabrica = $('#mdlControlesEntregadosPorFabrica');
     $(document).ready(function () {
 
-        mdlCobranzaDiaria.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlCobranzaDiaria);
-            mdlCobranzaDiaria.find("input").val("");
-            $.each(mdlCobranzaDiaria.find("select"), function (k, v) {
-                mdlCobranzaDiaria.find("select")[k].selectize.clear(true);
+        mdlControlesEntregadosPorFabrica.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlControlesEntregadosPorFabrica);
+            mdlControlesEntregadosPorFabrica.find("input").val("");
+            $.each(mdlControlesEntregadosPorFabrica.find("select"), function (k, v) {
+                mdlControlesEntregadosPorFabrica.find("select")[k].selectize.clear(true);
             });
-            mdlCobranzaDiaria.find('#dAgente').focus();
+            mdlControlesEntregadosPorFabrica.find('#FechaIni').val(getFirstDayMonth());
+            mdlControlesEntregadosPorFabrica.find('#FechaFin').val(getToday());
+            mdlControlesEntregadosPorFabrica.find('#FechaIni').focus();
         });
-
-        mdlCobranzaDiaria.find('#btnImprimir').on("click", function () {
+        mdlControlesEntregadosPorFabrica.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlCobranzaDiaria.find("#frmCaptura")[0]);
+            var frm = new FormData(mdlControlesEntregadosPorFabrica.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteCobranzaDiaria',
+                url: base_url + 'index.php/ReportesClientesJasper/onReporteControlesEntregadosPorFabrica',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -54,7 +56,6 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                         type: 'iframe',
@@ -85,7 +86,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlCobranzaDiaria.find('#dAgente').focus();
+                        mdlControlesEntregadosPorFabrica.find('#FechaIni').focus();
                     });
                 }
                 HoldOn.close();
@@ -93,8 +94,6 @@
                 console.log(x, y, z);
                 HoldOn.close();
             });
-
         });
     });
 </script>
-

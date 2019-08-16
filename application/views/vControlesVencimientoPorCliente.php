@@ -1,8 +1,8 @@
-<div class="modal " id="mdlCobranzaDiaria"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+<div class="modal " id="mdlControlesVencimientoPorCliente"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cobranza Por Agente</h5>
+                <h5 class="modal-title">Días de Vencimiento por Cliente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,13 +10,11 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-12">
-                            <label>Del agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="dAgente" name="dAgente" >
-                        </div>
-                        <div class="col-12">
-                            <label>Al agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="aAgente" name="aAgente" >
+                        <div class="col-12 col-sm-12 col-md-12">
+                            <label for="" >Cliente</label>
+                            <select id="ClienteCVC" name="ClienteCVC" class="form-control form-control-sm required" required="" >
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -29,23 +27,27 @@
     </div>
 </div>
 <script>
-    var mdlCobranzaDiaria = $('#mdlCobranzaDiaria');
+    var mdlControlesVencimientoPorCliente = $('#mdlControlesVencimientoPorCliente');
     $(document).ready(function () {
-
-        mdlCobranzaDiaria.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlCobranzaDiaria);
-            mdlCobranzaDiaria.find("input").val("");
-            $.each(mdlCobranzaDiaria.find("select"), function (k, v) {
-                mdlCobranzaDiaria.find("select")[k].selectize.clear(true);
+        validacionSelectPorContenedor(mdlControlesVencimientoPorCliente);
+        mdlControlesVencimientoPorCliente.on('shown.bs.modal', function () {
+            mdlControlesVencimientoPorCliente.find("input").val("");
+            $.each(mdlControlesVencimientoPorCliente.find("select"), function (k, v) {
+                mdlControlesVencimientoPorCliente.find("select")[k].selectize.clear(true);
             });
-            mdlCobranzaDiaria.find('#dAgente').focus();
+            getClientesControlesVencimiento();
+            mdlControlesVencimientoPorCliente.find('#ClienteCVC')[0].selectize.focus();
         });
-
-        mdlCobranzaDiaria.find('#btnImprimir').on("click", function () {
+        mdlControlesVencimientoPorCliente.find("#ClienteCVC").change(function () {
+            if ($(this).val()) {
+                mdlControlesVencimientoPorCliente.find('#btnImprimir').focus();
+            }
+        });
+        mdlControlesVencimientoPorCliente.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            var frm = new FormData(mdlCobranzaDiaria.find("#frmCaptura")[0]);
+            var frm = new FormData(mdlControlesVencimientoPorCliente.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteCobranzaDiaria',
+                url: base_url + 'index.php/ReportesClientesJasper/onReporteVencimientoCte',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -85,7 +87,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlCobranzaDiaria.find('#dAgente').focus();
+                        mdlControlesVencimientoPorCliente.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
@@ -93,8 +95,22 @@
                 console.log(x, y, z);
                 HoldOn.close();
             });
-
         });
     });
-</script>
 
+
+    function getClientesControlesVencimiento() {
+        mdlControlesVencimientoPorCliente.find("#ClienteCVC")[0].selectize.clear(true);
+        mdlControlesVencimientoPorCliente.find("#ClienteCVC")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlControlesVencimientoPorCliente.find("#ClienteCVC")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+
+
+</script>
