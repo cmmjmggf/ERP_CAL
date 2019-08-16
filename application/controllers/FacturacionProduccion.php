@@ -32,7 +32,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getListaDePreciosXCliente() {
         try {
-            print json_encode($this->db->query("SELECT C.ListaPrecios AS LP, C.Descuento AS DESCUENTO, C.Zona AS ZONA FROM clientes AS C WHERE C.Clave = {$this->input->post('CLIENTE')}")->result());
+            print json_encode($this->db->query("SELECT C.ListaPrecios AS LP, C.Descuento AS DESCUENTO, C.Zona AS ZONA, C.Agente AS AGENTE FROM clientes AS C WHERE C.Clave = {$this->input->post('CLIENTE')}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -152,12 +152,19 @@ class FacturacionProduccion extends CI_Controller {
         try {
             $x = $this->input->post();
             $this->db->trans_begin();
+            $fecha = $x['FECHA'];
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
             $f = array(
                 'factura' => $x['FACTURA'],
                 'tp' => $x['TP_DOCTO'],
                 'cliente' => $x['CLIENTE'],
                 'contped' => $x['CONTROL'],
-                'fecha' => $x['FECHA'],
+                'fecha' => "$anio-$mes-$dia",
                 'hora' => Date('d/m/Y'),
                 'corrida' => $x['SERIE'],
                 'pareped' => $x['PARES'],
@@ -176,14 +183,14 @@ class FacturacionProduccion extends CI_Controller {
             $f["iva"] = $x["IVA"];
             $f["staped"] = 1;
             $f["monletra"] = $x["TOTAL_EN_LETRA"];
-            $f["tmnda"] = $x["MONEDA"];
+            $f["tmnda"] = (intval($x["MONEDA"]) === 0 ? 1 : 2);
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
             $f["origen"] = NULL;
             $f["referen"] = $x["REFERENCIA"];
 
             $f["decdias"] = NULL;
-            $f["agente"] = $x["MONEDA"];
+            $f["agente"] = $x["AGENTE"];
             $f["colsuel"] = $x["COLOR_TEXT"];
             $f["tpofac"] = $x["MONEDA"];
             $f["año"] = date('Y');
@@ -199,7 +206,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["regadu"] = NULL;
             $f["periodo"] = NULL;
             $f["costo"] = NULL;
-//            $this->db->insert('facturacion', $f);
+            $this->db->insert('facturacion', $f);
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
             $facturaciondif = array(
@@ -235,7 +242,7 @@ class FacturacionProduccion extends CI_Controller {
             } else {
                 for ($iii = 1; $iii < 23; $iii++) {
                     $c = 0;
-                    if (intval($x["CAF$ii"]) > 0) {
+                    if (intval($x["CAF$iii"]) > 0) {
                         $c = (intval($x["C$iii"]) - intval($x["CAF$iii"]));
                     }
                     if ($iii < 10) {
@@ -255,6 +262,10 @@ class FacturacionProduccion extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function functionName($param) {
+        
     }
 
 }

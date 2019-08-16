@@ -1,4 +1,3 @@
-
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center" style="padding: 7px 10px 10px 10px !important;">
         <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
@@ -65,13 +64,14 @@
                                 <input type="text" id="TIPODECAMBIO" name="TIPODECAMBIO" class="form-control form-control-sm" readonly="">
                                 <input type="text" id="EstatusControl" name="EstatusControl" class="form-control form-control-sm" readonly="">
                                 <input type="text" id="ZonaFacturacion" name="ZonaFacturacion" class="form-control form-control-sm" readonly="">
+                                <input type="text" id="AgenteCliente" name="AgenteCliente"   readonly="">
 
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-6 col-md-2 col-lg-4 col-xl-1">
+                            <div class="col-12 col-xs-12 col-sm-6 col-md-2 col-lg-4 col-xl-1"   style="padding-right: 5px;"> 
                                 <label>Fecha</label>
                                 <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-2"> 
+                            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3"  style="padding-left: 5px; padding-right: 5px;"> 
                                 <div class="form-group">
                                     <label class="control-label">Cliente</label>
                                     <div class="form-group">
@@ -94,39 +94,39 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 ">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                                 <label>L-P</label>
                                 <input type="text" id="LPFactura" name="LPFactura" readonly="" data-toggle="tooltip" data-placement="bottom" title="Lista de precios"  class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 ">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                                 <label>TP</label>
-                                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm">
+                                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm" >
                                     <option></option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                 </select>
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>FA-PE.ORCO</label>
                                 <input type="text" id="FAPEORCOFactura" name="FAPEORCOFactura" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                                 <label>FC.A</label>
                                 <input type="number" id="FCAFactura" name="FCAFactura" max="2" min="0" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                                 <label>PAG</label>
                                 <input type="number" id="PAGFactura" name="PAGFactura" max="2" min="0" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                                 <label>T-MNDA</label>
                                 <input type="number" id="TMNDAFactura" name="TMNDAFactura" max="2" min="0" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>FOLIO</label>
                                 <input type="text" id="FolioFactura" name="FolioFactura" readonly="" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <div class="form-group"> 
                                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                                         <input type="checkbox" class="custom-control-input selectNotEnter" id="cCST" name="cCST" style="cursor: pointer !important;">
@@ -165,7 +165,7 @@
                             <div class="w-100"></div>
                             <div class="col-6 col-xs-6 col-sm-4 col-md-3 col-lg-3 col-xl-3">
                                 <label>Control</label>
-                                <div class="input-group">
+                                <div class="input-group">               
                                     <input type="text" id="Control" name="Control" class="form-control form-control-sm">
                                     <span class="input-group-prepend">
                                         <span class="input-group-text text-dark" 
@@ -315,27 +315,28 @@
                                 <span class="text-danger font-weight-bold ReferenciaFactura" style="font-size: 22px !important;">-</span>
                                 <input type="text" id="ReferenciaFacturacion" name="ReferenciaFacturacion" readonly="" class="form-control form-control-sm d-none">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Cajas</label>
                                 <input type="text" id="CajasFacturacion" name="CajasFacturacion"style="color: #ff0000 !important;" class="form-control form-control-sm font-weight-bold">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Estilo</label>
                                 <input type="text" id="EstiloFacturacion" name="EstiloFacturacion" readonly="" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Color</label>
+                                <input type="text" id="ColorClaveFacturacion" name="ColorClaveFacturacion" readonly="" class="form-control form-control-sm d-none">
                                 <input type="text" id="ColorFacturacion" name="ColorFacturacion" readonly="" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                                 <label>Corrida</label>
                                 <input type="text" id="CorridaFacturacion" name="CorridaFacturacion" readonly="" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Precio</label>
                                 <input type="text" id="PrecioFacturacion" name="PrecioFacturacion" style="color: #ff0000 !important;" class="form-control form-control-sm font-weight-bold">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Subtotal</label>
                                 <input type="text" id="SubtotalFacturacion" name="SubtotalFacturacion" readonly="" class="form-control form-control-sm">
                                 <input type="text" id="SubtotalFacturacionIVA" name="SubtotalFacturacionIVA" readonly="" class="d-none form-control form-control-sm">
@@ -349,15 +350,15 @@
                                     </div>
                                 </div>      
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Observación</label>
                                 <textarea id="ObservacionFacturacion" name="ObservacionFacturacion" class="form-control form-control-sm" rows="2" cols="3"></textarea>
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                                 <label>Descuento</label>
                                 <input type="text" id="DescuentoFacturacion" name="DescuentoFacturacion" class="form-control form-control-sm">
                             </div>
-                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
+                            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2"  style="padding-left: 5px; padding-right: 5px;">
                                 <label>Pares Facturados</label>
                                 <input type="text" id="ParesFacturadosFacturacion" name="ParesFacturadosFacturacion" readonly="" class="form-control form-control-sm">
                             </div>
@@ -502,6 +503,7 @@
             btnControlesXFac = pnlTablero.find("#btnControlesXFac"),
             tblParesFacturados = pnlTablero.find("#tblParesFacturados"),
             ClienteFactura = pnlTablero.find("#ClienteFactura"),
+            AgenteCliente = pnlTablero.find("#AgenteCliente"),
             Tienda = pnlTablero.find("#Tienda"),
             FechaFactura = pnlTablero.find('#FechaFactura'),
             LPFactura = pnlTablero.find('#LPFactura'),
@@ -523,6 +525,7 @@
             EstiloFacturacion = pnlTablero.find('#EstiloFacturacion'),
             ObservacionFacturacion = pnlTablero.find("#ObservacionFacturacion"),
             ColorFacturacion = pnlTablero.find('#ColorFacturacion'),
+            ColorClaveFacturacion = pnlTablero.find("#ColorClaveFacturacion"),
             CorridaFacturacion = pnlTablero.find('#CorridaFacturacion'),
             PrecioFacturacion = pnlTablero.find('#PrecioFacturacion'),
             SubtotalFacturacion = pnlTablero.find('#SubtotalFacturacion'),
@@ -602,13 +605,14 @@
             var p = {
                 FECHA: FechaFactura.val(),
                 CLIENTE: ClienteFactura.val(),
+                AGENTE: AgenteCliente.val(),
                 TP_DOCTO: TPFactura.val(),
                 FOLIO: FolioFactura.val(),
                 FACTURA: FAPEORCOFactura.val(),
                 CONTROL: Control.val(),
-                SERIE: Corrida.val(),
+                SERIE: CorridaFacturacion.val(),
                 ESTILO: EstiloFacturacion.val(),
-                COLOR: ColorFacturacion.val(),
+                COLOR: ColorClaveFacturacion.val(),
                 PARES: TotalParesEntrega.val(),
                 PARES_FACTURADOS: TotalParesEntregaF.val(),
                 PARES_A_FACTURAR: TotalParesEntregaAF.val()
@@ -748,7 +752,8 @@
                         {"data": "ESTILO"}, {"data": "COLOR"},
                         {"data": "PARES"}, {"data": "FAC"},
                         {"data": "MAQUILA"}, {"data": "SEMANA"},
-                        {"data": "PRECIOT"}, {"data": "PRECIO"}, {"data": "COLORT"}
+                        {"data": "PRECIOT"}, {"data": "PRECIO"},
+                        {"data": "COLORT"}
                     ],
                     "columnDefs": [
                         //ID
@@ -782,9 +787,11 @@
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
                     var xxx = ControlesXFacturar.row($(this)).data();
+                    console.log(xxx);
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
+                    ColorClaveFacturacion.val(xxx.COLOR);
                     CajasFacturacion.val(1);
                     CajasFacturacion.focus().select();
                     getInfoXControl();
@@ -898,6 +905,7 @@
                         LPFactura.val(xxx[0].LP);
                         DescuentoFacturacion.val(xxx[0].DESCUENTO);
                         ZonaFacturacion.val(xxx[0].ZONA);
+                        AgenteCliente.val(xxx[0].AGENTE);
                     }
                 }).fail(function (x) {
                     getError(x);
@@ -1012,22 +1020,29 @@
         $.each($(e).parents('tr').find("td"), function (k, v) {
             switch (i) {
                 case 1:
+                    console.log(' INDICE 1 A CALCULAR')
                     total_pares += (parseInt($(v).find("input:not(#TotalParesEntrega)").val()) > 0) ? parseInt($(v).find("input:not(#TotalParesEntrega)").val()) : 0;
                     TotalParesEntrega.val(total_pares);
                     pnlTablero.find(".produccionfabricados").text(total_pares);
-                    var tpef = $.isNumeric(pnlTablero.find("#TotalParesEntregaF").val()) ? parseInt(pnlTablero.find("#TotalParesEntregaF").val()) : 0;
+                    var tpef = $.isNumeric(pnlTablero.find("#TotalParesEntregaF").val()) ?
+                            parseInt(pnlTablero.find("#TotalParesEntregaF").val()) : 0;
                     pnlTablero.find(".produccionsaldo").text(total_pares - tpef);
                     break;
                 case 2:
+                    console.log(' INDICE 2 A CALCULAR')
                     total_pares += (parseInt($(v).find("input:not(#TotalParesEntregaF)").val()) > 0) ? parseInt($(v).find("input:not(#TotalParesEntregaF)").val()) : 0;
                     pnlTablero.find("#TotalParesEntregaF").val(total_pares);
                     pnlTablero.find(".produccionfacturados").text(total_pares);
                     break;
                 case 3:
+                    console.log(' INDICE 3 A CALCULAR')
                     total_pares += (parseInt($(v).find("input:not(#TotalParesEntregaAF)").val()) > 0) ? parseInt($(v).find("input:not(#TotalParesEntregaAF)").val()) : 0;
                     TotalParesEntregaAF.val(total_pares);
                     ParesFacturadosFacturacion.val(total_pares);
                     pnlTablero.find(".produccionfabricados").text(total_pares);
+                    var tpef = $.isNumeric(pnlTablero.find("#TotalParesEntregaF").val()) ?
+                            parseInt(pnlTablero.find("#TotalParesEntregaF").val()) : 0;
+                    pnlTablero.find(".produccionsaldo").text(total_pares - tpef);
                     break;
             }
         });
@@ -1107,7 +1122,7 @@
                                         var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
                                         var stt = parseFloat(xx.Precio) * prs;
                                         SubtotalFacturacion.val(stt);
-                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
+//                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
                                         TotalLetra.find("span").text(NumeroALetras(stt));
                                         pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
                                         EstatusControl.val(xx.ESTATUS)
@@ -1171,7 +1186,7 @@
         pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
         pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
         TotalLetra.find("span").text(NumeroALetras(t));
-        pnlTablero.find(".totalfacturadopie").text(NumeroALetras(t));
+        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
     }
 
     function onRecalcularSubtotal() {
