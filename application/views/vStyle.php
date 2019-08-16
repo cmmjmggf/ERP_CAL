@@ -91,6 +91,10 @@
     }
 
     /*Tablas */
+    .table-sm th, .table-sm td {
+        padding: 0.05rem;
+    }
+
     table tbody tr{
         cursor: pointer;
         font-size: 0.8rem !important;
@@ -369,7 +373,7 @@
         --dark: #343a40;*/
     body{
         color: #000 !important;
-    } 
+    }
     button.navbar-brand.text-success {
         color: #fff !important;
     }
