@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FacturacionVP" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.7715610000000082"/>
+	<property name="ireport.zoom" value="2.357947691000012"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -10,7 +10,7 @@
 	<columnHeader>
 		<band height="100" splitType="Stretch">
 			<image>
-				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="2cc2fa9c-3a6b-4ca1-bb27-b479c98ca661"/>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="39" isPrintInFirstWholeBand="true" uuid="2cc2fa9c-3a6b-4ca1-bb27-b479c98ca661"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<rectangle>
@@ -40,14 +40,14 @@
 			<staticText>
 				<reportElement x="363" y="0" width="100" height="13" forecolor="#FFFFFF" backcolor="#CC00CC" uuid="5b2cbb6f-e4cd-48bc-949b-6728283a217a"/>
 				<textElement textAlignment="Center">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Factura]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="363" y="13" width="100" height="13" forecolor="#FFFFFF" backcolor="#CC00CC" uuid="83659700-870a-4de1-a37b-e226a2902dfc"/>
 				<textElement textAlignment="Center">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Certificado]]></text>
 			</staticText>
@@ -57,6 +57,39 @@
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha y hora de emisión]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="39" width="572" height="37" uuid="f4b5118a-d616-46af-9a9d-c7a0673c8711"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="39" width="45" height="13" uuid="ad28f1b3-bd98-4e42-aab6-cedc026aba4f"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="51" width="45" height="13" uuid="6b6d7ecb-21e2-447a-bb61-cdf0511f7c2b"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="63" width="45" height="13" uuid="837dec30-8625-4c1f-9571-c379079bbdfd"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Colonia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="199" y="64" width="45" height="13" uuid="2ec6c817-0e1d-4394-b339-bc4b0493f3c7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Ciudad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="64" width="20" height="13" uuid="0645f9d3-9ed4-44b9-832a-dbfdec2e17a4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[C.P]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="63" width="25" height="13" uuid="7bd06422-ae06-4748-a318-a90b92304323"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[RFC]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
