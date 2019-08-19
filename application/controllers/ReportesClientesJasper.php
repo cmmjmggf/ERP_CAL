@@ -14,6 +14,30 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteDetalladoMovimientosClientes() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniDetalleMovimientos'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinDetalleMovimientos'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["dCliente"] = $this->input->post('dClienteDetalleMovimientos');
+        //$parametros["fechaIniF"] = $this->input->post('FechaIni');
+        //$parametros["fechaFinF"] = $this->input->post('FechaFin');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\reporteEstadoCuentaDetalleCliente.jasper');
+        $jc->setFilename('REPORTE_MOVS_DETALLADO_CLIENTES_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteEdoCuentaAgentes() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);

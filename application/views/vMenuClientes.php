@@ -54,4 +54,5 @@ $this->load->view('vControlesEntregadosPorFabrica');
 $this->load->view('vEstadoCuenta');
 $this->load->view('vEstadoCuenta8');
 $this->load->view('vEstadoCuentaAgente');
-
+$this->load->view('vEstadoCuenta306090');
+$this->load->view('vDetalladoMovimientos');
