@@ -48,6 +48,7 @@
     var mdlEstatusPedidoXGrupoAgente = $('#mdlEstatusPedidoXGrupoAgente');
     $(document).ready(function () {
         mdlEstatusPedidoXGrupoAgente.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEstatusPedidoXGrupoAgente);
             mdlEstatusPedidoXGrupoAgente.find("input").val("");
             $.each(mdlEstatusPedidoXGrupoAgente.find("select"), function (k, v) {
                 mdlEstatusPedidoXGrupoAgente.find("select")[k].selectize.clear(true);
@@ -113,7 +114,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlEstatusPedidoXGrupoAgente.find('#Ano').focus();
+                        mdlEstatusPedidoXGrupoAgente.find('#Agente')[0].selectize.focus();
                     });
                 }
                 HoldOn.close();

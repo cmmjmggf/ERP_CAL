@@ -14,6 +14,52 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteEstatusPedidoXAgenteFechas() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniRepFechas'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinRepFechas'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["agente"] = $this->input->post('AgenteRepFechas');
+        $jc->setJasperurl('jrxml\clientes\estatusPedidosPorAgenteFechas.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_ESTATUS_PEDIDOS_AGENTE_FECHAS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteRelacionNC() {
+        $Tipo = $this->input->post('TipoRelNC');
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniRelNC'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinRelNC'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["tp"] = $this->input->post('TpRelNC');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\relacionNotasCreditoSimple.jasper');
+        if ($Tipo === '2') {
+            $jc->setJasperurl('jrxml\clientes\relacionNotasCreditoGeneral.jasper');
+        }
+        $jc->setFilename('REPORTE_RELACION_NC_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteDetalladoMovimientosClientes() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniDetalleMovimientos'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));

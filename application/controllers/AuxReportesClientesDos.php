@@ -18,6 +18,52 @@ class AuxReportesClientesDos extends CI_Controller {
                 ->helper('Reportesclientes_helper')->helper('file');
     }
 
+    public function getPedidosXAgenteFechaCaptura() {
+        try {
+            $Agente = $this->input->get('Agente');
+
+            $fechaini = str_replace('/', '-', $this->input->get('FechaIni'));
+            $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+            $fechafin = str_replace('/', '-', $this->input->get('FechaFin'));
+            $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+            $query = "select
+                                                cast(PE.Cliente as signed) AS Cliente,
+                                                PE.Control,
+                                                PE.Clave as Pedido,
+                                                date_format(PE.Registro,'%d/%m/%Y') as FechaCaptura,
+                                                PE.FechaPedido,
+                                                PE.FechaEntrega,
+                                                PE.Estilo,
+                                                PE.Color,
+                                                PE.ColorT,
+                                                PE.Maquila,
+                                                PE.Semana,
+                                                CASE
+                                                WHEN PE.Control = 0 OR PE.Control IS NULL THEN 0
+                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 1
+                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN CAST(D.Clave AS SIGNED)
+                                                END AS Avance,
+                                                CASE
+                                                WHEN PE.Control = 0 OR PE.Control IS NULL THEN 'PRE-PROGRAMADO'
+                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 'PROGRAMADO'
+                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN D.Descripcion
+                                                END AS AvanceT ,
+                                                PE.Pares,
+                                                PE.ParesFacturados
+                                                from pedidox PE
+                                                left join controles C on PE.Control =  C.control
+                                                left join departamentos D on D.Descripcion  = C. EstatusProduccion
+                                                where PE.estatus in ('A')
+                                                and PE.agente = $Agente
+                                                and PE.Registro between '$nuevaFechaIni' and '$nuevaFechaFin' ";
+            //echo $query;
+            print json_encode($this->db->query($query)->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     /* REPORTES EDOS DE CUENTA */
 
     public function onReporteAntiguedadSaldosTp1() {

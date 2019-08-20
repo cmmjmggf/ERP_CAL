@@ -56,3 +56,7 @@ $this->load->view('vEstadoCuenta8');
 $this->load->view('vEstadoCuentaAgente');
 $this->load->view('vEstadoCuenta306090');
 $this->load->view('vDetalladoMovimientos');
+$this->load->view('vRelacionNotasCredito');
+$this->load->view('vEstatusPedidoXGrupoAgente');
+$this->load->view('vEstatusPedidoXAgenteFechaCaptura');
+$this->load->view('vConsultaPedidoXAgenteFechaCaptura');
