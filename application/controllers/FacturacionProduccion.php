@@ -117,9 +117,9 @@ class FacturacionProduccion extends CI_Controller {
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
-            $TOTAL = $x['IMPORTE_TOTAL'];
+            $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'];
             if (intval($x['MONEDA']) === 1) {
-                $TOTAL = $x['IMPORTE_TOTAL'] * $x['TIPO_DE_CAMBIO'];
+                $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
             }
             $cc = array(
                 'C.cliente' => $x['CLIENTE'], 'C.remicion' => $x['FACTURA'],
@@ -127,16 +127,11 @@ class FacturacionProduccion extends CI_Controller {
                 'C.tipo' => $x['TP_DOCTO'],
                 'C.status' => 1, 'C.pagos' => 0,
                 'C.saldo' => $TOTAL, 'C.comiesp' => 1,
-                'C.tcamb' => $x['TIPO_DE_CAMBIO'], 'C.tmnda' => $x['MONEDA'],
+                'C.tcamb' => $x['TIPO_DE_CAMBIO'], 'C.tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                 'C.nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'C.factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1));
-            var_dump($cc);
-//            $this->db->insert('cartcliente', $cc);
 
-            $Detalle = json_decode($x["Detalle"]);
-            foreach ($Detalle as $k => $v) {
-                print_r($v);
-            }
+            $this->db->insert('cartcliente', $cc);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -209,28 +204,48 @@ class FacturacionProduccion extends CI_Controller {
             $f["regadu"] = NULL;
             $f["periodo"] = Date('Y');
             $f["costo"] = NULL;
+            $f["obs"] = $x["OBSERVACIONES"];
             $this->db->insert('facturacion', $f);
-
+            $tipo_cambio = 0;
+            switch (intval($x["TIPO_CAMBIO"])) {
+                case 1:
+                    /* PESOS */
+                    $tipo_cambio = 0;
+                    break;
+                case 2:
+                    /* DOLAR */
+                    $tipo_cambio = $x["TIPO_CAMBIO"];
+                    break;
+                case 3:
+                    /* JEN */
+                    $tipo_cambio = $x["TIPO_CAMBIO"];
+                    break;
+            }
             /* FACTURACION DETALLE */
             $facturacion_detalle = array(
                 'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
                 'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
                 'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
-                'unidad' =>'PAR', 'codigo' => $x['ESTILO'],
-                'descripcion' => $x['ESTILOT'], 'Precio' => $x['xxxxxxx'],
+                'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                'descripcion' => $x['ESTILOT'], 'Precio' => $x['PRECIO'],
                 'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
                 'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1), 'tcamb' => $x['xxxxxxx'],
+                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                'tcamb' => $tipo_cambio,
                 'noidentificado' => NULL,
                 'referencia' => $x['REFERENCIA'],
                 'tienda' => $x['TIENDA']);
             $this->db->insert('facturadetalle', $facturacion_detalle);
+
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
-            $saldopares = ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
+            $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
             $facturaciondif = array(
-                'pareped' => $saldopares
-                /* PARES QUE FALTAN POR FACTURAR */, 'staped' => (($saldopares == 0) ? 99 : 98)
+                'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
+                'staped' => (($saldopares == 0) ? 99 : 98)
             );
+            if ($saldopares === 0) {
+                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+            }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
             $existe_en_facdetalle = $this->db->query(
                             "SELECT COUNT(*) AS EXISTE, FD.contped AS ID,"
@@ -264,14 +279,17 @@ class FacturacionProduccion extends CI_Controller {
                         $c = (intval($x["C$iii"]) - intval($x["CAF$iii"]));
                     }
                     if ($iii < 10) {
-                        $facturaciondif["par0$iii"] = $c;
+                        $facturaciondif["par0$iii"] = intval($x["CAF$iii"]);
                     } else {
-                        $facturaciondif["par$iii"] = $c;
+                        $facturaciondif["par$iii"] = intval($x["CAF$iii"]);
                     }
                 }
                 $facturaciondif['contped'] = $x['CONTROL'];
                 $this->db->insert('facturaciondif', $facturaciondif);
             }
+            /* SI EL SALDO ES IGUAL A CERO "0", PASAR A CERO */
+//            $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
             } else {

@@ -1,6 +1,6 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center" style="padding: 7px 10px 10px 10px !important;">
-        <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+        <h4 class="font-weight-bold font-italic text-danger">FACTURACIÓN  DEVOLUCIONES</h4>
     </div> 
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
