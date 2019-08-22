@@ -14,6 +14,62 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteControlesPorFacturar() {
+        $tipo = $this->input->post('Reporte');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+
+        switch ($tipo) {
+            case '1':
+                $jc->setJasperurl('jrxml\clientes\controlesPorFacturarClientes.jasper');
+                break;
+            case '2':
+                $jc->setJasperurl('jrxml\clientes\controlesPorFacturarDevoluciones.jasper');
+                break;
+            case '3':
+                $jc->setJasperurl('jrxml\clientes\controlesPorFacturarMuestrasPrototipos.jasper');
+                break;
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CONTROLES_POR_FACTURAR_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteAgentesCuatriAnual() {
+        $tipo = $this->input->post('Cuatrimestre');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('AnoCuatrimestre');
+
+        switch ($tipo) {
+            case '1':
+                $jc->setJasperurl('jrxml\clientes\reporteCuotasAgentesPrimerCuatrimestre.jasper');
+                break;
+            case '2':
+                $jc->setJasperurl('jrxml\clientes\reporteCuotasAgentesSegundoCuatrimestre.jasper');
+                break;
+            case '3':
+                $jc->setJasperurl('jrxml\clientes\reporteCuotasAgentesTercerCuatrimestre.jasper');
+                break;
+            case '4':
+                $jc->setJasperurl('jrxml\clientes\reporteCuotasAgentesAnual.jasper');
+                break;
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CUATRIMESTRAL_AGENTES_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteEstatusPedidoXAgenteFechas() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniRepFechas'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));

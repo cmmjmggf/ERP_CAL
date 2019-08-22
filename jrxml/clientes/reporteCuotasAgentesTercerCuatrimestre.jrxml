@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="1.8433187801425825"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="ano" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.clave, a.nombre,
+cast(a.SeptiembreCuota as decimal(8,2)) as SeptiembreCuota,
+(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 9 ) as pedidoSeptiembre,
+cast(a.OctubreCuota as decimal(8,2)) as OctubreCuota,
+(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 10 ) as pedidoOctubre,
+cast(a.NoviembreCuota as decimal(8,2)) as NoviembreCuota,
+(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 11 ) as pedidoNoviembre,
+cast(a.DiciembreCuota as decimal(8,2)) as DiciembreCuota,
+(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 12 ) as pedidoDiciembre,
+a.SeptiembreCuota + a.OctubreCuota + a.NoviembreCuota + a.DiciembreCuota as cuotaTotal,
+(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (9,10,11,12) ) as pedidoTotal
+FROM agentes a
+order by abs(a.clave)]]>
+	</queryString>
+	<field name="clave" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SeptiembreCuota" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pedidoSeptiembre" class="java.lang.Double"/>
+	<field name="OctubreCuota" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pedidoOctubre" class="java.lang.Double"/>
+	<field name="NoviembreCuota" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pedidoNoviembre" class="java.lang.Double"/>
+	<field name="DiciembreCuota" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pedidoDiciembre" class="java.lang.Double"/>
+	<field name="cuotaTotal" class="java.lang.Double"/>
+	<field name="pedidoTotal" class="java.lang.Double"/>
+	<variable name="porSeptiembre" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{pedidoSeptiembre}*100)/$F{SeptiembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="porOctubre" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{pedidoOctubre}*100)/$F{OctubreCuota}]]></variableExpression>
+	</variable>
+	<variable name="porNoviembre" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{pedidoNoviembre}*100)/$F{NoviembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="porDiciembre" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{pedidoDiciembre}*100)/$F{DiciembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="porTotal" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{pedidoTotal}*100)/$F{cuotaTotal}]]></variableExpression>
+	</variable>
+	<variable name="SeptiembreCuota_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SeptiembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="pedidoSeptiembre_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedidoSeptiembre}]]></variableExpression>
+	</variable>
+	<variable name="OctubreCuota_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{OctubreCuota}]]></variableExpression>
+	</variable>
+	<variable name="pedidoOctubre_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedidoOctubre}]]></variableExpression>
+	</variable>
+	<variable name="NoviembreCuota_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NoviembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="pedidoNoviembre_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedidoNoviembre}]]></variableExpression>
+	</variable>
+	<variable name="DiciembreCuota_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{DiciembreCuota}]]></variableExpression>
+	</variable>
+	<variable name="pedidoDiciembre_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedidoDiciembre}]]></variableExpression>
+	</variable>
+	<variable name="cuotaTotal_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cuotaTotal}]]></variableExpression>
+	</variable>
+	<variable name="pedidoTotal_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedidoTotal}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement x="522" y="31" width="118" height="22" uuid="386d488d-570c-4aaf-91c7-60543647bf24"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="286" y="31" width="118" height="22" uuid="44958d3e-e3a8-48c9-8268-cef43a410313"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="168" y="31" width="118" height="22" uuid="75081b7a-929b-4b75-be5f-05540f0b9eaa"/>
+			</rectangle>
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="1" y="53" width="757" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="252" y="42" width="34" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="670" y="0" width="80" height="12" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="751" y="0" width="15" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement x="627" y="12" width="139" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="72" height="42" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="77" y="-2" width="159" height="14" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="77" y="10" width="185" height="14" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos por agente de Septiembre a Diciembre del]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="1" y="42" width="46" height="11" forecolor="#000000" uuid="038bc91a-0ccc-4a1b-a796-16a5d9f8eb59"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Agente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="168" y="31" width="118" height="11" forecolor="#000000" uuid="df340fbc-a4b8-4e23-a6f5-36bb34e5c3ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Septiembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="210" y="42" width="42" height="11" forecolor="#000000" uuid="a45cf72f-3edd-4766-8ae1-c7d097b86d7f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="262" y="10" width="30" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2429cc1a-ac39-40d8-b466-9de8c45470d8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ano}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="168" y="42" width="42" height="11" forecolor="#000000" uuid="3b267a92-f288-4fc9-b8fa-d70ff6c5c82d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="286" y="42" width="42" height="11" forecolor="#000000" uuid="49fab4c6-29c9-45b8-b651-406aa0d1a55e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="286" y="31" width="118" height="11" forecolor="#000000" uuid="c2b6a9e6-cb6e-4427-b27d-877c5dfae583"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Octubre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="328" y="42" width="42" height="11" forecolor="#000000" uuid="551c23dc-d4b3-4439-a93e-e09b50b3aa8d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="370" y="42" width="34" height="11" forecolor="#000000" uuid="cf3c4e55-222e-4a20-ae51-be6015671acf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="404" y="31" width="118" height="22" uuid="cceb149a-6435-457f-a1f3-6d2384353770"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" x="488" y="42" width="34" height="11" forecolor="#000000" uuid="9228800a-bd6a-4176-8e67-0c11270060d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="446" y="42" width="42" height="11" forecolor="#000000" uuid="aeecbff1-40f2-48bf-9fa5-b3d709b97077"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="404" y="31" width="118" height="11" forecolor="#000000" uuid="f4919ee8-6e25-419b-948c-e13823a6cdd2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Noviembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="404" y="42" width="42" height="11" forecolor="#000000" uuid="a465d680-8e2e-4aad-9d7f-c6f3acb4791a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="564" y="42" width="42" height="11" forecolor="#000000" uuid="9f928e50-8102-47e6-8209-c17db8fd228c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="522" y="42" width="42" height="11" forecolor="#000000" uuid="18b55832-7c3e-4d0d-b817-d3f308e5d1d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="606" y="42" width="34" height="11" forecolor="#000000" uuid="293c763b-ff9a-4cf0-a401-b45f49434d91"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="522" y="32" width="118" height="11" forecolor="#000000" uuid="03faa947-414e-474d-b7bb-e6fac228676d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diciembre]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="640" y="31" width="118" height="22" uuid="5a5be581-37e7-4476-ae42-bc021a80c286"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" x="682" y="42" width="42" height="11" forecolor="#000000" uuid="f5d9e7d1-4f9a-4475-ade4-72ebe23e28a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pedidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="640" y="32" width="118" height="11" forecolor="#000000" uuid="d94cada8-f3fa-4c41-a0b5-c8026f25caec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="724" y="42" width="34" height="11" forecolor="#000000" uuid="cab07740-b490-4e16-a0ad-b337c79ed67f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="640" y="42" width="42" height="11" forecolor="#000000" uuid="851dddca-a997-4a58-b58f-40f8404087db"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuota]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<rectangle>
+				<reportElement x="640" y="0" width="118" height="11" uuid="b2fa909c-f09b-44bc-80c7-3ccf7ce4b921"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="522" y="0" width="118" height="11" uuid="355169ec-64ff-4f20-babf-398b14ba88a1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="168" y="0" width="118" height="11" uuid="2faa3578-ed7f-4055-adbd-cc490c656019"/>
+			</rectangle>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="10" width="167" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="22" height="11" uuid="7e54f5fe-d525-4ad0-8de9-1214941b4452"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clave}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="29" y="0" width="139" height="11" uuid="980890f1-eb9b-4fc6-bba1-e5cc1ee30889"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="210" y="0" width="42" height="11" uuid="588200d2-c148-412b-9c20-281ba11148a4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoSeptiembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="252" y="0" width="34" height="11" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porSeptiembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="168" y="0" width="42" height="11" uuid="d2b2ffe8-d296-4a0b-a3df-e41115ffe809"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SeptiembreCuota}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="286" y="0" width="118" height="11" uuid="eea8081c-220b-4d30-9b56-92553f652c9f"/>
+			</rectangle>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="370" y="0" width="34" height="11" uuid="ee4d463f-9016-4999-84f6-b84dae623f0b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porOctubre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="286" y="0" width="42" height="11" uuid="f7a52655-3901-4615-8619-9dce6cdf2c5d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OctubreCuota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="328" y="0" width="42" height="11" uuid="4fc15198-9e22-4d08-b92f-6d53ee1111c0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoOctubre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="446" y="0" width="42" height="11" uuid="ae210e3b-e2a5-441a-8f7a-60fc98237d9f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoOctubre}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="404" y="0" width="118" height="11" uuid="022395d2-f69a-4510-8eba-b6682197d5b9"/>
+			</rectangle>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="488" y="0" width="34" height="11" uuid="3770367b-70a0-4436-bb08-5af40f0b831a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porNoviembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="404" y="0" width="42" height="11" uuid="a64bc7c5-b9cd-48dc-a504-49852baa523f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NoviembreCuota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="446" y="0" width="42" height="11" uuid="a42ab4da-34fa-4783-8103-296a3f10af32"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoNoviembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="606" y="0" width="34" height="11" uuid="5ba1d9f8-96a6-4cca-a405-20b6dc006c65"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porDiciembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="564" y="0" width="42" height="11" uuid="b80dcd45-46a0-42d9-a14c-393cd3ae75a7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoDiciembre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="522" y="0" width="42" height="11" uuid="c3914e2a-9645-40f0-882d-da83ef006aee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DiciembreCuota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="724" y="0" width="34" height="11" uuid="dd76314b-d834-40a7-a6f3-24622db5c2a4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="640" y="0" width="42" height="11" uuid="d320205d-d630-4415-86a4-dcd3e675130f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuotaTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="682" y="0" width="42" height="11" uuid="452fa46b-0fa7-4a3a-90b8-94c589de011e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedidoTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="118" y="1" width="50" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="168" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4b6b6a4f-2b44-491c-b8dc-aed424019b21"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SeptiembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="210" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3fff5ff8-7b4c-4f3a-8c97-4eba72e78aaa"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedidoSeptiembre_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="252" y="1" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="175a9639-b886-4e47-8d26-178a64fef231"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{pedidoSeptiembre_1}*100)/$V{SeptiembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="286" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f04d16eb-8020-4800-b868-cb77efe26394"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OctubreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="328" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b1ce6744-ef0e-4c03-baf9-22f7dc035470"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedidoOctubre_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="404" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6f1d0301-fa04-4467-84c6-0e0f295afc77"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{NoviembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="446" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="02ad7792-e9b4-4d93-80c2-221788baa7ab"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedidoNoviembre_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="522" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f034f497-1f60-478b-ae3f-39ca6e16f9bd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DiciembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="564" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="815c1c16-d8e4-4aa3-b413-5ae9d0285724"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedidoDiciembre_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="640" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f7ca734d-e9c9-4987-9071-4c2a65ac534b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{cuotaTotal_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="682" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b95c7aad-8d1b-4755-8d02-c4e3803d21f3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedidoTotal_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="370" y="1" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fe967cc8-21a5-4564-b9fc-5597d2692829"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{pedidoOctubre_1}*100)/$V{OctubreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="488" y="1" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eb8d19e4-d6cf-4faa-bed5-4e29e6744349"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{pedidoNoviembre_1}*100)/$V{NoviembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="606" y="1" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2b698cfa-bb8c-45a2-ae48-5020fb10ad5d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{pedidoDiciembre_1}*100)/$V{DiciembreCuota_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="724" y="1" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eca11b86-5183-4a94-94ff-6b2596dad68d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{pedidoTotal_1}*100)/$V{cuotaTotal_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

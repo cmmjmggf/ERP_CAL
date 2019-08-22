@@ -60,3 +60,5 @@ $this->load->view('vRelacionNotasCredito');
 $this->load->view('vEstatusPedidoXGrupoAgente');
 $this->load->view('vEstatusPedidoXAgenteFechaCaptura');
 $this->load->view('vConsultaPedidoXAgenteFechaCaptura');
+$this->load->view('vPedidosAgenteCuatrimestre');
+$this->load->view('vControlesPorFacturarAClientes');
