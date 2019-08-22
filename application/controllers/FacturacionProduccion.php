@@ -3,13 +3,15 @@
 /* NO TOCAR */
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/phpqrcode/qrlib.php";
 
 class FacturacionProduccion extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('RastreoDeControlesEnDocumentos_model', 'rced');
+        $this->load->library('session')->helper('jaspercommand_helper')->model('RastreoDeControlesEnDocumentos_model', 'rced');
     }
 
     public function index() {
@@ -54,6 +56,16 @@ class FacturacionProduccion extends CI_Controller {
     public function getFacturacionDiff() {
         try {
             /* OBTENGO LAS DIFERENCIAS Y EL CLIENTE DE ESTE CONTROL PORQUE NO SE PUEDE FACTURAR UN CONTROL A UN CLIENTE AL QUE YA SE ELIGIO */
+            $facturacion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturaciondif AS F WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result();
+//            if (intval($facturacion_existe[0]->EXISTE) > 0) {
+//                print json_encode($this->db->query(" F.cliente, 
+//SUM(F.par01) AS par01, SUM(F.par02) AS par02, SUM(F.par03) AS par03, SUM(F.par04) AS par04, SUM(F.par05) AS par05,
+//SUM(F.par06) AS par06, SUM(F.par07) AS par07, SUM(F.par08) AS par08, SUM(F.par09) AS par09, SUM(F.par10) AS par10, 
+//SUM(F.par11) AS par11, SUM(F.par12) AS par12, SUM(F.par13) AS par13, SUM(F.par14) AS par14, SUM(F.par15) AS par15, 
+//SUM(F.par16) AS par16, SUM(F.par17) AS par17, SUM(F.par18) AS par18, SUM(F.par19) AS par19, SUM(F.par20) AS par20, 
+//SUM(F.par21) AS par21, SUM(F.par22) AS par22  
+//FROM facturacion AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
+//                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
             print json_encode($this->db->query("SELECT 
                                         F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05, 
                                         F.par06, F.par07, F.par08, F.par09, F.par10, 
@@ -61,7 +73,8 @@ class FacturacionProduccion extends CI_Controller {
                                         F.par16, F.par17, F.par18, F.par19, F.par20, 
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE 
                                         FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
-                                        WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+//            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -165,7 +178,7 @@ class FacturacionProduccion extends CI_Controller {
                 'fecha' => "$anio-$mes-$dia $hora",
                 'hora' => Date('d/m/Y'),
                 'corrida' => $x['SERIE'],
-                'pareped' => $x['PARES'],
+                'pareped' => $x['PARES_A_FACTURAR'],
                 'estilo' => $x['ESTILO'],
                 'combin' => $x['COLOR']
             );
@@ -318,6 +331,57 @@ class FacturacionProduccion extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function getVistaPrevia() {
+        try {
+            $x = $this->input->post();
+//            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
+//                            . " F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, F.acuse, F.sellocfd "
+//                            . "FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")->result();
+//            var_dump($dtm);
+//            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
+            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
+
+            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
+                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
+                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")->result();
+
+//            $total_factura = $this->db->query("SELECT ((SUM(F.subtot)) * 1.16) AS TOTAL FROM facturacion AS F "
+//                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+            $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
+                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+            $cfdi = $dtm[0];
+            $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
+            $UUID = $cfdi->uuid;
+            $rfc_emi = $this->session->EMPRESA_RFC;
+            $rfc_rec = $rfc_cliente[0]->RFC;
+            
+            $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $qr_url = QRcode::png($qr, 'rpt/qr.png');
+            $pr = array();
+            $pr["logo"] = base_url() . $this->session->LOGO;
+            $pr["empresa"] = $this->session->EMPRESA_RAZON;
+            $pr["callecolonia"] = $this->session->EMPRESA_DIRECCION;
+            $pr["ciudadestadotel"] = $this->session->EMPRESA_RAZON;
+            $pr["certificado"] = '00001000000201352796';
+            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+            $pr["qrCode"] = base_url('rpt/qr.png');
+            $jc->setParametros($pr);
+            $jc->setJasperurl('jrxml\facturacion\FacturacionVP.jasper');
+            $jc->setFilename("{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getQR($str) {
+        QRcode::png($str);
     }
 
 }

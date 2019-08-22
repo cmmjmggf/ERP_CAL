@@ -29,11 +29,16 @@ class Usuario_model extends CI_Model {
                     . 'E.Representante AS EMPRESA_REPRESENTANTE, '
                     . 'E.RazonSocial AS EMPRESA_RAZON,'
                     . 'E.Direccion AS EMPRESA_DIRECCION, '
+                    . 'E.Colonia AS EMPRESA_COLONIA, '
+                    . 'E.RFC AS EMPRESA_RFC, '
+                    . 'E.Telefono AS EMPRESA_TELEFONO, '
+                    . 'E.NoExt AS EMPRESA_NOEXT, '
+                    . 'E.CP AS EMPRESA_CP, '
                     . 'E.Foto AS LOGO', false);
-            $this->db->from('usuarios AS U');
-            $this->db->join('empresas AS E', 'U.Empresa = E.ID');
-            $this->db->where('U.Usuario', $USUARIO);
-            $this->db->where('\'' . $CONTRASENA . '\'  = AES_DECRYPT(U.AES, \'System32\')', NULL, FALSE);
+            $this->db->from('usuarios AS U')
+                    ->join('empresas AS E', 'U.Empresa = E.ID')
+                    ->where('U.Usuario', $USUARIO)
+                    ->where('\'' . $CONTRASENA . '\'  = AES_DECRYPT(U.AES, \'System32\')', NULL, FALSE);
             $this->db->where_in('U.Estatus', 'ACTIVO');
             $query = $this->db->get();
             /*

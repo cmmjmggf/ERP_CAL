@@ -10,7 +10,7 @@ class AplicaDepositosCliente extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('AplicaDepositosCliente_model', 'adc')->helper('jaspercommand_helper')->helper('file');
+        $this->load->library('session')->model('AplicaDepositosCliente_model', 'adc')->helper('file');
     }
 
     public function index() {
