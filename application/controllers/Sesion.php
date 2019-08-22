@@ -160,6 +160,8 @@ class Sesion extends CI_Controller {
                     'EMPRESA_RAZON' => $dt->EMPRESA_RAZON,
                     'EMPRESA_DIRECCION' => $dt->EMPRESA_DIRECCION,
                     'EMPRESA_COLONIA' => $dt->EMPRESA_COLONIA,
+                    'EMPRESA_CIUDAD' => $dt->EMPRESA_CIUDAD,
+                    'EMPRESA_ESTADO' => $dt->EMPRESA_ESTADO,
                     'EMPRESA_RFC' => $dt->EMPRESA_RFC,
                     'EMPRESA_TELEFONO' => $dt->EMPRESA_TELEFONO,
                     'EMPRESA_NOEXT' => $dt->EMPRESA_NOEXT,

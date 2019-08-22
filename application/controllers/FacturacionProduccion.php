@@ -336,19 +336,13 @@ class FacturacionProduccion extends CI_Controller {
     public function getVistaPrevia() {
         try {
             $x = $this->input->post();
-//            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
-//                            . " F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, F.acuse, F.sellocfd "
-//                            . "FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")->result();
-//            var_dump($dtm);
-//            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
+
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
 
             $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
                             . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
                             . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")->result();
 
-//            $total_factura = $this->db->query("SELECT ((SUM(F.subtot)) * 1.16) AS TOTAL FROM facturacion AS F "
-//                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
             $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
                             . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
             $cfdi = $dtm[0];
@@ -366,7 +360,7 @@ class FacturacionProduccion extends CI_Controller {
             $pr["logo"] = base_url() . $this->session->LOGO;
             $pr["empresa"] = $this->session->EMPRESA_RAZON;
             $pr["callecolonia"] = $this->session->EMPRESA_DIRECCION;
-            $pr["ciudadestadotel"] = $this->session->EMPRESA_RAZON;
+            $pr["ciudadestadotel"] = "{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_TELEFONO}";
             $pr["certificado"] = '00001000000201352796';
             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
             $pr["qrCode"] = base_url('rpt/qr.png');

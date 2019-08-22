@@ -1509,4 +1509,11 @@
 
         });
     }
+
+    function iMsg(msg, t, f) {
+        swal('ATENCIÓN', msg,
+                (t === 's' ? 'success' : (t === 'i' ? 'info' : (t === 'w' ? 'warning' : 'error')))).then(function () {
+            f();
+        });
+    }
 </script>

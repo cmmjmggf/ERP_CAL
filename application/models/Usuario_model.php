@@ -34,9 +34,12 @@ class Usuario_model extends CI_Model {
                     . 'E.Telefono AS EMPRESA_TELEFONO, '
                     . 'E.NoExt AS EMPRESA_NOEXT, '
                     . 'E.CP AS EMPRESA_CP, '
-                    . 'E.Foto AS LOGO', false);
+                    . 'E.Foto AS LOGO,'
+                    . 'ES.Descripcion AS EMPRESA_ESTADO,'
+                    . 'E.Ciudad AS EMPRESA_CIUDAD', false);
             $this->db->from('usuarios AS U')
                     ->join('empresas AS E', 'U.Empresa = E.ID')
+                    ->join('estados AS ES', 'E.Estado = ES.Clave')
                     ->where('U.Usuario', $USUARIO)
                     ->where('\'' . $CONTRASENA . '\'  = AES_DECRYPT(U.AES, \'System32\')', NULL, FALSE);
             $this->db->where_in('U.Estatus', 'ACTIVO');

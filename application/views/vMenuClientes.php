@@ -1,4 +1,3 @@
-<!-- Contenido  -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <button class="btn btn-primary text-success btn-sm navbar-brand" id="sidebarCollapse">
         <i class="fa fa-users"></i> Clientes
@@ -25,40 +24,20 @@
         } else {
             $('#btnRegresar').addClass('d-none');
         }
-
         getMenu(3);
     });
 </script>
-
 <?php
-$this->load->view('vTipoCambio')->view('vBloqueoClientesXCliente')
-        ->view('vBloqueoClientesAutomatico')->view('vCajasFlete')
-        ->view('vGeneraPinAutoClientes')->view('vCapturaPrecioDeVtaXListaLinea')
-        ->view('vFichaTecnicaCompra')->view('vColoresEstiloVista');
+$vs = array('vTipoCambio', 'vBloqueoClientesXCliente', 'vBloqueoClientesAutomatico', 'vCajasFlete',
+    'vGeneraPinAutoClientes', 'vCapturaPrecioDeVtaXListaLinea', 'vFichaTecnicaCompra', 'vColoresEstiloVista',
+    'vAvanceProduccion', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vReimprimeNotaCredito', 'vCobranzaDiaria',
+    'vDocsPorVencer', 'vReporteDocsVencidos', 'vReportePagoSeguro', 'vReportePagoPromedioClientes',
+    'vReporteDevolucionesPorAplicar', 'vEtiquetaCajas', 'vPagosDiariosClientes', 'vPagosDiariosClientesEfectivo',
+    'vControlesVencimientoPorMaquila', 'vControlesVencimientoPorCliente', 'vControlesEntregadosPorFabrica',
+    'vEstadoCuenta', 'vEstadoCuenta8', 'vEstadoCuentaAgente', 'vEstadoCuenta306090', 'vDetalladoMovimientos',
+    'vRelacionNotasCredito', 'vEstatusPedidoXGrupoAgente', 'vEstatusPedidoXAgenteFechaCaptura',
+    'vConsultaPedidoXAgenteFechaCaptura', 'vPedidosAgenteCuatrimestre', 'vControlesPorFacturarAClientes', 'vReimprimeDocto');
 
-$this->load->view('vAvanceProduccion');
-$this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
-$this->load->view('vReimprimeNotaCredito');
-$this->load->view('vCobranzaDiaria');
-$this->load->view('vDocsPorVencer');
-$this->load->view('vReporteDocsVencidos');
-$this->load->view('vReportePagoSeguro');
-$this->load->view('vReportePagoPromedioClientes');
-$this->load->view('vReporteDevolucionesPorAplicar');
-$this->load->view('vEtiquetaCajas');
-$this->load->view('vPagosDiariosClientes');
-$this->load->view('vPagosDiariosClientesEfectivo');
-$this->load->view('vControlesVencimientoPorMaquila');
-$this->load->view('vControlesVencimientoPorCliente');
-$this->load->view('vControlesEntregadosPorFabrica');
-$this->load->view('vEstadoCuenta');
-$this->load->view('vEstadoCuenta8');
-$this->load->view('vEstadoCuentaAgente');
-$this->load->view('vEstadoCuenta306090');
-$this->load->view('vDetalladoMovimientos');
-$this->load->view('vRelacionNotasCredito');
-$this->load->view('vEstatusPedidoXGrupoAgente');
-$this->load->view('vEstatusPedidoXAgenteFechaCaptura');
-$this->load->view('vConsultaPedidoXAgenteFechaCaptura');
-$this->load->view('vPedidosAgenteCuatrimestre');
-$this->load->view('vControlesPorFacturarAClientes');
+foreach ($vs as $v) {
+    $this->load->view($v);
+}

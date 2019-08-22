@@ -539,13 +539,21 @@
             TIPODECAMBIO = pnlTablero.find("#TIPODECAMBIO"), btnAcepta = pnlTablero.find("#btnAcepta"),
             btnFacturaXAnticipoDeProducto = pnlTablero.find("#btnFacturaXAnticipoDeProducto"),
             TotalLetra = pnlTablero.find("#TotalLetra"), ZonaFacturacion = pnlTablero.find("#ZonaFacturacion"),
-            SubtotalFacturacionIVA = pnlTablero.find("#SubtotalFacturacionIVA"), btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF");
+            SubtotalFacturacionIVA = pnlTablero.find("#SubtotalFacturacionIVA"),
+            btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
+            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto");
+
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
     pnlTablero.find("input,textarea").addClass("font-weight-bold");
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+
+        btnReimprimeDocto.click(function () {
+            $("#mdlReimprimeDocto").modal('show');
+        });
+
         btnVistaPreviaF.click(function () {
             if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
                 onBeep(1);
@@ -557,7 +565,7 @@
                 }).done(function (data, x, jq) {
                     console.log(data);
                     onBeep(1);
-                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
@@ -1149,7 +1157,7 @@
                                         //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
                                         TotalLetra.find("span").text(NumeroALetras(stt));
                                         pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
-                                        EstatusControl.val(xx.ESTATUS)
+                                        EstatusControl.val(xx.ESTATUS);
                                         pnlTablero.find("#CAF1").focus().select();
                                         btnFacturaXAnticipoDeProducto.attr('disabled', false);
                                         btnControlInCompleto.attr('disabled', false);
