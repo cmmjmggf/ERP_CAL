@@ -14,6 +14,51 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReportePagoComisiones306090365() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $jc->setJasperurl('jrxml\clientes\reportePagosClientes306090365.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_PAGOS_COMISIONES_306090365_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReportePagoComisiones() {
+        $tipo = $this->input->post('TpPagoComisiones');
+        $chMarcaComPagadas = $this->input->post('chMarcaComPagadas');
+        $agente = $this->input->post('AgentePagoComisiones');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["agente"] = $agente;
+
+        switch ($tipo) {
+            case '1':
+                $jc->setJasperurl('jrxml\clientes\reportePagoComisiones.jasper');
+                break;
+            case '2':
+                $jc->setJasperurl('jrxml\clientes\reportePagoComisiones2.jasper');
+                break;
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_PAGOS_COMISIONES_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+        //Marca las comisiones pagadas
+        $comicion = Date('y-m-d'); /* 170905 */
+        if ($chMarcaComPagadas === '1') {
+            $this->db->query("update cartctepagos set pagada = $comicion  "
+                    . " WHERE agente= $agente and tipo= $tipo and pagada = 0 and mov <> 10   ");
+        }
+    }
+
     public function onReporteControlesPorFacturar() {
         $tipo = $this->input->post('Reporte');
         $jc = new JasperCommand();
