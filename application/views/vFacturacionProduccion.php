@@ -1,6 +1,22 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center" style="padding: 7px 10px 10px 10px !important;">
-        <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+<div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
+        <div class="row">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="right">
+                <button type="button" id="btnNuevo" name="btnNuevo" 
+                        class="btn btn-default animated flipInX d-none" 
+                        disabled="true"
+                        data-toggle="tooltip" data-placement="bottom" title="Hecho" 
+                        style="padding: 3px 6px 3px 6px !important;    background-color: #9e9e9e00; box-shadow: none !important; color: #9E9E9E !important; border-color: ">
+                    <span class="fa fa-check fa-2x"></span>
+                </button>
+            </div>
+        </div>
     </div> 
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
@@ -24,10 +40,10 @@
                 <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
                     <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info">
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" disabled="">
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
-                <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info">
+                <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
             </div>
@@ -161,7 +177,7 @@
                         <span class="input-group-text text-dark" 
                               style="background-color: #007bff; color: #FFF !important;   
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
-                              id="" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
+                              id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
                               data-placement="top" title="ELIJE UN CONTROL">
                             <i class="fa fa-chess-pawn"></i> CONTROLES X FACTURAR
                         </span>
@@ -361,7 +377,7 @@
                     <span class="fa fa-check"></span> ACEPTA
                 </button>
             </div>
-            <div id="TotalLetra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="TotalLetra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                 <span class="font-weight-bold font-italic text-danger">
                     -
                 </span>
@@ -382,7 +398,7 @@
                             DETALLE DE LA FACTURA
                         </h4>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"  align="right">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"  align="right">
                         <h4 class="font-weight-bold text-danger font-italic totalfacturadohead">$ 0.0</h4>
                     </div>
                 </div>
@@ -438,9 +454,23 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>
-            </div>
+                </table>    
+            </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
+                <span class="font-weight-bold text-danger font-italic">SUBTOTAL</span>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
+                <h3 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h3>
+            </div> 
+            <div class="w-100"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
+                <span class="font-weight-bold text-danger font-italic">I.V.A</span>
+            </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
+                <h3 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h3>
+            </div> 
+            <div class="w-100"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
@@ -493,6 +523,7 @@
 </div>
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
+            btnNuevo = pnlTablero.find("#btnNuevo"),
             btnVerTienda = pnlTablero.find("#btnVerTienda"),
             btnControlesXFac = pnlTablero.find("#btnControlesXFac"),
             tblParesFacturados = pnlTablero.find("#tblParesFacturados"),
@@ -541,7 +572,7 @@
             TotalLetra = pnlTablero.find("#TotalLetra"), ZonaFacturacion = pnlTablero.find("#ZonaFacturacion"),
             SubtotalFacturacionIVA = pnlTablero.find("#SubtotalFacturacionIVA"),
             btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
-            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto");
+            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"), btnElijeControl = pnlTablero.find("#btnElijeControl");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -549,6 +580,31 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+
+        btnNuevo.click(function () {
+            onOpenOverlay('');
+            onResetCampos();
+            btnVistaPreviaF.attr('disabled', true);
+            btnReimprimeDocto.attr('disabled', true);
+            ParesFacturados.rows().remove().draw();
+
+            pnlTablero.find(".ReferenciaFactura").text('-');
+            pnlTablero.find(".subtotalfacturadopie").text('$0.0');
+            pnlTablero.find(".totalivafacturadopie").text('$0.0');
+            pnlTablero.find(".totalfacturadopie").text('$0.0');
+            pnlTablero.find(".totalfacturadoenletrapie").text('$0.0');
+            LPFactura.val('');
+            pnlTablero.find("input").val('');
+            FechaFactura.val(Hoy);
+            FAPEORCOFactura.val('');
+            ClienteFactura[0].selectize.clear(true);
+            TPFactura[0].selectize.clear(true);
+            LPFactura.val('');
+            btnNuevo.attr('disabled', true);
+            btnNuevo.addClass("d-none");
+            ClienteFactura[0].selectize.focus();
+            onCloseOverlay();
+        });
 
         btnReimprimeDocto.click(function () {
             $("#mdlReimprimeDocto").modal('show');
@@ -676,12 +732,67 @@
             if (e.keyCode === 13) {
                 onOpenOverlay('Comprobando...');
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                        {CLIENTE: ClienteFactura.val()}).done(function (a) {
+                        {FACTURA: FAPEORCOFactura.val()}).done(function (a) {
                     if (a.length > 0) {
                         if (parseInt(a[0].FACTURA_EXISTE) === 0) {
                             btnAcepta.attr('disabled', false);
                         } else {
                             btnAcepta.attr('disabled', true);
+                            $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
+                                    {
+                                        CLIENTE: ClienteFactura.val(),
+                                        FACTURA: FAPEORCOFactura.val(),
+                                        TP: TPFactura.val()
+                                    }).done(function (a) {
+                                if (a.length > 0) {
+                                    FechaFactura.val(a[0].FECHA_FACTURA);
+                                    $.each(a, function (k, v) {
+                                        var r = [];
+                                        r.push(v.ID);
+                                        r.push(v.FACTURA)
+                                        r.push(v.CLIENTE);
+                                        r.push(v.CONTROL);
+                                        r.push(v.FECHA_FACTURA);
+                                        r.push(v.PARES);
+                                        for (var i = 1; i < 23; i++) {
+                                            if (i < 10) {
+                                                r.push(v["par0" + i]);
+                                            } else {
+                                                r.push(v["par" + i]);
+                                            }
+                                        }
+                                        r.push('$' + $.number(v.PRECIO, 2, '.', ','));
+                                        r.push(v.PRECIO);
+                                        r.push('$' + $.number(v.SUBTOTAL));
+                                        r.push(v.SUBTOTAL);
+                                        r.push('<button type="button" class="btn btn-info" ><span class="fa fa-lock"></span></button>');
+                                        r.push(v.CAJAS_FACTURACION);
+                                        r.push(v.OBS);
+                                        r.push(v.DESCUENTO);
+                                        r.push(v.PARES_FACTURADOS);
+                                        r.push(v.FACTURA);
+                                        r.push(v.TIPO_MONEDA);
+                                        r.push(1);
+                                        r.push(v.ESTATUS_PRODUCCION);
+                                        r.push(1);
+                                        console.log("r = >", r)
+                                        ParesFacturados.row.add(r).draw(false);
+                                    });
+                                    $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                                    getTotalFacturado();
+                                    pnlTablero.find("#btnNuevo").removeClass("d-none");
+                                    pnlTablero.find("#btnNuevo").attr("disabled", false);
+                                    Control.attr('disabled', true);
+                                    btnElijeControl.attr('disabled', true);
+                                } else {
+                                    pnlTablero.find("#btnNuevo").addClass("d-none");
+                                    pnlTablero.find("#btnNuevo").attr("disabled", true);
+                                }
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+
+                            });
                         }
                     } else {
                         btnAcepta.attr('disabled', true);
@@ -1013,6 +1124,7 @@
             "scrollY": 450,
             "scrollX": true
         });
+        onBeep(1);
     });
 
     function getValor(e) {
@@ -1096,6 +1208,12 @@
                 if (abcd.length > 0) {
                     if (abcd[0].CLIENTE === clientesito) {
                         control_pertenece_a_cliente = true;
+                    } else {
+                        onBeep(2);
+                        iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
+                            onResetCampos();
+                            Control.focus().select();
+                        });
                     }
                     if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
@@ -1197,6 +1315,7 @@
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
+                onCloseOverlay();
             });
         }
     }
@@ -1208,10 +1327,12 @@
             pnlTablero.find(`#C${i}`).val("");
             pnlTablero.find("#CAF" + i).val("");
         }
+        Control.attr('disabled', false);
         btnFacturaXAnticipoDeProducto.attr('disabled', true);
         btnControlInCompleto.attr('disabled', true);
         btnControlCompleto.attr('disabled', true);
         TotalParesEntrega.val('');
+        TotalParesEntregaF.val('');
         TotalParesEntregaAF.val('');
         FolioFactura.val('');
         CorridaFacturacion.val('');
@@ -1227,10 +1348,25 @@
         $.each(ParesFacturados.rows().data(), function (k, v) {
             t += $.isNumeric(v[indice]) ? parseFloat(v[indice]) : 0;
         });
-        pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
-        pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
-        TotalLetra.find("span").text(NumeroALetras(t));
-        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+        switch (parseInt(TPFactura.val())) {
+            case 1:
+                pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                pnlTablero.find(".totalivafacturadopie").text('$' + $.number(parseFloat(t * 0.16), 2, '.', ','));
+                t *= 1.16;
+                pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                TotalLetra.find("span").text(NumeroALetras(t));
+                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                break;
+            case 2:
+                pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                TotalLetra.find("span").text(NumeroALetras(t));
+                totalivafacturadopie
+                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                break;
+        }
     }
 
     function onRecalcularSubtotal() {
@@ -1278,7 +1414,7 @@
         rowx.push(PAGFactura.val());
         rowx.push(EstatusControl.val());
         rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
-//            console.log(rowx);
+        //            console.log(rowx);
         ParesFacturados.row.add(rowx).draw(false);
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         getTotalFacturado();
@@ -1357,6 +1493,9 @@
             btnFacturaXAnticipoDeProducto.attr('disabled', true);
             btnControlInCompleto.attr('disabled', true);
             btnControlCompleto.attr('disabled', true);
+
+            btnVistaPreviaF.attr('disabled', false);
+            btnReimprimeDocto.attr('disabled', false);
         }).fail(function (x) {
             getError(x);
         }).always(function () {
