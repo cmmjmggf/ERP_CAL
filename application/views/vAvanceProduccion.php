@@ -72,6 +72,7 @@
     var mdlAvanceProduccion = $('#mdlAvanceProduccion');
     $(document).ready(function () {
         mdlAvanceProduccion.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlAvanceProduccion);
             mdlAvanceProduccion.find("input").val("");
             $.each(mdlAvanceProduccion.find("select"), function (k, v) {
                 mdlAvanceProduccion.find("select")[k].selectize.clear(true);
