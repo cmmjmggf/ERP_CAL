@@ -14,6 +14,23 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteParesPesosTiendas() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/clientes/';
+
+        $parametros["tp"] = $this->input->post('TpParesPesosTiendas');
+        $parametros["ano"] = $this->input->post('AnoParesPesosTiendas');
+        $jc->setJasperurl('jrxml\clientes\reporteParesPesosTiendas.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTES_PARES_PESOS_TIENDAS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReportePagoComisiones306090365() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);

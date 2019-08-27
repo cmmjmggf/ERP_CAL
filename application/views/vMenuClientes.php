@@ -28,16 +28,46 @@
     });
 </script>
 <?php
-$vs = array('vTipoCambio', 'vBloqueoClientesXCliente', 'vBloqueoClientesAutomatico', 'vCajasFlete',
-    'vGeneraPinAutoClientes', 'vCapturaPrecioDeVtaXListaLinea', 'vFichaTecnicaCompra', 'vColoresEstiloVista',
-    'vAvanceProduccion', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vReimprimeNotaCredito', 'vCobranzaDiaria',
-    'vDocsPorVencer', 'vReporteDocsVencidos', 'vReportePagoSeguro', 'vReportePagoPromedioClientes',
-    'vReporteDevolucionesPorAplicar', 'vEtiquetaCajas', 'vPagosDiariosClientes', 'vPagosDiariosClientesEfectivo',
-    'vControlesVencimientoPorMaquila', 'vControlesVencimientoPorCliente', 'vControlesEntregadosPorFabrica',
-    'vEstadoCuenta', 'vEstadoCuenta8', 'vEstadoCuentaAgente', 'vEstadoCuenta306090', 'vDetalladoMovimientos',
-    'vRelacionNotasCredito', 'vEstatusPedidoXGrupoAgente', 'vEstatusPedidoXAgenteFechaCaptura',
-    'vConsultaPedidoXAgenteFechaCaptura', 'vPedidosAgenteCuatrimestre', 'vControlesPorFacturarAClientes', 'vReimprimeDocto');
+$vs = array(
+    'vTipoCambio',
+    'vBloqueoClientesXCliente',
+    'vBloqueoClientesAutomatico',
+    'vCajasFlete',
+    'vGeneraPinAutoClientes',
+    'vCapturaPrecioDeVtaXListaLinea',
+    'vFichaTecnicaCompra',
+    'vColoresEstiloVista',
+    'vAvanceProduccion',
+    'vMaterialAnoSemMaqDesgloseControlEstilo',
+    'vReimprimeNotaCredito',
+    'vCobranzaDiaria',
+    'vDocsPorVencer',
+    'vReporteDocsVencidos',
+    'vReportePagoSeguro',
+    'vReportePagoPromedioClientes',
+    'vReporteDevolucionesPorAplicar',
+    'vEtiquetaCajas',
+    'vPagosDiariosClientes',
+    'vPagosDiariosClientesEfectivo',
+    'vControlesVencimientoPorMaquila',
+    'vControlesVencimientoPorCliente',
+    'vControlesEntregadosPorFabrica',
+    'vEstadoCuenta',
+    'vEstadoCuenta8',
+    'vEstadoCuentaAgente',
+    'vEstadoCuenta306090',
+    'vDetalladoMovimientos',
+    'vRelacionNotasCredito',
+    'vEstatusPedidoXGrupoAgente',
+    'vEstatusPedidoXAgenteFechaCaptura',
+    'vConsultaPedidoXAgenteFechaCaptura',
+    'vPedidosAgenteCuatrimestre',
+    'vControlesPorFacturarAClientes',
+    'vReimprimeDocto',
+    'vPagoComisiones',
+    'vParesPesosTiendas');
 
 foreach ($vs as $v) {
     $this->load->view($v);
 }
+
