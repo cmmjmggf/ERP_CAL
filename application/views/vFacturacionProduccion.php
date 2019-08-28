@@ -1,26 +1,20 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
-        <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-
+    <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
+            <div class="row">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+    
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="right">
+                    
+                </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
-            </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="right">
-                <button type="button" id="btnNuevo" name="btnNuevo" 
-                        class="btn btn-default animated flipInX d-none" 
-                        disabled="true"
-                        data-toggle="tooltip" data-placement="bottom" title="Hecho" 
-                        style="padding: 3px 6px 3px 6px !important;    background-color: #9e9e9e00; box-shadow: none !important; color: #9E9E9E !important; border-color: ">
-                    <span class="fa fa-check fa-2x"></span>
-                </button>
-            </div>
-        </div>
-    </div> 
+        </div>-->
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
-            <div class="col-sm-6"> 
+            <div class="col-sm-4">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
@@ -47,16 +41,32 @@
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
             </div>
-            <div class="col-sm-6" align="right"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="center">
+                <div class="row">
+                    <div class="col-10">
+                        <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" id="btnNuevo" name="btnNuevo" 
+                                class="btn btn-default animated flipInX d-none" 
+                                disabled="true"
+                                data-toggle="tooltip" data-placement="bottom"  
+                                style="padding: 6px 9px 6px 9px !important; 
+                                background-color: #99cc00; 
+                                box-shadow: none !important; 
+                                color: #fff !important;">
+                            <span class="fa fa-check"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" align="right"> 
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
                 <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" class="btn btn-info" disabled="">
                     <span class="fa fa-file-archive"></span>   ADDENDA COPPEL 
-                </button>
-                <button type="button" id="btnTimbrarFac" name="btnTimbrarFac" class="btn btn-warning" disabled="">
-                    <span class="fa fa-file-archive"></span>   TIMBRAR FAC 
-                </button>
+                </button> 
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
@@ -96,7 +106,7 @@
                                 ?>
                             </select>
                             <div class="input-group-append">
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
+                                <button type="button" id="btnVerTienda" name="btnVerTienda" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
                                     <span class="fa fa-exclamation"></span>
                                 </button>
                             </div>
@@ -153,18 +163,25 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <div class="alert alert-info  alert-dismissible m-2" role="alert">
-                            <h4 class="alert-heading">Consignar a</h4>
+                            <div class="row">
+                                <div class="col-10">
+                                    <h4 class="alert-heading">Consignar a</h4>
+                                    <select id="Tienda" name="Tienda" class="form-control">
+                                        <option></option>
+                                        <?php
+                                        foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
+                                                ->from('consignatarios AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                            print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
+                                        }
+                                        ?>
+                                    </select> 
+                                </div>
+                                <div class="col-2">
 
-                            <select id="Tienda" name="Tienda" class="form-control">
-                                <option></option>
-                                <?php
-                                foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
-                                        ->from('consignatarios AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
-                                }
-                                ?>
-                            </select> 
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -196,53 +213,103 @@
             </div> 
 
 
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                        <div class="row">
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                <h5 class="font-weight-bold text-danger font-italic">Producción</h5>
+            <!--            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
+                                    <div class="row">
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Producción</h5>
+                                        </div>
+                                        <div class="w-100"></div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Fabricados : </span>
+                                            <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
+                                            <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
+                                        </div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Facturados : </span>
+                                            <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
+                                            <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
+                                        </div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Saldo : </span>
+                                            <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
+                                            <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
+                                    <div class="row">
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Devoluciones</h5> 
+                                        </div>
+                                        <div class="w-100"></div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Devueltos:</span>
+                                            <span class="font-weight-bold text-danger devueltos"> 0 </span> 
+                                            <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
+                                        </div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Facturados: </span>
+                                            <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span> 
+                                            <input type="text" id="PrsFacturadosDevueltos" name="PrsFacturadosDevueltos" readonly=""  class="d-none form-control form-control-sm">
+                                        </div>
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"> 
+                                            <span class="font-weight-bold">Saldo: </span>
+                                            <span class="font-weight-bold text-danger saldodevuelto"> 0 </span> 
+                                            <input type="text" id="PrsSaldoDevuelto" name="PrsSaldoDevuelto" readonly=""  class="d-none form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="w-100"></div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Fabricados : </span>
+                        </div>-->
+
+
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="row">
+                    <div class="col-6" style="border-bottom: 1px solid #0202; ">
+                        <div class="row">
+                            <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
+                                <span class="font-weight-bold">Producción</span>
+                            </div>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Fabricados 
                                 <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
                                 <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Facturados : </span>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Facturados 
                                 <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
                                 <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Saldo : </span>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Saldo 
                                 <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
                                 <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
-                            </div> 
-                        </div> 
-                    </div> 
-                </div> 
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                        <div class="row">
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                <h5 class="font-weight-bold text-danger font-italic">Devoluciones</h5> 
                             </div>
-                            <div class="w-100"></div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Devueltos : </span>
+                        </div>
+                    </div>
+                    <div class="col-6" style="border-bottom: 1px solid #0202; ">
+                        <div class="row">
+                            <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
+                                <span class="font-weight-bold">Devoluciones</span>
+                            </div>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Devueltos 
                                 <span class="font-weight-bold text-danger devueltos"> 0 </span> 
                                 <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Facturados : </span>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Facturados 
                                 <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span> 
                                 <input type="text" id="PrsFacturadosDevueltos" name="PrsFacturadosDevueltos" readonly=""  class="d-none form-control form-control-sm">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6"> 
-                                <span class="font-weight-bold">Saldo : </span>
+                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                                Saldo 
                                 <span class="font-weight-bold text-danger saldodevuelto"> 0 </span> 
                                 <input type="text" id="PrsSaldoDevuelto" name="PrsSaldoDevuelto" readonly=""  class="d-none form-control form-control-sm">
                             </div>
@@ -250,22 +317,24 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="w-100 my-1"></div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">  
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" align="center"> 
-                    <button type="button" class="btn btn-info"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
-                        <span class="fa fa-exclamation"></span> FACTURA POR ANTICIPO DE PRODUCTO
-                    </button>
-                    <button type="button" class="btn btn-info" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
-                        <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
-                    </button>
-                    <button type="button" class="btn btn-info" id="btnControlCompleto"  disabled="" >
-                        <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO DEL CONTROL
-                    </button> 
-                </div>
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10" align="center">  
+                <!--                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" align="center"> 
+                                    <button type="button" class="btn btn-info"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
+                                        <span class="fa fa-exclamation"></span> FACTURA POR ANTICIPO DE PRODUCTO
+                                    </button>
+                                    <button type="button" class="btn btn-info" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                                        <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
+                                    </button>
+                                    <button type="button" class="btn btn-info" id="btnControlCompleto"  disabled="" >
+                                        <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO DEL CONTROL
+                                    </button> 
+                                </div>-->
                 <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;"> 
                     <table id="tblTallasF" class="Tallas">
                         <thead></thead>
@@ -274,16 +343,17 @@
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 43px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
+//                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
+                                    print "<td align='center'><span class=\"T{$index}\">$index</span></td>";
                                 }
-                                ?>
+                                ?>                        
                                 <td></td> 
                             </tr>  
                             <tr class="rCapturaCantidades" id="rCantidades">
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 43px;" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1);" onchange="onCalcularPares(this,1);" keyup="onCalcularPares(this,1);" onfocusout="onCalcularPares(this,1);"></td>';
+                                    print '<td><input type="text" style="width: 40px; font-weight: 300 !important; cursor: no-allowed !important;" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1);" onchange="onCalcularPares(this,1);" keyup="onCalcularPares(this,1);" onfocusout="onCalcularPares(this,1);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
@@ -294,7 +364,7 @@
                                 <td class="font-weight-bold">Facturado</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 43px;" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2);" onchange="onCalcularPares(this,2);" keyup="onCalcularPares(this,2);" onfocusout="onCalcularPares(this,2);"></td>';
+                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;  cursor: no-allowed !important;" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2);" onchange="onCalcularPares(this,2);" keyup="onCalcularPares(this,2);" onfocusout="onCalcularPares(this,2);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold">
@@ -306,7 +376,7 @@
                                 <td class="font-weight-bold">A Facturar</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 43px;" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onfocus="onCalcularPares(this,3);" onchange="onCalcularPares(this,3);" keyup="onCalcularPares(this,3);" onfocusout="onCalcularPares(this,3);"></td>';
+                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onfocus="onCalcularPares(this,3);" onchange="onCalcularPares(this,3);" keyup="onCalcularPares(this,3);" onfocusout="onCalcularPares(this,3);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
@@ -315,6 +385,21 @@
                     </table>
                 </div>
             </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-1" align="center"> 
+                <div class="row"  align="center">
+                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter notnotEnter"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
+                        <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
+                    </button>
+                    <div class="w-100"></div>
+                    <button type="button" class="btn btn-info notEnter notnotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                        <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
+                    </button>
+                    <div class="w-100"></div>
+                    <button type="button" class="btn btn-info notEnter notnotEnter" id="btnControlCompleto"  disabled="" >
+                        <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
+                    </button> 
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
@@ -583,6 +668,7 @@
 
         btnNuevo.click(function () {
             onOpenOverlay('');
+            onDisableInputs(false);
             onResetCampos();
             btnVistaPreviaF.attr('disabled', true);
             btnReimprimeDocto.attr('disabled', true);
@@ -593,7 +679,7 @@
             pnlTablero.find(".totalivafacturadopie").text('$0.0');
             pnlTablero.find(".totalfacturadopie").text('$0.0');
             pnlTablero.find(".totalfacturadoenletrapie").text('$0.0');
-            LPFactura.val('');
+            CajasFacturacion.attr('disabled', false);
             pnlTablero.find("input").val('');
             FechaFactura.val(Hoy);
             FAPEORCOFactura.val('');
@@ -603,6 +689,7 @@
             btnNuevo.attr('disabled', true);
             btnNuevo.addClass("d-none");
             ClienteFactura[0].selectize.focus();
+            btnVerTienda.addClass("d-none");
             onCloseOverlay();
         });
 
@@ -611,29 +698,44 @@
         });
 
         btnVistaPreviaF.click(function () {
-            if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
-                onBeep(1);
-                onOpenOverlay('Espere por favor...');
-                $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
-                    CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
-                    DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
-                    TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    onBeep(1);
-                    onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
-                }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                }).always(function () {
-                    onCloseOverlay();
-                });
-            } else {
-                onBeep(2);
-                iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
-                    ClienteFactura[0].selectize.focus();
-                });
-            }
+
+            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
+                DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : ''
+            }).done(function (a) {
+                if (a.length > 0) {
+                    if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
+                        onBeep(1);
+                        onOpenOverlay('Espere por favor...');
+                        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
+                            CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
+                            DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
+                            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+                        }).done(function (data, x, jq) {
+                            console.log(data);
+                            onBeep(1);
+                            onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                        }).fail(function (x, y, z) {
+                            console.log(x.responseText);
+                            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                        }).always(function () {
+                            onCloseOverlay();
+                        });
+                    } else {
+                        onBeep(2);
+                        iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
+                            ClienteFactura[0].selectize.focus();
+                        });
+                    }
+                } else {
+                    iMsg('ESTE DOCUMENTO NO TIENE UNA FACTURA ASOCIADA', 'w', function () {
+                        FAPEORCOFactura.focus().select();
+                    });
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
         });
 
         btnFacturaXAnticipoDeProducto.click(function () {
@@ -734,66 +836,93 @@
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
                         {FACTURA: FAPEORCOFactura.val()}).done(function (a) {
                     if (a.length > 0) {
+                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
+
                         if (parseInt(a[0].FACTURA_EXISTE) === 0) {
                             btnAcepta.attr('disabled', false);
+                            btnVistaPreviaF.attr('disabled', true);
+                            btnReimprimeDocto.attr('disabled', true);
+                            CajasFacturacion.attr('disabled', false);
                         } else {
-                            btnAcepta.attr('disabled', true);
-                            $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
-                                    {
-                                        CLIENTE: ClienteFactura.val(),
-                                        FACTURA: FAPEORCOFactura.val(),
-                                        TP: TPFactura.val()
-                                    }).done(function (a) {
-                                if (a.length > 0) {
-                                    FechaFactura.val(a[0].FECHA_FACTURA);
-                                    $.each(a, function (k, v) {
-                                        var r = [];
-                                        r.push(v.ID);
-                                        r.push(v.FACTURA)
-                                        r.push(v.CLIENTE);
-                                        r.push(v.CONTROL);
-                                        r.push(v.FECHA_FACTURA);
-                                        r.push(v.PARES);
-                                        for (var i = 1; i < 23; i++) {
-                                            if (i < 10) {
-                                                r.push(v["par0" + i]);
-                                            } else {
-                                                r.push(v["par" + i]);
+                            if (ClienteFactura.val() === a[0].CLIENTE) {
+                                btnVistaPreviaF.attr('disabled', false);
+                                btnReimprimeDocto.attr('disabled', false);
+                                btnAcepta.attr('disabled', true);
+                                CajasFacturacion.attr('disabled', true);
+                                onDisableInputs(true);
+                                $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
+                                        {
+                                            CLIENTE: ClienteFactura.val(),
+                                            FACTURA: FAPEORCOFactura.val(),
+                                            TP: TPFactura.val()
+                                        }).done(function (a) {
+                                    if (a.length > 0) {
+                                        FechaFactura.val(a[0].FECHA_FACTURA);
+                                        ParesFacturados.rows().remove().draw();
+                                        var facturado = false;
+                                        $.each(a, function (k, v) {
+                                            var r = [];
+                                            r.push(v.ID);
+                                            r.push(v.FACTURA);
+                                            r.push(v.CLIENTE);
+                                            r.push(v.CONTROL);
+                                            r.push(v.FECHA_FACTURA);
+                                            r.push(v.PARES);
+                                            for (var i = 1; i < 23; i++) {
+                                                if (i < 10) {
+                                                    r.push(v["par0" + i]);
+                                                } else {
+                                                    r.push(v["par" + i]);
+                                                }
                                             }
+                                            r.push('$' + $.number(v.PRECIO, 2, '.', ','));
+                                            r.push(v.PRECIO);
+                                            r.push('$' + $.number(v.SUBTOTAL));
+                                            r.push(v.SUBTOTAL);
+                                            r.push('<button type="button" class="btn btn-info" ><span class="fa fa-lock"></span></button>');
+                                            r.push(v.CAJAS_FACTURACION);
+                                            r.push(v.OBS);
+                                            r.push(v.DESCUENTO);
+                                            r.push(v.PARES_FACTURADOS);
+                                            r.push(v.FACTURA);
+                                            r.push(v.TIPO_MONEDA);
+                                            r.push(1);
+                                            r.push(v.ESTATUS_PRODUCCION);
+                                            r.push(1);
+                                            console.log("r = >", r)
+                                            ParesFacturados.row.add(r).draw(false);
+                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
+                                                facturado = true;
+                                            }
+                                        });
+                                        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                                        getTotalFacturado();
+                                        pnlTablero.find("#btnNuevo").removeClass("d-none");
+                                        pnlTablero.find("#btnNuevo").attr("disabled", false);
+                                        Control.attr('disabled', true);
+                                        btnElijeControl.attr('disabled', true);
+                                        if (facturado) {
+                                            ClienteFactura[0].selectize.disable();
+                                            TPFactura[0].selectize.disable();
+                                            btnElijeControl.addClass("d-none");
+                                            btnAcepta.addClass("d-none");
                                         }
-                                        r.push('$' + $.number(v.PRECIO, 2, '.', ','));
-                                        r.push(v.PRECIO);
-                                        r.push('$' + $.number(v.SUBTOTAL));
-                                        r.push(v.SUBTOTAL);
-                                        r.push('<button type="button" class="btn btn-info" ><span class="fa fa-lock"></span></button>');
-                                        r.push(v.CAJAS_FACTURACION);
-                                        r.push(v.OBS);
-                                        r.push(v.DESCUENTO);
-                                        r.push(v.PARES_FACTURADOS);
-                                        r.push(v.FACTURA);
-                                        r.push(v.TIPO_MONEDA);
-                                        r.push(1);
-                                        r.push(v.ESTATUS_PRODUCCION);
-                                        r.push(1);
-                                        console.log("r = >", r)
-                                        ParesFacturados.row.add(r).draw(false);
-                                    });
-                                    $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-                                    getTotalFacturado();
-                                    pnlTablero.find("#btnNuevo").removeClass("d-none");
-                                    pnlTablero.find("#btnNuevo").attr("disabled", false);
-                                    Control.attr('disabled', true);
-                                    btnElijeControl.attr('disabled', true);
-                                } else {
-                                    pnlTablero.find("#btnNuevo").addClass("d-none");
-                                    pnlTablero.find("#btnNuevo").attr("disabled", true);
-                                }
-                            }).fail(function (x) {
-                                getError(x);
-                            }).always(function () {
+                                    } else {
+                                        pnlTablero.find("#btnNuevo").addClass("d-none");
+                                        pnlTablero.find("#btnNuevo").attr("disabled", true);
+                                    }
+                                }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
 
-                            });
+                                });
+                            } else {
+                                iMsg('ESTA FACTURA NO PERTENECE A ESTE CLIENTE', 'w', function () {
+                                    ClienteFactura[0].selectize.focus();
+                                });
+                            }
                         }
+
                     } else {
                         btnAcepta.attr('disabled', true);
                     }
@@ -929,6 +1058,7 @@
                     CajasFacturacion.focus().select();
                     getInfoXControl();
                     mdlControlesXFacturar.modal('hide');
+                    CajasFacturacion.focus().select();
                 });
             } else if ($.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
                 ControlesXFacturar.ajax.reload();
@@ -1245,6 +1375,7 @@
                                         for (var i = 1; i < 21; i++) {
                                             if (parseInt(xx["T" + i]) > 0) {
                                                 pnlTablero.find("#T" + i).val(xx["T" + i]);
+                                                pnlTablero.find("span.T" + i).text(xx["T" + i]);
                                                 pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                                                 pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
                                                 pnlTablero.find(`#C${i}`).val(xx["C" + i]);
@@ -1276,7 +1407,6 @@
                                         TotalLetra.find("span").text(NumeroALetras(stt));
                                         pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
                                         EstatusControl.val(xx.ESTATUS);
-                                        pnlTablero.find("#CAF1").focus().select();
                                         btnFacturaXAnticipoDeProducto.attr('disabled', false);
                                         btnControlInCompleto.attr('disabled', false);
                                         btnControlCompleto.attr('disabled', false);
@@ -1508,6 +1638,42 @@
     function onCargarDoctoByNumero() {
         var docto = FAPEORCOFactura.val();
     }
+
+    function onDisableInputs(tf) {
+        if (tf) {
+            FechaFactura.attr('disabled', true);
+            ClienteFactura[0].selectize.disable();
+            TPFactura[0].selectize.disable();
+            FAPEORCOFactura.attr('disabled', true);
+            FCAFactura.attr('disabled', true);
+            PAGFactura.attr('disabled', true);
+            TMNDAFactura.attr('disabled', true);
+            Control.attr('disabled', true);
+            CajasFacturacion.attr('disabled', true);
+            PrecioFacturacion.attr('disabled', true);
+            ObservacionFacturacion.attr('disabled', true);
+            FAPEORCOFactura.attr('disabled', true);
+            for (var i = 1; i < 23; i++) {
+                pnlTablero.find("#CAF" + i).attr('disabled', true);
+            }
+        } else {
+            FechaFactura.attr('disabled', false);
+            ClienteFactura[0].selectize.enable();
+            TPFactura[0].selectize.enable();
+            FAPEORCOFactura.attr('disabled', false);
+            FCAFactura.attr('disabled', false);
+            PAGFactura.attr('disabled', false);
+            TMNDAFactura.attr('disabled', false);
+            Control.attr('disabled', false);
+            CajasFacturacion.attr('disabled', false);
+            PrecioFacturacion.attr('disabled', false);
+            ObservacionFacturacion.attr('disabled', false);
+            for (var i = 1; i < 23; i++) {
+                pnlTablero.find("#CAF" + i).attr('disabled', false);
+            }
+        }
+
+    }
 </script>
 
 <style> 
@@ -1517,5 +1683,11 @@
     }
     #tblParesFacturados thead th{
         font-size: 12px !important;
+    }
+    .hr-vertical{ 
+        border:         none;
+        border-left:    1px solid #ccc;
+        height:         10vh;
+        width:          1px;       
     }
 </style>
