@@ -14,6 +14,101 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteVentasPorClienteAno() {
+        $tipo = $this->input->post('TipoVtasAnoCliente');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('AnoVtasAnoCliente');
+        $parametros["cliente"] = $this->input->post('dClienteVtasAnocliente');
+
+        switch ($tipo) {
+            case '1':
+                $parametros["tp"] = $this->input->post('TpVtasAnoCliente');
+                $jc->setJasperurl('jrxml\clientes\reporteVentasAnoTpClienteFactura.jasper');
+                break;
+            case '2':
+                $jc->setJasperurl('jrxml\clientes\reporteVentasAnoTpClientePedido.jasper');
+                break;
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VTAS_CLIENTE_TP_ANO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteConsolidadoLineaEstilo() {
+        $linea = $this->input->post('LineaConsolidadoLineaEstilo');
+        $filtro = $this->input->post('FiltroConsolidadoLineaEstilo');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["dAno"] = $this->input->post('dAnoConsolidadoLineaEstilo');
+        $parametros["aAno"] = $this->input->post('aAnoConsolidadoLineaEstilo');
+        $parametros["tp"] = $this->input->post('TpConsolidadoLineaEstilo');
+
+
+
+        if ($linea !== '') {//Por Agente
+            $parametros["linea"] = 6160;
+            if ($filtro === '1') {//Pares
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorEstiloLineaPares.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorEstiloLineaPesos.jasper');
+            }
+        } else {//General
+            if ($filtro === '1') {//Pares
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorLineaPares.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorLineaPesos.jasper');
+            }
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CONSOLIDADO_MENSUAL_LINEA_ESTILO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteConsolidadoMes() {
+        $tipo = $this->input->post('TipoConsolidadoMes');
+        $filtro = $this->input->post('FiltroConsolidadoMes');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["dAno"] = $this->input->post('dAnoConsolidadoMes');
+        $parametros["aAno"] = $this->input->post('aAnoConsolidadoMes');
+        $parametros["tp"] = $this->input->post('TpConsolidadoMes');
+
+
+
+        if ($tipo === '1') {//Por Agente
+            if ($filtro === '1') {//Pares
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorAnoAgentePares.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorAnoAgentePesos.jasper');
+            }
+        } else {//General
+            if ($filtro === '1') {//Pares
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorAnoPares.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\clientes\consolidadoVentasPorAnoPesos.jasper');
+            }
+        }
+
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CONSOLIDADO_MENSUAL_ANUAL_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteParesPesosTiendas() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);

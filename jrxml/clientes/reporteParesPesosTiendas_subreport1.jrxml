@@ -63,22 +63,19 @@ order by nomcliente asc]]>
 		<variableExpression><![CDATA[(($V{p5_1}==null)? 0 : $V{p5_1})+
 (($V{p6_1}==null)? 0 : $V{p6_1})+
 (($V{p7_1}==null)? 0 : $V{p7_1})+
-(($V{p8_1}==null)? 0 : $V{p8_1})
-]]></variableExpression>
+(($V{p8_1}==null)? 0 : $V{p8_1})]]></variableExpression>
 	</variable>
 	<variable name="tCancelado1" class="java.lang.Float">
 		<variableExpression><![CDATA[(($V{p17_1}==null)? 0 : $V{p17_1})+
 (($V{p18_1}==null)? 0 : $V{p18_1})+
 (($V{p19_1}==null)? 0 : $V{p19_1})+
-(($V{p20_1}==null)? 0 : $V{p20_1})
- ]]></variableExpression>
+(($V{p20_1}==null)? 0 : $V{p20_1})]]></variableExpression>
 	</variable>
 	<variable name="tCanceladoP1" class="java.lang.Float">
 		<variableExpression><![CDATA[(($V{pss5_1}==null)? 0 : $V{pss5_1})+
 (($V{pss6_1}==null)? 0 : $V{pss6_1})+
 (($V{pss7_1}==null)? 0 : $V{pss7_1})+
-(($V{pss8_1}==null)? 0 : $V{pss8_1})
-   ]]></variableExpression>
+(($V{pss8_1}==null)? 0 : $V{pss8_1})]]></variableExpression>
 	</variable>
 	<variable name="p5_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{p5}]]></variableExpression>

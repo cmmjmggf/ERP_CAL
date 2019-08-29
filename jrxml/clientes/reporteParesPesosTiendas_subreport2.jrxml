@@ -33,7 +33,7 @@ when $P{tp} = '1' then f.tp = 1
 when $P{tp} = '2' then f.tp = 2
 ELSE f.tp LIKE '%%'
 end
-and f.año = 2019
+and f.año = $P{ano}
 and f.factura > 0
 and f.cliente in (2142,2071,2090,1704,1884,2069,1683,1882,1341,1980,2122,1883,1892,2124,2016,2128,1927,2067,2204,1916,1291,1363,1859,2210)
 group by f.cliente
@@ -117,22 +117,19 @@ order by nomcliente asc]]>
 		<variableExpression><![CDATA[(($V{pss9_1}==null)? 0 : $V{pss9_1})+
 (($V{pss10_1}==null)? 0 : $V{pss10_1})+
 (($V{pss11_1}==null)? 0 : $V{pss11_1})+
-(($V{pss12_1}==null)? 0 : $V{pss12_1})
-   ]]></variableExpression>
+(($V{pss12_1}==null)? 0 : $V{pss12_1})]]></variableExpression>
 	</variable>
 	<variable name="tCancelado1" class="java.lang.Float">
 		<variableExpression><![CDATA[(($V{p21_1}==null)? 0 : $V{p21_1})+
 (($V{p22_1}==null)? 0 : $V{p22_1})+
 (($V{p23_1}==null)? 0 : $V{p23_1})+
-(($V{p24_1}==null)? 0 : $V{p24_1})
- ]]></variableExpression>
+(($V{p24_1}==null)? 0 : $V{p24_1})]]></variableExpression>
 	</variable>
 	<variable name="tFacturado1" class="java.lang.Float">
 		<variableExpression><![CDATA[(($V{p9_1}==null)? 0 : $V{p9_1})+
 (($V{p10_1}==null)? 0 : $V{p10_1})+
 (($V{p11_1}==null)? 0 : $V{p11_1})+
-(($V{p12_1}==null)? 0 : $V{p12_1})
-]]></variableExpression>
+(($V{p12_1}==null)? 0 : $V{p12_1})]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
