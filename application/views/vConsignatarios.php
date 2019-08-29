@@ -55,13 +55,21 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                         <label for="Clave" >Clave*</label>
                         <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required placeholder="Clave del color">
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <label for="" >Consignatario*</label>
                         <input type="text" id="Consignatario" name="Consignatario" class="form-control form-control-sm "  required=""/>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-1 col-xl-1">
+                        <label for="" >TP*</label>
+                        <input type="text" id="TPProveedor" name="TPProveedor" class="form-control form-control-sm  numbersOnly"  required=""/>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="" >Numero de proveedor*</label>
+                        <input type="text" id="NumeroDeProveedor" name="NumeroDeProveedor" class="form-control form-control-sm  numbersOnly"  required=""/>
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <label for="Direccion" >Dirección*</label>
@@ -84,6 +92,14 @@
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <label for="" >Código Postal</label>
                         <input type="text" id="CodigoPostal" name="CodigoPostal" class="form-control form-control-sm numbersOnly"  />
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="" >#Interior</label>
+                        <input type="text" id="NumeroInterior" name="NumeroInterior" class="form-control form-control-sm numbersOnly"  />
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="" >#Exterior</label>
+                        <input type="text" id="NumeroExterior" name="NumeroExterior" class="form-control form-control-sm numbersOnly"  />
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <label for="" >RFC</label>
