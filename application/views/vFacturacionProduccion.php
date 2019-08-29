@@ -699,43 +699,41 @@
 
         btnVistaPreviaF.click(function () {
 
-            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
-                DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : ''
-            }).done(function (a) {
-                if (a.length > 0) {
-                    if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
-                        onBeep(1);
-                        onOpenOverlay('Espere por favor...');
-                        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
-                            CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
-                            DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
-                            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
-                        }).done(function (data, x, jq) {
-                            console.log(data);
-                            onBeep(1);
-                            onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
-                        }).fail(function (x, y, z) {
-                            console.log(x.responseText);
-                            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                        }).always(function () {
-                            onCloseOverlay();
-                        });
-                    } else {
-                        onBeep(2);
-                        iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
-                            ClienteFactura[0].selectize.focus();
-                        });
-                    }
-                } else {
-                    iMsg('ESTE DOCUMENTO NO TIENE UNA FACTURA ASOCIADA', 'w', function () {
-                        FAPEORCOFactura.focus().select();
-                    });
-                }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-
-            });
+//            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
+//                DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : ''
+//            }).done(function (a) {
+//                if (a.length > 0) {
+            if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
+                onBeep(1);
+                onOpenOverlay('Espere por favor...');
+                $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
+                    CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
+                    DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
+                    TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+                }).done(function (data, x, jq) { 
+                    onBeep(1);
+                    onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                }).fail(function (x, y, z) { 
+                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                }).always(function () {
+                    onCloseOverlay();
+                });
+            } else {
+                onBeep(2);
+                iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
+                    ClienteFactura[0].selectize.focus();
+                });
+            }
+//                } else {
+//                    iMsg('ESTE DOCUMENTO NO TIENE UNA FACTURA ASOCIADA', 'w', function () {
+//                        FAPEORCOFactura.focus().select();
+//                    });
+//                }
+//            }).fail(function (x) {
+//                getError(x);
+//            }).always(function () {
+//
+//            });
         });
 
         btnFacturaXAnticipoDeProducto.click(function () {
@@ -832,9 +830,10 @@
 
         FAPEORCOFactura.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                onOpenOverlay('Comprobando...');
+                onOpenOverlay('Espere un momento por favor...');
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                        {FACTURA: FAPEORCOFactura.val()}).done(function (a) {
+                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: FAPEORCOFactura.val()
+                        }).done(function (a) {
                     if (a.length > 0) {
                         console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
 
@@ -857,45 +856,33 @@
                                             TP: TPFactura.val()
                                         }).done(function (a) {
                                     if (a.length > 0) {
+                                        /*DATOS DEL ENCABEZADO*/
                                         FechaFactura.val(a[0].FECHA_FACTURA);
+                                        TMNDAFactura.val(a[0].TIPO_MONEDA);
+                                        onNotifyOld('', 'ESTE DOCUMENTO SE ENCUENTRA "' + a[0].ESTATUS_PRODUCCION + '" ', 'info');
+                                        /*DATOS DEL DETALLE*/
                                         ParesFacturados.rows().remove().draw();
                                         var facturado = false;
+                                        var r = [];
                                         $.each(a, function (k, v) {
-                                            var r = [];
-                                            r.push(v.ID);
-                                            r.push(v.FACTURA);
-                                            r.push(v.CLIENTE);
-                                            r.push(v.CONTROL);
-                                            r.push(v.FECHA_FACTURA);
-                                            r.push(v.PARES);
-                                            for (var i = 1; i < 23; i++) {
-                                                if (i < 10) {
-                                                    r.push(v["par0" + i]);
-                                                } else {
-                                                    r.push(v["par" + i]);
-                                                }
-                                            }
-                                            r.push('$' + $.number(v.PRECIO, 2, '.', ','));
-                                            r.push(v.PRECIO);
-                                            r.push('$' + $.number(v.SUBTOTAL));
-                                            r.push(v.SUBTOTAL);
-                                            r.push('<button type="button" class="btn btn-info" ><span class="fa fa-lock"></span></button>');
-                                            r.push(v.CAJAS_FACTURACION);
-                                            r.push(v.OBS);
-                                            r.push(v.DESCUENTO);
-                                            r.push(v.PARES_FACTURADOS);
-                                            r.push(v.FACTURA);
-                                            r.push(v.TIPO_MONEDA);
-                                            r.push(1);
-                                            r.push(v.ESTATUS_PRODUCCION);
-                                            r.push(1);
-                                            console.log("r = >", r)
-                                            ParesFacturados.row.add(r).draw(false);
+                                            r.push([v.ID, v.FACTURA, v.CLIENTE, v.CONTROL, v.FECHA_FACTURA, v.PARES,
+                                                v["par01"], v["par02"], v["par03"], v["par04"], v["par05"],
+                                                v["par06"], v["par07"], v["par08"], v["par09"], v["par10"],
+                                                v["par11"], v["par12"], v["par13"], v["par14"], v["par15"],
+                                                v["par16"], v["par17"], v["par18"], v["par19"], v["par20"],
+                                                v["par21"], v["par22"],
+                                                '$' + $.number(v.PRECIO, 2, '.', ','), v.PRECIO,
+                                                '$' + $.number(v.SUBTOTAL), v.SUBTOTAL,
+                                                '<span class="fa fa-lock"></span>',
+                                                v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
+                                                v.ESTATUS_PRODUCCION, 1]);
                                             if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
                                                 facturado = true;
                                             }
                                         });
+                                        ParesFacturados.rows.add(r).draw(false);
                                         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                                        onCloseOverlay();
                                         getTotalFacturado();
                                         pnlTablero.find("#btnNuevo").removeClass("d-none");
                                         pnlTablero.find("#btnNuevo").attr("disabled", false);
@@ -914,7 +901,6 @@
                                 }).fail(function (x) {
                                     getError(x);
                                 }).always(function () {
-
                                 });
                             } else {
                                 iMsg('ESTA FACTURA NO PERTENECE A ESTE CLIENTE', 'w', function () {
@@ -929,7 +915,7 @@
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
-                    onCloseOverlay();
+
                 });
             }
         });
@@ -1048,8 +1034,7 @@
                 });
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
-                    var xxx = ControlesXFacturar.row($(this)).data();
-                    console.log(xxx);
+                    var xxx = ControlesXFacturar.row($(this)).data(); 
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
@@ -1089,7 +1074,7 @@
             if (ClienteFactura.val() && TPFactura.val()) {
                 var x = parseInt(TPFactura.val()) === 1 ? 1 : 2;
                 if (x === 1 || x === 2) {
-                    onOpenOverlay('');
+//                    onOpenOverlay('');
                     $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
                         TP: x
                     }).done(function (a) {
@@ -1170,7 +1155,7 @@
                 } else {
                     btnVerTienda.addClass("d-none");
                 }
-                onOpenOverlay('');
+//                onOpenOverlay('');
                 $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
                     CLIENTE: ClienteFactura.val()
                 }).done(function (a) {
@@ -1192,7 +1177,7 @@
         });
 
         ParesFacturados = tblParesFacturados.DataTable({
-            dom: 'rt',
+            dom: 'rit',
             "columnDefs": [{
                     "targets": [0],
                     "visible": false,
@@ -1492,8 +1477,6 @@
                 pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 TotalLetra.find("span").text(NumeroALetras(t));
-                totalivafacturadopie
-                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
                 break;
         }
@@ -1591,7 +1574,7 @@
         p["COLOR_TEXT"] = ColorFacturacion.val();
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
-        console.log("\p PARAMETROS ", p);
+//        console.log("\p PARAMETROS ", p);
         $.post('<?php print base_url('FacturacionProduccion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
             /*REINICIAR VALORES POR DEFECTO PARA EL DETALLE*/

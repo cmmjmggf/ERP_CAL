@@ -338,8 +338,8 @@
                 align: "left"
             },
             animate: {
-                enter: 'animated flipInX',
-                exit: 'animated flipOutX'
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
             }
         });
     }
