@@ -65,10 +65,11 @@
             $.each(mdlConsolidadoPorMes.find("select"), function (k, v) {
                 mdlConsolidadoPorMes.find("select")[k].selectize.clear(true);
             });
+            var d = new Date();
             mdlConsolidadoPorMes.find('#dAnoConsolidadoMes').val(d.getFullYear() - 1);
             mdlConsolidadoPorMes.find('#aAnoConsolidadoMes').val(d.getFullYear());
             mdlConsolidadoPorMes.find('#dAnoConsolidadoMes').focus().select();
-            ;
+
         });
 
         mdlConsolidadoPorMes.find("#dAnoConsolidadoMes").keypress(function (e) {

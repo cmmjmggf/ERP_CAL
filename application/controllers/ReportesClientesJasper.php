@@ -14,6 +14,84 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteVentasPorFecha() {
+
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasPorFecha'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasPorFecha'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+        $tp = $this->input->post('TpVentasPorFecha');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+
+
+        $tipo = $this->input->post('Reporte');
+        $reports = array();
+
+
+        if ($tp === '0') {
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaMaquila.jasper');
+            $jc->setFilename('REPORTE_VTAS_POR_FECHAS_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            $reports['1UNO'] = $jc->getReport();
+            print json_encode($reports);
+        } else {
+            switch ($tipo) {
+                case '1':
+                    $parametros["tp"] = $tp;
+                    $jc->setParametros($parametros);
+                    $jc->setFilename('REPORTE_VTAS_POR_FECHAS_' . Date('h_i_s'));
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaSinRefacNiTraspDetalleTp.jasper');
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    print json_encode($reports);
+                    break;
+                case '2':
+                    $parametros["tp"] = $tp;
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaSinRefacNiTraspDetalleTp.jasper');
+                    $jc->setFilename('REPORTE_VTAS_POR_FECHAS__SIN_REFAC_NI_TRASPASOS' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaNormalGeneralTp.jasper');
+                    $jc->setFilename('REPORTE_VTAS_POR_FECHA_AGENTE_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['2DOS'] = $jc->getReport();
+                    print json_encode($reports);
+                    break;
+                case '3':
+                    $parametros["tp"] = $tp;
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaClienteImporteDoctoDetalleTp.jasper');
+                    $jc->setFilename('REPORTE_VTAS_POR_FECHAS_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    print json_encode($reports);
+                    break;
+                default:
+                    $parametros["tp"] = $tp;
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaNormalGeneralTp.jasper');
+                    $jc->setFilename('REPORTE_GENERAL_VTAS_POR_FECHAS_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    $jc->setJasperurl('jrxml\clientes\reporteVentasPorFechaNormalDetalleTp.jasper');
+                    $jc->setFilename('REPORTE_GENERAL_VTAS_POR_FECHAS_DETALLE_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['2DOS'] = $jc->getReport();
+                    print json_encode($reports);
+                    break;
+            }
+        }
+    }
+
     public function onReporteVentasPorClienteAno() {
         $tipo = $this->input->post('TipoVtasAnoCliente');
         $jc = new JasperCommand();
