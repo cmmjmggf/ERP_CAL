@@ -117,7 +117,7 @@ class FacturacionProduccion extends CI_Controller {
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
                                 P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
-                                FROM erp_cal.pedidox AS P 
+                                FROM pedidox AS P 
                                 WHERE P.Control NOT IN(0,1) 
                                 AND P.stsavan NOT IN(13,14) 
                                 AND P.Cliente = '{$this->input->get('CLIENTE')}' 
@@ -364,14 +364,19 @@ class FacturacionProduccion extends CI_Controller {
                     ->result();
             $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
                             . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
-            $cfdi = $dtm[0];
-            $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
-            $UUID = $cfdi->uuid;
+
             $rfc_emi = $this->session->EMPRESA_RFC;
-            $rfc_rec = $rfc_cliente[0]->RFC;
+            $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
 
-            $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+            if (!empty($dtm)) {
+                $cfdi = $dtm[0];
+                $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
+                $UUID = $cfdi->uuid;
 
+                $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+            } else {
+                $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
+            }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $qr_url = QRcode::png($qr, 'rpt/qr.png');
@@ -496,6 +501,7 @@ class FacturacionProduccion extends CI_Controller {
                     $pr["certificado"] = '00001000000201352796';
                     $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                     $pr["CLIENTE"] = $x['CLIENTE'];
+                    $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
                     $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                     $jc->setDocumentformat('pdf');
@@ -503,6 +509,13 @@ class FacturacionProduccion extends CI_Controller {
                     break;
                 case 39:
                     /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                    $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                    $pr["qrCode"] = base_url('rpt/qr.png');
+                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                    $pr["certificado"] = '00001000000201352796';
+                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                    $pr["CLIENTE"] = $x['CLIENTE'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                     $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -592,6 +605,7 @@ class FacturacionProduccion extends CI_Controller {
                     break;
             }
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -603,11 +617,13 @@ class FacturacionProduccion extends CI_Controller {
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
 
-    public function getQR($str) {
+    public
+            function getQR($str) {
         QRcode::png($str);
     }
 
@@ -618,16 +634,19 @@ class FacturacionProduccion extends CI_Controller {
             (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +  
             F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +  
             F.par21 +  F.par22) AS PARES_FACTURADOS,
-            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL, DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA, 
+            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL, 
+            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA, 
             F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, 
             F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10, 
             F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20, 
             F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra, 
-            F.tmnda AS TIPO_MONEDA, F.tcamb, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente, 
+            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente, 
             F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, 
-            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS, (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
+            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS, 
+            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION 
+            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
-                                    . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}' ORDER BY F.contped DESC")->result());
+                                    . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

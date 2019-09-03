@@ -727,11 +727,7 @@
     tr:hover td{
         background-color: #1b4f72;
         color: #fff;
-    }
-    td, td span{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
+    } 
 
     td:hover {
         position: relative;

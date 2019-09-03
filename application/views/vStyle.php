@@ -99,7 +99,10 @@
         cursor: pointer;
         font-size: 0.8rem !important;
         background-color: white;
-
+        font-weight: bold !important;
+    }
+    table tbody tr:hover td{
+        background-color: #000 !important;
     }
     table thead tr{
         cursor: pointer;

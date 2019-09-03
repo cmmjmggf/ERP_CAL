@@ -17,6 +17,7 @@
     var isMobile = false;
     var seg = <?php print (isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : 0); ?>;
     function onOpenWindow(url) {
+        onBeep(1);
         $.fancybox.open({
             src: url,
             type: 'iframe',

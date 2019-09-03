@@ -1,17 +1,4 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-    <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
-            <div class="row">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-    
-                </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                    <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
-                </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="right">
-                    
-                </div>
-            </div>
-        </div>-->
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
             <div class="col-sm-4">
@@ -41,7 +28,7 @@
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" align="center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" align="center">
                 <div class="row">
                     <div class="col-10">
                         <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
@@ -60,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4" align="right"> 
+            <div class="col-12 col-xs-12 col-sm-5 col-md-5" align="right"> 
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
@@ -73,8 +60,8 @@
                 <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
-                <button type="button" id="btnEtiquetasParaCaja" name="btnEtiquetasParaCaja" class="btn btn-primary">
-                    <span class="fa fa-file-archive"></span>    ETIQUETAS PARA CAJA
+                <button type="button" id="btnEtiquetasParaCaja" name="btnEtiquetasParaCaja" class="btn btn-primary d-none">
+                    <span class="fa fa-file-archive"></span>    ETIQ.P CAJA
                 </button>
             </div>
         </div>
@@ -99,8 +86,8 @@
                             <select id="ClienteFactura" name="ClienteFactura" class="form-control">
                                 <option></option>
                                 <?php
-                                foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
-                                        ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+//                                YA CONTIENE LOS BLOQUEOS DE VENTA
+                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT  JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                     print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -120,7 +107,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                 <label>TP</label>
-                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm" >
+                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm">
                     <option></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -479,9 +466,9 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="center">
-                        <h4 class="font-weight-bold text-danger font-italic">
+                        <h5 class="font-weight-bold text-danger font-italic">
                             DETALLE DE LA FACTURA
-                        </h4>
+                        </h5>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"  align="right">
                         <h4 class="font-weight-bold text-danger font-italic totalfacturadohead">$ 0.0</h4>
@@ -557,6 +544,9 @@
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
+                <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapieDLLS">-</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadopie">$ 0.0</h3>
@@ -710,10 +700,10 @@
                     CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
                     DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
                     TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
-                }).done(function (data, x, jq) { 
+                }).done(function (data, x, jq) {
                     onBeep(1);
                     onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
-                }).fail(function (x, y, z) { 
+                }).fail(function (x, y, z) {
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
                 }).always(function () {
                     onCloseOverlay();
@@ -842,6 +832,7 @@
                             btnVistaPreviaF.attr('disabled', true);
                             btnReimprimeDocto.attr('disabled', true);
                             CajasFacturacion.attr('disabled', false);
+                            onCloseOverlay();
                         } else {
                             if (ClienteFactura.val() === a[0].CLIENTE) {
                                 btnVistaPreviaF.attr('disabled', false);
@@ -872,7 +863,7 @@
                                                 v["par16"], v["par17"], v["par18"], v["par19"], v["par20"],
                                                 v["par21"], v["par22"],
                                                 '$' + $.number(v.PRECIO, 2, '.', ','), v.PRECIO,
-                                                '$' + $.number(v.SUBTOTAL), v.SUBTOTAL,
+                                                '$' + $.number(v.SUBTOTAL, 2, '.', ','), v.SUBTOTAL,
                                                 '<span class="fa fa-lock"></span>',
                                                 v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
                                                 v.ESTATUS_PRODUCCION, 1]);
@@ -1034,7 +1025,7 @@
                 });
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
-                    var xxx = ControlesXFacturar.row($(this)).data(); 
+                    var xxx = ControlesXFacturar.row($(this)).data();
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
@@ -1053,7 +1044,7 @@
         btnControlesXFac.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
-                mdlControlesXFacturar.modal({backdrop: false, keyboard: false});
+                mdlControlesXFacturar.modal({keyboard: false});
             } else {
                 swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
                     ClienteFactura[0].selectize.focus();
@@ -1238,8 +1229,7 @@
             "bSort": true,
             "scrollY": 450,
             "scrollX": true
-        });
-        onBeep(1);
+        }); 
     });
 
     function getValor(e) {
@@ -1472,12 +1462,16 @@
                 pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 TotalLetra.find("span").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
+
                 break;
             case 2:
                 pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 TotalLetra.find("span").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+
+                pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
                 break;
         }
     }

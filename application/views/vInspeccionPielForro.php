@@ -926,11 +926,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    }
-    td{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
+    } 
 
     span.badge{
         font-size: 100% !important;

@@ -726,11 +726,7 @@ text: "EL TP SÓLO PUEDE SER 1 ó 2",<div class="card m-3 animated fadeIn" id="p
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    }
-    td{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
+    } 
 
     td span.badge{
         font-size: 100% !important;

@@ -396,20 +396,14 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    }
-    td{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
+    } 
 
     #tblPedidoDetalle table tbody{
         height: 300px !important;
     }
 
     #tblPedidoDetalle tbody td{
-        font-weight: bold;
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
+        font-weight: bold;  
         left: 20px;
         top: -5px;
     }

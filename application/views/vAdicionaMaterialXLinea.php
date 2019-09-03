@@ -231,10 +231,6 @@
         background-color: #FFF !important;
         color: #000!important;
     }
-    td{
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
-    }
     .btn-info-blue{
         color: #fff;
         background-color: #3F51B5 !important;

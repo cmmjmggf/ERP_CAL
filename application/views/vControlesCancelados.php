@@ -649,9 +649,7 @@
 </script> 
 <style>
     table tbody td{
-        font-weight: bold;
-        -webkit-transition: all .2s ease-in-out;
-        transition: all .2s ease-in-out;
+        font-weight: bold; 
         left: 20px;
         top: -5px;
     } 
