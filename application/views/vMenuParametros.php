@@ -12,6 +12,9 @@
 </nav>
 <script>
     $(document).ready(function () {
-        getMenu(8); 
+        getMenu(8);
     });
 </script>
+
+<?php
+$this->load->view('vFichaTecnicaCompra')->view('vEstilosFotos')->view('vSeleccionaEstiloColorParaEfectoVenta');

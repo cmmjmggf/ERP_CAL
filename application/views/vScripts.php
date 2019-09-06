@@ -44,7 +44,7 @@
         $.fancybox.open({
             toolbar: false,
             smallBtn: true,
-            src: url,
+            src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + url + '#pagemode=thumbs',
             type: 'iframe',
             opts: {
                 afterShow: function (instance, current) {

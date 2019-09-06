@@ -161,26 +161,28 @@ class HistoricoClientePedidoFacturado extends CI_Controller {
                         . "where cliente= $cte and staped = 3 ; ")->result());
 
         /* 7. */
-        $datos['SIETE'] = json_encode($this->db->query("select sum(pareped) as ParesPagados, sum(subtot) as PesosPagados ,
-                                            (select date_format( max(ccp.fecha),'%d/%m/%Y')
-                                            FROM cartctepagos ccp
-                                            WHERE ccp.cliente = $cte and ccp.mov < 5 ) as ultPago
-                                            from facturacion
-                                            where concat(tp,factura) in
-                                            (SELECT concat(tipo,remicion) FROM cartctepagos ccp
-                                            WHERE ccp.cliente = $cte and ccp.mov < 5 group by remicion)
-                                            and cliente = $cte ")->result());
+        $datos['SIETE'] = json_encode($this->db->query("
+                                select sum(A.pares) as ParesPagados, sum(A.pesospagados) as PesosPagados, date_format( max(A.fecha),'%d/%m/%Y') as ultPago
+                                from
+                                (SELECT ccp.tipo, ccp.remicion,
+                                (select sum(pareped) from facturacion where factura = ccp.remicion and tp = ccp.tipo and cliente= ccp.cliente) as pares,
+                                (select sum(subtot) from facturacion where factura = ccp.remicion and tp = ccp.tipo and cliente= ccp.cliente) as pesospagados,
+                                ccp.fecha
+                                FROM cartctepagos ccp
+                                WHERE ccp.cliente = $cte and ccp.mov < 5
+                                group by ccp.remicion) AS A
+                                 ")->result());
 
         /* 8. */
-        $datos['OCHO'] = json_encode($this->db->query("select sum(pareped) as ParesDevueltos, sum(subtot) as ParesPagados ,
-                                            (select date_format( max(ccp.fecha),'%d/%m/%Y')
-                                            FROM cartctepagos ccp
-                                            WHERE ccp.cliente = $cte and ccp.mov = 6 ) as UltDevol
-                                            from facturacion
-                                            where concat(tp,factura) in
-                                            (SELECT concat(tipo,remicion) FROM cartctepagos ccp
-                                            WHERE ccp.cliente = $cte and ccp.mov = 6 group by remicion)
-                                            and cliente = $cte ")->result());
+        $datos['OCHO'] = json_encode($this->db->query("select sum(A.pares) as ParesDevueltos, sum(A.pesospagados) as ParesPagados, date_format( max(A.fecha),'%d/%m/%Y') as UltDevol
+                            from
+                            (SELECT ccp.tipo, ccp.remicion,
+                            (select sum(pareped) from facturacion where factura = ccp.remicion and tp = ccp.tipo and cliente= ccp.cliente) as pares,
+                            (select sum(subtot) from facturacion where factura = ccp.remicion and tp = ccp.tipo and cliente= ccp.cliente) as pesospagados,
+                            ccp.fecha
+                            FROM cartctepagos ccp
+                            WHERE ccp.cliente = $cte and ccp.mov = 6
+                            group by ccp.remicion) AS A")->result());
 
         /* 9. */
         $datos['NUEVE'] = json_encode($this->db->query("SELECT cast(AVG(datediff(

@@ -1,4 +1,4 @@
-text: "EL TP SÓLO PUEDE SER 1 ó 2",<div class="card m-3 animated fadeIn" id="pnlTablero">
+<div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
@@ -726,7 +726,7 @@ text: "EL TP SÓLO PUEDE SER 1 ó 2",<div class="card m-3 animated fadeIn" id="p
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;
