@@ -88,7 +88,7 @@
                                 <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
                                 foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT  JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
+                                    print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
                             </select>
@@ -1073,8 +1073,9 @@
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                             FAPEORCOFactura.val(r);
                             var ref = padLeft(ClienteFactura.val(), 4) + '' + r;
-                            pnlTablero.find(".ReferenciaFactura").text(ref);
-                            ReferenciaFacturacion.val(ref);
+                            getReferencia();
+//                            pnlTablero.find(".ReferenciaFactura").text(ref);
+//                            ReferenciaFacturacion.val(ref);
                         }
                         FCAFactura.val(0);
                         PAGFactura.val(1);
@@ -1229,7 +1230,7 @@
             "bSort": true,
             "scrollY": 450,
             "scrollX": true
-        }); 
+        });
     });
 
     function getValor(e) {
@@ -1292,7 +1293,101 @@
     }
 
     function getReferencia() {
-        ReferenciaFacturacion.val(0);
+        var txtreferen11 = "000000000000398827";
+        txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(FAPEORCOFactura.val(), 4);
+
+        var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
+                num6 = 0, num7 = 0, num8 = 0, num9 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
+                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
+                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                txtreferen9 = 0, txtreferen10 = 0;
+
+        console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
+
+        for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
+            txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
+            switch (refe1) {
+                case 1:
+                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 2:
+                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 3:
+                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 4:
+                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 5:
+                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+                case 6:
+                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 1 : 0);
+                    break;
+                case 7:
+                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 2 : 0);
+                    break;
+                case 8:
+                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 3 : 0);
+                    break;
+                case 9:
+                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 5 : 0);
+                    break;
+                case 10:
+                    num10 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    break;
+                case 11:
+                    num11 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    break;
+                case 12:
+                    num12 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    break;
+                case 13:
+                    num13 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    break;
+                case 14:
+                    num14 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 15:
+                    num15 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 16:
+                    num16 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 17:
+                    num17 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 18:
+                    num18 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+            }
+        }
+
+
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
+                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        var res = 0, res1 = 0, res2 = 0, res3 = 0;
+        console.log("txtreferen3 => " + txtreferen3);
+        txtreferen4 = txtreferen3 / 97;
+        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
+        res = (txtreferen4 % 1);
+        res1 = res * 100;
+        res2 = res1 % 1;
+        res3 = res1 - res2;
+
+        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
+
+        var ponderador_fijo = 99;
+        if (res3 > 0) {
+            txtreferen10 = ponderador_fijo - res3 + 1;
+        } else {
+            txtreferen10 = ponderador_fijo - res3;
+        }
+        console.log("txtreferen10 => " + txtreferen10);
+        pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
+        ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
     }
 
     function iMsg(msg, t, f) {

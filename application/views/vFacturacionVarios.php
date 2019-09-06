@@ -25,11 +25,12 @@
     </div>
     <div class="card-body " style="padding: 7px 10px 10px 10px !important;">
         <div class="row">    
-            <div class="col-12 d-none">
+            <div class="col-12 d-none"> 
+                <label>Referencia</label>
+                <input type="text" id="ReferenciaFacturacion" name="ReferenciaFacturacion" class="form-control form-control-sm" readonly="">
                 <input type="text" id="TIPODECAMBIO" name="TIPODECAMBIO" class="form-control form-control-sm" readonly="">
-                <input type="text" id="EstatusControl" name="EstatusControl" class="form-control form-control-sm" readonly="">
                 <input type="text" id="ZonaFacturacion" name="ZonaFacturacion" class="form-control form-control-sm" readonly="">
-                <input type="text" id="AgenteCliente" name="AgenteCliente"   readonly="">
+                <input type="text" id="AgenteCliente" name="AgenteCliente"  class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"> 
                 <div class="form-group">
@@ -129,24 +130,27 @@
 
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                 <div class="form-group">
+                    <!--CHECK 1-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cNoIva" style="cursor: pointer !important;">No genera I.V.A</label>
                     </div>
                 </div>      
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                 <div class="form-group">
+                    <!--CHECK 3-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cTimbrar" name="cTimbrar" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input" id="cTimbrar" name="cTimbrar" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cTimbrar" style="cursor: pointer !important;">Timbrar</label>
                     </div>
                 </div>      
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                 <div class="form-group">
+                    <!--CHECK 4-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cPorAnticipo" name="cPorAnticipo" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input" id="cPorAnticipo" name="cPorAnticipo" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cPorAnticipo" style="cursor: pointer !important;">Por anticipo</label>
                     </div>
                 </div>      
@@ -165,7 +169,15 @@
                     <span class="fa fa-check"></span> Acepta
                 </button>
             </div>
-
+            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                <div class="form-group">
+                    <!--CHECK 4-->
+                    <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input" id="cNoCuentaComoPares" name="cNoCuentaComoPares" style="cursor: pointer !important;">
+                        <label class="custom-control-label text-danger labelCheck" for="cNoCuentaComoPares" style="cursor: pointer !important;">No cuenta como pares</label>
+                    </div>
+                </div>      
+            </div> 
             <div id="TotalLetra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                 <span class="font-weight-bold font-italic text-danger"> - </span>
             </div> 
@@ -217,6 +229,8 @@
                 <h4 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h4>
                 <h4 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h4>
                 <h4 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">$ 0.0</h4>
+                <input type="text" id="total_letra_en_pesos" name="total_letra_en_pesos" class="form-control d-none" readonly="">
+                <input type="text" id="total_letra_en_dolares" name="total_letra_en_dolares" class="form-control d-none" readonly="">
             </div>   
             <div class="col-12 col-lg-12 col-xl-12">
                 <div class="row"> 
@@ -252,7 +266,7 @@
             </div>  
             <div class="col-2" align="center"></div>
             <div class="col-2" align="center">
-                <button type="button" id="CierraDocto" name="CierraDocto" class="btn btn-danger btn-block">
+                <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger btn-block">
                     <span class="fa fa-lock"></span>   Cierra docto
                 </button>
                 <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" class="btn btn-info btn-block">
@@ -296,7 +310,10 @@
             Documentos, tblDocumentos = pnlTablero.find("#tblDocumentos"),
             DetalleDocumento, tblDetalleDocumento = pnlTablero.find("#tblDetalleDocumento"),
             btnNuevo = pnlTablero.find("#btnNuevo"),
-            btnDeshacer = pnlTablero.find("#btnDeshacer"), nuevo = true;
+            btnDeshacer = pnlTablero.find("#btnDeshacer"), nuevo = true,
+            btnCierraDocto = pnlTablero.find("#btnCierraDocto"), PrevisualizarDocto = pnlTablero.find("#PrevisualizarDocto"),
+            AddendaCoppel = pnlTablero.find("#AddendaCoppel"),
+            ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion");
 
     $(document).ready(function () {
 
@@ -305,7 +322,53 @@
         FechaFactura.val(Hoy);
 
         handleEnterDiv(pnlTablero);
+        cNoIva.change(function () {
+            getTotales(true);
+        });
 
+        btnCierraDocto.click(function () {
+            console.log(DetalleDocumento.rows().count(), ",", DetalleDocumento.data().count());
+            if (!nuevo && ClienteFactura.val() && TPFactura.val() && Documento.val() &&
+                    FechaFactura.val()) {
+                /* 
+                 * ID, cliente, remicion, fecha, importe, tipo, numpol, numcia, 
+                 * status, pagos, saldo, comiesp, tcamb, tmnda, stscont, nc, factura 
+                 */
+                var p = {
+                    CLIENTE: ClienteFactura.val(),
+                    FACTURA: Documento.val(),
+                    FECHA: FechaFactura.val(),
+                    IMPORTE: Subtotal.val(),
+                    TIPO: TPFactura.val(),
+                    TIPO_MONEDA: TMNDAFactura.val(),
+                    TIPO_CAMBIO: TIPODECAMBIO.val(),
+                    NO_GEN_IVA: pnlTablero.find("#cNoIva")[0].checked ? 1 : 0,
+                    TIMBRAR: pnlTablero.find("#cTimbrar")[0].checked ? 1 : 0,
+                    POR_ANTICIPO: pnlTablero.find("#cPorAnticipo")[0].checked ? 1 : 0,
+                    MONEDA_LETRA_PESOS: pnlTablero.find("#total_letra_en_pesos").val(),
+                    MONEDA_LETRA_DOLARES: pnlTablero.find("#total_letra_en_dolares").val()
+                };
+                $.post('<?php print base_url('FacturacionVarios/onCerrarDocumento'); ?>', p).done(function (a) {
+                    console.log(a);
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
+            } else {
+                iMsg('DEBE DE AGREGAR UN DOCUMENTO VÁLIDO', 'w', function () {
+                    ClienteFactura[0].selectize.focus();
+                });
+            }
+        });
+
+        PrevisualizarDocto.click(function () {
+
+        });
+
+        AddendaCoppel.click(function () {
+
+        });
 
         Estilo.change(function () {
             if (Estilo.val()) {
@@ -347,6 +410,8 @@
             pnlTablero.find("input[type='checkbox']")[0].checked = false;
             ClienteFactura[0].selectize.focus();
             Estilo[0].selectize.clear();
+            getDetalleDocumento();
+            getTotales(false);
         });
 
         Precio.keydown(function (e) {
@@ -360,81 +425,106 @@
             console.log(e.keyCode);
             if (e.keyCode === 13 && $(this).length > 0) {
                 onCalcularSubtotal();
+                getReferencia();
                 onInHabilitarEncabezado();
+                if (nuevo) {
+                    DetalleDocumento.rows().remove().draw();
+                }
             }
         });
 
         btnAcepta.click(function () {
             /*validar encabezado*/
-            onComprobarFactura();
-            if (ClienteFactura.val() && TPFactura.val() && TMNDAFactura.val()
-                    && Documento.val() && FechaFactura.val()) {
-
-                /*validar detalle*/
-                var p = {
-                    FACTURA: Documento.val(),
-                    TP: TPFactura.val(),
-                    CLIENTE: ClienteFactura.val(),
-                    TIPO_MONEDA: TMNDAFactura.val(),
-                    FECHA: FechaFactura.val(),
-                    AGENTE: AgenteCliente.val(),
-                    CANTIDAD: Cantidad.val(),
-                    ESTILO: Estilo.val(),
-                    CONCEPTO: Concepto.val(),
-                    PRECIO: Precio.val(),
-                    TALLA: Talla.val(),
-                    NO_GENERA_IVA: (pnlTablero.find("#cNoIva")[0].checked ? 1 : 0),
-                    TIPO_CAMBIO: TIPODECAMBIO.val(),
-                    ZONA: ZonaFacturacion.val(),
-                    SUBTOTAL: Subtotal.val(),
-                    OBS: Observaciones.val(),
-                    PEDIMENTO: PedimientoXTaxDestinatario.val(),
-                    ORDEN_DE_COMPRA: OrdenCompraClaveIncotem.val()
-                };
-                if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val() && Talla.val()) {
-                    onOpenOverlay('Guardando...');
-                    if (nuevo) {
-                        $.post('<?php print base_url('FacturacionVarios/onGuardar') ?>', p).done(function (a) {
-                            Cantidad.val('');
-                            Estilo[0].selectize.clear();
-                            Concepto.val('');
-                            Precio.val('');
-                            Talla.val('');
-                            Subtotal.val('');
-                            pnlTablero.find("span.subtotaldocvarios").text("$0.0");
-                            pnlTablero.find(".productoSAT").text('-');
-                            Pedido.val('');
-                            Observaciones.val('');
-                            pnlTablero.find("#cNoIva")[0].checked = false;
-                            pnlTablero.find("#cTimbrar")[0].checked = false;
-                            pnlTablero.find("#cPorAnticipo")[0].checked = false;
-                            PedimientoXTaxDestinatario.val('');
-                            OrdenCompraClaveIncotem.val('');
-                            nuevo = false;
-                            Cantidad.focus().select();
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
+            $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
+                    {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                        FACTURA: Documento.val()
+                    }).done(function (a) {
+                if (a.length > 0) {
+                    if (parseInt(a[0].FACTURA_EXISTE) > 0 && nuevo) {
+                        iMsg('LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', 'w', function () {
+                            Documento.attr('disabled', false);
+                            Documento.focus().select();
                             onCloseOverlay();
                         });
                     } else {
+                        if (ClienteFactura.val() && TPFactura.val() && TMNDAFactura.val()
+                                && Documento.val() && FechaFactura.val()) {
 
+                            /*validar detalle*/
+                            var p = {
+                                FACTURA: Documento.val(),
+                                TP: TPFactura.val(),
+                                CLIENTE: ClienteFactura.val(),
+                                TIPO_MONEDA: TMNDAFactura.val(),
+                                FECHA: FechaFactura.val(),
+                                AGENTE: AgenteCliente.val(),
+                                CANTIDAD: Cantidad.val(),
+                                ESTILO: Estilo.val(),
+                                CONCEPTO: Concepto.val(),
+                                PRECIO: Precio.val(),
+                                TALLA: Talla.val(),
+                                NO_GENERA_IVA: (pnlTablero.find("#cNoIva")[0].checked ? 1 : 0),
+                                TIPO_CAMBIO: TIPODECAMBIO.val(),
+                                ZONA: ZonaFacturacion.val(),
+                                SUBTOTAL: Subtotal.val(),
+                                OBS: Observaciones.val(),
+                                PEDIMENTO: PedimientoXTaxDestinatario.val(),
+                                ORDEN_DE_COMPRA: OrdenCompraClaveIncotem.val(),
+                                MONEDA_LETRA: NumeroALetras(Subtotal.val()),
+                                PRODUCTO_SAT: ProductoSAT.val(),
+                                REFERENCIA: ReferenciaFacturacion.val()
+                            };
+                            if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val() && Talla.val()) {
+                                onOpenOverlay('Guardando...');
+//                                if (nuevo) {
+                                $.post('<?php print base_url('FacturacionVarios/onGuardar') ?>', p).done(function (a) {
+                                    Cantidad.val('');
+                                    Estilo[0].selectize.clear();
+                                    Concepto.val('');
+                                    Precio.val('');
+                                    Talla.val('');
+                                    Subtotal.val('');
+                                    pnlTablero.find("span.subtotaldocvarios").text("$0.0");
+                                    pnlTablero.find(".productoSAT").text('-');
+                                    Pedido.val('');
+                                    Observaciones.val('');
+                                    pnlTablero.find("#cNoIva")[0].checked = false;
+                                    pnlTablero.find("#cTimbrar")[0].checked = false;
+                                    pnlTablero.find("#cPorAnticipo")[0].checked = false;
+                                    PedimientoXTaxDestinatario.val('');
+                                    OrdenCompraClaveIncotem.val('');
+                                    Cantidad.focus().select();
+                                    getDetalleDocumento();
+                                    nuevo = false;
+                                }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
+                                    onCloseOverlay();
+                                });
+//                                } else {
+//
+//                                }
+                            } else {
+                                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
+                                    Cantidad.focus().select();
+                                });
+                            }
+                        } else {
+                            swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
+                                ClienteFactura[0].selectize.focus();
+                            });
+                        }
                     }
-                } else {
-                    swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
-                        Cantidad.focus().select();
-                    });
                 }
-            } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
-                    ClienteFactura[0].selectize.focus();
-                });
-            }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+            });
         });
 
 
         TPFactura.change(function (e) {
-            $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
+            $.getJSON('<?php print base_url('FacturacionVarios/getTipoDeCambio'); ?>').done(function (abcde) {
                 if (abcde.length > 0) {
                     TIPODECAMBIO.val(abcde[0].DOLAR);
                 }
@@ -446,7 +536,7 @@
                 var x = parseInt(TPFactura.val()) === 1 ? 1 : 2;
                 if (x === 1 || x === 2) {
                     onOpenOverlay('');
-                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                    $.getJSON('<?php print base_url('FacturacionVarios/getUltimaFactura') ?>', {
                         TP: x
                     }).done(function (a) {
                         if (a.length > 0) {
@@ -470,8 +560,7 @@
 
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
-                onOpenOverlay('');
-                $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
+                $.post('<?php print base_url('FacturacionVarios/getListaDePreciosXCliente') ?>', {
                     CLIENTE: ClienteFactura.val()
                 }).done(function (a) {
                     if (a.length > 0) {
@@ -480,6 +569,8 @@
                         ZonaFacturacion.val(xxx[0].ZONA);
                         AgenteCliente.val(xxx[0].AGENTE);
                     }
+                    getDocumentosXCliente();
+                    getDetalleDocumento();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -489,7 +580,7 @@
         });
 
         Documentos = tblDocumentos.DataTable({
-            dom: 'rt',
+            dom: 'ript',
             "columnDefs": [{
                     "targets": [0],
                     "visible": false,
@@ -512,10 +603,12 @@
                     "searchable": false
                 }],
             language: lang,
+            responsive: true,
+            "processing": true,
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 999,
+            "displayLength": 99,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -534,10 +627,14 @@
                     "searchable": false
                 }],
             language: lang,
+            responsive: true,
+            "serverSide": false,
+            "info": true,
+            "processing": true,
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 999,
+            "displayLength": 9999,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -546,18 +643,23 @@
             "scrollX": true
         });
         getDocumentosXCliente();
+        getDetalleDocumento();
     });
 
     function onComprobarFactura() {
-        $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: Documento.val()
+        $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
+                {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                    FACTURA: Documento.val()
                 }).done(function (a) {
             if (a.length > 0) {
                 if (parseInt(a[0].FACTURA_EXISTE) > 0) {
                     iMsg('LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', 'w', function () {
                         Documento.attr('disabled', false);
                         Documento.focus().select();
+                        onCloseOverlay();
                     });
+                } else {
+
                 }
             }
         }).fail(function (x) {
@@ -572,53 +674,186 @@
         Subtotal.val(subtotal);
         pnlTablero.find(".subtotaldocvarios").text('$' + $.number(subtotal, '2', '.', ','));
         btnAcepta.attr('disabled', false);
+
     }
 
-    function getReferencia() {
+    function getReferenciaX() {
         var reffac = 0, reffac1 = 0, reffac2 = 0,
                 reffac2 = Documento.val(), txtreferen2 = 0;
         var txtreferen1 = padLeft(ClienteFactura.val(), 4) + '' + padLeft(Documento.val(), 4);
 
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 313, num11 = 802, txtreferen3 = 0;
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
+                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
+                num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0,
+                txtreferen9 = 0, txtreferen10 = 0, txtreferen11 = 0;
 
-        for (var refe1 = 1; refe1 <= 9; refe1++) {
+        for (var refe1 = 0; refe1 <= txtreferen1.length; refe1++) {
             txtreferen2 = txtreferen1.substr(refe1, 1);
             switch (refe1) {
                 case 1:
-                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
                     break;
                 case 2:
-                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
                     break;
                 case 3:
-                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
                     break;
                 case 4:
-                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
                     break;
                 case 5:
-                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
                     break;
                 case 6:
-                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 1 : 0);
                     break;
                 case 7:
-                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 2 : 0);
                     break;
                 case 8:
-                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 3 : 0);
                     break;
                 case 9:
-                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 5 : 0);
+                    break;
+                case 10:
+                    num10 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    break;
+                case 11:
+                    num11 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    break;
+                case 12:
+                    num12 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    break;
+                case 13:
+                    num13 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    break;
+                case 14:
+                    num14 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 15:
+                    num15 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 16:
+                    num16 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 17:
+                    num17 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 18:
+                    num18 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
                     break;
             }
         }
-        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 + num10 + num11;
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
+                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        txtreferen4 = txtreferen3 / 97;
+
+        txtreferen9 = txtreferen3 * 97;
+        txtreferen10 = 99 - txtreferen9;
+        txtreferen11 = txtreferen10.length;
+
         btnAcepta.attr('disabled', false);
     }
 
+    function getReferencia() {
+        var txtreferen11 = "000000000000398827";
+        txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
+
+        var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
+                num6 = 0, num7 = 0, num8 = 0, num9 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
+                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
+                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                txtreferen9 = 0, txtreferen10 = 0;
+
+        console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
+
+        for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
+            txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
+            switch (refe1) {
+                case 1:
+                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 2:
+                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 3:
+                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 4:
+                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 5:
+                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+                case 6:
+                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 1 : 0);
+                    break;
+                case 7:
+                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 2 : 0);
+                    break;
+                case 8:
+                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 3 : 0);
+                    break;
+                case 9:
+                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 5 : 0);
+                    break;
+                case 10:
+                    num10 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    break;
+                case 11:
+                    num11 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    break;
+                case 12:
+                    num12 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    break;
+                case 13:
+                    num13 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    break;
+                case 14:
+                    num14 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 15:
+                    num15 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 16:
+                    num16 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 17:
+                    num17 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 18:
+                    num18 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+            }
+        }
+
+
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
+                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        var res = 0, res1 = 0, res2 = 0, res3 = 0;
+        console.log("txtreferen3 => " + txtreferen3);
+        txtreferen4 = txtreferen3 / 97;
+        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
+        res = (txtreferen4 % 1);
+        res1 = res * 100;
+        res2 = res1 % 1;
+        res3 = res1 - res2;
+
+        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
+
+        var ponderador_fijo = 99;
+        if (res3 > 0) {
+            txtreferen10 = ponderador_fijo - res3 + 1;
+        } else {
+            txtreferen10 = ponderador_fijo - res3;
+        }
+        console.log("txtreferen10 => " + txtreferen10);
+    }
     function onInHabilitarEncabezado() {
         if (ClienteFactura.val() && TPFactura.val()
                 && TMNDAFactura.val() && Documento.val()
@@ -638,7 +873,6 @@
     }
 
     function getDocumentosXCliente() {
-        onOpenOverlay('');
         $.getJSON('<?php print base_url('FacturacionVarios/getDocumentosXCliente'); ?>', {CLIENTE: ClienteFactura.val() ? ClienteFactura.val() : ''}).done(function (a) {
             if (a.length > 0) {
                 var r = [];
@@ -646,8 +880,8 @@
                     r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP,
                         '$' + $.number(v.IMPORTE, 2, '.', ','), v.IMPORTE,
                         '$' + $.number(v.PAGOS, 2, '.', ','), v.PAGOS,
-                        (parseFloat(v.SALDO) <= 0)? '<span style="color: #689F38 !important;">$' + $.number(v.SALDO, 2, '.', ',') + '</span>':'<span class="text-danger">$' + $.number(v.SALDO, 2, '.', ',') + '</span>', v.SALDO,
-                                '<span class="fa fa-lock"></span>',
+                        (parseFloat(v.SALDO) <= 0) ? '<span style="color: #689F38 !important;">$' + $.number(v.SALDO, 2, '.', ',') + '</span>' : '<span class="text-danger">$' + $.number(v.SALDO, 2, '.', ',') + '</span>', v.SALDO,
+                        '<span class="fa fa-lock"></span>',
                         v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
                         v.ESTATUS_PRODUCCION, 1]);
                     if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
@@ -661,6 +895,170 @@
         }).always(function () {
             onCloseOverlay();
         });
+    }
+
+    function getDetalleDocumento() {
+        $.getJSON('<?php print base_url('FacturacionVarios/getDetalleDocumento'); ?>',
+                {
+                    CLIENTE: ClienteFactura.val() ? ClienteFactura.val() : '',
+                    FACTURA: Documento.val() ? Documento.val() : ''
+                }).done(function (a) {
+            if (a.length > 0) {
+                var r = [];
+                DetalleDocumento.rows().remove().draw();
+                $.each(a, function (k, v) {
+                    r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP, v.CONCEPTO, v.CANTIDAD,
+                        '$' + $.number(v.PRECIO, 2, '.', ','),
+                        '$' + $.number(v.SUBTOTAL, 2, '.', ',')]);
+                });
+                DetalleDocumento.rows.add(r).draw(false);
+                if (ClienteFactura.val() && Documento.val()) {
+                    getTotales(true);
+                } else {
+                    getTotales(false);
+                }
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
+
+
+    function getTotales(tf) {
+        if (tf) {
+            var subtotal = 0;
+            $.each(DetalleDocumento.rows().data(), function (k, v) {
+                console.log(k, v, getNumberFloat(v[8]));
+                subtotal += getNumberFloat(v[8]);
+            });
+            if (cNoIva[0].checked) {
+                pnlTablero.find(".subtotalfacturadopie").text("$" + $.number(subtotal, 2, '.', ','));
+                pnlTablero.find(".totalivafacturadopie").text("$" + $.number(0, 2, '.', ','));
+                pnlTablero.find(".totalfacturadoenletrapie").text("$" + $.number(subtotal, 2, '.', ','));
+                pnlTablero.find("#total_letra_en_pesos").val(NumeroALetras(subtotal));
+                var dlls = NumeroALetras(subtotal);
+                dlls = dlls.replace("pesos", "Dolares");
+                dlls = dlls.replace("m.n", "Dll");
+                pnlTablero.find("#total_letra_en_dolares").val(dlls);
+            } else {
+                pnlTablero.find(".subtotalfacturadopie").text("$" + $.number(subtotal, 2, '.', ','));
+                pnlTablero.find(".totalivafacturadopie").text("$" + $.number(subtotal * 0.16, 2, '.', ','));
+                pnlTablero.find(".totalfacturadoenletrapie").text("$" + $.number(subtotal * 1.16, 2, '.', ','));
+                pnlTablero.find("#total_letra_en_pesos").val(NumeroALetras(subtotal * 1.16));
+                var dlls = NumeroALetras(subtotal * 1.16);
+                dlls = dlls.replace("PESOS", "DOLARES");
+                dlls = dlls.replace("pesos", "Dolares");
+                dlls = dlls.replace("m.n", "DLL");
+                dlls = dlls.replace("mxn", "DLL");
+                dlls = dlls.replace("MXN", "DLL");
+                pnlTablero.find("#total_letra_en_dolares").val(dlls);
+            }
+        } else {
+            pnlTablero.find(".subtotalfacturadopie").text("$0.0");
+            pnlTablero.find(".totalivafacturadopie").text("$0.0");
+            pnlTablero.find(".totalfacturadoenletrapie").text("$0.0");
+            pnlTablero.find("#total_letra_en_pesos").val("");
+            pnlTablero.find("#total_letra_en_dolares").val("");
+        }
+    }
+
+    function getReferencia() {
+        var txtreferen11 = "000000000000398827";
+        txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
+        var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
+                num6 = 0, num7 = 0, num8 = 0, num9 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
+                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
+                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                txtreferen9 = 0, txtreferen10 = 0;
+        console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
+        for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
+            txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
+            switch (refe1) {
+                case 1:
+                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 2:
+                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 3:
+                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 4:
+                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 5:
+                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+                case 6:
+                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 1 : 0);
+                    break;
+                case 7:
+                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 2 : 0);
+                    break;
+                case 8:
+                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 3 : 0);
+                    break;
+                case 9:
+                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 5 : 0);
+                    break;
+                case 10:
+                    num10 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    break;
+                case 11:
+                    num11 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    break;
+                case 12:
+                    num12 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    break;
+                case 13:
+                    num13 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    break;
+                case 14:
+                    num14 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 15:
+                    num15 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 16:
+                    num16 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 17:
+                    num17 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 18:
+                    num18 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+            }
+        }
+
+
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
+                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        var res = 0, res1 = 0, res2 = 0, res3 = 0;
+        console.log("txtreferen3 => " + txtreferen3);
+        txtreferen4 = txtreferen3 / 97;
+        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
+        res = (txtreferen4 % 1);
+        res1 = res * 100;
+        res2 = res1 % 1;
+        res3 = res1 - res2;
+        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
+        var ponderador_fijo = 99;
+        if (res3 > 0) {
+            txtreferen10 = ponderador_fijo - res3 + 1;
+        } else {
+            txtreferen10 = ponderador_fijo - res3;
+        }
+        console.log("txtreferen10 => " + txtreferen10);
+        pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
+        ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
+    }
+
+    function getNoGenIVA() {
+
     }
 </script>
 
