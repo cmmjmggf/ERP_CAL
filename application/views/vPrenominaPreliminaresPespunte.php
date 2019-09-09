@@ -46,7 +46,7 @@
                 $.post('<?php print base_url('PrenominaPreliminaresPespunte/getReporte') ?>',
                         {ANIO: AnioPNSP.val(), SEM: SemanaPNSP.val()}).done(function (a) {
                     if (a.length > 0) {
-                        onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + a + '#pagemode=thumbs');
+                        onImprimirReporteFancy(a);
                     } else {
                         swal('ATENCION', 'NO HA SIDO POSIBLE OBTENER EL REPORTE SOLICITADO', 'warning');
                     }

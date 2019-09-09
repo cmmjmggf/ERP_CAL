@@ -218,8 +218,7 @@
                     </thead>
                     <tbody></tbody>
                 </table>    
-            </div> 
-
+            </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1" align="right">
                 <h4 class="font-weight-bold text-danger font-italic">SUBTOTAL</h4>
                 <h4 class="font-weight-bold text-danger font-italic">I.V.A</h4>
@@ -231,9 +230,9 @@
                 <h4 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">$ 0.0</h4>
                 <input type="text" id="total_letra_en_pesos" name="total_letra_en_pesos" class="form-control d-none" readonly="">
                 <input type="text" id="total_letra_en_dolares" name="total_letra_en_dolares" class="form-control d-none" readonly="">
-            </div>   
+            </div>
             <div class="col-12 col-lg-12 col-xl-12">
-                <div class="row"> 
+                <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" align="center">
                         <h6 class="font-weight-bold text-danger font-italic">
                             DOCUMENTOS DEL CLIENTE
@@ -328,6 +327,7 @@
 
         btnCierraDocto.click(function () {
             console.log(DetalleDocumento.rows().count(), ",", DetalleDocumento.data().count());
+            onOpenOverlay('Espere un momento por favor...');
             if (!nuevo && ClienteFactura.val() && TPFactura.val() && Documento.val() &&
                     FechaFactura.val()) {
                 /* 
@@ -350,6 +350,7 @@
                 };
                 $.post('<?php print base_url('FacturacionVarios/onCerrarDocumento'); ?>', p).done(function (a) {
                     console.log(a);
+                    getVistaPrevia();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -363,7 +364,17 @@
         });
 
         PrevisualizarDocto.click(function () {
-
+            if (ClienteFactura.val() && Documento.val()) {
+                getVistaPrevia();
+            } else {
+                iMsg('DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', 'w', function () {
+                    if (ClienteFactura.val()) {
+                        ClienteFactura[0].selectize.focus();
+                    } else if (Documento.val()) {
+                        Documento.focus().select();
+                    }
+                });
+            }
         });
 
         AddendaCoppel.click(function () {
@@ -1059,6 +1070,20 @@
 
     function getNoGenIVA() {
 
+    }
+    function  getVistaPrevia() {
+        $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
+            CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
+            DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : '',
+            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+        }).done(function (data, x, jq) {
+            onBeep(1);
+            onImprimirReporteFancy(data);
+        }).fail(function (x, y, z) {
+            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
 

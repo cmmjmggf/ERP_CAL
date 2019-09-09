@@ -144,7 +144,7 @@
             });
             $.post(master_url + 'getParesPreProgramados').done(function (data, x, jq) {
                 console.log(data);
-                onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                onImprimirReporteFancy(data);
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 HoldOn.close();

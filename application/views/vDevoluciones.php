@@ -22,7 +22,7 @@
                 <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
                     <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" disabled="">
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
@@ -52,17 +52,14 @@
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
-                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" class="btn btn-info" disabled="">
-                    <span class="fa fa-file-archive"></span>   ADDENDA COPPEL 
-                </button> 
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
                 <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
-                <button type="button" id="btnEtiquetasParaCaja" name="btnEtiquetasParaCaja" class="btn btn-primary">
-                    <span class="fa fa-file-archive"></span>    ETIQUETAS PARA CAJA
+                <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-primary">
+                    <span class="fa fa-file-archive"></span>   R-est.cte
                 </button>
             </div>
         </div>
@@ -446,7 +443,7 @@
                 <span class="font-weight-bold font-italic text-danger">
                     -
                 </span>
-            </div> 
+            </div>
 
             <div class="w-100 my-2"></div>
 
@@ -547,6 +544,7 @@
         </div><!--        END CARD BLOCK-->
     </div>
 </div>
+
 <!--CONTROLES X FACTURAR--> 
 <div class="modal" id="mdlControlesXFacturar">
     <div class="modal-dialog modal-lg" role="document">
@@ -640,7 +638,9 @@
             TotalLetra = pnlTablero.find("#TotalLetra"), ZonaFacturacion = pnlTablero.find("#ZonaFacturacion"),
             SubtotalFacturacionIVA = pnlTablero.find("#SubtotalFacturacionIVA"),
             btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
-            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"), btnElijeControl = pnlTablero.find("#btnElijeControl");
+            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"),
+            btnElijeControl = pnlTablero.find("#btnElijeControl"),
+            btnRastreoDeEstilosClientesFechasEnVentas = pnlTablero.find("#btnRastreoDeEstilosClientesFechasEnVentas");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -648,6 +648,10 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+
+        btnRastreoDeEstilosClientesFechasEnVentas.click(function () {
+            onOpenWindow('<?php print base_url('RastreoEstilosClientesXFechasEnVentas'); ?>');
+        });
 
         btnNuevo.click(function () {
             onOpenOverlay('');
@@ -682,20 +686,20 @@
 
         btnVistaPreviaF.click(function () {
 
-//            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
+//            $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarCFDI'); ?>', {
 //                DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : ''
 //            }).done(function (a) {
 //                if (a.length > 0) {
             if (ClienteFactura.val() && FAPEORCOFactura.val() && TPFactura.val()) {
                 onBeep(1);
                 onOpenOverlay('Espere por favor...');
-                $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
+                $.post('<?php print base_url('FacturacionDevolucion/getVistaPrevia'); ?>', {
                     CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
                     DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
                     TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);
-                    onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    onImprimirReporteFancy(data);
                 }).fail(function (x, y, z) {
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
                 }).always(function () {
@@ -729,7 +733,7 @@
             $("#mdlEtiquetaCajas").modal('show');
         });
 
-        btnMovClientes.click(function () { 
+        btnMovClientes.click(function () {
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
 
@@ -787,7 +791,7 @@
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),
                     REFACTURACION: xRefacturacion[0].cheked ? 1 : 0
                 };
-                $.post('<?php print base_url('FacturacionProduccion/onCerrarDocto') ?>', p).done(function (abc) {
+                $.post('<?php print base_url('FacturacionDevolucion/onCerrarDocto') ?>', p).done(function (abc) {
                     iMsg('SE HA CERRADO EL DOCTO', 's', function () {
                         btnCierraDocto.attr('disabled', true);
                         ClienteFactura[0].selectize.enable();
@@ -813,7 +817,7 @@
         FAPEORCOFactura.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 onOpenOverlay('Espere un momento por favor...');
-                $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarFactura'); ?>',
                         {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: FAPEORCOFactura.val()
                         }).done(function (a) {
                     if (a.length > 0) {
@@ -824,6 +828,7 @@
                             btnVistaPreviaF.attr('disabled', true);
                             btnReimprimeDocto.attr('disabled', true);
                             CajasFacturacion.attr('disabled', false);
+                            onCloseOverlay();
                         } else {
                             if (ClienteFactura.val() === a[0].CLIENTE) {
                                 btnVistaPreviaF.attr('disabled', false);
@@ -831,7 +836,7 @@
                                 btnAcepta.attr('disabled', true);
                                 CajasFacturacion.attr('disabled', true);
                                 onDisableInputs(true);
-                                $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
+                                $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturaXFolio'); ?>',
                                         {
                                             CLIENTE: ClienteFactura.val(),
                                             FACTURA: FAPEORCOFactura.val(),
@@ -968,7 +973,7 @@
             if (!$.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
                 ControlesXFacturar = tblControlesXFacturar.DataTable({
                     dom: 'frtip', "ajax": {
-                        "url": '<?php print base_url('FacturacionProduccion/getPedidosXFacturar'); ?>',
+                        "url": '<?php print base_url('FacturacionDevolucion/getPedidosXFacturar'); ?>',
                         "dataSrc": "",
                         "data": function (d) {
                             d.CLIENTE = ClienteFactura.val();
@@ -1044,7 +1049,7 @@
         });
 
         TPFactura.change(function (e) {
-            $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
+            $.getJSON('<?php print base_url('FacturacionDevolucion/getTipoDeCambio'); ?>').done(function (abcde) {
                 if (abcde.length > 0) {
                     TIPODECAMBIO.val(abcde[0].DOLAR);
                 }
@@ -1057,7 +1062,7 @@
                 var x = parseInt(TPFactura.val()) === 1 ? 1 : 2;
                 if (x === 1 || x === 2) {
 //                    onOpenOverlay('');
-                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                    $.getJSON('<?php print base_url('FacturacionDevolucion/getUltimaFactura') ?>', {
                         TP: x
                     }).done(function (a) {
                         if (a.length > 0) {
@@ -1084,7 +1089,7 @@
             }
         });
 
-        btnClientes.click(function () { 
+        btnClientes.click(function () {
             onOpenWindow('<?php print base_url('Clientes'); ?>');
         });
 
@@ -1137,7 +1142,7 @@
                     btnVerTienda.addClass("d-none");
                 }
 //                onOpenOverlay('');
-                $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
+                $.post('<?php print base_url('FacturacionDevolucion/getListaDePreciosXCliente') ?>', {
                     CLIENTE: ClienteFactura.val()
                 }).done(function (a) {
                     if (a.length > 0) {
@@ -1220,7 +1225,6 @@
             "scrollY": 450,
             "scrollX": true
         });
-        onBeep(1);
     });
 
     function getValor(e) {
@@ -1298,7 +1302,7 @@
         if (Control.val()) {
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
-            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarControlXCliente'); ?>', {
+            $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarControlXCliente'); ?>', {
                 CONTROL: Control.val() ? Control.val() : ''
             }).done(function (abcd) {
                 if (abcd.length > 0) {
@@ -1312,7 +1316,7 @@
                         });
                     }
                     if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
-                        $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
+                        $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturacionDiff'); ?>', {
                             CONTROL: Control.val() ? Control.val() : ''
                         }).done(function (aa) {
                             var abc = aa[0];
@@ -1331,7 +1335,7 @@
                                 }
                             }
                             if (control_pertenece_a_cliente) {
-                                $.getJSON('<?php print base_url('FacturacionProduccion/getInfoXControl'); ?>', {
+                                $.getJSON('<?php print base_url('FacturacionDevolucion/getInfoXControl'); ?>', {
                                     CONTROL: Control.val()
                                 }).done(function (a) {
                                     if (a.length > 0) {
@@ -1477,7 +1481,7 @@
 
     function onObtenerCodigoSatXEstilo() {
         /*OBTENER CODIGO DEL SAT X ESTILO*/
-        $.getJSON('<?php print base_url('FacturacionProduccion/onObtenerCodigoSatXEstilo'); ?>', {ESTILO: EstiloFacturacion.val()}).done(function (abcd) {
+        $.getJSON('<?php print base_url('FacturacionDevolucion/onObtenerCodigoSatXEstilo'); ?>', {ESTILO: EstiloFacturacion.val()}).done(function (abcd) {
             if (abcd.length > 0) {
                 CodigoSat.val(abcd[0].CPS);
             }
@@ -1560,7 +1564,7 @@
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
 //        console.log("\p PARAMETROS ", p);
-        $.post('<?php print base_url('FacturacionProduccion/onGuardarDocto'); ?>', p).done(function (a) {
+        $.post('<?php print base_url('FacturacionDevolucion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
             /*REINICIAR VALORES POR DEFECTO PARA EL DETALLE*/
             for (var i = 1; i < 23; i++) {
@@ -1642,7 +1646,7 @@
         }
 
     }
-    
+
     function onVerListasDePrecios() {
         onOpenWindow('<?php print base_url('ListasPrecioMaquilas/?origen=CLIENTES'); ?>');
     }

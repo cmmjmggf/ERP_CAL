@@ -366,7 +366,7 @@
                                 });
                             });
                             /*IMPRIMIR PAGARE*/
-                            onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + a + '#pagemode=thumbs');
+                            onImprimirReporteFancy(a);
                         }).fail(function (x, y, z) {
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);

@@ -91,7 +91,7 @@
                         FECHA_INICIAL: FechaInicial.val(),
                         FECHA_FINAL: FechaFinal.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                onImprimirReporteFancy(data);
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);
@@ -119,7 +119,7 @@
                         FECHA_INICIAL: FechaInicial.val(),
                         FECHA_FINAL: FechaFinal.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                onImprimirReporteFancy(data);
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);
@@ -147,7 +147,7 @@
                         FECHA_INICIAL: FechaInicial.val(),
                         FECHA_FINAL: FechaFinal.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                onImprimirReporteFancy(data);
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);
@@ -175,7 +175,7 @@
                         FECHA_INICIAL: FechaInicial.val(),
                         FECHA_FINAL: FechaFinal.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                onImprimirReporteFancy(data);
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);

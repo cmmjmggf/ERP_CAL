@@ -67,7 +67,7 @@
                     message: 'Espere un momento por favor...'
                 });
                 $.post('<?php print base_url('PrestamosEmpleados/getPagares'); ?>', {PAGARE: pagare, FECHA: fecha}).done(function (a) {
-                    onImprimirReporteFancy('<?php print base_url('js/pdf.js-gh-pages/web/viewer.html?file='); ?>' + a + '#pagemode=thumbs');
+                    onImprimirReporteFancy(a);
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {

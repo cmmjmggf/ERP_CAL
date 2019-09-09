@@ -84,7 +84,7 @@
                         CLIENTE: Cliente.val() ? Cliente.val() : ''
                     }).done(function (data) {
                 if (data.length > 0) {
-                    onImprimirReporteFancy('<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    onImprimirReporteFancy(data);
                 }
             }).fail(function (x, y, z) {
                 getError(x);

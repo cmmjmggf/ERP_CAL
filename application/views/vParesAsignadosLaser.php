@@ -60,7 +60,7 @@
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);
-                    onImprimirReporteFancy(base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs');
+                    onImprimirReporteFancy(data);
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
