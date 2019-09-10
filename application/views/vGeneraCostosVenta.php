@@ -15,31 +15,33 @@
                         <a class="dropdown-item" href="#" onclick="consultaEstiloso()">Estilos</a>
                         <a class="dropdown-item" href="#" onclick="consultaFraccionesXEstilo()">Fracciones</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">Costos Ficha Técnica</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">Lineas Abiertas</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlLineasAbiertas">Lineas Abiertas</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlEstilosFotos">Visualiza Estilo</a>
-                        <a class="dropdown-item" href="#">Parámetros Fijos</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlParametrosFijos">Parámetros Fijos</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="btn text-white dropdown-toggle" href="#" id="navUtilerias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Utilerías</a>
                     <ul class="dropdown-menu animated slideIn" aria-labelledby="navUtilerias">
-                        <a class="dropdown-item" href="#">Marca Linea/Estilos para NO modificarlos</a>
-                        <a class="dropdown-item" href="#">Desmarca Linea/Estilos para modificarlos</a>
+                        <a class="dropdown-item" href="#" onclick="onMarcarLineaParaNoModificar()">Marca Linea/Estilos para NO modificarlos</a>
+                        <a class="dropdown-item" href="#" onclick="onDescarmarLineaParaModificar()">Desmarca Linea/Estilos para modificarlos</a>
                         <a class="dropdown-item" href="#" onclick="onImprimirListaPrecios()">Imprime Lista de Precios</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Clasifica Estilo para Precio Venta</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Elimina Estilos Obsoletos</a>
-                        <a class="dropdown-item" href="#">Verifica Estilos/Lineas</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlConsultaEstiloLineaLista">Verifica Estilos/Lineas</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="btn text-white dropdown-toggle" href="#" id="navHerramientas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Herramientas</a>
+                    <a class="btn text-white dropdown-toggle" href="#" id="navHerramientas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Eliminar</a>
                     <ul class="dropdown-menu animated slideIn" aria-labelledby="navHerramientas">
-                        <a class="dropdown-item" href="#">Elimina Linea, Corrida lista para volver a generar</a>
-                        <a class="dropdown-item" href="#">Otra Linea-Corrida lista de precios</a>
-                        <a class="dropdown-item" href="#">Elimina Estilo Seleccionado</a>
+                        <a class="dropdown-item" href="#" onclick="onEliminarLineaListaCorrida()">Elimina Linea, Corrida lista para volver a generar</a>
+                        <a class="dropdown-item" href="#" onclick="onEliminarEstilo()">Elimina Estilo Seleccionado</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown ml-auto">
+                    <button class="btn btn-warning " id="sidebarCollapse" onclick="init()">
+                        <i class="fa fa-file-alt"></i> Otra Linea-Corrida lista de precios
+                    </button>
                     <button class="btn btn-danger " id="sidebarCollapse" onclick="onImprimirReporteCostos()">
                         <i class="fa fa-print"></i> IMPRIME
                     </button>
@@ -50,6 +52,7 @@
             </ul>
         </div>
     </nav>
+    <!--    PARÁMETROS-->
     <div class="card-body ">
         <div class="row ">
             <!--primer columna-->
@@ -98,7 +101,7 @@
                     <div class="col-12 mt-1" >
                         <div class="card-block">
                             <div id="Registros" class="datatable-wide">
-                                <table id="tblRegistros" class="table table-sm display " style="width:100%">
+                                <table id="tblRegistrosGenCostos" class="table table-sm display " style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Lta</th>
@@ -507,7 +510,7 @@
                     <div class="col-8" >
                     </div>
                     <div class="col-4" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  morado numbersOnly" maxlength="7"  id="PreAutori" name="PreAutori"   >
                     </div>
                     <!--                   Estilo Sel y tot Estilos -->
                     <div class="w-100"></div>
@@ -552,11 +555,22 @@
     var master_url = base_url + 'index.php/GeneraCostosVenta/';
     var pnlTablero = $("#pnlTablero");
     var linea;
-    var tblRegistros = $('#tblRegistros');
+    var tblRegistrosGenCostos = $('#tblRegistrosGenCostos');
     var Registros;
-
+    var estiloS = 0, colorS = 0, listaS = 0, lineaS = 0;
     $(document).ready(function () {
         init();
+        tblRegistrosGenCostos.find('tbody').on('click', 'tr', function () {
+            tblRegistrosGenCostos.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+        });
+        tblRegistrosGenCostos.find('tbody').on('dblclick', 'tr', function () {
+            var dtm = Registros.row(this).data();
+            estiloS = dtm.estilo;
+            lineaS = dtm.linea;
+            listaS = dtm.lista;
+            colorS = dtm.color;
+        });
         pnlTablero.find('#Linea').change(function () {
             var tipoLinea = 0;
             if ($(this).val()) {
@@ -618,14 +632,13 @@
                     pnlTablero.find('#FechaUltiActu').val(data[0].fecha);
                     pnlTablero.find('#GastosFijos').val(data[0].gtosf);
 
-                    $('#tblRegistros_filter input[type=search]').focus();
+                    $('#tblRegistrosGenCostos_filter input[type=search]').focus();
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
             }
         });
-
         pnlTablero.find('#GastosFijos').keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
@@ -640,7 +653,95 @@
                 }
             }
         });
+        pnlTablero.find('#PreAutori').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (estiloS > 0) {
+                    if ($(this).val()) {
+                        $.post(master_url + 'onActualizarPrecioAutorizado', {PrecioAut: $(this).val(), Linea: lineaS, Lista: listaS, Estilo: estiloS, Color: colorS}).done(function (data) {
+                            Registros.ajax.reload();
+                            onNotifyOld('fa fa-check', 'PRECIO GUARDADO CORRECTAMENTE', 'success');
+                            pnlTablero.find('#PreAutori').focus().select();
+                        }).fail(function (x) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                        });
+                    }
+                } else {
+                    swal('ATENCIÓN', 'SELECCIONA EL ESTILO A ELIMINAR', 'warning');
+                }
+            }
+        });
     });
+    function onEliminarEstilo() {
+        if (estiloS > 0) {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(base_url + 'index.php/GeneraCostosVenta/onEliminarEstilo', {Linea: lineaS, Lista: listaS, Estilo: estiloS, Color: colorS}).done(function (data) {
+                Registros.ajax.reload();
+                onNotifyOld('fa fa-check', 'ESTILO ELIMINADO CORRECTAMENTE', 'success');
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        } else {
+            swal('ATENCIÓN', 'SELECCIONA EL ESTILO A ELIMINAR', 'warning');
+        }
+    }
+    function onEliminarLineaListaCorrida() {
+        var corrida = pnlTablero.find('#Corrida').val();
+        var lista = pnlTablero.find('#ListaPrecios').val();
+        if (linea && corrida && lista) {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(base_url + 'index.php/GeneraCostosVenta/onEliminarLineaListaCorrida', {Linea: linea, Lista: lista, Corrida: corrida}).done(function (data) {
+                console.log(data);
+                onNotifyOld('fa fa-check', 'REGISTRO ELIMINADO CORRECTAMENTE', 'success');
+                init();
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        } else {
+            swal('ERROR', 'Debe de seleccionar una LINEA/LISTA/CORRIDA para continuar', 'warning').then((value) => {
+                pnlTablero.find('#Linea')[0].selectize.focus();
+                pnlTablero.find('#Linea')[0].selectize.open();
+            });
+        }
+    }
+    function onMarcarLineaParaNoModificar() {
+        if (linea) {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(base_url + 'index.php/GeneraCostosVenta/onMarcarLineaParaNoModificar', {Linea: linea}).done(function (data) {
+                onNotifyOld('fa fa-check', 'LINEAS MARCADAS CORRECTAMENTE', 'success');
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        } else {
+            swal('ERROR', 'SELECCIONE UNA LINEA A MARCAR', 'warning').then((value) => {
+                pnlTablero.find('#Linea')[0].selectize.focus();
+                pnlTablero.find('#Linea')[0].selectize.open();
+            });
+        }
+    }
+    function onDescarmarLineaParaModificar() {
+        if (linea) {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(base_url + 'index.php/GeneraCostosVenta/onDescarmarLineaParaModificar', {Linea: linea}).done(function (data) {
+                onNotifyOld('fa fa-check', 'LINEAS DESMARCADAS CORRECTAMENTE', 'success');
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        } else {
+            swal('ERROR', 'SELECCIONE UNA LINEA A DESMARCAR', 'warning').then((value) => {
+                pnlTablero.find('#Linea')[0].selectize.focus();
+                pnlTablero.find('#Linea')[0].selectize.open();
+            });
+        }
+    }
     function init() {
         pnlTablero.find('#Linea')[0].selectize.focus();
         pnlTablero.find('#Corrida').selectize({
@@ -660,6 +761,10 @@
         });
         limpia();
         getRegistros('', 0, 0);
+        estiloS = 0;
+        lineaS = 0;
+        listaS = 0;
+        colorS = 0;
     }
     function limpia() {
         pnlTablero.find("input").val("");
@@ -667,16 +772,15 @@
             pnlTablero.find("select")[k].selectize.clear(true);
         });
         pnlTablero.find('#porVenta100').val('100%');
-
     }
     function getRegistros(linea, lista, corrida) {
         $.fn.dataTable.ext.errMode = 'throw';
 
-        if ($.fn.DataTable.isDataTable('#tblRegistros')) {
-            tblRegistros.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tblRegistrosGenCostos')) {
+            tblRegistrosGenCostos.DataTable().destroy();
         }
 
-        Registros = tblRegistros.DataTable({
+        Registros = tblRegistrosGenCostos.DataTable({
             "dom": 'frt',
             buttons: buttons,
             orderCellsTop: true,
@@ -761,22 +865,11 @@
 
             }
         });
-        tblRegistros.find('tbody').on('click', 'tr', function () {
-            tblRegistros.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-        });
 
-        tblRegistros.find('tbody').on('dblclick', 'tr', function () {
-            tblRegistros.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = Registros.row(this).data();
-        });
     }
-
     function consultaFraccionesXEstilo() {
         onOpenWindow('<?php print base_url('FraccionesXEstilo'); ?>');
     }
-
     function consultaEstiloso() {
         onOpenWindow('<?php print base_url('Estilos'); ?>');
     }
@@ -815,7 +908,6 @@
             });
         }
     }
-
 </script>
 <style>
     .text-strong {

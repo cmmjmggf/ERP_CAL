@@ -17,4 +17,10 @@
 </script>
 
 <?php
-$this->load->view('vFichaTecnicaCompra')->view('vEstilosFotos')->view('vSeleccionaEstiloColorParaEfectoVenta');
+$this->load
+        ->view('vFichaTecnicaCompra')
+        ->view('vEstilosFotos')
+        ->view('vSeleccionaEstiloColorParaEfectoVenta')
+        ->view('vConsultaEstilos')
+        ->view('vLineasAbiertas')
+        ->view('vParametrosFijos');

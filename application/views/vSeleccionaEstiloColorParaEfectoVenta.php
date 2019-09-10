@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Rastreo de conceptos de nómina por empleado</h5>
+                <h5 class="modal-title">Consulta Colores por Estilo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,42 +10,37 @@
             <div class="modal-body">
                 <form id="frmExplosion">
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-2 col-xl-2">
-                            <label>Año</label>
-                            <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="AnoConcepto" name="AnoConcepto" required="">
+                        <div class="col-3">
+                            <label>Estilo</label>
+                            <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloGenCos" name="EstiloGenCos" required="">
                         </div>
-                        <div class="col-6">
-                            <label>Empleado</label>
-                            <select id="EmpleadoConcepto" name="EmpleadoConcepto" class="form-control form-control-sm required">
+                        <div class="col-5">
+                            <label>Color</label>
+                            <select id="Color" name="Color" class="form-control form-control-sm required">
                                 <option value=""></option>
                             </select>
                         </div>
-                        <div class="col-4">
-                            <label>Concepto</label>
-                            <select id="Concepto" name="Concepto" class="form-control form-control-sm required">
-                                <option value=""></option>
-                            </select>
+                        <div class="col-3">
+                            <button type="button" id="btnAceptar" class="btn btn-primary btn-sm mt-4">
+                                <span class="fa fa-check"></span> ACEPTAR
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <label class="badge badge-danger" style="font-size: 14px;">El estilo marcado con 1, es el que se tomará como base para costeo</label>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="table-responsive" id="ConceptosNominaRastreo">
-                                <table id="tblConceptosNominaRastreo" class="table table-sm  " style="width:100%">
+                            <div class="table-responsive" id="EstiloColores">
+                                <table id="tblEstiloColores" class="table table-sm  " style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Sem</th>
-                                            <th>Empleado</th>
-                                            <th>Concepto</th>
-                                            <th>Fecha</th>
-                                            <th>Tipo</th>
-                                            <th>Importe</th>
+                                            <th>Estilo</th>
+                                            <th>Color</th>
+                                            <th>Descripcion</th>
+                                            <th>Costo</th>
+                                            <th>P. Venta</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th colspan="5" align="center">Total General:</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -60,88 +55,85 @@
 </div>
 <script>
     var mdlSeleccionaEstiloColorParaEfectoVenta = $('#mdlSeleccionaEstiloColorParaEfectoVenta');
-    var tblConceptosNominaRastreo = $('#tblConceptosNominaRastreo');
-    var ConceptosNominaRastreo;
+    var tblEstiloColores = $('#tblEstiloColores');
+    var EstiloColores;
 
     $(document).ready(function () {
-
-        setFocusSelectToSelectOnChange('#EmpleadoConcepto', '#Concepto', mdlSeleccionaEstiloColorParaEfectoVenta);
         mdlSeleccionaEstiloColorParaEfectoVenta.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlSeleccionaEstiloColorParaEfectoVenta);
-            validacionSelectPorContenedor(mdlSeleccionaEstiloColorParaEfectoVenta);
             mdlSeleccionaEstiloColorParaEfectoVenta.find("input").val("");
             $.each(mdlSeleccionaEstiloColorParaEfectoVenta.find("select"), function (k, v) {
                 mdlSeleccionaEstiloColorParaEfectoVenta.find("select")[k].selectize.clear(true);
             });
-            mdlSeleccionaEstiloColorParaEfectoVenta.find("#AnoConcepto").val(new Date().getFullYear());
+            getEstiloColores('');
+            mdlSeleccionaEstiloColorParaEfectoVenta.find('#EstiloGenCos').focus().select();
+        });
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#EstiloGenCos").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var estilo = $(this).val();
+                    //veririca essitlo
+                    $.getJSON(base_url + 'index.php/GeneraCostosVenta/onVerificarExisteEstilo', {Estilo: $(this).val()}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            getColoresByEstilo(estilo);
+                            getEstiloColores(estilo);
+                        } else {
+                            swal('ATENCIÓN', 'EL ESTILO NO EXISTE', 'error').then((value) => {
+                                mdlSeleccionaEstiloColorParaEfectoVenta.find('#EstiloGenCos').val('').focus();
 
-            getEmpleadosConceptosNomina();
-            getConceptosNomina();
-            mdlSeleccionaEstiloColorParaEfectoVenta.find('#AnoConcepto').focus().select();
-        });
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#AnoConcepto").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    mdlSeleccionaEstiloColorParaEfectoVenta.find("#AnoConcepto").val("");
-                    mdlSeleccionaEstiloColorParaEfectoVenta.find("#AnoConcepto").focus();
-                });
-            } else {
-                mdlSeleccionaEstiloColorParaEfectoVenta.find("#Concepto")[0].selectize.clear(true);
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                } else {
+                    $(this).focus();
+                }
             }
         });
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#EmpleadoConcepto").change(function () {
-            var ano = mdlSeleccionaEstiloColorParaEfectoVenta.find("#AnoConcepto").val();
-            var empleado = $(this).val();
-            getConceptosNominaRastreo(ano, empleado);
-            mdlSeleccionaEstiloColorParaEfectoVenta.find("#Concepto")[0].selectize.clear(true);
-        });
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Concepto").change(function () {
-            var concepto = $(this).val();
-            if (concepto) {
-                ConceptosNominaRastreo.column(2).search('^' + concepto + '$', true, false).draw();
-            } else {
-                ConceptosNominaRastreo.search('').draw();
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color").change(function () {
+            if ($(this).val()) {
+                mdlSeleccionaEstiloColorParaEfectoVenta.find("#btnAceptar").focus();
             }
-            $(this)[0].selectize.focus();
+        });
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#btnAceptar").click(function () {
+            var estilo = mdlSeleccionaEstiloColorParaEfectoVenta.find("#EstiloGenCos").val();
+            var color = mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color").val();
+            $.post(base_url + 'index.php/GeneraCostosVenta/onModificarEstiloColorParaCosto', {Estilo: estilo, Color: color}).done(function (data, x, jq) {
+                EstiloColores.ajax.reload();
+                mdlSeleccionaEstiloColorParaEfectoVenta.find("#Estilo").focus().select();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
 
         });
     });
 
-    function getConceptosNominaRastreo(ano, empleado) {
+    function getEstiloColores(estilo) {
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblConceptosNominaRastreo')) {
-            tblConceptosNominaRastreo.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tblEstiloColores')) {
+            tblEstiloColores.DataTable().destroy();
         }
-        ConceptosNominaRastreo = tblConceptosNominaRastreo.DataTable({
+        EstiloColores = tblEstiloColores.DataTable({
             "dom": 'rt',
             buttons: buttons,
             "ajax": {
-                "url": base_url + 'index.php/CapturaFraccionesParaNomina/getConceptosNominaRastreo',
+                "url": base_url + 'index.php/GeneraCostosVenta/getEstiloColores',
                 "dataType": "json",
                 "type": 'GET',
-                "data": {Ano: ano, Emp: empleado},
+                "data": {Estilo: estilo},
                 "dataSrc": ""
             },
             "columns": [
-                {"data": "numsem"},
-                {"data": "numemp"},
-                {"data": "numcon"},
-                {"data": "fecha"},
-                {"data": "PerDed"},
-                {"data": "Importe"}
+                {"data": "estilo"},
+                {"data": "color"},
+                {"data": "nomcolor"},
+                {"data": "costo"},
+                {"data": "pventa"}
             ],
             "columnDefs": [
                 {
-                    "targets": [5],
+                    "targets": [3],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
@@ -152,14 +144,14 @@
             "autoWidth": true,
             "colReorder": false,
             "displayLength": 500,
-            scrollY: 370,
+            scrollY: 350,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             keys: false,
             "bSort": true,
             "aaSorting": [
-                [0, 'asc']/*ID*/, [1, 'asc']/*ID*/, [4, 'asc']/*ID*/, [2, 'asc']/*ID*/
+                [0, 'asc']/*ID*/, [1, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -168,84 +160,48 @@
                     switch (index) {
                         case 0:
                             /*UNIDAD*/
-                            c.addClass('text-info text-strong');
+                            c.addClass('text-strong');
                             break;
                         case 1:
                             /*CONSUMO*/
-                            c.addClass('text-success text-strong');
+                            c.addClass('text-info text-strong');
+                            break;
+                        case 2:
+                            /*PZXPAR*/
+                            c.addClass('text-info text-strong ');
                             break;
                         case 4:
                             /*PZXPAR*/
-                            c.addClass('text-strong ');
-                            break;
-                        case 5:
-                            /*PZXPAR*/
-                            c.addClass('text-strong ');
+                            c.addClass('text-danger text-strong ');
                             break;
                     }
                 });
-            },
-            "footerCallback": function (row, data, start, end, display) {
-                var api = this.api();//Get access to Datatable API
-                // Update footer
-                var totalCO = api.column(5).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(5).footer()).html(api.column(5, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalCO), 2, '.', ',');
-                }, 0));
-            },
-            rowGroup: {
-                startRender: null,
-                endRender: function (rows, group) {
-                    var stcV = $.number(rows.data().pluck('Importe').reduce(function (a, b) {
-                        return a + parseFloat(b);
-                    }, 0), 2, '.', ',');
-                    return $('<tr>').
-                            append('<td colspan="5" align="center">Total semana ' + group + ':</td>').append('<td>$' + stcV + '</td></tr>');
-                },
-                dataSrc: "numsem"
             },
             "initComplete": function (x, y) {
                 HoldOn.close();
             }
         });
-        $('#tblConceptosNominaRastreo_filter input[type=search]').addClass('selectNotEnter');
-        tblConceptosNominaRastreo.find('tbody').on('click', 'tr', function () {
-            tblConceptosNominaRastreo.find("tbody tr").removeClass("success");
+        tblEstiloColores.find('tbody').on('click', 'tr', function () {
+            tblEstiloColores.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
 
     }
 
-    function getEmpleadosConceptosNomina() {
-        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getEmpleadosGeneral', ).done(function (data, x, jq) {
+    function getColoresByEstilo(estilo) {
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.clear(true);
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/GeneraCostosVenta/getColoresByEstilo', {Estilo: estilo}).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlSeleccionaEstiloColorParaEfectoVenta.find("#EmpleadoConcepto")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
+                mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
+            mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.focus();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
             HoldOn.close();
         });
     }
-
-    function getConceptosNomina() {
-        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getConceptosNomina', ).done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlSeleccionaEstiloColorParaEfectoVenta.find("#Concepto")[0].selectize.addOption({text: v.Concepto, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
-
-
 </script>
 <style>
     .text-strong {

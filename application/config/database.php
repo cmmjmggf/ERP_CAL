@@ -74,6 +74,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+/*
+  'hostname' => '192.168.0.1',
+  'username' => 'lobo',
+  'password' => 'abcd1234',
+ *
+ *  */
 $db['default'] = array(
     'dsn' => '',
     'hostname' => '192.168.0.1',
