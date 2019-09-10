@@ -2,7 +2,7 @@
     <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Usuarios.shoes'); ?>'">
         <div class="card text-center">
             <div class="card-body">
-                <span class="fa fa-user-circle fa-2x mt-5"></span> 
+                <span class="fa fa-user-circle fa-2x mt-5"></span>
             </div>
             <div class="card-footer">
                 <h5>USUARIOS</h5>
@@ -12,10 +12,20 @@
     <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Accesos.shoes'); ?>'">
         <div class="card text-center">
             <div class="card-body">
-                <span class="fa fa-key fa-2x mt-5"></span> 
+                <span class="fa fa-key fa-2x mt-5"></span>
             </div>
             <div class="card-footer">
                 <h5>ACCESOS</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('GeneraCostosVenta.shoes'); ?>'">
+        <div class="card text-center">
+            <div class="card-body">
+                <span class="fa fa-dollar-sign fa-2x mt-5"></span>
+            </div>
+            <div class="card-footer">
+                <h5>PRECIOS Y COSTOS</h5>
             </div>
         </div>
     </div>
@@ -47,16 +57,16 @@
         -webkit-transition: all 1s ease-in-out;
         transition: all 1s ease-in-out;
         z-index: 99  !important;
-    } 
+    }
     .card{
         cursor: pointer !important;
-        font-weight: bold; 
+        font-weight: bold;
         background: #2b2b2b !important;
         color: #fff;
     }
     .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold;        
+        font-weight: bold;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
         background: #ffffff; /* Old browsers */
         background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
@@ -103,5 +113,5 @@
         transform: scale(1.065);
         cursor: pointer !important;
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
-    } 
+    }
 </style>
