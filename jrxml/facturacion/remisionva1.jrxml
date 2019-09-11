@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="2.0276506581568206"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
+	<property name="ireport.zoom" value="2.2304157239725275"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="27"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.NombreP) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, F.fecha AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs,
+		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.NombreP) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs,
 (CASE
 WHEN C.FormaPago = 0 THEN "00"
 WHEN C.FormaPago = 1 THEN "01"
@@ -19,13 +19,55 @@ WHEN C.FormaPago = 28 THEN "28"
 WHEN C.FormaPago = 29 THEN "29"
 WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
-END) AS METODO_DE_PAGO,  C.Banco BANCO, C.Descuento AS DESCUENTO, C.DiasPlazo AS DIAS_PLAZO, C.Agente AS AGENTE,
-F.par01, F.par02, F.par03, F.par04, F.par05,
-F.par06, F.par07, F.par08, F.par09, F.par10,
-F.par11, F.par12, F.par13, F.par14, F.par15,
-F.par16, F.par17, F.par18, F.par19, F.par20,
-F.par21, F.par22, S.Clave AS SERIE,
-S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22, date_format(DATE_ADD( F.fecha, INTERVAL 30 DAY),"%d/%m/%Y") AS FECHA_DEL_PAGO,
+END) AS METODO_DE_PAGO,  C.Banco BANCO, (C.Descuento * 100) AS DESCUENTO, C.DiasPlazo AS DIAS_PLAZO, C.Agente AS AGENTE,
+
+(CASE WHEN F.par01 = 0 THEN "" ELSE F.par01 END) AS par01,
+(CASE WHEN F.par02 = "0" THEN "" ELSE F.par02 END) AS par02,
+(CASE WHEN F.par03 = "0" THEN "" ELSE F.par03 END) AS par03,
+(CASE WHEN F.par04 = "0" THEN "" ELSE F.par04 END) AS par04,
+(CASE WHEN F.par05 = "0" THEN "" ELSE F.par05 END) AS par05,
+(CASE WHEN F.par06 = "0" THEN "" ELSE F.par06 END) AS par06,
+(CASE WHEN F.par07 = "0" THEN "" ELSE F.par07 END) AS par07,
+(CASE WHEN F.par08 = "0" THEN "" ELSE F.par08 END) AS par08,
+(CASE WHEN F.par09 = "0" THEN "" ELSE F.par09 END) AS par09,
+(CASE WHEN F.par10 = "0" THEN "" ELSE F.par10 END) AS par10,
+(CASE WHEN F.par11 = "0" THEN "" ELSE F.par11 END) AS par11,
+(CASE WHEN F.par12 = "0" THEN "" ELSE F.par12 END) AS par12,
+(CASE WHEN F.par13 = "0" THEN "" ELSE F.par13 END) AS par13,
+(CASE WHEN F.par14 = "0" THEN "" ELSE F.par14 END) AS par14,
+(CASE WHEN F.par15 = "0" THEN "" ELSE F.par15 END) AS par15,
+(CASE WHEN F.par16 = "0" THEN "" ELSE F.par16 END) AS par16,
+(CASE WHEN F.par17 = "0" THEN "" ELSE F.par17 END) AS par17,
+(CASE WHEN F.par18 = "0" THEN "" ELSE F.par18 END) AS par18,
+(CASE WHEN F.par19 = "0" THEN "" ELSE F.par19 END) AS par19,
+(CASE WHEN F.par20 = "0" THEN "" ELSE F.par20 END) AS par20,
+(CASE WHEN F.par21 = "0" THEN "" ELSE F.par21 END) AS par21,
+(CASE WHEN F.par22 = "0" THEN "" ELSE F.par22 END) AS par22,
+S.Clave AS SERIE,
+(CASE WHEN S.T1= "0" THEN "" ELSE S.T1 END) AS T1,
+(CASE WHEN S.T2= "0" THEN "" ELSE S.T2 END) AS T2,
+(CASE WHEN S.T3= "0" THEN "" ELSE S.T3 END) AS T3,
+(CASE WHEN S.T4= "0" THEN "" ELSE S.T4 END) AS T4,
+(CASE WHEN S.T5= "0" THEN "" ELSE S.T5 END) AS T5,
+(CASE WHEN S.T6= "0" THEN "" ELSE S.T6 END) AS T6,
+(CASE WHEN S.T7= "0" THEN "" ELSE S.T7 END) AS T7,
+(CASE WHEN S.T8= "0" THEN "" ELSE S.T8 END) AS T8,
+(CASE WHEN S.T9= "0" THEN "" ELSE S.T9 END) AS T9,
+(CASE WHEN S.T10= "0" THEN "" ELSE S.T10 END) AS T10,
+(CASE WHEN S.T11= "0" THEN "" ELSE S.T11 END) AS T11,
+(CASE WHEN S.T12= "0" THEN "" ELSE S.T12 END) AS T12,
+(CASE WHEN S.T13= "0" THEN "" ELSE S.T13 END) AS T13,
+(CASE WHEN S.T14= "0" THEN "" ELSE S.T14 END) AS T14,
+(CASE WHEN S.T15= "0" THEN "" ELSE S.T15 END) AS T15,
+(CASE WHEN S.T16= "0" THEN "" ELSE S.T16 END) AS T16,
+(CASE WHEN S.T17= "0" THEN "" ELSE S.T17 END) AS T17,
+(CASE WHEN S.T18= "0" THEN "" ELSE S.T18 END) AS T18,
+(CASE WHEN S.T19= "0" THEN "" ELSE S.T19 END) AS T19,
+(CASE WHEN S.T20= "0" THEN "" ELSE S.T20 END) AS T20,
+(CASE WHEN S.T21= "0" THEN "" ELSE S.T21 END) AS T21,
+(CASE WHEN S.T22= "0" THEN "" ELSE S.T22 END) AS T22,
+
+date_format(DATE_ADD( F.fecha, INTERVAL 30 DAY),"%d/%m/%Y") AS FECHA_DEL_PAGO,
 C.NombreP AS NOMBRE_CLIENTE
 
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave
@@ -65,7 +107,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="CONTROL" class="java.lang.Integer"/>
-	<field name="FECHA" class="java.sql.Timestamp">
+	<field name="FECHA" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="hora" class="java.lang.String">
@@ -157,144 +199,144 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 	<field name="BANCO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DESCUENTO" class="java.lang.String">
+	<field name="DESCUENTO" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="DIAS_PLAZO" class="java.lang.String"/>
 	<field name="AGENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par01" class="java.lang.Integer">
+	<field name="par01" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par02" class="java.lang.Integer">
+	<field name="par02" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par03" class="java.lang.Integer">
+	<field name="par03" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par04" class="java.lang.Integer">
+	<field name="par04" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par05" class="java.lang.Integer">
+	<field name="par05" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par06" class="java.lang.Integer">
+	<field name="par06" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par07" class="java.lang.Integer">
+	<field name="par07" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par08" class="java.lang.Integer">
+	<field name="par08" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par09" class="java.lang.Integer">
+	<field name="par09" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par10" class="java.lang.Integer">
+	<field name="par10" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par11" class="java.lang.Integer">
+	<field name="par11" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par12" class="java.lang.Integer">
+	<field name="par12" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par13" class="java.lang.Integer">
+	<field name="par13" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par14" class="java.lang.Integer">
+	<field name="par14" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par15" class="java.lang.Integer">
+	<field name="par15" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par16" class="java.lang.Integer">
+	<field name="par16" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par17" class="java.lang.Integer">
+	<field name="par17" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par18" class="java.lang.Integer">
+	<field name="par18" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par19" class="java.lang.Integer">
+	<field name="par19" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par20" class="java.lang.Integer">
+	<field name="par20" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par21" class="java.lang.Integer">
+	<field name="par21" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="par22" class="java.lang.Integer">
+	<field name="par22" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="SERIE" class="java.lang.String"/>
-	<field name="T1" class="java.lang.Double">
+	<field name="T1" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T2" class="java.lang.Double">
+	<field name="T2" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T3" class="java.lang.Double">
+	<field name="T3" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T4" class="java.lang.Double">
+	<field name="T4" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T5" class="java.lang.Double">
+	<field name="T5" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T6" class="java.lang.Double">
+	<field name="T6" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T7" class="java.lang.Double">
+	<field name="T7" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T8" class="java.lang.Double">
+	<field name="T8" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T9" class="java.lang.Double">
+	<field name="T9" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T10" class="java.lang.Double">
+	<field name="T10" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T11" class="java.lang.Double">
+	<field name="T11" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T12" class="java.lang.Double">
+	<field name="T12" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T13" class="java.lang.Double">
+	<field name="T13" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T14" class="java.lang.Double">
+	<field name="T14" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T15" class="java.lang.Double">
+	<field name="T15" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T16" class="java.lang.Double">
+	<field name="T16" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T17" class="java.lang.Double">
+	<field name="T17" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T18" class="java.lang.Double">
+	<field name="T18" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T19" class="java.lang.Double">
+	<field name="T19" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T20" class="java.lang.Double">
+	<field name="T20" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T21" class="java.lang.Double">
+	<field name="T21" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="T22" class="java.lang.Double">
+	<field name="T22" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="FECHA_DEL_PAGO" class="java.lang.String"/>
@@ -322,7 +364,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 		<groupHeader>
 			<band height="15">
 				<rectangle>
-					<reportElement x="1" y="0" width="570" height="14" backcolor="#666666" uuid="2a66880b-ea22-434b-b2e6-4f8f075d8af8"/>
+					<reportElement x="0" y="0" width="615" height="14" backcolor="#666666" uuid="2a66880b-ea22-434b-b2e6-4f8f075d8af8"/>
 				</rectangle>
 				<staticText>
 					<reportElement x="0" y="0" width="31" height="15" forecolor="#FFFFFF" uuid="fed73286-ec32-4d8e-99ae-f0e1a65b8139"/>
@@ -339,14 +381,14 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 					<text><![CDATA[Descripción]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="471" y="1" width="41" height="13" forecolor="#FFFFFF" uuid="32640b27-96a8-48f9-b4fd-52176642dd08"/>
+					<reportElement x="514" y="1" width="41" height="13" forecolor="#FFFFFF" uuid="32640b27-96a8-48f9-b4fd-52176642dd08"/>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Precio]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="512" y="1" width="60" height="13" forecolor="#FFFFFF" uuid="68f5c0b9-3715-4f84-bdd2-855d73d4db5a"/>
+					<reportElement x="555" y="1" width="60" height="13" forecolor="#FFFFFF" uuid="68f5c0b9-3715-4f84-bdd2-855d73d4db5a"/>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
 					</textElement>
@@ -355,7 +397,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="34">
+			<band height="32">
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="0" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="458487fc-be82-4e58-be8f-df31c546eb33"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -379,9 +421,9 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 					</textElement>
 					<text><![CDATA[Pares]]></text>
 				</staticText>
-				<textField>
-					<reportElement x="511" y="0" width="60" height="15" uuid="bfe7d765-40ae-4933-af88-4de715cd5768"/>
-					<textElement textAlignment="Center">
+				<textField pattern="#,##0.00">
+					<reportElement x="555" y="0" width="60" height="13" uuid="bfe7d765-40ae-4933-af88-4de715cd5768"/>
+					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{subtot_4}]]></textFieldExpression>
@@ -393,187 +435,190 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{obs}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="0" y="12" width="614" height="1" forecolor="#999999" uuid="3a0f8476-a5d4-4e73-8cc1-bcf35fb67491"/>
+				</line>
 			</band>
 		</groupFooter>
 	</group>
 	<group name="SERIE">
 		<groupExpression><![CDATA[$F{SERIE}]]></groupExpression>
 		<groupHeader>
-			<band height="13">
-				<textField>
-					<reportElement x="148" y="0" width="13" height="12" uuid="2fc5811a-0d7e-46ee-8996-dfe63531f13e"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
+			<band height="10">
+				<textField pattern="0.#">
+					<reportElement x="148" y="0" width="15" height="10" uuid="2fc5811a-0d7e-46ee-8996-dfe63531f13e"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font size="6"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="174" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f258d7cd-3933-4740-b8ad-f3ef2062535e"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="178" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f258d7cd-3933-4740-b8ad-f3ef2062535e"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T3}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="200" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="97b0e580-0520-4dc7-826e-5aa004318fc5"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="208" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="97b0e580-0520-4dc7-826e-5aa004318fc5"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T5}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="213" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="380463d5-a52d-4ff5-a6fe-af3ad1f2ab65"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="223" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="380463d5-a52d-4ff5-a6fe-af3ad1f2ab65"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T6}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="226" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4ae7cfb0-e442-4867-92cb-73439e8469f5"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="238" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="4ae7cfb0-e442-4867-92cb-73439e8469f5"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T7}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="239" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="09b5f209-eeac-44e5-9718-2a5957e71a69"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="253" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="09b5f209-eeac-44e5-9718-2a5957e71a69"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T8}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="252" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="698fa713-eb6f-4ec9-adef-73beb34ecb34"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="268" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="698fa713-eb6f-4ec9-adef-73beb34ecb34"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T9}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="265" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a5efbe06-efab-4f70-b40a-f530a5d34b4c"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="283" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a5efbe06-efab-4f70-b40a-f530a5d34b4c"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T10}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="161" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0d61ad0e-c86a-4018-9e6d-0d868a1f047f"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="163" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="0d61ad0e-c86a-4018-9e6d-0d868a1f047f"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="187" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8a0f691e-97f6-4d57-99ef-f39af72b8b87"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="193" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a0f691e-97f6-4d57-99ef-f39af72b8b87"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T4}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="278" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="137a306e-afb6-461d-babc-6a45dd7338a9"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="298" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="137a306e-afb6-461d-babc-6a45dd7338a9"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T11}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="291" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a5759e82-ddcf-43a7-bf7a-12d879ae8207"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="313" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a5759e82-ddcf-43a7-bf7a-12d879ae8207"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T12}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="304" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fc9c5700-caae-430b-80a3-e12a876edbe1"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="328" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="fc9c5700-caae-430b-80a3-e12a876edbe1"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T13}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="317" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9862ee2b-1913-46cf-b44c-e96fdca5192a"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="343" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9862ee2b-1913-46cf-b44c-e96fdca5192a"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T14}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="330" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="37cb5197-660c-45e1-bd03-a9fcf2f9a824"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="358" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="37cb5197-660c-45e1-bd03-a9fcf2f9a824"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T15}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="343" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1b4b734c-81cb-4a39-86af-504eb13c7dba"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="373" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1b4b734c-81cb-4a39-86af-504eb13c7dba"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T16}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="356" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cd3f0f11-6011-4fb2-9e0e-3be792b181ac"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="388" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="cd3f0f11-6011-4fb2-9e0e-3be792b181ac"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T17}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="369" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1d3042ac-a3f0-43c2-9700-b5b871435472"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="403" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1d3042ac-a3f0-43c2-9700-b5b871435472"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T18}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="382" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3982894f-a4d0-47bb-923f-57ec33b7e1ee"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="418" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="3982894f-a4d0-47bb-923f-57ec33b7e1ee"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T19}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="395" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6647963-70a5-44ad-8693-a8b83b2d9e23"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="433" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d6647963-70a5-44ad-8693-a8b83b2d9e23"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T20}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="408" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9cd1db93-48c7-40b4-a011-ce15d96820f2"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="448" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9cd1db93-48c7-40b4-a011-ce15d96820f2"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T21}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="421" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f8af17c3-f15a-4125-9cd4-743da27a18c0"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textField pattern="0.#" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="463" y="0" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f8af17c3-f15a-4125-9cd4-743da27a18c0"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{T22}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{T22}.equals("0") ? "" : $F{T22}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -581,41 +626,41 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 	<columnHeader>
 		<band height="64" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="449" height="63" uuid="79ea253e-8b49-4ef1-ba28-2b4c33a01b1d"/>
+				<reportElement x="0" y="0" width="475" height="63" uuid="79ea253e-8b49-4ef1-ba28-2b4c33a01b1d"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="449" y="0" width="122" height="63" backcolor="#FFFFFF" uuid="f735ef83-c6ca-4602-834f-3c5435fa5fa5"/>
+				<reportElement x="475" y="0" width="140" height="63" backcolor="#FFFFFF" uuid="f735ef83-c6ca-4602-834f-3c5435fa5fa5"/>
 			</rectangle>
 			<staticText>
-				<reportElement mode="Opaque" x="449" y="0" width="122" height="13" forecolor="#FFFFFF" backcolor="#666666" uuid="edad719a-6916-4932-9b70-d7abb7309086"/>
+				<reportElement mode="Opaque" x="475" y="0" width="140" height="13" forecolor="#FFFFFF" backcolor="#666666" uuid="edad719a-6916-4932-9b70-d7abb7309086"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pedido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="449" y="32" width="122" height="13" forecolor="#FFFFFF" backcolor="#666666" uuid="82a54781-f430-4888-8da7-c490087158f7"/>
+				<reportElement mode="Opaque" x="475" y="32" width="140" height="13" forecolor="#FFFFFF" backcolor="#666666" uuid="82a54781-f430-4888-8da7-c490087158f7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="268" y="25" width="30" height="13" uuid="03120061-005d-4764-ad39-7d2e202b62f4"/>
+				<reportElement x="296" y="25" width="30" height="13" uuid="03120061-005d-4764-ad39-7d2e202b62f4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#EXT.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="348" y="25" width="25" height="13" uuid="8fee984a-ceb6-45af-9811-7af29ac73fa1"/>
+				<reportElement x="376" y="25" width="25" height="13" uuid="8fee984a-ceb6-45af-9811-7af29ac73fa1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#INT]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="1" y="13" width="381" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="53af1fe1-415e-4036-86dc-f094d78d32dc"/>
+				<reportElement mode="Transparent" x="1" y="13" width="408" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="53af1fe1-415e-4036-86dc-f094d78d32dc"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -623,102 +668,104 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{CLIENTE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1" y="25" width="268" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="44e7b03a-9339-4b2d-be29-683c25bc8090"/>
+				<reportElement mode="Transparent" x="1" y="25" width="295" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="44e7b03a-9339-4b2d-be29-683c25bc8090"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1" y="37" width="179" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ae762435-d7d1-4947-9ed4-d5ca1ef35a39"/>
+				<reportElement mode="Transparent" x="1" y="37" width="212" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ae762435-d7d1-4947-9ed4-d5ca1ef35a39"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CIUDAD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="372" y="25" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5b536dd1-93b8-4edb-9f33-d32948abdc15"/>
+				<reportElement mode="Transparent" x="400" y="25" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5b536dd1-93b8-4edb-9f33-d32948abdc15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NOINT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="297" y="25" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="d1ae2399-f296-4e04-be46-5dec0e59ae14"/>
+				<reportElement mode="Transparent" x="325" y="25" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="d1ae2399-f296-4e04-be46-5dec0e59ae14"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NOEXT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="449" y="13" width="122" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c41de2e9-ef53-4400-b6b2-6dcada042375"/>
+				<reportElement mode="Transparent" x="475" y="13" width="140" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c41de2e9-ef53-4400-b6b2-6dcada042375"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FACTURA}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="449" y="45" width="122" height="18" uuid="5f5dc84e-9384-4537-b048-4a4d5bbde1cf"/>
+			<textField pattern="">
+				<reportElement x="475" y="45" width="140" height="18" uuid="5f5dc84e-9384-4537-b048-4a4d5bbde1cf"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="381" y="13" width="25" height="13" uuid="ceaa89b2-c6eb-4ae4-ad61-3be3ff0239bf"/>
+				<reportElement x="409" y="13" width="25" height="13" uuid="ceaa89b2-c6eb-4ae4-ad61-3be3ff0239bf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[L-P]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="406" y="13" width="41" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="80764745-0c4a-46c0-b605-595ec9227bb0"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<reportElement mode="Transparent" x="434" y="13" width="41" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="80764745-0c4a-46c0-b605-595ec9227bb0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{LISTA_PRECIO}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="1" y="49" width="44" height="13" uuid="c6e9aa91-8223-4833-8749-0fe8c926dd7a"/>
+			<textField pattern="0.#">
+				<reportElement x="1" y="49" width="34" height="13" uuid="c6e9aa91-8223-4833-8749-0fe8c926dd7a"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{DESCUENTO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="45" y="49" width="98" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c6f20b76-4423-42fc-96a8-623918526904"/>
+				<reportElement mode="Transparent" x="51" y="49" width="92" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c6f20b76-4423-42fc-96a8-623918526904"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descuento pago contado]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="180" y="37" width="193" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c0eab819-8a38-44bc-bc90-4dad65dac679"/>
+				<reportElement mode="Transparent" x="215" y="37" width="193" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c0eab819-8a38-44bc-bc90-4dad65dac679"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="143" y="49" width="63" height="13" uuid="0d271b92-bd8c-46fb-b250-d7b566d7415f"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="186" y="49" width="27" height="13" uuid="0d271b92-bd8c-46fb-b250-d7b566d7415f"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{DIAS_PLAZO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="206" y="49" width="80" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="3bebd7b8-91d6-466f-a9b8-b02aa366d6a3"/>
+				<reportElement mode="Transparent" x="217" y="49" width="58" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="3bebd7b8-91d6-466f-a9b8-b02aa366d6a3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Dias pago neto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="286" y="50" width="80" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6f6c0fbe-b18b-4e3b-99ef-9109ea946a49"/>
+				<reportElement mode="Transparent" x="287" y="49" width="38" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6f6c0fbe-b18b-4e3b-99ef-9109ea946a49"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -726,17 +773,24 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Agt-]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="366" y="50" width="83" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="004aabb9-46b0-4001-b479-266acf67610c"/>
+				<reportElement mode="Transparent" x="325" y="49" width="83" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="004aabb9-46b0-4001-b479-266acf67610c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{AGENTE}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="35" y="49" width="15" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="51cb2719-6829-4ef3-9976-ea800b7e2021"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="31" height="12" uuid="286fb789-a183-4fc9-8631-33747e1d6b8d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -745,7 +799,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{pareped}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="434" y="0" width="37" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="7da803b0-bf8e-4b51-9ccb-913e41d05d20"/>
+				<reportElement mode="Transparent" x="478" y="0" width="36" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="7da803b0-bf8e-4b51-9ccb-913e41d05d20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -753,18 +807,18 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="1" y="12" width="572" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
+				<reportElement x="1" y="12" width="614" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="511" y="0" width="61" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="554" y="0" width="61" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtot}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="471" y="0" width="40" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="514" y="0" width="40" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -788,7 +842,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="148" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a6290f01-b8ff-4426-9403-c5d15017e1b3"/>
+				<reportElement mode="Transparent" x="148" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a6290f01-b8ff-4426-9403-c5d15017e1b3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -796,7 +850,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par01}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="161" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6536c7f8-47d8-4c64-81b7-a43ea41d60a8"/>
+				<reportElement mode="Transparent" x="163" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6536c7f8-47d8-4c64-81b7-a43ea41d60a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -804,7 +858,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par02}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="174" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="734e4fa5-193a-4c6b-8eac-7a677babd6df"/>
+				<reportElement mode="Transparent" x="178" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="734e4fa5-193a-4c6b-8eac-7a677babd6df"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -812,7 +866,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par03}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="187" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="26582e98-5868-4f2e-a010-25bbb946b06d"/>
+				<reportElement mode="Transparent" x="193" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="26582e98-5868-4f2e-a010-25bbb946b06d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -820,7 +874,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par04}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="200" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96b9515b-aa77-4414-b428-b9f16c79945d"/>
+				<reportElement mode="Transparent" x="208" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96b9515b-aa77-4414-b428-b9f16c79945d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -828,7 +882,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par05}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="213" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="66cfd81c-74c6-49eb-960e-a08bda24039c"/>
+				<reportElement mode="Transparent" x="223" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="66cfd81c-74c6-49eb-960e-a08bda24039c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -836,7 +890,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par06}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="226" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a5db3eb-2ce4-4b6e-bae8-9a76096f6930"/>
+				<reportElement mode="Transparent" x="238" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a5db3eb-2ce4-4b6e-bae8-9a76096f6930"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -844,7 +898,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par07}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="239" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f0c59bb2-a6cf-4dfe-9c9d-ad6ab0daf8f3"/>
+				<reportElement mode="Transparent" x="253" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f0c59bb2-a6cf-4dfe-9c9d-ad6ab0daf8f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -852,7 +906,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par08}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="252" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f2437290-ba91-4237-9606-1acd11dc5b47"/>
+				<reportElement mode="Transparent" x="268" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f2437290-ba91-4237-9606-1acd11dc5b47"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -860,7 +914,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par09}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="265" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9c7d4ec7-a485-41c4-8ec7-ec3d5aa62981"/>
+				<reportElement mode="Transparent" x="283" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9c7d4ec7-a485-41c4-8ec7-ec3d5aa62981"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -868,7 +922,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par10}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="278" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9755f075-59df-40e1-a965-00ed8adee455"/>
+				<reportElement mode="Transparent" x="298" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9755f075-59df-40e1-a965-00ed8adee455"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -876,7 +930,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par11}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="291" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96dcf9a5-d819-4753-8ae3-f3d412251c2a"/>
+				<reportElement mode="Transparent" x="313" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96dcf9a5-d819-4753-8ae3-f3d412251c2a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -884,7 +938,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par12}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="304" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae98da05-a720-4dcb-86fb-3cc6dec92ea1"/>
+				<reportElement mode="Transparent" x="328" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae98da05-a720-4dcb-86fb-3cc6dec92ea1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -892,7 +946,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par13}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="317" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="465bc305-3adf-4c31-b68c-b0e117a4a7a9"/>
+				<reportElement mode="Transparent" x="343" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="465bc305-3adf-4c31-b68c-b0e117a4a7a9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -900,7 +954,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par14}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="330" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ef6d68b-da94-43a1-b645-a814336deee6"/>
+				<reportElement mode="Transparent" x="358" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ef6d68b-da94-43a1-b645-a814336deee6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -908,7 +962,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par15}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="343" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="576e895e-33dc-4b5d-95eb-94d1ec674db2"/>
+				<reportElement mode="Transparent" x="373" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="576e895e-33dc-4b5d-95eb-94d1ec674db2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -916,7 +970,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par16}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="356" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6635449-8a93-49ef-afd9-c43c759acd0c"/>
+				<reportElement mode="Transparent" x="388" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6635449-8a93-49ef-afd9-c43c759acd0c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -924,7 +978,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par17}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="369" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="40c7144b-45eb-4bb8-972f-8a7604c41391"/>
+				<reportElement mode="Transparent" x="403" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="40c7144b-45eb-4bb8-972f-8a7604c41391"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -932,7 +986,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par18}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="382" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2642fd15-6e23-4813-9626-f8cc442820b1"/>
+				<reportElement mode="Transparent" x="418" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2642fd15-6e23-4813-9626-f8cc442820b1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -940,7 +994,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par19}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="395" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3016b664-e49b-4df2-bc6f-67be596b4fc2"/>
+				<reportElement mode="Transparent" x="433" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3016b664-e49b-4df2-bc6f-67be596b4fc2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -948,7 +1002,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par20}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="408" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="80f60660-6e95-4729-8d93-af97127a807a"/>
+				<reportElement mode="Transparent" x="448" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="80f60660-6e95-4729-8d93-af97127a807a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -956,22 +1010,160 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{par21}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="421" y="0" width="13" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c342bccf-863d-43cc-992f-f27491548c72"/>
+				<reportElement mode="Transparent" x="463" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c342bccf-863d-43cc-992f-f27491548c72"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{par22}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="163" y="0" width="1" height="13" uuid="2c4d16eb-ddfe-4156-8ba7-26d7291e9b78"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="148" y="0" width="1" height="13" uuid="5aed2b37-9273-40b4-a6f3-bbe9d25c3c7d"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="178" y="0" width="1" height="13" uuid="466d1c9d-9953-4c6c-8027-5b34f6a86c5f"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="193" y="0" width="1" height="13" uuid="85a83d22-a890-4870-bf96-3e20dbb2a946"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="208" y="0" width="1" height="13" uuid="cd3318d2-f72d-4855-86b9-9fc33557e6d1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="223" y="0" width="1" height="13" uuid="7b779c9e-96fc-49fc-afa0-a32823ddb3b9"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="238" y="0" width="1" height="13" uuid="f2cdee07-bdfd-4764-a70d-5c300d3d455c"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="253" y="0" width="1" height="13" uuid="c7c36fcc-2684-403d-ba30-c76c93c0c774"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="282" y="-1" width="1" height="13" uuid="9a694c96-1681-4ee0-8fcf-4b182e37d8d9"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="267" y="-1" width="1" height="13" uuid="2b43e4dc-1a45-442f-828d-b3fc6595c73a"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="297" y="-1" width="1" height="13" uuid="c2fa984a-6ec5-4419-93f1-dd8ab748deda"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="312" y="-1" width="1" height="13" uuid="f0917e40-36b0-4b5a-8404-3b23f529cd4c"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="327" y="-1" width="1" height="13" uuid="bd735595-3f3d-4ea1-a190-01ff66852448"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="342" y="-1" width="1" height="13" uuid="6a6c1219-0e7e-4683-877c-11e56f5386fd"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="357" y="-1" width="1" height="13" uuid="94750527-4af1-49dc-833c-2a54df3e2985"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="372" y="-1" width="1" height="13" uuid="d7f23a81-3167-4d47-920b-8e0feb77862e"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="402" y="-1" width="1" height="13" uuid="e9bb4f26-5034-4e90-bb95-69fccab890e8"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="387" y="-1" width="1" height="13" uuid="614191fa-6ab6-43a5-af31-135b4d9aeb96"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="417" y="-1" width="1" height="13" uuid="d8856f3f-17ad-4434-9d99-ed9f6a45afc4"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="432" y="-1" width="1" height="13" uuid="caf7e3c9-15d8-4072-8b11-79c57328ef80"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="447" y="-1" width="1" height="13" uuid="45187443-646f-4d81-b9c8-a62e1736d408"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="462" y="-1" width="1" height="13" uuid="54339041-152c-4e34-96c7-73eaa70eeb09"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="477" y="-1" width="1" height="13" uuid="055c35bb-8c31-46dd-939b-2d0067e7b721"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="172">
 			<rectangle>
-				<reportElement mode="Transparent" x="1" y="26" width="570" height="144" uuid="695a15b2-ca51-40ba-b965-b3a9dd6d79b4"/>
+				<reportElement mode="Transparent" x="1" y="26" width="612" height="144" uuid="695a15b2-ca51-40ba-b965-b3a9dd6d79b4"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="571" height="13" uuid="5740f20d-f59d-459b-a40d-42c8e2964dab"/>
+				<reportElement x="0" y="0" width="613" height="13" uuid="5740f20d-f59d-459b-a40d-42c8e2964dab"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -994,7 +1186,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="418" y="26" width="53" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="eea5685d-1e3f-42f2-a07c-bce1247026ca"/>
+				<reportElement mode="Opaque" x="458" y="26" width="53" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="eea5685d-1e3f-42f2-a07c-bce1247026ca"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1034,7 +1226,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Calzado Lobo, s.a. de c.v.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="335" y="53" width="119" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eb725e3d-265c-4873-b34e-fa91d556c140"/>
+				<reportElement mode="Transparent" x="375" y="53" width="119" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eb725e3d-265c-4873-b34e-fa91d556c140"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1045,7 +1237,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Lugar del pago   Leon, Gto. Mexico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="335" y="38" width="159" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b145c357-039a-4664-8a56-6f15bfc89db9"/>
+				<reportElement mode="Transparent" x="375" y="38" width="159" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b145c357-039a-4664-8a56-6f15bfc89db9"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1057,14 +1249,14 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="51" y="65" width="279" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="4a6020e8-03ec-47b9-8ef0-7c4acca199dc"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MONEDA_LETRA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="449" y="53" width="62" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="de5be3a0-4eb0-474a-ab07-8f33bdfc7aca"/>
+				<reportElement mode="Transparent" x="493" y="53" width="62" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="de5be3a0-4eb0-474a-ab07-8f33bdfc7aca"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1075,7 +1267,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Fecha del pago]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="512" y="53" width="59" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c3d9581d-2cad-4162-a6d4-e03160f91a83"/>
+				<reportElement mode="Transparent" x="552" y="53" width="59" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c3d9581d-2cad-4162-a6d4-e03160f91a83"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1083,7 +1275,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{FECHA_DEL_PAGO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="78" width="570" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="a9e98ea1-567f-4de9-91c0-ee3f7179818b"/>
+				<reportElement mode="Transparent" x="1" y="78" width="610" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="a9e98ea1-567f-4de9-91c0-ee3f7179818b"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1091,15 +1283,15 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Valor recibido a mi (nuestra) entera satisfaccion. Este pagare forma parte de una serie numerada del 1 al 1 sujetos a la condicion de que, al no pagarse desde la fecha de vencimiento de este cualquiera de ellos a su vencimiento, sera exigibles todos los que les sigan en numero ademas de los ya vencidos, documento hasta el dia de su liquidacion, causara intereses moratorios al tipo de % mensual, pagadero en esta ciudad juntamente con el principal, mas los gastos que por ello se originen]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="286" y="26" width="69" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e921486d-22b8-4b85-ae93-9c82af4833cf"/>
-				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+				<reportElement mode="Opaque" x="285" y="26" width="69" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="e921486d-22b8-4b85-ae93-9c82af4833cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FACTURA}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="471" y="26" width="100" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6c615696-9248-4b5e-9ec3-0a1b6aea8f25"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="511" y="26" width="102" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6c615696-9248-4b5e-9ec3-0a1b6aea8f25"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1107,7 +1299,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$V{subtot_5}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement mode="Transparent" x="494" y="38" width="77" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c9e483ce-0bd4-4a96-9af9-b5d56f828e1f"/>
+				<reportElement mode="Transparent" x="534" y="38" width="77" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c9e483ce-0bd4-4a96-9af9-b5d56f828e1f"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1118,7 +1310,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="117" width="420" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="82bf6b5e-6e15-4b64-b020-5a927e811a6e"/>
+				<reportElement mode="Opaque" x="1" y="117" width="453" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="82bf6b5e-6e15-4b64-b020-5a927e811a6e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1147,7 +1339,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Colonia]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="35" y="128" width="388" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0974534e-ae10-4afa-98ad-5134cae7995a"/>
+				<reportElement mode="Transparent" x="35" y="128" width="419" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0974534e-ae10-4afa-98ad-5134cae7995a"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1155,7 +1347,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{NOMBRE_CLIENTE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="35" y="140" width="204" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6aeb37e1-5cc5-4992-8d26-72afa5b9ef67"/>
+				<reportElement mode="Transparent" x="35" y="140" width="240" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6aeb37e1-5cc5-4992-8d26-72afa5b9ef67"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1178,7 +1370,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<text><![CDATA[Ciudad]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="268" y="140" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="f8a1a069-2575-4c1a-bbc4-a113bd3416e6"/>
+				<reportElement mode="Transparent" x="304" y="140" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="f8a1a069-2575-4c1a-bbc4-a113bd3416e6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1186,14 +1378,14 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{NOEXT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="239" y="140" width="30" height="13" uuid="67524036-1ec7-467c-9b23-d46b243969f5"/>
+				<reportElement x="275" y="140" width="30" height="13" uuid="67524036-1ec7-467c-9b23-d46b243969f5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#EXT.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="343" y="141" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="047c120c-240f-45a4-9e6d-ce45b416393b"/>
+				<reportElement mode="Transparent" x="379" y="141" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="047c120c-240f-45a4-9e6d-ce45b416393b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1201,14 +1393,14 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{NOINT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="319" y="140" width="25" height="13" uuid="8bcea5c5-119e-4a65-9c40-5c70d48d5367"/>
+				<reportElement x="355" y="140" width="25" height="13" uuid="8bcea5c5-119e-4a65-9c40-5c70d48d5367"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#INT]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="373" y="152" width="59" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="18296f39-4590-48c7-902a-c3d4bc1d907a"/>
+				<reportElement mode="Transparent" x="373" y="153" width="59" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="18296f39-4590-48c7-902a-c3d4bc1d907a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1216,14 +1408,14 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="348" y="152" width="25" height="13" uuid="63c207f5-02f5-4468-9bd2-2761e716a626"/>
+				<reportElement x="348" y="153" width="25" height="13" uuid="63c207f5-02f5-4468-9bd2-2761e716a626"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Edo]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="34" y="152" width="129" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b1bd7f03-f299-49e6-89fe-669a6cc5e570"/>
+				<reportElement mode="Transparent" x="34" y="152" width="179" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b1bd7f03-f299-49e6-89fe-669a6cc5e570"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1231,7 +1423,7 @@ WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
 				<textFieldExpression><![CDATA[$F{COLONIA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="434" y="159" width="137" height="11" uuid="05b64ade-b0a4-4f8d-ad94-bae59adf5d7d"/>
+				<reportElement x="454" y="159" width="158" height="11" uuid="05b64ade-b0a4-4f8d-ad94-bae59adf5d7d"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>

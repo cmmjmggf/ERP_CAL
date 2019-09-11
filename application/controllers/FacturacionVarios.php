@@ -323,8 +323,12 @@ class FacturacionVarios extends CI_Controller {
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $qr_url = QRcode::png($qr, 'rpt/qr.png');
             $pr = array();
-            $pr["logo"] = base_url() . $this->session->LOGO;
-            $pr["empresa"] = $this->session->EMPRESA_RAZON;
+            switch (intval($x["TP"])) {
+                case 1:
+                    $pr["logo"] = base_url() . $this->session->LOGO;
+                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                    BREAK;
+            }
             switch (intval($x["TP"])) {
                 case 1:
                     switch (intval($x['CLIENTE'])) {
@@ -613,7 +617,7 @@ class FacturacionVarios extends CI_Controller {
                 case 2:
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                     $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec2121.jasper');
+                    $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
                     $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                     $jc->setDocumentformat('pdf');
                     PRINT $jc->getReport();

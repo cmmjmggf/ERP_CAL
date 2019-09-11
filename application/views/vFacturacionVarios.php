@@ -1,4 +1,3 @@
-<?php print $this->session->ID; ?>
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
         <div class="row">
@@ -42,7 +41,7 @@
                                 <option></option>
                                 <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                     print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -366,6 +365,7 @@
 
         PrevisualizarDocto.click(function () {
             if (ClienteFactura.val() && Documento.val()) {
+                onOpenOverlay('');
                 getVistaPrevia();
             } else {
                 iMsg('DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', 'w', function () {
