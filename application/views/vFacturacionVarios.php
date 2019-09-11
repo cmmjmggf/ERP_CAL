@@ -1,3 +1,4 @@
+<?php print $this->session->ID; ?>
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
         <div class="row">
@@ -941,7 +942,6 @@
         if (tf) {
             var subtotal = 0;
             $.each(DetalleDocumento.rows().data(), function (k, v) {
-                console.log(k, v, getNumberFloat(v[8]));
                 subtotal += getNumberFloat(v[8]);
             });
             if (cNoIva[0].checked) {
@@ -1066,11 +1066,8 @@
         console.log("txtreferen10 => " + txtreferen10);
         pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
-    }
-
-    function getNoGenIVA() {
-
-    }
+    } 
+    
     function  getVistaPrevia() {
         $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
             CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',

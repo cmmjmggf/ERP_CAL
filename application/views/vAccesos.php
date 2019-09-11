@@ -24,6 +24,9 @@
                 <button id="btnAsignaTodo" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
                     <span class="fa fa-shield-alt"></span>
                 </button>
+                <button id="btnAsignaAccesosRapidos" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR ACCESOS RÁPIDOS">
+                    <span class="fa fa-cubes"></span>
+                </button>
                 <button id="btnAsignaAvaPRD" type="button" class="btn btn-primary d-none"  data-toggle="tooltip" data-placement="top" title="ASIGNAR AVAPRD">
                     <span class="fa fa-shield-alt"></span>
                 </button>

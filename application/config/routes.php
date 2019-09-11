@@ -108,6 +108,7 @@ $route['colores_x_estilo'] = 'AvanceTejido/getColoresXEstilo';
 
 /*ACCESOS*/
 $route['menu_modulos'] = 'ResourceManager/getModulos';
+$route['accesos_directos_x_usuario'] = 'ResourceManager/getAccesosDirectosXModulo';
 $route['menu_opciones_modulos'] = 'ResourceManager/getOpcionesXModulo';
 
 $route['accesos_modulos'] = 'Accesos/getModulos';

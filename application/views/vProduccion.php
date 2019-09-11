@@ -1,15 +1,4 @@
-<div id="MnuBlock" class="col-12 row justify-content-center mt-2" align="center">
-    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Pedidos/?origen=PRODUCCION'); ?>'">
-        <div class="card text-center">
-            <div class="card-body">
-                <span class="fa fa-clipboard-list fa-2x mt-5"></span> 
-            </div>
-            <div class="card-footer">
-                <h5>PEDIDOS</h5>
-            </div>
-        </div>
-    </div> 
-</div>
+<div id="MnuBlock" class="col-12 row justify-content-center mt-2" align="center"></div>
 <style>
     .card:hover img{
         -webkit-transition: all 1s ease-in-out;

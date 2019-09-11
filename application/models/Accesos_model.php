@@ -29,7 +29,7 @@ class Accesos_model extends CI_Model {
     public function getUsuarios() {
         try {
             $this->db->select("U.ID AS ID, U.Usuario AS USUARIO, U.TipoAcceso AS TIPO_ACCESO", false)
-                    ->from('usuarios AS U')->order_by('ABS(U.ID)','ASC');
+                    ->from('usuarios AS U')->order_by('ABS(U.ID)', 'ASC');
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -268,6 +268,11 @@ class Accesos_model extends CI_Model {
                 INNER JOIN subsubitemsxitemxopcionxmoduloxusuario AS AA ON A.ID = AA.SubSubItem 
                 WHERE AA.Usuario = $USUARIO);";
             $this->db->query($sql_cuatro);
+
+            $sql_cinco = "INSERT INTO `accesos_directos_x_usuario` (`Acceso_directo`, `Usuario`, `UsuarioAsigna`, `Fecha`) "
+                    . "SELECT AD.ID, {$USUARIO}, {$USUARIO_ASIGNA}, '{$FECHA}' FROM accesos_directos_x_usuario AS ADU RIGHT JOIN accesos_directos AS AD ON ADU.Acceso_directo = AD.ID WHERE ADU.ID IS NULL";
+            $this->db->query($sql_cinco);
+
             $this->db->trans_complete();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
