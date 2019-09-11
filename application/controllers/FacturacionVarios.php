@@ -611,12 +611,7 @@ class FacturacionVarios extends CI_Controller {
                     }
                     break;
                 case 2:
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MÉXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = '00001000000201352796';
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\facturaelec2121.jasper');
                     $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));

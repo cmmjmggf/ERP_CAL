@@ -1356,15 +1356,16 @@
     }
 
     function getAccesosDirectosXModuloXUsuario(m) {
+        var usr = '<?php print $this->session->ID; ?>' !== '' ? '<?php print $this->session->ID; ?>' : 0;
         $.getJSON('<?php print base_url('accesos_directos_x_usuario') ?>',
-                {MODULO: parseInt(m), USUARIO: <?php print $this->session->ID; ?>}).done(function (a) {
+                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) {
             console.log(a);
             var accesos_directos = "";
             if (a.length > 0) {
                 var burl = '<?php print base_url(); ?>';
                 $.each(a, function (k, v) {
-                    accesos_directos += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href =\''+ (burl + v.Ref) +'\'">'+
-                    '<div class="card text-center">' +
+                    accesos_directos += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href =\'' + (burl + v.Ref) + '\'">' +
+                            '<div class="card text-center">' +
                             '<div class="card-body">' +
                             '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>' +
                             '</div>' +
