@@ -41,7 +41,7 @@
                                 <option></option>
                                 <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                     print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -365,6 +365,7 @@
 
         PrevisualizarDocto.click(function () {
             if (ClienteFactura.val() && Documento.val()) {
+                onOpenOverlay('');
                 getVistaPrevia();
             } else {
                 iMsg('DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', 'w', function () {
@@ -941,7 +942,6 @@
         if (tf) {
             var subtotal = 0;
             $.each(DetalleDocumento.rows().data(), function (k, v) {
-                console.log(k, v, getNumberFloat(v[8]));
                 subtotal += getNumberFloat(v[8]);
             });
             if (cNoIva[0].checked) {
@@ -1066,11 +1066,8 @@
         console.log("txtreferen10 => " + txtreferen10);
         pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
-    }
-
-    function getNoGenIVA() {
-
-    }
+    } 
+    
     function  getVistaPrevia() {
         $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
             CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',

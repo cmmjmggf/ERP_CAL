@@ -8,11 +8,11 @@
                 <label>Cliente</label>
                 <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" >
                     <option></option>
-                    <?php
-                    $clientes = $this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
-                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
+                    <?php 
+                    //YA CONTIENE LOS BLOQUEOS DE VENTA 
+                    $clientes = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result();
                     foreach ($clientes as $k => $v) {
-                        print "<option value=\"{$v->Clave}\">{$v->Cliente}</option>";
+                        print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
                     }
                     ?>
                 </select>
@@ -87,7 +87,7 @@
                                 <option></option>
                                 <?php
                                 foreach ($clientes as $k => $v) {
-                                    print "<option value=\"{$v->Clave}\">{$v->Cliente}</option>";
+                                    print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
                                 }
                                 ?>
                             </select>
@@ -538,7 +538,7 @@
                 } else {
                     /*MODIFICANDO*/
                     $.post('<?php print base_url('Pedidos/onModificarX'); ?>', p).done(function (a) {
-                         if (a.length > 0) {
+                        if (a.length > 0) {
                             nuevo = false;
                             var xxx = JSON.parse(a);
                             getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
@@ -761,7 +761,7 @@
                         $.fancybox.open({
                             src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                             type: 'iframe',
-                            opts: { 
+                            opts: {
                                 iframe: {
                                     // Iframe template
                                     tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
@@ -970,7 +970,7 @@
             }
         });
 
-        btnNuevo.click(function () { 
+        btnNuevo.click(function () {
             nuevo = true;
             pnlDatos.find("#FechaEntrega").prop('readonly', false);
             pnlDatos.find("#Semana").prop('readonly', false);
@@ -1057,7 +1057,7 @@
                 pnlDatos.find("#Color")[0].selectize.clear(true);
                 pnlDatos.find("#Color")[0].selectize.clearOptions();
                 //OBTENER COLORES POR ESTILO
-                $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo');?>', {Estilo: $(this).val()}).done(function (data) {
+                $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo'); ?>', {Estilo: $(this).val()}).done(function (data) {
                     $.each(data, function (k, v) {
                         pnlDatos.find("#Color")[0].selectize.addOption({text: v.Color, value: v.Clave});
                     });

@@ -1,35 +1,4 @@
-<div id="MnuBlock" class="col-12 row justify-content-center mt-2" align="center">
-    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Usuarios.shoes'); ?>'">
-        <div class="card text-center">
-            <div class="card-body">
-                <span class="fa fa-user-circle fa-2x mt-5"></span>
-            </div>
-            <div class="card-footer">
-                <h5>USUARIOS</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('Accesos.shoes'); ?>'">
-        <div class="card text-center">
-            <div class="card-body">
-                <span class="fa fa-key fa-2x mt-5"></span>
-            </div>
-            <div class="card-footer">
-                <h5>ACCESOS</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href = '<?php print base_url('GeneraCostosVenta.shoes'); ?>'">
-        <div class="card text-center">
-            <div class="card-body">
-                <span class="fa fa-dollar-sign fa-2x mt-5"></span>
-            </div>
-            <div class="card-footer">
-                <h5>PRECIOS Y COSTOS</h5>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="MnuBlock" class="col-12 row justify-content-center mt-2" align="center"></div>
 <style>
     .col-1, .col-2, .col-3, .col-4, .col-5,
     .col-6, .col-7, .col-8, .col-9, .col-10,

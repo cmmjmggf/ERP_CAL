@@ -1351,6 +1351,36 @@
                 }
                 return false;
             });
+            getAccesosDirectosXModuloXUsuario(m);
+        });
+    }
+
+    function getAccesosDirectosXModuloXUsuario(m) {
+        var usr = '<?php print $this->session->ID; ?>' !== '' ? '<?php print $this->session->ID; ?>' : 0;
+        $.getJSON('<?php print base_url('accesos_directos_x_usuario') ?>',
+                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) {
+            console.log(a);
+            var accesos_directos = "";
+            if (a.length > 0) {
+                var burl = '<?php print base_url(); ?>';
+                $.each(a, function (k, v) {
+                    accesos_directos += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href =\'' + (burl + v.Ref) + '\'">' +
+                            '<div class="card text-center">' +
+                            '<div class="card-body">' +
+                            '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>' +
+                            '</div>' +
+                            '<div class="card-footer">' +
+                            '<h5>' + v.Nombre + '</h5>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                });
+            }
+            $("#MnuBlock").html(accesos_directos);
+        }).fail(function (x) {
+            console.log("\n ERROR EN ACCESOS DIRECTOS \n", x);
+        }).always(function () {
+
         });
     }
 
@@ -1388,7 +1418,7 @@
         });
     }
     function getQuickMenu(type) {
-        var burl = '<?= base_url(); ?>';
+        var burl = '<?php print base_url(); ?>';
         $.getJSON('<?php print base_url('menu_modulos'); ?>').done(function (data) {
             var modulo = "";
             if (modulos_counter === 0) {

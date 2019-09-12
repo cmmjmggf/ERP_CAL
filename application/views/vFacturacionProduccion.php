@@ -87,8 +87,8 @@
                                 <option></option>
                                 <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT  JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                    print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
                             </select>
@@ -668,7 +668,9 @@
             pnlTablero.find(".subtotalfacturadopie").text('$0.0');
             pnlTablero.find(".totalivafacturadopie").text('$0.0');
             pnlTablero.find(".totalfacturadopie").text('$0.0');
-            pnlTablero.find(".totalfacturadoenletrapie").text('$0.0');
+            pnlTablero.find(".totalfacturadoenletrapie").text('-');
+            pnlTablero.find(".totalfacturadoenletrapieDLLS").text('-');
+            
             CajasFacturacion.attr('disabled', false);
             pnlTablero.find("input").val('');
             FechaFactura.val(Hoy);
