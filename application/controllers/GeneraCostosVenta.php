@@ -25,6 +25,35 @@ class GeneraCostosVenta extends CI_Controller {
         }
     }
 
+    public function getFotoEstilo() {
+        try {
+            $estilo = $this->input->get('Estilo');
+            $query = "select foto from estilos where clave = '$estilo' ";
+            //print $query;
+            print json_encode($this->db->query($query)->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoCostos() {
+        $linea = $this->input->get('Linea');
+        $lista = $this->input->get('Lista');
+        $estilo = $this->input->get('Estilo');
+        $color = $this->input->get('Color');
+        $corr = $this->input->get('Corrida');
+        $datos = array();
+        /* 1. */
+        $query = "select *, date_format(fecha,'%d/%m/%Y') as fecha from costovaria "
+                . " where lista = $lista and linea = $linea and estilo = '$estilo' and color = $color and corr = $corr ";
+
+        $datos['UNO'] = json_encode($this->db->query($query)->result());
+        /* 2. */
+
+
+        print json_encode($datos);
+    }
+
     public function onEliminarParametroFijo() {
         try {
             $Lista = $this->input->post('Lista');

@@ -803,8 +803,6 @@
                 }
             });
             var ext = getExt(dtm.FOTOEMPLEADO);
-
-
             $.ajax({
                 url: base_url + dtm.FOTOEMPLEADO,
                 type: 'HEAD',

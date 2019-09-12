@@ -2,7 +2,7 @@
     <!--    MENU DE OPCIONES-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
         <span class="ml-2 navbar-brand" >
-            Genera Costos
+            Generación de Precios de Venta
         </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -46,7 +46,7 @@
                         <i class="fa fa-print"></i> IMPRIME
                     </button>
                     <button class="btn btn-success " id="sidebarCollapse">
-                        <i class="fa fa-check"></i> ACEPTAR
+                        <i class="fa fa-check"></i> ACTUALIZAR Y ACEPTAR
                     </button>
                 </li>
             </ul>
@@ -135,11 +135,14 @@
             <!--segunda columna-->
             <div class="col-5 border border-info border-top-0  border-right-0 border-bottom-0">
                 <div class="row">
-                    <div class="col-12" align="center">
-                        <label class="badge badge-danger" style="font-size: 14px;">Analisis de precio por estilo</label>
+                    <div class="col-8" align="center">
+                        <label class="badge badge-danger" style="font-size: 14px; width: 100%">Analisis de precio por estilo</label>
+                    </div>
+                    <div class="col-4" align="center">
+                        <label class="badge badge-info" style="font-size: 14px; width: 100%">Precio Vta-Aut</label>
                     </div>
 
-                    <div class="w-100 mt-3"></div>
+                    <div class="w-100 mt-2"></div>
                     <!--ENCABEZADOS-->
                     <div class="col-4" align="center">
                         <label class="badge badge-info" style="font-size: 12px; width: 100%;">Parametros Fijos</label>
@@ -151,7 +154,7 @@
                         <label class="badge badge-danger" style="font-size: 12px; width: 100%;">%</label>
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="PreAutoPrincipal" name="PreAutoPrincipal"   >
                     </div>
                     <div class="col-2" align="center">
                         <label class="badge badge-danger" style="font-size: 12px; width: 100%;">%</label>
@@ -159,22 +162,21 @@
 
                     <div class="w-100"></div>
 
-
                     <!--                    primer renglon-->
                     <div class="col-4" >
                         <label>Materia Prima</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mp" name="mp"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mpPor1" name="mpPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mp2" name="mp2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mpPor2" name="mpPor2"   >
                     </div>
 
                     <!--                    2do renglon-->
@@ -182,38 +184,38 @@
                         <label>%Ext.Piel/Fo</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="pextr" name="pextr"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mextr" name="mextr"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mextrPor1" name="mextrPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mextr2" name="mextr2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mextrPor2" name="mextrPor2"   >
                     </div>
                     <!--                    3er renglon-->
                     <div class="col-2" >
                         <label>Tolerancia</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tolera" name="tolera"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tolera2" name="tolera2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="toleraPor1" name="toleraPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tolera22" name="tolera22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="toleraPor2" name="toleraPor2"   >
                     </div>
 
                     <!--                    4to renglon-->
@@ -224,16 +226,16 @@
 
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mo" name="mo"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="moPor1" name="moPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="mo2" name="mo2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="moPor2" name="moPor2"   >
                     </div>
 
                     <!--                    5to renglon-->
@@ -241,19 +243,19 @@
                         <label>Tejida</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tejida" name="tejida"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tejida2" name="tejida2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="tejidaPor1" name="tejidaPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="tejida22" name="tejida22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="tejidaPor2" name="tejidaPor2"   >
                     </div>
 
                     <!--                    6to renglon-->
@@ -261,19 +263,19 @@
                         <label>Gto. Fabric</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gfabri" name="gfabri"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gfabri2" name="gfabri2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gfabriPor1" name="gfabriPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gfabri22" name="gfabri22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gfabriPor2" name="gfabriPor2"   >
                     </div>
 
                     <!--                    7mo renglon-->
@@ -284,16 +286,16 @@
 
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd" name="costoProd"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="costoProdPor1" name="costoProdPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd2" name="costoProd2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="costoProdPor2" name="costoProdPor2"   >
                     </div>
 
                     <!--                    8vo renglon-->
@@ -301,19 +303,19 @@
                         <label>Gto. Venta</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gvta" name="gvta"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gvta2" name="gvta2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gvtaPor1" name="gvtaPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gvta22" name="gvta22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gvtaPor2" name="gvtaPor2"   >
                     </div>
 
                     <!--                    9no renglon-->
@@ -321,19 +323,19 @@
                         <label>Gto. Adm</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gadmon" name="gadmon"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gadmon2" name="gadmon2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gadmonPor1" name="gadmonPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="gadmon22" name="gadmon22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="gadmonPor2" name="gadmonPor2"   >
                     </div>
 
                     <!--                    10mo renglon-->
@@ -341,19 +343,19 @@
                         <label>Hms</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="hms" name="hms"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="hms2" name="hms2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="hmsPor1" name="hmsPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="hms22" name="hms22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="hmsPor2" name="hmsPor2"   >
                     </div>
 
                     <!--                    11vo renglon-->
@@ -361,19 +363,19 @@
                         <label>Flete</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="flete" name="flete"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="flete2" name="flete2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="fletePor1" name="fletePor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="flete22" name="flete22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="fletePor2" name="fletePor2"   >
                     </div>
 
                     <!--                    12vo renglon-->
@@ -381,13 +383,13 @@
                         <label>Utilidad</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="utilid" name="utilid"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="utilid2" name="utilid2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="utilidPor1" name="utilidPor1"   >
                     </div>
                     <div class="col-2" >
                     </div>
@@ -401,13 +403,13 @@
                     <div class="col-2" align="center">
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="subtotal" name="subtotal"   >
                     </div>
                     <div class="col-2" align="center">
 
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="subtotal2" name="subtotal2"   >
                     </div>
                     <div class="col-2" align="center">
                     </div>
@@ -417,19 +419,19 @@
                         <label>Desc</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="desc" name="desc"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="desc2" name="desc2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="descPor1" name="descPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="desc22" name="desc22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="descPor2" name="descPor2"   >
                     </div>
 
 
@@ -438,19 +440,19 @@
                         <label>Comisión</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="comic" name="comic"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="comic2" name="comic2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="comicPor1" name="comicPor1"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="comic22" name="comic22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="comicPor2" name="comicPor2"   >
                     </div>
 
                     <!--                    16vo renglon-->
@@ -458,16 +460,16 @@
                         <label>Precio Venta</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="PrecioProm" name="PrecioProm"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="porVenta100" name="porVenta100"   >
+                        <input type="text" class="form-control form-control-sm NotClean verde" readonly="" id="porVenta100" name="porVenta100"   >
                     </div>
                     <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="utilidReal" name="utilidReal"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="porUtilidReal" name="porUtilidReal"   >
                     </div>
 
                     <div class="w-100"></div>
@@ -482,7 +484,7 @@
                     </div>
                     <div class="col-4" >
                         <label class="badge badge-danger" style="font-size: 12px; width: 100%;">Punto Equilibrio</label>
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="CanceladoPesos" name="CanceladoPesos"  >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="ptoequil" name="ptoequil"  >
                     </div>
 
                     <!--                    CAMPOS PRECIO-->
@@ -497,20 +499,20 @@
                     <div class="col-8" >
                     </div>
                     <div class="col-1" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="ListaSe" name="ListaSe"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="EstiloSe" name="EstiloSe"   >
                     </div>
                     <div class="col-1" >
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="Agente" name="Agente"   >
+                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="ColorSe" name="ColorSe"   >
                     </div>
                     <!--                   Precio -->
                     <div class="w-100"></div>
                     <div class="col-8" >
                     </div>
                     <div class="col-4" align="center">
-                        <input type="text" class="form-control form-control-sm  morado numbersOnly" maxlength="7"  id="PreAutori" name="PreAutori"   >
+                        <input type="text" class="form-control  numbersOnly" maxlength="7"  id="PreAutori" name="PreAutori"   >
                     </div>
                     <!--                   Estilo Sel y tot Estilos -->
                     <div class="w-100"></div>
@@ -523,7 +525,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="EstiloSelecc" name="EstiloSelecc"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="TotEstilos" name="TotEstilos"   >
+                        <input type="text" class="form-control form-control-sm NotClean azul" readonly="" id="TotEstilos" name="TotEstilos"   >
                     </div>
                     <!--                   Fecha última actualización -->
                     <div class="w-100"></div>
@@ -543,14 +545,21 @@
                         <label class="text-strong text-info" style="font-size: 16px;">Precio Promedio</label>
                     </div>
                     <div class="col-4" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="PrecioProm" name="PrecioProm"   >
+                        <input type="text" class="form-control form-control-sm NotClean morado" readonly="" id="PrecioPromFinal" name="PrecioPromFinal"   >
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div id="dFotoDrag" class="d-none">
+        <div class="card cardFoto" id="marcoFoto">
+            <div class="card-header card-headerFoto"><span class="float-right close-icon text-danger" id = "btnCerrarFoto"><i class="fa fa-times fa-2x"></i></span></div>
+            <div class="card-body card-bodyFoto" style="height: 250px; overflow-y: auto;" align="center">
+                <img id="fotoEstilo" src="" alt="" width="270px" height=""/>
+            </div>
+        </div>
+    </div>
 </div>
-
 <script>
     var master_url = base_url + 'index.php/GeneraCostosVenta/';
     var pnlTablero = $("#pnlTablero");
@@ -558,18 +567,246 @@
     var tblRegistrosGenCostos = $('#tblRegistrosGenCostos');
     var Registros;
     var estiloS = 0, colorS = 0, listaS = 0, lineaS = 0;
+    var fotoEstilo = $("#fotoEstilo");
+
     $(document).ready(function () {
+        /*Foto*/
+        var a = 3;
+        pnlTablero.find('#marcoFoto').draggable({
+            start: function (event, ui) {
+                $(this).css("z-index", a++);
+            }
+        });
+        pnlTablero.find('#dFotoDrag div').click(function () {
+            $(this).addClass('top').removeClass('bottom');
+            $(this).siblings().removeClass('top').addClass('bottom');
+            $(this).css("z-index", a++);
+        });
+
+        pnlTablero.find('#btnCerrarFoto').click(function () {
+            pnlTablero.find('#dFotoDrag').addClass('d-none');
+        });
+        /*Fin Foto*/
+
         init();
         tblRegistrosGenCostos.find('tbody').on('click', 'tr', function () {
             tblRegistrosGenCostos.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
         tblRegistrosGenCostos.find('tbody').on('dblclick', 'tr', function () {
+
+            /*Limpia inputs*/
+            pnlTablero.find("input").not('.NotClean').val("");
             var dtm = Registros.row(this).data();
             estiloS = dtm.estilo;
             lineaS = dtm.linea;
             listaS = dtm.lista;
             colorS = dtm.color;
+            //Cargar Foto
+            $.getJSON(master_url + 'getFotoEstilo', {Estilo: estiloS}).done(function (data) {
+                if (data.length > 0) {
+                    var dtm = data[0];
+                    var ext = getExt(dtm.foto);
+                    $.ajax({
+                        url: base_url + dtm.foto,
+                        type: 'HEAD',
+                        error: function ()
+                        {
+                            fotoEstilo[0].src = '<?php print base_url('uploads/Estilos/1173.gif'); ?>';
+                        },
+                        success: function ()
+                        {
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
+                                fotoEstilo[0].src = base_url + dtm.foto;
+                            } else {
+                                fotoEstilo[0].src = '<?php print base_url('uploads/Estilos/1173.gif'); ?>';
+                            }
+                        }
+                    });
+                } else {
+                    fotoEstilo[0].src = '<?php print base_url('uploads/Estilos/1173.gif'); ?>';
+                }
+                pnlTablero.find('#dFotoDrag').removeClass('d-none');
+            }).fail(function (x) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+            });
+
+            $.getJSON(master_url + 'getInfoCostos', {Lista: listaS, Linea: lineaS, Estilo: estiloS, Color: colorS, Corrida: dtm.corr}).done(function (data) {
+
+                var datosParamFijos = JSON.parse(data['UNO'])[0];
+
+                /*Datos generales*/
+                pnlTablero.find("#EstiloSelecc").val(estiloS);
+                pnlTablero.find("#ListaSe").val(listaS);
+                pnlTablero.find("#EstiloSe").val(estiloS);
+                pnlTablero.find("#ColorSe").val(colorS);
+
+                pnlTablero.find('#GastosFijos').val(toFormattedNumber(datosParamFijos.gtosf));
+                pnlTablero.find('#FechaUltiActu').val(datosParamFijos.fecha);
+                pnlTablero.find('#PreAutoPrincipal').val(toFormattedNumber(datosParamFijos.preaut));
+
+
+                pnlTablero.find("#pextr").val(toFormattedPorcent(datosParamFijos.pextr * 100));
+                pnlTablero.find("#tolera").val(toFormattedPorcent(datosParamFijos.toler * 100));
+                pnlTablero.find("#gfabri").val(toFormattedNumber(datosParamFijos.gfabri));
+                pnlTablero.find("#gvta").val(toFormattedNumber(datosParamFijos.gvta));
+                pnlTablero.find("#gadmon").val(toFormattedNumber(datosParamFijos.gadmon));
+                pnlTablero.find("#hms").val(toFormattedNumber(datosParamFijos.hms));
+                pnlTablero.find("#utilid").val(toFormattedPorcent(datosParamFijos.utili));
+                pnlTablero.find("#desc").val(toFormattedPorcent(datosParamFijos.desc * 100));
+                pnlTablero.find("#flete").val(toFormattedNumber(datosParamFijos.flete));
+                pnlTablero.find("#comic").val(toFormattedPorcent(datosParamFijos.comic * 100));
+                pnlTablero.find("#mo").val(toFormattedNumber(datosParamFijos.maob));
+                pnlTablero.find("#tejida").val(toFormattedNumber(datosParamFijos.tejida));
+                pnlTablero.find("#mp").val(toFormattedNumber(datosParamFijos.matpri));
+                pnlTablero.find("#mextr").val(toFormattedNumber(datosParamFijos.mextr));
+
+                var txttol9 = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.mextr);
+                var txttol = parseFloat(txttol9) * parseFloat(datosParamFijos.toler);
+                pnlTablero.find("#tolera2").val(toFormattedNumber(txttol));
+
+                pnlTablero.find("#tejida2").val(toFormattedNumber(datosParamFijos.tejida));
+                pnlTablero.find("#gfabri2").val(toFormattedNumber(datosParamFijos.gfabri));
+                pnlTablero.find("#flete2").val(toFormattedNumber(datosParamFijos.flete));
+
+                var txtctopro = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.maob) +
+                        parseFloat(datosParamFijos.tejida) + parseFloat(datosParamFijos.gfabri) + parseFloat(txttol) + parseFloat(datosParamFijos.mextr);
+                pnlTablero.find("#costoProd").val(toFormattedNumber(txtctopro));
+
+                pnlTablero.find("#gvta2").val(toFormattedNumber(datosParamFijos.gvta));
+                pnlTablero.find("#gadmon2").val(toFormattedNumber(datosParamFijos.gadmon));
+                pnlTablero.find("#hms2").val(toFormattedNumber(datosParamFijos.hms));
+
+
+                var txtsubt9 = parseFloat(txtctopro) + parseFloat(datosParamFijos.gvta) + parseFloat(datosParamFijos.gadmon) +
+                        parseFloat(datosParamFijos.hms) + parseFloat(datosParamFijos.flete);
+
+                var porcentaje1 = 0.85;
+                var porcentaje2 = parseFloat(datosParamFijos.comic) + parseFloat(datosParamFijos.desc);
+                var porcentaje3 = parseFloat(porcentaje1) - parseFloat(porcentaje2);
+
+                var txtsubt99 = parseFloat(txtsubt9) / parseFloat(porcentaje3);
+
+                var txtsubt8 = parseFloat(txtsubt99) * 0.16;
+                var txtsubt = parseFloat(txtsubt9) + parseFloat(txtsubt8);
+
+                pnlTablero.find("#utilid2").val(toFormattedNumber(txtsubt8));
+                pnlTablero.find("#subtotal").val(toFormattedNumber(txtsubt));
+
+
+                var txtds = parseFloat(txtsubt99) * parseFloat(datosParamFijos.desc);
+                var txtcm = parseFloat(txtsubt99) * parseFloat(datosParamFijos.comic);
+                pnlTablero.find("#desc2").val(toFormattedNumber(txtds));
+                pnlTablero.find("#comic2").val(toFormattedNumber(txtcm));
+
+                var txtpreprom = txtsubt + txtds + txtcm;
+                pnlTablero.find("#PrecioProm").val(toFormattedNumber(txtpreprom));
+
+                // ------------------------------- PORCENTAJES COLUMNA 1 ---------------------------------
+
+                var txtpmp = (parseFloat(datosParamFijos.matpri) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#mpPor1").val(toFormattedPorcentDecimals(txtpmp));
+                var txtpmextr = (parseFloat(datosParamFijos.mextr) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#mextrPor1").val(toFormattedPorcentDecimals(txtpmextr));
+                var txtptl = (parseFloat(txttol) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#toleraPor1").val(toFormattedPorcentDecimals(txtptl));
+                var txtpmo = (parseFloat(datosParamFijos.maob) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#moPor1").val(toFormattedPorcentDecimals(txtpmo));
+                var txtptj = (parseFloat(datosParamFijos.tejida) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#tejidaPor1").val(toFormattedPorcentDecimals(txtptj));
+                var txtpgf = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#gfabriPor1").val(toFormattedPorcentDecimals(txtpgf));
+                var txtpctopro = (parseFloat(txtctopro) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#costoProdPor1").val(toFormattedPorcentDecimals(txtpctopro));
+                var txtpgv = (parseFloat(datosParamFijos.gvta) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#gvtaPor1").val(toFormattedPorcentDecimals(txtpgv));
+                var txtga = (parseFloat(datosParamFijos.gadmon) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#gadmonPor1").val(toFormattedPorcentDecimals(txtga));
+                var txtphs = (parseFloat(datosParamFijos.hms) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#hmsPor1").val(toFormattedPorcentDecimals(txtphs));
+                var txtpflete = (parseFloat(datosParamFijos.flete) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#fletePor1").val(toFormattedPorcentDecimals(txtpflete));
+                var txtput = (parseFloat(txtsubt8) * 100) / parseFloat(txtsubt99);
+                pnlTablero.find("#utilidPor1").val(toFormattedPorcentDecimals(txtput));
+                var txtpds = (parseFloat(txtds) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#descPor1").val(toFormattedPorcentDecimals(txtpds));
+                var txtpcm = (parseFloat(txtcm) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#comicPor1").val(toFormattedPorcentDecimals(txtpcm));
+
+                // ------------------------------- TOTALES COLUMNA 2 CON PRECIO AUTORIZADO---------------------------------
+
+                pnlTablero.find("#mextr2").val(toFormattedNumber(datosParamFijos.mextr));
+                pnlTablero.find("#mp2").val(toFormattedNumber(datosParamFijos.matpri));
+                var txttol99 = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.mextr);
+                var txttol1 = parseFloat(txttol99) * parseFloat(datosParamFijos.toler);
+                pnlTablero.find("#tolera22").val(toFormattedNumber(txttol1));
+                pnlTablero.find("#mo2").val(toFormattedNumber(datosParamFijos.maob));
+                pnlTablero.find("#tejida22").val(toFormattedNumber(datosParamFijos.tejida));
+                pnlTablero.find("#gfabri22").val(toFormattedNumber(datosParamFijos.gfabri));
+
+                var txtctopro1 = parseFloat(datosParamFijos.preaut) - parseFloat(datosParamFijos.matpri) - parseFloat(datosParamFijos.mextr) - parseFloat(datosParamFijos.maob) -
+                        parseFloat(datosParamFijos.tejida) - parseFloat(datosParamFijos.gfabri) - parseFloat(txttol);
+                pnlTablero.find("#costoProd2").val(toFormattedNumber(txtctopro1));
+
+                pnlTablero.find("#gvta22").val(toFormattedNumber(datosParamFijos.gvta));
+                pnlTablero.find("#gadmon22").val(toFormattedNumber(datosParamFijos.gadmon));
+                pnlTablero.find("#hms22").val(toFormattedNumber(datosParamFijos.hms));
+                pnlTablero.find("#flete22").val(toFormattedNumber(datosParamFijos.flete));
+
+                var txtsubt1 = parseFloat(txtctopro1) - parseFloat(datosParamFijos.gvta) - parseFloat(datosParamFijos.gadmon) - parseFloat(datosParamFijos.hms) - parseFloat(datosParamFijos.flete);
+                pnlTablero.find("#subtotal2").val(toFormattedNumber(txtsubt1));
+
+                var txtds1 = parseFloat(datosParamFijos.preaut) * parseFloat(datosParamFijos.desc);
+                var txtcm1 = parseFloat(datosParamFijos.preaut) * parseFloat(datosParamFijos.comic);
+                pnlTablero.find("#desc22").val(toFormattedNumber(txtds1));
+                pnlTablero.find("#comic22").val(toFormattedNumber(txtcm1));
+
+                var txtutreal = txtsubt1 - txtds1 - txtcm1;
+                pnlTablero.find("#utilidReal").val(toFormattedNumber(txtutreal));
+
+                // --------------------- PORCENTAJES COLUMNA 3 --------------------
+                var txtpmp1 = (parseFloat(datosParamFijos.matpri) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#mpPor2").val(toFormattedPorcentDecimals(txtpmp1));
+                var txtpmextr1 = (parseFloat(datosParamFijos.mextr) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#mextrPor2").val(toFormattedPorcentDecimals(txtpmextr1));
+                var txtptl1 = (parseFloat(txttol1) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#toleraPor2").val(toFormattedPorcentDecimals(txtptl1));
+                var txtpmo1 = (parseFloat(datosParamFijos.maob) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#moPor2").val(toFormattedPorcentDecimals(txtpmo1));
+                var txtptj1 = (parseFloat(datosParamFijos.tejida) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#tejidaPor2").val(toFormattedPorcentDecimals(txtptj1));
+                var txtpgf1 = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#gfabriPor2").val(toFormattedPorcentDecimals(txtpgf1));
+                var txtpctopro1 = (parseFloat(txtctopro1) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#costoProdPor2").val(toFormattedPorcentDecimals(txtpctopro1));
+                var txtpgv1 = (parseFloat(datosParamFijos.gvta) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#gvtaPor2").val(toFormattedPorcentDecimals(txtpgv1));
+                var txtpga1 = (parseFloat(datosParamFijos.gadmon) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#gadmonPor2").val(toFormattedPorcentDecimals(txtpga1));
+                var txtphs1 = (parseFloat(datosParamFijos.hms) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#hmsPor2").val(toFormattedPorcentDecimals(txtphs1));
+                var txtpflete1 = (parseFloat(datosParamFijos.flete) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#fletePor2").val(toFormattedPorcentDecimals(txtpflete1));
+                var txtpds1 = (parseFloat(txtds1) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#descPor2").val(toFormattedPorcentDecimals(txtpds1));
+                var txtpcm1 = (parseFloat(txtcm1) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#comicPor2").val(toFormattedPorcentDecimals(txtpcm1));
+                var txtputreal = (parseFloat(txtutreal) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#porUtilidReal").val(toFormattedPorcentDecimals(txtputreal));
+
+                //Punto de equilibrio
+                var txtpe1 = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.mextr) + parseFloat(datosParamFijos.maob) +
+                        parseFloat(datosParamFijos.tejida) + parseFloat(datosParamFijos.flete) + parseFloat(txtds1) + parseFloat(txtcm1);
+                var txtpe2 = parseFloat(datosParamFijos.gfabri) / txtpe1;
+                pnlTablero.find("#ptoequil").val(parseFloat(txtpe2).toFixed(2));
+                //Establecemos foco en pre-aut
+                pnlTablero.find("#PreAutori").focus().select();
+            }).fail(function (x) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+            });
+
         });
         pnlTablero.find('#Linea').change(function () {
             var tipoLinea = 0;
@@ -606,6 +843,7 @@
                 var pretot = 0;
                 var corrida = $(this).val();
                 var lista = pnlTablero.find('#ListaPrecios').val();
+                estiloS = 0;
                 getRegistros(linea, lista, corrida);
                 //Obtener información inicial
                 $.getJSON(master_url + 'getInfoInicial', {Linea: linea, Lista: lista, Corrida: corrida}).done(function (data) {
@@ -627,11 +865,8 @@
                     });
                     var paresTot = registros + 1;
                     //Llenamos los campos con los datos
-                    pnlTablero.find('#PrecioProm').val('$' + $.number(parseFloat(pretot / paresTot), 2, '.', ','));
+                    pnlTablero.find('#PrecioPromFinal').val('$' + $.number(parseFloat(pretot / paresTot), 2, '.', ','));
                     pnlTablero.find('#TotEstilos').val(paresTot);
-                    pnlTablero.find('#FechaUltiActu').val(data[0].fecha);
-                    pnlTablero.find('#GastosFijos').val(data[0].gtosf);
-
                     $('#tblRegistrosGenCostos_filter input[type=search]').focus();
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -659,6 +894,7 @@
                     if ($(this).val()) {
                         $.post(master_url + 'onActualizarPrecioAutorizado', {PrecioAut: $(this).val(), Linea: lineaS, Lista: listaS, Estilo: estiloS, Color: colorS}).done(function (data) {
                             Registros.ajax.reload();
+                            estiloS = 0;
                             onNotifyOld('fa fa-check', 'PRECIO GUARDADO CORRECTAMENTE', 'success');
                             pnlTablero.find('#PreAutori').focus().select();
                         }).fail(function (x) {
@@ -667,7 +903,9 @@
                         });
                     }
                 } else {
-                    swal('ATENCIÓN', 'SELECCIONA EL ESTILO A ELIMINAR', 'warning');
+                    swal('ATENCIÓN', 'DEBES DE SELECCIONAR UN ESTILO', 'warning').then((value) => {
+                        pnlTablero.find('#PreAutori').focus().select();
+                    });
                 }
             }
         });
@@ -908,8 +1146,36 @@
             });
         }
     }
+    function toFormattedNumber(number) {
+        return '$' + $.number(parseFloat(number), 2, '.', ',');
+    }
+    function toFormattedPorcent(number) {
+        return  $.number(parseFloat(number), 0, '.', ',') + '%';
+    }
+    function toFormattedPorcentDecimals(number) {
+        return  $.number(parseFloat(number), 2, '.', ',') + '%';
+    }
 </script>
 <style>
+
+    #marcoFoto {width: 300px; height:300px; position: absolute; top: 58%; left:42%; z-index: 999;background-color: #FFF;}
+    .top {z-index: 2; position: relative}
+    .bottom {z-index: 1; position: relative}
+
+    .close-icon {
+        cursor: pointer;
+    }
+    .card-bodyFoto {
+        padding: .5em !important;
+    }
+    .card-headerFoto {
+        padding: 0.35rem 1rem;
+    }
+
+    .cardFoto {
+        box-shadow: 0 8px 14px rgba(0,0,0,0.20), 0 8px 14px rgba(0,0,0,0.20)!important;
+    }
+
     .text-strong {
         font-weight: bolder;
     }
@@ -965,7 +1231,9 @@
         padding: 0.15rem 0.5rem;
         margin-top:  0.15rem;
         margin-bottom: 0.15rem;
+        font-weight: bold;
     }
+
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7,
     .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto,
     .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
