@@ -39,13 +39,13 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown ml-auto">
-                    <button class="btn btn-warning " id="sidebarCollapse" onclick="init()">
+                    <button class="btn btn-warning " onclick="init()">
                         <i class="fa fa-file-alt"></i> Otra Linea-Corrida lista de precios
                     </button>
-                    <button class="btn btn-danger " id="sidebarCollapse" onclick="onImprimirReporteCostos()">
+                    <button class="btn btn-danger " onclick="onImprimirReporteCostos()">
                         <i class="fa fa-print"></i> IMPRIME
                     </button>
-                    <button class="btn btn-success " id="sidebarCollapse">
+                    <button class="btn btn-success " id ="btnAceptarActualizar">
                         <i class="fa fa-check"></i> ACTUALIZAR Y ACEPTAR
                     </button>
                 </li>
@@ -570,6 +570,62 @@
     var fotoEstilo = $("#fotoEstilo");
 
     $(document).ready(function () {
+        /*ACTUALIZAR*/
+        pnlTablero.find('#btnAceptarActualizar').click(function () {
+            var lista = pnlTablero.find('#ListaPrecios').val();
+            var corrida = pnlTablero.find('#Corrida').val();
+            if (linea) {
+                if (lista) {
+                    if (corrida) {
+                        swal({
+                            buttons: ["Cancelar", "Aceptar"],
+                            title: 'Estás Seguro?',
+                            text: "Se actualizarán los precios de: \n" + "Lista: " + lista + "  \nLinea: " + linea + "  \nCorrida: " + corrida,
+                            icon: "warning",
+                            closeOnEsc: false,
+                            closeOnClickOutside: false
+                        }).then((action) => {
+                            if (action) {
+                                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                                $.post(base_url + 'index.php/GeneraCostosVenta/onActualizarCostos', {Lista: lista, Linea: linea, Corrida: corrida}).done(function (data) {
+                                    console.log(data);
+
+                                    if (data.length > 0) {
+                                        //no existen parámetros fijos
+                                    } else {
+                                        //se ha actualizado con existo
+                                        swal('ATENCIÓN', 'ACTUALIZACIÓN EXITOSA', 'success').then((value) => {
+                                            Registros.ajax.reload();
+                                            //Ejecutar funcion para traernos el precio promedio y numero de registros
+                                            obtenerInfoInicial(linea, lista, corrida);
+                                        });
+                                    }
+                                    HoldOn.close();
+                                }).fail(function (x, y, z) {
+                                    console.log(x, y, z);
+                                    HoldOn.close();
+                                });
+                            }
+                        });
+                    } else {
+                        swal('ERROR', 'SELECCIONE UNA CORRIDA', 'warning').then((value) => {
+                            pnlTablero.find('#Corrida')[0].selectize.focus();
+                            pnlTablero.find('#Corrida')[0].selectize.open();
+                        });
+                    }
+                } else {
+                    swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
+                        pnlTablero.find('#ListaPrecios')[0].selectize.focus();
+                        pnlTablero.find('#ListaPrecios')[0].selectize.open();
+                    });
+                }
+            } else {
+                swal('ERROR', 'SELECCIONE UNA LINEA', 'warning').then((value) => {
+                    pnlTablero.find('#Linea')[0].selectize.focus();
+                    pnlTablero.find('#Linea')[0].selectize.open();
+                });
+            }
+        });
         /*Foto*/
         var a = 3;
         pnlTablero.find('#marcoFoto').draggable({
@@ -582,12 +638,10 @@
             $(this).siblings().removeClass('top').addClass('bottom');
             $(this).css("z-index", a++);
         });
-
         pnlTablero.find('#btnCerrarFoto').click(function () {
             pnlTablero.find('#dFotoDrag').addClass('d-none');
         });
         /*Fin Foto*/
-
         init();
         tblRegistrosGenCostos.find('tbody').on('click', 'tr', function () {
             tblRegistrosGenCostos.find("tbody tr").removeClass("success");
@@ -840,38 +894,12 @@
         });
         pnlTablero.find('#Corrida').change(function () {
             if ($(this).val()) {
-                var pretot = 0;
                 var corrida = $(this).val();
                 var lista = pnlTablero.find('#ListaPrecios').val();
                 estiloS = 0;
                 getRegistros(linea, lista, corrida);
                 //Obtener información inicial
-                $.getJSON(master_url + 'getInfoInicial', {Linea: linea, Lista: lista, Corrida: corrida}).done(function (data) {
-                    var registros = 0;
-                    var pre1, pre2, pre3, pre33, pre7, pre11, porcentaje0, porcentaje1, porcentaje2;
-                    $.each(data, function (k, v) {
-                        registros = k;
-                        porcentaje0 = 0.85;
-                        porcentaje1 = parseFloat(v.comic) + parseFloat(v.desc);
-                        porcentaje2 = parseFloat(porcentaje0) - parseFloat(porcentaje1);
-                        pre1 = parseFloat(v.matpri) + parseFloat(v.mextr);
-                        pre11 = parseFloat(pre1) * parseFloat(v.toler);
-                        pre2 = parseFloat(pre11) + parseFloat(v.matpri) + parseFloat(v.maob) + parseFloat(v.gfabri) + parseFloat(v.tejida) + parseFloat(v.mextr);
-                        pre3 = parseFloat(pre2) + parseFloat(v.gvta) + parseFloat(v.gadmon) + parseFloat(v.hms) + parseFloat(v.flete);
-                        pre33 = parseFloat(pre3) / parseFloat(porcentaje2);
-                        pre7 = parseFloat(pre33);
-                        pretot = parseFloat(pretot) + parseFloat(pre7);
-
-                    });
-                    var paresTot = registros + 1;
-                    //Llenamos los campos con los datos
-                    pnlTablero.find('#PrecioPromFinal').val('$' + $.number(parseFloat(pretot / paresTot), 2, '.', ','));
-                    pnlTablero.find('#TotEstilos').val(paresTot);
-                    $('#tblRegistrosGenCostos_filter input[type=search]').focus();
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                obtenerInfoInicial(linea, lista, corrida);
             }
         });
         pnlTablero.find('#GastosFijos').keypress(function (e) {
@@ -910,6 +938,34 @@
             }
         });
     });
+    function obtenerInfoInicial(linea, lista, corrida) {
+        var pretot = 0;
+        $.getJSON(master_url + 'getInfoInicial', {Linea: linea, Lista: lista, Corrida: corrida}).done(function (data) {
+            var registros = 0;
+            var pre1, pre2, pre3, pre33, pre7, pre11, porcentaje0, porcentaje1, porcentaje2;
+            $.each(data, function (k, v) {
+                registros = k;
+                porcentaje0 = 0.85;
+                porcentaje1 = parseFloat(v.comic) + parseFloat(v.desc);
+                porcentaje2 = parseFloat(porcentaje0) - parseFloat(porcentaje1);
+                pre1 = parseFloat(v.matpri) + parseFloat(v.mextr);
+                pre11 = parseFloat(pre1) * parseFloat(v.toler);
+                pre2 = parseFloat(pre11) + parseFloat(v.matpri) + parseFloat(v.maob) + parseFloat(v.gfabri) + parseFloat(v.tejida) + parseFloat(v.mextr);
+                pre3 = parseFloat(pre2) + parseFloat(v.gvta) + parseFloat(v.gadmon) + parseFloat(v.hms) + parseFloat(v.flete);
+                pre33 = parseFloat(pre3) / parseFloat(porcentaje2);
+                pre7 = parseFloat(pre33);
+                pretot = parseFloat(pretot) + parseFloat(pre7);
+            });
+            var totalEstilos = registros + 1;
+            //Llenamos los campos con los datos
+            pnlTablero.find('#PrecioPromFinal').val('$' + $.number(parseFloat(pretot / totalEstilos), 2, '.', ','));
+            pnlTablero.find('#TotEstilos').val(totalEstilos);
+            $('#tblRegistrosGenCostos_filter input[type=search]').focus();
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
     function onEliminarEstilo() {
         if (estiloS > 0) {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
