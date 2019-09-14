@@ -626,7 +626,76 @@ class FacturacionDevolucion extends CI_Controller {
             (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION 
             FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
-            ." AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+                                    . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onDevolver() {
+        try {
+            $x = $this->input->post();
+
+            $d = array(
+                "cliente" => $x["CLIENTE"],
+                "docto" => $x["DOCUMENTO"],
+                "aplica" => 0,
+                "nc" => $x["NOTA_DE_CREDITO"],
+                "fact" => $x["FACTURA_UNO"],
+                "fact1" => $x["FACTURA_DOS"],
+                "fact2" => $x["FACTURA_TRES"],
+                "conce" => $x["CONCEPTO"],
+                "tp" => $x["TP"],
+                "tpvta" => $x["TP_VTA"],
+                "control" => $x["CONTROL"],
+                "controlprd" => $x["CONTROL_PRODUCCION"],
+                "paredev" => $x["PARES"],
+                "parefac" => $x["PARES_FACTURADOS"]);
+
+            for ($i = 1; $i < 23; $i++) {
+                if ($i < 10) {
+                    $d["par0$i"] = $x["CAF$i"];
+                } else {
+                    $d["par$i"] = $x["CAF$i"];
+                }
+            }
+            $d["defecto"] = $x["xxxxxx"];
+            $d["detalle"] = $x["xxxxxx"];
+            $d["clasif"] = $x["xxxxxx"];
+            $d["cargoa"] = $x["xxxxxx"];
+            $d["fecha"] = $x["xxxxxx"];
+            $d["fechadev"] = $x["xxxxxx"];
+            $d["estilo"] = $x["xxxxxx"];
+            $d["comb"] = $x["xxxxxx"];
+            $d["seriped"] = $x["xxxxxx"];
+            $d["precio"] = $x["xxxxxx"];
+            $d["subtot"] = $x["xxxxxx"];
+            $d["registro"] = $x["xxxxxx"];
+            $d["stafac"] = $x["xxxxxx"];
+            $d["staapl"] = $x["xxxxxx"];
+            $d["maq"] = $x["xxxxxx"];
+            $d["preciodev"] = $x["xxxxxx"];
+            $d["preciomaq"] = $x["xxxxxx"];
+            $d["obs1"] = $x["xxxxxx"];
+            $d["ctenvo"] = $x["xxxxxx"];
+            $d["pedidonvo"] = $x["xxxxxx"];
+            $this->db->insert("devolucionnp", $d);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDevolucionesXControl() {
+        try {
+            $x = $this->input->post();
+            print json_encode($this->db->query("SELECT 
+                                                (D.par01 + D.par02 + D.par03 + D.par04 + D.par05 + 
+                                                D.par06 + D.par07 + D.par08 + D.par09 + D.par10 + 
+                                                D.par11 + D.par12 + D.par13 + D.par14 + D.par15 + 
+                                                D.par16 + D.par17 + D.par18 + D.par19 + D.par20 + 
+                                                D.par21 + D.par22 ) AS PARES_DEVUELTOS
+                                                FROM devolucionnp AS D 
+                                                WHERE D.control  = {$x["CONTROL"]}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

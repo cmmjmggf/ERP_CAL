@@ -58,6 +58,9 @@
                 <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
+                <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-primary">
+                    <span class="fa fa-file-archive"></span>   R-ctr.doc
+                </button>
                 <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-primary">
                     <span class="fa fa-file-archive"></span>   R-est.cte
                 </button>
@@ -119,15 +122,15 @@
                 <label>FC.A</label>
                 <input type="number" id="FCAFactura" name="FCAFactura" max="2" min="0" class="form-control form-control-sm">
             </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>PAG</label>
                 <input type="number" id="PAGFactura" name="PAGFactura" max="2" min="0" class="form-control form-control-sm">
             </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
                 <input type="number" id="TMNDAFactura" name="TMNDAFactura" max="2" min="0" class="form-control form-control-sm">
             </div> 
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1">
                 <div class="form-group">  
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                         <input type="checkbox" class="custom-control-input selectNotEnter" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
@@ -163,7 +166,7 @@
                 </div>
             </div>
             <div class="w-100"></div>
-            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-6 col-xs-6 col-sm-4 col-md-8 col-lg-4 col-xl-4">
                 <label>Control</label>
                 <div class="input-group">               
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly">
@@ -178,75 +181,15 @@
                     </span>
                 </div>
             </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1 d-none" style="padding-left: 5px; padding-right: 5px;">
                 <label>FOLIO</label>
                 <input type="text" id="FolioFactura" name="FolioFactura" readonly="" class="form-control form-control-sm">
-            </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-1 col-lg-1 col-xl-1">
-            </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-none">
-                <label>Corrida</label>
-                <input type="text" id="Corrida" name="Corrida" class="form-control form-control-sm" readonly="">
             </div> 
-
-
-            <!--            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                                    <div class="row">
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Producción</h5>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Fabricados : </span>
-                                            <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
-                                            <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Facturados : </span>
-                                            <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
-                                            <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Saldo : </span>
-                                            <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
-                                            <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
-                                        </div> 
-                                    </div> 
-                                </div> 
-                            </div> 
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                                    <div class="row">
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Devoluciones</h5> 
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Devueltos:</span>
-                                            <span class="font-weight-bold text-danger devueltos"> 0 </span> 
-                                            <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Facturados: </span>
-                                            <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span> 
-                                            <input type="text" id="PrsFacturadosDevueltos" name="PrsFacturadosDevueltos" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Saldo: </span>
-                                            <span class="font-weight-bold text-danger saldodevuelto"> 0 </span> 
-                                            <input type="text" id="PrsSaldoDevuelto" name="PrsSaldoDevuelto" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
-
-
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-n1one">
+                <label>Serie</label>
+                <input type="text" id="Corrida" name="Corrida" class="form-control form-control-sm" readonly="">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <div class="row">
                     <div class="col-6" style="border-bottom: 1px solid #0202; ">
                         <div class="row">
@@ -300,7 +243,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10" align="center">  
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="center">  
                 <!--                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" align="center"> 
                                     <button type="button" class="btn btn-info"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
                                         <span class="fa fa-exclamation"></span> FACTURA POR ANTICIPO DE PRODUCTO
@@ -362,19 +305,25 @@
                     </table>
                 </div>
             </div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-1" align="center"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-1" align="center"> 
                 <div class="row"  align="center">
-                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter notnotEnter"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
-                        <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
-                    </button>
-                    <div class="w-100"></div>
-                    <button type="button" class="btn btn-info notEnter notnotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
-                        <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
-                    </button>
-                    <div class="w-100"></div>
-                    <button type="button" class="btn btn-info notEnter notnotEnter" id="btnControlCompleto"  disabled="" >
-                        <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
-                    </button> 
+                    <div class="col">
+                        <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
+                            <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
+                        </button>
+                    </div>
+                    <div class="col">
+                        <div class="w-100"></div>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                            <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
+                        </button>
+                    </div>
+                    <div class="col">
+                        <div class="w-100"></div>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnControlCompleto"  disabled="" >
+                            <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
+                        </button> 
+                    </div> 
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
@@ -426,13 +375,13 @@
                 <label>Observación</label>
                 <textarea id="ObservacionFacturacion" name="ObservacionFacturacion" class="form-control form-control-sm" rows="2" cols="3"></textarea>
             </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1 d-none" style="padding-left: 5px; padding-right: 5px;">
                 <label>Descuento</label>
-                <input type="text" id="DescuentoFacturacion" name="DescuentoFacturacion" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="DescuentoFacturacion" name="DescuentoFacturacion" class="form-control form-control-sm numbersOnly d-none" readonly="">
             </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2"  style="padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2 d-none"  style="padding-left: 5px; padding-right: 5px;">
                 <label>Pares Facturados</label>
-                <input type="text" id="ParesFacturadosFacturacion" name="ParesFacturadosFacturacion" readonly="" class="form-control form-control-sm">
+                <input type="text" id="ParesFacturadosFacturacion" name="ParesFacturadosFacturacion" readonly="" class="form-control form-control-sm d-none" readonly="">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
                 <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info mt-4" disabled="">
@@ -444,21 +393,18 @@
                     -
                 </span>
             </div>
-
             <div class="w-100 my-2"></div>
-
             <!--DETALLE DE LA FACTURA-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
-
             <div class="col-12 col-lg-12 col-xl-12">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="center">
-                        <h4 class="font-weight-bold text-danger font-italic">
+                        <h5 class="font-weight-bold text-danger font-italic">
                             DETALLE DE LA FACTURA
-                        </h4>
+                        </h5>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"  align="right">
                         <h4 class="font-weight-bold text-danger font-italic totalfacturadohead">$ 0.0</h4>
@@ -604,7 +550,7 @@
             PAGFactura = pnlTablero.find('#PAGFactura'),
             TMNDAFactura = pnlTablero.find('#TMNDAFactura'),
             FolioFactura = pnlTablero.find('#FolioFactura'),
-            cCST = pnlTablero.find('#cCST'),
+//            cCST = pnlTablero.find('#cCST'),
             cNoIva = pnlTablero.find('#cNoIva'),
             Control = pnlTablero.find('#Control'),
             Corrida = pnlTablero.find('#Corrida'),
@@ -640,7 +586,8 @@
             btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
             btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"),
             btnElijeControl = pnlTablero.find("#btnElijeControl"),
-            btnRastreoDeEstilosClientesFechasEnVentas = pnlTablero.find("#btnRastreoDeEstilosClientesFechasEnVentas");
+            btnRastreoDeEstilosClientesFechasEnVentas = pnlTablero.find("#btnRastreoDeEstilosClientesFechasEnVentas"),
+            btnRastreoDeControlesEnDocumento = pnlTablero.find("#btnRastreoDeControlesEnDocumento");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -648,6 +595,17 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+
+        pnlTablero.find("#CAF22").on('keydown', function (e) {
+            console.log(e, e.keyCode);
+            if (e.keyCode === 13) {
+                CajasFacturacion.focus().select();
+            }
+        });
+
+        btnRastreoDeControlesEnDocumento.click(function () {
+            onOpenWindow('<?php print base_url('RastreoDeControlesEnDocumentosClientes'); ?>');
+        });
 
         btnRastreoDeEstilosClientesFechasEnVentas.click(function () {
             onOpenWindow('<?php print base_url('RastreoEstilosClientesXFechasEnVentas'); ?>');
@@ -1068,9 +1026,7 @@
                         if (a.length > 0) {
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                             FAPEORCOFactura.val(r);
-                            var ref = padLeft(ClienteFactura.val(), 4) + '' + r;
-                            pnlTablero.find(".ReferenciaFactura").text(ref);
-                            ReferenciaFacturacion.val(ref);
+                            getReferencia();
                         }
                         FCAFactura.val(0);
                         PAGFactura.val(1);
@@ -1090,6 +1046,7 @@
         });
 
         btnClientes.click(function () {
+            onBeep(1);
             onOpenWindow('<?php print base_url('Clientes'); ?>');
         });
 
@@ -1284,6 +1241,16 @@
         pnlTablero.find(".produccionfabricados").text(ttp);
         pnlTablero.find(".produccionfacturados").text(ttpf);
         pnlTablero.find(".produccionsaldo").text((ttpf > 0) ? ttpaf : ttp);
+        /*OBTENER LOS PARES DEVUELTOS*/
+        $.post('<?php print base_url('FacturacionDevolucion/getDevolucionesXControl'); ?>', {CONTROL: Control.val()}).done(function (a) {
+            var prs = JSON.parse(a);
+            console.log("PARES", prs);
+            pnlTablero.find(".devueltos").text(prs[0].PARES_DEVUELTOS);
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
     }
 
     function getReferencia() {
@@ -1375,7 +1342,7 @@
                                         SubtotalFacturacionIVA.val(stt * 0.16);
                                         //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
                                         TotalLetra.find("span").text(NumeroALetras(stt));
-                                        pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
+//                                        pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
                                         EstatusControl.val(xx.ESTATUS);
                                         btnFacturaXAnticipoDeProducto.attr('disabled', false);
                                         btnControlInCompleto.attr('disabled', false);
@@ -1650,6 +1617,104 @@
     function onVerListasDePrecios() {
         onOpenWindow('<?php print base_url('ListasPrecioMaquilas/?origen=CLIENTES'); ?>');
     }
+    function getReferencia() {
+        var txtreferen11 = "000000000000398827";
+        txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(FAPEORCOFactura.val(), 4);
+
+        var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
+                num6 = 0, num7 = 0, num8 = 0, num9 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
+                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
+                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                txtreferen9 = 0, txtreferen10 = 0;
+
+        console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
+
+        for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
+            txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
+            switch (refe1) {
+                case 1:
+                    num1 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 2:
+                    num2 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 3:
+                    num3 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 4:
+                    num4 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 5:
+                    num5 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+                case 6:
+                    num6 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 1 : 0);
+                    break;
+                case 7:
+                    num7 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 2 : 0);
+                    break;
+                case 8:
+                    num8 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 3 : 0);
+                    break;
+                case 9:
+                    num9 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 5 : 0);
+                    break;
+                case 10:
+                    num10 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 7 : 0);
+                    break;
+                case 11:
+                    num11 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 11 : 0);
+                    break;
+                case 12:
+                    num12 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 13 : 0);
+                    break;
+                case 13:
+                    num13 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 17 : 0);
+                    break;
+                case 14:
+                    num14 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 19 : 0);
+                    break;
+                case 15:
+                    num15 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 23 : 0);
+                    break;
+                case 16:
+                    num16 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 29 : 0);
+                    break;
+                case 17:
+                    num17 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 31 : 0);
+                    break;
+                case 18:
+                    num18 = ($.isNumeric(txtreferen2) ? parseInt(txtreferen2) * 37 : 0);
+                    break;
+            }
+        }
+
+
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
+                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        var res = 0, res1 = 0, res2 = 0, res3 = 0;
+        console.log("txtreferen3 => " + txtreferen3);
+        txtreferen4 = txtreferen3 / 97;
+        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
+        res = (txtreferen4 % 1);
+        res1 = res * 100;
+        res2 = res1 % 1;
+        res3 = res1 - res2;
+
+        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
+
+        var ponderador_fijo = 99;
+        if (res3 > 0) {
+            txtreferen10 = ponderador_fijo - res3 + 1;
+        } else {
+            txtreferen10 = ponderador_fijo - res3;
+        }
+        console.log("txtreferen10 => " + txtreferen10);
+        pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
+        ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
+    }
+
 </script>
 
 <style> 

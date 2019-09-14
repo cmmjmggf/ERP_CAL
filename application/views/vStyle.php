@@ -382,4 +382,25 @@
     .dropdown-item {
         color: #000 !important;
     }
+    .btn-indigo {
+        color: #fff;
+        background-color: #3F51B5;
+        border-color: #3F51B5;
+        box-shadow: 0 0 0 0.2rem #CDDC39 !important;
+    } 
+    .btn-green {
+        color: #fff;
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+    }
+    .btn-red {
+        color: #fff;
+        background-color: #D32F2F;
+        border-color: #D32F2F;
+    }
+    .btn-black{
+        color: #ffffff;
+        background-color: #000000; 
+        border: solid 2px #fff;
+    }
 </style>

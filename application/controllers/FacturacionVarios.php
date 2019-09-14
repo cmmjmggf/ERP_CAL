@@ -129,20 +129,21 @@ class FacturacionVarios extends CI_Controller {
                         $Descripcion = $x["ESTILO"] . " " . $x["CONCEPTO"];
                         break;
                 }
-
-                $this->db->insert('facturadetalle', array(
-                    "numfac" => $x["FACTURA"], "numcte" => $x["CLIENTE"],
-                    "tp" => $x["TP"], "claveproducto" => $x["PRODUCTO_SAT"],
-                    "claveunidad" => "PR", "cantidad" => $x["CANTIDAD"],
-                    "unidad" => "PAR", "codigo" => $x["ESTILO"],
-                    "descripcion" => $Descripcion, "Precio" => $x["PRECIO"],
-                    "importe" => ($x["CANTIDAD"] * $x["PRECIO"]),
-                    "fecha" => $FECHIN, "control" => 0,
-                    "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
-                    "tmnda" => intval($x["TIPO_MONEDA"]),
-                    "tcamb" => $x["TIPO_CAMBIO"], "noidentificado" => $CodigoBarras,
-                    "referencia" => $x["REFERENCIA"], "tienda" => 0
-                ));
+                if (intval($x["TP"]) === 1) {
+                    $this->db->insert('facturadetalle', array(
+                        "numfac" => $x["FACTURA"], "numcte" => $x["CLIENTE"],
+                        "tp" => $x["TP"], "claveproducto" => $x["PRODUCTO_SAT"],
+                        "claveunidad" => "PR", "cantidad" => $x["CANTIDAD"],
+                        "unidad" => "PAR", "codigo" => $x["ESTILO"],
+                        "descripcion" => $Descripcion, "Precio" => $x["PRECIO"],
+                        "importe" => ($x["CANTIDAD"] * $x["PRECIO"]),
+                        "fecha" => $FECHIN, "control" => 0,
+                        "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
+                        "tmnda" => intval($x["TIPO_MONEDA"]),
+                        "tcamb" => $x["TIPO_CAMBIO"], "noidentificado" => $CodigoBarras,
+                        "referencia" => $x["REFERENCIA"], "tienda" => 0
+                    ));
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

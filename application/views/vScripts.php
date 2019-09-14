@@ -833,18 +833,18 @@
     }
 
 
-    $('input:not(.notEnter)').keyup(function () {
+    $('input:not(.notEnter), button:not(.notEnter)').keyup(function () {
         $(this).val($(this).val().toUpperCase());
     });
 
 
     function handleEnterDiv(divParent) {
-        $('input:not(.notEnter)').keyup(function () {
+        $('input:not(.notEnter), button:not(.notEnter)').keyup(function () {
             $(this).val($(this).val().toUpperCase());
         });
 
 
-        divParent.on('keydown', 'input, select, textarea:not(.notEnter)', function (e) {
+        divParent.on('keydown', 'input, select, textarea:not(.notEnter), button:not(.notEnter)', function (e) {
             var self = $(this)
                     , form = self.parents('body')
                     , focusable
@@ -853,7 +853,7 @@
             if (e.keyCode === 13) {
                 focusable = form.find('input,a,select,button,textarea')
                         .filter(':visible:enabled')
-                        .not('.disabledForms').not('.selectNotEnter').not(':input[readonly]');
+                        .not('.disabledForms').not('.NotEnter').not('.selectNotEnter').not(':input[readonly]');
                 next = focusable.eq(focusable.index(this) + 1);
                 if (next.length) {
                     next.focus();
@@ -863,7 +863,7 @@
             }
             if (e.keyCode === 9) {
                 focusable = form.find('input,a,select,button,textarea').filter(':visible:enabled')
-                        .not('.disabledForms').not('.selectNotEnter').not(':input[readonly]');
+                        .not('.disabledForms').not('.NotEnter').not('.selectNotEnter').not(':input[readonly]');
                 next = focusable.eq(focusable.index(this) + 1);
                 if (next.length) {
                     next.focus();
@@ -881,16 +881,16 @@
             $(this).val($(this).val().toUpperCase());
         });
 
-        $('body').on('keydown', 'input, select, textarea:not(.notEnter)', function (e) {
+        $('body').on('keydown', 'input, select, textarea:not(.notEnter),button:not(.notEnter', function (e) {
             var self = $(this)
                     , form = self.parents('body')
                     , focusable
                     , next
                     ;
             if (e.keyCode === 13) {
-                focusable = form.find('input,a,select,button,textarea')
+                focusable = form.find('input,a,select,button:not(.notEnter),textarea')
                         .filter(':visible:enabled')
-                        .not('.disabledForms').not('.selectNotEnter').not(':input[readonly]');
+                        .not('.disabledForms').not('.NotEnter').not('.selectNotEnter').not(':input[readonly]');
                 next = focusable.eq(focusable.index(this) + 1);
                 if (next.length) {
                     next.focus();
@@ -900,7 +900,7 @@
             }
             if (e.keyCode === 9) {
                 focusable = form.find('input,a,select,button,textarea').filter(':visible:enabled')
-                        .not('.disabledForms').not('.selectNotEnter').not(':input[readonly]');
+                        .not('.disabledForms').not('.NotEnter').not('.selectNotEnter').not(':input[readonly]');
                 next = focusable.eq(focusable.index(this) + 1);
                 if (next.length) {
                     next.focus();
@@ -1495,7 +1495,7 @@
         return e.val() ? e.val() : '';
     }
     function getidsInputSelect(padre) {
-        var inputs_selects = padre.find("input:not(input[id$='selectized']), select");
+        var inputs_selects = padre.find("input:not(input[id$='selectized']), select,textarea,table");
         var i = 1;
         console.log("var ");
         var logs = "var ";

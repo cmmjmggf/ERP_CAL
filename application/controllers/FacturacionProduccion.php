@@ -234,21 +234,22 @@ class FacturacionProduccion extends CI_Controller {
                     break;
             }
             /* FACTURACION DETALLE */
-            $facturacion_detalle = array(
-                'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
-                'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
-                'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
-                'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                'descripcion' => $x['ESTILOT'], 'Precio' => $x['PRECIO'],
-                'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
-                'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
-                'tcamb' => $tipo_cambio,
-                'noidentificado' => NULL,
-                'referencia' => $x['REFERENCIA'],
-                'tienda' => $x['TIENDA']);
-            $this->db->insert('facturadetalle', $facturacion_detalle);
-
+            if (intval($x['TP_DOCTO']) === 1) {
+                $facturacion_detalle = array(
+                    'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
+                    'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
+                    'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
+                    'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                    'descripcion' => $x['ESTILOT'], 'Precio' => $x['PRECIO'],
+                    'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
+                    'control' => $x['CONTROL'], 'iva' => $x['IVA'],
+                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                    'tcamb' => $tipo_cambio,
+                    'noidentificado' => NULL,
+                    'referencia' => $x['REFERENCIA'],
+                    'tienda' => $x['TIENDA']);
+                $this->db->insert('facturadetalle', $facturacion_detalle);
+            }
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
             $facturaciondif = array(
