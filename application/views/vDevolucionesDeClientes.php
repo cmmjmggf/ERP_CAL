@@ -83,7 +83,18 @@
                 </div>
             </div>
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 border border-info rounded" >
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 border " >
+                <div class="row">
+                    <div class="col-4">
+                        <input type="text" id="ControlF" name="ControlF" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" id="EstiloF" name="EstiloF" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" id="DocumentoF" name="DocumentoF" class="form-control form-control-sm">
+                    </div>
+                </div>
                 <table id="tblPedidos" class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -96,7 +107,7 @@
                             <th scope="col">Estilo</th><!--6--><!--1-->
                             <th scope="col">Color</th><!--7--><!--2-->
                             <th scope="col">Precio</th><!--8--><!--3-->
-                            <th scope="col">ST</th><!--9--><!--4--> 
+                            <th scope="col">ST</th><!--9--><!--4-->  
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -110,7 +121,8 @@
 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly"> 
+                <input type="text" id="Control" name="Control" disabled="" class="form-control form-control-sm numbersOnly"> 
+                <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="form-control form-control-sm numbersOnly"> 
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-7">
                 <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;">
@@ -130,10 +142,10 @@
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px; font-weight: 300 !important; cursor: no-allowed !important;" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
+                                    print '<td><input type="text"  id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly style-pares" name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
                                 }
                                 ?>
-                                <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
+                                <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm  style-pares" readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
                                 <td>
                                 </td>
                             </tr>
@@ -141,57 +153,28 @@
                                 <td class="font-weight-bold">Pares facturados</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;  cursor: no-allowed !important;" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
+                                    print '<td><input type="text"  id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly style-pares" name="CF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold">
                                     <input type="text" style="width: 45px;" id="TotalParesEntregaF" 
-                                           class="form-control form-control-sm " readonly="" data-toggle="tooltip" data-placement="right" title="0">
+                                           class="form-control form-control-sm  style-pares" readonly="" data-toggle="tooltip" data-placement="right" title="0">
                                 </td>
                             </tr>
                             <tr class="rCapturaCantidades" id="rCantidades">
                                 <td class="font-weight-bold">Pares devueltos</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;" id="PDF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="PDF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
+                                    print '<td><input type="text" id="PDF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly style-pares" name="PDF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
                                 }
                                 ?>
-                                <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
+                                <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm  style-pares" readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-black btn-block" id="btnAcepta" name="btnAcepta">
-                            <span class="fa fa-check"></span>  Acepta
-                        </button>
-                    </div>
-                    <div class="w-100 my-1"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-black btn-block" id="btnReportes" name="btnReportes">
-                            <span class="fa fa-file"></span>  Reportes
-                        </button>
-                    </div>
-                    <div class="w-100 my-1"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-black btn-block" id="btnControlCompleto" name="btnControlCompleto">
-                            <span class="fa fa-dot-circle"></span>  Ctrl /Completo
-                        </button>
-                    </div> 
-                    <div class="w-100 my-1"></div> 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 justify-content-center" align="center"> 
-                        <div class="btn-group  btn-group-toggle" data-toggle="buttons" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-black" id="btnDefectos" name="btnDefectos">  <span class="fa fa-file"></span>  Defecto</button>
-                            <button type="button" class="btn btn-black" id="btnDetalle" name="btnDetalle">  <span class="fa fa-dot-circle"></span>  Detalle</button>
-                            <button type="button" class="btn btn-black" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo ctr/doc</button>
-                            <button type="button" class="btn btn-black" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo est/cte</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <!--BREAK-->
             <div class="w-100"></div>
             <!--BREAK-->
@@ -200,17 +183,20 @@
                 <input type="text" id="Motivo" name="Motivo" class="form-control form-control-sm" maxlength="500">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 mt-4"> 
-                <input type="text" id="Color" name="Color" class="form-control form-control-sm" maxlength="500">
+                <span class="text-danger font-weight-bold color_t">-</span>
+                <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly=""  maxlength="500">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-4"> 
-                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" maxlength="500">
+                <span class="text-danger font-weight-bold estilo_t">-</span>
+                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm d-none" readonly="" maxlength="500">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 mt-4"> 
-                <input type="text" id="ColorClave" name="ColorClave" class="form-control form-control-sm" maxlength="15">
+                <span class="text-danger font-weight-bold color_clave">-</span>
+                <input type="text" id="ColorClave" name="ColorClave" class="form-control form-control-sm d-none" readonly=""  maxlength="15">
             </div>
             <!--PEDIDOS-->
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                <table id="tblPedidos" class="table table-hover table-sm"  style="width: 100% !important;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <table id="tblDevoluciones" class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -233,6 +219,36 @@
                     <tbody></tbody>
                 </table>
             </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <button type="button" class="btn btn-black btn-block" id="btnAcepta" name="btnAcepta" disabled="">
+                            <span class="fa fa-check"></span>  Acepta
+                        </button>
+                    </div>
+                    <div class="w-100 my-1"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-black btn-block" id="btnReportes" name="btnReportes" disabled="">
+                            <span class="fa fa-file"></span>  Reportes
+                        </button>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-black btn-block" id="btnControlCompleto" name="btnControlCompleto">
+                            <span class="fa fa-dot-circle"></span>  Ctrl /Completo
+                        </button>
+                    </div>
+                    <div class="w-100 my-1"></div>
+
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 justify-content-center" align="center"> 
+                        <div class="btn-group  btn-group-toggle" data-toggle="buttons" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-black notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-file"></span>  Defecto</button>
+                            <button type="button" class="btn btn-black notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-dot-circle"></span>  Detalle</button>
+                            <button type="button" class="btn btn-black notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo ctr/doc</button>
+                            <button type="button" class="btn btn-black notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-file"></span> Rastreo est/cte</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--PEDIDOS-->
         </div>
     </div>
@@ -249,45 +265,143 @@
             Serie = pnlTablero.find('#Serie'),
             Pedidos,
             tblPedidos = pnlTablero.find('#tblPedidos'),
-            Control = pnlTablero.find('#Control'), Serie = pnlTablero.find('#Serie'),
+            Control = pnlTablero.find('#Control'),
+            DOCUMENTO = pnlTablero.find("#DOCUMENTO"),
+            Color = pnlTablero.find('#Color'),
+            Estilo = pnlTablero.find('#Estilo'),
+            ColorClave = pnlTablero.find("#ColorClave"),
             tblTallasF = pnlTablero.find('#tblTallasF'),
             TotalParesEntrega = pnlTablero.find('#TotalParesEntrega'),
             TotalParesEntregaF = pnlTablero.find('#TotalParesEntregaF'),
             TotalParesEntregaAF = pnlTablero.find('#TotalParesEntregaAF'),
+            btnControlCompleto = pnlTablero.find("#btnControlCompleto"),
+            Devoluciones,
+            tblDevoluciones = pnlTablero.find('#tblDevoluciones'),
+            btnDefectos = pnlTablero.find("#btnDefectos"),
+            btnDetalle = pnlTablero.find("#btnDetalle"),
+            btnRastreoCtrlDoc = pnlTablero.find("#btnRastreoCtrlDoc"),
+            btnRastreoEstiloCliente = pnlTablero.find("#btnRastreoEstiloCliente"),
             Hoy = '<?php print Date('d/m/Y'); ?>',
-            control_pertenece_a_cliente = false;
+            control_pertenece_a_cliente = false,
+            Motivo = pnlTablero.find("#Motivo"),
+            ControlF = pnlTablero.find("#ControlF"),
+            EstiloF = pnlTablero.find("#EstiloF"),
+            DocumentoF = pnlTablero.find("#DocumentoF");
+
 
     $(document).ready(function () {
+
         getidsInputSelect(pnlTablero);
 
         handleEnterDiv(pnlTablero);
+
+        pnlTablero.find("#PDF22").on('keydown', function (e) {
+            Motivo.focus().select();
+        });
+
+        TotalParesEntregaAF.on('change', function () {
+            btnAcepta.attr('disabled', false);
+        });
+
+        EstiloF.on('keydown', function () {
+            Pedidos.columns(6).search(this.value).draw();
+        });
+
+        DocumentoF.on('keydown', function () {
+            Pedidos.columns(2).search(this.value).draw();
+        });
+
+        ControlF.on('keydown', function () {
+            Pedidos.columns(1).search(this.value).draw();
+        });
+
+        btnAcepta.click(function () {
+            var p = {
+                CLIENTE: ClienteDevolucion.val(),
+                DOCUMENTO: DOCUMENTO.val()
+            };
+            $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
+                console.log(a);
+                onOpenOverlay('');
+                Pedidos.ajax.reload(function () {
+                    Devoluciones.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                });
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+        });
+
+        btnRastreoEstiloCliente.click(function () {
+            onOpenWindow('<?php print base_url('RastreoDeEstilosEnPedidos'); ?>');
+        });
+
+        btnRastreoCtrlDoc.click(function () {
+            onOpenWindow('<?php print base_url('RastreoDeControlesEnDocumentosClientes'); ?>');
+        });
+
+        btnDetalle.click(function () {
+            onOpenWindow('<?php print base_url('DetallesDefectos/?origen=CLIENTES'); ?>');
+        });
+
+        btnDefectos.click(function () {
+            onOpenWindow('<?php print base_url('Defectos/?origen=CLIENTES'); ?>');
+        });
+
+        btnControlCompleto.click(function () {
+            for (var i = 1; i < 23; i++) {
+                pnlTablero.find("#PDF" + i).val(pnlTablero.find("#C" + i).val());
+            }
+            getTotalPares();
+            Motivo.focus().select();
+        });
+
+        Motivo.on('keydown', function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode === 13) {
+                btnAcepta.focus();
+            }
+        });
 
         pnlTablero.find("input[id^=PDF]").on('keydown', function (e) {
             console.log($(this).attr("id"), $(this).val());
             if (e.keyCode === 13) {
                 var idx = $(this).attr("id");
-                var PFA = pnlTablero.find("#")
+                var PFA = pnlTablero.find("#" + idx);
+                console.log(PFA.val());
             }
         });
 
         ClienteDevolucion.change(function () {
             onOpenOverlay('');
             Pedidos.ajax.reload(function () {
-                onCloseOverlay();
+                Devoluciones.ajax.reload(function () {
+                    onCloseOverlay();
+                    ControlF.val('');
+                    EstiloF.val('');
+                    DocumentoF.val('');
+                    Pedidos.columns(1).search('').draw();
+                    Pedidos.columns(2).search('').draw();
+                    Pedidos.columns(6).search('').draw();
+                });
             });
         });
+
         Control.on('keydown', function (e) {
-            if (ClienteDevolucion.val()) {
-                if (Control.val() && e.keyCode === 13) {
-                    onOpenOverlay('Buscando...');
-                    getInfoXControl();
-                }
-            } else {
-                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteDevolucion[0].selectize.focus();
-                });
-                $(".swal-button--confirm").focus();
-            }
+//            if (ClienteDevolucion.val()) {
+//                if (Control.val() && e.keyCode === 13) {
+//                    onOpenOverlay('Buscando...');
+//                    getInfoXControl();
+//                }
+//            } else {
+//                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+//                    ClienteDevolucion[0].selectize.focus();
+//                });
+//                $(".swal-button--confirm").focus();
+//            }
         });
 
         Pedidos = tblPedidos.DataTable({
@@ -303,9 +417,9 @@
                 {"data": "ID"},
                 {"data": "CONTROL"}, {"data": "DOCUMENTO"},
                 {"data": "TP"}, {"data": "FECHA"},
-                {"data": "PARES"},
-                {"data": "ESTILO"}, {"data": "COLOR"},
-                {"data": "PRECIO"}, {"data": "ST"}
+                {"data": "PARES"}, {"data": "ESTILO"},
+                {"data": "COLOR"}, {"data": "PRECIO"},
+                {"data": "ST"}
             ],
             "columnDefs": [{
                     "targets": [0],
@@ -354,13 +468,71 @@
             }
             if (cvalidos) {
                 var z = Pedidos.row($(this)).data();
-                console.log(z);
+                console.log("Z = >", z);
                 Control.val(z.CONTROL);
+                Color.val(z.COLOR);
+                Estilo.val(z.ESTILO);
+                ColorClave.val(z.COLOR);
+                DOCUMENTO.val(z.DOCUMENTO);
+                $.getJSON('<?php print base_url('DevolucionesDeClientes/getColorXControl'); ?>', {
+                    CONTROL: z.CONTROL
+                }).done(function (a) {
+                    console.log(a, a.length);
+                    if (a.length > 0) {
+                        Color.val(a[0].COLOR_T);
+                        pnlTablero.find(".color_t").text(a[0].COLOR_T);
+                        pnlTablero.find(".estilo_t").text(z.ESTILO);
+                        pnlTablero.find(".color_clave").text(z.COLOR);
+
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
                 getInfoXControl(z.CONTROL);
                 getParesFacturadosXControl(z.CONTROL);
             }
         });
 
+        Devoluciones = tblDevoluciones.DataTable({
+            dom: 'rtp',
+            "ajax": {
+                "url": '<?php print base_url('DevolucionesDeClientes/getDevoluciones'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
+                    d.CONTROL = Control.val() ? Control.val() : '';
+                }
+            },
+            "columns": [
+                {"data": "ID"},
+                {"data": "CLIENTE"}, {"data": "DOCUMENTO"},
+                {"data": "CONTROL"}, {"data": "PARES"},
+                {"data": "DEFECTO"}, {"data": "DETALLE"},
+                {"data": "CLASIFICACION"}, {"data": "CARGO"},
+                {"data": "MAQUILA"}, {"data": "FECHA"},
+                {"data": "TP"}, {"data": "CONCEPTO"},
+                {"data": "PRECIO_DEVOLUCION"}, {"data": "PRECIO_CG"}
+            ],
+            "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 50,
+            "bLengthChange": false,
+            "deferRender": true, "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": 250,
+            "scrollX": true,
+            "initComplete": function (settings, json) {
+            }
+        });
     });
 
     function getInfoXControl(c) {
@@ -400,6 +572,7 @@
             pnlTablero.find("#PDF1").focus().select();
         });
     }
+
     function getTotalPares() {
         var ttp = 0, ttpf = 0, ttpaf = 0;
         for (var i = 1; i < 23; i++) {
@@ -450,3 +623,16 @@
         });
     }
 </script>
+<style>
+    .style-pares{
+        width: 35px  !important; 
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        border: 1px solid #000 !important;
+    }
+    input,.selectize-input > * {
+        font-weight: bold !important;
+    }
+</style>

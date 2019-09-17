@@ -52,7 +52,7 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
                 }
             }
             if ($C['CONTROL'] === '' || intval($C['ORDEN']) === 0) {
-                $this->db->limit(999);
+                $this->db->limit(99);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -72,7 +72,7 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
             if ($C['CONTROL'] !== '') {
                 $this->db->where('DV.control', $C['CONTROL']);
             } else {
-                $this->db->limit(999);
+                $this->db->limit(99);
             }
 
             print json_encode($this->db->get()->result());
