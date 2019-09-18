@@ -15,16 +15,16 @@
                         <a class="dropdown-item" href="#" onclick="consultaEstiloso()">Estilos</a>
                         <a class="dropdown-item" href="#" onclick="consultaFraccionesXEstilo()">Fracciones</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">Costos Ficha Técnica</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlLineasAbiertas">Lineas Abiertas</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlEstilosFotos">Visualiza Estilo</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlParametrosFijos">Parámetros Fijos</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="btn text-white dropdown-toggle" href="#" id="navUtilerias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Utilerías</a>
                     <ul class="dropdown-menu animated slideIn" aria-labelledby="navUtilerias">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlLineasAbiertas">Lineas Abiertas</a>
                         <a class="dropdown-item" href="#" onclick="onMarcarLineaParaNoModificar()">Marca Linea/Estilos para NO modificarlos</a>
                         <a class="dropdown-item" href="#" onclick="onDescarmarLineaParaModificar()">Desmarca Linea/Estilos para modificarlos</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlParametrosFijos">Parámetros Fijos</a>
                         <a class="dropdown-item" href="#" onclick="onImprimirListaPrecios()">Imprime Lista de Precios</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Clasifica Estilo para Precio Venta</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Elimina Estilos Obsoletos</a>
