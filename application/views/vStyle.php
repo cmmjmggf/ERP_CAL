@@ -403,4 +403,10 @@
         background-color: #000000; 
         border: solid 2px #fff;
     }
+    .btn-black-o{ 
+        color: #000000;
+        background-color: #ffffff;
+        border: solid 2px #191919;
+        font-weight: bold !important;
+    }
 </style>

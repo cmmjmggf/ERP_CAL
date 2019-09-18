@@ -32,7 +32,7 @@ class DevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("F.ID, F.contped AS CONTROL, F.factura AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)
-                    ->from("facturacion AS F");
+                    ->from("facturacion AS F")->where('F.contped <> 0',null,false);
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('F.cliente', $x["CLIENTE"])->order_by("F.fecha", "DESC");
             }
@@ -94,7 +94,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 $this->db->where('D.control', $x['CONTROL'])->order_by("D.fecha", "DESC");
             }
             if ($x['CLIENTE'] === '' && $x['CONTROL'] === '') {
-                $this->db->order_by("D.fecha", "DESC")->limit(99);
+                $this->db->order_by("D.ID", "DESC")->order_by("D.fecha", "DESC")->limit(99);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -112,109 +112,41 @@ class DevolucionesDeClientes extends CI_Controller {
 
     public function onGuardar() {
         try {
-
-            /*
-
-              Private Sub CmdAcepta_Click()
-              If Val(txtnumdefe) = 0 Or Val(txtnumdeta) = 0 Or Val(txtclasif) = 0 Then
-              MsgBox "Algun campo no tiene datos verifique": txtnumdefe.SetFocus
-              Else
-              txtspares = Val(txtpard01) + Val(txtpard02) + Val(txtpard03) + Val(txtpard04) + Val(txtpard05) + Val(txtpard06) + Val(txtpard07) + Val(txtpard08) + Val(txtpard09) + Val(txtpard10) + Val(txtpard11) + Val(txtpard12) + Val(txtpard13) + Val(txtpard14) + Val(txtpard15) + Val(txtpard16) + Val(txtpard17) + Val(txtpard18) + Val(txtpard19) + Val(txtpard20) + Val(txtpard21) + Val(txtpard22)
-              If Val(txtspares) = 0 Then MsgBox "Cantida de pares por talla no puese ser 0": txtpard01.SetFocus: Exit Sub
-              If Val(txtspares) > Val(txtparedev) Then MsgBox "Cantida  por talla no concuerda con pares devueltos": txtpard01.SetFocus: Exit Sub
-              If Val(txtspares) < Val(txtparedev) Then MsgBox "Cantida  por talla no concuerda con pares devueltos": txtpard01.SetFocus: Exit Sub
- 
-              Data1.RecordSource = "SELECT * FROM devolucionnp WHERE registro > " & 0 & "": Data1.Refresh
-              Data1.Recordset.MoveLast
-              txtreg = Data1.Recordset.Fields("registro") + 1
-
-              Data1.Recordset.AddNew
-              Data1.Recordset.Fields("cliente") = Val(txtcliente)
-              Data1.Recordset.Fields("docto") = Val(txtdocto)
-              Data1.Recordset.Fields("aplica") = 0
-              Data1.Recordset.Fields("nc") = 0
-              Data1.Recordset.Fields("conce") = txtconce & "-" & txtcontrol & "-" & txtestilo & "-" & txtcombin
-              Data1.Recordset.Fields("tp") = Val(txttp)
-              Data1.Recordset.Fields("control") = Val(txtcontrol)
-              Data1.Recordset.Fields("controlprd") = 0
-              Data1.Recordset.Fields("paredev") = Val(txtparedev)
-              Data1.Recordset.Fields("par01") = Val(txtpard01)
-              Data1.Recordset.Fields("par02") = Val(txtpard02)
-              Data1.Recordset.Fields("par03") = Val(txtpard03)
-              Data1.Recordset.Fields("par04") = Val(txtpard04)
-              Data1.Recordset.Fields("par05") = Val(txtpard05)
-              Data1.Recordset.Fields("par06") = Val(txtpard06)
-              Data1.Recordset.Fields("par07") = Val(txtpard07)
-              Data1.Recordset.Fields("par08") = Val(txtpard08)
-              Data1.Recordset.Fields("par09") = Val(txtpard09)
-              Data1.Recordset.Fields("par10") = Val(txtpard10)
-              Data1.Recordset.Fields("par11") = Val(txtpard11)
-              Data1.Recordset.Fields("par12") = Val(txtpard12)
-              Data1.Recordset.Fields("par13") = Val(txtpard13)
-              Data1.Recordset.Fields("par14") = Val(txtpard14)
-              Data1.Recordset.Fields("par15") = Val(txtpard15)
-              Data1.Recordset.Fields("par16") = Val(txtpard16)
-              Data1.Recordset.Fields("par17") = Val(txtpard17)
-              Data1.Recordset.Fields("par18") = Val(txtpard18)
-              Data1.Recordset.Fields("par19") = Val(txtpard19)
-              Data1.Recordset.Fields("par20") = Val(txtpard20)
-              Data1.Recordset.Fields("par21") = Val(txtpard21)
-              Data1.Recordset.Fields("par22") = Val(txtpard22)
-              Data1.Recordset.Fields("defecto") = Val(txtnumdefe)
-              Data1.Recordset.Fields("detalle") = Val(txtnumdeta)
-              Data1.Recordset.Fields("ctenvo") = Val(txtdepto)
-              Data1.Recordset.Fields("clasif") = Val(txtclasif)
-              Data1.Recordset.Fields("cargoa") = Val(txtcargoa)
-              Data1.Recordset.Fields("estilo") = txtestilo
-              Data1.Recordset.Fields("comb") = Val(txtcombin)
-              Data1.Recordset.Fields("precio") = Val(txtprecio)
-              Data1.Recordset.Fields("subtot") = Val(txtprecio) * Val(txtparedev)
-              Data1.Recordset.Fields("seriped") = Val(txtseriped)
-              Data1.Recordset.Fields("fecha") = fecha
-              Data1.Recordset.Fields("fechadev") = Date
-              Data1.Recordset.Fields("registro") = Val(txtreg)
-              Data1.Recordset.Fields("stafac") = 0
-              Data1.Recordset.Fields("staapl") = 0
-              Data1.Recordset.Fields("maq") = Val(txtmaq)
-              Data1.Recordset.Fields("preciodev") = Val(preciodev)
-              Data1.Recordset.Fields("preciomaq") = Val(preciomaq)
-              Data1.Recordset.Update
-              Data1.RecordSource = "SELECT * FROM devolucionnp  WHERE cliente = " & Val(txtcliente) & " and stafac = " & 0 & " and staapl = " & 0 & " ": Data1.Refresh
-              CmdAcepta.Enabled = False: limpia:  txtclasif.SetFocus:
-              End If
-              End Sub
-             */
             $x = $this->input->post();
-            $this->db->insert('devolucionnp', array(
-                "cliente" => $x["CLIENTE"], "docto" => $x["DOCUMENTO"],
-                "aplica" => 0, "nc" => $x["xxxxx"],
-                "fact" => $x["xxxxx"], "fact1" => $x["xxxxx"],
-                "fact2" => $x["xxxxx"], "conce" => $x["xxxxx"],
-                "tp" => $x["xxxxx"], "tpvta" => $x["xxxxx"],
-                "control" => $x["xxxxx"], "controlprd" => $x["xxxxx"],
-                "paredev" => $x["xxxxx"], "parefac" => $x["xxxxx"],
-                "par01" => $x["xxxxx"], "par02" => $x["xxxxx"],
-                "par03" => $x["xxxxx"], "par04" => $x["xxxxx"],
-                "par05" => $x["xxxxx"], "par06" => $x["xxxxx"],
-                "par07" => $x["xxxxx"], "par08" => $x["xxxxx"],
-                "par09" => $x["xxxxx"], "par10" => $x["xxxxx"],
-                "par11" => $x["xxxxx"], "par12" => $x["xxxxx"],
-                "par13" => $x["xxxxx"], "par14" => $x["xxxxx"],
-                "par15" => $x["xxxxx"], "par16" => $x["xxxxx"],
-                "par17" => $x["xxxxx"], "par18" => $x["xxxxx"],
-                "par19" => $x["xxxxx"], "par20" => $x["xxxxx"],
-                "par21" => $x["xxxxx"], "par22" => $x["xxxxx"],
-                "defecto" => $x["xxxxx"], "detalle" => $x["xxxxx"],
-                "clasif" => $x["xxxxx"], "cargoa" => $x["xxxxx"],
-                "fecha" => $x["xxxxx"], "fechadev" => $x["xxxxx"],
-                "estilo" => $x["xxxxx"], "comb" => $x["xxxxx"],
-                "seriped" => $x["xxxxx"], "precio" => $x["xxxxx"],
-                "subtot" => $x["xxxxx"], "registro" => $x["xxxxx"],
-                "stafac" => $x["xxxxx"], "staapl" => $x["xxxxx"],
-                "maq" => $x["xxxxx"], "preciodev" => $x["xxxxx"],
-                "preciomaq" => $x["xxxxx"], "obs1" => $x["xxxxx"],
-                "ctenvo" => $x["xxxxx"]
+            $fecha = Date('Y-m-d h:i:s');
+            $p = array(
+                "cliente" => $x["CLIENTE"],
+                "docto" => $x["DOCUMENTO"],
+                "aplica" => 0, "nc" => 0,
+                "fact" => 0, "fact1" => 0,
+                "fact2" => 0,
+                "conce" => $x["MOTIVO"] . "-" . $x["CONTROL"] . "-" . $x["ESTILO"] . "-" . $x["COLOR"],
+                "tp" => $x["TP"], "tpvta" => 0,
+                "control" => $x["CONTROL"], "controlprd" => 0,
+                "paredev" => $x["PARES_DEVUELTOS"], "parefac" => $x["PARES_FACTURADOS"]);
+
+            for ($index = 1; $index < 23; $index++) {
+                if ($index < 10) {
+                    $p["par0{$index}"] = $x["PAR0{$index}"];
+                } else {
+                    $p["par{$index}"] = $x["PAR{$index}"];
+                }
+            }
+            $registro = $this->db->query("SELECT (D.registro +1) AS REGISTRITO FROM devolucionnp AS D ORDER BY D.registro DESC LIMIT 1")->result();
+            $pp = array_merge($p, array(
+                "defecto" => $x["DEFECTO"], "detalle" => $x["DETALLE"],
+                "clasif" => $x["CLASIFICACION"], "cargoa" => $x["CARGO_A"],
+                "fecha" => $fecha, "fechadev" => $fecha,
+                "estilo" => $x["ESTILO"], "comb" => $x["COLOR"],
+                "seriped" => $x["SERIE"], "precio" => $x["PRECIO"],
+                "subtot" => $x["PRECIO"] * $x["PARES_DEVUELTOS"],
+                "registro" => (empty($registro) ? 1 : $registro[0]->REGISTRITO),
+                "stafac" => 0, "staapl" => 0,
+                "maq" => $x["MAQUILA"], "preciodev" => $x["PRECIO_DEVOLUCION"],
+                "preciomaq" => $x["PRECIO_DEVOLUCION"] * 0.1, "obs1" => 0,
+                "ctenvo" => 170393
             ));
+            $this->db->insert('devolucionnp', $pp);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

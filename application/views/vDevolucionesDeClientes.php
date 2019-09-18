@@ -83,16 +83,16 @@
                 </div>
             </div>
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 border " >
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" >
                 <div class="row">
                     <div class="col-4">
-                        <input type="text" id="ControlF" name="ControlF" class="form-control form-control-sm">
+                        <input type="text" id="ControlF" name="ControlF" class="form-control form-control-sm" placeholder="Control a buscar...">
                     </div>
                     <div class="col-4">
-                        <input type="text" id="EstiloF" name="EstiloF" class="form-control form-control-sm">
+                        <input type="text" id="EstiloF" name="EstiloF" class="form-control form-control-sm" placeholder="Estilo a buscar...">
                     </div>
                     <div class="col-4">
-                        <input type="text" id="DocumentoF" name="DocumentoF" class="form-control form-control-sm">
+                        <input type="text" id="DocumentoF" name="DocumentoF" class="form-control form-control-sm" placeholder="Documento a buscar...">
                     </div>
                 </div>
                 <table id="tblPedidos" class="table table-hover table-sm"  style="width: 100% !important;">
@@ -122,7 +122,13 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Control</label>
                 <input type="text" id="Control" name="Control" disabled="" class="form-control form-control-sm numbersOnly"> 
-                <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="form-control form-control-sm numbersOnly"> 
+                <input type="text" id="TP" name="TP" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
+                <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
+                <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
+                <input type="text" id="MAQUILA" name="MAQUILA" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
+                <button type="button" class="btn btn-black-o btn-block mt-1" id="btnControlCompleto" name="btnControlCompleto" disabled="">
+                    <span class="fa fa-dot-circle"></span>  Ctrl /Completo
+                </button>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-7">
                 <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;">
@@ -165,7 +171,7 @@
                                 <td class="font-weight-bold">Pares devueltos</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" id="PDF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly style-pares" name="PDF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
+                                    print '<td><input type="text" id="PDF' . $index . '" indice="' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly style-pares" name="PDF' . $index . '" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm  style-pares" readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
@@ -180,7 +186,7 @@
             <!--BREAK-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <label>Motivo</label>
-                <input type="text" id="Motivo" name="Motivo" class="form-control form-control-sm" maxlength="500">
+                <input type="text" id="Motivo" name="Motivo" placeholder="Escriba el motivo por el cual se devuelve..." class="form-control form-control-sm" maxlength="500">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 mt-4"> 
                 <span class="text-danger font-weight-bold color_t">-</span>
@@ -222,30 +228,28 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-black btn-block" id="btnAcepta" name="btnAcepta" disabled="">
+                        <button type="button" class="btn btn-black-o btn-block" id="btnAcepta" name="btnAcepta" disabled="">
                             <span class="fa fa-check"></span>  Acepta
                         </button>
                     </div>
                     <div class="w-100 my-1"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-black btn-block" id="btnReportes" name="btnReportes" disabled="">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <button type="button" class="btn btn-black-o btn-block" id="btnReportes" name="btnReportes" disabled="">
                             <span class="fa fa-file"></span>  Reportes
                         </button>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-black btn-block" id="btnControlCompleto" name="btnControlCompleto">
-                            <span class="fa fa-dot-circle"></span>  Ctrl /Completo
-                        </button>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <button type="button" class="btn btn-black-o notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-file"></span>  Defecto</button>
                     </div>
-                    <div class="w-100 my-1"></div>
-
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 justify-content-center" align="center"> 
-                        <div class="btn-group  btn-group-toggle" data-toggle="buttons" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-black notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-file"></span>  Defecto</button>
-                            <button type="button" class="btn btn-black notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-dot-circle"></span>  Detalle</button>
-                            <button type="button" class="btn btn-black notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo ctr/doc</button>
-                            <button type="button" class="btn btn-black notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-file"></span> Rastreo est/cte</button>
-                        </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <button type="button" class="btn btn-black-o notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-dot-circle"></span>  Detalle</button>
+                    </div>
+                    <div class="w-100 my-1"></div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
+                        <button type="button" class="btn btn-black-o notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo ctr/doc</button>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
+                        <button type="button" class="btn btn-black-o notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-file"></span> Rastreo est/cte</button>
                     </div>
                 </div>
             </div>
@@ -263,10 +267,13 @@
             Defecto = pnlTablero.find('#Defecto'),
             DetalleDefecto = pnlTablero.find('#DetalleDefecto'),
             Serie = pnlTablero.find('#Serie'),
+            PRECIO = pnlTablero.find("#PRECIO"),
+            MAQUILA = pnlTablero.find("#MAQUILA"),
             Pedidos,
             tblPedidos = pnlTablero.find('#tblPedidos'),
             Control = pnlTablero.find('#Control'),
             DOCUMENTO = pnlTablero.find("#DOCUMENTO"),
+            TP = pnlTablero.find("#TP"),
             Color = pnlTablero.find('#Color'),
             Estilo = pnlTablero.find('#Estilo'),
             ColorClave = pnlTablero.find("#ColorClave"),
@@ -286,8 +293,8 @@
             Motivo = pnlTablero.find("#Motivo"),
             ControlF = pnlTablero.find("#ControlF"),
             EstiloF = pnlTablero.find("#EstiloF"),
-            DocumentoF = pnlTablero.find("#DocumentoF");
-
+            DocumentoF = pnlTablero.find("#DocumentoF"),
+            btnAcepta = pnlTablero.find("#btnAcepta");
 
     $(document).ready(function () {
 
@@ -316,23 +323,48 @@
         });
 
         btnAcepta.click(function () {
-            var p = {
-                CLIENTE: ClienteDevolucion.val(),
-                DOCUMENTO: DOCUMENTO.val()
-            };
-            $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
-                console.log(a);
-                onOpenOverlay('');
-                Pedidos.ajax.reload(function () {
-                    Devoluciones.ajax.reload(function () {
-                        onCloseOverlay();
+            if (ClienteDevolucion.val() && FechaDevolucion.val()) {
+                getTotalPares();
+                var p = {
+                    CLIENTE: ClienteDevolucion.val(), FECHA: FechaDevolucion.val(),
+                    DOCUMENTO: DOCUMENTO.val(), MOTIVO: Motivo.val(),
+                    CONTROL: Control.val(), ESTILO: Estilo.val(),
+                    COLOR: ColorClave.val(), TP: TP.val(),
+                    PARES_DEVUELTOS: (TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0),
+                    PARES_FACTURADOS: (TotalParesEntregaF.val() ? TotalParesEntregaF.val() : 0)
+                };
+                for (var i = 1; i < 23; i++) {
+                    if (i < 10) {
+                        p["PAR0" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+                    } else {
+                        p["PAR" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+                    }
+                }
+                p["DEFECTO"] = Defecto.val();
+                p["DETALLE"] = DetalleDefecto.val();
+                p["CLASIFICACION"] = Clasificacion.val();
+                p["CARGO_A"] = Cargo.val();
+                p["SERIE"] = Serie.val();
+                p["PRECIO"] = PRECIO.val();
+                p["MAQUILA"] = Defecto.val();
+                p["PRECIO_DEVOLUCION"] = PRECIO.val(); 
+                
+                $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
+                    onOpenOverlay('');
+                    onResetCampos();
+                    Pedidos.ajax.reload(function () {
+                        Devoluciones.ajax.reload(function () {
+                            onCloseOverlay();
+                             Clasificacion[0].selectize.focus();
+                        });
                     });
-                });
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
+                    onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
 
-            });
+                });
+            }
         });
 
         btnRastreoEstiloCliente.click(function () {
@@ -367,11 +399,33 @@
         });
 
         pnlTablero.find("input[id^=PDF]").on('keydown', function (e) {
-            console.log($(this).attr("id"), $(this).val());
-            if (e.keyCode === 13) {
-                var idx = $(this).attr("id");
-                var PFA = pnlTablero.find("#" + idx);
-                console.log(PFA.val());
+            if (Control.val()) {
+                console.log($(this).attr("id"), $(this).val());
+                if (e.keyCode === 13) {
+                    var index = $(this).attr('indice');
+                    if (parseInt(($(this).val() ? $(this).val() : 0)) <= parseInt((pnlTablero.find("#CF" + index).val() ? pnlTablero.find("#CF" + index).val() : 0))) {
+                        console.log($(this).val(), pnlTablero.find("#CF" + index).val());
+                        console.log(parseInt($(this).val()) <= parseInt(pnlTablero.find("#CF" + index).val()));
+                    } else {
+                        iMsg('LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', 'w', function () {
+                            pnlTablero.find("#PDF" + index).focus().select();
+                        });
+                    }
+                    var pares_a_devolver = 0;
+                    for (var i = 1; i < 23; i++) {
+                        pares_a_devolver += parseInt(pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+                    }
+                    console.log(pares_a_devolver);
+                    if (pares_a_devolver > 0) {
+                        btnAcepta.attr('disabled', false);
+                    } else {
+                        btnAcepta.attr('disabled', true);
+                    }
+                }
+            } else {
+                iMsg('DEBE DE SELECCIONAR UN CONTROL', 'w', function () {
+
+                });
             }
         });
 
@@ -432,10 +486,12 @@
             "colReorder": true,
             "displayLength": 50,
             "bLengthChange": false,
-            "deferRender": true, "scrollCollapse": false,
+            "deferRender": true, 
+            "scrollCollapse": false,
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
+            "order": [[ 4, "desc" ]],
             "initComplete": function (settings, json) {
                 ClienteDevolucion[0].selectize.focus();
                 FechaDevolucion.val(Hoy);
@@ -443,6 +499,7 @@
         });
 
         tblPedidos.on('click', 'tr', function () {
+            onBeep(1);
             //            onOpenOverlay('Por favor espere...');
             var campos = ["ClienteDevolucion", "FechaDevolucion", "Clasificacion",
                 "Cargo", "Departamento", "Defecto", "DetalleDefecto"];
@@ -474,6 +531,8 @@
                 Estilo.val(z.ESTILO);
                 ColorClave.val(z.COLOR);
                 DOCUMENTO.val(z.DOCUMENTO);
+                PRECIO.val(z.PRECIO);
+                TP.val(z.TP);
                 $.getJSON('<?php print base_url('DevolucionesDeClientes/getColorXControl'); ?>', {
                     CONTROL: z.CONTROL
                 }).done(function (a) {
@@ -483,7 +542,6 @@
                         pnlTablero.find(".color_t").text(a[0].COLOR_T);
                         pnlTablero.find(".estilo_t").text(z.ESTILO);
                         pnlTablero.find(".color_clave").text(z.COLOR);
-
                     }
                 }).fail(function (x) {
                     getError(x);
@@ -492,6 +550,7 @@
                 });
                 getInfoXControl(z.CONTROL);
                 getParesFacturadosXControl(z.CONTROL);
+                btnControlCompleto.attr('disabled', false);
             }
         });
 
@@ -530,12 +589,14 @@
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
+            "order": [[ 10, "desc" ]],
             "initComplete": function (settings, json) {
             }
         });
     });
 
     function getInfoXControl(c) {
+        var indice_f = 0;
         onOpenOverlay('Cargando...');
         $.getJSON('<?php print base_url('DevolucionesDeClientes/getInfoXControl'); ?>', {
             CONTROL: c
@@ -552,6 +613,14 @@
                         pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                         pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
                         pnlTablero.find(`#C${i}`).val(xx["C" + i]);
+                        if (parseInt(xx["C" + i]) <= 0) {
+                            pnlTablero.find("#PDF" + i).attr('disabled', true);
+                        } else {
+                            pnlTablero.find("#PDF" + i).attr('disabled', false);
+                            if (indice_f === 0) {
+                                indice_f = i;
+                            }
+                        }
                         var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
                         /* PDF = Pares Devueltos Facturados*/
                         //                        pnlTablero.find("#PDF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
@@ -569,7 +638,7 @@
             getError(x);
         }).always(function () {
             onCloseOverlay();
-            pnlTablero.find("#PDF1").focus().select();
+            pnlTablero.find("#PDF" + indice_f).focus().select();
         });
     }
 
@@ -590,18 +659,42 @@
         pnlTablero.find(".produccionfacturados").text(ttpf);
         pnlTablero.find(".produccionsaldo").text((ttpf > 0) ? ttpaf : ttp);
     }
+
     function onResetCampos() {
-        Corrida.val('');
+
+        Clasificacion[0].selectize.clear();
+        Cargo[0].selectize.clear();
+        Departamento[0].selectize.clear();
+        Defecto[0].selectize.clear();
+        DetalleDefecto[0].selectize.clear();
+
         for (var i = 1; i < 21; i++) {
             pnlTablero.find("#T" + i).val("");
             pnlTablero.find(`#C${i}`).val("");
+            pnlTablero.find(`#CF${i}`).val(""); 
             pnlTablero.find("#PDF" + i).val("");
         }
+
+        Control.val('');
+        Estilo.val('');
+        Color.val('');
+        Serie.val('');
         Control.attr('disabled', false);
         TotalParesEntrega.val('');
         TotalParesEntregaF.val('');
         TotalParesEntregaAF.val('');
-        getTotalFacturado();
+        ColorClave.val('');
+        DOCUMENTO.val('');
+        PRECIO.val('');
+        TP.val('');
+
+        /*BORRAR BUSQUEDAS EN LA TABLA UNO*/
+        ControlF.val('');
+        EstiloF.val('');
+        DocumentoF.val('');
+        Pedidos.columns(1).search('').draw();
+        Pedidos.columns(2).search('').draw();
+        Pedidos.columns(6).search('').draw();
     }
 
     function getParesFacturadosXControl(c) {
