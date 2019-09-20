@@ -44,8 +44,60 @@ class OrdenDeProduccion extends CI_Controller {
 
     public function getRecords() {
         try {
-            $x = $this->input;
-            print json_encode($this->odpm->getRecords($x->get('MAQUILA'), $x->get('SEMANA'), $x->get('ANIO')));
+            try {
+                $x = $this->input->get();
+                $this->db->select('PD.ID AS ID, '
+                                . 'PD.Estilo AS IdEstilo, '
+                                . 'PD.Color AS IdColor, '
+                                . "PD.Estilo AS Estilo, "
+                                . "PD.Estilo AS \"Descripcion Estilo\", "
+                                . "PD.color AS Color, "
+                                . "PD.color AS \"Descripcion Color\", "
+                                . "PD.Clave AS Pedido,"
+                                . "PD.FechaPedido AS \"Fecha Pedido\","
+                                . "PD.FechaRecepcion AS \"Fecha Entrega\","
+                                . "PD.Registro AS \"Fecha Captura\","
+                                . "PD.Semana AS Semana,"
+                                . "PD.Maquila AS Maq,"
+                                . "PD.Cliente AS Cliente,"
+                                . "PD.Cliente AS \"Cliente Razon\","
+                                . "PD.Pares AS Pares,"
+                                . "CONCAT('$',PD.Precio) AS Precio , "
+                                . "CONCAT('$',(PD.Precio * PD.Pares)) AS Importe, "
+                                . "CONCAT('$',(PD.Precio * PD.Pares)) AS Descuento,"
+                                . "PD.FechaEntrega AS Entrega,"
+                                . "PD.Serie AS Serie, "
+                                . "PD.Ano AS Anio,"
+                                . " CASE "
+                                . "WHEN PD.Control IS NULL THEN '' "
+                                . "ELSE PD.Control END AS Marca, "
+                                . "CONCAT(RIGHT(CT.Ano,2), CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
+                                . "S.ID AS SerieID,"
+                                . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
+                        ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
+                        ->join('series AS S', 'PD.Serie = S.Clave')
+                        ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
+                        ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
+                        ->where('PD.Control <> 0 AND OP.ID IS NULL', null, false)
+                        ->where('CT.Estatus', 'A');
+                if ($x["ANIO"] !== '') {
+                    $this->db->where('PD.Ano', $x["ANIO"]);
+                }
+                if ( $x["MAQUILA"] !== '') {
+                    $this->db->where('PD.Maquila', $x["MAQUILA"]);
+                }
+                if ($x["SEMANA"] !== '') {
+                    $this->db->where('PD.Semana', $x["SEMANA"]);
+                }
+                if ($x["ANIO"] === '' &&  $x["MAQUILA"] === '' && $x["SEMANA"] === '') {
+                    $this->db->limit(99);
+                }
+                $sql = $this->db->get();
+//            PRINT $this->db->last_query();
+                print json_encode($sql->result());
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

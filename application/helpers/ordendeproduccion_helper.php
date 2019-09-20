@@ -908,7 +908,7 @@ class PDF extends FPDF {
         /* CODIGO DE BARRAS */
         $this->SetFont('Calibri', 'B', 14);
         $this->SetX($pos[3]);
-        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */); 
+//        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */); 
         $this->Cell(42.5, 6, "", 0/* BORDE */, 1, 'C', 0);
         $this->SetFont('Calibri', 'B', 8);
 

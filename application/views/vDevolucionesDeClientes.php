@@ -234,7 +234,7 @@
                     </div>
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-black-o btn-block" id="btnReportes" name="btnReportes" disabled="">
+                        <button type="button" class="btn btn-black-o btn-block" id="btnReportesDev" name="btnReportesDev">
                             <span class="fa fa-file"></span>  Reportes
                         </button>
                     </div>
@@ -257,6 +257,74 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="mdlReportesDevoluciones">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Devoluciones no aplicadas ni facturadas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <h4>Nota capture fechas y oprima enter</h4>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <label>De la fecha</label> 
+                        <input type="text" id="DeLaFechaDev" name="DeLaFechaDev" class="form-control form-control-sm date notEnter">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <label>A la fecha</label>
+                        <input type="text" id="ALaFechaDev" name="ALaFechaDev" class="form-control form-control-sm date notEnter">
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="rNormalDev" name="Reporte" class="custom-control-input">
+                                        <label class="custom-control-label text-info" for="rNormalDev">Normal</label>
+                                    </div> 
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="rPorClienteDev" name="Reporte" class="custom-control-input">
+                                        <label class="custom-control-label text-danger" for="rPorClienteDev">Por cliente</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="rPorMaquilaDev" name="Reporte" class="custom-control-input">
+                                        <label class="custom-control-label text-info" for="rPorMaquilaDev">Por maquila</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="rPorDefectoDetalleDev" name="Reporte" class="custom-control-input">
+                                        <label class="custom-control-label text-danger" for="rPorDefectoDetalleDev">Por defecto detalle</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="rAgtCteDepDefeDetaDev" name="Reporte" class="custom-control-input">
+                                        <label class="custom-control-label text-info" for="rAgtCteDepDefeDetaDev">Por Agt.Cte.Dep.Defe.Deta</label>
+                                    </div>
+                                </div>
+                            </div><!--ROW-->
+                        </div><!--FORM-GROUP-->
+                    </div><!--COL-12-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptaReporteDevolucion">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div> 
 <script>
     var pnlTablero = $("#pnlTablero"),
             ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
@@ -294,20 +362,39 @@
             ControlF = pnlTablero.find("#ControlF"),
             EstiloF = pnlTablero.find("#EstiloF"),
             DocumentoF = pnlTablero.find("#DocumentoF"),
-            btnAcepta = pnlTablero.find("#btnAcepta");
+            btnAcepta = pnlTablero.find("#btnAcepta"),
+            btnReportesDev = pnlTablero.find("#btnReportesDev"),
+            mdlReportesDevoluciones = $("#mdlReportesDevoluciones"),
+            DeLaFechaDev = mdlReportesDevoluciones.find("#DeLaFechaDev"),
+            ALaFechaDev = mdlReportesDevoluciones.find("#ALaFechaDev"),
+            btnAceptaReporteDevolucion = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucion");
 
     $(document).ready(function () {
-
-        getidsInputSelect(pnlTablero);
-
         handleEnterDiv(pnlTablero);
+
+        btnAceptaReporteDevolucion.click(function () {
+            onOpenOverlay('');
+            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>',
+                    {
+                        FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
+                        FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
+                    }).done(function (a) {
+                onImprimirReporteFancy(a);
+            }).fail(function (x, y, z) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
+        });
+
+        btnReportesDev.click(function () {
+            ALaFechaDev.val(Hoy);
+            DeLaFechaDev.val(Hoy);
+            mdlReportesDevoluciones.modal('show');
+        });
 
         pnlTablero.find("#PDF22").on('keydown', function (e) {
             Motivo.focus().select();
-        });
-
-        TotalParesEntregaAF.on('change', function () {
-            btnAcepta.attr('disabled', false);
         });
 
         EstiloF.on('keydown', function () {
@@ -340,6 +427,7 @@
                         p["PAR" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
                     }
                 }
+                p["DEPARTAMENTO"] = Departamento.val();
                 p["DEFECTO"] = Defecto.val();
                 p["DETALLE"] = DetalleDefecto.val();
                 p["CLASIFICACION"] = Clasificacion.val();
@@ -347,15 +435,15 @@
                 p["SERIE"] = Serie.val();
                 p["PRECIO"] = PRECIO.val();
                 p["MAQUILA"] = Defecto.val();
-                p["PRECIO_DEVOLUCION"] = PRECIO.val(); 
-                
+                p["PRECIO_DEVOLUCION"] = PRECIO.val();
+
                 $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
                     onOpenOverlay('');
                     onResetCampos();
                     Pedidos.ajax.reload(function () {
                         Devoluciones.ajax.reload(function () {
                             onCloseOverlay();
-                             Clasificacion[0].selectize.focus();
+                            Clasificacion[0].selectize.focus();
                         });
                     });
                     onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
@@ -388,12 +476,14 @@
                 pnlTablero.find("#PDF" + i).val(pnlTablero.find("#C" + i).val());
             }
             getTotalPares();
+            onRevisarRegistroValido();
             Motivo.focus().select();
         });
 
         Motivo.on('keydown', function (e) {
             console.log(e.keyCode);
             if (e.keyCode === 13) {
+                onRevisarRegistroValido();
                 btnAcepta.focus();
             }
         });
@@ -411,16 +501,7 @@
                             pnlTablero.find("#PDF" + index).focus().select();
                         });
                     }
-                    var pares_a_devolver = 0;
-                    for (var i = 1; i < 23; i++) {
-                        pares_a_devolver += parseInt(pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
-                    }
-                    console.log(pares_a_devolver);
-                    if (pares_a_devolver > 0) {
-                        btnAcepta.attr('disabled', false);
-                    } else {
-                        btnAcepta.attr('disabled', true);
-                    }
+                    onRevisarRegistroValido();
                 }
             } else {
                 iMsg('DEBE DE SELECCIONAR UN CONTROL', 'w', function () {
@@ -445,17 +526,17 @@
         });
 
         Control.on('keydown', function (e) {
-//            if (ClienteDevolucion.val()) {
-//                if (Control.val() && e.keyCode === 13) {
-//                    onOpenOverlay('Buscando...');
-//                    getInfoXControl();
-//                }
-//            } else {
-//                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-//                    ClienteDevolucion[0].selectize.focus();
-//                });
-//                $(".swal-button--confirm").focus();
-//            }
+            //            if (ClienteDevolucion.val()) {
+            //                if (Control.val() && e.keyCode === 13) {
+            //                    onOpenOverlay('Buscando...');
+            //                    getInfoXControl();
+            //                }
+            //            } else {
+            //                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+            //                    ClienteDevolucion[0].selectize.focus();
+            //                });
+            //                $(".swal-button--confirm").focus();
+            //            }
         });
 
         Pedidos = tblPedidos.DataTable({
@@ -486,12 +567,12 @@
             "colReorder": true,
             "displayLength": 50,
             "bLengthChange": false,
-            "deferRender": true, 
+            "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
-            "order": [[ 4, "desc" ]],
+            "order": [[4, "desc"]],
             "initComplete": function (settings, json) {
                 ClienteDevolucion[0].selectize.focus();
                 FechaDevolucion.val(Hoy);
@@ -562,6 +643,7 @@
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
                     d.CONTROL = Control.val() ? Control.val() : '';
+                    d.FECHA = FechaDevolucion.val() ? FechaDevolucion.val() : '';
                 }
             },
             "columns": [
@@ -589,7 +671,7 @@
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
-            "order": [[ 10, "desc" ]],
+            "order": [[10, "desc"]],
             "initComplete": function (settings, json) {
             }
         });
@@ -671,7 +753,7 @@
         for (var i = 1; i < 21; i++) {
             pnlTablero.find("#T" + i).val("");
             pnlTablero.find(`#C${i}`).val("");
-            pnlTablero.find(`#CF${i}`).val(""); 
+            pnlTablero.find(`#CF${i}`).val("");
             pnlTablero.find("#PDF" + i).val("");
         }
 
@@ -679,6 +761,8 @@
         Estilo.val('');
         Color.val('');
         Serie.val('');
+        Motivo.val('');
+
         Control.attr('disabled', false);
         TotalParesEntrega.val('');
         TotalParesEntregaF.val('');
@@ -714,6 +798,21 @@
         }).always(function () {
 
         });
+    }
+
+    function onRevisarRegistroValido() {
+        var pares_a_devolver = 0;
+        for (var i = 1; i < 23; i++) {
+            pares_a_devolver += parseInt(pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+        }
+        console.log(pares_a_devolver);
+        if (pares_a_devolver > 0) {
+            btnAcepta.attr('disabled', false);
+            btnReportes.attr('disabled', false);
+        } else {
+            btnAcepta.attr('disabled', true);
+            btnReportes.attr('disabled', true);
+        }
     }
 </script>
 <style>

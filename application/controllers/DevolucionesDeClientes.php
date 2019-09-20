@@ -8,7 +8,7 @@ class DevolucionesDeClientes extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session');
+        $this->load->library('session')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -32,7 +32,7 @@ class DevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("F.ID, F.contped AS CONTROL, F.factura AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)
-                    ->from("facturacion AS F")->where('F.contped <> 0',null,false);
+                    ->from("facturacion AS F")->where('F.contped <> 0', null, false);
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('F.cliente', $x["CLIENTE"])->order_by("F.fecha", "DESC");
             }
@@ -144,9 +144,28 @@ class DevolucionesDeClientes extends CI_Controller {
                 "stafac" => 0, "staapl" => 0,
                 "maq" => $x["MAQUILA"], "preciodev" => $x["PRECIO_DEVOLUCION"],
                 "preciomaq" => $x["PRECIO_DEVOLUCION"] * 0.1, "obs1" => 0,
-                "ctenvo" => 170393
+                "ctenvo" => $x["DEPARTAMENTO"]
             ));
             $this->db->insert('devolucionnp', $pp);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onImprimirRepNormal() {
+        try {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["FECHA_INICIAL"] = $this->input->post('FECHA_INICIAL');
+            $P["FECHA_FINAL"] = $this->input->post('FECHA_FINAL'); 
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\facturacion\devolnapl.jasper');
+            $jc->setFilename('DEV_NORMAL_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -129,7 +129,7 @@
                     message: 'GENERANDO...'
                 });
                 var params = {INICIO: ControlInicial.val(), FIN: ControlFinal.val(), SEMANA: '', ANIO: ''};
-                $.post(master_url + 'getOrdenDeProduccion', params).done(function (data) {
+                $.post('<?php print base_url('IOrdenDeProduccion/getOrdenDeProduccion');?>', params).done(function (data) {
                     //check Apple device
                     if (isAppleDevice() || isMobile) {
                         window.open(data, '_blank');

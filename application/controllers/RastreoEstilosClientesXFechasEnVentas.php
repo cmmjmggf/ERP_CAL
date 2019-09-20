@@ -39,7 +39,7 @@ class RastreoEstilosClientesXFechasEnVentas extends CI_Controller {
                 $this->db->where('F.combin', $x['COLOR']);
             }
             if ($x['FECHA_INICIO'] !== '' && $x['FECHA_FIN'] !== '') {
-                $this->db->where("F.fecha BETWEEN  date_format(STR_TO_DATE('{$x['FECHA_INICIO']}', \"%d/%m/%Y\"), '%Y-%m-%d') AND date_format(STR_TO_DATE('{$x['FECHA_FIN']}', \"%d/%m/%Y\"), '%Y-%m-%d')", null, false);
+                $this->db->where("F.fecha BETWEEN date_format(STR_TO_DATE('{$x['FECHA_INICIO']}', \"%d/%m/%Y\"), '%Y-%m-%d') AND date_format(STR_TO_DATE('{$x['FECHA_FIN']}', \"%d/%m/%Y\"), '%Y-%m-%d')", null, false);
             }
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('F.cliente', $x['CLIENTE']);

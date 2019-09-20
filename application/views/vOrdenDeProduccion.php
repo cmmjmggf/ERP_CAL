@@ -109,7 +109,7 @@
             }
         ],
         "ajax": {
-            "url": master_url + 'getRecords',
+            "url": '<?php print base_url('OrdenDeProduccion/getRecords'); ?>',
             "dataSrc": "",
             "data": function (d) {
                 d.MAQUILA = (Maquila.val().trim());
@@ -179,19 +179,6 @@
             [0, 'desc']/*ID*/
         ],
         "createdRow": function (row, data, dataIndex, cells) {
-            $.each($(row).find("td"), function (k, v) {
-                switch (parseInt(k)) {
-                    case 1:
-                        $(v).attr('title', data["Cliente Razon"]);
-                        break;
-                    case 2:
-                        $(v).attr('title', data["Descripcion Estilo"]);
-                        break;
-                    case 3:
-                        $(v).attr('title', data["Descripcion Color"]);
-                        break;
-                }
-            });
             $.each($(row), function (k, v) {
                 if (data["Marca"] === '0' && data["Control"] !== null) {
                     $(v).addClass('HasMca');
@@ -220,19 +207,14 @@
         $(function () {
             handleEnter();
 
+            Controles = tblControles.DataTable(options_ordendeproduccion);
+
             Semana.keydown(function (e) {
                 if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
-                    HoldOn.open({
-                        theme: 'sk-bounce',
-                        message: 'Por favor espere...'
+                    onOpenOverlay('');
+                    Controles.ajax.reload(function () {
+                        onCloseOverlay();
                     });
-                    $.fn.dataTable.ext.errMode = 'throw';
-                    if ($.fn.DataTable.isDataTable('#tblControles')) {
-                        Controles.ajax.reload();
-                        HoldOn.close();
-                    } else {
-                        Controles = tblControles.DataTable(options_ordendeproduccion);
-                    }
                 }
             });
 
@@ -242,17 +224,10 @@
                 onVerificarFormValido();
             }).keydown(function (e) {
                 if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
-                    HoldOn.open({
-                        theme: 'sk-bounce',
-                        message: 'Por favor espere...'
+                    onOpenOverlay('');
+                    Controles.ajax.reload(function () {
+                        onCloseOverlay();
                     });
-                    $.fn.dataTable.ext.errMode = 'throw';
-                    if ($.fn.DataTable.isDataTable('#tblControles')) {
-                        Controles.ajax.reload();
-                        HoldOn.close();
-                    } else {
-                        Controles = tblControles.DataTable(options_ordendeproduccion);
-                    }
                 }
             });
 
