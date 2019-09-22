@@ -57,10 +57,14 @@ class CapturaInventarios extends CI_Controller {
             $Maq = $this->input->post('Maq');
             $Mes = $this->input->post('Mes');
 
-            $this->db->set("Existencia", 0)
-                    ->update($Maq);
+            $this->db->set("Existencia", 0)->update($Maq);
 
-            $this->db->query("UPDATE articulos A SET A.Existencia = A.$Mes ");
+            $this->db->query("UPDATE $Maq A SET A.Existencia = A.$Mes ");
+
+            $this->db->query("update $Maq a
+                            inner join preciosmaquilas pm on pm.articulo=a.clave and pm.maquila = '1'
+                            set a.P$Mes = pm.Precio
+                            where a.$Mes > 0 ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -840,7 +844,7 @@ class CapturaInventarios extends CI_Controller {
                         $Total_Salidas = ($D->Salidas * $D->PrecioMov <> 0) ? '$' . number_format($D->Salidas * $D->PrecioMov, 2, ".", ",") : '';
                         $pdf->Row(array(
                             utf8_decode($D->ClaveArt),
-                            mb_strimwidth(utf8_decode($D->Articulo), 0, 50, ""),
+                            utf8_decode(mb_strimwidth($D->Articulo, 0, 29, "")),
                             utf8_decode($D->Unidad),
                             utf8_decode($D->FechaMov),
                             utf8_decode($D->TipoMov),

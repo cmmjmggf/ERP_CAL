@@ -130,7 +130,7 @@ ORDER BY ClaveGrupo ASC, Doc ASC, A.Descripcion ASC]]>
 					<text><![CDATA[Total por grupo:]]></text>
 				</staticText>
 				<textField pattern="¤ #,##0.00">
-					<reportElement x="349" y="0" width="52" height="12" uuid="9b66334b-7ddc-41fc-9af9-13963f6c2186"/>
+					<reportElement x="329" y="0" width="72" height="12" uuid="9b66334b-7ddc-41fc-9af9-13963f6c2186"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -382,7 +382,7 @@ ORDER BY ClaveGrupo ASC, Doc ASC, A.Descripcion ASC]]>
 				<text><![CDATA[Total general:]]></text>
 			</staticText>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="349" y="1" width="52" height="12" uuid="a1c55803-0be3-4d62-877b-81851488279b"/>
+				<reportElement x="329" y="1" width="72" height="12" uuid="a1c55803-0be3-4d62-877b-81851488279b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>

@@ -148,7 +148,11 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-sm-4">
                         <label for="">Correo</label>
-                        <input type="tel" class="form-control form-control-sm"   name="Correo"  >
+                        <input type="tel" class="form-control form-control-sm notEnter"   name="Correo" >
+                    </div>
+                    <div class="col-12 col-md-4 col-sm-4">
+                        <label for="">Contacto</label>
+                        <input type="text" class="form-control form-control-sm"   name="Contacto"  >
                     </div>
                     <div class="col-12 col-md-4 col-xl-2">
                         <label for="">% P' Compras x Pedido F</label>

@@ -478,7 +478,7 @@ class PDFMovimientosAlmacen extends FPDF {
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Calibri', 'B', 9);
+        $this->SetFont('Calibri', 'B', 8.5);
         $this->Row(array('', utf8_decode('Artículo'), 'U.M', 'Fecha', 'Precio', 'Cantidad', 'Total', 'Doc', 'Tipo'), 'B');
 
         $anchos = array(12/* 1 */, 58/* 2 */, 15/* 3 */, 20/* 3 */, 17/* 4 */, 22/* 5 */, 22/* 6 */, 25/* 7 */, 15/* 7 */);
@@ -511,7 +511,7 @@ class PDFMovimientosAlmacen extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -529,7 +529,7 @@ class PDFMovimientosAlmacen extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], $border, $a);
+            $this->MultiCell($w, 3, $data[$i], $border, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1332,12 +1332,12 @@ class PDFComprasArticulos extends FPDF {
         $this->SetX(5);
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(0.1/* 1 */, 130/* 2 */, 15/* 3 */, 15/* 3 */, 15/* 4 */);
+        $anchos = array(0.1/* 1 */, 130/* 2 */, 15/* 3 */, 18/* 3 */, 18/* 4 */);
         $aligns = array('L', 'L', 'C', 'R', 'R');
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Calibri', 'B', 9);
+        $this->SetFont('Calibri', 'B', 8.5);
         $this->Row(array('', utf8_decode('Artículo'), 'U.M', 'Cantidad', '%'), 'B');
     }
 

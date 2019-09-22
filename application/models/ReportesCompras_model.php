@@ -28,17 +28,27 @@ class ReportesCompras_model extends CI_Model {
         }
     }
 
-    public function getGruposReporte($FechaIni, $FechaFin, $Tp) {
+    public function getGruposReporte($FechaIni, $FechaFin, $Tp, $Grupo, $Articulo) {
         try {
             $this->db->query("SET sql_mode = '';");
-            return $this->db->select("CAST(G.Clave AS SIGNED) AS ClaveGrupo, G.Nombre AS NombreGrupo  ", false)
-                            ->from("compras C")
-                            ->join("articulos A", 'ON A.Clave =  C.Articulo')
-                            ->join("grupos G", "ON G.Clave = A.Grupo ")
-                            ->where("C.Estatus", 'CONCLUIDA')
-                            ->like("C.Tp ", $Tp)
-                            ->where("STR_TO_DATE(C.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\") ", null, false)
-                            ->group_by("G.Clave")
+            $this->db->select("CAST(G.Clave AS SIGNED) AS ClaveGrupo, G.Nombre AS NombreGrupo  ", false)
+                    ->from("compras C")
+                    ->join("articulos A", 'ON A.Clave =  C.Articulo')
+                    ->join("grupos G", "ON G.Clave = A.Grupo ")
+                    ->where("C.Estatus", 'CONCLUIDA')
+                    ->like("C.Tp ", $Tp);
+
+            if ($Grupo !== '') {
+                $this->db->where("A.Grupo ", $Grupo);
+            }
+
+            if ($Articulo !== '') {
+
+                $this->db->where("C.Articulo ", $Articulo);
+            }
+
+            $this->db->where("STR_TO_DATE(C.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\") ", null, false);
+            return $this->db->group_by("G.Clave")
                             ->group_by("G.Nombre")
                             ->order_by("ClaveGrupo", 'ASC')
                             ->get()->result();
@@ -47,19 +57,27 @@ class ReportesCompras_model extends CI_Model {
         }
     }
 
-    public function getArticulosReporte($FechaIni, $FechaFin, $Tp) {
+    public function getArticulosReporte($FechaIni, $FechaFin, $Tp, $Grupo, $Articulo) {
         try {
             $this->db->query("SET sql_mode = '';");
-            return $this->db->select("CAST(A.Grupo AS SIGNED) AS ClaveGrupo, A.Clave, A.Descripcion,U.Descripcion AS Unidad, sum(C.Cantidad) AS Cantidad  ", false)
-                            ->from("compras C")
-                            ->join("articulos A", 'ON A.Clave =  C.Articulo')
-                            ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
-                            ->where("C.Estatus", 'CONCLUIDA')
-                            ->like("C.Tp ", $Tp)
-                            ->where("STR_TO_DATE(C.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\") ", null, false)
-                            ->group_by("A.Clave")
+            $this->db->select("CAST(A.Grupo AS SIGNED) AS ClaveGrupo, A.Clave, A.Descripcion,U.Descripcion AS Unidad, sum(C.Cantidad) AS Cantidad  ", false)
+                    ->from("compras C")
+                    ->join("articulos A", 'ON A.Clave =  C.Articulo')
+                    ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
+                    ->where("C.Estatus", 'CONCLUIDA')
+                    ->like("C.Tp ", $Tp);
+            if ($Grupo !== '') {
+                $this->db->where("A.Grupo ", $Grupo);
+            }
+
+            if ($Articulo !== '') {
+
+                $this->db->where("C.Articulo ", $Articulo);
+            }
+            $this->db->where("STR_TO_DATE(C.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\") ", null, false);
+            return $this->db->group_by("A.Clave")
                             ->order_by("ClaveGrupo", 'ASC')
-                            ->order_by("A.Descripcion", 'ASC')
+                            ->order_by("sum(C.Cantidad)", 'DESC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -246,7 +264,7 @@ class ReportesCompras_model extends CI_Model {
         }
     }
 
-    public function getArticulosMovimientosAlmacen($FechaIni, $FechaFin) {
+    public function getArticulosMovimientosAlmacen($FechaIni, $FechaFin, $Grupo) {
         try {
             $this->db->query("SET sql_mode = '';");
             return $this->db->select("CAST(A.Grupo AS SIGNED) AS ClaveGrupo,"
@@ -264,9 +282,12 @@ class ReportesCompras_model extends CI_Model {
                             ->join("articulos A", 'ON A.Clave =  MA.Articulo')
                             ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
                             ->where("MA.CantidadMov > 0", null, false)
+                            ->where("A.Grupo", $Grupo)
                             ->where("STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\") ", null, false)
                             ->order_by("ClaveGrupo", 'ASC')
-                            ->order_by("A.Descripcion", 'ASC')
+                            ->order_by("abs(A.Clave)", 'ASC')
+                            ->order_by("MA.TipoMov", 'ASC')
+                            ->order_by("STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") ASC ")
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

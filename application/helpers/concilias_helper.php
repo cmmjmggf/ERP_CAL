@@ -83,70 +83,70 @@ class Concilias extends FPDF {
 
         /* PRIMERA LINEA */
         $this->SetLineWidth(0.2);
-        $this->SetY(18);
+        $this->SetY(16);
         $this->SetX(5);
-        $this->Cell(70, 4, utf8_decode(''), 0/* BORDE */, 0, 'L');
+        $this->Cell(50, 3, utf8_decode(''), 0/* BORDE */, 0, 'L');
         $this->SetX($this->GetX());
-        $this->Cell(12.5, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(10, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12.5, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(10, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(12, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Diferencia'), 'TRL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Diferencia'), 'TRL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(14, 4, utf8_decode(''), 0/* BORDE */, 0, 'C');
+        $this->Cell(12, 3, utf8_decode(''), 0/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Explosión'), 'TL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Explosión'), 'TL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Entregado'), 'TL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Entregado'), 'TL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Devolución'), 'TL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Devolución'), 'TL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Diferencia'), 'TRL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Diferencia'), 'TRL'/* BORDE */, 0, 'C');
 
 
 
         /* SEGUNDA LINEA */
 
-        $this->SetY(22);
+        $this->SetY(19);
         $this->SetX(5);
 
-        $this->Cell(70, 4, utf8_decode('Artículo'), 'B'/* BORDE */, 0, 'L');
+        $this->Cell(50, 3, utf8_decode('Artículo'), 'B'/* BORDE */, 0, 'L');
         $this->SetX($this->GetX());
-        $this->Cell(12.5, 4, utf8_decode('U.M.'), 'B'/* BORDE */, 0, 'C');
+        $this->Cell(10, 3, utf8_decode('U.M.'), 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(12.5, 4, utf8_decode('Talla'), 'B'/* BORDE */, 0, 'C');
+        $this->Cell(10, 3, utf8_decode('Talla'), 'B'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Explosión'), 'TBL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Explosión'), 'TBL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Entregado'), 'TBL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Entregado'), 'TBL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Diferencia'), 'TBL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Diferencia'), 'TBL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, utf8_decode('Devol'), 'TBL'/* BORDE */, 0, 'C');
+        $this->Cell(12, 3, utf8_decode('Devol'), 'TBL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Ex-En-Dv'), 'BL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Ex-En-Dv'), 'BL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(14, 4, utf8_decode('Precio'), 'TBL'/* BORDE */, 0, 'C');
+        $this->Cell(12, 3, utf8_decode('Precio'), 'TBL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('XPrecio'), 'BL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('XPrecio'), 'BL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('XPrecio'), 'BL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('XPrecio'), 'BL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Pesos'), 'BL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Pesos'), 'BL'/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 4, utf8_decode('Pesos'), 'RBL'/* BORDE */, 0, 'C');
+        $this->Cell(14, 3, utf8_decode('Pesos'), 'RBL'/* BORDE */, 0, 'C');
 
-        $this->SetY(26);
+        $this->SetY(22);
     }
 
     var $widths;

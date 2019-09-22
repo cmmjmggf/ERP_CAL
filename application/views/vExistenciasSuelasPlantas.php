@@ -8,7 +8,7 @@
                 <button type="button" class="btn btn-info btn-sm " id="btnVerArticulos" >
                     <span class="fa fa-cube" ></span> ARTICULOS
                 </button>
-                <button type="button" class="btn btn-warning btn-sm " id="btnImprimirInv" >
+                <button type="button" class="btn btn-warning btn-sm " id="btnImprimirKardex" data-toggle="modal" data-target="#mdlKardexPorArticulo" >
                     <span class="fa fa-file-pdf" ></span> IMPRIMIR KARDEX
                 </button>
             </div>
@@ -67,8 +67,11 @@
     var pnlTablero = $("#pnlTablero");
     var tblExistenciasSuelas = $('#tblExistenciasSuelas');
     var btnVerArticulos = pnlTablero.find('#btnVerArticulos');
+
     var ExistenciasSuelas;
     $(document).ready(function () {
+
+
 
         btnVerArticulos.click(function () {
             $.fancybox.open({
@@ -210,7 +213,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

@@ -59,7 +59,7 @@
                             <th>Ano</th>
                             <th>Tipo</th>
                             <th>Tp</th>
-                            <th>O.C.</th>
+                            <th>OC</th>
                             <th>Proveedor</th>
                             <th>Fecha Orden</th>
                             <th>Artículo</th>
@@ -89,8 +89,7 @@
         /*FUNCIONES INICIALES*/
         init();
         handleEnter();
-        pnlTablero.find("input").val("");
-        $(':input:text:enabled:visible:first').focus();
+
 
         pnlTablero.find('#btnLimpiarFiltros').click(function () {
             pnlTablero.find("input").val("");
@@ -142,6 +141,7 @@
             var tp = pnlTablero.find("#col3_filter").val();
             var tipo = pnlTablero.find("#col2_filter").val();
             getRecords(ano, tp, tipo);
+            pnlTablero.find('#OC').focus();
         });
 
         $('input.column_filter').on('keyup', function () {
@@ -153,13 +153,17 @@
 
         $('#tblCompras tfoot th').each(function () {
             var title = $(this).text();
-            $(this).html('<input class="form-control form-control-sm" type="text" placeholder="Buscar por ' + title + '" />');
+            $(this).html('<input class="form-control form-control-sm" type="text" placeholder="Buscar por ' + title + '"  id="' + title + '"/>');
         });
 
     });
 
     function init() {
         getRecords('', '', '');
+        pnlTablero.find("input").val("");
+        $(':input:text:enabled:visible:first').focus();
+
+
     }
     function getRecords(ano, tp, tipo) {
         temp = 0;
@@ -172,7 +176,7 @@
             tblCompras.DataTable().destroy();
         }
         Compras = tblCompras.DataTable({
-            "dom": 'Brtip',
+            "dom": 'Blrtip',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
@@ -266,8 +270,8 @@
 
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
-            "bLengthChange": false,
+            "displayLength": 10,
+            "bLengthChange": true,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
@@ -347,7 +351,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

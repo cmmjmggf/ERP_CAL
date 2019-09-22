@@ -20,10 +20,24 @@
                             <input type="text" class="form-control form-control-sm date notEnter" id="FechaFin" name="FechaFin" >
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-4">
                             <label>Tp <span class="badge badge-info mb-2" style="font-size: 12px;">Dejar en blanco para todo</span></label>
                             <input type="text" class="form-control form-control-sm  numbersOnly" name="Tp"  id="Tp" maxlength="1" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <label>Grupo</label>
+                            <select class="form-control form-control-sm" id="TipoArticuloComprasFechaArt" name="TipoArticuloComprasFechaArt" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label>Artículo</label>
+                            <select class="form-control form-control-sm" id="ArticuloComprasFechaArt" name="ArticuloComprasFechaArt" >
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -37,12 +51,15 @@
 </div>
 <script>
     var mdlComprasPorFechaPorArticulo = $('#mdlComprasPorFechaPorArticulo');
+
+
     $(document).ready(function () {
         mdlComprasPorFechaPorArticulo.on('shown.bs.modal', function () {
             mdlComprasPorFechaPorArticulo.find("input").val("");
             $.each(mdlComprasPorFechaPorArticulo.find("select"), function (k, v) {
                 mdlComprasPorFechaPorArticulo.find("select")[k].selectize.clear(true);
             });
+            getGruposComprasFechaArt();
             mdlComprasPorFechaPorArticulo.find('#FechaFin').val(getToday());
             mdlComprasPorFechaPorArticulo.find('#FechaIni').focus();
         });
@@ -51,6 +68,20 @@
         mdlComprasPorFechaPorArticulo.find("#Tp").change(function () {
             onVerificarTp($(this));
         });
+
+        mdlComprasPorFechaPorArticulo.find("#TipoArticuloComprasFechaArt").change(function () {
+            mdlComprasPorFechaPorArticulo.find("#ArticuloComprasFechaArt")[0].selectize.clear(true);
+            mdlComprasPorFechaPorArticulo.find("#ArticuloComprasFechaArt")[0].selectize.clearOptions();
+            $.getJSON(base_url + 'index.php/SuelaPlantaCompras/getArticulosByGrupo', {Grupo: $(this).val()}).done(function (data) {
+                $.each(data, function (k, v) {
+                    mdlComprasPorFechaPorArticulo.find("#ArticuloComprasFechaArt")[0].selectize.addOption({text: v.Articulo, value: v.ID});
+                });
+            }).fail(function (x) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+            });
+        });
+
         mdlComprasPorFechaPorArticulo.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlComprasPorFechaPorArticulo.find("#frmCaptura")[0]);
@@ -124,5 +155,16 @@
                 $(v).val('').focus();
             });
         }
+    }
+
+    function getGruposComprasFechaArt() {
+        $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGrupos').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlComprasPorFechaPorArticulo.find("#TipoArticuloComprasFechaArt")[0].selectize.addOption({text: v.Grupo, value: v.ID});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
     }
 </script>

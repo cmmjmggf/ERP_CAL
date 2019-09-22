@@ -73,7 +73,7 @@
             var Art = parseInt(mdlKardexPorProveedor.find('#ProveedorKardex').val());
 
             if (Art > 0) {
-                //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                 var frm = new FormData(mdlKardexPorProveedor.find("#frmCaptura")[0]);
                 var nombre_prov = mdlKardexPorProveedor.find("#ProveedorKardex option:selected").text();
                 frm.append('Nombre', nombre_prov);

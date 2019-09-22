@@ -21,10 +21,6 @@
                             <label>De la maq.</label>
                             <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" id="Maq" name="Maq" >
                         </div>
-                        <div class="col-6">
-                            <label>A la maq.</label>
-                            <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" id="aMaq" name="aMaq" >
-                        </div>
 
                     </div>
                 </form>
@@ -126,10 +122,6 @@
         mdlCuentasPorCobrarMaquilas.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlCuentasPorCobrarMaquilas.find("#aMaq").change(function () {
-            onComprobarMaquilas($(this));
-        });
-
     });
     function onComprobarMaquilas(v) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {

@@ -349,46 +349,45 @@ class ReportesCompras extends CI_Controller {
 
         $cm = $this->ReportesCompras_model;
         $Grupos = $cm->getGruposMovimientosAlmacen($FechaIni, $FechaFin);
-        $Articulos = $cm->getArticulosMovimientosAlmacen($FechaIni, $FechaFin);
+
         if (!empty($Grupos)) {
 
             $pdf = new PDFMovimientosAlmacen('P', 'mm', array(215.9, 279.4));
             $pdf->setFechaFin($FechaFin);
             $pdf->setFechaIni($FechaIni);
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 6);
+            $pdf->SetAutoPageBreak(true, 4);
             $pdf->SetLineWidth(0.2);
 
             foreach ($Grupos as $key => $P) {
 
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->Cell(20, 5, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->Cell(20, 4, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(25);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(50, 5, mb_strimwidth(utf8_decode($P->ClaveGrupo . '    ' . $P->NombreGrupo), 0, 45, ""), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(50, 4, utf8_decode(mb_strimwidth($P->ClaveGrupo . '    ' . $P->NombreGrupo, 0, 45, "")), 'B'/* BORDE */, 1, 'L');
 
                 $pdf->SetLineWidth(0.2);
-                $pdf->SetFont('Calibri', '', 9);
+                $pdf->SetFont('Calibri', '', 8);
+
+                $Articulos = $cm->getArticulosMovimientosAlmacen($FechaIni, $FechaFin, $P->ClaveGrupo);
+
                 foreach ($Articulos as $key => $A) {
-                    if ($P->ClaveGrupo === $A->ClaveGrupo) {
-
-
-                        $pdf->Row(array($A->Clave,
-                            utf8_decode(mb_strimwidth($A->Articulo, 0, 35, "")),
-                            $A->Unidad,
-                            $A->FechaMov,
-                            '$' . number_format($A->PrecioMov, 2, ".", ","),
-                            number_format($A->CantidadMov, 2, ".", ","),
-                            '$' . number_format($A->Subtotal, 2, ".", ","),
-                            $A->DocMov,
-                            $A->TipoMov), 'B');
-                    }
+                    $pdf->SetX(5);
+                    $pdf->Cell(12, 3, $A->Clave . ' ', 'B'/* BORDE */, 0, 'R');
+                    $pdf->Cell(58, 3, utf8_decode(mb_strimwidth($A->Articulo, 0, 40, "")), 'B'/* BORDE */, 0, 'L');
+                    $pdf->Cell(15, 3, $A->Unidad, 'B'/* BORDE */, 0, 'C');
+                    $pdf->Cell(20, 3, $A->FechaMov, 'B'/* BORDE */, 0, 'C');
+                    $pdf->Cell(17, 3, '$' . number_format($A->PrecioMov, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                    $pdf->Cell(22, 3, number_format($A->CantidadMov, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                    $pdf->Cell(22, 3, '$' . number_format($A->Subtotal, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                    $pdf->Cell(25, 3, $A->DocMov, 'B'/* BORDE */, 0, 'R');
+                    $pdf->Cell(15, 3, $A->TipoMov, 'B'/* BORDE */, 1, 'L');
                 }
-                $pdf->SetY($pdf->GetY() + 4);
+                $pdf->SetY($pdf->GetY() + 2);
             }
-
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Almacen';
@@ -869,9 +868,12 @@ class ReportesCompras extends CI_Controller {
         $FechaFin = $this->input->post('FechaFin');
         $Tp = $this->input->post('Tp');
 
+        $Grupo = $this->input->post('TipoArticuloComprasFechaArt');
+        $Articulo = $this->input->post('ArticuloComprasFechaArt');
+
         $cm = $this->ReportesCompras_model;
-        $Grupos = $cm->getGruposReporte($FechaIni, $FechaFin, $Tp);
-        $Articulos = $cm->getArticulosReporte($FechaIni, $FechaFin, $Tp);
+        $Grupos = $cm->getGruposReporte($FechaIni, $FechaFin, $Tp, $Grupo, $Articulo);
+        $Articulos = $cm->getArticulosReporte($FechaIni, $FechaFin, $Tp, $Grupo, $Articulo);
         if (!empty($Grupos)) {
 
             $pdf = new PDFComprasArticulos('P', 'mm', array(215.9, 279.4));
@@ -879,7 +881,7 @@ class ReportesCompras extends CI_Controller {
             $pdf->setFechaIni($FechaIni);
             $pdf->setTp($Tp);
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 6);
+            $pdf->SetAutoPageBreak(true, 4);
             $pdf->SetLineWidth(0.2);
 
             $Total_G = 0;
@@ -887,11 +889,11 @@ class ReportesCompras extends CI_Controller {
 
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->Cell(15, 5, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 8.5);
+                $pdf->Cell(15, 4, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(38, 5, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 8.5);
+                $pdf->Cell(38, 4, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
 
 
                 $Total_M = 0;
@@ -905,13 +907,13 @@ class ReportesCompras extends CI_Controller {
 
                         $Porcentaje = ($D->Cantidad / $TotalGrupo) * 100;
 
-                        $pdf->SetFont('Calibri', '', 9);
+                        $pdf->SetFont('Calibri', '', 8.5);
 
-                        $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 15/* 3 */, 15/* 4 */);
+                        $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 18/* 3 */, 18/* 4 */);
                         $aligns = array('R', 'L', 'C', 'R', 'R');
                         $pdf->SetAligns($aligns);
                         $pdf->SetWidths($anchos);
-                        $pdf->Row(array($D->Clave, $D->Descripcion, $D->Unidad, number_format($D->Cantidad, 2, ".", ","), number_format($Porcentaje, 2, ".", ",")), 'B');
+                        $pdf->Row(array($D->Clave, utf8_decode($D->Descripcion), $D->Unidad, number_format($D->Cantidad, 2, ".", ","), number_format($Porcentaje, 2, ".", ",")), 'B');
 
                         $Total_M += $D->Cantidad;
                         $Total_G += $D->Cantidad;
@@ -921,8 +923,8 @@ class ReportesCompras extends CI_Controller {
 
                 /* Total por articulo */
                 $pdf->SetX(70);
-                $pdf->SetFont('Calibri', 'B', 9);
-                $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 15/* 3 */, 15/* 4 */);
+                $pdf->SetFont('Calibri', 'B', 8.5);
+                $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 18/* 3 */, 18/* 4 */);
                 $aligns = array('R', 'R', 'C', 'R', 'C');
                 $pdf->SetAligns($aligns);
                 $pdf->SetWidths($anchos);
@@ -930,8 +932,8 @@ class ReportesCompras extends CI_Controller {
             }
             /* Total general */
             $pdf->SetX(70);
-            $pdf->SetFont('Calibri', 'B', 9);
-            $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 15/* 3 */, 15/* 4 */);
+            $pdf->SetFont('Calibri', 'B', 8.5);
+            $anchos = array(12/* 1 */, 118/* 2 */, 15/* 3 */, 18/* 3 */, 18/* 4 */);
             $aligns = array('R', 'R', 'C', 'R', 'C');
             $pdf->SetAligns($aligns);
             $pdf->SetWidths($anchos);

@@ -18,13 +18,12 @@ class ReporteCuentasPorCobrarMaquilas extends CI_Controller {
     public function onReporteCtasPorCobrarMaquilas() {
         $Año = $this->input->post('Ano');
         $Maq = $this->input->post('Maq');
-        $aMaq = $this->input->post('aMaq');
 
 
         $cm = $this->ReporteCuentasPorCobrarMaquilas_model;
-        $Maquilas = $cm->getMaquilasReporte($Maq, $aMaq, $Año);
-        $Semanas = $cm->getSemanasReporte($Maq, $aMaq, $Año);
-        $Doctos = $cm->getDoctosReporte($Maq, $aMaq, $Año);
+        $Maquilas = $cm->getMaquilasReporte($Maq, $Año);
+        $Semanas = $cm->getSemanasReporte($Maq, $Año);
+        $Doctos = $cm->getDoctosReporte($Maq, $Año);
 
         if (!empty($Maquilas)) {
 

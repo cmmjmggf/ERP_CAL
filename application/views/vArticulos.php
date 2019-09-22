@@ -190,7 +190,7 @@
                 </select>
             </div>
             <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
-                <label for="Precio" >Precio Maquila uno*</label>
+                <label for="Precio" >Precio Maquila*</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" id="Precio" name="Precio" required placeholder="0.0">
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 my-2 d-sm-block pt-3">

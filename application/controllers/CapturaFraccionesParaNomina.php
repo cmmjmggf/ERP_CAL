@@ -232,7 +232,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
 
             $this->db->insert('avance', array(
                 'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'FechaAvance' => Date('Y-m-d h:i:s'),
+                'FechaAvance' => Date('d/m/Y'),
                 'Departamento' => ($x->post('DeptoClave') !== NULL) ? $x->post('DeptoClave') : NULL,
                 'DepartamentoT' => ($x->post('DeptoNombre') !== NULL) ? $x->post('DeptoNombre') : NULL,
                 'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,

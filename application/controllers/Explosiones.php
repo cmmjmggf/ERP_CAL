@@ -102,7 +102,7 @@ class Explosiones extends CI_Controller {
                                         if ($Exp_Acum > 0) {
                                             $pdf->Row(array(
                                                 utf8_decode($D->Articulo),
-                                                mb_strimwidth(utf8_decode($D->Descripcion), 0, 40, ""),
+                                                utf8_decode(mb_strimwidth($D->Descripcion, 0, 40, "")),
                                                 utf8_decode($D->Unidad),
                                                 $Talla,
                                                 number_format($Exp_Acum, 2, ".", ","),
@@ -117,7 +117,7 @@ class Explosiones extends CI_Controller {
                                         if ($Exp_Acum > 0) {
                                             $pdf->Row(array(
                                                 utf8_decode($D->Articulo),
-                                                mb_strimwidth(utf8_decode($D->Descripcion), 0, 40, ""),
+                                                utf8_decode(mb_strimwidth($D->Descripcion, 0, 40, "")),
                                                 utf8_decode($D->Unidad),
                                                 $Talla,
                                                 number_format($Exp_Acum, 2, ".", ","),
@@ -303,7 +303,7 @@ class Explosiones extends CI_Controller {
                                 $PorcentajeSuelas = ($Tipo === '80') ? number_format($Porcentaje, 2, ".", ",") . '%' : '';
                                 $pdf->Row(array(
                                     utf8_decode($D->Articulo),
-                                    mb_strimwidth(utf8_decode($D->Descripcion), 0, 45, ""),
+                                    utf8_decode(mb_strimwidth($D->Descripcion, 0, 42, "")),
                                     utf8_decode($D->Clasificacion),
                                     utf8_decode($D->Unidad),
                                     number_format($ExplosionCant, 2, ".", ","),

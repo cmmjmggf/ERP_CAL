@@ -79,12 +79,12 @@ class PDEntSalContables extends FPDF {
 
         $this->SetY(7);
         $this->SetX(245);
-        $this->SetFont('Calibri', 'B', 9);
+        $this->SetFont('Calibri', 'B', 8);
         $this->Cell(30, 4, utf8_decode("Fecha: " . date("d-m-Y     h:i:s a")), 0/* BORDE */, 1, 'R');
         $this->AliasNbPages(' {totalPages}');
 
         /* Primer Renglon de Titulos */
-        $this->SetY(19);
+        $this->SetY(16);
         $this->SetX(123);
 
 
@@ -92,7 +92,7 @@ class PDEntSalContables extends FPDF {
         $this->Cell(28, 4, 'Existencia', 'TLR'/* BORDE */, 0, 'C');
 
         /* Segundo Renglon de Titulos */
-        $this->SetY(23);
+        $this->SetY(20);
         $this->SetX(5);
 
         $this->Cell(40, 4, utf8_decode('Artículo'), 'B'/* BORDE */, 0, 'L');

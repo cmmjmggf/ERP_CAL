@@ -101,6 +101,7 @@ class Proveedores extends CI_Controller {
                 'DctoProntoPago' => ($DctoProntoPago !== NULL) ? $DctoProntoPago : NULL,
                 'DiasProntoPago' => ($DiasProntoPago !== NULL) ? $DiasProntoPago : NULL,
                 'Correo' => ($Correo !== NULL) ? $Correo : NULL,
+                'Contacto' => ($Contacto !== NULL) ? $Contacto : NULL,
                 'PorcentajeComprasPorPedidoF' => ($PorcentajeComprasPorPedidoF !== NULL) ? $PorcentajeComprasPorPedidoF : NULL,
                 'PorcentajeComprasPorPedidoR' => ($PorcentajeComprasPorPedidoR !== NULL) ? $PorcentajeComprasPorPedidoR : NULL,
                 'Estatus' => 'ACTIVO'
@@ -132,6 +133,7 @@ class Proveedores extends CI_Controller {
                 'DctoProntoPago' => ($DctoProntoPago !== NULL) ? $DctoProntoPago : NULL,
                 'DiasProntoPago' => ($DiasProntoPago !== NULL) ? $DiasProntoPago : NULL,
                 'Correo' => ($Correo !== NULL) ? $Correo : NULL,
+                'Contacto' => ($Contacto !== NULL) ? $Contacto : NULL,
                 'PorcentajeComprasPorPedidoF' => ($PorcentajeComprasPorPedidoF !== NULL) ? $PorcentajeComprasPorPedidoF : NULL,
                 'PorcentajeComprasPorPedidoR' => ($PorcentajeComprasPorPedidoR !== NULL) ? $PorcentajeComprasPorPedidoR : NULL,
             );

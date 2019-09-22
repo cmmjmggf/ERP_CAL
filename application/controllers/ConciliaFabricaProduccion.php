@@ -21,43 +21,72 @@ class ConciliaFabricaProduccion extends CI_Controller {
         $Sem = $this->input->post('Sem');
         $Ano = $this->input->post('Ano');
 
+
         $this->db->query("TRUNCATE TABLE concilias_temp ");
         //Obtenemos todas las salidas a maquilas de movarticulos einsertamos a tabla temporal del reporte
-        $Entregado = $cm->getMatEntregado($Ano, $Sem, $Maq);
-        $Precio = 0;
-        foreach ($Entregado as $key => $D) {
+        $this->db->query("
+                INSERT INTO concilias_temp
+                (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
+                SELECT
+                A.Grupo,
+                A.Clave AS Articulo,
+                U.Descripcion AS Unidad,
+                '' as Talla,
+                0 as Explosion,
+                CASE WHEN MA.TipoMov in ('SXM', 'SPR', 'SXP', 'SXC') THEN sum(ifnull(MA.CantidadMov, 0)) ELSE 0 END as CantidadEntregada,
+                CASE WHEN MA.TipoMov in ('EDV') THEN sum(ifnull(MA.CantidadMov, 0)) ELSE 0 END as Devolucion,
+                CASE WHEN $T_Precio = 1 THEN PM.Precio ELSE MA.PrecioMov END as Precio
 
-            $Precio = ($T_Precio === '1') ? $D->PrecioActual : $D->PrecioMov;
+                FROM articulos A
+                JOIN movarticulos MA ON MA.Articulo = A.Clave
+                JOIN unidades U ON U.Clave = A.UnidadMedida
+                JOIN preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = '$Maq'
+                WHERE MA.TipoMov IN('SXM', 'SPR', 'SXP', 'SXC', 'EDV')
+                AND MA.Ano = '$Ano'
+                AND MA.Sem = '$Sem'
+                AND MA.Maq = '$Maq'
+                GROUP BY A.Clave, A.Descripcion, MA.tipomov
+                ORDER BY A.Descripcion ASC; ");
+        //Obtenemos la explosión de materiales sin suela ni planta y los guardamos en concilias_temp
+        $this->db->query("
+                INSERT INTO concilias_temp
+                (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
+                SELECT
+                CAST(A.Grupo AS SIGNED) AS ClaveGrupo,
+                FT.Articulo,
+                U.Descripcion AS Unidad,
+                '' as Talla,
+                CASE WHEN A.Grupo in ('1', '2') THEN
+                (PE.Pares *  SUM(FT.Consumo)) *
+                (CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
+                WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
+                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1)
+                ELSE (PE.Pares *  SUM(FT.Consumo)) END AS Explosion,
+                0 as dev,
+                0 as ent,
+                PM.Precio
+                FROM `pedidox` `PE`
+                JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
+                JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='$Maq'
+                JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
+                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                WHERE `A`.`Grupo` NOT IN('3', '50', '52')
+                AND `PE`.`Maquila` = '$Maq'
+                AND `PE`.`Semana` = '$Sem'
+                AND `PE`.`Ano` = '$Ano'
+                AND `PE`.`Estatus` = 'A'
+                AND `PE`.`Control` <> 0
+                AND PE.Control IS NOT NULL
+                GROUP BY `A`.`Clave`
+                ORDER BY `ClaveGrupo` ASC, `A`.`Descripcion` ASC ");
 
-            //Insertamos la explosion en la tabla temporal
-            $this->db->insert("concilias_temp", array(
-                'Grupo' => $D->Grupo,
-                'Articulo' => $D->Articulo,
-                'Unidad' => $D->Unidad,
-                'Talla' => '',
-                'Explosion' => 0,
-                'Entregado' => $D->CantidadEntregada,
-                'Devuelto' => $D->Devolucion,
-                'Precio' => $Precio
-            ));
-        }
-        $Explosion_normal = $cm->getExplosionNormal($Ano, $Sem, $Maq);
-        foreach ($Explosion_normal as $key => $D) {
 
-            //Insertamos la explosion en la tabla temporal
-            $this->db->insert("concilias_temp", array(
-                'Grupo' => $D->ClaveGrupo,
-                'Articulo' => $D->Articulo,
-                'Unidad' => $D->Unidad,
-                'Talla' => '',
-                'Explosion' => $D->Explosion,
-                'Entregado' => 0,
-                'Devuelto' => 0,
-                'Precio' => $D->Precio
-            ));
-        }
         //Realizacion de consulta a cabeceros para insertarlos
         $Explosion_tallas = $cm->getExplosionTallas($Ano, $Sem, $Maq);
+
 
         foreach ($Explosion_tallas as $key => $D) {
 
@@ -71,30 +100,15 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 } else if ($D->{"A$sig"} === '0') {
                     $Exp_Acum += $D->{"C$sig"};
                     if ($Exp_Acum > 0) {
-
-                        $this->db->insert("concilias_temp", array(
-                            'Grupo' => $D->Grupo,
-                            'Articulo' => $D->{"A$i"},
-                            'Unidad' => $D->Unidad,
-                            'Talla' => $Talla,
-                            'Explosion' => $Exp_Acum,
-                            'Entregado' => 0,
-                            'Devuelto' => 0,
-                            'Precio' => $D->Precio
-                        ));
+                        $Articulo = $D->{"A$i"};
+                        $this->db->query("INSERT INTO concilias_temp (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio) "
+                                . " VALUES ($D->Grupo,$Articulo,'$D->Unidad',$Talla,$Exp_Acum,0,0,$D->Precio) ");
                     }
                 } else {
                     if ($Exp_Acum > 0) {
-                        $this->db->insert("concilias_temp", array(
-                            'Grupo' => $D->Grupo,
-                            'Articulo' => $D->{"A$i"},
-                            'Unidad' => $D->Unidad,
-                            'Talla' => $Talla,
-                            'Explosion' => $Exp_Acum,
-                            'Entregado' => 0,
-                            'Devuelto' => 0,
-                            'Precio' => $D->Precio
-                        ));
+                        $Articulo = $D->{"A$i"};
+                        $this->db->query("INSERT INTO concilias_temp (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio) "
+                                . " VALUES ($D->Grupo,$Articulo,'$D->Unidad',$Talla,$Exp_Acum,0,0,$D->Precio) ");
                     }
                     $Talla = $D->{"T$sig"};
                     $Exp_Acum = $D->{"C$sig"};
@@ -105,15 +119,16 @@ class ConciliaFabricaProduccion extends CI_Controller {
         $Grupos = $cm->getGruposReporte();
         $Articulos = $cm->getDetalleReporte();
 
+
         if (!empty($Grupos)) {
 
-            $pdf = new Concilias('L', 'mm', array(215.9, 279.4));
+            $pdf = new Concilias('P', 'mm', array(215.9, 279.4));
             $pdf->Maq = $Maq;
             $pdf->Sem = $Sem;
             $pdf->Ano = $Ano;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 6);
+            $pdf->SetAutoPageBreak(true, 4);
 
             $GT_Explosion = 0;
             $GT_Entregado = 0;
@@ -129,11 +144,11 @@ class ConciliaFabricaProduccion extends CI_Controller {
 
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(15, 4, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 7);
+                $pdf->Cell(15, 3, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(38, 4, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 7);
+                $pdf->Cell(38, 3, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
 
                 $pdf->SetLineWidth(0.2);
 
@@ -154,36 +169,36 @@ class ConciliaFabricaProduccion extends CI_Controller {
                         $Diferencia_Pesos = ($D->Explosion * $D->Precio) - ($D->Entregado * $D->Precio) + ($D->Devuelto * $D->Precio);
 
 
-                        $pdf->SetFont('Calibri', '', 8);
+                        $pdf->SetFont('Calibri', '', 7);
                         $pdf->SetX(5);
-                        $pdf->Cell(10, 3, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->Cell(8, 3, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(60, 3, mb_strimwidth(utf8_decode($D->Descripcion), 0, 38, ""), 'B'/* BORDE */, 0, 'L');
+                        $pdf->Cell(42, 3, utf8_decode(mb_strimwidth($D->Descripcion, 0, 34, "")), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12.5, 3, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
+                        $pdf->Cell(10, 3, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12.5, 3, ($D->Talla <> 0) ? number_format($D->Talla, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
-                        $pdf->SetFont('Calibri', 'B', 8);
+                        $pdf->Cell(10, 3, ($D->Talla <> 0) ? number_format($D->Talla, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetFont('Calibri', 'B', 7);
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($D->Explosion <> 0) ? number_format($D->Explosion, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($D->Explosion <> 0) ? number_format($D->Explosion, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($D->Entregado <> 0) ? number_format($D->Entregado, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($D->Entregado <> 0) ? number_format($D->Entregado, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($Diferencia <> 0) ? number_format($Diferencia, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($Diferencia <> 0) ? number_format($Diferencia, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(16, 3, ($D->Devuelto <> 0) ? number_format($D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(12, 3, ($D->Devuelto <> 0) ? number_format($D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($Diferencia + $D->Devuelto <> 0) ? number_format($Diferencia + $D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($Diferencia + $D->Devuelto <> 0) ? number_format($Diferencia + $D->Devuelto, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(13, 3, number_format($D->Precio, 2, ".", ","), 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(12, 3, number_format($D->Precio, 2, ".", ","), 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($D->Explosion * $D->Precio <> 0) ? '$' . number_format($D->Explosion * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($D->Explosion * $D->Precio <> 0) ? '$' . number_format($D->Explosion * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($D->Entregado * $D->Precio <> 0) ? '$' . number_format($D->Entregado * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($D->Entregado * $D->Precio <> 0) ? '$' . number_format($D->Entregado * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($D->Devuelto * $D->Precio <> 0) ? '$' . number_format($D->Devuelto * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3, ($D->Devuelto * $D->Precio <> 0) ? '$' . number_format($D->Devuelto * $D->Precio, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3, ($Diferencia_Pesos <> 0) ? '$' . number_format($Diferencia_Pesos, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
+                        $pdf->Cell(14, 3, ($Diferencia_Pesos <> 0) ? '$' . number_format($Diferencia_Pesos, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
 
 
                         $GT_Explosion += $D->Explosion;
@@ -207,58 +222,58 @@ class ConciliaFabricaProduccion extends CI_Controller {
                         $T_Dif_P += $Diferencia_Pesos;
                     }
                 }
-                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetFont('Calibri', 'B', 7);
                 $pdf->SetX(5);
-                $pdf->Cell(60, 4, '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(35, 3, '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(34, 4, 'Totales por Grupo:', 0/* BORDE */, 0, 'L');
+                $pdf->Cell(35, 3, 'Totales por Grupo:', 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Explosion <> 0) ? number_format($T_Explosion, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Explosion <> 0) ? number_format($T_Explosion, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Entregado <> 0) ? number_format($T_Entregado, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Entregado <> 0) ? number_format($T_Entregado, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Diferencia <> 0) ? number_format($T_Diferencia, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Diferencia <> 0) ? number_format($T_Diferencia, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(16, 4, ($T_Devol <> 0) ? number_format($T_Devol, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(12, 3, ($T_Devol <> 0) ? number_format($T_Devol, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Dif_Ex_En_Dv <> 0) ? number_format($T_Dif_Ex_En_Dv, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Dif_Ex_En_Dv <> 0) ? number_format($T_Dif_Ex_En_Dv, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(14, 4, '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(12, 3, '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Explosion_P <> 0) ? '$' . number_format($T_Explosion_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Explosion_P <> 0) ? '$' . number_format($T_Explosion_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Entregado_P <> 0) ? '$' . number_format($T_Entregado_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Entregado_P <> 0) ? '$' . number_format($T_Entregado_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Devol_P <> 0) ? '$' . number_format($T_Devol_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 3, ($T_Devol_P <> 0) ? '$' . number_format($T_Devol_P, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($T_Dif_P <> 0) ? '$' . number_format($T_Dif_P, 2, ".", ",") : '', 0/* BORDE */, 1, 'R');
+                $pdf->Cell(14, 3, ($T_Dif_P <> 0) ? '$' . number_format($T_Dif_P, 2, ".", ",") : '', 0/* BORDE */, 1, 'R');
             }
 
-            $pdf->SetFont('Calibri', 'B', 9);
+            $pdf->SetFont('Calibri', 'B', 7);
             $pdf->SetX(5);
-            $pdf->Cell(60, 5, '', 0/* BORDE */, 0, 'R');
+            $pdf->Cell(35, 5, '', 0/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(35, 5, 'Total Semana Maquila:', 'T'/* BORDE */, 0, 'L');
+            $pdf->Cell(35, 3, 'Total Semana Maquila:', 'T'/* BORDE */, 0, 'L');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Explosion <> 0) ? number_format($GT_Explosion, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Explosion <> 0) ? number_format($GT_Explosion, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Entregado <> 0) ? number_format($GT_Entregado, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Entregado <> 0) ? number_format($GT_Entregado, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Diferencia <> 0) ? number_format($GT_Diferencia, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Diferencia <> 0) ? number_format($GT_Diferencia, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(16, 5, ($GT_Devol <> 0) ? number_format($GT_Devol, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(12, 3, ($GT_Devol <> 0) ? number_format($GT_Devol, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Dif_Ex_En_Dv <> 0) ? number_format($GT_Dif_Ex_En_Dv, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Dif_Ex_En_Dv <> 0) ? number_format($GT_Dif_Ex_En_Dv, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(14, 5, '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(12, 3, '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Explosion_P <> 0) ? '$' . number_format($GT_Explosion_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Explosion_P <> 0) ? '$' . number_format($GT_Explosion_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Entregado_P <> 0) ? '$' . number_format($GT_Entregado_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Entregado_P <> 0) ? '$' . number_format($GT_Entregado_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Devol_P <> 0) ? '$' . number_format($GT_Devol_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(14, 3, ($GT_Devol_P <> 0) ? '$' . number_format($GT_Devol_P, 2, ".", ",") : '', 'T'/* BORDE */, 0, 'R');
             $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 5, ($GT_Dif_P <> 0) ? '$' . number_format($GT_Dif_P, 2, ".", ",") : '', 'T'/* BORDE */, 1, 'R');
+            $pdf->Cell(14, 3, ($GT_Dif_P <> 0) ? '$' . number_format($GT_Dif_P, 2, ".", ",") : '', 'T'/* BORDE */, 1, 'R');
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Explosion';
