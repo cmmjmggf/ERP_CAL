@@ -135,12 +135,14 @@
     }
 
     /*Hacer todo el texto de los inputs mayusculas*/
-    input {
+
+    input:not(.notEnter) {
         text-transform: uppercase;
     }
-    textarea  {
+    textarea:not(.notEnter)  {
         text-transform: uppercase;
     }
+
     ::-webkit-input-placeholder { /* WebKit browsers */
         text-transform: none;
     }
@@ -387,7 +389,7 @@
         background-color: #3F51B5;
         border-color: #3F51B5;
         box-shadow: 0 0 0 0.2rem #CDDC39 !important;
-    } 
+    }
     .btn-green {
         color: #fff;
         background-color: #4CAF50;
@@ -400,10 +402,10 @@
     }
     .btn-black{
         color: #ffffff;
-        background-color: #000000; 
+        background-color: #000000;
         border: solid 2px #fff;
     }
-    .btn-black-o{ 
+    .btn-black-o{
         color: #000000;
         background-color: #ffffff;
         border: solid 2px #191919;
