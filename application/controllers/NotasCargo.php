@@ -232,6 +232,19 @@ class NotasCargo extends CI_Controller {
         }
     }
 
+    /* Documentos compras por tp-proveedor */
+
+    public function getDocsByTpByProveedor() {
+        try {
+            $tp = $this->input->get('Tp');
+            $prov = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select distinct(Doc) as Doc from compras "
+                                    . " where proveedor = $prov and tp = $tp order by Doc ASC ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getNotasByTpByProveedor() {
         try {
             print json_encode($this->NotasCargo_model->getNotasByTpByProveedor($this->input->get('Tp'), $this->input->get('Proveedor')));

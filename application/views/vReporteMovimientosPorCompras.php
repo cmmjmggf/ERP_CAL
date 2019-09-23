@@ -17,17 +17,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
-                            <label>Doc</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" id="Doc" name="Doc" >
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-6">
                             <label for="" >Proveedor*</label>
                             <select id="Proveedor" name="Proveedor" class="form-control form-control-sm mb-2 required" required="" >
                                 <option value=""></option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Doc</label>
+                            <select id="Doc" name="Doc" class="form-control form-control-sm mb-2 required" required="" >
+                                <option value=""></option>
+                            </select>
+
                         </div>
                     </div>
                 </form>
@@ -109,7 +112,7 @@
         mdlReporteMovimientosPorCompras.find("#TpDoc").change(function () {
             var tp = parseInt($(this).val());
             if (tp === 1 || tp === 2) {
-                mdlReporteMovimientosPorCompras.find('#Doc').focus();
+                mdlReporteMovimientosPorCompras.find("#Proveedor")[0].selectize.focus();
                 getProveedoresEntComp(tp);
             } else {
                 swal({
@@ -124,6 +127,49 @@
                     $(this).val('').focus();
                 });
             }
+        });
+
+        mdlReporteMovimientosPorCompras.find("#Proveedor").change(function () {
+            var tp = mdlReporteMovimientosPorCompras.find("#TpDoc").val();
+            $.getJSON(base_url + 'index.php/NotasCargo/getDocsByTpByProveedor', {
+                Tp: tp,
+                Proveedor: $(this).val()
+            }).done(function (data) {
+                mdlReporteMovimientosPorCompras.find("#Doc")[0].selectize.clear(true);
+                mdlReporteMovimientosPorCompras.find("#Doc")[0].selectize.clearOptions();
+                if (data.length > 0) {//Existe
+                    $.each(data, function (k, v) {
+                        mdlReporteMovimientosPorCompras.find("#Doc")[0].selectize.addOption({text: v.Doc, value: v.Doc});
+                    });
+                    mdlReporteMovimientosPorCompras.find("#Doc")[0].selectize.open();
+                } else {//NO TIENE DOCUMENTOS
+                    $.notify({
+                        // options
+                        icon: 'fa fa-exclamation',
+                        title: 'Atención',
+                        message: 'PROVEEDOR/TP NO TIENE DOCUMENTOS'
+                    }, {
+                        // settings
+                        type: 'danger',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        showProgressbar: false,
+                        delay: 3000,
+                        timer: 1000,
+                        placement: {
+                            from: "bottom",
+                            align: "left"
+                        },
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        }
+                    });
+                }
+            }).fail(function (x, y, z) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+            });
         });
 
 

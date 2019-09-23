@@ -35,15 +35,15 @@ class ReportesCompras_model extends CI_Model {
                     ->from("compras C")
                     ->join("articulos A", 'ON A.Clave =  C.Articulo')
                     ->join("grupos G", "ON G.Clave = A.Grupo ")
-                    ->where("C.Estatus", 'CONCLUIDA')
-                    ->like("C.Tp ", $Tp);
+                    ->where("C.Estatus", 'CONCLUIDA');
 
+            if ($Tp !== '') {
+                $this->db->where("C.Tp ", $Tp);
+            }
             if ($Grupo !== '') {
                 $this->db->where("A.Grupo ", $Grupo);
             }
-
             if ($Articulo !== '') {
-
                 $this->db->where("C.Articulo ", $Articulo);
             }
 
@@ -64,8 +64,11 @@ class ReportesCompras_model extends CI_Model {
                     ->from("compras C")
                     ->join("articulos A", 'ON A.Clave =  C.Articulo')
                     ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
-                    ->where("C.Estatus", 'CONCLUIDA')
-                    ->like("C.Tp ", $Tp);
+                    ->where("C.Estatus", 'CONCLUIDA');
+
+            if ($Tp !== '') {
+                $this->db->where("C.Tp ", $Tp);
+            }
             if ($Grupo !== '') {
                 $this->db->where("A.Grupo ", $Grupo);
             }
