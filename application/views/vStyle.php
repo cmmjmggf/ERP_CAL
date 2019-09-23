@@ -418,4 +418,11 @@
         border: solid 2px #191919;
         font-weight: bold !important;
     }
+    .fancybox-show-nav .fancybox-arrow {
+        opacity: 1 !important;
+    }
+    .fancybox-arrow:after {
+        background-color: #8BC34A !important
+        background-size: 36px 36px !important;
+    }
 </style>

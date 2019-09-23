@@ -154,18 +154,45 @@ class DevolucionesDeClientes extends CI_Controller {
 
     public function onImprimirRepNormal() {
         try {
+            $reports = array();
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $P = array();
-            $P["logo"] = base_url() . $this->session->LOGO;
-            $P["empresa"] = $this->session->EMPRESA_RAZON;
-            $P["FECHA_INICIAL"] = $this->input->post('FECHA_INICIAL');
-            $P["FECHA_FINAL"] = $this->input->post('FECHA_FINAL'); 
+            $x = $this->input->post();
+            $P = array(
+                "logo" => base_url() . $this->session->LOGO,
+                "empresa" => $this->session->EMPRESA_RAZON,
+                "FECHA_INICIAL" => $x["FECHA_INICIAL"],
+                "FECHA_FINAL" => $x["FECHA_FINAL"],
+            );
+            /* 1. REPORTE AGRUPADO POR CLASIFICACIÓN */
             $jc->setParametros($P);
             $jc->setJasperurl('jrxml\facturacion\devolnapl.jasper');
-            $jc->setFilename('DEV_NORMAL_' . Date('h_i_s'));
+            $jc->setFilename('DEV_X_CLASIFICACION_' . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
-            print $jc->getReport();
+            $reports["1UNO"] = $jc->getReport();
+
+            /* 2. REPORTE AGRUPADO POR MAQUILA */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\facturacion\devolnaplm.jasper');
+            $jc->setFilename('DEV_X_MAQUILA_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['2DOS'] = $jc->getReport();
+
+            /* 3. REPORTE AGRUPADO CARGO UNO (cargoa = 1) */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\facturacion\devolnaplp.jasper');
+            $jc->setFilename('DEV_CON_CARGO_PARA_VTA_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['3TRES'] = $jc->getReport();
+
+            /* 4. REPORTE AGRUPADO CARGO CERO (cargoa = 0, Cargo a = NO) */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\facturacion\devolnapl0.jasper');
+            $jc->setFilename('DEV_SIN_CARGO_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['4CUATRO'] = $jc->getReport();
+
+            print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

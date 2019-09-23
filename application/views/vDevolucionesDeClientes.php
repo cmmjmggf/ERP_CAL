@@ -285,32 +285,32 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="rNormalDev" name="Reporte" class="custom-control-input">
+                                        <input type="radio" id="rNormalDev" name="Reporte" class="custom-control-input" valor="1">
                                         <label class="custom-control-label text-info" for="rNormalDev">Normal</label>
                                     </div> 
                                 </div>
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="rPorClienteDev" name="Reporte" class="custom-control-input">
+                                        <input type="radio" id="rPorClienteDev" name="Reporte" class="custom-control-input" valor="2">
                                         <label class="custom-control-label text-danger" for="rPorClienteDev">Por cliente</label>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="rPorMaquilaDev" name="Reporte" class="custom-control-input">
+                                        <input type="radio" id="rPorMaquilaDev" name="Reporte" class="custom-control-input" valor="3">
                                         <label class="custom-control-label text-info" for="rPorMaquilaDev">Por maquila</label>
 
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="rPorDefectoDetalleDev" name="Reporte" class="custom-control-input">
+                                        <input type="radio" id="rPorDefectoDetalleDev" name="Reporte" class="custom-control-input" valor="4">
                                         <label class="custom-control-label text-danger" for="rPorDefectoDetalleDev">Por defecto detalle</label>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="rAgtCteDepDefeDetaDev" name="Reporte" class="custom-control-input">
+                                        <input type="radio" id="rAgtCteDepDefeDetaDev" name="Reporte" class="custom-control-input" valor="5">
                                         <label class="custom-control-label text-info" for="rAgtCteDepDefeDetaDev">Por Agt.Cte.Dep.Defe.Deta</label>
                                     </div>
                                 </div>
@@ -373,18 +373,32 @@
         handleEnterDiv(pnlTablero);
 
         btnAceptaReporteDevolucion.click(function () {
-            onOpenOverlay('');
-            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>',
-                    {
-                        FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
-                        FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
-                    }).done(function (a) {
-                onImprimirReporteFancy(a);
-            }).fail(function (x, y, z) {
-                getError(x);
-            }).always(function () {
-                onCloseOverlay();
-            });
+            if (DeLaFechaDev.val() && ALaFechaDev.val()) {
+                if (mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') !== undefined) {
+                    onOpenOverlay('');
+                    $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>',
+                            {
+                                FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
+                                FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
+                            }).done(function (aaa) {
+                        if (aaa.length > 0) {
+                            onImprimirReporteFancyArray(JSON.parse(aaa));
+                        }
+                    }).fail(function (x, y, z) {
+                        getError(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    iMsg("DEBE DE ESPECIFICAR UN TIPO DE REPORTE", 'w', function () {
+
+                    });
+                }
+            } else {
+                iMsg("DEBE DE ESPECIFICAR LAS FECHAS", 'w', function () {
+                    DeLaFechaDev.focus().select();
+                });
+            }
         });
 
         btnReportesDev.click(function () {
