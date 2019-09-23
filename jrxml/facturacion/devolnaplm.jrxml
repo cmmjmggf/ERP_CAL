@@ -36,7 +36,7 @@ D.staapl AS STATUS_APLICADA, (CASE WHEN D.cargoa = 0 THEN "NO" WHEN D.cargoa = 1
 FROM devolucionnp as D INNER JOIN clientes AS C ON D.cliente = C.Clave
 INNER JOIN pedidox AS P ON D.cliente = P.Cliente AND D.comb = P.Color AND D.estilo = P.Estilo AND D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
-AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")) AND YEAR(str_to_date($P{FECHA_FINAL},"%d/%m/%Y")) ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
+AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")) AND YEAR(str_to_date($P{FECHA_FINAL},"%d/%m/%Y")) AND D.cargoa = 2 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 	</queryString>
 	<field name="PRECIO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
