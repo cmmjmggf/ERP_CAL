@@ -241,7 +241,7 @@
 
 
 
-        $('.modal-dialog').draggable();
+        $('.modal-dialog:not(.notdraggable)').draggable();
         $('.modal-content').resizable({
             minHeight: 300,
             minWidth: 450

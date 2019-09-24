@@ -259,7 +259,7 @@
 </div>
 
 <div class="modal" id="mdlReportesDevoluciones">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Devoluciones no aplicadas ni facturadas</h5>
@@ -387,6 +387,8 @@
                             /*1 = NORMAL (4 REPORTES)*/
                             onOpenOverlay('');
                             $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
+                                 
+
                                 if (aaa.length > 0) {
                                     onImprimirReporteFancyArray(JSON.parse(aaa));
                                 }
@@ -398,16 +400,19 @@
                             break;
                         case 2:
                             /* 2 = POR CLIENTE*/
-                            onOpenOverlay('');
-                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirReportePorCliente'); ?>', p).done(function (aaa) {
-                                if (aaa.length > 0) {
-                                    onImprimirReporteFancy(aaa);
-                                }
-                            }).fail(function (x, y, z) {
-                                getError(x);
-                            }).always(function () {
-                                onCloseOverlay();
-                            });
+                            onMostraReporte('onImprimirReportePorCliente', p);
+                            break;
+                        case 3:
+                            /* 3 = POR MAQUILA*/
+                            onMostraReporte('onImprimirReportePorMaquila', p);
+                            break;
+                        case 4:
+                            /* 4 = POR DEFECTO DETALLE*/
+                            onMostraReporte('onImprimirReportePorDefectoDetalle', p);
+                            break;
+                        case 5:
+                            /* 5 = POR AGENTE, POR CLIENTE, POR DEPARTAMENTO, POR DEFECTO Y DETALLE*/
+                            onMostraReporte('onImprimirReportePorAgenteClienteDepartamentoDefectoDetalle', p);
                             break;
                     }
                 } else {
@@ -848,6 +853,19 @@
             btnAcepta.attr('disabled', true);
             btnReportes.attr('disabled', true);
         }
+    }
+
+    function onMostraReporte(url, p) {
+        onOpenOverlay('');
+        $.post('<?php print base_url('DevolucionesDeClientes/'); ?>' + url, p).done(function (aaa) {
+            if (aaa.length > 0) {
+                onImprimirReporteFancy(aaa);
+            }
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
 <style>
