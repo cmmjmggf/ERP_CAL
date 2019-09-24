@@ -198,4 +198,26 @@ class DevolucionesDeClientes extends CI_Controller {
         }
     }
 
+    public function onImprimirReportePorCliente() {
+        try { 
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $x = $this->input->post();
+            $P = array(
+                "logo" => base_url() . $this->session->LOGO,
+                "empresa" => $this->session->EMPRESA_RAZON,
+                "FECHA_INICIAL" => $x["FECHA_INICIAL"],
+                "FECHA_FINAL" => $x["FECHA_FINAL"],
+            );
+            /* 1. REPORTE AGRUPADO POR CLIENTE */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\facturacion\estadvcli.jasper');
+            $jc->setFilename('DEV_X_CLIENTE_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

@@ -373,22 +373,43 @@
         handleEnterDiv(pnlTablero);
 
         btnAceptaReporteDevolucion.click(function () {
+            var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
+            var indice = parseInt(r);
             if (DeLaFechaDev.val() && ALaFechaDev.val()) {
-                if (mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') !== undefined) {
-                    onOpenOverlay('');
-                    $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>',
-                            {
-                                FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
-                                FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
-                            }).done(function (aaa) {
-                        if (aaa.length > 0) {
-                            onImprimirReporteFancyArray(JSON.parse(aaa));
-                        }
-                    }).fail(function (x, y, z) {
-                        getError(x);
-                    }).always(function () {
-                        onCloseOverlay();
-                    });
+                var p = {
+                    FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
+                    FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
+                };
+                console.log("INDICE => " + indice);
+                if (indice) {
+                    switch (indice) {
+                        case 1:
+                            /*1 = NORMAL (4 REPORTES)*/
+                            onOpenOverlay('');
+                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
+                                if (aaa.length > 0) {
+                                    onImprimirReporteFancyArray(JSON.parse(aaa));
+                                }
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            }).always(function () {
+                                onCloseOverlay();
+                            });
+                            break;
+                        case 2:
+                            /* 2 = POR CLIENTE*/
+                            onOpenOverlay('');
+                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirReportePorCliente'); ?>', p).done(function (aaa) {
+                                if (aaa.length > 0) {
+                                    onImprimirReporteFancy(aaa);
+                                }
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            }).always(function () {
+                                onCloseOverlay();
+                            });
+                            break;
+                    }
                 } else {
                     iMsg("DEBE DE ESPECIFICAR UN TIPO DE REPORTE", 'w', function () {
 
