@@ -68,7 +68,7 @@ $vs = array(
     'vParesPesosTiendas',
     'vConsolidadoPorMes',
     'vConsolidadoPorLineaEstilo',
-    'vVentasPorClienteAno', 'vVentasPorFecha');
+    'vVentasPorClienteAno', 'vVentasPorFecha', 'vModificaAClienteDevoluciones');
 
 foreach ($vs as $v) {
     $this->load->view($v);
