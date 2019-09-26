@@ -118,14 +118,7 @@
         var row_data;
         tblControlesXAplicarDeEsteCliente.find('tbody').on('click', 'tr', function () {
             var dtm = ControlesXAplicarDeEsteCliente.row(this).data();
-            console.log(dtm);
             row_data = dtm;
-            var tr = $(this).find("td");
-            var td = $(tr[0]);
-            console.log("CLIENTE ESTA DEFINIDO => ", tblControlesXAplicarDeEsteCliente.find("#ClienteID").val());
-            if (tblControlesXAplicarDeEsteCliente.find("#ClienteID").val() !== undefined) {
-                removerInputs();
-            }
             Swal.fire({
                 title: 'Selecccione un cliente',
                 input: 'select',
@@ -181,5 +174,5 @@ foreach ($dtm as $k => $v) {
         });
 
     }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+</script>  
+<script src="<?php print base_url('js/swal2/sweetalert2@8'); ?>"></script>
