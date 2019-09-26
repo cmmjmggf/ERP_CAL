@@ -27,4 +27,16 @@ class ModificaAClienteDevoluciones extends CI_Controller {
         }
     }
 
+    public function onCambiarClienteAcontrol() {
+        try {
+            $x = $this->input->post();
+            $this->db->set('cliente', $x['CLIENTE_NUEVO'])
+                    ->where('ID', $x['ID'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->update('devolucionnp');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

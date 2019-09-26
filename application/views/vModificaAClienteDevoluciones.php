@@ -15,7 +15,8 @@
                             <option></option>
                             <?php
                             /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                            foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl = 1 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                            $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl = 1 ORDER BY ABS(C.Clave) ASC;")->result();
+                            foreach ($dtm as $k => $v) {
                                 print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
                             }
                             ?>
@@ -97,6 +98,7 @@
                     "searchable": false
                 }],
             language: lang,
+            select: true,
             "autoWidth": true,
             "colReorder": true,
             "displayLength": 99,
@@ -113,5 +115,71 @@
                 onCloseOverlay();
             }
         });
+        var row_data;
+        tblControlesXAplicarDeEsteCliente.find('tbody').on('click', 'tr', function () {
+            var dtm = ControlesXAplicarDeEsteCliente.row(this).data();
+            console.log(dtm);
+            row_data = dtm;
+            var tr = $(this).find("td");
+            var td = $(tr[0]);
+            console.log("CLIENTE ESTA DEFINIDO => ", tblControlesXAplicarDeEsteCliente.find("#ClienteID").val());
+            if (tblControlesXAplicarDeEsteCliente.find("#ClienteID").val() !== undefined) {
+                removerInputs();
+            }
+            Swal.fire({
+                title: 'Selecccione un cliente',
+                input: 'select',
+                inputOptions: {
+<?php
+/* YA CONTIENE LOS BLOQUEOS DE VENTA */
+$i = 1;
+$tt = count($dtm);
+foreach ($dtm as $k => $v) {
+    print "'{$v->CLAVE}':'{$v->CLIENTE}'";
+    if ($i < $tt) {
+        print ",";
+    }
+    $i += 1;
+}
+?>
+                },
+                inputPlaceholder: 'Seleccione un cliente',
+                showCancelButton: true,
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value !== '') {
+                            resolve();
+                        } else {
+                            resolve('Necesitas escoger un cliente');
+                        }
+                    });
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    Swal.fire({
+                        type: 'success',
+                        html: 'El control se cambio al cliente ' + result.value
+                    });
+                    var p = {
+                        ID: row_data.ID,
+                        CLIENTE: row_data.CLIENTE,
+                        CLIENTE_NUEVO: result.value
+                    };
+                    $.post('<?php print base_url('ModificaAClienteDevoluciones/onCambiarClienteAcontrol') ?>', p).done(function (aaa) {
+                        console.log(aaa);
+                        ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                            onCloseOverlay();
+                        });
+                    }).fail(function (x) {
+                        getError(x)
+                    }).always(function () {
+
+                    });
+                }
+            });
+
+        });
+
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
