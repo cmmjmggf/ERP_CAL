@@ -47,18 +47,87 @@
         </div>
     </div>
 </div>
+
+<div id="mdlSeleccionaCliente" class="modal">
+    <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <span class="fa fa-exchange-alt"></span> Seleccione un cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <input type="text" id="IDANTERIOR" name="IDANTERIOR" class="form-control d-none" readonly="">
+                        <input type="text" id="ClienteViejo" name="ClienteViejo" class="form-control d-none" readonly="">
+                        <label>Cliente</label>
+                        <select id="ClienteAModificar" name="ClienteAModificar" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            /* YA CONTIENE LOS BLOQUEOS DE VENTA */
+                            foreach ($dtm as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var mdlModificaAClienteDevoluciones = $("#mdlModificaAClienteDevoluciones"),
+            mdlSeleccionaCliente = $("#mdlSeleccionaCliente"),
+            ClienteAModificar = mdlSeleccionaCliente.find("#ClienteAModificar"),
             ClienteMCD = mdlModificaAClienteDevoluciones.find("#ClienteMCD"),
             ControlesXAplicarDeEsteCliente,
             tblControlesXAplicarDeEsteCliente = mdlModificaAClienteDevoluciones.find("#tblControlesXAplicarDeEsteCliente");
 
     $(document).ready(function () {
+
         ClienteMCD.change(function () {
             ControlesXAplicarDeEsteCliente.ajax.reload(function () {
                 onCloseOverlay();
             });
         });
+
+        mdlSeleccionaCliente.on('shown.bs.modal', function () {
+            ClienteAModificar[0].selectize.focus(); 
+        });
+        
+        mdlSeleccionaCliente.on('hidden.bs.modal', function () {
+            ClienteAModificar[0].selectize.clear(); 
+        });
+
+        ClienteAModificar.change(function () {
+            if (ClienteAModificar.val()) {
+                var p = {
+                    ID: mdlSeleccionaCliente.find("#IDANTERIOR").val(),
+                    CLIENTE: mdlSeleccionaCliente.find("#ClienteViejo").val(),
+                    CLIENTE_NUEVO: mdlSeleccionaCliente.find("#ClienteAModificar").val()
+                };
+                $.post('<?php print base_url('ModificaAClienteDevoluciones/onCambiarClienteAcontrol') ?>', p).done(function (aaa) {
+                    console.log(aaa);
+                    mdlSeleccionaCliente.modal('hide');
+                    onNotifyOld('', 'CLIENTE MODIFICADO', 'success');
+                    ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                }).fail(function (x) {
+                    getError(x)
+                }).always(function () {
+
+                });
+            }
+        });
+
         mdlModificaAClienteDevoluciones.on('shown.bs.modal', function () {
             ClienteMCD[0].selectize.clear();
             if ($.fn.DataTable.isDataTable('#tblControlesXAplicarDeEsteCliente')) {
@@ -119,58 +188,10 @@
         tblControlesXAplicarDeEsteCliente.find('tbody').on('click', 'tr', function () {
             var dtm = ControlesXAplicarDeEsteCliente.row(this).data();
             row_data = dtm;
-            Swal.fire({
-                title: 'Selecccione un cliente',
-                input: 'select',
-                inputOptions: {
-<?php
-/* YA CONTIENE LOS BLOQUEOS DE VENTA */
-$i = 1;
-$tt = count($dtm);
-foreach ($dtm as $k => $v) {
-    print "'{$v->CLAVE}':'{$v->CLIENTE}'";
-    if ($i < $tt) {
-        print ",";
-    }
-    $i += 1;
-}
-?>
-                },
-                inputPlaceholder: 'Seleccione un cliente',
-                showCancelButton: true,
-                inputValidator: function (value) {
-                    return new Promise(function (resolve, reject) {
-                        if (value !== '') {
-                            resolve();
-                        } else {
-                            resolve('Necesitas escoger un cliente');
-                        }
-                    });
-                }
-            }).then(function (result) {
-                if (result.value) {
-                    Swal.fire({
-                        type: 'success',
-                        html: 'El control se cambio al cliente ' + result.value
-                    });
-                    var p = {
-                        ID: row_data.ID,
-                        CLIENTE: row_data.CLIENTE,
-                        CLIENTE_NUEVO: result.value
-                    };
-                    $.post('<?php print base_url('ModificaAClienteDevoluciones/onCambiarClienteAcontrol') ?>', p).done(function (aaa) {
-                        console.log(aaa);
-                        ControlesXAplicarDeEsteCliente.ajax.reload(function () {
-                            onCloseOverlay();
-                        });
-                    }).fail(function (x) {
-                        getError(x)
-                    }).always(function () {
-
-                    });
-                }
-            });
+            mdlSeleccionaCliente.find("#IDANTERIOR").val(dtm.ID);
+            mdlSeleccionaCliente.find("#ClienteViejo").val(dtm.CLIENTE);
+            mdlSeleccionaCliente.modal('show');
         });
     }
 </script>  
-<script src="<?php print base_url('js/swal2/sweetalert2@8'); ?>"></script>
+
