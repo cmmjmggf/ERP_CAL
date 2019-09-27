@@ -86,8 +86,7 @@ class ExplosionesPorCliente extends CI_Controller {
                                 $pdf->SetFont('Calibri', '', 8);
 
 
-
-                                $ExplosionCant = ($D->Consumo * $D->Pares);
+                                $ExplosionCant = ($M->Consumo * $D->Pares);
                                 $Subtotal = $ExplosionCant * $M->Precio;
 
                                 $Exp_Acum = $D->C1;
@@ -276,6 +275,13 @@ class ExplosionesPorCliente extends CI_Controller {
                 $pdf->SetFont('Calibri', '', 8);
                 $pdf->Cell(50, 5, utf8_decode($G->Clave . '     ' . $G->Nombre), 0/* BORDE */, 1, 'L');
 
+                //Si es tipo suela planta entresuela traemos el total de pares por grupo para calcular porcentajes
+                $TotalesPorcentaje = '';
+                if ($Tipo === '80') {
+                    $TotalesPorcentaje = $cm->getTotalesPorGrupoParaPorcentaje(
+                            $Ano, $Sem, $aSem, $Maq, $aMaq, $Cliente, $G->Clave
+                    );
+                }
 
                 foreach ($Materiales as $key => $M) {
                     $TOTAL_EXP_ART = 0;
@@ -292,23 +298,15 @@ class ExplosionesPorCliente extends CI_Controller {
                                 $pdf->SetFont('Calibri', '', 8);
 
 
-
-                                switch ($Tipo) {
-                                    case '10':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares) * ($D->Desperdicio + 1);
-                                        break;
-                                    case '80':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                                        break;
-                                    case '90':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                                        break;
+                                $ExplosionCant = $D->Explosion;
+                                $Subtotal = $ExplosionCant * $D->Precio;
+                                $PorcentajeSuelas = '';
+                                if ($Tipo === '80') {
+                                    $Porcentaje = $D->Pares * 100 / $TotalesPorcentaje[0]->Explosion;
+                                    $PorcentajeSuelas = number_format($Porcentaje, 2, ".", ",") . '%';
                                 }
 
 
-                                $Subtotal = $ExplosionCant * $D->Precio;
-                                $Porcentaje = $D->Pares * 100 / $Pares[0]->Pares;
-                                $PorcentajeSuelas = ($Tipo === '80') ? number_format($Porcentaje, 2, ".", ",") . '%' : '';
                                 $pdf->Row(array(
                                     utf8_decode($D->Articulo),
                                     mb_strimwidth(utf8_decode($D->Descripcion), 0, 40, ""),

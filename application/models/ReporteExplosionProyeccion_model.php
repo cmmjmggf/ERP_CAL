@@ -15,105 +15,84 @@ class ReporteExplosionProyeccion_model extends CI_Model {
         try {
 
             $this->db->query("set sql_mode=''");
-            $this->db->select("A.Grupo, "
-                            . "FT.Articulo, "
-                            . "A.Descripcion, "
-                            . "U.Descripcion AS Unidad,"
-                            . "ifnull(A.$MesAnt,0) AS Inv_Ini,"
-                            /* Compras en firme */
-                            . "ifnull((select SUM(OC.Cantidad) AS Cantidad from ordencompra OC
-                                where OC.Articulo = A.Clave
-                                and OC.Maq BETWEEN $Maquila AND $aMaquila
-                                AND OC.Sem = $Sem_Compras
-                                AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA','INACTIVA','RECIBIDA')
-                                 ),0) AS CantPedida,"
-                            /* Compras recibidas  */
-                            . "ifnull((select SUM(OC.CantidadRecibida) AS CantidadRecibida from ordencompra OC
-                                where OC.Articulo = A.Clave
-                                and OC.Maq BETWEEN $Maquila AND $aMaquila
-                                AND OC.Sem = $Sem_Compras
-                                AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA','INACTIVA','RECIBIDA')
-                                ),0) AS CantEntregada,"
+            $this->db->select("EXPL.Grupo, EXPL.Articulo, EXPL.Descripcion, EXPL.Unidad, sum(EXPL.Explosion) as Explosion, EXPL.Inv_Ini,
 
-                            /* Factura Compras */
-                            . "ifnull((select OC.Folio from ordencompra OC
-                                where OC.Articulo = A.Clave
+                                ifnull((select SUM(OC.Cantidad) AS Cantidad from ordencompra OC
+                                where OC.Articulo = EXPL.Articulo
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA','INACTIVA','RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                 ), 0) AS CantPedida,
+
+                                ifnull((select SUM(OC.CantidadRecibida) AS CantidadRecibida from ordencompra OC
+                                where OC.Articulo = EXPL.Articulo
+                                and OC.Maq BETWEEN $Maquila AND $aMaquila
+                                AND OC.Sem = $Sem_Compras
+                                AND OC.Ano =  $Ano
+                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                ), 0) AS CantEntregada,
+
+                                ifnull((select OC.Folio from ordencompra OC
+                                where OC.Articulo = EXPL.Articulo
+                                and OC.Maq BETWEEN $Maquila AND $aMaquila
+                                AND OC.Sem = $Sem_Compras
+                                AND OC.Ano =  $Ano
+                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
                                 AND OC.Folio IS NOT NULL LIMIT 1
-                                 ),'') AS FolioOrden,"
+                                 ), '') AS FolioOrden,
 
-                            /* Factura Fecha */
-                            . "ifnull((select OC.FechaOrden from ordencompra OC
-                                where OC.Articulo = A.Clave
+                                 ifnull((select OC.FechaOrden from ordencompra OC
+                                where OC.Articulo = EXPL.Articulo
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA','INACTIVA','RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
                                 AND OC.FechaOrden IS NOT NULL LIMIT 1
-                                 ),'') AS FechaOrden,"
+                                 ), '') AS FechaOrden,
 
-                            /* Entradas */
-                            . "ifnull((select sum(MA.CantidadMov) from movarticulos MA
+                                 ifnull((select sum(MA.CantidadMov) from movarticulos MA
                                 where MA.EntradaSalida = '1'
-                                and MA.Articulo = A.Clave
+                                and MA.Articulo = EXPL.Articulo
                                 and MA.Maq BETWEEN $Maquila AND $aMaquila
-                                AND STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\")
-                                ),0) AS Entradas, "
-                            /* Salidas */
-                            . "ifnull((select sum(MA.CantidadMov) from movarticulos MA
-                                where MA.EntradaSalida = '2'
-                                and MA.Articulo = A.Clave
-                                and MA.Maq BETWEEN $Maquila AND $aMaquila
-                                AND STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FechaIni', \"%d/%m/%Y\") AND STR_TO_DATE('$FechaFin', \"%d/%m/%Y\")
-                                ),0) AS Salidas, "
-                            . "CASE WHEN E.PiezasCorte <= 10 THEN
-                                MA.PorExtra3a10
-                                WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN
-                                MA.PorExtra11a14
-                                WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN
-                                MA.PorExtra15a18
-                                WHEN E.PiezasCorte > 18  THEN
-                                MA.PorExtra19a
-                                END AS Desperdicio , "
-                            . "PE.Pares,"
-                            . "SUM(FT.Consumo) AS Consumo,"
-                            . "PM.Precio "
-                            . " ", false)
-                    ->from('pedidox PE')
-                    ->join('fichatecnica FT', 'ON FT.Estilo =  PE.Estilo AND FT.Color = PE.Color')
-                    ->join('preciosmaquilas PM', "ON PM.Articulo = FT.Articulo AND PM.Maquila ='$Maquila' ")
-                    ->join('articulos A', 'ON A.Clave =  FT.Articulo')
-                    ->join('piezas PZA', 'ON PZA.Clave =  FT.Pieza')
-                    ->join('grupos G', 'ON G.Clave = A.Grupo')
-                    ->join('unidades U', 'ON U.Clave = A.UnidadMedida')
-                    ->join('maquilas MA', "MA.Clave = '$Maquila'")
-                    ->join('estilos E', 'ON E.Clave = PE.Estilo')
-                    ->where("PE.Maquila BETWEEN $Maquila AND $aMaquila")
-                    ->where("PE.Semana = $Semana ")
-                    ->where('PE.Ano', $Ano)
-                    ->where('PE.Estatus', 'A')
-                    ->where('PE.Control <>  ', false)
-                    ->where('PE.Control IS NOT NULL ', NULL, false);
-            switch ($TipoE) {
-                case '10':
-                    $this->db->where_in('G.Clave', array('1', '2'));
-                    break;
-                case '80':
-                    $this->db->where_in('G.Clave', array('3', '50', '52'));
-                    break;
-                case '90':
-                    $this->db->where_not_in('G.Clave', array('1', '2', '3', '50', '52'));
-                    break;
-            }
+                                AND STR_TO_DATE(MA.FechaMov, '%d/%m/%Y') BETWEEN STR_TO_DATE('$FechaIni', '%d/%m/%Y') AND STR_TO_DATE('$FechaFin', '%d/%m/%Y')
+                                ), 0) AS Entradas,
 
-            //Agrupacion
-            $this->db->group_by('A.Clave');
-            $this->db->order_by('A.Descripcion', 'ASC');
+                                ifnull((select sum(MA.CantidadMov) from movarticulos MA
+                                where MA.EntradaSalida = '2'
+                                and MA.Articulo = EXPL.Articulo
+                                and MA.Maq BETWEEN $Maquila AND $aMaquila
+                                AND STR_TO_DATE(MA.FechaMov, '%d/%m/%Y') BETWEEN STR_TO_DATE('$FechaIni', '%d/%m/%Y') AND STR_TO_DATE('$FechaFin', '%d/%m/%Y')
+                                ), 0) AS Salidas
+
+                                from
+
+
+                                (SELECT A.Grupo, FT.Articulo, A.Descripcion, U.Descripcion AS Unidad,
+                                case when $TipoE = '10' then
+                                (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                                WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
+                                WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
+                                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )
+                                else (PE.Pares *  FT.Consumo) end AS Explosion,
+                                ifnull(A.$MesAnt,0) AS Inv_Ini
+                                FROM `pedidox` `PE`
+                                JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
+                                JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+                                JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
+                                WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
+                                AND PE.Semana = $Semana
+                                AND `PE`.`Ano` = '2019'
+                                AND case
+                                when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
+                                when $TipoE = '80' then `A`.`Grupo` IN('3', '50', '52')
+                                when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2', '3', '50', '52')
+                                end) as EXPL
+                                GROUP BY `EXPL`.`Articulo`
+                                ORDER BY `EXPL`.`Grupo` ASC, `EXPL`.`Descripcion` ASC "
+                    . " ", false);
 
             $query = $this->db->get();
             /*

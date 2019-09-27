@@ -8,7 +8,227 @@ class ReporteCotejaOrdComExplosion extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('session')->model('ReporteCotejaOrdComExplosion_model')
-                ->helper('Explosiones_helper')->helper('file');
+                ->helper('Explosiones_helper')->helper('Concilias_helper')->helper('file');
+    }
+
+    public function onReporteCotejaTallas() {
+
+        $cm = $this->ReporteCotejaOrdComExplosion_model;
+        $Maq = $this->input->post('Maq');
+        $aMaq = $this->input->post('aMaq');
+        $Sem = $this->input->post('Sem');
+        $aSem = $this->input->post('aSem');
+        $Ano = $this->input->post('Ano');
+
+        $this->db->query("TRUNCATE TABLE coteja_temp ");
+        //Realizacion de consulta a cabeceros para insertarlos
+        $Explosion_tallas = $cm->getExplosionTallas($Ano, $Sem, $aSem, $Maq, $aMaq);
+
+
+        foreach ($Explosion_tallas as $key => $D) {
+
+            $Exp_Acum = $D->C1;
+            $Talla = $D->T1;
+
+            for ($i = 1; $i < 22; $i++) {
+                $sig = $i + 1;
+                if ($D->{"A$i"} === $D->{"A$sig"}) {
+                    $Exp_Acum += $D->{"C$sig"};
+                } else if ($D->{"A$sig"} === '0') {
+                    $Exp_Acum += $D->{"C$sig"};
+                    if ($Exp_Acum > 0) {
+                        $Articulo = $D->{"A$i"};
+                        $this->db->query("INSERT INTO coteja_temp (Grupo,Articulo,NomArticulo,Unidad,Talla,Explosion,Precio) "
+                                . " VALUES ($D->Grupo,$Articulo,'$D->Descripcion','$D->Unidad',$Talla,$Exp_Acum,$D->Precio) ");
+                    }
+                } else {
+                    if ($Exp_Acum > 0) {
+                        $Articulo = $D->{"A$i"};
+                        $this->db->query("INSERT INTO coteja_temp (Grupo,Articulo,NomArticulo,Unidad,Talla,Explosion,Precio) "
+                                . " VALUES ($D->Grupo,$Articulo,'$D->Descripcion','$D->Unidad',$Talla,$Exp_Acum,$D->Precio) ");
+                    }
+                    $Talla = $D->{"T$sig"};
+                    $Exp_Acum = $D->{"C$sig"};
+                }
+            }
+        }
+        // **************Reporte*************** */
+        $Grupos = $cm->getGruposReporte();
+        $Articulos = $cm->getDetalleReporte($Ano, $Sem, $aSem, $Maq, $aMaq);
+        $DatosEmpresa = $cm->getDatosEmpresa();
+
+        if (!empty($Grupos)) {
+
+            $pdf = new CotejaOrdComExplosionTallas('L', 'mm', array(215.9, 279.4));
+
+
+            $pdf->Sem = $Sem;
+            $pdf->aSem = $aSem;
+            $pdf->Maq = $Maq;
+            $pdf->aMaq = $aMaq;
+            $pdf->Tipo = '******* SUELA *******';
+            $pdf->TipoE = '80';
+
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(true, 5);
+
+            $TOTAL_EXP = 0;
+            $TOTAL_SUBT = 0;
+
+            $GCantPedida = 0;
+            $GCantEntregada = 0;
+            $GSaldoXEntregar = 0;
+            $GEntregadoMaquilas = 0;
+
+            $GCantPedidaP = 0;
+            $GCantEntregadaP = 0;
+            $GSaldoXEntregarP = 0;
+            $GEntregadoMaquilasP = 0;
+
+            foreach ($Grupos as $key => $G) {
+
+
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetX(5);
+                $pdf->Cell(20, 4, 'Grupo: ', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetX(25);
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(50, 4, utf8_decode($G->ClaveGrupo . '     ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+
+                $TOTAL_EXP_GRUPO = 0;
+                $TOTAL_SUBT_GRUPO = 0;
+
+                $CantPedida = 0;
+                $CantEntregada = 0;
+                $SaldoXEntregarG = 0;
+                $EntregadoMaquilas = 0;
+
+                $CantPedidaP = 0;
+                $CantEntregadaP = 0;
+                $SaldoXEntregarP = 0;
+                $EntregadoMaquilasP = 0;
+
+                foreach ($Articulos as $key => $D) {
+                    if ($G->ClaveGrupo === $D->Grupo) {
+                        $pdf->SetLineWidth(0.25);
+                        $pdf->SetX(5);
+                        $pdf->SetFont('Calibri', '', 8);
+
+                        $ExplosionCant = $D->Explosion;
+                        $Subtotal = $ExplosionCant * $D->Precio;
+                        $SaldoXEntregar = $D->CantPedida - $D->CantEntregada;
+
+                        $pdf->SetX(5);
+                        $pdf->Cell(10, 4, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(58, 4, utf8_decode(mb_strimwidth($D->Descripcion, 0, 37, "")), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(8, 4, utf8_decode($D->Talla), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(8, 4, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(17, 4, number_format($ExplosionCant, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(14, 4, '$' . number_format($D->Precio, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, '$' . number_format($Subtotal, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->CantPedida <> 0) ? number_format($D->CantPedida, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->CantPedida * $D->Precio <> 0) ? '$' . number_format($D->CantPedida * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->CantEntregada <> 0) ? number_format($D->CantEntregada, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->CantEntregada * $D->Precio <> 0) ? '$' . number_format($D->CantEntregada * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($SaldoXEntregar <> 0) ? number_format($SaldoXEntregar, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($SaldoXEntregar * $D->Precio <> 0) ? '$' . number_format($SaldoXEntregar * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->EntregadoMaquilas <> 0) ? number_format($D->EntregadoMaquilas, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->EntregadoMaquilas * $D->Precio <> 0) ? '$' . number_format($D->EntregadoMaquilas * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 1, 'R');
+
+                        $TOTAL_EXP_GRUPO += $ExplosionCant;
+                        $TOTAL_SUBT_GRUPO += $Subtotal;
+                        $TOTAL_EXP += $ExplosionCant;
+                        $TOTAL_SUBT += $Subtotal;
+
+                        //Totales grupo
+                        $CantPedida += $D->CantPedida;
+                        $CantEntregada += $D->CantEntregada;
+                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $EntregadoMaquilas += $D->EntregadoMaquilas;
+
+                        $CantPedidaP += $D->CantPedida * $D->Precio;
+                        $CantEntregadaP += $D->CantEntregada * $D->Precio;
+                        $SaldoXEntregarP += $SaldoXEntregar * $D->Precio;
+                        $EntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
+
+                        //Totales generales
+                        $GCantPedida += $D->CantPedida;
+                        $GCantEntregada += $D->CantEntregada;
+                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $GEntregadoMaquilas += $D->EntregadoMaquilas;
+
+                        $GCantPedidaP += $D->CantPedida * $D->Precio;
+                        $GCantEntregadaP += $D->CantEntregada * $D->Precio;
+                        $GSaldoXEntregar += $SaldoXEntregar * $D->Precio;
+                        $GEntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
+                    }
+                }
+                //Totales grupo
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->RowNoBorder(array(
+                    '',
+                    'Totales por Grupo ' . utf8_decode($G->ClaveGrupo . ' ' . $G->NombreGrupo) . ':',
+                    '',
+                    number_format($TOTAL_EXP_GRUPO, 2, ".", ","),
+                    '',
+                    '$' . number_format($TOTAL_SUBT_GRUPO, 2, ".", ","),
+                    number_format($CantPedida, 2, ".", ","),
+                    '$' . number_format($CantPedidaP, 2, ".", ","),
+                    number_format($CantEntregada, 2, ".", ","),
+                    '$' . number_format($CantEntregadaP, 2, ".", ","),
+                    number_format($SaldoXEntregarG, 2, ".", ","),
+                    '$' . number_format($SaldoXEntregarP, 2, ".", ","),
+                    number_format($EntregadoMaquilas, 2, ".", ","),
+                    '$' . number_format($EntregadoMaquilasP, 2, ".", ",")
+                ));
+            }
+            //Total general
+            $pdf->SetFont('Calibri', 'B', 8);
+            $pdf->RowNoBorder(array(
+                '',
+                'Total por Semana Maquila: ',
+                '',
+                number_format($TOTAL_EXP, 2, ".", ","),
+                '',
+                '$' . number_format($TOTAL_SUBT, 2, ".", ","),
+                number_format($GCantPedida, 2, ".", ","),
+                '$' . number_format($GCantPedidaP, 2, ".", ","),
+                number_format($CantEntregada, 2, ".", ","),
+                '$' . number_format($GCantEntregadaP, 2, ".", ","),
+                number_format($GSaldoXEntregar, 2, ".", ","),
+                '$' . number_format($GSaldoXEntregarP, 2, ".", ","),
+                number_format($GEntregadoMaquilas, 2, ".", ","),
+                '$' . number_format($GEntregadoMaquilasP, 2, ".", ",")
+            ));
+
+            /* FIN RESUMEN */
+            $path = 'uploads/Reportes/Explosion';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "COTEJA ORD_COM - EXPL - ENTREGADO " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.pdf';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Explosion/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $pdf->Output($url);
+            print base_url() . $url;
+        }
     }
 
     public function onReporteCotejaOrdComExplosion() {
@@ -19,75 +239,21 @@ class ReporteCotejaOrdComExplosion extends CI_Controller {
         $aSem = $this->input->post('aSem');
         $Ano = $this->input->post('Ano');
 
-        $Mes = Date('n');
-        $Texto_Mes_Anterior = '';
-        $Mes_Anterior = $Mes - 1;
-
-        switch ($Mes_Anterior) {
-            case 0:
-                $Texto_Mes_Anterior = 'Dic';
-
-                break;
-            case 1:
-                $Texto_Mes_Anterior = 'Ene';
-
-                break;
-            case 2:
-                $Texto_Mes_Anterior = 'Feb';
-
-                break;
-            case 3:
-                $Texto_Mes_Anterior = 'Mar';
-
-                break;
-            case 4:
-                $Texto_Mes_Anterior = 'Abr';
-
-                break;
-            case 5:
-                $Texto_Mes_Anterior = 'May';
-
-                break;
-            case 6:
-                $Texto_Mes_Anterior = 'Jun';
-
-                break;
-            case 7:
-                $Texto_Mes_Anterior = 'Jul';
-
-                break;
-            case 8:
-                $Texto_Mes_Anterior = 'Ago';
-
-                break;
-            case 9:
-                $Texto_Mes_Anterior = 'Sep';
-
-                break;
-            case 10:
-                $Texto_Mes_Anterior = 'Oct';
-
-                break;
-            case 11:
-                $Texto_Mes_Anterior = 'Nov';
-
-                break;
-            case 12:
-                $Texto_Mes_Anterior = 'Dic';
-
-                break;
-        }
-
         $cm = $this->ReporteCotejaOrdComExplosion_model;
-
-        $Explosion = $cm->getRegistros(
-                $Ano, $Sem, $aSem, $Maq, $aMaq, $Tipo, $Texto_Mes_Anterior
+        $DatosEmpresa = $cm->getDatosEmpresa();
+        $Grupos = $cm->getGrupos(
+                $Ano, $Sem, $aSem, $Maq, $aMaq, $Tipo
+        );
+        $Explosion = $cm->getExplosionMateriales(
+                $Ano, $Sem, $aSem, $Maq, $aMaq, $Tipo
         );
 
 
         if (!empty($Explosion)) {
 
-            $pdf = new CotejaOrdComExplosion('P', 'mm', array(215.9, 279.4));
+            $pdf = new CotejaOrdComExplosion('L', 'mm', array(215.9, 279.4));
+            $pdf->Logo = $DatosEmpresa[0]->Logo;
+            $pdf->Empresa = $DatosEmpresa[0]->Empresa;
 
 
             switch ($Tipo) {
@@ -106,113 +272,163 @@ class ReporteCotejaOrdComExplosion extends CI_Controller {
             $pdf->aSem = $aSem;
             $pdf->Maq = $Maq;
             $pdf->aMaq = $aMaq;
-            $pdf->TipoE = $TipoE;
-            $pdf->Ano = $Ano;
-
+            $pdf->Tipo = $TipoE;
+            $pdf->TipoE = $Tipo;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 8);
+            $pdf->SetAutoPageBreak(true, 5);
 
-            $T_InvIni = 0;
-            $T_Pedido = 0;
-            $T_Entregado = 0;
-            $T_EntregaProveedor = 0;
-            $T_EntregadoMaquilas = 0;
-            $T_Real = 0;
-            $T_Explosion = 0;
-            $T_FaltSobra = 0;
+            $TOTAL_EXP = 0;
+            $TOTAL_SUBT = 0;
+
+            $GCantPedida = 0;
+            $GCantEntregada = 0;
+            $GSaldoXEntregar = 0;
+            $GEntregadoMaquilas = 0;
+
+            $GCantPedidaP = 0;
+            $GCantEntregadaP = 0;
+            $GSaldoXEntregarP = 0;
+            $GEntregadoMaquilasP = 0;
 
 
-            foreach ($Explosion as $key => $D) {
+            foreach ($Grupos as $key => $G) {
 
+                $TOTAL_EXP_GRUPO = 0;
+                $TOTAL_SUBT_GRUPO = 0;
 
-                $pdf->SetLineWidth(0.25);
+                $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetX(5);
+                $pdf->Cell(20, 4, 'Grupo: ', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetX(25);
                 $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(50, 4, utf8_decode($G->Clave . '     ' . $G->Nombre), 'B'/* BORDE */, 1, 'L');
 
-                $ExplosionCant = 0;
-                $Existencia_Real = 0;
-                $Faltante_Sobrante = 0;
-                switch ($Tipo) {
-                    case '10':
-                        $ExplosionCant = ($D->Consumo * $D->Pares) * ($D->Desperdicio + 1);
-                        break;
-                    case '80':
-                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                        break;
-                    case '90':
-                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                        break;
+                $CantPedida = 0;
+                $CantEntregada = 0;
+                $SaldoXEntregarG = 0;
+                $EntregadoMaquilas = 0;
+
+                $CantPedidaP = 0;
+                $CantEntregadaP = 0;
+                $SaldoXEntregarP = 0;
+                $EntregadoMaquilasP = 0;
+
+
+                foreach ($Explosion as $key => $D) {
+
+                    if ($G->Clave === $D->Grupo) {
+
+                        $pdf->SetLineWidth(0.25);
+                        $pdf->SetX(5);
+                        $pdf->SetFont('Calibri', '', 8);
+
+                        $ExplosionCant = $D->Explosion;
+                        $Subtotal = $ExplosionCant * $D->Precio;
+                        $SaldoXEntregar = $D->CantPedida - $D->CantEntregada;
+
+                        $pdf->SetX(5);
+                        $pdf->Cell(10, 4, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(60, 4, utf8_decode(mb_strimwidth($D->Descripcion, 0, 38, "")), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(13, 4, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(17, 4, number_format($ExplosionCant, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(14, 4, '$' . number_format($D->Precio, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, '$' . number_format($Subtotal, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->CantPedida <> 0) ? number_format($D->CantPedida, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->CantPedida * $D->Precio <> 0) ? '$' . number_format($D->CantPedida * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->CantEntregada <> 0) ? number_format($D->CantEntregada, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->CantEntregada * $D->Precio <> 0) ? '$' . number_format($D->CantEntregada * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($SaldoXEntregar <> 0) ? number_format($SaldoXEntregar, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($SaldoXEntregar * $D->Precio <> 0) ? '$' . number_format($SaldoXEntregar * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(16, 4, ($D->EntregadoMaquilas <> 0) ? number_format($D->EntregadoMaquilas, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 4, ($D->EntregadoMaquilas * $D->Precio <> 0) ? '$' . number_format($D->EntregadoMaquilas * $D->Precio, 2, ".", ",") : '', 1/* BORDE */, 1, 'R');
+
+                        $TOTAL_EXP_GRUPO += $ExplosionCant;
+                        $TOTAL_SUBT_GRUPO += $Subtotal;
+                        $TOTAL_EXP += $ExplosionCant;
+                        $TOTAL_SUBT += $Subtotal;
+
+                        //Totales grupo
+                        $CantPedida += $D->CantPedida;
+                        $CantEntregada += $D->CantEntregada;
+                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $EntregadoMaquilas += $D->EntregadoMaquilas;
+
+                        $CantPedidaP += $D->CantPedida * $D->Precio;
+                        $CantEntregadaP += $D->CantEntregada * $D->Precio;
+                        $SaldoXEntregarP += $SaldoXEntregar * $D->Precio;
+                        $EntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
+
+                        //Totales generales
+                        $GCantPedida += $D->CantPedida;
+                        $GCantEntregada += $D->CantEntregada;
+                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $GEntregadoMaquilas += $D->EntregadoMaquilas;
+
+                        $GCantPedidaP += $D->CantPedida * $D->Precio;
+                        $GCantEntregadaP += $D->CantEntregada * $D->Precio;
+                        $GSaldoXEntregar += $SaldoXEntregar * $D->Precio;
+                        $GEntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
+                    }
                 }
-                $Existencia_Real = $D->Inv_Ini + $D->CantEntregada - $D->EntregadoMaquilas;
-                $Faltante_Sobrante = $Existencia_Real - $ExplosionCant;
-
-                $pdf->SetX(5);
-                $pdf->Cell(10, 4, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(40, 4, mb_strimwidth(utf8_decode($D->Descripcion), 0, 35, ""), 'B'/* BORDE */, 0, 'L');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(15, 4, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(19, 4, ($D->Inv_Ini <> 0) ? number_format($D->Inv_Ini, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(17.5, 4, ($D->CantPedida <> 0) ? number_format($D->CantPedida, 2, ".", ",") : '', 'BL'/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(17.5, 4, ($D->CantEntregada <> 0) ? number_format($D->CantEntregada, 2, ".", ",") : '', 'BR'/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(17, 4, ($D->CantPedida - $D->CantEntregada <> 0) ? number_format($D->CantPedida - $D->CantEntregada, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(18, 4, ($D->EntregadoMaquilas <> 0) ? number_format($D->EntregadoMaquilas, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(17, 4, ($Existencia_Real <> 0) ? number_format($Existencia_Real, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(19, 4, ($ExplosionCant <> 0) ? number_format($ExplosionCant, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                $pdf->SetX($pdf->GetX());
-                $pdf->Cell(17, 4, ($Faltante_Sobrante <> 0) ? number_format($Faltante_Sobrante, 2, ".", ",") : '', 1/* BORDE */, 1, 'R');
 
 
-                $T_InvIni += $D->Inv_Ini;
-                $T_Pedido += $D->CantPedida;
-                $T_Entregado += $D->CantEntregada;
-                $T_EntregaProveedor += $D->CantPedida - $D->CantEntregada;
-                $T_EntregadoMaquilas += $D->EntregadoMaquilas;
-                $T_Real += $Existencia_Real;
-                $T_Explosion += $ExplosionCant;
-                $T_FaltSobra += $Faltante_Sobrante;
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->RowNoBorder(array(
+                    '',
+                    'Totales por Grupo ' . utf8_decode($G->Clave . ' ' . $G->Nombre) . ':',
+                    '',
+                    number_format($TOTAL_EXP_GRUPO, 2, ".", ","),
+                    '',
+                    '$' . number_format($TOTAL_SUBT_GRUPO, 2, ".", ","),
+                    number_format($CantPedida, 2, ".", ","),
+                    '$' . number_format($CantPedidaP, 2, ".", ","),
+                    number_format($CantEntregada, 2, ".", ","),
+                    '$' . number_format($CantEntregadaP, 2, ".", ","),
+                    number_format($SaldoXEntregarG, 2, ".", ","),
+                    '$' . number_format($SaldoXEntregarP, 2, ".", ","),
+                    number_format($EntregadoMaquilas, 2, ".", ","),
+                    '$' . number_format($EntregadoMaquilasP, 2, ".", ",")
+                ));
             }
-            $pdf->SetFont('Calibri', 'B', 9);
 
-            $pdf->SetX(5);
-            $pdf->Cell(10, 4, '', 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 4, 'Total General:', 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(15, 4, '', 0/* BORDE */, 0, 'C');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(19, 4, number_format($T_InvIni, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(17.5, 4, number_format($T_Pedido, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(17.5, 4, number_format($T_Entregado, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(17, 4, number_format($T_EntregaProveedor, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(18, 4, number_format($T_EntregadoMaquilas, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(17, 4, number_format($T_Real, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(19, 4, number_format($T_Explosion, 2, ".", ","), 0/* BORDE */, 0, 'R');
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(17, 4, number_format($T_FaltSobra, 2, ".", ","), 0/* BORDE */, 1, 'R');
-
-
+            $pdf->SetFont('Calibri', 'B', 8);
+            $pdf->RowNoBorder(array(
+                '',
+                'Total por Semana Maquila: ',
+                '',
+                number_format($TOTAL_EXP, 2, ".", ","),
+                '',
+                '$' . number_format($TOTAL_SUBT, 2, ".", ","),
+                number_format($GCantPedida, 2, ".", ","),
+                '$' . number_format($GCantPedidaP, 2, ".", ","),
+                number_format($CantEntregada, 2, ".", ","),
+                '$' . number_format($GCantEntregadaP, 2, ".", ","),
+                number_format($GSaldoXEntregar, 2, ".", ","),
+                '$' . number_format($GSaldoXEntregarP, 2, ".", ","),
+                number_format($GEntregadoMaquilas, 2, ".", ","),
+                '$' . number_format($GEntregadoMaquilasP, 2, ".", ",")
+            ));
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Explosion';
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
             }
-            $file_name = "EXPLOSION MATERIALES " . ' ' . date("d-m-Y his");
+            $file_name = "COTEJA ORD_COM - EXPL - ENTREGADO " . ' ' . date("d-m-Y his");
             $url = $path . '/' . $file_name . '.pdf';
             /* Borramos el archivo anterior */
             if (delete_files('uploads/Reportes/Explosion/')) {

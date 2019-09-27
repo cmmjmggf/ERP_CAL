@@ -40,7 +40,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 FROM articulos A
                 JOIN movarticulos MA ON MA.Articulo = A.Clave
                 JOIN unidades U ON U.Clave = A.UnidadMedida
-                JOIN preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = '$Maq'
+                JOIN preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = '1'
                 WHERE MA.TipoMov IN('SXM', 'SPR', 'SXP', 'SXC', 'EDV')
                 AND MA.Ano = '$Ano'
                 AND MA.Sem = '$Sem'
@@ -51,37 +51,29 @@ class ConciliaFabricaProduccion extends CI_Controller {
         $this->db->query("
                 INSERT INTO concilias_temp
                 (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
-                SELECT
-                CAST(A.Grupo AS SIGNED) AS ClaveGrupo,
-                FT.Articulo,
-                U.Descripcion AS Unidad,
-                '' as Talla,
-                CASE WHEN A.Grupo in ('1', '2') THEN
-                (PE.Pares *  SUM(FT.Consumo)) *
-                (CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                SELECT EXPL.Grupo, EXPL.Articulo, EXPL.Unidad,'' AS Talla, sum(EXPL.Explosion) as Explosion, 0 as ENT, 0 as DEV, EXPL.Precio
+                from ( SELECT A.Grupo, FT.Articulo, U.Descripcion AS Unidad,
+                CASE WHEN A.Grupo in ('1', '2') then
+                (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
                 WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
                 WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
-                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1)
-                ELSE (PE.Pares *  SUM(FT.Consumo)) END AS Explosion,
-                0 as dev,
-                0 as ent,
+                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )
+                else (PE.Pares *  FT.Consumo) end AS Explosion,
                 PM.Precio
                 FROM `pedidox` `PE`
                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
-                JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='$Maq'
+                JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='1'
                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
-                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
-                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
-                WHERE `A`.`Grupo` NOT IN('3', '50', '52')
-                AND `PE`.`Maquila` = '$Maq'
-                AND `PE`.`Semana` = '$Sem'
+                JOIN `maquilas` `MA` ON `MA`.`Clave` = '$Maq'
+                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
+                WHERE cast(PE.Maquila as signed) = $Maq
+                AND cast(PE.Semana as signed) = $Sem
                 AND `PE`.`Ano` = '$Ano'
-                AND `PE`.`Estatus` = 'A'
-                AND `PE`.`Control` <> 0
-                AND PE.Control IS NOT NULL
-                GROUP BY `A`.`Clave`
-                ORDER BY `ClaveGrupo` ASC, `A`.`Descripcion` ASC ");
+                AND `A`.`Grupo` NOT IN('3', '50', '52') ) as EXPL
+                GROUP BY `EXPL`.`Articulo`
+                ORDER BY `EXPL`.`Grupo` ASC, CAST(`EXPL`.`Articulo` AS SIGNED) ASC
+                ");
 
 
         //Realizacion de consulta a cabeceros para insertarlos

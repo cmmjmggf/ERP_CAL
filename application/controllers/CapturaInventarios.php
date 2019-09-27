@@ -804,47 +804,60 @@ class CapturaInventarios extends CI_Controller {
         $Mes = $this->input->post('Mes');
         $Ano = $this->input->post('Ano');
 
-        $Grupos = $this->ReporteCapturaFisica_model->getGruposMovimientosAjuste($Maq, $Mes, $Ano);
-        $Articulos = $this->ReporteCapturaFisica_model->getDetalleMovimientosAjuste($Maq, $Mes, $Ano);
-        if (!empty($Grupos)) {
+        $Movs = $this->ReporteCapturaFisica_model->getMovimientosAjuste($Maq, $Mes, $Ano);
+        if (!empty($Movs)) {
             $pdf = new PDF_Ajustes('P', 'mm', array(215.9, 279.4));
             $pdf->setMes($Mes);
             $pdf->setAno($Ano);
             $pdf->SetAutoPageBreak(true, 5);
-            $pdf->AddPage();
+
 
             $GT_Entradas = 0;
             $GT_Salidas = 0;
             $GT_TEntradas = 0;
             $GT_TSalidas = 0;
-            foreach ($Grupos as $key => $G) {
+
+            foreach ($Movs as $key => $M) {
+                $pdf->setMov($M->tipomov);
+                $pdf->AddPage();
+                $Grupos = $this->ReporteCapturaFisica_model->getGruposMovimientosAjuste($Maq, $Mes, $Ano, $M->tipomov);
+
+                $TM_Entradas = 0;
+                $TM_Salidas = 0;
+                $TM_TEntradas = 0;
+                $TM_TSalidas = 0;
 
                 $pdf->SetX(5);
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(15, 4, 'Grupo:', 'B'/* BORDE */, 0, 'L');
-                $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(40, 4, utf8_decode($G->Clave) . '    ' . utf8_decode($G->Nombre), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(15, 4, $M->tipomov, 1/* BORDE */, 1, 'L');
+                foreach ($Grupos as $key => $G) {
+                    $pdf->SetX(5);
+                    $pdf->SetLineWidth(0.5);
+                    $pdf->SetFont('Calibri', 'B', 8);
+                    $pdf->Cell(15, 4, 'Grupo:', 'B'/* BORDE */, 0, 'L');
+                    $pdf->SetX(20);
+                    $pdf->SetFont('Calibri', '', 8);
+                    $pdf->Cell(40, 4, utf8_decode($G->Clave) . '    ' . utf8_decode($G->Nombre), 'B'/* BORDE */, 1, 'L');
 
-                $pdf->SetLineWidth(0.2);
-                $pdf->SetFont('Calibri', '', 8);
-                $T_Entradas = 0;
-                $T_Salidas = 0;
-                $T_TEntradas = 0;
-                $T_TSalidas = 0;
-                $Total_Entradas = 0;
-                $Total_Salidas = 0;
+                    $pdf->SetLineWidth(0.2);
+                    $pdf->SetFont('Calibri', '', 8);
 
-                foreach ($Articulos as $keyA => $D) {
+                    $T_Entradas = 0;
+                    $T_Salidas = 0;
+                    $T_TEntradas = 0;
+                    $T_TSalidas = 0;
+                    $Total_Entradas = 0;
+                    $Total_Salidas = 0;
 
-                    if ($D->ClaveGrupo === $G->Clave) {
+                    $Articulos = $this->ReporteCapturaFisica_model->getDetalleMovimientosAjuste($Maq, $Mes, $Ano, $G->TipoMov, $G->Clave);
+                    foreach ($Articulos as $keyA => $D) {
 
                         $Total_Entradas = ($D->Entradas * $D->PrecioMov <> 0) ? '$' . number_format($D->Entradas * $D->PrecioMov, 2, ".", ",") : '';
                         $Total_Salidas = ($D->Salidas * $D->PrecioMov <> 0) ? '$' . number_format($D->Salidas * $D->PrecioMov, 2, ".", ",") : '';
                         $pdf->Row(array(
                             utf8_decode($D->ClaveArt),
-                            utf8_decode(mb_strimwidth($D->Articulo, 0, 29, "")),
+                            utf8_decode(mb_strimwidth($D->Articulo, 0, 30, "")),
                             utf8_decode($D->Unidad),
                             utf8_decode($D->FechaMov),
                             utf8_decode($D->TipoMov),
@@ -862,20 +875,47 @@ class CapturaInventarios extends CI_Controller {
                         $T_TEntradas += $D->Entradas * $D->PrecioMov;
                         $T_TSalidas += $D->Salidas * $D->PrecioMov;
 
+                        $TM_Entradas += $D->Entradas;
+                        $TM_Salidas += $D->Salidas;
+                        $TM_TEntradas += $D->Entradas * $D->PrecioMov;
+                        $TM_TSalidas += $D->Salidas * $D->PrecioMov;
+
                         $GT_Entradas += $D->Entradas;
                         $GT_Salidas += $D->Salidas;
                         $GT_TEntradas += $D->Entradas * $D->PrecioMov;
                         $GT_TSalidas += $D->Salidas * $D->PrecioMov;
                     }
-                }
 
+                    $pdf->SetX(40);
+                    $pdf->SetFont('Calibri', 'B', 8);
+                    $pdf->Cell(25, 4, 'Total por Grupo:', 0/* BORDE */, 0, 'L');
+                    $pdf->SetX(65);
+                    $pdf->SetFont('Calibri', '', 8);
+                    $pdf->Cell(40, 4, utf8_decode($G->Clave) . ' ' . utf8_decode($G->Nombre), 0/* BORDE */, 0, 'L');
+
+                    $pdf->SetFont('Calibri', 'B', 8);
+                    $pdf->Row(array(
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        number_format($T_Entradas, 2, ".", ","),
+                        number_format($T_Salidas, 2, ".", ","),
+                        '',
+                        '$' . number_format($T_TEntradas, 2, ".", ","),
+                        '$' . number_format($T_TSalidas, 2, ".", ","),
+                        '',
+                        ''
+                            ), 0);
+                }
+                //Total por tipo de mov
                 $pdf->SetX(40);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(25, 4, 'Total por Grupo:', 0/* BORDE */, 0, 'L');
+                $pdf->Cell(25, 4, 'Total de:', 0/* BORDE */, 0, 'L');
                 $pdf->SetX(65);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(40, 4, utf8_decode($G->Clave) . ' ' . utf8_decode($G->Nombre), 0/* BORDE */, 0, 'L');
-
+                $pdf->Cell(40, 4, utf8_decode($M->tipomov), 0/* BORDE */, 0, 'L');
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->Row(array(
                     '',
@@ -883,16 +923,15 @@ class CapturaInventarios extends CI_Controller {
                     '',
                     '',
                     '',
-                    number_format($T_Entradas, 2, ".", ","),
-                    number_format($T_Salidas, 2, ".", ","),
+                    number_format($TM_Entradas, 2, ".", ","),
+                    number_format($TM_Salidas, 2, ".", ","),
                     '',
-                    '$' . number_format($T_TEntradas, 2, ".", ","),
-                    '$' . number_format($T_TSalidas, 2, ".", ","),
+                    '$' . number_format($TM_TEntradas, 2, ".", ","),
+                    '$' . number_format($TM_TSalidas, 2, ".", ","),
                     '',
                     ''
                         ), 0);
             }
-
             $pdf->SetX(40);
             $pdf->SetFont('Calibri', 'B', 8);
             $pdf->Cell(25, 4, 'Total general:', 0/* BORDE */, 0, 'L');

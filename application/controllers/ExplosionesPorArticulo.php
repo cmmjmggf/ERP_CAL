@@ -210,17 +210,7 @@ class ExplosionesPorArticulo extends CI_Controller {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', '', 8);
 
-                switch ($Tipo) {
-                    case '10':
-                        $ExplosionCant = ($D->Consumo * $D->Pares) * ($D->Desperdicio + 1);
-                        break;
-                    case '80':
-                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                        break;
-                    case '90':
-                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                        break;
-                }
+                $ExplosionCant = $D->Explosion;
 
                 $Subtotal = $ExplosionCant * $D->Precio;
                 $pdf->Row(array(

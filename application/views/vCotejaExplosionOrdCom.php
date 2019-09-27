@@ -71,8 +71,11 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlCotejaExplosionOrdCom.find("#frmCaptura")[0]);
 
+            var Tipo = mdlCotejaExplosionOrdCom.find('#Tipo').val();
+            var reporte = (Tipo === '80') ? 'onReporteCotejaTallas' : 'onReporteCotejaOrdComExplosion';
+
             $.ajax({
-                url: base_url + 'index.php/ReporteCotejaOrdComExplosion/onReporteCotejaOrdComExplosion',
+                url: base_url + 'index.php/ReporteCotejaOrdComExplosion/' + reporte,
                 type: "POST",
                 cache: false,
                 contentType: false,

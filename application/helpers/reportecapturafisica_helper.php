@@ -411,6 +411,15 @@ class PDF_Ajustes extends FPDF {
 
     private $mes;
     private $ano;
+    public $mov;
+
+    function getMov() {
+        return $this->mov;
+    }
+
+    function setMov($mov) {
+        $this->mov = $mov;
+    }
 
     function getMes() {
         return $this->mes;
@@ -452,6 +461,13 @@ class PDF_Ajustes extends FPDF {
         $this->SetFont('Calibri', '', 10);
         $this->Cell(10, 4, utf8_decode($this->getAno()), 0/* BORDE */, 1, 'C');
 
+        $this->SetFont('Calibri', 'B', 10);
+        $this->SetX(36);
+        $this->Cell(10, 4, utf8_decode('Mov: '), 0/* BORDE */, 0, 'L');
+
+        $this->SetFont('Calibri', '', 10);
+        $this->SetX(46);
+        $this->Cell(10, 4, utf8_decode($this->getMov()), 0/* BORDE */, 0, 'L');
 
         //Paginador
         $this->SetY(3);

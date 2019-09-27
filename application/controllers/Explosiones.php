@@ -52,7 +52,7 @@ class Explosiones extends CI_Controller {
             $pdf->TipoE = $Tipo;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 10);
+            $pdf->SetAutoPageBreak(true, 5);
 
             $TOTAL_EXP = 0;
             $TOTAL_SUBT = 0;
@@ -83,15 +83,12 @@ class Explosiones extends CI_Controller {
                                 $pdf->SetLineWidth(0.25);
                                 $pdf->SetX(5);
                                 $pdf->SetFont('Calibri', '', 8);
-
-
-
-                                $ExplosionCant = ($D->Consumo * $D->Pares);
+                                $ExplosionCant = ($M->Consumo * $D->Pares);
                                 $Subtotal = $ExplosionCant * $M->Precio;
 
+                                //Aqui valida que el siguiente sea el mismo para irlos acumulando
                                 $Exp_Acum = $D->C1;
                                 $Talla = $D->T1;
-
 
                                 for ($i = 1; $i < 22; $i++) {
                                     $sig = $i + 1;
@@ -252,7 +249,7 @@ class Explosiones extends CI_Controller {
             $pdf->TipoE = $Tipo;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 10);
+            $pdf->SetAutoPageBreak(true, 5);
 
             $TOTAL_EXP = 0;
             $TOTAL_SUBT = 0;
@@ -268,6 +265,13 @@ class Explosiones extends CI_Controller {
                 $pdf->SetFont('Calibri', '', 8);
                 $pdf->Cell(50, 5, utf8_decode($G->Clave . '     ' . $G->Nombre), 0/* BORDE */, 1, 'L');
 
+                //Si es tipo suela planta entresuela traemos el total de pares por grupo para calcular porcentajes
+                $TotalesPorcentaje = '';
+                if ($Tipo === '80') {
+                    $TotalesPorcentaje = $cm->getTotalesPorGrupoParaPorcentaje(
+                            $Ano, $Sem, $aSem, $Maq, $aMaq, $G->Clave
+                    );
+                }
 
                 foreach ($Materiales as $key => $M) {
                     $TOTAL_EXP_ART = 0;
@@ -284,26 +288,18 @@ class Explosiones extends CI_Controller {
                                 $pdf->SetFont('Calibri', '', 8);
 
 
+                                $ExplosionCant = $D->Explosion;
+                                $Subtotal = $ExplosionCant * $D->Precio;
 
-                                switch ($Tipo) {
-                                    case '10':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares) * ($D->Desperdicio + 1);
-                                        break;
-                                    case '80':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                                        break;
-                                    case '90':
-                                        $ExplosionCant = ($D->Consumo * $D->Pares);
-                                        break;
+                                $PorcentajeSuelas = '';
+                                if ($Tipo === '80') {
+                                    $Porcentaje = $D->Pares * 100 / $TotalesPorcentaje[0]->Explosion;
+                                    $PorcentajeSuelas = number_format($Porcentaje, 2, ".", ",") . '%';
                                 }
 
-
-                                $Subtotal = $ExplosionCant * $D->Precio;
-                                $Porcentaje = $D->Pares * 100 / $Pares[0]->Pares;
-                                $PorcentajeSuelas = ($Tipo === '80') ? number_format($Porcentaje, 2, ".", ",") . '%' : '';
                                 $pdf->Row(array(
                                     utf8_decode($D->Articulo),
-                                    utf8_decode(mb_strimwidth($D->Descripcion, 0, 42, "")),
+                                    utf8_decode(mb_strimwidth($D->Descripcion, 0, 40, "")),
                                     utf8_decode($D->Clasificacion),
                                     utf8_decode($D->Unidad),
                                     number_format($ExplosionCant, 2, ".", ","),
