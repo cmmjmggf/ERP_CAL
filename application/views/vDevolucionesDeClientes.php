@@ -259,7 +259,7 @@
 </div>
 
 <div class="modal" id="mdlReportesDevoluciones">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Devoluciones no aplicadas ni facturadas</h5>
@@ -373,22 +373,48 @@
         handleEnterDiv(pnlTablero);
 
         btnAceptaReporteDevolucion.click(function () {
+            var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
+            var indice = parseInt(r);
             if (DeLaFechaDev.val() && ALaFechaDev.val()) {
-                if (mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') !== undefined) {
-                    onOpenOverlay('');
-                    $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>',
-                            {
-                                FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
-                                FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
-                            }).done(function (aaa) {
-                        if (aaa.length > 0) {
-                            onImprimirReporteFancyArray(JSON.parse(aaa));
-                        }
-                    }).fail(function (x, y, z) {
-                        getError(x);
-                    }).always(function () {
-                        onCloseOverlay();
-                    });
+                var p = {
+                    FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
+                    FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
+                };
+                console.log("INDICE => " + indice);
+                if (indice) {
+                    switch (indice) {
+                        case 1:
+                            /*1 = NORMAL (4 REPORTES)*/
+                            onOpenOverlay('');
+                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
+                                 
+
+                                if (aaa.length > 0) {
+                                    onImprimirReporteFancyArray(JSON.parse(aaa));
+                                }
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            }).always(function () {
+                                onCloseOverlay();
+                            });
+                            break;
+                        case 2:
+                            /* 2 = POR CLIENTE*/
+                            onMostraReporte('onImprimirReportePorCliente', p);
+                            break;
+                        case 3:
+                            /* 3 = POR MAQUILA*/
+                            onMostraReporte('onImprimirReportePorMaquila', p);
+                            break;
+                        case 4:
+                            /* 4 = POR DEFECTO DETALLE*/
+                            onMostraReporte('onImprimirReportePorDefectoDetalle', p);
+                            break;
+                        case 5:
+                            /* 5 = POR AGENTE, POR CLIENTE, POR DEPARTAMENTO, POR DEFECTO Y DETALLE*/
+                            onMostraReporte('onImprimirReportePorAgenteClienteDepartamentoDefectoDetalle', p);
+                            break;
+                    }
                 } else {
                     iMsg("DEBE DE ESPECIFICAR UN TIPO DE REPORTE", 'w', function () {
 
@@ -827,6 +853,19 @@
             btnAcepta.attr('disabled', true);
             btnReportes.attr('disabled', true);
         }
+    }
+
+    function onMostraReporte(url, p) {
+        onOpenOverlay('');
+        $.post('<?php print base_url('DevolucionesDeClientes/'); ?>' + url, p).done(function (aaa) {
+            if (aaa.length > 0) {
+                onImprimirReporteFancy(aaa);
+            }
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
 <style>
