@@ -61,7 +61,7 @@
         });
         mdlModificaAClienteDevoluciones.on('shown.bs.modal', function () {
             ClienteMCD[0].selectize.clear();
-            if ($.fn.DataTable.isDataTable('#tblOrdenesCompra')) {
+            if ($.fn.DataTable.isDataTable('#tblControlesXAplicarDeEsteCliente')) {
                 ControlesXAplicarDeEsteCliente.ajax.reload(function () {
                     onCloseOverlay();
                 });
@@ -170,9 +170,7 @@ foreach ($dtm as $k => $v) {
                     });
                 }
             });
-
         });
-
     }
 </script>  
 <script src="<?php print base_url('js/swal2/sweetalert2@8'); ?>"></script>
