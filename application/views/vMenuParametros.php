@@ -18,7 +18,7 @@
 
 <?php
 $this->load
-        ->view('vFichaTecnicaCompra')
+        ->view('vFichaTecnicaPreciosCostos')
         ->view('vEstilosFotos')
         ->view('vSeleccionaEstiloColorParaEfectoVenta')
         ->view('vConsultaEstilos')

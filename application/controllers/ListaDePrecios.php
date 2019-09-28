@@ -17,8 +17,19 @@ class ListaDePrecios extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuParametros');
+
+
+                    $this->load->view('vNavGeneral');
+                    //Validamos que no venga vacia y asignamos un valor por defecto
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+
+                    if ($Origen === 'FICHASTECNICAS') {
+                        $this->load->view('vMenuFichasTecnicas');
+                    } else if ($Origen === 'PARAMETROS') {
+                        $this->load->view('vMenuParametros');
+                    }
                     break;
+
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
                     break;

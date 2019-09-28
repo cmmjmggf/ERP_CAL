@@ -2,7 +2,7 @@
     <!--    MENU DE OPCIONES-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
         <span class="ml-2 navbar-brand" >
-            Generación de Precios de Venta
+            Genera Precios de Venta
         </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -14,7 +14,7 @@
                     <ul class="dropdown-menu animated slideIn" aria-labelledby="navCatalogos">
                         <a class="dropdown-item" href="#" onclick="consultaEstiloso()">Estilos</a>
                         <a class="dropdown-item" href="#" onclick="consultaFraccionesXEstilo()">Fracciones</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlFichaTecnicaCompra">Costos Ficha Técnica</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlFichaTecnicaPreciosCostos">Costos Ficha Técnica</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlEstilosFotos">Visualiza Estilo</a>
                     </ul>
                 </li>
@@ -24,9 +24,6 @@
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlLineasAbiertas">Lineas Abiertas</a>
                         <a class="dropdown-item" href="#" onclick="onMarcarLineaParaNoModificar()">Marca Linea/Estilos para NO modificarlos</a>
                         <a class="dropdown-item" href="#" onclick="onDescarmarLineaParaModificar()">Desmarca Linea/Estilos para modificarlos</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlParametrosFijos">Parámetros Fijos</a>
-                        <a class="dropdown-item" href="#" onclick="onImprimirListaPrecios()">Imprime Lista de Precios</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Clasifica Estilo para Precio Venta</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Elimina Estilos Obsoletos</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlConsultaEstiloLineaLista">Verifica Estilos/Lineas</a>
                     </ul>
@@ -39,14 +36,19 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown ml-auto">
+                    <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">
+                        <i class="fa fa-check-square"></i> Clasifica Estilo p' Precio-Vta
+                    </a>
+                    <a class="btn btn-secondary" href="#" onclick="onImprimirListaPrecios()"><i class="fa fa-file-invoice-dollar"></i> Imp. Lista Precios</a>
+                    <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#mdlParametrosFijos"><i class="fa fa-cogs"></i> Param. Fijos</a>
                     <button class="btn btn-warning " onclick="init()">
-                        <i class="fa fa-file-alt"></i> Otra Linea-Corrida lista de precios
+                        <i class="fa fa-file-alt"></i> Otra Linea-Corr-Lista
                     </button>
                     <button class="btn btn-danger " onclick="onImprimirReporteCostos()">
-                        <i class="fa fa-print"></i> IMPRIME
+                        <i class="fa fa-print"></i> Imprime
                     </button>
                     <button class="btn btn-success " id ="btnAceptarActualizar">
-                        <i class="fa fa-check"></i> ACTUALIZAR Y ACEPTAR
+                        <i class="fa fa-check"></i> Actualiza
                     </button>
                 </li>
             </ul>
@@ -58,33 +60,45 @@
             <!--primer columna-->
             <div class="col-7" >
                 <div class="row">
-                    <div class="col-12 col-sm-5 col-md-4 col-xl-4" >
+                    <div class="col-1" >
                         <label for="" >Linea</label>
-                        <select id="Linea" name="Linea" class="form-control form-control-sm required" >
+                        <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6"  id="Linea" name="Linea"   >
+                    </div>
+                    <div class="col-3" >
+                        <label for="" ></label>
+                        <select id="sLinea" name="sLinea" class="form-control form-control-sm  NotSelectize" >
                             <option value=""></option>
                             <?php
-                            foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Descripcion) AS LINEA, C.Tipo ", false)
-                                    ->from('lineas AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                                print "<option value='{$v->CLAVE}-{$v->Tipo}'>{$v->LINEA}</option>";
+                            foreach ($this->db->select("C.Clave AS CLAVE, C.Descripcion AS LINEA, C.Tipo ", false)
+                                    ->from('lineas AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('LINEA', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->LINEA}</option>";
                             }
                             ?>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-5 col-md-4 col-xl-4" >
-                        <label for="" >Lista Precios</label>
-                        <select id="ListaPrecios" name="ListaPrecios" class="form-control form-control-sm required" >
+                    <div class="col-1" >
+                        <label for="" >Lista</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6" id="ListaPrecios" name="ListaPrecios"   >
+                    </div>
+                    <div class="col-3" >
+                        <label for="" ></label>
+                        <select id="sListaPrecios" name="sListaPrecios" class="form-control form-control-sm  NotSelectize" >
                             <option value=""></option>
                             <?php
-                            foreach ($this->db->select("C.Lista AS CLAVE, CONCAT(C.Lista, \" - \",C.Descripcion) AS LISTA ", false)
-                                    ->from('listadeprecios AS C')->order_by('ABS(C.Lista)', 'ASC')->get()->result() as $k => $v) {
+                            foreach ($this->db->select("C.Lista AS CLAVE, C.Descripcion AS LISTA ", false)
+                                    ->from('listadeprecios AS C')->order_by('LISTA', 'ASC')->get()->result() as $k => $v) {
                                 print "<option value='{$v->CLAVE}' >{$v->LISTA}</option>";
                             }
                             ?>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-5 col-md-4 col-xl-4" >
+                    <div class="col-1" >
                         <label for="" >Corrida</label>
-                        <select id="Corrida" name="Corrida" class="form-control form-control-sm NotSelectize" >
+                        <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6"  id="Corrida" name="Corrida"   >
+                    </div>
+                    <div class="col-3" >
+                        <label for="" ></label>
+                        <select id="sCorrida" name="sCorrida" class="form-control form-control-sm NotSelectize" >
                             <option value=""></option>
                             <option value="1">1 - 17/21 &frac12; Nn </option>
                             <option value="2">2 - 22/27 Dn</option>
@@ -96,22 +110,22 @@
                     </div>
                 </div>
                 <!--                Tabla-->
-                <div class="row" style="height: 700px; overflow-y: auto;">
+                <div class="row" style="height: 630px; overflow-y: auto;">
                     <!--Primer tabla-->
                     <div class="col-12 mt-1" >
                         <div class="card-block">
                             <div id="Registros" class="datatable-wide">
-                                <table id="tblRegistrosGenCostos" class="table table-sm display " style="width:100%">
+                                <table id="tblRegistrosGenCostos" class="table table-sm display nowrap " style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Lta</th>
-                                            <th>Linea</th>
+                                            <th class="d-none">Lta</th>
+                                            <th class="d-none">Linea</th>
                                             <th>Estilo</th>
                                             <th>Col</th>
-                                            <th>Cda</th>
+                                            <th class="d-none">Cda</th>
                                             <th>Tipo Piel</th>
                                             <th>Mat.Pri</th>
-                                            <th>%ExPF</th>
+                                            <th class="d-none">%ExPF</th>
                                             <th>$ExPF</th>
                                             <th>M.OB.</th>
                                             <th>Tejido</th>
@@ -124,12 +138,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12" align="center">
-                    <label class="badge badge-danger" style="font-size: 14px;">Nota: Actualizar es tomar informacion actual en precios y consumos, para efectos de facturación</label>
-                </div>
-                <div class="col-12" align="center">
-                    <label class="badge badge-info" style="font-size: 14px;">Nota: Materia Prima es natural sin desperdicio</label>
                 </div>
             </div>
             <!--segunda columna-->
@@ -472,21 +480,6 @@
                         <input type="text" class="form-control form-control-sm  verde" readonly="" id="porUtilidReal" name="porUtilidReal"   >
                     </div>
 
-                    <div class="w-100"></div>
-                    <!--                    17vo renglon-->
-                    <div class="col-2" align="center">
-                    </div>
-                    <div class="col-4" >
-                        <label class="badge badge-danger" style="font-size: 12px; width: 100%;">Gastos Fijos</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly rojo" maxlength="6" id="GastosFijos" name="GastosFijos"  >
-                    </div>
-                    <div class="col-2" align="center">
-                    </div>
-                    <div class="col-4" >
-                        <label class="badge badge-danger" style="font-size: 12px; width: 100%;">Punto Equilibrio</label>
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="ptoequil" name="ptoequil"  >
-                    </div>
-
                     <!--                    CAMPOS PRECIO-->
                     <div class="w-100 mt-2 "></div>
                     <div class="col-8" align="center">
@@ -495,18 +488,6 @@
                         <label class="badge badge-success text-strong text-white" style="font-size: 14px; width: 100%;">Precio Autorizado</label>
                     </div>
                     <div class="w-100 mb-2"></div>
-                    <!--                   Estilo color Lista -->
-                    <div class="col-8" >
-                    </div>
-                    <div class="col-1" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="ListaSe" name="ListaSe"   >
-                    </div>
-                    <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="EstiloSe" name="EstiloSe"   >
-                    </div>
-                    <div class="col-1" >
-                        <input type="text" class="form-control form-control-sm  morado" readonly="" id="ColorSe" name="ColorSe"   >
-                    </div>
                     <!--                   Precio -->
                     <div class="w-100"></div>
                     <div class="col-8" >
@@ -519,24 +500,16 @@
                     <div class="col-3" >
                     </div>
                     <div class="col-5" align="right">
-                        <label>Estilo seleccionado y tot-estilos</label>
+                        <label>Fecha Ult. Act y total-estilos</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="EstiloSelecc" name="EstiloSelecc"   >
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="FechaUltiActu" name="FechaUltiActu"   >
                     </div>
                     <div class="col-2" align="center">
                         <input type="text" class="form-control form-control-sm NotClean azul" readonly="" id="TotEstilos" name="TotEstilos"   >
                     </div>
                     <!--                   Fecha última actualización -->
                     <div class="w-100"></div>
-                    <div class="col-3" >
-                    </div>
-                    <div class="col-5" align="right">
-                        <label>Fecha última actualización</label>
-                    </div>
-                    <div class="col-4" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="FechaUltiActu" name="FechaUltiActu"   >
-                    </div>
                     <!--                   Precio Promedio-->
                     <div class="w-100"></div>
                     <div class="col-3" >
@@ -553,9 +526,9 @@
     </div>
     <div id="dFotoDrag" class="d-none">
         <div class="card cardFoto" id="marcoFoto">
-            <div class="card-header card-headerFoto"><span class="float-right close-icon text-danger" id = "btnCerrarFoto"><i class="fa fa-times fa-2x"></i></span></div>
-            <div class="card-body card-bodyFoto" style="height: 250px; overflow-y: auto;" align="center">
-                <img id="fotoEstilo" src="" alt="" width="270px" height=""/>
+            <div class="card-header card-headerFoto"><span class="float-right close-icon text-danger" id = "btnCerrarFoto"><i class="fa fa-times fa-lg"></i></span></div>
+            <div class="card-body card-bodyFoto" style="height: 215px; overflow-y: auto;" align="center">
+                <img id="fotoEstilo" src="" alt="" width="250px" height=""/>
             </div>
         </div>
     </div>
@@ -570,6 +543,124 @@
     var fotoEstilo = $("#fotoEstilo");
 
     $(document).ready(function () {
+        init();
+        /*inputs events*/
+        pnlTablero.find('#Linea').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtlinea = $(this).val();
+                if (txtlinea) {
+
+                    $.getJSON(master_url + 'onVerificarLinea', {Linea: txtlinea}).done(function (data) {
+                        if (data.length > 0) {
+                            linea = txtlinea;
+                            pnlTablero.find("#sLinea")[0].selectize.addItem(txtlinea, true);
+                            pnlTablero.find('#ListaPrecios').focus().select();
+                        } else {
+                            swal('ERROR', 'LA LINEA CAPTURADA NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#Linea').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#sLinea').change(function () {
+            if ($(this).val()) {
+                linea = $(this).val();
+                pnlTablero.find('#Linea').val(linea);
+                pnlTablero.find('#ListaPrecios').focus().select();
+            }
+        });
+        pnlTablero.find('#ListaPrecios').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtlista = $(this).val();
+                if (txtlista) {
+
+                    $.getJSON(master_url + 'onVerificarListaPrecios', {Lista: txtlista}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sListaPrecios")[0].selectize.addItem(txtlista, true);
+                            pnlTablero.find('#Corrida').focus().select();
+                        } else {
+                            swal('ERROR', 'LA LISTA DE PRECIOS NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#ListaPrecios').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#sListaPrecios').change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#ListaPrecios').val($(this).val());
+                pnlTablero.find('#Corrida').focus().select();
+            }
+        });
+        pnlTablero.find('#Corrida').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var lista = pnlTablero.find('#ListaPrecios').val();
+                var corrida = pnlTablero.find('#Corrida').val();
+                if (linea) {
+                    if (lista) {
+                        if (corrida) {
+                            pnlTablero.find("#sCorrida")[0].selectize.addItem(corrida, true);
+                            estiloS = 0;
+                            //Obtener información inicial
+                            getRegistros(linea, lista, corrida);
+                            obtenerInfoInicial(linea, lista, corrida);
+                        } else {
+                            swal('ERROR', 'SELECCIONE UNA CORRIDA', 'warning').then((value) => {
+                                pnlTablero.find('#Corrida').focus();
+                            });
+                        }
+                    } else {
+                        swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
+                            pnlTablero.find('#ListaPrecios').focus();
+                        });
+                    }
+                } else {
+                    swal('ERROR', 'SELECCIONE UNA LINEA', 'warning').then((value) => {
+                        pnlTablero.find('#Linea').focus();
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#sCorrida').change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Corrida').val($(this).val());
+                var lista = pnlTablero.find('#ListaPrecios').val();
+                var corrida = pnlTablero.find('#Corrida').val();
+                if (linea) {
+                    if (lista) {
+                        if (corrida) {
+                            pnlTablero.find("#sCorrida")[0].selectize.addItem(corrida, true);
+                            estiloS = 0;
+                            //Obtener información inicial
+                            getRegistros(linea, lista, corrida);
+                            obtenerInfoInicial(linea, lista, corrida);
+                        } else {
+                            swal('ERROR', 'SELECCIONE UNA CORRIDA', 'warning').then((value) => {
+                                pnlTablero.find('#Corrida').focus();
+                            });
+                        }
+                    } else {
+                        swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
+                            pnlTablero.find('#ListaPrecios').focus();
+                        });
+                    }
+                } else {
+                    swal('ERROR', 'SELECCIONE UNA LINEA', 'warning').then((value) => {
+                        pnlTablero.find('#Linea').focus();
+                    });
+                }
+            }
+        });
+
         /*ACTUALIZAR*/
         pnlTablero.find('#btnAceptarActualizar').click(function () {
             var lista = pnlTablero.find('#ListaPrecios').val();
@@ -577,52 +668,38 @@
             if (linea) {
                 if (lista) {
                     if (corrida) {
-                        swal({
-                            buttons: ["Cancelar", "Aceptar"],
-                            title: 'Estás Seguro?',
-                            text: "Se actualizarán los precios de: \n" + "Lista: " + lista + "  \nLinea: " + linea + "  \nCorrida: " + corrida,
-                            icon: "warning",
-                            closeOnEsc: false,
-                            closeOnClickOutside: false
-                        }).then((action) => {
-                            if (action) {
-                                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                                $.post(base_url + 'index.php/GeneraCostosVenta/onActualizarCostos', {Lista: lista, Linea: linea, Corrida: corrida}).done(function (data) {
-                                    console.log(data);
+                        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                        $.post(base_url + 'index.php/GeneraCostosVenta/onActualizarCostos', {Lista: lista, Linea: linea, Corrida: corrida}).done(function (data) {
+                            console.log(data);
 
-                                    if (data.length > 0) {
-                                        //no existen parámetros fijos
-                                    } else {
-                                        //se ha actualizado con existo
-                                        swal('ATENCIÓN', 'ACTUALIZACIÓN EXITOSA', 'success').then((value) => {
-                                            Registros.ajax.reload();
-                                            //Ejecutar funcion para traernos el precio promedio y numero de registros
-                                            obtenerInfoInicial(linea, lista, corrida);
-                                        });
-                                    }
-                                    HoldOn.close();
-                                }).fail(function (x, y, z) {
-                                    console.log(x, y, z);
-                                    HoldOn.close();
-                                });
+                            if (data.length > 0) {
+                                //no existen parámetros fijos
+                                onNotifyOld('fa fa-times', 'NO EXISTEN PARÁMETROS FIJOS', 'danger');
+                            } else {
+                                //se ha actualizado con existo
+                                onNotifyOld('fa fa-check', 'ACTUALIZACIÓN EXITOSA', 'success');
+                                Registros.ajax.reload();
+                                //Ejecutar funcion para traernos el precio promedio y numero de registros
+                                obtenerInfoInicial(linea, lista, corrida);
                             }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
                         });
                     } else {
                         swal('ERROR', 'SELECCIONE UNA CORRIDA', 'warning').then((value) => {
-                            pnlTablero.find('#Corrida')[0].selectize.focus();
-                            pnlTablero.find('#Corrida')[0].selectize.open();
+                            pnlTablero.find('#Corrida').focus();
                         });
                     }
                 } else {
                     swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
-                        pnlTablero.find('#ListaPrecios')[0].selectize.focus();
-                        pnlTablero.find('#ListaPrecios')[0].selectize.open();
+                        pnlTablero.find('#ListaPrecios').focus();
                     });
                 }
             } else {
                 swal('ERROR', 'SELECCIONE UNA LINEA', 'warning').then((value) => {
-                    pnlTablero.find('#Linea')[0].selectize.focus();
-                    pnlTablero.find('#Linea')[0].selectize.open();
+                    pnlTablero.find('#Linea').focus();
                 });
             }
         });
@@ -642,13 +719,11 @@
             pnlTablero.find('#dFotoDrag').addClass('d-none');
         });
         /*Fin Foto*/
-        init();
         tblRegistrosGenCostos.find('tbody').on('click', 'tr', function () {
             tblRegistrosGenCostos.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
         tblRegistrosGenCostos.find('tbody').on('dblclick', 'tr', function () {
-
             /*Limpia inputs*/
             pnlTablero.find("input").not('.NotClean').val("");
             var dtm = Registros.row(this).data();
@@ -691,12 +766,6 @@
                 var datosParamFijos = JSON.parse(data['UNO'])[0];
 
                 /*Datos generales*/
-                pnlTablero.find("#EstiloSelecc").val(estiloS);
-                pnlTablero.find("#ListaSe").val(listaS);
-                pnlTablero.find("#EstiloSe").val(estiloS);
-                pnlTablero.find("#ColorSe").val(colorS);
-
-                pnlTablero.find('#GastosFijos').val(toFormattedNumber(datosParamFijos.gtosf));
                 pnlTablero.find('#FechaUltiActu').val(datosParamFijos.fecha);
                 pnlTablero.find('#PreAutoPrincipal').val(toFormattedNumber(datosParamFijos.preaut));
 
@@ -849,11 +918,6 @@
                 var txtputreal = (parseFloat(txtutreal) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#porUtilidReal").val(toFormattedPorcentDecimals(txtputreal));
 
-                //Punto de equilibrio
-                var txtpe1 = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.mextr) + parseFloat(datosParamFijos.maob) +
-                        parseFloat(datosParamFijos.tejida) + parseFloat(datosParamFijos.flete) + parseFloat(txtds1) + parseFloat(txtcm1);
-                var txtpe2 = parseFloat(datosParamFijos.gfabri) / txtpe1;
-                pnlTablero.find("#ptoequil").val(parseFloat(txtpe2).toFixed(2));
                 //Establecemos foco en pre-aut
                 pnlTablero.find("#PreAutori").focus().select();
             }).fail(function (x) {
@@ -861,60 +925,6 @@
                 console.log(x.responseText);
             });
 
-        });
-        pnlTablero.find('#Linea').change(function () {
-            var tipoLinea = 0;
-            if ($(this).val()) {
-                linea = $(this).val().split("-")[0];
-                tipoLinea = parseInt($(this).val().split("-")[1]);
-                switch (tipoLinea) {
-                    case 1:
-                        swal('ATENCIÓN', 'Linea en PROTOTIPO', 'info').then((value) => {
-                            pnlTablero.find('#ListaPrecios')[0].selectize.focus();
-                        });
-                        break;
-                    case 2:
-                        swal('ATENCIÓN', 'Linea en MUESTRA', 'info').then((value) => {
-                            pnlTablero.find('#ListaPrecios')[0].selectize.focus();
-                        });
-                        break;
-                    case 3:
-                        swal('ATENCIÓN', 'Linea en EXTENCIÓN', 'info').then((value) => {
-                            pnlTablero.find('#ListaPrecios')[0].selectize.focus();
-                        });
-                        break;
-                }
-                //limpia();
-            }
-        });
-        pnlTablero.find('#ListaPrecios').change(function () {
-            if ($(this).val()) {
-                pnlTablero.find('#Corrida')[0].selectize.focus();
-            }
-        });
-        pnlTablero.find('#Corrida').change(function () {
-            if ($(this).val()) {
-                var corrida = $(this).val();
-                var lista = pnlTablero.find('#ListaPrecios').val();
-                estiloS = 0;
-                getRegistros(linea, lista, corrida);
-                //Obtener información inicial
-                obtenerInfoInicial(linea, lista, corrida);
-            }
-        });
-        pnlTablero.find('#GastosFijos').keypress(function (e) {
-            if (e.keyCode === 13) {
-                if ($(this).val()) {
-                    $.post(master_url + 'onActualizarGastosFijos', {GastosF: $(this).val()}).done(function (data) {
-                        swal('ATENCIÓN', 'LOS GASTOS FIJOS SE HAN ACTUALIZADO CON ÉXITO', 'success').then((value) => {
-                            pnlTablero.find('#GastosFijos').focus().select();
-                        });
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
-                }
-            }
         });
         pnlTablero.find('#PreAutori').keypress(function (e) {
             if (e.keyCode === 13) {
@@ -1037,22 +1047,8 @@
         }
     }
     function init() {
-        pnlTablero.find('#Linea')[0].selectize.focus();
-        pnlTablero.find('#Corrida').selectize({
-            hideSelected: false,
-            openOnFocus: true,
-            score: function (search)
-            {
-                return function (option)
-                {
-                    if (option.text.indexOf(search) === 0)
-                    {
-                        return 1;
-                    }
-                    return 0;
-                };
-            }
-        });
+        pnlTablero.find('#Linea').focus();
+        pnlTablero.find("select").selectize();
         limpia();
         getRegistros('', 0, 0);
         estiloS = 0;
@@ -1069,14 +1065,11 @@
     }
     function getRegistros(linea, lista, corrida) {
         $.fn.dataTable.ext.errMode = 'throw';
-
         if ($.fn.DataTable.isDataTable('#tblRegistrosGenCostos')) {
             tblRegistrosGenCostos.DataTable().destroy();
         }
-
         Registros = tblRegistrosGenCostos.DataTable({
-            "dom": 'frt',
-            buttons: buttons,
+            "dom": 'frt', buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
@@ -1112,6 +1105,11 @@
                     "render": function (data, type, row) {
                         return '%' + $.number(parseFloat(data * 100), 0, '.', ',');
                     }
+                },
+                {
+                    "targets": [0, 1, 4, 7],
+                    "visible": false,
+                    "searchable": false
                 }
             ],
             "createdRow": function (row, data, index) {
@@ -1119,23 +1117,19 @@
                     var c = $(v);
                     var index = parseInt(k);
                     switch (index) {
-                        case 2:
-                            /*ARTICULO*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 3:
-                            /*UNIDAD*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 5:
-                            /*UNIDAD*/
+                        case 0:
                             c.addClass('text-strong');
                             break;
-                        case 11:
-                            /*UNIDAD*/
+                        case 1:
+                            c.addClass('text-info text-strong');
+                            break;
+                        case 2:
+                            c.addClass('text-info text-strong');
+                            break;
+                        case 7:
                             c.addClass('text-strong text-warning');
                             break;
-                        case 12:
+                        case 8:
                             /*UNIDAD*/
                             c.addClass('text-strong text-success');
                             break;
@@ -1147,7 +1141,7 @@
             "colReorder": true,
             "displayLength": 450,
             "scrollX": true,
-            "scrollY": 630,
+            "scrollY": 550,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -1159,7 +1153,6 @@
 
             }
         });
-
     }
     function consultaFraccionesXEstilo() {
         onOpenWindow('<?php print base_url('FraccionesXEstilo'); ?>');
@@ -1180,8 +1173,7 @@
             });
         } else {
             swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
-                pnlTablero.find('#ListaPrecios')[0].selectize.focus();
-                pnlTablero.find('#ListaPrecios')[0].selectize.open();
+                pnlTablero.find('#ListaPrecios').focus();
             });
         }
     }
@@ -1197,8 +1189,7 @@
             });
         } else {
             swal('ERROR', 'SELECCIONE UNA LINEA', 'warning').then((value) => {
-                pnlTablero.find('#Linea')[0].selectize.focus();
-                pnlTablero.find('#Linea')[0].selectize.open();
+                pnlTablero.find('#Linea').focus();
             });
         }
     }
@@ -1214,7 +1205,7 @@
 </script>
 <style>
 
-    #marcoFoto {width: 300px; height:300px; position: absolute; top: 58%; left:42%; z-index: 999;background-color: #FFF;}
+    #marcoFoto {width: 280px; height:265px; position: absolute; top: 60%; left:59%; z-index: 999;background-color: #FFF;}
     .top {z-index: 2; position: relative}
     .bottom {z-index: 1; position: relative}
 
@@ -1236,27 +1227,15 @@
         font-weight: bolder;
     }
 
-    tr.group-start:hover td{
-        background-color: #e0e0e0 !important;
-        color: #000 !important;
-    }
-    tr.group-end td{
-        background-color: #FFF !important;
-        color: #000!important;
-    }
-    /*    td{
-            -webkit-transition: all .2s ease-in-out;
-            transition: all .2s ease-in-out;
-        }*/
-
-    td span.badge{
-        font-size: 100% !important;
+    table tbody tr {
+        font-size: 0.85rem !important;
     }
 
     div.datatable-wide {
         padding-left: 0;
         padding-right: 0;
     }
+
 
     .verde {
 
@@ -1285,9 +1264,10 @@
 
     .form-control-sm,  .form-control {
         padding: 0.15rem 0.5rem;
-        margin-top:  0.15rem;
-        margin-bottom: 0.15rem;
+        margin-top:  0.10rem;
+        margin-bottom: 0.10rem;
         font-weight: bold;
+        font-size: 0.85rem !important;
     }
 
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7,

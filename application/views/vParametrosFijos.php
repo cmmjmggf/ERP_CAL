@@ -10,91 +10,76 @@
             </div>
             <div class="modal-body">
                 <form id="frmCapturaPF">
+                    <label for="" class="mb-2 mr-sm-2">Lista de precios</label>
+                    <div class="form-inline">
+
+                        <input type="text" class="form-control form-control-sm numbersOnly mb-2 mr-sm-2" style="width: 100px;" maxlength="6"  id="ListaPF" name="ListaPF"   >
+                        <select id="sListaPF" name="sListaPF" class="form-control form-control-sm required " style="width: 320px;">
+                            <option value=""></option>
+                            <?php
+                            foreach ($this->db->select("C.Lista AS CLAVE, C.Descripcion AS LISTA, C.Descripcion as nomlista ", false)
+                                    ->from('listadeprecios AS C')->order_by('LISTA', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}' >{$v->LISTA}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+
                     <div class="row">
-                        <div class="col-3">
-                            <label>Lista de Precios</label>
-                            <select id="ListaPF" name="ListaPF" class="form-control form-control-sm required ">
-                                <option value=""></option>
-                                <?php
-                                foreach ($this->db->select("C.Lista AS CLAVE, CONCAT(C.Lista, \" - \",C.Descripcion) AS LISTA, C.Descripcion as nomlista ", false)
-                                        ->from('listadeprecios AS C')->order_by('ABS(C.Lista)', 'ASC')->get()->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}-{$v->nomlista}' >{$v->LISTA}</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
                         <div class="col-12"><hr></div>
                         <div class="w-100"></div>
-                        <!-- ----------------------------- CAMPOS ----------------------------- -->
-                        <div class="col-1">
-                            <label>Tolerancia</label>
+
+                        <div class="col-12" align="center">
+                            <label class="badge badge-info" style="font-size: 14px; width: 100%;">Nota: Los campos de % deben ser .15 que equivale a 15%</label>
                         </div>
-                        <div class="col-1">
+                        <!-- ----------------------------- CAMPOS ----------------------------- -->
+
+                        <div class="col-2">
+                            <label>Tolerancia %</label>
                             <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="tolerPF" name="tolerPF"   >
                         </div>
-                        <div class="col-1">
-                            <label>G-Admon</label>
+                        <div class="col-2">
+                            <label>G-Fábrica</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="gfabriPF" name="gfabriPF"   >
                         </div>
-                        <div class="col-1">
+                        <div class="col-2">
+                            <label>G-Venta</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="gvtaPF" name="gvtaPF"   >
+                        </div>
+                        <div class="col-2">
+                            <label>G-Admon</label>
                             <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="gadmonPF" name="gadmonPF"   >
                         </div>
-                        <div class="col-1">
-                            <label>% Decuento</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="descPF" name="descPF"   >
-                        </div>
-                        <div class="col-1">
-                            <label>Flete</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="fletePF" name="fletePF"   >
+                        <div class="col-2">
+                            <label>Hms</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="hmsPF" name="hmsPF"   >
                         </div>
                         <!-- -----------------------------primer renglon----------------------------- -->
                         <div class="w-100"></div>
-                        <div class="col-1">
-                            <label>G-Fábrica</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="gfabriPF" name="gfabriPF"   >
-                        </div>
-                        <div class="col-1">
-                            <label>Hms</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="hmsPF" name="hmsPF"   >
-                        </div>
-                        <div class="col-1">
-                            <label>% Comisión</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="comicPF" name="comicPF"   >
-                        </div>
-                        <!-- -----------------------------segundo renglon----------------------------- -->
-                        <div class="w-100"></div>
-                        <div class="col-1">
-                            <label>G-Venta</label>
-                        </div>
-                        <div class="col-1">
-                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="gvtaPF" name="gvtaPF"   >
-                        </div>
-                        <div class="col-1">
+                        <div class="col-2">
                             <label>% Utilidad</label>
-                        </div>
-                        <div class="col-1">
                             <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="utiliPF" name="utiliPF"   >
                         </div>
-                        <div class="col-1">
-                            <label>% Extra</label>
+                        <div class="col-2">
+                            <label>% Decuento</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="descPF" name="descPF"   >
                         </div>
-                        <div class="col-1">
+                        <div class="col-2">
+                            <label>% Comisión</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="comicPF" name="comicPF"   >
+                        </div>
+                        <div class="col-2">
+                            <label>% Extra</label>
                             <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="pextrPF" name="pextrPF"   >
                         </div>
-                        <!-- ----------------------------- FIN CAMPOS ----------------------------- -->
-                        <div class="col-12 mt-1" align="center">
-                            <label class="badge badge-info" style="font-size: 14px; width: 100%;">Nota: Los campos de % deben ser .15 que equivale a 15%</label>
+                        <div class="col-2">
+                            <label>Flete</label>
+                            <input type="text" class="form-control form-control-sm  azul numbersOnly" maxlength= "6"  id="fletePF" name="fletePF"   >
                         </div>
-                        <div class="col-sm-12 mt-3">
+
+                        <!-- ----------------------------- FIN CAMPOS ----------------------------- -->
+                        <div class="col-sm-12 mt-2">
                             <div class="table-responsive" id="ParametrosFijos">
                                 <table id="tblParametrosFijos" class="table table-sm  " style="width:100%">
                                     <thead>
@@ -136,9 +121,62 @@
     var mdlParametrosFijos = $('#mdlParametrosFijos');
     var tblParametrosFijos = $('#tblParametrosFijos');
     var ParametrosFijos;
-    var listaPF, nomlistaPF;
+    var listaPF;
 
     $(document).ready(function () {
+
+        mdlParametrosFijos.find("#btnClientesPF").click(function () {
+            $.fancybox.open({
+                src: base_url + '/Clientes',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "85%",
+                            height: "85%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+        mdlParametrosFijos.find("#btnListasPreciosPF").click(function () {
+            $.fancybox.open({
+                src: base_url + '/ListaDePrecios',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "85%",
+                            height: "85%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
         tblParametrosFijos.find('tbody').on('dblclick', 'tr', function () {
             var dtm = ParametrosFijos.row(this).data();
             swal({
@@ -160,7 +198,7 @@
                             $.each(mdlParametrosFijos.find("select"), function (k, v) {
                                 mdlParametrosFijos.find("select")[k].selectize.clear(true);
                             });
-                            mdlParametrosFijos.find('#ListaPF')[0].selectize.focus();
+                            mdlParametrosFijos.find('#ListaPF').focus();
                         }
                     }).fail(function (x) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -177,10 +215,50 @@
             });
             getParametrosFijos();
         });
-        mdlParametrosFijos.find("#ListaPF").change(function () {
+
+
+        mdlParametrosFijos.find('#ListaPF').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    listaPF = $(this).val();
+                    mdlParametrosFijos.find("#sListaPF")[0].selectize.addItem(listaPF, true);
+                    $.getJSON(master_url + 'getInfoParametrosFijos', {Lista: listaPF}).done(function (data) {
+                        if (data.length > 0) {
+                            //SI EXSTE CARGAMOS LOS DATOS EN LOS INPUTS
+                            mdlParametrosFijos.find("#tolerPF").val(data[0].toler);
+                            mdlParametrosFijos.find("#gfabriPF").val(data[0].gfabri);
+                            mdlParametrosFijos.find("#gvtaPF").val(data[0].gvta);
+                            mdlParametrosFijos.find("#gadmonPF").val(data[0].gadmon);
+                            mdlParametrosFijos.find("#hmsPF").val(data[0].hms);
+                            mdlParametrosFijos.find("#utiliPF").val(data[0].utili);
+                            mdlParametrosFijos.find("#descPF").val(data[0].desc);
+                            mdlParametrosFijos.find("#comicPF").val(data[0].comic);
+                            mdlParametrosFijos.find("#pextrPF").val(data[0].pextr);
+                            mdlParametrosFijos.find("#fletePF").val(data[0].flete);
+                            mdlParametrosFijos.find("#tolerPF").focus().select();
+                        } else {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "NO EXISTE PARÁMETROS PARA ESTA LISTA DE PRECIOS, PRESIONE OK PARA CAPTURARLOS ",
+                                icon: "warning"
+                            }).then((action) => {
+                                mdlParametrosFijos.find("#tolerPF").focus().select();
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+
+
+                }
+            }
+        });
+
+        mdlParametrosFijos.find("#sListaPF").change(function () {
             if ($(this).val()) {
-                listaPF = $(this).val().split("-")[0];
-                nomlistaPF = $(this).val().split("-")[1];
+                listaPF = $(this).val();
+                mdlParametrosFijos.find('#ListaPF').val(listaPF);
                 $.getJSON(master_url + 'getInfoParametrosFijos', {Lista: listaPF}).done(function (data) {
                     if (data.length > 0) {
                         //SI EXSTE CARGAMOS LOS DATOS EN LOS INPUTS
@@ -318,7 +396,7 @@
             if (valido) {
                 var frm = new FormData(mdlParametrosFijos.find("#frmCapturaPF")[0]);
                 frm.append('Lista', listaPF);
-                frm.append('NomLista', nomlistaPF);
+                frm.append('NomLista', mdlParametrosFijos.find("#sListaPF option:selected").text());
                 $.ajax({
                     url: master_url + 'onGuardarParametroFijos',
                     type: "POST",
@@ -334,7 +412,7 @@
                     $.each(mdlParametrosFijos.find("select"), function (k, v) {
                         mdlParametrosFijos.find("select")[k].selectize.clear(true);
                     });
-                    mdlParametrosFijos.find('#ListaPF')[0].selectize.focus();
+                    mdlParametrosFijos.find('#ListaPF').focus();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -418,7 +496,7 @@
             },
             "initComplete": function (x, y) {
                 HoldOn.close();
-                mdlParametrosFijos.find('#ListaPF')[0].selectize.focus();
+                mdlParametrosFijos.find('#ListaPF').focus();
             }
         });
         tblParametrosFijos.find('tbody').on('click', 'tr', function () {

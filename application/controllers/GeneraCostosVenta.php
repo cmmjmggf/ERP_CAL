@@ -25,6 +25,26 @@ class GeneraCostosVenta extends CI_Controller {
         }
     }
 
+    /* Verifica inputs */
+
+    public function onVerificarLinea() {
+        try {
+            $Linea = $this->input->get('Linea');
+            print json_encode($this->db->query("select clave from lineas where clave = '$Linea' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarListaPrecios() {
+        try {
+            $Lista = $this->input->get('Lista');
+            print json_encode($this->db->query("select Lista from listadeprecios where Lista = '$Lista' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onActualizarCostos() {
         try {
             $lista = $this->input->post('Lista');
@@ -488,15 +508,6 @@ class GeneraCostosVenta extends CI_Controller {
                                 FROM costovaria
                                 where linea = '$linea' and corr = $corrida and lista = $lista
                                 order by linea, lista, estilo asc ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onActualizarGastosFijos() {
-        try {
-            $gastosf = $this->input->post('GastosF');
-            $this->db->query("update costovaria set gtosf = $gastosf ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
