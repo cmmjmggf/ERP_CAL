@@ -22,8 +22,8 @@
                     <a class="btn text-white dropdown-toggle" href="#" id="navUtilerias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Utilerías</a>
                     <ul class="dropdown-menu animated slideIn" aria-labelledby="navUtilerias">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlLineasAbiertas">Lineas Abiertas</a>
-                        <a class="dropdown-item" href="#" onclick="onMarcarLineaParaNoModificar()">Marca Linea/Estilos para NO modificarlos</a>
-                        <a class="dropdown-item" href="#" onclick="onDescarmarLineaParaModificar()">Desmarca Linea/Estilos para modificarlos</a>
+                        <a class="dropdown-item" href="#" onclick="onMarcarLineaParaNoModificar()">Cerrar Linea/Estilos para NO modificar</a>
+                        <a class="dropdown-item" href="#" onclick="onDescarmarLineaParaModificar()">Abrir Linea/Estilos para modificar</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">Elimina Estilos Obsoletos</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlConsultaEstiloLineaLista">Verifica Estilos/Lineas</a>
                     </ul>
@@ -65,7 +65,7 @@
                         <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6"  id="Linea" name="Linea"   >
                     </div>
                     <div class="col-3" >
-                        <label for="" ></label>
+                        <label for="" >-</label>
                         <select id="sLinea" name="sLinea" class="form-control form-control-sm  NotSelectize" >
                             <option value=""></option>
                             <?php
@@ -81,7 +81,7 @@
                         <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6" id="ListaPrecios" name="ListaPrecios"   >
                     </div>
                     <div class="col-3" >
-                        <label for="" ></label>
+                        <label for="" >-</label>
                         <select id="sListaPrecios" name="sListaPrecios" class="form-control form-control-sm  NotSelectize" >
                             <option value=""></option>
                             <?php
@@ -97,7 +97,7 @@
                         <input type="text" class="form-control form-control-sm numbersOnly NotClean" maxlength="6"  id="Corrida" name="Corrida"   >
                     </div>
                     <div class="col-3" >
-                        <label for="" ></label>
+                        <label for="" >-</label>
                         <select id="sCorrida" name="sCorrida" class="form-control form-control-sm NotSelectize" >
                             <option value=""></option>
                             <option value="1">1 - 17/21 &frac12; Nn </option>
@@ -178,7 +178,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mp" name="mp"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mpPor1" name="mpPor1"   >
+                        <input type="text" class="form-control form-control-sm  amarillo" readonly="" id="mpPor1" name="mpPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mp2" name="mp2"   >
@@ -198,7 +198,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mextr" name="mextr"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="mextrPor1" name="mextrPor1"   >
+                        <input type="text" class="form-control form-control-sm  amarillo" readonly="" id="mextrPor1" name="mextrPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mextr2" name="mextr2"   >
@@ -217,7 +217,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="tolera2" name="tolera2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="toleraPor1" name="toleraPor1"   >
+                        <input type="text" class="form-control form-control-sm  amarillo" readonly="" id="toleraPor1" name="toleraPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="tolera22" name="tolera22"   >
@@ -237,7 +237,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mo" name="mo"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="moPor1" name="moPor1"   >
+                        <input type="text" class="form-control form-control-sm  amarillo" readonly="" id="moPor1" name="moPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="mo2" name="mo2"   >
@@ -257,7 +257,7 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="tejida2" name="tejida2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="tejidaPor1" name="tejidaPor1"   >
+                        <input type="text" class="form-control form-control-sm  amarillo" readonly="" id="tejidaPor1" name="tejidaPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="tejida22" name="tejida22"   >
@@ -266,7 +266,32 @@
                         <input type="text" class="form-control form-control-sm  verde" readonly="" id="tejidaPor2" name="tejidaPor2"   >
                     </div>
 
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
+
                     <!--                    6to renglon-->
+
+                    <div class="col-2" >
+                        <label class="text-danger">Cto-Producc</label>
+                    </div>
+                    <div class="col-2" align="center">
+
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd" name="costoProd"   >
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="costoProdPor1" name="costoProdPor1"   >
+                    </div>
+                    <div class="col-2" >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd2" name="costoProd2"   >
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="costoProdPor2" name="costoProdPor2"   >
+                    </div>
+
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
+
+                    <!--                    7mo renglon-->
                     <div class="col-2" >
                         <label>Gto. Fabric</label>
                     </div>
@@ -284,26 +309,6 @@
                     </div>
                     <div class="col-2" align="center">
                         <input type="text" class="form-control form-control-sm  verde" readonly="" id="gfabriPor2" name="gfabriPor2"   >
-                    </div>
-
-                    <!--                    7mo renglon-->
-                    <div class="col-2" >
-                        <label>Cto-Producc</label>
-                    </div>
-                    <div class="col-2" align="center">
-
-                    </div>
-                    <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd" name="costoProd"   >
-                    </div>
-                    <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="costoProdPor1" name="costoProdPor1"   >
-                    </div>
-                    <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="costoProd2" name="costoProd2"   >
-                    </div>
-                    <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="costoProdPor2" name="costoProdPor2"   >
                     </div>
 
                     <!--                    8vo renglon-->
@@ -386,27 +391,32 @@
                         <input type="text" class="form-control form-control-sm  verde" readonly="" id="fletePor2" name="fletePor2"   >
                     </div>
 
-                    <!--                    12vo renglon-->
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
+                    <!--                    Totales gastos-->
                     <div class="col-2" >
-                        <label>Utilidad</label>
+                        <label class="text-danger">Gastos</label>
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="utilid" name="utilid"   >
+
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="utilid2" name="utilid2"   >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="GastoProd" name="GastoProd"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="utilidPor1" name="utilidPor1"   >
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="GastoProdPor1" name="GastoProdPor1"   >
                     </div>
                     <div class="col-2" >
+                        <input type="text" class="form-control form-control-sm  rojo" readonly="" id="GastoProd2" name="GastoProd2"   >
                     </div>
                     <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="GastoProdPor2" name="GastoProdPor2"   >
                     </div>
+
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
 
                     <!--                    13vo renglon-->
                     <div class="col-2" >
-                        <label>Subtot</label>
+                        <label class="text-danger">Subtot</label>
                     </div>
                     <div class="col-2" align="center">
                     </div>
@@ -422,6 +432,7 @@
                     <div class="col-2" align="center">
                     </div>
 
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
                     <!--                    14vo renglon-->
                     <div class="col-2" >
                         <label>Desc</label>
@@ -433,13 +444,13 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="desc2" name="desc2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="descPor1" name="descPor1"   >
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="descPor1" name="descPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="desc22" name="desc22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="descPor2" name="descPor2"   >
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="descPor2" name="descPor2"   >
                     </div>
 
 
@@ -454,18 +465,41 @@
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="comic2" name="comic2"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="comicPor1" name="comicPor1"   >
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="comicPor1" name="comicPor1"   >
                     </div>
                     <div class="col-2" >
                         <input type="text" class="form-control form-control-sm  azul" readonly="" id="comic22" name="comic22"   >
                     </div>
                     <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="comicPor2" name="comicPor2"   >
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="comicPor2" name="comicPor2"   >
                     </div>
 
+
                     <!--                    16vo renglon-->
+                    <div class="col-2" >
+                        <label>Utilidad</label>
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  azul" readonly="" id="utilid" name="utilid"   >
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  lila" readonly="" id="utilid2" name="utilid2"   >
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="utilidPor1" name="utilidPor1"   >
+                    </div>
+                    <div class="col-2" >
+                        <input type="text" class="form-control form-control-sm  lila" readonly="" id="utilidReal" name="utilidReal"   >
+                    </div>
+                    <div class="col-2" align="center">
+                        <input type="text" class="form-control form-control-sm  verdemas" readonly="" id="porUtilidReal" name="porUtilidReal"   >
+                    </div>
+
+
+                    <div class="w-100 border border-info border-top-0  border-right-0 border-left-0 mt-1 mb-1 ml-2 mr-2"></div>
+                    <!--                    17vo renglon-->
                     <div class="col-4" >
-                        <label>Precio Venta</label>
+                        <label class="text-success" style="font-size: 16px;">Precio Venta</label>
                     </div>
                     <div class="col-2" align="center">
                         <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="PrecioProm" name="PrecioProm"   >
@@ -473,11 +507,8 @@
                     <div class="col-2" align="center">
                         <input type="text" class="form-control form-control-sm NotClean verde" readonly="" id="porVenta100" name="porVenta100"   >
                     </div>
-                    <div class="col-2" >
-                        <input type="text" class="form-control form-control-sm  rojomas" readonly="" id="utilidReal" name="utilidReal"   >
-                    </div>
-                    <div class="col-2" align="center">
-                        <input type="text" class="form-control form-control-sm  verde" readonly="" id="porUtilidReal" name="porUtilidReal"   >
+                    <div class="col-4">
+
                     </div>
 
                     <!--                    CAMPOS PRECIO-->
@@ -790,19 +821,24 @@
                 pnlTablero.find("#tolera2").val(toFormattedNumber(txttol));
 
                 pnlTablero.find("#tejida2").val(toFormattedNumber(datosParamFijos.tejida));
-                pnlTablero.find("#gfabri2").val(toFormattedNumber(datosParamFijos.gfabri));
                 pnlTablero.find("#flete2").val(toFormattedNumber(datosParamFijos.flete));
 
                 var txtctopro = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.maob) +
-                        parseFloat(datosParamFijos.tejida) + parseFloat(datosParamFijos.gfabri) + parseFloat(txttol) + parseFloat(datosParamFijos.mextr);
+                        parseFloat(datosParamFijos.tejida) + parseFloat(txttol) + parseFloat(datosParamFijos.mextr);
                 pnlTablero.find("#costoProd").val(toFormattedNumber(txtctopro));
 
+                pnlTablero.find("#gfabri2").val(toFormattedNumber(datosParamFijos.gfabri));
                 pnlTablero.find("#gvta2").val(toFormattedNumber(datosParamFijos.gvta));
                 pnlTablero.find("#gadmon2").val(toFormattedNumber(datosParamFijos.gadmon));
                 pnlTablero.find("#hms2").val(toFormattedNumber(datosParamFijos.hms));
 
+                /*Llena los campos de gastos*/
+                var txttotalGastos = parseFloat(datosParamFijos.gvta) + parseFloat(datosParamFijos.gadmon) + parseFloat(datosParamFijos.gfabri) +
+                        parseFloat(datosParamFijos.hms) + parseFloat(datosParamFijos.flete);
+                pnlTablero.find("#GastoProd").val(toFormattedNumber(txttotalGastos));
 
-                var txtsubt9 = parseFloat(txtctopro) + parseFloat(datosParamFijos.gvta) + parseFloat(datosParamFijos.gadmon) +
+
+                var txtsubt9 = parseFloat(txtctopro) + parseFloat(datosParamFijos.gvta) + parseFloat(datosParamFijos.gadmon) + parseFloat(datosParamFijos.gfabri) +
                         parseFloat(datosParamFijos.hms) + parseFloat(datosParamFijos.flete);
 
                 var porcentaje1 = 0.85;
@@ -811,19 +847,23 @@
 
                 var txtsubt99 = parseFloat(txtsubt9) / parseFloat(porcentaje3);
 
-                var txtsubt8 = parseFloat(txtsubt99) * 0.16;
-                var txtsubt = parseFloat(txtsubt9) + parseFloat(txtsubt8);
+                var txtsubt8 = parseFloat(txtsubt99) * parseFloat(datosParamFijos.utili / 100);//Utilidad
+                var txtsubt = parseFloat(txtsubt9);
 
                 pnlTablero.find("#utilid2").val(toFormattedNumber(txtsubt8));
                 pnlTablero.find("#subtotal").val(toFormattedNumber(txtsubt));
 
-
-                var txtds = parseFloat(txtsubt99) * parseFloat(datosParamFijos.desc);
+                //Primero sacamos el valor de la suma general con el descuento y la comicion
+                var txtds = parseFloat(txtsubt99).toFixed(2) * parseFloat(datosParamFijos.desc).toFixed(2);
                 var txtcm = parseFloat(txtsubt99) * parseFloat(datosParamFijos.comic);
-                pnlTablero.find("#desc2").val(toFormattedNumber(txtds));
-                pnlTablero.find("#comic2").val(toFormattedNumber(txtcm));
+                var txtpreprom = txtsubt + txtds + txtcm + txtsubt8;
 
-                var txtpreprom = txtsubt + txtds + txtcm;
+                //Se saca el porcentaje y valor del descuento con estas variables ya calculadas con el precio general
+                var txtdsfinal = parseFloat(txtpreprom) * parseFloat(datosParamFijos.desc);
+                var txtcmfinal = parseFloat(txtpreprom) * parseFloat(datosParamFijos.comic);
+                //Pintamos los valores
+                pnlTablero.find("#desc2").val(toFormattedNumber(txtdsfinal));
+                pnlTablero.find("#comic2").val(toFormattedNumber(txtcmfinal));
                 pnlTablero.find("#PrecioProm").val(toFormattedNumber(txtpreprom));
 
                 // ------------------------------- PORCENTAJES COLUMNA 1 ---------------------------------
@@ -838,10 +878,10 @@
                 pnlTablero.find("#moPor1").val(toFormattedPorcentDecimals(txtpmo));
                 var txtptj = (parseFloat(datosParamFijos.tejida) * 100) / parseFloat(txtctopro);
                 pnlTablero.find("#tejidaPor1").val(toFormattedPorcentDecimals(txtptj));
-                var txtpgf = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(txtctopro);
-                pnlTablero.find("#gfabriPor1").val(toFormattedPorcentDecimals(txtpgf));
                 var txtpctopro = (parseFloat(txtctopro) * 100) / parseFloat(txtpreprom);
                 pnlTablero.find("#costoProdPor1").val(toFormattedPorcentDecimals(txtpctopro));
+                var txtpgf = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(txtctopro);
+                pnlTablero.find("#gfabriPor1").val(toFormattedPorcentDecimals(txtpgf));
                 var txtpgv = (parseFloat(datosParamFijos.gvta) * 100) / parseFloat(txtpreprom);
                 pnlTablero.find("#gvtaPor1").val(toFormattedPorcentDecimals(txtpgv));
                 var txtga = (parseFloat(datosParamFijos.gadmon) * 100) / parseFloat(txtpreprom);
@@ -850,11 +890,13 @@
                 pnlTablero.find("#hmsPor1").val(toFormattedPorcentDecimals(txtphs));
                 var txtpflete = (parseFloat(datosParamFijos.flete) * 100) / parseFloat(txtpreprom);
                 pnlTablero.find("#fletePor1").val(toFormattedPorcentDecimals(txtpflete));
+                var txtpgastos = (parseFloat(txttotalGastos) * 100) / parseFloat(txtpreprom);
+                pnlTablero.find("#GastoProdPor1").val(toFormattedPorcentDecimals(txtpgastos));
                 var txtput = (parseFloat(txtsubt8) * 100) / parseFloat(txtsubt99);
                 pnlTablero.find("#utilidPor1").val(toFormattedPorcentDecimals(txtput));
-                var txtpds = (parseFloat(txtds) * 100) / parseFloat(txtpreprom);
+                var txtpds = (parseFloat(txtdsfinal) * 100) / parseFloat(txtpreprom);
                 pnlTablero.find("#descPor1").val(toFormattedPorcentDecimals(txtpds));
-                var txtpcm = (parseFloat(txtcm) * 100) / parseFloat(txtpreprom);
+                var txtpcm = (parseFloat(txtcmfinal) * 100) / parseFloat(txtpreprom);
                 pnlTablero.find("#comicPor1").val(toFormattedPorcentDecimals(txtpcm));
 
                 // ------------------------------- TOTALES COLUMNA 2 CON PRECIO AUTORIZADO---------------------------------
@@ -866,18 +908,29 @@
                 pnlTablero.find("#tolera22").val(toFormattedNumber(txttol1));
                 pnlTablero.find("#mo2").val(toFormattedNumber(datosParamFijos.maob));
                 pnlTablero.find("#tejida22").val(toFormattedNumber(datosParamFijos.tejida));
-                pnlTablero.find("#gfabri22").val(toFormattedNumber(datosParamFijos.gfabri));
+
 
                 var txtctopro1 = parseFloat(datosParamFijos.preaut) - parseFloat(datosParamFijos.matpri) - parseFloat(datosParamFijos.mextr) - parseFloat(datosParamFijos.maob) -
-                        parseFloat(datosParamFijos.tejida) - parseFloat(datosParamFijos.gfabri) - parseFloat(txttol);
+                        parseFloat(datosParamFijos.tejida) - parseFloat(txttol);
+
                 pnlTablero.find("#costoProd2").val(toFormattedNumber(txtctopro1));
 
+                pnlTablero.find("#gfabri22").val(toFormattedNumber(datosParamFijos.gfabri));
                 pnlTablero.find("#gvta22").val(toFormattedNumber(datosParamFijos.gvta));
                 pnlTablero.find("#gadmon22").val(toFormattedNumber(datosParamFijos.gadmon));
                 pnlTablero.find("#hms22").val(toFormattedNumber(datosParamFijos.hms));
                 pnlTablero.find("#flete22").val(toFormattedNumber(datosParamFijos.flete));
 
-                var txtsubt1 = parseFloat(txtctopro1) - parseFloat(datosParamFijos.gvta) - parseFloat(datosParamFijos.gadmon) - parseFloat(datosParamFijos.hms) - parseFloat(datosParamFijos.flete);
+
+
+                /*Llena los campos de gastos*/
+                var txttotalGastos2 = parseFloat(datosParamFijos.gvta) + parseFloat(datosParamFijos.gadmon) + parseFloat(datosParamFijos.gfabri) +
+                        parseFloat(datosParamFijos.hms) + parseFloat(datosParamFijos.flete);
+                pnlTablero.find("#GastoProd2").val(toFormattedNumber(txttotalGastos2));
+
+
+
+                var txtsubt1 = parseFloat(txtctopro1) - parseFloat(datosParamFijos.gfabri) - parseFloat(datosParamFijos.gvta) - parseFloat(datosParamFijos.gadmon) - parseFloat(datosParamFijos.hms) - parseFloat(datosParamFijos.flete);
                 pnlTablero.find("#subtotal2").val(toFormattedNumber(txtsubt1));
 
                 var txtds1 = parseFloat(datosParamFijos.preaut) * parseFloat(datosParamFijos.desc);
@@ -899,10 +952,10 @@
                 pnlTablero.find("#moPor2").val(toFormattedPorcentDecimals(txtpmo1));
                 var txtptj1 = (parseFloat(datosParamFijos.tejida) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#tejidaPor2").val(toFormattedPorcentDecimals(txtptj1));
-                var txtpgf1 = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(datosParamFijos.preaut);
-                pnlTablero.find("#gfabriPor2").val(toFormattedPorcentDecimals(txtpgf1));
                 var txtpctopro1 = (parseFloat(txtctopro1) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#costoProdPor2").val(toFormattedPorcentDecimals(txtpctopro1));
+                var txtpgf1 = (parseFloat(datosParamFijos.gfabri) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#gfabriPor2").val(toFormattedPorcentDecimals(txtpgf1));
                 var txtpgv1 = (parseFloat(datosParamFijos.gvta) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#gvtaPor2").val(toFormattedPorcentDecimals(txtpgv1));
                 var txtpga1 = (parseFloat(datosParamFijos.gadmon) * 100) / parseFloat(datosParamFijos.preaut);
@@ -911,10 +964,15 @@
                 pnlTablero.find("#hmsPor2").val(toFormattedPorcentDecimals(txtphs1));
                 var txtpflete1 = (parseFloat(datosParamFijos.flete) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#fletePor2").val(toFormattedPorcentDecimals(txtpflete1));
+                var txtpgastos2 = (parseFloat(txttotalGastos2) * 100) / parseFloat(datosParamFijos.preaut);
+                pnlTablero.find("#GastoProdPor2").val(toFormattedPorcentDecimals(txtpgastos2));
                 var txtpds1 = (parseFloat(txtds1) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#descPor2").val(toFormattedPorcentDecimals(txtpds1));
                 var txtpcm1 = (parseFloat(txtcm1) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#comicPor2").val(toFormattedPorcentDecimals(txtpcm1));
+
+                console.log(parseFloat(txtds1));
+                console.log(parseFloat(datosParamFijos.preaut));
                 var txtputreal = (parseFloat(txtutreal) * 100) / parseFloat(datosParamFijos.preaut);
                 pnlTablero.find("#porUtilidReal").val(toFormattedPorcentDecimals(txtputreal));
 
@@ -1007,8 +1065,7 @@
             });
         } else {
             swal('ERROR', 'Debe de seleccionar una LINEA/LISTA/CORRIDA para continuar', 'warning').then((value) => {
-                pnlTablero.find('#Linea')[0].selectize.focus();
-                pnlTablero.find('#Linea')[0].selectize.open();
+                pnlTablero.find('#Linea').focus();
             });
         }
     }
@@ -1024,8 +1081,7 @@
             });
         } else {
             swal('ERROR', 'SELECCIONE UNA LINEA A MARCAR', 'warning').then((value) => {
-                pnlTablero.find('#Linea')[0].selectize.focus();
-                pnlTablero.find('#Linea')[0].selectize.open();
+                pnlTablero.find('#Linea').focus();
             });
         }
     }
@@ -1041,8 +1097,7 @@
             });
         } else {
             swal('ERROR', 'SELECCIONE UNA LINEA A DESMARCAR', 'warning').then((value) => {
-                pnlTablero.find('#Linea')[0].selectize.focus();
-                pnlTablero.find('#Linea')[0].selectize.open();
+                pnlTablero.find('#Linea').focus();
             });
         }
     }
@@ -1147,7 +1202,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [3, 'desc']
+                [2, 'asc'], [3, 'asc']
             ],
             "initComplete": function (x, y) {
 
@@ -1235,7 +1290,18 @@
         padding-left: 0;
         padding-right: 0;
     }
+    .verdemas{
+        background-color: #9CD985 !important;
+    }
 
+    .lila{
+
+        background-color: #EF85FA !important;
+    }
+    .amarillo{
+
+        background-color: #FAE985 !important;
+    }
 
     .verde {
 
@@ -1258,14 +1324,14 @@
         background-color: #CFC7FA !important;
     }
     label {
-        margin-top: 0.14rem;
+        margin-top: 0.12rem;
         margin-bottom: 0.0rem;
     }
 
     .form-control-sm,  .form-control {
         padding: 0.15rem 0.5rem;
-        margin-top:  0.10rem;
-        margin-bottom: 0.10rem;
+        margin-top:  0.08rem;
+        margin-bottom: 0.08rem;
         font-weight: bold;
         font-size: 0.85rem !important;
     }

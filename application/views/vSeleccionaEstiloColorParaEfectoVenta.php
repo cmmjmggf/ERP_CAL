@@ -14,17 +14,22 @@
                             <label>Estilo</label>
                             <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloGenCos" name="EstiloGenCos" required="">
                         </div>
+                        <div class="col-2" >
+                            <label for="" >Color</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2"  id="Color" name="Color"   >
+                        </div>
                         <div class="col-5">
-                            <label>Color</label>
-                            <select id="Color" name="Color" class="form-control form-control-sm required">
+                            <label for="">-</label>
+                            <select class="form-control form-control-sm required selectize" id="sColor" name="sColor" required="">
                                 <option value=""></option>
                             </select>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <button type="button" id="btnAceptar" class="btn btn-primary btn-sm mt-4">
                                 <span class="fa fa-check"></span> ACEPTAR
                             </button>
                         </div>
+                        <div class="w-100"></div>
                         <div class="col-3">
                             <label class="badge badge-danger" style="font-size: 14px;">El estilo marcado con 1, es el que se tomará como base para costeo</label>
                         </div>
@@ -76,6 +81,7 @@
                         if (data.length > 0) {
                             getColoresByEstilo(estilo);
                             getEstiloColores(estilo);
+                            mdlSeleccionaEstiloColorParaEfectoVenta.find('#Color').focus().select();
                         } else {
                             swal('ATENCIÓN', 'EL ESTILO NO EXISTE', 'error').then((value) => {
                                 mdlSeleccionaEstiloColorParaEfectoVenta.find('#EstiloGenCos').val('').focus();
@@ -90,8 +96,30 @@
                 }
             }
         });
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color").change(function () {
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Color = $(this).val();
+                var Estilo = mdlSeleccionaEstiloColorParaEfectoVenta.find("#EstiloGenCos").val();
+                if (Color) {
+                    $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarEstiloColor', {Color: Color, Estilo: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            mdlSeleccionaEstiloColorParaEfectoVenta.find("#sColor")[0].selectize.addItem(Color, true);
+                            mdlSeleccionaEstiloColorParaEfectoVenta.find("#btnAceptar").focus();
+                        } else {
+                            swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
+                                mdlSeleccionaEstiloColorParaEfectoVenta.find('#Color').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#sColor").change(function () {
             if ($(this).val()) {
+                mdlSeleccionaEstiloColorParaEfectoVenta.find('#Color').val($(this).val());
                 mdlSeleccionaEstiloColorParaEfectoVenta.find("#btnAceptar").focus();
             }
         });
@@ -189,13 +217,12 @@
     }
 
     function getColoresByEstilo(estilo) {
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.clear(true);
-        mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.clearOptions();
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#sColor")[0].selectize.clear(true);
+        mdlSeleccionaEstiloColorParaEfectoVenta.find("#sColor")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/GeneraCostosVenta/getColoresByEstilo', {Estilo: estilo}).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                mdlSeleccionaEstiloColorParaEfectoVenta.find("#sColor")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
-            mdlSeleccionaEstiloColorParaEfectoVenta.find("#Color")[0].selectize.focus();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {

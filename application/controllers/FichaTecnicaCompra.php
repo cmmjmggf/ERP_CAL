@@ -21,6 +21,70 @@ class FichaTecnicaCompra extends CI_Controller {
         }
     }
 
+    public function onComprobarMaquila() {
+        try {
+            print json_encode($this->db->select("clave")
+                                    ->from("maquilas")
+                                    ->where("Estatus", "ACTIVO")
+                                    ->where('Clave', $this->input->get('Maquila'))
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComprobarEstiloColor() {
+        try {
+            print json_encode($this->db->select("clave as color, estilo")
+                                    ->from("colores")
+                                    ->where("Estatus", "ACTIVO")
+                                    ->where('Clave', $this->input->get('Color'))
+                                    ->where('Estilo', $this->input->get('Estilo'))
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getColoresXEstilo() {
+        try {
+            print json_encode($this->db->select("CAST(C.Clave AS SIGNED ) AS ID, C.Descripcion AS Descripcion ", false)
+                                    ->from('colores AS C')
+                                    ->where('C.Estilo', $this->input->get('Estilo'))
+                                    ->where('C.Estatus', 'ACTIVO')
+                                    ->order_by('ID', 'ASC')
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getMaquilas() {
+        try {
+            print json_encode($this->db
+                                    ->select("CONVERT(M.Clave, UNSIGNED INTEGER) AS Clave, "
+                                            . " M.Nombre AS Maquila")
+                                    ->from("maquilas AS M")
+                                    ->where("M.Estatus", "ACTIVO")
+                                    ->order_by('Clave', 'ASC')
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEstilos() {
+        try {
+            print json_encode($this->db->select("E.Clave AS Clave, E.Descripcion AS Estilo")
+                                    ->from("estilos AS E")
+                                    ->where("E.Estatus", "ACTIVO")
+                                    ->order_by('Clave', 'ASC')
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onImprimirFichaTecnicaSinPrecios() {
         $cm = $this->FichaTecnicaCompra_model;
 

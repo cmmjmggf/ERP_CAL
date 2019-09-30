@@ -51,6 +51,7 @@ class GeneraCostosVenta extends CI_Controller {
             $linea = $this->input->post('Linea');
             $corr = $this->input->post('Corrida');
 
+            $this->db->query("delete from costovaria where linea = $linea and lista = $lista and corr = $corr ");
             //------------------------------Obtenemos los estilos y colores con su porcentaje de desperdicio------------------------------
             $Estilos = $this->db->query("select e.clave as estilo ,
                             CASE
@@ -64,6 +65,8 @@ class GeneraCostosVenta extends CI_Controller {
                             join maquilas m on m.Clave = 1
                             where e.linea = '$linea' and e.clave <> '5418N' and e.Corrida = $corr and e.costos = 0 ")->result();
 
+            $txttolera = 0;
+            $txtutili = 0;
             if (!empty($Estilos)) {//Si existen estilos empezamos el proceso
                 foreach ($Estilos as $key => $E) {
                     $estilo = $E->estilo;
@@ -197,16 +200,36 @@ class GeneraCostosVenta extends CI_Controller {
                         $tejida = $CF->tejida;
                         $mextr = $CF->mextr;
                         $flete = $CF->flete;
+
+                        $txttol9 = floatval($matepri) + floatval($mextr);
+                        $txttol = floatval($txttol9) * floatval($txttolera);
+
+                        $txtctopro = floatval($matepri) + floatval($maob) + floatval($tejida) + floatval($gfabri) + floatval($txttol) + floatval($mextr);
+
+
+                        $txtsubt9 = floatval($txtctopro) + floatval($gvta) + floatval($gadmon) + floatval($hms) + floatval($flete);
+
                         $porcentaje0 = 0.85;
                         $porcentaje1 = floatval($comic) + floatval($desc);
                         $porcentaje2 = floatval($porcentaje0) - floatval($porcentaje1);
-                        $pre1 = floatval($matepri) + floatval($mextr);
-                        $pre11 = floatval($pre1) * floatval($tolera);
-                        $pre2 = floatval($pre11) + floatval($matepri) + floatval($maob) + floatval($gfabri) + floatval($tejida) + floatval($mextr);
-                        $pre3 = floatval($pre2) + floatval($gvta) + floatval($gadmon) + floatval($hms) + floatval($flete);
-                        $pre4 = floatval($pre3) / floatval($porcentaje2);
-                        $pre7 = floatval($pre4);
-                        $this->db->query("update costovaria set precto = $pre7 where lista = $lista and linea = $linea and corr = $corr and estilo = '$CF->estilo' and color = $CF->color ");
+
+                        $txtsubt99 = floatval($txtsubt9) / floatval($porcentaje2);
+
+
+                        $txtsubt8 = floatval($txtsubt99) * (floatval($txtutili) / 100);
+                        $txtsubt = floatval($txtsubt9) + floatval($txtsubt8);
+                        $txtds = floatval($txtsubt99) * floatval($desc);
+                        $txtcm = floatval($txtsubt99) * floatval($comic);
+                        $txtpreprom = $txtsubt + $txtds + $txtcm;
+
+//                        $pre1 = floatval($matepri) + floatval($mextr);
+//                        $pre11 = floatval($pre1) * floatval($tolera);
+//                        $pre2 = floatval($pre11) + floatval($matepri) + floatval($maob) + floatval($gfabri) + floatval($tejida) + floatval($mextr);
+//                        $pre3 = floatval($pre2) + floatval($gvta) + floatval($gadmon) + floatval($hms) + floatval($flete);
+//                        $pre4 = floatval($pre3) / floatval($porcentaje2);
+//                        $pre7 = floatval($pre4);
+
+                        $this->db->query("update costovaria set precto = $txtpreprom where lista = $lista and linea = $linea and corr = $corr and estilo = '$CF->estilo' and color = $CF->color ");
                     }
                 }
             } else {//No existen estilos
@@ -376,22 +399,6 @@ class GeneraCostosVenta extends CI_Controller {
         }
     }
 
-    public function onMarcarTodasLineasAbiertas() {
-        try {
-            $this->db->query("update estilos set seguridad = 1 ");
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getLineasAbiertas() {
-        try {
-            print json_encode($this->db->query("select linea, clave, seguridad from estilos where Seguridad = 0 ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function getEstiloLineaLista() {
         try {
             $Estilo = $this->input->get('Estilo');
@@ -404,10 +411,33 @@ class GeneraCostosVenta extends CI_Controller {
         }
     }
 
+    public function onMarcarTodasLineasAbiertas() {
+        try {
+            $Usuario = $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos');
+            $Fecha = Date('d/m/Y');
+            $this->db->query("update estilos set seguridad = 1, UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getLineasAbiertas() {
+        try {
+            print json_encode($this->db->query("select linea, clave, "
+                                    . " seguridad, UsuarioAbrioLinea as usuario,FechaAbrioLinea as fechaAbre "
+                                    . " from estilos where Seguridad = 0 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onMarcarLineaParaNoModificar() {
         try {
             $Linea = $this->input->post('Linea');
-            $this->db->query("update estilos set seguridad = 1 where linea = '$Linea' ");
+            $Usuario = $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos');
+            $Fecha = Date('d/m/Y');
+            $this->db->query("update estilos set seguridad = 1 , UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' "
+                    . " where linea = '$Linea' ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -416,7 +446,10 @@ class GeneraCostosVenta extends CI_Controller {
     public function onDescarmarLineaParaModificar() {
         try {
             $Linea = $this->input->post('Linea');
-            $this->db->query("update estilos set seguridad = 0 where linea = '$Linea' ");
+            $Fecha = Date('d/m/Y');
+            $Usuario = $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos');
+            $this->db->query("update estilos set seguridad = 0 , UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' "
+                    . "where linea = '$Linea' ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -459,7 +492,7 @@ class GeneraCostosVenta extends CI_Controller {
     public function getColoresByEstilo() {
         try {
             $Estilo = $this->input->get('Estilo');
-            print json_encode($this->db->select("CAST(C.Clave AS SIGNED ) AS ID, CONCAT(C.Clave,'-', C.Descripcion) AS Descripcion ", false)
+            print json_encode($this->db->select("CAST(C.Clave AS SIGNED ) AS ID, C.Descripcion AS Descripcion ", false)
                                     ->from('colores AS C')
                                     ->where('C.Estilo', $Estilo)
                                     ->where('C.Estatus', 'ACTIVO')
@@ -478,7 +511,7 @@ class GeneraCostosVenta extends CI_Controller {
 
             print json_encode($this->db->query("SELECT * FROM costovaria
                                                 where linea = '$linea' and corr = $corrida and lista = $lista
-                                                order by linea, lista, estilo asc ")->result());
+                                                order by estilo asc, color asc ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="7.400249944258483"/>
-	<property name="ireport.x" value="4711"/>
-	<property name="ireport.y" value="245"/>
+	<property name="ireport.zoom" value="1.0000000000000429"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
-	<parameter name="agente" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<parameter name="linea" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -51,8 +48,10 @@ cv.fecha
 from costovaria cv
 join lineas l on l.clave = cv.linea
 join costofijo cf on cf.lista = cv.lista
+join estilos e on e.clave = cv.estilo
 where cv.linea  = $P{linea}
-order by cv.lista, cv.corr, cv.estilo asc]]>
+and e.costos = 0
+order by cv.lista, cv.corr, cv.estilo asc, cv.color asc]]>
 	</queryString>
 	<field name="numlinea" class="java.lang.String"/>
 	<field name="nomlinea" class="java.lang.String"/>
@@ -719,8 +718,7 @@ order by cv.lista, cv.corr, cv.estilo asc]]>
 					<font size="7" isBold="false"/>
 					<paragraph rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{utili}/100
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{utili}/100]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement mode="Opaque" x="552" y="0" width="1" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8008239f-2d9c-4299-913a-2bc574629956"/>

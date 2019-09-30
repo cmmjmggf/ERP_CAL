@@ -18,6 +18,8 @@
                                             <th>Linea</th>
                                             <th>Estilo</th>
                                             <th>0=Abierta , 1=Cerrada</th>
+                                            <th>Abierta Por:</th>
+                                            <th>Fecha</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -76,7 +78,9 @@
             "columns": [
                 {"data": "linea"},
                 {"data": "clave"},
-                {"data": "seguridad"}
+                {"data": "seguridad"},
+                {"data": "usuario"},
+                {"data": "fechaAbre"}
             ],
             language: lang,
             "autoWidth": true,
@@ -107,6 +111,10 @@
                         case 2:
                             /*PZXPAR*/
                             c.addClass('text-danger text-strong ');
+                            break;
+                        case 3:
+                            /*PZXPAR*/
+                            c.addClass('text-warning text-strong ');
                             break;
                     }
                 });
