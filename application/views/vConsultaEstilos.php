@@ -8,29 +8,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmExplosion">
-                    <div class="row">
-                        <div class="col-3">
-                            <label>Estilo</label>
-                            <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloConGenCos" name="EstiloConGenCos" required="">
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="table-responsive" id="EstiloLineaLista">
-                                <table id="tblEstiloLineaLista" class="table table-sm  " style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Linea</th>
-                                            <th>Lista</th>
-                                            <th>Estilo</th>
-                                            <th>Color</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
+                <div class="row">
+                    <div class="col-3">
+                        <label>Estilo</label>
+                        <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloConsultaGenCos" name="EstiloConsultaGenCos" required="">
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="table-responsive" id="EstiloLineaLista">
+                            <table id="tblEstiloLineaLista" class="table table-sm  " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Linea</th>
+                                        <th>Lista</th>
+                                        <th>Estilo</th>
+                                        <th>Color</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary selectNotEnter" id="btnSalir" data-dismiss="modal">SALIR</button>
@@ -50,27 +48,22 @@
                 mdlConsultaEstiloLineaLista.find("select")[k].selectize.clear(true);
             });
             getEstiloLineaLista('');
-            mdlConsultaEstiloLineaLista.find('#EstiloConGenCos').focus().select();
+            mdlConsultaEstiloLineaLista.find('#EstiloConsultaGenCos').focus().select();
         });
-        mdlConsultaEstiloLineaLista.find("#EstiloConGenCos").keypress(function (e) {
+        mdlConsultaEstiloLineaLista.find("#EstiloConsultaGenCos").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     var estilo = $(this).val();
                     //veririca essitlo
-                    $.getJSON(base_url + 'index.php/GeneraCostosVenta/onVerificarExisteEstilo', {Estilo: $(this).val()}).done(function (data, x, jq) {
+                    $.getJSON(base_url + 'index.php/GeneraCostosVenta/onVerificarExisteEstilo', {Estilo: estilo}).done(function (data, x, jq) {
                         if (data.length > 0) {
                             getEstiloLineaLista(estilo);
                         } else {
                             swal('ATENCIÓN', 'EL ESTILO NO EXISTE', 'error').then((value) => {
                                 mdlConsultaEstiloLineaLista.find('#EstiloConGenCos').val('').focus();
-
                             });
                         }
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
                     });
-                } else {
-                    $(this).focus();
                 }
             }
         });

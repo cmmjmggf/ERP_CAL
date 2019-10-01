@@ -51,7 +51,7 @@ class GeneraCostosVenta extends CI_Controller {
             $linea = $this->input->post('Linea');
             $corr = $this->input->post('Corrida');
 
-            $this->db->query("delete from costovaria where linea = $linea and lista = $lista and corr = $corr ");
+            //$this->db->query("delete from costovaria where linea = $linea and lista = $lista and corr = $corr ");
             //------------------------------Obtenemos los estilos y colores con su porcentaje de desperdicio------------------------------
             $Estilos = $this->db->query("select e.clave as estilo ,
                             CASE
@@ -403,9 +403,11 @@ class GeneraCostosVenta extends CI_Controller {
         try {
             $Estilo = $this->input->get('Estilo');
 
-            print json_encode($this->db->query("select linea,lista,estilo,color
-                                                from costovaria
-                                                where estilo = '$Estilo' ")->result());
+            print json_encode($this->db->query("select cv.linea,cv.lista,cv.estilo,cv.color
+                                                from costovaria cv
+                                                join estilos e on e.clave = cv.estilo and e.Costos = 0
+                                                join colores c on c.clave = cv.color and c.estilo = cv.estilo and c.PrecioVenta = 1
+                                                where cv.estilo = '$Estilo' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -508,10 +510,13 @@ class GeneraCostosVenta extends CI_Controller {
             $linea = $this->input->get('Linea');
             $lista = $this->input->get('Lista');
             $corrida = $this->input->get('Corrida');
-
-            print json_encode($this->db->query("SELECT * FROM costovaria
-                                                where linea = '$linea' and corr = $corrida and lista = $lista
-                                                order by estilo asc, color asc ")->result());
+//Obtener solo las primeras dos palabras del color
+            /*   , SUBSTRING_INDEX(colord, ' ', 2) AS colord    */
+            print json_encode($this->db->query("select cv.* from costovaria cv
+                                                join estilos e on e.clave = cv.estilo and e.Costos = 0
+                                                join colores c on c.clave = cv.color and c.estilo = cv.estilo and c.PrecioVenta = 1
+                                                where cv.linea = '$linea' and cv.corr = $corrida and cv.lista = $lista
+                                                order by cv.estilo asc, cv.color asc ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -524,23 +529,25 @@ class GeneraCostosVenta extends CI_Controller {
             $corrida = $this->input->get('Corrida');
 
             print json_encode($this->db->query("SELECT
-                                gtosf,
-                                date_format(fecha,'%d/%m/%Y') as fecha,
-                                comic,
-                                `desc`,
-                                matpri,
-                                mextr,
-                                toler,
-                                maob,
-                                gfabri,
-                                tejida,
-                                gvta,
-                                gadmon,
-                                hms,
-                                flete
-                                FROM costovaria
-                                where linea = '$linea' and corr = $corrida and lista = $lista
-                                order by linea, lista, estilo asc ")->result());
+                                ifnull(cv.gtosf,0) as gtosf,
+                                date_format(cv.fecha,'%d/%m/%Y') as fecha,
+                                ifnull(cv.comic,0) as comic,
+                                ifnull(cv.`desc`,0) as `desc`,
+                                ifnull(cv.matpri,0) as matpri,
+                                ifnull(cv.mextr,0) as mextr,
+                                ifnull(cv.toler,0) as toler,
+                                ifnull(maob,0) as maob,
+                                ifnull(cv.gfabri,0) as gfabri,
+                                ifnull(cv.tejida,0) as tejida,
+                                ifnull(cv.gvta,0) as gvta,
+                                ifnull(cv.gadmon,0) as gadmon,
+                                ifnull(cv.hms,0) as hms,
+                                ifnull(cv.flete,0) as flete
+                                FROM costovaria cv
+                                join estilos e on e.clave = cv.estilo and e.Costos = 0
+                                join colores c on c.clave = cv.color and c.estilo = cv.estilo and c.PrecioVenta = 1
+                                where cv.linea = '$linea' and cv.corr = $corrida and cv.lista = $lista
+                                order by cv.linea, cv.lista, cv.estilo asc ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
