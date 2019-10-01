@@ -31,7 +31,7 @@
         <form id="frmNuevo">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-2 float-left">
-                    <legend class="float-left">Ficha Técnica</legend> 
+                    <legend class="float-left">Ficha Técnica</legend>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-10" align="right">
@@ -76,22 +76,22 @@
                     </button>
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnMatSemProd" data-toggle="modal" data-target="#mdlMaterialSemanaProduccionEstilo">
                         <span class="fa fa-boxes"></span> Mat.sem.Prod
-                    </button>   
+                    </button>
                     <button type="button" class="btn btn-danger btn-sm my-1" id="btnAdicionaMaterialFijo" disabled="">
                         <span class="fa fa-plus"></span> Adiciona material fijo
-                    </button>   
-                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT " data-toggle="modal" data-target="#mdlSuplePiezaEnFT">
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSuplePZAFT" data-toggle="modal" data-target="#mdlSuplePiezaEnFT">
                         <span class="fa fa-magic"></span> Suple pieza x pieza en F.T
-                    </button>      
-                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT " data-toggle="modal" data-target="#mdlSupleMaterialEnFT">
+                    </button>
+                    <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaFT" data-toggle="modal" data-target="#mdlSupleMaterialEnFT">
                         <span class="fa fa-magic"></span> Suple mat
-                    </button>             
+                    </button>
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnSupleMaXLinFTLinea" data-toggle="modal" data-target="#mdlSupleMaterialEnFTXLinea">
                         <span class="fa fa-magic"></span> Suple mat X linea
-                    </button>     
+                    </button>
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnArtConsumoXEstiloColor" data-toggle="modal" data-target="#mdlArticuloYConsumoXEstiloColor">
                         <span class="fa fa-chart-pie"></span> Art. y consumo x estilo color
-                    </button> 
+                    </button>
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnActualizaConsumoEstiloFT">
                         <span class="fa fa-band-aid"></span> Actualiza consumo estilo/ficha técnica
                     </button>
@@ -345,7 +345,9 @@
             btnColor = pnlDatos.find("#btnColor"), btnEliminarFT = pnlDatos.find("#btnEliminarFT"),
             btnFotos = pnlDatos.find("#btnFotos"), btnCopyFTaFT = pnlDatos.find("#btnCopyFTaFT");
 
-
+    var btnSuplePZAFT = pnlDatos.find("#btnSuplePZAFT"), btnSupleMaFT = pnlDatos.find("#btnSupleMaFT"), btnSupleMaXLinFTLinea = pnlDatos.find("#btnSupleMaXLinFTLinea"),
+            btnArtConsumoXEstiloColor = pnlDatos.find("#btnArtConsumoXEstiloColor"), btnActualizaConsumoEstiloFT = pnlDatos.find("#btnActualizaConsumoEstiloFT"),
+            btnAdicionaMatXLin = pnlDatos.find("#btnAdicionaMatXLin");
     var btnAdicionaMaterialFijo = pnlDatos.find("#btnAdicionaMaterialFijo");
 
     $(document).ready(function () {
@@ -659,6 +661,11 @@
                     "searchable": false
                 },
                 {
+                    "targets": [8],
+                    "visible": (seguridad === '1' ? false : true),
+                    "searchable": false
+                },
+                {
                     "targets": [9],
                     "visible": false,
                     "searchable": false
@@ -745,24 +752,31 @@
                 HoldOn.close();
             }
         });
+
         tblFichaTecnicaDetalle.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
             tblFichaTecnicaDetalle.find("tbody tr").removeClass("success");
             $(this).addClass("success");
-            var dtm = FichaTecnicaDetalle.row(this).data();
-            HoldOn.close();
-            mdlEditarArticulo.find("input").val("");
-            $.each(mdlEditarArticulo.find("select"), function (k, v) {
-                mdlEditarArticulo.find("select")[k].selectize.clear(true);
-            });
-            mdlEditarArticulo.modal('show');
-            $.each(dtm, function (k, v) {
-                mdlEditarArticulo.find("[name='" + k + "']").val(v);
-            });
-            (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
-            mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addItem(dtm.Pieza_ID, true);
-            mdlEditarArticulo.find("[name='eArticulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
-            mdlEditarArticulo.find('#eArticulo')[0].selectize.focus();
+        });
+
+        tblFichaTecnicaDetalle.find('tbody').on('dblclick', 'tr', function () {
+            if (seguridad === '1') {
+                tblFichaTecnicaDetalle.find("tbody tr").removeClass("success");
+                $(this).addClass("success");
+            } else {
+                var dtm = FichaTecnicaDetalle.row(this).data();
+                mdlEditarArticulo.find("input").val("");
+                $.each(mdlEditarArticulo.find("select"), function (k, v) {
+                    mdlEditarArticulo.find("select")[k].selectize.clear(true);
+                });
+                $.each(dtm, function (k, v) {
+                    mdlEditarArticulo.find("[name='" + k + "']").val(v);
+                });
+                (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
+                mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addItem(dtm.Pieza_ID, true);
+                mdlEditarArticulo.find("[name='eArticulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
+                mdlEditarArticulo.modal('show');
+                mdlEditarArticulo.find('#eArticulo')[0].selectize.focus();
+            }
         });
     }
 
@@ -848,17 +862,52 @@
             }).always(function () {
             });
             pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
+            onVerificarEstiloCerradoCostos(dtm.EstiloId, dtm.ColorId);
             getFotoXEstilo(dtm.EstiloId);
-            getFichaTecnicaDetalleByID(dtm.EstiloId, dtm.ColorId);
             pnlTablero.addClass("d-none");
             pnlDetalle.removeClass('d-none');
             pnlControlesDetalle.removeClass('d-none');
             pnlDatos.removeClass('d-none');
-
             pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
+        });
+    }
+    var seguridad;
+    function onVerificarEstiloCerradoCostos(estilo, color) {
+        $.getJSON(master_url + 'getEstiloByID', {Estilo: estilo}).done(function (data, x, jq) {
+            if (data.length > 0) {
+                seguridad = data[0].Seguridad;
+                if (seguridad === '1') {
+                    getFichaTecnicaDetalleByID(estilo, color);
+                    btnEliminarFT.addClass('d-none');
+                    btnAgregar.addClass('d-none');
+                    btnAdicionaMaterialFijo.addClass('d-none');
+                    btnSuplePZAFT.addClass('d-none');
+                    btnSupleMaFT.addClass('d-none');
+                    btnSupleMaXLinFTLinea.addClass('d-none');
+                    btnActualizaConsumoEstiloFT.addClass('d-none');
+                    btnArtConsumoXEstiloColor.addClass('d-none');
+                    btnAdicionaMatXLin.addClass('d-none');
+                    swal('ESTILO BLOQUEADO', 'PARA MODIFICAR SU FICHA TÉCNICA, CONSULTE AL ING. MARCOS O LA SRA. LAURA CUEVAS PARA DESBLOQUEARLO', 'warning').then((value) => {
+                        //Acciones
+                    });
+                } else {
+                    getFichaTecnicaDetalleByID(estilo, color);
+                    btnEliminarFT.removeClass('d-none');
+                    btnAgregar.removeClass('d-none');
+                    btnAdicionaMaterialFijo.removeClass('d-none');
+                    btnSuplePZAFT.removeClass('d-none');
+                    btnSupleMaFT.removeClass('d-none');
+                    btnSupleMaXLinFTLinea.removeClass('d-none');
+                    btnActualizaConsumoEstiloFT.removeClass('d-none');
+                    btnArtConsumoXEstiloColor.removeClass('d-none');
+                    btnAdicionaMatXLin.removeClass('d-none');
+                }
+            }
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
         });
     }
     function getEstilos() {
@@ -1070,10 +1119,10 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
     .btn-info-blue{
         color: #fff;
         background-color: #3F51B5 !important;
         border-color: #3F51B5 !important;
-    } 
+    }
 </style>

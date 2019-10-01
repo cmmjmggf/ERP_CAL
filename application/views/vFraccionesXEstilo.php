@@ -575,13 +575,18 @@
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
-                }, {
+                },
+                {
                     "targets": [3],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
                 },
-
+                {
+                    "targets": [5],
+                    "visible": (seguridad === '1' ? false : true),
+                    "searchable": false
+                },
                 {
                     "targets": [6],
                     "visible": false,
@@ -686,26 +691,29 @@
         });
 
         tblFraccionesXEstiloDetalle.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
             tblFraccionesXEstiloDetalle.find("tbody tr").removeClass("success");
             $(this).addClass("success");
-            var tr = $(this);
+        });
 
-            var dtm = FraccionesXEstiloDetalle.row(this).data();
+        tblFraccionesXEstiloDetalle.find('tbody').on('dblclick', 'tr', function () {
+            if (seguridad === '1') {
+                tblFraccionesXEstiloDetalle.find("tbody tr").removeClass("success");
+                $(this).addClass("success");
+            } else {
+                var dtm = FraccionesXEstiloDetalle.row(this).data();
+                mdlEditarRenglon.find("input").val("");
+                $.each(mdlEditarRenglon.find("select"), function (k, v) {
+                    mdlEditarRenglon.find("select")[k].selectize.clear(true);
+                });
+                mdlEditarRenglon.modal('show');
+                $.each(dtm, function (k, v) {
+                    mdlEditarRenglon.find("[name='" + k + "']").val(v);
+                });
+                (dtm.AfectaCostoVTA === '1') ? mdlEditarRenglon.find("#eAfectaCostoVTA").prop('checked', true) : mdlEditarRenglon.find("#eAfectaCostoVTA").prop('checked', false);
 
-            HoldOn.close();
-            mdlEditarRenglon.find("input").val("");
-            $.each(mdlEditarRenglon.find("select"), function (k, v) {
-                mdlEditarRenglon.find("select")[k].selectize.clear(true);
-            });
-            mdlEditarRenglon.modal('show');
-            $.each(dtm, function (k, v) {
-                mdlEditarRenglon.find("[name='" + k + "']").val(v);
-            });
-            (dtm.AfectaCostoVTA === '1') ? mdlEditarRenglon.find("#eAfectaCostoVTA").prop('checked', true) : mdlEditarRenglon.find("#eAfectaCostoVTA").prop('checked', false);
-
-            mdlEditarRenglon.find("[name='Fraccion']")[0].selectize.addItem(dtm.Fraccion_ID, true);
-            mdlEditarRenglon.find('#eCostoMO').focus().select();
+                mdlEditarRenglon.find("[name='Fraccion']")[0].selectize.addItem(dtm.Fraccion_ID, true);
+                mdlEditarRenglon.find('#eCostoMO').focus().select();
+            }
 
         });
 
@@ -777,7 +785,7 @@
                 pnlDatos.find("#Estilo")[0].selectize.setValue(data[0].Estilo);
                 pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
                 getFotoXEstilo(dtm.EstiloId);
-                getFraccionesXEstiloDetalleByID(dtm.EstiloId);
+                onVerificarEstiloBloqueadoCostos(dtm.EstiloId);
                 pnlTablero.addClass("d-none");
                 pnlDetalle.removeClass('d-none');
                 pnlControlesDetalle.removeClass('d-none');
@@ -788,6 +796,27 @@
                 console.log(x, y, z);
             }).always(function () {
             });
+        });
+    }
+    var seguridad;
+    function onVerificarEstiloBloqueadoCostos(Estilo) {
+        $.getJSON(master_url + 'getEstiloByID', {Estilo: Estilo}).done(function (data, x, jq) {
+            if (data.length > 0) {
+                seguridad = data[0].Seguridad;
+                if (seguridad === '1') {
+                    btnAgregar.addClass('d-none');
+                    getFraccionesXEstiloDetalleByID(Estilo);
+                    swal('ESTILO BLOQUEADO', 'PARA MODIFICACIONES, CONSULTE AL ING. MARCOS O LA SRA. LAURA CUEVAS PARA DESBLOQUEARLO', 'warning').then((value) => {
+                        //Acciones
+                    });
+                } else {
+                    btnAgregar.removeClass('d-none');
+                    getFraccionesXEstiloDetalleByID(Estilo);
+                }
+            }
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
         });
     }
 
@@ -996,5 +1025,5 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 </style>
