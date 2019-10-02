@@ -57,24 +57,17 @@
                 </div>
             </div>
         </form>
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12">
-
-                <div class="row">
-                    <table id="tblCalidadProduccion" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <table id="tblCalidadProduccion" class="table table-sm display" style="width:  100%;">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Control</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
 
@@ -328,7 +321,7 @@
             "autoWidth": true,
             "colReorder": true,
             "displayLength": 20,
-            "scrollX": true,
+            "scrollX": false,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -394,7 +387,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

@@ -48,6 +48,21 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function getPrecioEstiloColor() {
+        try {
+            $x = $this->input->get();
+            $CLIENTE = $x['Cliente'];
+            print json_encode($this->db->select("cv.preaut", false)
+                                    ->from("costovaria cv")
+                                    ->join("clientes ct", "ON ct.Clave = '$CLIENTE' and ct.ListaPrecios = cv.lista ")
+                                    ->where('cv.estilo', $x['Estilo'])
+                                    ->where('cv.color', $x['Color'])
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onComprobarFichaTecnicaXEstilo() {
         try {
             $x = $this->input->get();
@@ -381,7 +396,7 @@ class Pedidos extends CI_Controller {
                     "C21" => ($v->C21 !== '') ? $v->C21 : NULL, "C22" => ($v->C22 !== '') ? $v->C22 : NULL,
                     "Recibido" => ($v->Recibido !== '') ? $v->Recibido : NULL
                 );
-                $data["Estatus"] = 'A'; 
+                $data["Estatus"] = 'A';
                 $data["Registro"] = Date('Y-m-d h:i:s');
                 $this->db->insert("pedidox", $data);
             }
@@ -394,7 +409,7 @@ class Pedidos extends CI_Controller {
 
     public function onModificarX() {
         try {
-            $x = $this->input->post(); 
+            $x = $this->input->post();
             $this->db->trans_begin();
             $p = array(
                 "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],

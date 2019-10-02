@@ -197,6 +197,15 @@ class ControlesTerminados extends CI_Controller {
         }
     }
 
+    public function onVerificarExisteenFacturacion() {
+        try {
+            $control = $this->input->get('Control');
+            print json_encode($this->db->query("SELECT pareped FROM facturacion where contped = '$control' and staped = 2")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAgregarAvanceControl() {
         try {
             $x = $this->input;
@@ -213,7 +222,7 @@ class ControlesTerminados extends CI_Controller {
                 'Hora' => Date('H:i:s')
             ));
             //Actualiza controles y pedidox
-            $this->ctm->onModificarControl($x->post('Control'), $x->post('DepartamentoT'), $x->post('Departamento'));
+            $this->ctm->onModificarControl($x->post('Control'), $x->post('DepartamentoT'), $x->post('Departamento'), $x->post('stsavan'));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

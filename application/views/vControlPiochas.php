@@ -124,38 +124,39 @@
             </div>
         </form>
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-12">
-
-                <div class="row">
-                    <table id="tblPiochas" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Fec-Rep</th>
-                                <th scope="col">Estilo</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Depto</th>
-                                <th scope="col">Empleado</th>
-                                <th scope="col">I-D-P</th>
-                                <th scope="col">Pieza</th>
-                                <th scope="col">Fraccion</th>
-                                <th scope="col">Artículo</th>
-                                <th scope="col">Talla</th>
-                                <th scope="col">Pares</th>
-                                <th scope="col">Def</th>
-                                <th scope="col">Det</th>
-                                <th scope="col">REPARADA</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+            <div class="col-12">
+                <table id="tblPiochas" class="table table-sm display" style="width:  100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Control</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Fec-Rep</th>
+                            <th scope="col">Estilo</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Depto</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">I-D-P</th>
+                            <th scope="col">Pieza</th>
+                            <th scope="col">Fraccion</th>
+                            <th scope="col">Artículo</th>
+                            <th scope="col">Talla</th>
+                            <th scope="col">Pares</th>
+                            <th scope="col">Def</th>
+                            <th scope="col">Det</th>
+                            <th scope="col">REPARADA</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
+
+
     </div>
 </div>
+
+
 <div class="modal " id="mdlReportePiochas"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
@@ -223,8 +224,8 @@
 
     var mdlReportePiochas = $('#mdlReportePiochas');
 
-
     $(document).ready(function () {
+
         //validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToInputOnChange('#ParteZapato', '#Pares', pnlTablero);
         setFocusSelectToSelectOnChange('#TipoCargo', '#Departamento', pnlTablero);
@@ -707,7 +708,7 @@
             "autoWidth": true,
             "colReorder": true,
             "displayLength": 20,
-            "scrollX": true,
+            "scrollX": false,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -865,7 +866,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

@@ -232,10 +232,17 @@ class ControlesTerminados_model extends CI_Model {
         }
     }
 
-    public function onModificarControl($Control, $Depto, $NumDepto) {
+    public function onModificarControl($Control, $Depto, $NumDepto, $stsavan) {
         try {
+            $st_ped = 'A';
+            if ($stsavan === '13') {
+                $st_ped = 'F';
+            }
+
             $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
-            $this->db->set('stsavan', 12)->where('Control', $Control)->update("pedidox");
+            $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->set('stsavan', $stsavan)->set('Estatus', $st_ped)->where('Control', $Control)->update("pedidox");
+
+            //Actualizar avaprd también
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

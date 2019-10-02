@@ -131,48 +131,44 @@
 
             <div class="col-12 col-sm-12 col-md-7">
                 <h4>Controles terminados</h4>
-                <div class="row">
-                    <table id="tblControlesTerminados" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Fca</th>
-                                <th scope="col">Sem</th>
-                                <th scope="col">Est</th>
-                                <th scope="col">Co</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Docto</th>
-                                <th scope="col">Pares</th>
-                                <th scope="col">Rechaza</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <table id="tblControlesTerminados" class="table table-sm display" style="width:  100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Control</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Fca</th>
+                            <th scope="col">Sem</th>
+                            <th scope="col">Est</th>
+                            <th scope="col">Co</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Docto</th>
+                            <th scope="col">Pares</th>
+                            <th scope="col">Rechaza</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
 
             <div class="col-12 col-sm-12 col-md-5">
                 <h4>Controles rechazados</h4>
-                <div class="row">
-                    <table id="tblControlesRechazados" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Defe</th>
-                                <th scope="col">Deta</th>
-                                <th scope="col">Fca</th>
+                <table id="tblControlesRechazados" class="table table-sm display" style="width:  100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Control</th>
+                            <th scope="col">Defe</th>
+                            <th scope="col">Deta</th>
+                            <th scope="col">Fca</th>
 
-                                <th scope="col">Sem</th>
-                                <th scope="col">Docto</th>
-                                <th scope="col">Pares</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                            <th scope="col">Sem</th>
+                            <th scope="col">Docto</th>
+                            <th scope="col">Pares</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -690,6 +686,7 @@
         var detalledefecto = pnlTablero.find('#DetalleDefecto').val();
         var depto_destino = '';
         var deptoT_destino = '';
+        var stsavan = 0;
         isValid('pnlTablero');
         if (valido) {
             if (defecto === '' && detalledefecto === '') {
@@ -710,32 +707,59 @@
                     if (seg === 1 && Maquila.val() === '98') { //Control de muestras
                         depto_destino = '260';
                         deptoT_destino = 'FACTURADO';
+                        stsavan = 13;
                     } else { //Aquí es cuando es un control normal
-                        depto_destino = '240';
-                        deptoT_destino = 'TERMINADO';
+                        var pares_fac = 0;
+                        $.getJSON(master_url + 'onVerificarExisteenFacturacion', {Control: Control.val()}).done(function (data) {
+                            if (data.length > 0) {
+                                pares_fac = parseInt(data[0].pareped);
+                                if (pares_fac >= parseInt(Pares.val())) {//estatus 13 FACTURADO
+                                    depto_destino = '260';
+                                    deptoT_destino = 'FACTURADO';
+                                    stsavan = 13;
+                                } else {
+                                    depto_destino = '240';
+                                    deptoT_destino = 'TERMINADO';
+                                    stsavan = 12;
+                                }
+                            } else {//Si no esta en facturacion todo se va a terminado
+                                depto_destino = '240';
+                                deptoT_destino = 'TERMINADO';
+                                stsavan = 12;
+                            }
+                            //Seguimos con el proceso una ves sabiendo si esta fact o termi
+                            $.post(master_url + 'onAgregarAvanceControl', {
+                                Control: Control.val(),
+                                Departamento: depto_destino,
+                                DepartamentoT: deptoT_destino,
+                                stsavan: stsavan
+                            }).done(function (data) {
+                                if (nuevo) {
+                                    getControlesTerminados(Docto.val(), Maquila.val());
+                                    getControlesRechazados(Docto.val(), Maquila.val());
+                                    nuevo = false;
+                                } else {
+                                    ControlesTerminados.ajax.reload();
+                                    ControlesRechazados.ajax.reload();
+                                }
+
+                                pnlTablero.find("input:not(#Docto)").val('');
+                                pnlTablero.find("#Defecto")[0].selectize.clear(true);
+                                pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
+                                pnlTablero.find('#Control').focus();
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            });
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        });
                     }
 
-                    $.post(master_url + 'onAgregarAvanceControl', {
-                        Control: Control.val(),
-                        Departamento: depto_destino,
-                        DepartamentoT: deptoT_destino
-                    }).done(function (data) {
-                        if (nuevo) {
-                            getControlesTerminados(Docto.val(), Maquila.val());
-                            getControlesRechazados(Docto.val(), Maquila.val());
-                            nuevo = false;
-                        } else {
-                            ControlesTerminados.ajax.reload();
-                            ControlesRechazados.ajax.reload();
-                        }
 
-                        pnlTablero.find("input:not(#Docto)").val('');
-                        pnlTablero.find("#Defecto")[0].selectize.clear(true);
-                        pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
-                        pnlTablero.find('#Control').focus();
-                    }).fail(function (x, y, z) {
-                        getError(x);
-                    });
+
+
+
+
 
 
                 }).fail(function (x, y, z) {
@@ -867,7 +891,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "scrollX": true,
+            "scrollX": false,
             keys: true,
             "bSort": true,
             "aaSorting": [
@@ -942,7 +966,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             keys: true,
-            "scrollX": true,
+            "scrollX": false,
             "bSort": true,
             "aaSorting": [
                 [1, 'asc']/*ID*/
@@ -1101,7 +1125,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

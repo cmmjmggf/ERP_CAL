@@ -8,8 +8,8 @@
                 <label>Cliente</label>
                 <select id="ClientePedido" name="ClientePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm" >
                     <option></option>
-                    <?php 
-                    //YA CONTIENE LOS BLOQUEOS DE VENTA 
+                    <?php
+                    //YA CONTIENE LOS BLOQUEOS DE VENTA
                     $clientes = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result();
                     foreach ($clientes as $k => $v) {
                         print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
@@ -100,7 +100,7 @@
                                 foreach ($this->db->query("SELECT A.Clave, CONCAT(A.Clave, \" - \", A.Nombre) AS Agente FROM agentes AS A")->result() as $k => $v) {
                                     print "<option value=\"{$v->Clave}\">{$v->Agente}</option>";
                                 }
-                                ?>                                    
+                                ?>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2">
@@ -207,7 +207,7 @@
                                                     ?>
                                                     <td class="font-weight-bold">Pares</td>
                                                 </tr>
-                                                <tr>
+                                                <tr id="rCantidades">
                                                     <?php
                                                     for ($index = 1; $index < 23; $index++) {
                                                         print '<td><input type="text" style="width: 37px;" maxlength="4" class=" numbersOnly" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
@@ -230,12 +230,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row pt-2"> 
+                    <div class="row pt-2">
                         <div class="col-6 col-sm-6 col-md-6" align="right">
                             <button type="button" class="btn btn-info btn-lg btn-float animated slideInUp d-none" disabled="" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
                                 <i class="fa fa-save"></i>
                             </button>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1042,8 +1042,21 @@
 
         pnlDatos.find("#Color").change(function () {
             var color = $(this).val();
+            var estilo = pnlDatos.find("#Estilo").val();
+            var cliente = pnlDatos.find("#PedidoxCliente").val();
             if (color !== '') {
-                pnlDatos.find("#Precio").prop('readonly', false);
+                //OBTENER PRECIO ESTILO/COLOR
+                $.getJSON('<?php print base_url('Pedidos/getPrecioEstiloColor'); ?>', {Color: color, Estilo: estilo, Cliente: cliente}).done(function (data) {
+                    if (data.length > 0) {
+                        pnlDatos.find("#Precio").val(data[0].preaut);
+
+                    }
+                    pnlDatos.find("#Precio").prop('readonly', false);
+                }).fail(function (x, y, z) {
+                    getError(x);
+                });
+
+
             } else {
                 pnlDatos.find("#Precio").prop('readonly', true);
             }
@@ -1076,16 +1089,14 @@
                         pnlDatos.find("#Maquila")[0].selectize.setValue(data[0].Maquila);
                         onComprobarSemanaMaquila(data[0].Maquila, pnlDatos.find("#Semana").val());
                         //SET TALLAS
-                        var indice = 0;
                         $.each(data[0], function (k, v) {
-                            if (parseInt(v) > 0) {
-//                                pnlDatos.find("[name='C" + indice + "']").prop('disabled',false);
-                                pnlDatos.find("[name='" + k + "']").val(v);
+                            var Can = k.replace("T", "C");
+                            if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
+                                pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', true);
                             } else {
-//                                pnlDatos.find("[name='C" + indice + "']").prop('disabled',true);
-                                pnlDatos.find("[name='C" + indice + "']").val('');
+                                pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', false);
+                                pnlDatos.find('#tblTallas').find("[name='" + k + "']").val(v);
                             }
-                            indice += 1;
                         });
                         //MOSTRAR FOTO
                         if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
@@ -1135,6 +1146,9 @@
                                         '</div>'
                             });
                         }
+                    } else {
+                        pnlDatos.find('#tblTallas').find("input").val("");
+                        pnlDatos.find('#rCantidades').find("input").prop('disabled', true);
                     }
                 }).fail(function (x, y, z) {
                     getError(x);
@@ -1627,7 +1641,7 @@
     }
 
     #tblPedidoDetalle tbody td{
-        font-weight: bold; 
+        font-weight: bold;
         left: 20px;
         top: -5px;
     }
@@ -1642,16 +1656,16 @@
         border-top-color: #007bff !important;
         border-bottom-color: #007bff !important;
         background-color: #fff !important;
-        color: #000 !important;  
+        color: #000 !important;
     }
 
-    #tblPedidoDetalle tbody tr:hover td:first-child{ 
+    #tblPedidoDetalle tbody tr:hover td:first-child{
         border-top-left-radius: 5px !important;
         border-bottom-left-radius: 5px !important;
         border-left-color: #007bff !important;
     }
 
-    #tblPedidoDetalle tbody tr:hover td:last-child{ 
+    #tblPedidoDetalle tbody tr:hover td:last-child{
         border-top-right-radius:  5px !important;
         border-bottom-right-radius:  5px !important;
         border-right-color: #007bff !important;
@@ -1660,7 +1674,7 @@
     #tblPedidoDetalle tr:hover td{
         color:#000;
         background-color: #fff;
-    } 
+    }
 
     div.zoom:hover{
         cursor: pointer;
@@ -1669,14 +1683,14 @@
 
     #tblTallas tbody tr:hover {
         background-color: #333 !important;
-        color: #fff !important; 
-    } 
+        color: #fff !important;
+    }
 
     table.dataTable tbody>tr.selected, table.dataTable tbody>tr.selected td{
         border-width: 2px !important;
         border-style: solid !important;
         border-bottom-color: #007bff !important;
         background-color: #fff !important;
-        color: #000 !important; 
+        color: #000 !important;
     }
 </style>
