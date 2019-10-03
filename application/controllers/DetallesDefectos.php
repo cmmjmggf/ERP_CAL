@@ -32,7 +32,7 @@ class DetallesDefectos extends CI_Controller {
                     } else if ($Origen === 'FACTURACION') {
                         $this->load->view('vMenuFacturacion');
                     } else if ($Origen === 'FICHASTECNICAS') {
-                        $this->load->view('vMenuFacturacion');
+                        $this->load->view('vMenuFichasTecnicas');
                     }
                     //Cuando no viene de ningun modulo y lo teclean
                     else {

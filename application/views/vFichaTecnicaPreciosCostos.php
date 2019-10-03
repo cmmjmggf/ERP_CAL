@@ -108,7 +108,7 @@
         mdlFichaTecnicaPreciosCostos.find("#Maquila").keypress(function (e) {
             if (e.keyCode === 13) {
                 var Maquila = $(this).val();
-                if (Color) {
+                if (Maquila) {
                     $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarMaquila', {Maquila: Maquila}).done(function (data, x, jq) {
                         if (data.length > 0) {
                             mdlFichaTecnicaPreciosCostos.find("#sMaquila")[0].selectize.addItem(Maquila, true);
@@ -143,7 +143,7 @@
         mdlFichaTecnicaPreciosCostos.find('#btnImprimirFichaTecnica').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData($('#mdlFichaTecnicaPreciosCostos').find("#frmFichaTecnicaCompras")[0]);
-            var maq = mdlFichaTecnicaPreciosCostos.find("#Maquila").find("option:selected").text();
+            var maq = mdlFichaTecnicaPreciosCostos.find("#sMaquila").find("option:selected").text();
 
             frm.append('NomMaquila', maq);
             $.ajax({
@@ -189,7 +189,7 @@
                         text: "ESTILO NO VÁLIDO",
                         icon: "error"
                     }).then((action) => {
-                        mdlFichaTecnicaPreciosCostos.find('#Estilo')[0].selectize.focus();
+                        mdlFichaTecnicaPreciosCostos.find('#Estilo').focus();
                     });
                 }
                 HoldOn.close();

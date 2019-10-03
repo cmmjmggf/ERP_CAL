@@ -11,25 +11,33 @@
                 <form id="frmFichaTecnicaCompras">
                     <div class="row">
 
-                        <div class="col-12 col-sm-8">
-                            <label>Estilo</label>
-                            <select class="form-control form-control-sm required selectize" id="Estilo" name="Estilo" required="">
-                                <option value=""></option>
-                            </select>
+                        <div class="col-3" >
+                            <label for="" >Estilo</label>
+                            <input type="text" class="form-control form-control-sm " maxlength="6"  id="Estilo" name="Estilo"   >
                         </div>
-                        <div class="col-12 col-sm-4">
+                        <div class="col-7" ></div>
+                        <div class="col-2">
                             <label>Piezas</label>
                             <input type="text" maxlength="6" class="form-control form-control-sm disabledForms" id="Piezas" name="Piezas" >
                         </div>
-                        <div class="col-12 col-sm-12">
-                            <label>Color</label>
-                            <select class="form-control form-control-sm required selectize" id="Color" name="Color" required="">
+                        <div class="w-100"></div>
+                        <div class="col-3" >
+                            <label for="" >Color</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2"  id="Color" name="Color"   >
+                        </div>
+                        <div class="col-9">
+                            <label for="">-</label>
+                            <select class="form-control form-control-sm required selectize" id="sColor" name="sColor" required="">
                                 <option value=""></option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-12">
-                            <label>Maquila</label>
-                            <select class="form-control form-control-sm required selectize" id="Maquila" name="Maquila" required="">
+                        <div class="col-3" >
+                            <label for="" >Maquila</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2"  id="Maquila" name="Maquila"   >
+                        </div>
+                        <div class="col-9">
+                            <label>-</label>
+                            <select class="form-control form-control-sm required selectize" id="sMaquila" name="sMaquila" required="">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -82,35 +90,130 @@
 
     var mdlFichaTecnicaCompra = $('#mdlFichaTecnicaCompra');
     $(document).ready(function () {
-        validacionSelectPorContenedor(mdlFichaTecnicaCompra);
-        setFocusSelectToSelectOnChange('#Color', '#Maquila', mdlFichaTecnicaCompra);
 
-        mdlFichaTecnicaCompra.find("#Estilo").change(function () {
-            $("#Color")[0].selectize.clear(true);
-            $("#Color")[0].selectize.clearOptions();
-            getColoresXEstiloReporte($(this).val());
-            getEstiloByClaveReporte($(this).val());
+        mdlFichaTecnicaCompra.find("#Estilo").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Estilo = $(this).val();
+                if (Estilo) {
+                    $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {Clave: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            mdlFichaTecnicaCompra.find("#Piezas").val(parseInt(data[0].PiezasCorte));
+                            mdlFichaTecnicaCompra.find("#sColor")[0].selectize.clear(true);
+                            mdlFichaTecnicaCompra.find("#sColor")[0].selectize.clearOptions();
+                            getColoresXEstiloReporte(Estilo);
+                            mdlFichaTecnicaCompra.find("#Color").focus().select();
+                        } else {
+                            swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                                mdlFichaTecnicaCompra.find('#Estilo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
         });
 
-        mdlFichaTecnicaCompra.find("#Maquila").change(function () {
-            var Piezas = parseInt($('#Piezas').val());
-            getDesperdicioByMaquilaPiezas($(this).val(), Piezas);
-            mdlFichaTecnicaCompra.find("#ManoObra").focus();
+        mdlFichaTecnicaCompra.find("#Color").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Color = $(this).val();
+                var Estilo = mdlFichaTecnicaCompra.find("#Estilo").val();
+                if (Color) {
+                    $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarEstiloColor', {Color: Color, Estilo: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            mdlFichaTecnicaCompra.find("#sColor")[0].selectize.addItem(Color, true);
+                            mdlFichaTecnicaCompra.find("#Maquila").focus().select();
+                        } else {
+                            swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
+                                mdlFichaTecnicaCompra.find('#Color').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
         });
+
+        mdlFichaTecnicaCompra.find("#sColor").change(function () {
+            if ($(this).val()) {
+                var Maquila = $(this).val();
+                var Piezas = mdlFichaTecnicaCompra.find("#Piezas").val();
+                mdlFichaTecnicaCompra.find("#Color").val($(this).val());
+                getDesperdicioByMaquilaPiezas(Maquila, Piezas);
+                mdlFichaTecnicaCompra.find("#Maquila").focus().select();
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#Maquila").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Maquila = $(this).val();
+                var Piezas = mdlFichaTecnicaCompra.find("#Piezas").val();
+                if (Maquila) {
+                    $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarMaquila', {Maquila: Maquila}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            mdlFichaTecnicaCompra.find("#sMaquila")[0].selectize.addItem(Maquila, true);
+                            getDesperdicioByMaquilaPiezas(Maquila, Piezas);
+                            mdlFichaTecnicaCompra.find("#ManoObra").focus().select();
+                        } else {
+                            swal('ERROR', 'LA MAQUILA NO EXISTE', 'warning').then((value) => {
+                                mdlFichaTecnicaCompra.find('#Maquila').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#sMaquila").change(function () {
+            if ($(this).val()) {
+                mdlFichaTecnicaCompra.find("#Maquila").val($(this).val());
+                mdlFichaTecnicaCompra.find("#ManoObra").focus().select();
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#ManoObra").keypress(function (e) {
+            if (e.keyCode === 13) {
+                mdlFichaTecnicaCompra.find("#Gastos").focus().select();
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#Gastos").keypress(function (e) {
+            if (e.keyCode === 13) {
+                mdlFichaTecnicaCompra.find("#Utilidad").focus().select();
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#Utilidad").keypress(function (e) {
+            if (e.keyCode === 13) {
+                mdlFichaTecnicaCompra.find("#FichaSinPrecios").focus();
+            }
+        });
+
+        mdlFichaTecnicaCompra.find("#FichaSinPrecios").keypress(function (e) {
+            if (e.keyCode === 13) {
+                mdlFichaTecnicaCompra.find("#btnImprimirFichaTecnica").focus();
+            }
+        });
+
+
+
 
         mdlFichaTecnicaCompra.on('shown.bs.modal', function () {
             mdlFichaTecnicaCompra.find("input").val("");
             $.each(mdlFichaTecnicaCompra.find("select"), function (k, v) {
                 mdlFichaTecnicaCompra.find("select")[k].selectize.clear(true);
             });
-            mdlFichaTecnicaCompra.find('#Estilo')[0].selectize.focus();
+            mdlFichaTecnicaCompra.find('#Estilo').focus();
         });
 
         mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').on("click", function () {
             var TipoFicha = mdlFichaTecnicaCompra.find("#FichaSinPrecios")[0].checked ? 'onImprimirFichaTecnicaSinPrecios' : 'onImprimirFichaTecnicaCompra';
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData($('#mdlFichaTecnicaCompra').find("#frmFichaTecnicaCompras")[0]);
-            var maq = mdlFichaTecnicaCompra.find("#Maquila").find("option:selected").text();
+            var maq = mdlFichaTecnicaCompra.find("#sMaquila").find("option:selected").text();
 
             frm.append('NomMaquila', maq);
             $.ajax({
@@ -156,7 +259,7 @@
                         text: "ESTILO NO VÁLIDO",
                         icon: "error"
                     }).then((action) => {
-                        mdlFichaTecnicaCompra.find('#Estilo')[0].selectize.focus();
+                        mdlFichaTecnicaCompra.find('#Estilo').focus();
                     });
                 }
                 HoldOn.close();
@@ -165,48 +268,25 @@
                 HoldOn.close();
             });
         });
-        handleEnterDiv(mdlFichaTecnicaCompra);
-        getEstilosReporte();
+        //handleEnterDiv(mdlFichaTecnicaCompra);
         getMaquilasCostosEstilos();
     });
 
     function getMaquilasCostosEstilos() {
-        $.getJSON(base_url + 'index.php/Estilos/getMaquilas').done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/FichaTecnicaCompra/getMaquilas').done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlFichaTecnicaCompra.find("#Maquila")[0].selectize.addOption({text: v.Maquila, value: v.Clave});
+                mdlFichaTecnicaCompra.find("#sMaquila")[0].selectize.addOption({text: v.Maquila, value: v.Clave});
             });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-    }
-
-    function getEstilosReporte() {
-        $.getJSON(base_url + 'index.php/FichaTecnica/getEstilos').done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlFichaTecnicaCompra.find("#Estilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-    }
-
-    function getEstiloByClaveReporte(Estilo) {
-        $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {Clave: Estilo}).done(function (data, x, jq) {
-            if (data.length > 0) {
-                mdlFichaTecnicaCompra.find("#Piezas").val(parseInt(data[0].PiezasCorte));
-            }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
     }
 
     function getColoresXEstiloReporte(Estilo) {
-
-        $.getJSON(base_url + 'index.php/FichaTecnica/getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/FichaTecnicaCompra/getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlFichaTecnicaCompra.find("#Color")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                mdlFichaTecnicaCompra.find("#sColor")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
-            mdlFichaTecnicaCompra.find("#Color")[0].selectize.focus();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
