@@ -57,7 +57,7 @@
 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Importe</label>
-                <input type="text" id="Importe" name="Importe" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="ImporteTT" name="ImporteTT" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Pagos</label>
@@ -151,10 +151,20 @@
     var pnlTablero = $("#pnlTablero"), DescuentosYDevoluciones,
             tblDescuentosYDevoluciones = pnlTablero.find("#tblDescuentosYDevoluciones"),
             DocumentosConSaldoDeEsteCliente, tblDocumentosConSaldoDeEsteCliente = pnlTablero.find("#tblDocumentosConSaldoDeEsteCliente"),
-            btnPagosDeClientes = pnlTablero.find("#btnPagosDeClientes");
+            btnPagosDeClientes = pnlTablero.find("#btnPagosDeClientes"),
+            ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
+            TP = pnlTablero.find('#TP'),
+            Documento = pnlTablero.find('#Documento'),
+            FechaDevolucion = pnlTablero.find('#FechaDevolucion'),
+            Mov = pnlTablero.find('#Mov'),
+            Importe = pnlTablero.find('#Importe'),
+            Referencia = pnlTablero.find('#Referencia'),
+            ImporteTT = pnlTablero.find('#ImporteTT'),
+            Pagos = pnlTablero.find('#Pagos'),
+            Saldo = pnlTablero.find('#Saldo');
 
     $(document).ready(function () {
-
+        getidsInputSelect(pnlTablero);
         btnPagosDeClientes.click(function () {
             onOpenWindow('<?php print base_url('PagosDeClientes.shoes'); ?>');
         });
@@ -211,7 +221,7 @@
                 {"data": "ID"}, {"data": "CLIENTE"},
                 {"data": "DOCUMENTO"}, {"data": "TP"},
                 {"data": "FECHA_DEP"}, {"data": "IMPORTE"},
-                {"data": "PAGOS"}, {"data": "SALDO"}, 
+                {"data": "PAGOS"}, {"data": "SALDO"},
                 {"data": "ST"}, {"data": "DIAS"}
             ],
             "columnDefs": [{

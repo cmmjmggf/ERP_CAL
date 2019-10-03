@@ -56,7 +56,7 @@ class OrdenDeProduccion extends CI_Controller {
                                 . "PD.Clave AS Pedido,"
                                 . "PD.FechaPedido AS \"Fecha Pedido\","
                                 . "PD.FechaRecepcion AS \"Fecha Entrega\","
-                                . "PD.Registro AS \"Fecha Captura\","
+                                . "DATE_FORMAT(PD.Registro,\"%d/%m/%Y\") AS \"Fecha Captura\","
                                 . "PD.Semana AS Semana,"
                                 . "PD.Maquila AS Maq,"
                                 . "PD.Cliente AS Cliente,"
@@ -71,7 +71,7 @@ class OrdenDeProduccion extends CI_Controller {
                                 . " CASE "
                                 . "WHEN PD.Control IS NULL THEN '' "
                                 . "ELSE PD.Control END AS Marca, "
-                                . "CONCAT(RIGHT(CT.Ano,2), CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
+                                . "CT.Control AS Control,"
                                 . "S.ID AS SerieID,"
                                 . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                         ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
@@ -82,18 +82,20 @@ class OrdenDeProduccion extends CI_Controller {
                         ->where('CT.Estatus', 'A');
                 if ($x["ANIO"] !== '') {
                     $this->db->where('PD.Ano', $x["ANIO"]);
+                    $ANIO_CT = substr($x["ANIO"], 2, 2);
+                    $this->db->where('CT.Ano', $ANIO_CT);
                 }
-                if ( $x["MAQUILA"] !== '') {
+                if ($x["MAQUILA"] !== '') {
                     $this->db->where('PD.Maquila', $x["MAQUILA"]);
                 }
                 if ($x["SEMANA"] !== '') {
                     $this->db->where('PD.Semana', $x["SEMANA"]);
                 }
-                if ($x["ANIO"] === '' &&  $x["MAQUILA"] === '' && $x["SEMANA"] === '') {
+                if ($x["ANIO"] === '' && $x["MAQUILA"] === '' && $x["SEMANA"] === '') {
                     $this->db->limit(99);
                 }
                 $sql = $this->db->get();
-//            PRINT $this->db->last_query();
+//                PRINT $this->db->last_query();
                 print json_encode($sql->result());
             } catch (Exception $exc) {
                 echo $exc->getTraceAsString();
@@ -123,8 +125,40 @@ class OrdenDeProduccion extends CI_Controller {
 
     public function onAgregarAOrdenDeProduccion() {
         try {
-            $x = $this->input;
-            $PEDIDO_DETALLE = $this->odpm->getPedidosByMaquilaSemana($x->post('MAQUILA'), $x->post('SEMANA'), $x->post('ANO'));
+            $x = $this->input->post();
+            $ANIO_CT = substr($x["ANO"], 2, 2);
+            $PEDIDO_DETALLE = $this->db->select("P.Clave AS CLAVE_PEDIDO, P.Cliente CLAVE_CLIENTE, "
+                                    . "IFNULL(C.RazonS,\"Z FALTA AGREGAR EL CLIENTE\") AS CLIENTE, "
+                                    . "P.FechaPedido AS FECHA_PEDIDO, "
+                                    . "T.Descripcion AS TRANSPORTE, A.Nombre AGENTE, S.Clave AS SERIE,"
+                                    . "CT.ID AS CLAVE_CONTROL,"
+                                    . "S.T1, S.T2, S.T3, S.T4, S.T5,"
+                                    . "S.T6, S.T7, S.T8, S.T9, S.T10,"
+                                    . "S.T11, S.T12, S.T13, S.T14, S.T15,"
+                                    . "S.T16, S.T17, S.T18, S.T19, S.T20,"
+                                    . "S.T21,S.T22,L.Clave AS CLAVE_LINEA, L.Descripcion AS LINEA,"
+                                    . "E.Horma AS HORMA, E.Descripcion AS OESTILOT, "
+                                    . "CO.Descripcion AS OCOLORT, P.ID AS PEDIDO_DETALLE,"
+                                    . "P.*, P.Clave AS Pedido", false)
+                            ->from('pedidox AS P')
+                            ->join('clientes AS C', 'P.Cliente = C.Clave', 'left')
+                            ->join('estilos AS E', 'P.Estilo = E.Clave', 'left')
+                            ->join('colores AS CO', 'P.Color = CO.Clave', 'left')
+                            ->join('agentes AS A', 'P.Agente = A.Clave', 'left')
+                            ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
+                            ->join('series AS S', 'P.Serie = S.Clave', 'left')
+                            ->join('lineas AS L', 'E.Linea = L.Clave', 'left')
+                            ->join('controles AS CT', 'CT.PedidoDetalle = P.ID', 'left')
+                            ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.ID', 'left')
+                            ->where('P.Maquila', $x['MAQUILA'])
+                            ->where('P.Semana', $x['SEMANA'])
+                            ->where('P.Ano', $x['ANO'])
+                            ->where('E.Clave = CO.Estilo '
+                                    . 'AND CT.PedidoDetalle = P.ID  AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL', null, false)
+                            ->get()->result();
+            $str = $this->db->last_query();
+//            PRINT $str;
+//            exit(0);
             foreach ($PEDIDO_DETALLE as $k => $v) {
                 $op = array();
                 $op["Clave"] = $v->CLAVE_CLIENTE;
@@ -144,11 +178,30 @@ class OrdenDeProduccion extends CI_Controller {
                 $op["ColorT"] = $v->OCOLORT;
                 $op["Agente"] = $v->AGENTE;
                 $op["Transporte"] = $v->TRANSPORTE;
-                $op["Semana"] = $x->post('SEMANA');
-                $op["Maquila"] = $x->post('MAQUILA');
-                $op["Ano"] = $x->post('ANO');
+                $op["Semana"] = $x['SEMANA'];
+                $op["Maquila"] = $x['MAQUILA'];
+                $op["Ano"] = $x['ANO'];
 
-                $P_F_S_S = $this->odpm->getPIEL_FORRO_SINTETICO_SUELA($v->Estilo, $v->Color, $v->Pares);
+                $P_F_S_S = $this->db->select("G.Clave, G.Nombre AS Grupo, A.Descripcion AS PIEL_FORRO_SINTETICO_SUELA ,
+                            ((sum(FT.Consumo) * (
+                            (CASE
+                            WHEN  E.PiezasCorte BETWEEN 0 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10
+                            WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14
+                            WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18
+                            WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a
+                            ELSE 0
+                            END) +1)) * {$v->Pares}) AS CONSUMOTOTAL", false)
+                                ->from('fichatecnica AS FT')
+                                ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                                ->join('estilos AS E', 'FT.Estilo = E.Clave')
+                                ->join('maquilas AS M', 'E.Maquila = M.Clave')
+                                ->join('grupos AS G ', 'A.Grupo = G.Clave')
+                                ->where('FT.Estilo', $v->Estilo)
+                                ->where('FT.Color', $v->Color)
+                                ->where_in('A.Grupo', array(1, 2, 40, 3))
+                                ->group_by('A.Descripcion')
+                                ->order_by('ABS(G.Clave)', 'ASC')
+                                ->order_by('A.Descripcion', 'ASC')->get()->result();
                 $total_piel = 0;
                 $total_forro = 0;
                 $total_sintetico = 0;
@@ -210,7 +263,33 @@ class OrdenDeProduccion extends CI_Controller {
                 $ID = $row['LAST_INSERT_ID()'];
 
                 /* DETALLE */
-                $ORDENDEPRODUCCIOND = $this->odpm->getFichaTecnicaParaOrdenDeProduccion($v->Estilo, $v->Color, $v->Pares);
+                $ORDENDEPRODUCCIOND = $this->db->select("P.Clave AS PIEZA, P.Descripcion AS PIEZAT,
+                                    A.Clave AS ARTICULO, A.Descripcion AS ARTICULOT,
+                                    D.Clave AS DEPARTAMENTO, D.Descripcion AS DEPARTAMENTOT,
+                                    FT.PzXPar AS PZXPAR, U.Clave AS UNIDAD, U.Descripcion AS UNIDADT,
+                                    FT.Consumo AS CONSUMO, P.Clasificacion AS CLASIFICACION,
+                                    ((SUM(FT.Consumo) * ((CASE
+                                      WHEN  E.PiezasCorte BETWEEN 0 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10
+                                      WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14
+                                      WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18
+                                      WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a
+                                      ELSE 0 END) +1)) * {$v->Pares}) AS CANTIDAD_CONSUMO, FT.Precio AS PRECIO,
+                                    FT.AfectaPV AS AFECTAPV, A.Grupo AS GRUPO, A.Departamento AS DEPTOART", false)
+                                ->from('fichatecnica AS FT')
+                                ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                                ->join('estilos AS E', 'FT.Estilo = E.Clave')
+                                ->join('maquilas AS M', 'E.Maquila = M.Clave')
+                                ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                                ->join('departamentos AS D', 'P.Departamento = D.Clave')
+                                ->join('unidades AS U', 'A.UnidadMedida = U.Clave')
+                                ->where('FT.Estilo', $v->Estilo)
+                                ->where('FT.Color', $v->Color)
+                                ->where_not_in('A.Grupo', 3)
+                                ->group_by('P.Clave')
+                                ->order_by('ABS(D.Clave)', 'ASC')
+                                ->order_by('CANTIDAD_CONSUMO', 'ASC')
+                                ->get()->result();
+
                 foreach ($ORDENDEPRODUCCIOND as $kkk => $vvv) {
                     $opd = array();
                     $opd["OrdenDeProduccion"] = $ID;

@@ -93,6 +93,25 @@
                         <span class="font-weight-bold text-info serie_text">----</span>
                         <input type="text" id="Serie" name="Serie" class="form-control form-control-sm d-none" readonly=""> 
                     </div>
+
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <label>IMPORTE FACTURA</label>
+                        <input type="text" id="ImporteFactura" name="ImporteFactura" class="form-control form-control-sm">
+                        <p class="importe_fact">0000</p>
+
+                        <label>SALDO FACTURA</label>
+                        <input type="text" id="SaldoFactura" name="SaldoFactura" class="form-control form-control-sm">
+                        <p class="saldo_fact">0000</p>
+
+                        <label>IMPORTE DEVUELTO</label>
+                        <input type="text" id="ImporteDev" name="ImporteDev" class="form-control form-control-sm">
+                        <p class="importe_dev">0000</p>
+
+                        <label>NUEVO SALDO</label>
+                        <input type="text" id="NuevoSaldo" name="NuevoSaldo" class="form-control form-control-sm">
+                        <p class="total_dev">0000</p>
+                    </div>
+
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info" disabled="">
@@ -165,8 +184,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                 <p class="font-weight-bold text-danger">DETALLE DE LA DEVOLUCIÓN</p>
 
-                <table id="tblDevolucionDetalle" class="table table-hover table-sm display nowrap"  style="width: 100%!important;
-                       ">
+                <table id="tblDevolucionDetalle" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -188,8 +206,6 @@
                     <tbody></tbody>
                 </table>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -261,7 +277,7 @@
                 });
             } else
             {
-                
+
             }
         });
 
@@ -339,20 +355,27 @@
 
         tblDocDeEsteCteConSaldo.find('tbody').on('click', 'tr', function () {
             var dtm = DocDeEsteCteConSaldo.row(this).data();
-
-            if (ClienteDevolucion.val()) {
-                AplicaDevolucion.val(dtm.DOCUMENTO);
-                documento_dtm = dtm;
-                getUltimaNC();
-                /* BLINK */
-                tblDocDeEsteCteConSaldo.parent().removeClass("blinkb");
-                tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
-            } else {
-                iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
-                    DocDeEsteCteConSaldo.rows('.important').deselect();
-                    ClienteDevolucion[0].selectize.focus();
-                });
-            }
+            getImporteSaldoXDocumento(dtm);
+//            if (nuevo) {
+//                if (ClienteDevolucion.val()) {
+//                    AplicaDevolucion.val(dtm.DOCUMENTO);
+//                    documento_dtm = dtm;
+//                    pnlTablero.find("#ImporteFactura").val(dtm.IMPORTE);
+//                    pnlTablero.find(".importe_fact").text(dtm.IMPORTE);
+//                    pnlTablero.find("#SaldoFactura").val(dtm.SALDO);
+//                    pnlTablero.find(".saldo_fact").text(dtm.SALDO);
+//
+//                    getUltimaNC();
+//                    /* BLINK */
+//                    tblDocDeEsteCteConSaldo.parent().removeClass("blinkb");
+//                    tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+//                } else {
+//                    iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
+//                        DocDeEsteCteConSaldo.rows('.important').deselect();
+//                        ClienteDevolucion[0].selectize.focus();
+//                    });
+//                }
+//            }
         });
 
         DevCtrlXAplicarDeEsteCliente = tblDevCtrlXAplicarDeEsteCliente.DataTable({
@@ -401,39 +424,7 @@
         tblDevCtrlXAplicarDeEsteCliente.find('tbody').on('click', 'tr', function () {
             var dtm = DevCtrlXAplicarDeEsteCliente.row(this).data();
             if (ClienteDevolucion.val()) {
-                $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getInfoXControl'); ?>', {
-                    CONTROL: dtm.CONTROL
-                }).done(function (aaa) {
-                    if (aaa.length > 0) {
-                        console.log(dtm);
-                        Precio.val(dtm.PREDV);
-                        Control.val(dtm.CONTROL);
-                        var z = aaa[0];
-                        Estilo.val(z.ESTILO);
-                        Color.val(z.COLOR);
-                        ColorT.val(z.COLOR_TEXT);
-                        Serie.val(z.SERIE);
-
-                        pnlTablero.find(".control_text").text(dtm.CONTROL);
-                        pnlTablero.find(".estilo_text").text(z.ESTILO);
-                        pnlTablero.find(".color_text").text(z.COLOR);
-                        pnlTablero.find(".serie_text").text(z.SERIE);
-                        btnAcepta.attr('disabled', false);
-                        console.log("PAR0 => " + z["par01"])
-                        for (var i = 1; i < 23; i++) {
-                            if (i < 10) {
-                                pnlTablero.find("#xpar0" + i).val(z["par0" + i]);
-                            } else {
-                                pnlTablero.find("#xpar" + i).val(z["par" + i]);
-                            }
-                        }
-                        devolucion_dtm = dtm;
-                    }
-                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
-                    Precio.focus().select();
-                }).fail(function (x) {
-                    getError(x);
-                });
+                getInfoXControl(dtm);
             } else {
                 iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
                     ClienteDevolucion[0].selectize.focus();
@@ -500,6 +491,18 @@
                 iMsg('ESTE DOCUMENTO NO PERTENECE A ESTE CLIENTE O NO EXISTE, INTENTE CON OTRO NUMERO DE DOCUMENTO', 'w', function () {
                     AplicaDevolucion.focus();
                 });
+            } else {
+                $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getDocumentadosDeEsteClienteConSaldoXDocumento') ?>', {
+                    CLIENTE: ClienteDevolucion.val() ? ClienteDevolucion.val() : '',
+                    DOCUMENTO: AplicaDevolucion.val() ? AplicaDevolucion.val() : '',
+                    TP: TP.val() ? TP.val() : ''
+                }).done(function (dtm) {
+                    getImporteSaldoXDocumento(dtm[0]);
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
             }
         }).fail(function (x) {
             getError(x);
@@ -516,6 +519,97 @@
         }).always(function () {
 
         });
+    }
+
+    function getInfoXControl(dtm) {
+
+        $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getInfoXControl'); ?>', {
+            CONTROL: dtm.CONTROL
+        }).done(function (aaa) {
+            if (aaa.length > 0) {
+                console.log(dtm);
+                Precio.val(dtm.PREDV);
+                Control.val(dtm.CONTROL);
+
+                var z = aaa[0];
+                Estilo.val(z.ESTILO);
+                Color.val(z.COLOR);
+                ColorT.val(z.COLOR_TEXT);
+                Serie.val(z.SERIE);
+                pnlTablero.find(".control_text").text(dtm.CONTROL);
+                pnlTablero.find(".estilo_text").text(z.ESTILO);
+                pnlTablero.find(".color_text").text(z.COLOR);
+                pnlTablero.find(".serie_text").text(z.SERIE);
+
+                var idv = dtm.PREDV * dtm.PARES;
+                var total_final = pnlTablero.find("#SaldoFactura").val() - idv;
+
+                if (total_final < 0) {
+                    onBeep(2);
+                    iMsg('LA DEVOLUCIÓN SOBREPASA EL SALDO DEL DOCUMENTO CARGADO, SELECCIONE OTRA DEVOLUCIÓN', 'w', function () {
+                        pnlTablero.find("#ImporteDev").val(0);
+                        pnlTablero.find(".importe_dev").text('0');
+                        pnlTablero.find("#NuevoSaldo").val(0);
+                        DevCtrlXAplicarDeEsteCliente.rows().deselect();
+                        tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+                    });
+                } else {
+                    onBeep(1);
+                    pnlTablero.find("#ImporteDev").val(idv);
+                    pnlTablero.find(".importe_dev").text(idv);
+                    pnlTablero.find("#NuevoSaldo").val(total_final);
+                    var pp = {
+                        CLIENTE: ClienteDevolucion.val(),
+                        NC: NotaCredito.val()
+                    };
+                    $.post('<?php print base_url('AplicaDevolucionesDeClientes/onObtenerSaldoXDevolucionDocumentoNC') ?>', pp).done(function (aaa) {
+                        console.log(aaa);
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+
+                    });
+
+                    btnAcepta.attr('disabled', false);
+                    console.log("PAR0 => " + z["par01"]);
+                    for (var i = 1; i < 23; i++) {
+                        if (i < 10) {
+                            pnlTablero.find("#xpar0" + i).val(z["par0" + i]);
+                        } else {
+                            pnlTablero.find("#xpar" + i).val(z["par" + i]);
+                        }
+                    }
+                    devolucion_dtm = dtm;
+                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
+                    Precio.focus().select();
+                }
+            }
+        }).fail(function (x) {
+            getError(x);
+        });
+    }
+
+    function getImporteSaldoXDocumento(dtm) {
+        if (nuevo) {
+            if (ClienteDevolucion.val()) {
+                AplicaDevolucion.val(dtm.DOCUMENTO);
+                documento_dtm = dtm;
+                pnlTablero.find("#ImporteFactura").val(dtm.IMPORTE);
+                pnlTablero.find(".importe_fact").text(dtm.IMPORTE);
+                pnlTablero.find("#SaldoFactura").val(dtm.SALDO);
+                pnlTablero.find(".saldo_fact").text(dtm.SALDO);
+
+                getUltimaNC();
+                /* BLINK */
+                tblDocDeEsteCteConSaldo.parent().removeClass("blinkb");
+                tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+            } else {
+                iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
+                    DocDeEsteCteConSaldo.rows('.important').deselect();
+                    ClienteDevolucion[0].selectize.focus();
+                });
+            }
+        }
     }
 </script>
 <style> 

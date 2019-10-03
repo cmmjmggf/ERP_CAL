@@ -2,7 +2,7 @@
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h5 class="text-danger font-italic"> <span class="fa fa-exchange-alt"></span> DEVOLUCION CON APLICACIÓN A CARTERA</h5>
+                <h5 class="text-danger font-italic"> <span class="fa fa-exchange-alt"></span> DEVOLUCION CON APLICACIÓN A CARTERA (NO LO OCUPAN)</h5>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
                 <label>Cliente</label>
@@ -453,6 +453,7 @@
         btnDetalle.click(function () {
             onOpenWindow('<?php print base_url('DetallesDefectos'); ?>');
         });
+        
         DocumentosClienteConSaldo = tblDocumentosClienteConSaldo.DataTable({
             dom: 'rtp',
             "ajax": {

@@ -865,7 +865,7 @@ class PDF extends FPDF {
         $anc = array(15/* 0 */, 65/* 1 */, 40/* 2 */, 120/* 3 */, 55/* 4 */);
 
         $base = 5;
-        $alto_celda = 3.5;
+        $alto_celda = 3.25;
 
         /* CLIENTE */
         $this->SetY($base);
@@ -908,7 +908,7 @@ class PDF extends FPDF {
         /* CODIGO DE BARRAS */
         $this->SetFont('Calibri', 'B', 14);
         $this->SetX($pos[3]);
-//        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */); 
+        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */); 
         $this->Cell(42.5, 6, "", 0/* BORDE */, 1, 'C', 0);
         $this->SetFont('Calibri', 'B', 8);
 
@@ -940,9 +940,9 @@ class PDF extends FPDF {
         $this->SetY($this->getY() + 2.5);
         /* PIEL */
         $this->SetFont('Calibri', 'B', 8);
-        $this->Rect(11.8, $this->GetY(), 61.6/* DER-X */, 14/* DER-Y */);
-        $this->Rect(73.4, $this->GetY(), 61.6/* DER-X */, 14/* DER-Y */);
-        $this->Rect(135, $this->GetY(), 61.6/* DER-X */, 14/* DER-Y */);
+        $this->Rect(11.8, $this->GetY(), 61.6/* DER-X */, 13/* DER-Y */);
+        $this->Rect(73.4, $this->GetY(), 61.6/* DER-X */, 13/* DER-Y */);
+        $this->Rect(135, $this->GetY(), 61.6/* DER-X */, 13/* DER-Y */);
         $this->SetX(5);
         $this->Cell(6.8, $alto_celda, utf8_decode("Piel"), 0/* BORDE */, 0, 'L', 0);
 

@@ -36,10 +36,27 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function getDocumentadosDeEsteClienteConSaldo() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT CC.ID AS ID, CC.tipo AS TP, CC.remicion AS DOCUMENTO, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA, CC.importe AS IMPORTE, CC.pagos AS PAGOS, CC.saldo AS SALDO, CC.stscont AS ST  "
+            print json_encode($this->db->query("SELECT CC.ID AS ID, CC.tipo AS TP, "
+                                    . "CC.remicion AS DOCUMENTO, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA, "
+                                    . "CC.importe AS IMPORTE, CC.pagos AS PAGOS, "
+                                    . "CC.saldo AS SALDO, CC.status AS ST  "
                                     . "FROM cartcliente AS CC "
                                     . "WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN CC.cliente = '{$x['CLIENTE']}' ELSE CC.cliente LIKE '%%' END) "
                                     . "AND CC.saldo > 1 ORDER BY CC.fecha DESC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function getDocumentadosDeEsteClienteConSaldoXDocumento() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT CC.ID AS ID, CC.cliente AS CLIENTE, CC.tipo AS TP, "
+                                    . "CC.remicion AS DOCUMENTO, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA, "
+                                    . "CC.importe AS IMPORTE, CC.pagos AS PAGOS, "
+                                    . "CC.saldo AS SALDO, CC.status AS ST  "
+                                    . "FROM cartcliente AS CC "
+                                    . "WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN CC.cliente = '{$x['CLIENTE']}' ELSE CC.cliente LIKE '%%' END) "
+                                    . "AND CC.saldo > 1 AND CC.tipo = {$x["TP"]}  AND CC.remicion = {$x["DOCUMENTO"]} ORDER BY CC.fecha DESC LIMIT 1;")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -57,6 +74,24 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 FROM devolucionnp AS D 
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
                                     . "AND D.staapl < 2  ORDER BY D.fecha DESC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getControlesPorAplicarDeEsteClienteXDocumento() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE, 
+                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES, 
+                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,  
+                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, 
+                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG 
+                FROM devolucionnp AS D 
+                WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
+                                    . "AND D.staapl < 2  "
+                                    . "AND D.docto = {$x["DOCUMENTO"]} "
+                                    . "LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -209,6 +244,18 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "stscont" => $x["xxxxx"], "regdev" => $x["xxxxx"]);
                 $this->db->insert('cartctepagos', $nota_de_credito);
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onObtenerSaldoXDevolucionDocumentoNC() {
+        try {
+            $x = $this->input->post();
+            print json_encode($this->db->query("SELECT SUM(D.subtot) AS TOTAL_DEVUELTO "
+                                    . "FROM devctes AS D "
+                                    . "WHERE D.cliente = {$x["CLIENTE"]} "
+                                    . "AND D.nc = {$x["NC"]}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

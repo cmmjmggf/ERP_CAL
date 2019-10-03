@@ -22,11 +22,14 @@
                 <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col14_filter" maxlength="4" minlength="1">
             </div>
             <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 mt-4">
-                <button type="button" class="btn btn-primary" id="btnGenerar">Generar</button>
+                <button type="button" class="btn btn-primary" id="btnGenerar"> <span class="fa fa-check"></span> Generar</button>
+            </div>
+            <div class="col-12 text-center">
+                <p class="text-danger font-weight-bold total_pares font-italic">-</p>
             </div>
             <div id="Resultado" class="col-12 text-center my-2"></div>
             <div id="Controles" class="table-responsive">
-                <table id="tblControles" class="table table-sm display hover" style="width:100%">
+                <table id="tblControles" class="table table-sm display hover nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th>ID</th><!--0-->
@@ -52,30 +55,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th style="text-align:right">Pares</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
+                     
                 </table>
             </div>
         </div>
@@ -168,7 +148,7 @@
         keys: true,
         "autoWidth": true,
         "colReorder": true,
-        "displayLength": 9999999999,
+        "displayLength": 50,
         "scrollY": 380,
         "scrollX": true,
         "bLengthChange": false,
@@ -184,14 +164,7 @@
                     $(v).addClass('HasMca');
                 }
             });
-        },
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(); //Get access to Datatable API
-            // Update footer
-            $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
-                return parseFloat(a) + parseFloat(b);
-            }, 0));
-        },
+        }, 
         initComplete: function (a, b) {
             HoldOn.close();
         }
@@ -211,9 +184,9 @@
 
             Semana.keydown(function (e) {
                 if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
-                    onOpenOverlay('');
                     Controles.ajax.reload(function () {
                         onCloseOverlay();
+                        getParesTotales()
                     });
                 }
             });
@@ -249,7 +222,9 @@
             theme: 'sk-bounce',
             message: 'GENERANDO...'
         });
-        $.post(master_url + 'onAgregarAOrdenDeProduccion', {MAQUILA: Maquila.val(), SEMANA: Semana.val(), ANO: Anio.val()}).done(function (data) {
+        $.post('<?php print base_url('OrdenDeProduccion/onAgregarAOrdenDeProduccion'); ?>',
+                {MAQUILA: Maquila.val(), SEMANA: Semana.val(), ANO: Anio.val()}
+        ).done(function (data) {
             var nordenes = parseInt(data);
             if (nordenes > 0) {
                 $("#Resultado").html('<p class="text-info font-weight-bold mt-2"> SE HAN GENERADO ' + nordenes + ' ORDENES DE PRODUCCIÓN</p>');
@@ -345,6 +320,14 @@
                 Anio.focus().select();
             });
         }
+    }
+
+    function getParesTotales() {
+        var prs = 0;
+        $.each(Controles.rows().data(), function (k, v) {
+            prs += parseInt(v.Pares);
+        });
+        pnlTablero.find(".total_pares").text(prs + ' pares');
     }
 </script>
 <style>

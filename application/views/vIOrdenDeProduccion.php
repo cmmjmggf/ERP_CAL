@@ -1,80 +1,26 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Imprime orden de producción</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <label>Del control</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus maxlength="10" >
+<div class="modal" id="mdlIOP">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-print"></span> Imprime orden de producción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <label>Al control</label>     
-                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" maxlength="10"  min="1" max="10" >
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label>Del control</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicialM" autofocus maxlength="10" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label>Al control</label>     
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinalM" maxlength="10"  min="1" max="10" >
+                    </div> 
+                </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-none" data-column="13">
-                <label>Semana</label>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col13_filter" maxlength="2" minlength="1" onfocus="">
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-none" data-column="14">
-                <label>Año</label>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col14_filter" maxlength="4" minlength="1" onfocus="">
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-12 col-xl-12 mt-4" align="right">
-                <button type="button" class="btn btn-primary" id="btnGenerar">Aceptar</button>
-            </div>
-            <div id="Controles" class="table-responsive d-none">
-                <table id="tblControles" class="table table-sm display hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th><!--0-->
-                            <th>IdEstilo</th><!--1-->
-                            <th>IdColor</th><!--2-->
-                            <th>Pedido</th><!--3-->
-                            <th>Cliente</th><!--4-->
-
-                            <th>Estilo</th><!--5-->
-                            <th>Color</th><!--6-->
-                            <th>Serie</th><!--7-->
-                            <th>Fecha</th><!--8-->
-                            <th>Fe - Pe</th><!--9-->
-
-                            <th>Fe - En</th><!--10-->
-                            <th>Pars</th><!--11-->
-                            <th>Maq</th><!--12-->
-                            <th>Sem</th><!--13-->
-                            <th>Año</th><!--14-->
-
-                            <th>Control</th><!--15-->
-                            <th>SerieID</th><!--16-->
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th style="text-align:right">Pares</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-info" id="btnGenerarM" disabled=""><span class="fa fa-check"></span> Aceptar</button>
             </div>
         </div>
     </div>
@@ -82,9 +28,11 @@
 <script>
     var master_url = base_url + 'index.php/IOrdenDeProduccion/';
     var btnGenerar = $("#btnGenerar");
-    var ControlInicial = $("#ControlInicial"), ControlFinal = $("#ControlFinal"), semana = $("#col13_filter"), Anio = $("#col14_filter");
+    var ControlInicial = $("#ControlInicial"), ControlFinalM = $("#ControlFinalM"), semana = $("#col13_filter"), Anio = $("#col14_filter");
     var Controles;
-    var tblControles = $('#tblControles');
+    var tblControles = $('#tblControles'),
+            mdlIOP = $("#mdlIOP"), btnGenerarM = mdlIOP.find("#btnGenerarM"),
+            ControlInicialM = mdlIOP.find("#ControlInicialM"), ControlFinalM = mdlIOP.find("#ControlFinalM");
 
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
@@ -100,7 +48,7 @@
             $.fn.dataTable.ext.search.push(
                     function (settings, data, dataIndex) {
                         var min = $('#ControlInicial').val() !== '' ? parseInt($('#ControlInicial').val()) : 0;
-                        var max = $('#ControlFinal').val() !== '' ? parseInt($('#ControlFinal').val()) : 9999999999;
+                        var max = $('#ControlFinalM').val() !== '' ? parseInt($('#ControlFinalM').val()) : 9999999999;
                         var age = parseInt(data[15]) || 0; // use data for the age column 
                         if ((isNaN(min) && isNaN(max)) || (isNaN(min) && age <= max) || (min <= age && isNaN(max)) || (min <= age && age <= max))
                         {
@@ -109,27 +57,39 @@
                         return false;
                     }
             );
-            $("#ControlInicial").focusout(function () {
+            ControlInicialM.focusout(function () {
                 onObtenerElUltimoControl(this);
             });
 
-            $("#ControlInicial, #ControlFinal").keydown(function (e) {
+            ControlInicialM.keydown(function (e) {
                 console.log(e.keyCode)
-                if (ControlInicial.val() && ControlFinal.val() && e.keyCode === 13) {
-                    btnGenerar.prop("disabled", false);
+                if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
+                    btnGenerarM.prop("disabled", false);
                 } else {
-                    btnGenerar.prop("disabled", true);
+                    btnGenerarM.prop("disabled", true);
+                }
+            });
+            ControlFinalM.keydown(function (e) {
+                console.log(e.keyCode)
+                if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
+                    btnGenerarM.prop("disabled", false);
+                } else {
+                    btnGenerarM.prop("disabled", true);
                 }
             });
 
-            btnGenerar.click(function () {
-                btnGenerar.prop("disabled", true);
+            mdlIOP.on('shown.bs.modal', function () {
+                mdlIOP.find("#ControlInicialM").focus().select();
+            });
+
+            btnGenerarM.click(function () {
+                btnGenerarM.prop("disabled", true);
                 HoldOn.open({
                     theme: 'sk-bounce',
                     message: 'GENERANDO...'
                 });
-                var params = {INICIO: ControlInicial.val(), FIN: ControlFinal.val(), SEMANA: '', ANIO: ''};
-                $.post('<?php print base_url('IOrdenDeProduccion/getOrdenDeProduccion');?>', params).done(function (data) {
+                var params = {INICIO: ControlInicialM.val(), FIN: ControlFinalM.val(), SEMANA: '', ANIO: ''};
+                $.post('<?php print base_url('IOrdenDeProduccion/getOrdenDeProduccion'); ?>', params).done(function (data) {
                     //check Apple device
                     if (isAppleDevice() || isMobile) {
                         window.open(data, '_blank');
@@ -140,6 +100,8 @@
                             opts: {
                                 afterShow: function (instance, current) {
                                     console.info('done!');
+                                }, afterClose: function () {
+                                    ControlInicialM.focus().select();
                                 },
                                 iframe: {
                                     // Iframe template
@@ -164,7 +126,7 @@
                     swal('ATENCION', 'HA OCURRIDO UN ERROR AL OBTENER EL REPORTE, REVISE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
                     HoldOn.close();
-                    btnGenerar.prop("disabled", false);
+                    btnGenerarM.prop("disabled", false);
                 });
             });
 
@@ -217,7 +179,7 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CONTROL_INICIAL = (ControlInicial.val().trim());
-                    d.CONTROL_FINAL = (ControlFinal.val().trim());
+                    d.CONTROL_FINAL = (ControlFinalM.val().trim());
                 }
             },
             "columnDefs": [
@@ -317,9 +279,9 @@
     function onVerificarFormValido() {
         var row_count = Controles.page.info().recordsDisplay;
         if (row_count > 0) {
-            btnGenerar.prop("disabled", false);
+            btnGenerarM.prop("disabled", false);
         } else {
-            btnGenerar.prop("disabled", true);
+            btnGenerarM.prop("disabled", true);
         }
     }
 
@@ -327,11 +289,10 @@
         var control = $(e).val();
         var semana = parseInt(control.slice(2, 4));
         var maquila = parseInt(control.slice(4, 6));
-        $.getJSON(master_url + 'onObtenerElUltimoControl', {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
+        $.getJSON('<?php print base_url('IOrdenDeProduccion/onObtenerElUltimoControl'); ?>', {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
             var dt = data[0];
-            var ControlFinal = $("#ControlFinal");
-            if (data.length > 0 && ControlFinal.val() === '' && ControlFinal.val().length <= 0) {
-                ControlFinal.val(dt.ULTIMO_CONTROL);
+            if (data.length > 0 && ControlFinalM.val() === '' && ControlFinalM.val().length <= 0) {
+                ControlFinalM.val(dt.ULTIMO_CONTROL);
                 onBeep(1);
             }
         }).fail(function (x, y, z) {

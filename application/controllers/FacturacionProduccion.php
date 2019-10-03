@@ -258,7 +258,14 @@ class FacturacionProduccion extends CI_Controller {
             );
             if ($saldopares === 0) {
                 $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
             }
+            /* SUMA LOS PARES FACTURADOS: SI  SON 36 PARES Y SOLO FACTURAN 18, */
+            $PF = (is_numeric($x['PARES_A_FACTURAR']) ? intval($x['PARES_A_FACTURAR']) : 0);
+            $this->db->query("UPDATE pedidox "
+                    . "SET ParesFacturados = IFNULL(ParesFacturados,0)+ {$PF} "
+                    . "WHERE Control = {$x['CONTROL']}")->result();
+
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
             $existe_en_facdetalle = $this->db->query(
                             "SELECT COUNT(*) AS EXISTE, FD.contped AS ID,"

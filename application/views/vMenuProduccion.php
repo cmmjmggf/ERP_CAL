@@ -32,7 +32,7 @@
 
 <?php
 $vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalArticulo', 'vCotejaExplosionOrdCom', 'vExplosionSemanalOrdComProyeccion', 'vVisualizaPedido', 'vReporteParesPreAsignados', 'vEstadisticasEntrega', 'vReporteCorteHiloTejer', 'vReporteMatrizFraccionesEstiloLinea', 'vFraccionesCapturadasNominaSem', 'vLotificacionSuelasPlantas', 'vEstiloFraccionNomina', 'vMaterialSemanaProduccionEstilo', 'vConciliaFabricaProduccion',
-    'vConRelControlesXMaquila', 'vManoObraDirecta', 'vParesAsignadosMaqSemGen', 'vAvanceProduccion', 'vAvanceProduccionSemDia', 'vAvanceProduccionSemDia', 'vAvanceProduccionPorLinea', 'vAvanceProduccionPorDepto', 'vDiasPromedioEntregaPorCliente', 'vParesEntregadosCalidadXMaq', 'vCostoInventariosProceso', 'vEtiTrazabilidad', 'vEtiCajasXCliente', 'vEtiZapica', 'vEstatusPedidoXGrupoAgente', 'vFichaTecnicaCompra', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vCostoManoObraGeneral');
+    'vConRelControlesXMaquila', 'vManoObraDirecta', 'vParesAsignadosMaqSemGen', 'vAvanceProduccion', 'vAvanceProduccionSemDia', 'vAvanceProduccionSemDia', 'vAvanceProduccionPorLinea', 'vAvanceProduccionPorDepto', 'vDiasPromedioEntregaPorCliente', 'vParesEntregadosCalidadXMaq', 'vCostoInventariosProceso', 'vEtiTrazabilidad', 'vEtiCajasXCliente', 'vEtiZapica', 'vEstatusPedidoXGrupoAgente', 'vFichaTecnicaCompra', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vCostoManoObraGeneral', 'vIOrdenDeProduccion');
 foreach ($vs as $v) {
     $this->load->view($v);
 }
