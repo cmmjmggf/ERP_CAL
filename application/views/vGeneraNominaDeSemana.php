@@ -40,12 +40,12 @@
                     <div class="col-6">
                         <label>Fecha Final</label>
                         <input type="text" id="FechaFinalGNS" name="FechaFinalGDF" maxlength="12" class="form-control form-control-sm date" readonly="">
-                    </div>  
+                    </div>
                     <div class="col-12 mt-4">
                         <div class="alert alert-dismissible alert-primary">
                             <strong>
                                 Nota. Para semana de vacaciones debe ser año actual sem-99. Para semana de aguinaldo debe ser año actual y sem-98
-                            </strong> 
+                            </strong>
                         </div>
                     </div>
                     <!--ESTO SOLO APLICA CUANDO PONEN LA SEM 99 (VACACIONES) Y 98 (AGUINALDO)-->
@@ -54,19 +54,19 @@
                             <div class="alert alert-dismissible alert-warning">
                                 <strong>
                                     Semanas a procesar de vacaciones o aguinaldos para destajos
-                                </strong> 
+                                </strong>
                             </div>
                         </div>
-                        <div class="col-3"> 
+                        <div class="col-3">
                             <input type="text" id="SemanaUnoGNS" name="SemanaUnoGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
                         </div>
-                        <div class="col-3"> 
+                        <div class="col-3">
                             <input type="text" id="SemanaDosGNS" name="SemanaDosGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
                         </div>
-                        <div class="col-3"> 
+                        <div class="col-3">
                             <input type="text" id="SemanaTresGNS" name="SemanaTresGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
                         </div>
-                        <div class="col-3"> 
+                        <div class="col-3">
                             <input type="text" id="SemanaCuatroGNS" name="SemanaCuatroGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
                         </div>
                         <div class="w-100"></div>
@@ -82,7 +82,7 @@
                             <span class="fa fa-cogs"></span> GENERA</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-default btn-sm btn-block" id="btnSalirGNS">
+                        <button type="button" class="btn btn-default btn-sm btn-block"  data-dismiss="modal"id="btnSalirGNS">
                             <span class="fa fa-times-circle"></span> SALIR</button>
                     </div>
                     <div class="w-100 my-2"></div>
@@ -319,6 +319,7 @@
         mdlGeneraNominaDeSemana.on('shown.bs.modal', function () {
             AnioGNS.val('<?php print Date('Y'); ?>');
             getSemanaNomina();
+
         });
     });
     function getSemanaPrenomina() {
@@ -342,7 +343,7 @@
                 SemanaGNS.val(a[0].SEMANA);
                 FechaInicialGNS.val(a[0].FECHAINI);
                 FechaFinalGNS.val(a[0].FECHAFIN);
-                AnioGNS.focus();
+                AnioGNS.focus().select();
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');

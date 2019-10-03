@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Prestamos a empleados <span class="fa fa-coins"></span></legend>
+                <legend class="float-left">Préstamos a empleados <span class="fa fa-coins"></span></legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
                 <button type="button" class="btn btn-danger" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
@@ -46,11 +46,11 @@
                     <input type="text" id="Semana" name="Semana" class="form-control form-control-sm" data-toggle="tooltip" data-placement="bottom" title="SEMANA DE CARACTER INFORMATIVO" readonly="" autocomplete="off">
                 </div>
                 <div class="col-2">
-                    <div class="alert alert-dismissible alert-info"> 
+                    <div class="alert alert-dismissible alert-info">
                         <strong> % </strong> Interés semanal sobre saldo insolutos.
                     </div>
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <input type="text" id="Interes" name="Interes" value="0" class="form-control form-control-sm" autocomplete="off" placeholder="0">
                 </div>
                 <div class="w-100"></div>
@@ -59,13 +59,13 @@
                         <h6>Prestamo nvo</h6>
                     </span>
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-primary">
                         <span class="fa fa-check"></span>
                     </button>
@@ -76,21 +76,21 @@
                         <h6>Saldo actual</h6>
                     </span>
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <input type="text" id="NuevoSaldoPrestamo" name="NuevoSaldoPrestamo" class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <input type="text" id="SaldoFinal" name="SaldoFinal" class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
-                <div class="col-2"> 
+                <div class="col-2">
                     <div class="alert alert-dismissible alert-primary">
                         <p>STS</p>
                         <p>1 = Sin aplicar</p>
                         <p>2 = Aplicado</p>
                     </div>
-                </div>  
+                </div>
                 <div class="w-100"></div>
                 <div id="TotalEnLetra" class="col-12 text-center">
                     <p class="font-weight-bold text-warning display-4"></p>
@@ -173,12 +173,12 @@
                 <div class="row">
                     <div class="col-12">
                         <label>Interes %</label>
-                        <input type="text" id="InteresPrestamos" name="InteresPrestamos" maxlength="3" class="form-control form-control-sm numbersOnly" autofocus="" autocomplete="off"> 
+                        <input type="text" id="InteresPrestamos" name="InteresPrestamos" maxlength="3" class="form-control form-control-sm numbersOnly" autofocus="" autocomplete="off">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptaInteresPrestamo"><span class="fa fa-check"></span> Aceptar</button> 
+                <button type="button" class="btn btn-primary" id="btnAceptaInteresPrestamo"><span class="fa fa-check"></span> Aceptar</button>
             </div>
         </div>
     </div>
@@ -476,7 +476,7 @@
                     [0, 'desc']
                 ],
                 "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api();//Get access to Datatable API 
+                    var api = this.api();//Get access to Datatable API
 //                    // Update footer
                     var prestamos = api.column(5).data().reduce(function (a, b) {
                         var ax = 0, bx = 0;
@@ -543,8 +543,8 @@
                     [0, 'desc']
                 ],
                 "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api();//Get access to Datatable API 
-//                    // Update footer 
+                    var api = this.api();//Get access to Datatable API
+//                    // Update footer
                     var abonos = api.column(4).data().reduce(function (a, b) {
                         var ax = 0, bx = 0;
                         ax = $.isNumeric(a) ? parseFloat(a) : 0;
@@ -569,8 +569,8 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-</style> 
+</style>

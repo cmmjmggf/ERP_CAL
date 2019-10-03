@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reimpresión de pagare <span class="fa fa-coins"></span> </h5>
+                <h5 class="modal-title">Reimpresión de pagaré <span class="fa fa-coins"></span> </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,21 +12,21 @@
                     <div class="col-12">
                         <label>Empleado</label>
                         <select id="EmpleadoConsulta" name="EmpleadoConsulta class="form-control form-control-sm"></select>
-                    </div> 
+                    </div>
                     <div class="col-12">
                         <label>Pagare</label>
                         <input type="text" id="NumPagare" name="NumPagare" autofocus="" placeholder="" autocomplete="off" class="form-control form-control-sm numbersOnly">
-                    </div> 
+                    </div>
                     <div class="col-12">
                         <label>Fecha</label>
                         <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-12">
                     <div id="PrestamosConsulta" class="table-responsive">
                         <table id="tblPrestamosConsulta" class="table table-sm display " style="width:100%">
                             <thead>
-                                <tr> 
+                                <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Empleado</th>
                                     <th scope="col">Fecha</th>
@@ -102,7 +102,7 @@
             });
         });
     });
-    
+
     function onValidarReimpresionPagares() {
         if (mdlReimprimePagare.find("#NumPagare").val() || mdlReimprimePagare.find("#Fecha").val()) {
             mdlReimprimePagare.find("#btnImprimePagare").attr('disabled', false);

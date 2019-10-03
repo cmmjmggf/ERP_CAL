@@ -72,24 +72,22 @@
 
             <div class="col-12 col-sm-12 col-md-9">
                 <legend >Fracciones capturadas por empleado</legend>
-                <div class="row">
-                    <table id="tblFraccionesNomina" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Empleado</th>
-                                <th scope="col">Sem</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Estilo</th>
-                                <th scope="col">Fracción</th>
-                                <th scope="col">Pares</th>
-                                <th scope="col">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <table id="tblFraccionesNomina" class="table table-sm display" style="width:  100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Sem</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Control</th>
+                            <th scope="col">Estilo</th>
+                            <th scope="col">Fracción</th>
+                            <th scope="col">Pares</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
             <div class="col-12 col-sm-12 col-md-3">
                 <button type="button" id="btnAceptar" class="btn btn-primary btn-sm selectNotEnter">
@@ -722,7 +720,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

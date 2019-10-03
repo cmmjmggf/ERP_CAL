@@ -11,23 +11,23 @@
                 <div class="row">
                     <div class="col-6">
                         <label>Año</label>
-                        <input type="text" id="AnioGDF" name="AnioGDF" max="2050"  maxlength="4" class="form-control numeric" autofocus="" autocomplete="off">
+                        <input type="text" id="AnioGDF" name="AnioGDF" max="2050"  maxlength="4" class="form-control form-control-sm numeric" autofocus="" autocomplete="off">
                     </div>
                     <div class="col-6">
                         <label>Semana</label>
-                        <input type="text" id="SemanaGDF" name="SemanaGDF" maxlength="3" class="form-control numeric" autocomplete="off">
+                        <input type="text" id="SemanaGDF" name="SemanaGDF" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off">
                     </div>
                     <div class="col-6">
                         <label>Fecha Inicial</label>
-                        <input type="text" id="FechaInicialGDF" name="FechaInicialGDF" maxlength="12" class="form-control date" readonly="">
+                        <input type="text" id="FechaInicialGDF" name="FechaInicialGDF" maxlength="12" class="form-control form-control-sm date" readonly="">
                     </div>
                     <div class="col-6">
                         <label>Fecha Final</label>
-                        <input type="text" id="FechaFinalGDF" name="FechaFinalGDF" maxlength="12" class="form-control date" readonly="">
-                    </div>  
+                        <input type="text" id="FechaFinalGDF" name="FechaFinalGDF" maxlength="12" class="form-control form-control-sm date" readonly="">
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnGuardarGDF">GUARDAR</button>
             </div>
         </div>
@@ -134,10 +134,7 @@
             AnioGDF.focus().select();
 
             /*OBTENER SEMANA ACTUAL DE NOMINA*/
-            HoldOn.open({
-                theme: 'sk-rect',
-                message: ''
-            });
+
             $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
                     {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
                 if (a.length > 0) {

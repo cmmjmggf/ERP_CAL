@@ -48,31 +48,28 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12">
                 <legend >Detalle de captura</legend>
-                <div class="row">
-                    <table id="tblDetalleOtrosBanco" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Depto</th>
-                                <th scope="col">Empleado</th>
-                                <th scope="col">Interno</th>
-                                <th scope="col">Fiscal</th>
-                                <th scope="col">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3" align="center">Total General:</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table id="tblDetalleOtrosBanco" class="table table-sm display" style="width:  100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Depto</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Interno</th>
+                            <th scope="col">Fiscal</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" align="center">Total General:</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-
         </div>
     </div>
 </div>
@@ -372,7 +369,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

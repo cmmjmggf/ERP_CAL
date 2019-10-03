@@ -41,7 +41,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-5">
-                <select name="from[]" id="modulos" class="form-control NotSelectize " size="10" multiple="multiple"> 
+                <select name="from[]" id="modulos" class="form-control NotSelectize " size="10" multiple="multiple">
                 </select>
             </div>
             <div class="col-2 text-center">
@@ -56,16 +56,16 @@
             </div>
             <div class="col-5">
                 <select name="to[]" id="modulos_to" class="form-control NotSelectize" size="10" multiple="multiple"></select>
-            </div> 
+            </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2" align="right">
                 <button type="button" class="btn btn-info" id="btnAsignarModulos"><span class="fa fa-save"></span> GUARDAR</button>
             </div>
         </div>
-        <!--FIN MODULOS POR USUARIO-->      
+        <!--FIN MODULOS POR USUARIO-->
         <!--OPCIONES POR MODULO-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-3 text-center">
-                <h4 class="font-italic">OPCIONES POR MODULO</h4> 
+                <h4 class="font-italic">OPCIONES POR MODULO</h4>
                 <hr>
                 <div class="w-100"></div>
             </div>
@@ -90,7 +90,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-5">
-                <select name="from[]" id="opciones" class="form-control NotSelectize " size="10" multiple="multiple"> 
+                <select name="from[]" id="opciones" class="form-control NotSelectize " size="10" multiple="multiple">
                 </select>
             </div>
             <div class="col-2 text-center">
@@ -109,12 +109,12 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2" align="right">
                 <button type="button" class="btn btn-info" id="btnAsignarOpcionesxModulos"><span class="fa fa-save"></span> GUARDAR</button>
             </div>
-        </div>     
-        <!--FIN OPCIONES POR MODULO--> 
+        </div>
+        <!--FIN OPCIONES POR MODULO-->
         <!--ITEMS POR OPCION-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-3 text-center">
-                <h4 class="font-italic">ITEMS POR OPCIÓN</h4> 
+                <h4 class="font-italic">ITEMS POR OPCIÓN</h4>
                 <hr>
                 <div class="w-100"></div>
             </div>
@@ -144,7 +144,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-5">
-                <select name="from[]" id="items" class="form-control NotSelectize " size="15" multiple="multiple"> 
+                <select name="from[]" id="items" class="form-control NotSelectize " size="15" multiple="multiple">
                 </select>
             </div>
             <div class="col-2 text-center">
@@ -163,12 +163,12 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2" align="right">
                 <button type="button" class="btn btn-info" id="btnAsignarItemsXOpcionXModulo"><span class="fa fa-save"></span> GUARDAR</button>
             </div>
-        </div>     
+        </div>
         <!--FIN ITEMS POR OPCION-->
         <!--SUBITEMS POR ITEM-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-3 text-center">
-                <h4 class="font-italic">SUBITEMS POR ITEM</h4> 
+                <h4 class="font-italic">SUBITEMS POR ITEM</h4>
                 <hr>
                 <div class="w-100"></div>
             </div>
@@ -203,7 +203,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-5">
-                <select name="from[]" id="subitems" class="form-control NotSelectize " size="15" multiple="multiple"> 
+                <select name="from[]" id="subitems" class="form-control NotSelectize " size="15" multiple="multiple">
                 </select>
             </div>
             <div class="col-2 text-center">
@@ -222,12 +222,12 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2" align="right">
                 <button type="button" class="btn btn-info" id="btnAsignarSubItemsXItemXOpcionXModulo"><span class="fa fa-save"></span> GUARDAR</button>
             </div>
-        </div>     
+        </div>
         <!--FIN SUBITEMS POR ITEM-->
         <!--SUBSUBITEMS POR ITEM-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-3 text-center">
-                <h4 class="font-italic">SUBSUBITEMS POR SUBITEM</h4> 
+                <h4 class="font-italic">SUBSUBITEMS POR SUBITEM</h4>
                 <hr>
                 <div class="w-100"></div>
             </div>
@@ -267,7 +267,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-5">
-                <select name="from[]" id="subsubitems" class="form-control NotSelectize " size="15" multiple="multiple"> 
+                <select name="from[]" id="subsubitems" class="form-control NotSelectize " size="15" multiple="multiple">
                 </select>
             </div>
             <div class="col-2 text-center">
@@ -286,7 +286,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2" align="right">
                 <button type="button" class="btn btn-info" id="btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo"><span class="fa fa-save"></span> GUARDAR</button>
             </div>
-        </div>     
+        </div>
         <!--FIN SUBSUBITEMS POR ITEM-->
     </div>
 </div>
@@ -349,7 +349,6 @@
         });
 
         pnlTableroBody.find("#mxu, #oxmu,#ixou,#sixiu,#ssixiu").selectize({
-            create: true,
             sortField: 'text'
         });
         pnlTableroBody.find('#modulos').multiselect();
@@ -371,7 +370,7 @@
             if (ssixiu.val() && ssixim.val() && ssixio.val() && ssixit.val() && ssixis.val()) {
                 console.log('okoka');
                 var subsubitems = [];
-                $.each($("#subsubitems_to").find('option'), function (k, v) { 
+                $.each($("#subsubitems_to").find('option'), function (k, v) {
                     subsubitems.push({SUBSUBITEM: $(v).val(), SUBSUBITEMT: $(v).text()});
                 });
                 console.log('subsubitems', subsubitems);
@@ -1266,7 +1265,7 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }

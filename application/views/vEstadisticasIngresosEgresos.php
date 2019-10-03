@@ -62,7 +62,7 @@
             mdlEstadisticasIngresosEgresos.find("#AnoIngreEgre").val(new Date().getFullYear());
             mdlEstadisticasIngresosEgresos.find('#AnoIngreEgre').focus().select();
         });
-        mdlEstadisticasIngresosEgresos.find("#AnoIngreEgre").keydown(function (e) {
+        mdlEstadisticasIngresosEgresos.find("#AnoIngreEgre").keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
                     swal({
@@ -82,19 +82,19 @@
                 }
             }
         });
-        mdlEstadisticasIngresosEgresos.find("#dSemIngreEgre").keydown(function (e) {
+        mdlEstadisticasIngresosEgresos.find("#dSemIngreEgre").keypress(function (e) {
             if ($(this).val()) {
                 if (e.keyCode === 13) {
                     var ano = mdlEstadisticasIngresosEgresos.find("#AnoIngreEgre");
-                    onComprobarSemanasNomina($(this), ano.val());
+                    onComprobarSemanasNominaEstIngEgre($(this), ano.val());
                 }
             }
         });
-        mdlEstadisticasIngresosEgresos.find("#aSemIngreEgre").keydown(function (e) {
+        mdlEstadisticasIngresosEgresos.find("#aSemIngreEgre").keypress(function (e) {
             if ($(this).val()) {
                 if (e.keyCode === 13) {
                     var ano = mdlEstadisticasIngresosEgresos.find("#AnoIngreEgre");
-                    onComprobarSemanasNomina2($(this), ano.val());
+                    onComprobarSemanasNominaEstIngEgre2($(this), ano.val());
 
                 }
             }
@@ -161,7 +161,7 @@
     });
 
 
-    function onComprobarSemanasNomina2(v, ano) {
+    function onComprobarSemanasNominaEstIngEgre2(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
@@ -195,7 +195,7 @@
         });
     }
 
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaEstIngEgre(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {

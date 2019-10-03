@@ -94,7 +94,7 @@
             if ($(this).val()) {
                 if (e.keyCode === 13) {
                     var ano = mdlRecibosNomina.find("#AnoRecibos");
-                    onComprobarSemanasNomina($(this), ano.val());
+                    onComprobarSemanasNominaRecibos($(this), ano.val());
                 }
             }
         });
@@ -193,7 +193,7 @@
             console.log(x.responseText);
         });
     }
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaRecibos(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {

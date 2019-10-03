@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Captura de vales de zapato de tiendas a nomina</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Captura vales de zapato de tiendas a nómina</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,11 +14,11 @@
                         <select id="EmpleadoVZFB" name="EmpleadoVZFB" class="form-control"></select>
                     </div>
                     <div class="col-4">
-                        <label>Vale zapato / FieraBono</label>
+                        <label>1 Vale zapato / 2 FieraBono</label>
                         <select id="ValeZapatoFieraBono" name="ValeZapatoFieraBono" class="form-control">
                             <option></option>
-                            <option value="1">VALE ZAPATO</option>
-                            <option value="2">FIERA BONO</option>
+                            <option value="1">1 VALE ZAPATO</option>
+                            <option value="2">2 FIERA BONO</option>
                         </select>
                     </div>
                     <div class="col-6">
@@ -48,7 +48,7 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnGuardarValeFiera">GUARDAR</button>
             </div>
         </div>
@@ -116,8 +116,8 @@
             getValesDeZapatosFieraBono();
             handleEnterDiv(mdlCargoZapatosFieraBono);
         });
-    }); 
-    
+    });
+
     function getValesDeZapatosFieraBono() {
         if ($.fn.DataTable.isDataTable('#tblValesVZFB')) {
             ValesVZFB.ajax.reload(function () {

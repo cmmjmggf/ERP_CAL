@@ -51,38 +51,34 @@
             </div>
         </form>
         <div class="w-100 my-2"></div>
-        <div class="row">
 
-            <div class="col-12 col-sm-12 col-md-12">
-                <legend >Detalle de conceptos variables</legend>
-                <div class="row">
-                    <table id="tblConceptosVariables" class="table table-sm display" style="width:  100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">PD</th>
-                                <th scope="col">Sem</th>
-                                <th scope="col">Emp</th>
-                                <th scope="col">Concepto</th>
-                                <th scope="col">Percepciones</th>
-                                <th scope="col">Deducciones</th>
-                                <th scope="col">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="5" align="center">Total General:</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
 
-        </div>
+        <legend >Detalle de conceptos variables</legend>
+
+        <table id="tblConceptosVariables" class="table table-sm display" style="width:  100%;">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">PD</th>
+                    <th scope="col">Sem</th>
+                    <th scope="col">Emp</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Percepciones</th>
+                    <th scope="col">Deducciones</th>
+                    <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5" align="center">Total General:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+
     </div>
 </div>
 <script>
@@ -611,7 +607,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

@@ -126,7 +126,7 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    if (data.length !== '0') {
+                    if (data !== '0') {
 
                         $.fancybox.open({
                             src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
@@ -155,7 +155,7 @@
                     } else {
                         swal({
                             title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                            text: "NO EXISTEN PRESTAMOS PARA ESTOS EMPLEADOS",
                             icon: "error"
                         }).then((action) => {
                             mdlCajaAhorroPrestamos.find('#btnImprimir').focus();
