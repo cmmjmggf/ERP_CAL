@@ -15,7 +15,7 @@
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="AnoCierraNomina" name="AnoCierraNomina" required="">
                         </div>
                         <div class="col-12 col-sm-6 col-md-2 col-xl-2">
-                            <label>De la Sem</label>
+                            <label>Sem</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly " id="SemCierraNomina" name="SemCierraNomina" required="">
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btnImprimir">CERRAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimir">CERRAR SEMANA</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -49,7 +49,7 @@
             mdlCerrarNominaDeSemana.find("#AnoCierraNomina").val(new Date().getFullYear());
             mdlCerrarNominaDeSemana.find('#AnoCierraNomina').focus().select();
         });
-        mdlCerrarNominaDeSemana.find("#AnoCierraNomina").keydown(function (e) {
+        mdlCerrarNominaDeSemana.find("#AnoCierraNomina").keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
                     swal({
@@ -57,9 +57,7 @@
                         text: "AÑO INCORRECTO",
                         icon: "warning",
                         closeOnClickOutside: false,
-                        closeOnEsc: false,
-                        buttons: false,
-                        timer: 1000
+                        closeOnEsc: false
                     }).then((action) => {
                         mdlCerrarNominaDeSemana.find("#AnoCierraNomina").val("");
                         mdlCerrarNominaDeSemana.find("#AnoCierraNomina").focus();
@@ -69,11 +67,11 @@
                 }
             }
         });
-        mdlCerrarNominaDeSemana.find("#SemCierraNomina").keydown(function (e) {
-            if ($(this).val()) {
-                if (e.keyCode === 13) {
+        mdlCerrarNominaDeSemana.find("#SemCierraNomina").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
                     var ano = mdlCerrarNominaDeSemana.find("#AnoCierraNomina");
-                    onComprobarSemanasNomina($(this), ano.val());
+                    onComprobarSemanasNominaCierraNomina($(this), ano.val());
                 }
             }
         });
@@ -119,18 +117,69 @@
             } else {
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
-        })
+        });
 
     });
 
 
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaCierraNomina(v, ano) {
         //Valida que esté creada la semana en nominas
-        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
-            if (data.length > 0) {
-                mdlCerrarNominaDeSemana.find('#FechaIniCierraNomina').val(data[0].FechaIni);
-                mdlCerrarNominaDeSemana.find('#FechaFinCierraNomina').val(data[0].FechaFin);
-                mdlCerrarNominaDeSemana.find('#btnImprimir').focus();
+        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
+            if (dataUno.length > 0) {
+                //Valida que no esté cerrada la semana en nomina
+                $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
+                    if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
+                        if (parseInt(data[0].status) === 2) {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "ESTÁ CERRADA",
+                                icon: "warning",
+                                buttons: {
+                                    eliminar: {
+                                        text: "Aceptar",
+                                        value: "aceptar"
+                                    }
+                                }
+                            }).then((value) => {
+                                switch (value) {
+                                    case "aceptar":
+                                        swal.close();
+                                        $(v).val('');
+                                        $(v).focus();
+                                        break;
+                                }
+                            });
+                        } else {//Sí está pero esta en estatus 1
+                            mdlCerrarNominaDeSemana.find('#FechaIniCierraNomina').val(dataUno[0].FechaIni);
+                            mdlCerrarNominaDeSemana.find('#FechaFinCierraNomina').val(dataUno[0].FechaFin);
+                            mdlCerrarNominaDeSemana.find('#btnImprimir').focus();
+                        }
+                    } else {//Aún no existe la nomina, podemos continuar
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO HA SIDO CERRADA TODAVÍA",
+                            icon: "warning",
+                            buttons: {
+                                eliminar: {
+                                    text: "Aceptar",
+                                    value: "aceptar"
+                                }
+                            }
+                        }).then((value) => {
+                            switch (value) {
+                                case "aceptar":
+                                    swal.close();
+                                    $(v).val('');
+                                    $(v).focus();
+                                    break;
+                            }
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -157,7 +206,6 @@
             console.log(x.responseText);
         });
     }
-
 
     function onCerrarNominaSemanal() {
         mdlCerrarNominaDeSemana.modal({

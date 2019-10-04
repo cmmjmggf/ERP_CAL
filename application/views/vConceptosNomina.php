@@ -254,7 +254,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [0, 'desc']/*ID*/
+                [1, 'desc']/*ID*/
             ]
         });
 

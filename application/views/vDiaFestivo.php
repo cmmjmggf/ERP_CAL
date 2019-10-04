@@ -1,4 +1,4 @@
-<div class="modal fade" id="mdlGeneraDiaFestivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="mdlGeneraDiaFestivo" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,52 +43,31 @@
 
     $(document).ready(function () {
 
-        SemanaGDF.on('keydown', function () {
-            /*CHECAR QUE LA SEMANA NO ESTE CERRADA EN PRENOMINA !== 2 === 1*/
-            if (SemanaGDF.val() && parseInt(SemanaGDF.val()) > 0 && parseInt(SemanaGDF.val()) < 54) {
-                /*REVISAR QUE LA SEMANA EXISTA*/
-                $.getJSON('<?php print base_url('DiaFestivo/onComprobarSemanaNomina'); ?>', {ANO: AnioGDF.val(), SEMANA: SemanaGDF.val()})
-                        .done(function (a) {
-                            if (a.length > 0) {
-                                $.getJSON('<?php print base_url('DiaFestivo/onVerificarSemanaNominaCerrada'); ?>', {SEMANA: SemanaGDF.val()})
-                                        .done(function (aa) {
-                                            if (aa.length > 0) {
-                                                if (parseInt(aa[0].status) === 2) {
-                                                    swal({
-                                                        title: "ATENCIÓN",
-                                                        text: "LA NÓMINA DE LA SEMANA " + SemanaGDF.val() + " DEL " + AnioGDF.val() + " " + "ESTÁ CERRADA",
-                                                        icon: "warning",
-                                                        buttons: {
-                                                            botonsito: {
-                                                                text: "Aceptar",
-                                                                value: "aceptar"
-                                                            }
-                                                        }
-                                                    }).then((value) => {
-                                                        switch (value) {
-                                                            case "aceptar":
-                                                                swal.close();
-                                                                SemanaGDF.focus().select();
-                                                                break;
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                    HoldOn.close();
-                                });
-                            } else {
-                                swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA, NO EXISTE O ES INVÁLIDA', 'warning').then((value) => {
-                                    SemanaGDF.focus().select();
-                                });
-                            }
-                        }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
+        AnioGDF.keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        AnioGDF.val("");
+                        AnioGDF.focus();
+                    });
+                } else {
+                    SemanaGDF.focus().select();
+                }
+            }
+        });
+
+        SemanaGDF.on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var ano = AnioGDF.val();
+                    onComprobarSemanasNominaDiaFestivo($(this), ano);
+                }
             }
         });
 
@@ -152,16 +131,14 @@
             });
         });
 
-        handleEnterDiv(mdlGeneraDiaFestivo);
-
     });
 
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaDiaFestivo(v, ano) {
         //Valida que esté creada la semana en nominas
-        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
-            if (data.length > 0) {
+        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
+            if (dataUno.length > 0) {
                 //Valida que no esté cerrada la semana en nomina
-                $.getJSON(master_url + 'onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
+                $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
                     if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
                         if (parseInt(data[0].status) === 2) {
                             swal({
@@ -184,10 +161,30 @@
                                 }
                             });
                         } else {//Sí está pero esta en estatus 1
-                            getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
+                            FechaInicialGDF.val(dataUno[0].FechaIni);
+                            FechaFinalGDF.val(dataUno[0].FechaFin);
+                            btnGuardarGDF.focus();
                         }
                     } else {//Aún no existe la nomina, podemos continuar
-                        getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO HA SIDO CERRADA TODAVÍA",
+                            icon: "warning",
+                            buttons: {
+                                eliminar: {
+                                    text: "Aceptar",
+                                    value: "aceptar"
+                                }
+                            }
+                        }).then((value) => {
+                            switch (value) {
+                                case "aceptar":
+                                    swal.close();
+                                    $(v).val('');
+                                    $(v).focus();
+                                    break;
+                            }
+                        });
                     }
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

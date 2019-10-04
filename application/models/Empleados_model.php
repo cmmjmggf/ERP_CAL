@@ -137,6 +137,7 @@ class Empleados_model extends CI_Model {
                                     . "E.RFC, "
                                     . "E.CURP, "
                                     . "E.NoIMSS, "
+                                    . "E.ISR, "
                                     . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
                                     . "date_format(str_to_date(E.Nacimiento,'%Y-%m-%d'),'%d/%m/%Y') as Nacimiento, "
                                     . "date_format(str_to_date(E.FechaIMSS,'%Y-%m-%d'),'%d/%m/%Y') as FechaIMSS, "

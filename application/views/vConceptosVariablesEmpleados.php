@@ -288,7 +288,7 @@
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
                 //Valida que no esté cerrada la semana en nomina
-                $.getJSON(master_url + 'onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
+                $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
                     if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
                         if (parseInt(data[0].status) === 2) {
                             swal({

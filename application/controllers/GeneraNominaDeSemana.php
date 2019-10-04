@@ -30,7 +30,7 @@ class GeneraNominaDeSemana extends CI_Controller {
         try {
             $x = $this->input->post();
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
-//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */)) 
+//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
             /* ELIMINAR EN PRENOMINA */
@@ -175,10 +175,10 @@ class GeneraNominaDeSemana extends CI_Controller {
                     /* 3.4 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE  */
                     $SUELDO_FINAL_DESTAJO = 0;
                     if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
-                        /* 3.4.1 SI EL EMPLEADO NO TIENE MOVIMIENTOS EN FRACPAGNOM 
-                         * Y TIENE UN PORCENTAJE PERTENECE A UNA CELULA, 
+                        /* 3.4.1 SI EL EMPLEADO NO TIENE MOVIMIENTOS EN FRACPAGNOM
+                         * Y TIENE UN PORCENTAJE PERTENECE A UNA CELULA,
                          * PARA SABER CUAL CELULA ES EN LA QUE ESTA TRABAJANDO,
-                         * OBTENGO SU DEPTO FISICO, BUSCO EL EMPLEADO POR ESTE DEPTO FISICO Y POR LA COINCIDENCIA DE BUSQUEDA "CELULA", 
+                         * OBTENGO SU DEPTO FISICO, BUSCO EL EMPLEADO POR ESTE DEPTO FISICO Y POR LA COINCIDENCIA DE BUSQUEDA "CELULA",
                          * OBTENIENDO DE ESTA FORMA EL DEPTO DE LA CELULA Y EL NUMERO DEL EMPLEADO CON EL CUAL INGRESAN LAS FRACCIONES */
                         $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico ={$v->DepartamentoFisico} AND E.Busqueda LIKE '%CELULA%'")->result();
                         /* 3.4.2  UNA VEZ OBTENIDO EL DEPTO DE LA CELULA Y EL NUMERO,
@@ -189,12 +189,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                             $SUELDO_FINAL_DESTAJO = 0;
                             /* ES POSIBLE QUE ESTE EMPLEADO ESTE POR CELULA PERO NO HAYA HECHO AUN NADA O JAMAS SE PRESENTO A LABORAR */
                         }
-                        /* 3.4.3  FINALMENTE EL SUBTOTAL GENERADO POR ESA CELULA 
+                        /* 3.4.3  FINALMENTE EL SUBTOTAL GENERADO POR ESA CELULA
                          * SE MULTIPLICA POR EL PORCENTAJE DEL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
                     } else {
-                        /* 3.5 EL SUELDO FINAL CORRESPONDE AL SUBTOTAL DE FRACPAGNOMINA, 
-                         * EN CASO DE NO PERTENECER A NINGUNA CELULA SOLO SE LE PAGA LO QUE HIZO 
+                        /* 3.5 EL SUELDO FINAL CORRESPONDE AL SUBTOTAL DE FRACPAGNOMINA,
+                         * EN CASO DE NO PERTENECER A NINGUNA CELULA SOLO SE LE PAGA LO QUE HIZO
                          * Y REGISTRO DENTRO DEL SISTEMA */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
                     }
@@ -245,6 +245,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $this->onZapatosTienda($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
                 /* CALCULAR SI TIENE O NO SALDO DE PRESTAMOS */
                 $this->onAbonoPrestamo($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
+                /* CALCULAR SI TIENE O NO ISR */
+                $this->onISR($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
             }
             /* OBTENER REPORTES */
             $jc = new JasperCommand();
@@ -400,6 +402,27 @@ class GeneraNominaDeSemana extends CI_Controller {
                 ));
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('fonac', $v->Fonacot)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onISR($ANIO, $SEM, $v, $ASISTENCIAS) {
+        try {
+            if (floatval($v->Fonacot) > 0) {
+                $this->db->insert('prenomina', array(
+                    "numsem" => $SEM, "año" => $ANIO,
+                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                    "numcon" => 82 /* 82 ISR */, "tpcon" => 0 /* 1 = PERCECION */,
+                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                    "imported" => $v->ISR, "fecha" => Date('Y-m-d h:i:s'),
+                    "registro" => 0, "status" => 1, "tpomov" => 0,
+                    "depto" => $v->DepartamentoFisico
+                ));
+//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+                $this->db->set('impu', $v->ISR)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {

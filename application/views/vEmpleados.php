@@ -376,6 +376,10 @@
                                         <label for="Fonacot" >Fonacot*</label>
                                         <input type="text" id="Fonacot" name="Fonacot" class="form-control form-control-sm numbersOnly">
                                     </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="Fonacot" >ISR*</label>
+                                        <input type="text" id="ISR" name="ISR" class="form-control form-control-sm numbersOnly">
+                                    </div>
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                         <label for="EntregaDeMaterialYPrecio" >Entrega de material y precio*</label>
                                         <input type="text" id="EntregaDeMaterialYPrecio" name="EntregaDeMaterialYPrecio" class="form-control form-control-sm numbersOnly" required="">
@@ -583,7 +587,7 @@
                             processData: false,
                             data: frm
                         }).done(function (data, x, jq) {
-                            //console.log(data);
+                            console.log(data);
                             onBeep(1);
                             swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
                             nuevo = false;

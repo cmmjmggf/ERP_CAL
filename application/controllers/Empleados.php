@@ -182,6 +182,7 @@ class Empleados extends CI_Controller {
 
 
             unset($data["ID"]);
+
             $this->db->where('ID', $x->post('ID'))->update("empleados", $data);
             $ID = $x->post('ID');
             $Foto = $this->input->post('Foto');
