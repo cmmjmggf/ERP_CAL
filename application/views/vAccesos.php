@@ -21,6 +21,9 @@
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3"align="right">
+                <button id="btnCopiarAccesos" type="button" data-toggle="modal" data-target="#mdlCopiaAccesosUsuario" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="COPIAR ACCESOS DE USUARIO">
+                    <span class="fa fa-copy"></span>
+                </button>
                 <button id="btnAsignaTodo" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
                     <span class="fa fa-shield-alt"></span>
                 </button>
@@ -290,6 +293,7 @@
         <!--FIN SUBSUBITEMS POR ITEM-->
     </div>
 </div>
+
 <script type="text/javascript">
     var pnlTablero = $("#pnlTablero"), pnlTableroBody = $("#pnlTablero").find(".card-body");
     var mxu = pnlTableroBody.find("#mxu"), oxmu = pnlTableroBody.find("#oxmu"),
@@ -309,6 +313,11 @@
     var usr = '<?php PRINT $this->session->ID; ?>';
     $(document).ready(function () {
         console.log(usr);
+
+        pnlTableroBody.find("#btnCopiarAccesos").click(function () {
+
+        });
+
         pnlTableroBody.find("#btnAsignaAvaPRD").click(function () {
             HoldOn.open({
                 theme: 'sk-rect',
@@ -783,6 +792,8 @@
                 ixou[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
                 sixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
                 ssixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+                $('#mdlCopiaAccesosUsuario').find('#UsuarioAsigna')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+                $('#mdlCopiaAccesosUsuario').find('#UsuarioRecibe')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x.responseText);

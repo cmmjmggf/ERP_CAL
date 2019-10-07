@@ -23,4 +23,4 @@ $this->load
         ->view('vSeleccionaEstiloColorParaEfectoVenta')
         ->view('vConsultaEstilos')
         ->view('vLineasAbiertas')
-        ->view('vParametrosFijos');
+        ->view('vParametrosFijos')->view('vCopiarAccesosUsuario');

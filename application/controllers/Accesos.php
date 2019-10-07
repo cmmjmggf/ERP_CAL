@@ -42,6 +42,40 @@ class Accesos extends CI_Controller {
         }
     }
 
+    public function onCopiarAccesosUsuario() {
+        try {
+            $usuario_recibe = $this->input->post('UsuarioRecibe');
+            $usuario_asigna = $this->input->post('UsuarioAsigna');
+
+            $this->db->query("delete from modulosxusuario where Usuario = $usuario_recibe ; ");
+            $this->db->query("INSERT INTO modulosxusuario(Modulo,Usuario,UsuarioAsigna,Fecha)
+                                select Modulo, $usuario_recibe as usuario, 1 as usuario_asigna, date_format(now(),'%d/%m/%Y %h:%i:%s %p')
+                                from modulosxusuario where usuario = $usuario_asigna ; ");
+
+            $this->db->query("delete from opcionesxmoduloxusuario where Usuario = $usuario_recibe ; ");
+            $this->db->query("INSERT INTO opcionesxmoduloxusuario(Usuario,Modulo,Opcion,Fecha,UsuarioAsigna)
+                                select  $usuario_recibe as usuario, Modulo, Opcion ,date_format(now(),'%d/%m/%Y %h:%i:%s %p'), 1 as usuario_asigna
+                                from opcionesxmoduloxusuario where usuario = $usuario_asigna; ");
+
+            $this->db->query("delete from itemsxopcionxmoduloxusuario where Usuario = $usuario_recibe ; ");
+            $this->db->query("INSERT INTO itemsxopcionxmoduloxusuario(Item,Opcion,Modulo,Usuario,UsuarioAsigna,Fecha)
+                                select Item, Opcion, Modulo, $usuario_recibe as usuario, 1 as usuario_asigna, date_format(now(),'%d/%m/%Y %h:%i:%s %p')
+                                from itemsxopcionxmoduloxusuario where usuario = $usuario_asigna; ");
+
+            $this->db->query("delete from subitemsxitemxopcionxmoduloxusuario where Usuario = $usuario_recibe ; ");
+            $this->db->query("INSERT INTO subitemsxitemxopcionxmoduloxusuario(SubItem,Item,Opcion,Modulo,Usuario,UsuarioAsigna,Fecha)
+                                select SubItem, Item, Opcion, Modulo, $usuario_recibe as usuario, 1 as usuario_asigna, date_format(now(),'%d/%m/%Y %h:%i:%s %p')
+                                from subitemsxitemxopcionxmoduloxusuario where usuario = $usuario_asigna; ");
+
+            $this->db->query("delete from subsubitemsxitemxopcionxmoduloxusuario where Usuario = $usuario_recibe ; ");
+            $this->db->query("INSERT INTO subsubitemsxitemxopcionxmoduloxusuario(SubSubItem,SubItem,Item,Opcion,Modulo,Usuario,UsuarioAsigna,Fecha)
+                                select SubSubItem, SubItem, Item, Opcion, Modulo, $usuario_recibe as usuario, 1 as usuario_asigna, date_format(now(),'%d/%m/%Y %h:%i:%s %p')
+                                from subsubitemsxitemxopcionxmoduloxusuario where usuario = $usuario_asigna ;  ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getTiposDeAcceso() {
         try {
             print json_encode($this->acm->getTiposDeAcceso());
