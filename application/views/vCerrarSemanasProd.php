@@ -5,6 +5,9 @@
                 <legend class="float-left">Semanas Producción Cerradas</legend>
             </div>
             <div class="col-sm-4" align="right">
+                <button type="button" class="btn btn-success" id="btnImportar">
+                    <i class="fa fa-copy"></i> IMPORTAR DE SISTEMA VIEJO
+                </button>
                 <button type="button" class="btn btn-warning" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
                     <i class="fa fa-trash"></i>
                 </button>
@@ -64,6 +67,31 @@
         handleEnter();
         pnlTablero.find("input").val("");
         var accion = "";
+
+        pnlTablero.find('#btnImportar').click(function () {
+            HoldOn.open({
+                theme: 'sk-cube',
+                message: 'CARGANDO...'
+            });
+            $.post(master_url + 'onImportarSemanasTablaFili').done(function (data) {
+                swal({
+                    title: 'Atención',
+                    text: "IMPORTACIÓN CORRECTA",
+                    icon: "success",
+                    closeOnEsc: false,
+                    closeOnClickOutside: false
+                }).then((action) => {
+                    if (action) {
+                        Semanas.ajax.reload();
+                        HoldOn.close();
+                        pnlTablero.find('#col1_filter').focus().select();
+                    }
+                });
+
+            });
+
+        });
+
         btnCerrarSemana.click(function () {
             var ano = pnlTablero.find('#col0_filter').val();
             var sem = pnlTablero.find('#Semana').val();
@@ -151,6 +179,12 @@
     );
 
     function init() {
+        if (seg === 1) {
+            pnlTablero.find('#btnImportar').removeClass('d-none');
+        } else {
+            pnlTablero.find('#btnImportar').addClass('d-none');
+        }
+
         getRecords();
     }
     function getRecords() {
@@ -182,13 +216,14 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 8,
+            "displayLength": 400,
+            "scrollY": 400,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [0, 'asc'], [1, 'asc'], [2, 'desc']
+                [0, 'desc'], [1, 'asc'], [2, 'desc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -340,7 +375,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

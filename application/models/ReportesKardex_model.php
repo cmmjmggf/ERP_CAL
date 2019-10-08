@@ -178,11 +178,12 @@ class ReportesKardex_model extends CI_Model {
     public function getDoctosSubAlmacenByArticulo($Articulo, $fecha, $aFecha, $Texto_Mes_Anterior) {
         try {
             $this->db->query("SET sql_mode = '';");
-            return $this->db->select("(SELECT $Texto_Mes_Anterior FROM articulos10 WHERE Clave = MA.Articulo) AS SaldoInicial,  "
-                                    . "(SELECT P$Texto_Mes_Anterior FROM articulos10 WHERE Clave = MA.Articulo) AS PrecioInicial, "
-                                    . "G.Clave AS ClaveGrupo, G.Nombre AS NombreGrupo, "
+            return $this->db->select("(SELECT $Texto_Mes_Anterior FROM articulos10 WHERE Clave = `A`.`Clave`) AS SaldoInicial,
+                                      (SELECT P$Texto_Mes_Anterior FROM articulos10 WHERE Clave = `A`.`Clave`) AS PrecioInicial, "
+                                    . "(SELECT Clave FROM grupos WHERE Clave = `A`.`Grupo`) AS ClaveGrupo,
+                                       (SELECT Nombre FROM grupos WHERE Clave = `A`.`Grupo`) AS NombreGrupo,  "
                                     . "MA.Articulo AS ClaveArt, A.Descripcion AS Articulo, "
-                                    . "U.Descripcion AS Unidad, "
+                                    . "(SELECT Descripcion FROM unidades WHERE Clave = `A`.`UnidadMedida`) AS Unidad, "
                                     . "MA.DocMov, MA.OrdenCompra,"
                                     . "MA.Maq, MA.Sem, MA.TipoMov, MA.FechaMov, MA.PrecioMov, MA.Subtotal,"
                                     . "STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") AS FechaOrd,"
@@ -196,8 +197,6 @@ class ReportesKardex_model extends CI_Model {
                                     . " ", false)
                             ->from("movarticulos_fabrica MA")
                             ->join("articulos10 AS A", "ON MA.Articulo = A.Clave ")
-                            ->join("grupos G", "ON G.Clave =  A.Grupo ")
-                            ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
                             ->join("proveedores P", "ON P.Clave =  MA.Proveedor ", "left")
                             ->where("MA.Articulo", $Articulo)
                             ->where("STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$fecha', \"%d/%m/%Y\") AND STR_TO_DATE('$aFecha', \"%d/%m/%Y\")")

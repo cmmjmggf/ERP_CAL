@@ -7,11 +7,11 @@ require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class PagosConCincoDescuento extends CI_Controller {
 
-//    public function accion() {
-//        exec('schtasks /create /sc minute /tn "Notepad" /tr "C:/Windows/system32/Notepad.exe" ');
-//        exec('schtasks /run /tn "Notepad"  ');
-//        exec('schtasks /delete /tn "Notepad" /F ');
-//    }
+    public function accion() {
+        exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe 8825 " ');
+        exec('schtasks /run /tn "Timbrar"  ');
+        exec('schtasks /delete /tn "Timbrar" /F ');
+    }
 
     public function __construct() {
         parent::__construct();

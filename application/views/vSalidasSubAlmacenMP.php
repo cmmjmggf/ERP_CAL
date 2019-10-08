@@ -74,25 +74,24 @@
                 </button>
             </div>
         </div>
-        <div class="row mt-2">
-            <div id="Movimientos" class="col-12 col-sm-12 col-md-12">
+        <div class="mt-2">
+            <div id="Movimientos" >
                 <h5>Material a entregar de este documento</h5>
-                <div class="row">
-                    <table id="tblMovimientos" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Clave</th>
-                                <th>Articulo</th>
-                                <th>Cantidad</th>
-                                <th>Maq.</th>
-                                <th>Tipo</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+
+                <table id="tblMovimientos" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Clave</th>
+                            <th>Articulo</th>
+                            <th>Cantidad</th>
+                            <th>Maq.</th>
+                            <th>Tipo</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -501,7 +500,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

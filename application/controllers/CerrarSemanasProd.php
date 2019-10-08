@@ -38,6 +38,32 @@ class CerrarSemanasProd extends CI_Controller {
         }
     }
 
+    public function onImportarSemanasTablaFili() {
+        try {
+            $SemanasFili = $this->db->query("SELECT numsem, `status` as ano, maq1, maq2, maq3, maq4, maq5, maq6, maq7, maq8, maq9
+                                            FROM semanasprodfili order by `status` asc, numsem asc")->result();
+
+
+            $this->db->query("truncate table semanasproduccioncerradas ");
+            foreach ($SemanasFili as $key => $v) {
+
+                for ($i = 1; $i < 10; $i++) {
+                    $statusSem = intval($v->{"maq$i"});
+                    if ($statusSem > 0) {
+                        $ano = $v->ano;
+                        $maq = $i;
+                        $sem = $v->numsem;
+                        $statusSem = ($statusSem === 2) ? 'CERRADA' : '';
+                        $this->db->query("INSERT INTO `erp_cal`.`semanasproduccioncerradas` (`Ano`,`Maq`,`Sem`,`Estatus`)
+                                        VALUES($ano,$maq,$sem,'$statusSem') ; ");
+                    }
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->Cerrarsemanasprod_model->getRecords());

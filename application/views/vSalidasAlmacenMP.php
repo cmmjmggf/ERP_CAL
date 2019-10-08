@@ -87,43 +87,41 @@
         <div class="row mt-2">
             <div id="Movimientos" class="col-12 col-sm-12 col-md-7">
                 <h5>Material a entregar de este documento</h5>
-                <div class="row">
-                    <table id="tblMovimientos" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Clave</th>
-                                <th>Articulo</th>
-                                <th>Cantidad</th>
-                                <th>Maq.</th>
-                                <th>Tipo</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+
+                <table id="tblMovimientos" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Clave</th>
+                            <th>Articulo</th>
+                            <th>Cantidad</th>
+                            <th>Maq.</th>
+                            <th>Tipo</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
             <div id="MatEntregado" class="col-12 col-sm-12 col-md-5">
                 <h5>Total de Material Entregado Maq-Sem</h5>
-                <div class="row">
-                    <table id="tblMatEntregado" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Documento</th>
-                                <th>Artículo</th>
-                                <th>Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">Total Entregado:</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+
+                <table id="tblMatEntregado" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Artículo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Total Entregado:</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
@@ -685,7 +683,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;
