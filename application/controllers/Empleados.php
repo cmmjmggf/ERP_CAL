@@ -182,7 +182,6 @@ class Empleados extends CI_Controller {
 
 
             unset($data["ID"]);
-
             $this->db->where('ID', $x->post('ID'))->update("empleados", $data);
             $ID = $x->post('ID');
             $Foto = $this->input->post('Foto');
@@ -197,13 +196,12 @@ class Empleados extends CI_Controller {
                         if (!file_exists(utf8_decode($URL_DOC . '/' . $ID))) {
                             mkdir(utf8_decode($URL_DOC . '/' . $ID), 0777, true);
                         }
-                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . '/' . $ID . '/' . utf8_decode($_FILES["Foto"]["name"]))) {
-                            $img = $master_url . $ID . '/' . $_FILES["Foto"]["name"];
+                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . '/' . utf8_decode($_FILES["Foto"]["name"]))) {
+                            $img = $master_url . $_FILES["Foto"]["name"];
                             $this->load->library('image_lib');
                             $config['image_library'] = 'gd2';
                             $config['source_image'] = $img;
                             $config['maintain_ratio'] = true;
-                            $config['width'] = 250;
                             $this->image_lib->initialize($config);
                             $this->image_lib->resize();
                             $this->db->set('Foto', $img)->where('ID', $ID)->update('empleados');
