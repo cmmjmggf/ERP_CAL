@@ -297,14 +297,14 @@ class AsignaPFTSACXC extends CI_Controller {
                             'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
                             'CantidadMov' => $x->post('REGRESO'),
                             'FechaMov' => Date('d/m/Y'),
-                            'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
-                            'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
+                            'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
+                            'TipoMov' => 'SPR', /* EXP = ENTRADA POR PRODUCCION */
                             'DocMov' => $x->post('ID'),
                             'Tp' => '',
                             'Maq' => 1,
                             'Sem' => substr($x->post('CONTROL'), 2, 2),
                             'Ano' => $Ano,
-                            'OrdenCompra' => NULL,
+                            'OrdenCompra' => 'BASURA',
                             'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x->post('REGRESO')
                         );
                         $this->db->insert("movarticulos_fabrica", $datos);

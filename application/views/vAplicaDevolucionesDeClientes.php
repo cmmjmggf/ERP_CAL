@@ -94,44 +94,59 @@
                         <input type="text" id="Serie" name="Serie" class="form-control form-control-sm d-none" readonly=""> 
                     </div>
 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-nones">
                         <label>IMPORTE FACTURA</label>
-                        <input type="text" id="ImporteFactura" name="ImporteFactura" class="form-control form-control-sm">
+                        <input type="text" id="ImporteFactura" name="ImporteFactura" class="form-control form-control-sm" readonly="">
                         <p class="importe_fact">0000</p>
 
                         <label>SALDO FACTURA</label>
-                        <input type="text" id="SaldoFactura" name="SaldoFactura" class="form-control form-control-sm">
+                        <input type="text" id="SaldoFactura" name="SaldoFactura" class="form-control form-control-sm" readonly="">
                         <p class="saldo_fact">0000</p>
 
                         <label>IMPORTE DEVUELTO</label>
-                        <input type="text" id="ImporteDev" name="ImporteDev" class="form-control form-control-sm">
+                        <input type="text" id="ImporteDev" name="ImporteDev" class="form-control form-control-sm" readonly="">
                         <p class="importe_dev">0000</p>
 
                         <label>NUEVO SALDO</label>
-                        <input type="text" id="NuevoSaldo" name="NuevoSaldo" class="form-control form-control-sm">
+                        <input type="text" id="NuevoSaldo" name="NuevoSaldo" class="form-control form-control-sm" readonly="">
                         <p class="total_dev">0000</p>
                     </div>
 
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info" disabled="">
-                            <span class="fa fa-check"></span> Acepta
-                        </button>
-                        <button type="button" id="btnCierraNC" name="btnCierraNC" class="btn btn-info" disabled="">
-                            <span class="fa fa-file-code"></span> Cierra N-c
-                        </button>
-                        <button type="button" id="btnPagos" name="btnPagos" class="btn btn-info">
-                            <span class="fa fa-coins"></span> Pagos
-                        </button>
-                        <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info">
-                            <span class="fa fa-exchange-alt"></span> Movimientos
-                        </button>
-                        <button type="button" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc" class="btn btn-info">
-                            <span class="fa fa-search"></span> Rastreo ctr/doc
-                        </button> 
-                        <button type="button" id="btnRastreoEstCte" name="btnRastreoEstCte" class="btn btn-info">
-                            <span class="fa fa-search"></span> Rastreo est/cte
-                        </button> 
+                        <div class="row">
+                            <div class="col-4">
+                                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info btn-block" disabled="">
+                                    <span class="fa fa-check"></span> Acepta
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" id="btnCierraNC" name="btnCierraNC" class="btn btn-info btn-block" disabled="">
+                                    <span class="fa fa-file-code"></span> Cierra N-c
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" id="btnPagos" name="btnPagos" class="btn btn-info btn-block">
+                                    <span class="fa fa-coins"></span> Pagos
+                                </button>
+                            </div>
+                            <div class="w-100 my-1"></div>
+                            <div class="col-4">
+                                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info btn-block">
+                                    <span class="fa fa-exchange-alt"></span> Movimientos
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc" class="btn btn-info btn-block">
+                                    <span class="fa fa-search"></span> Rastreo ctr/doc
+                                </button> 
+                            </div>
+                            <div class="col-4">
+                                <button type="button" id="btnRastreoEstCte" name="btnRastreoEstCte" class="btn btn-info btn-block">
+                                    <span class="fa fa-search"></span> Rastreo est/cte
+                                </button> 
+                            </div>
+                        </div>
                     </div>
                 </div><!--ROW-->
             </div>
@@ -155,10 +170,9 @@
                 </table>
             </div>
             <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <p class="font-weight-bold text-danger">CONTROLES POR APLICAR DE ESTE CLIENTE</p>
-                <table id="tblDevCtrlXAplicarDeEsteCliente" class="table table-hover table-sm display nowrap"  style="width: 100%!important;
-                       ">
+                <table id="tblDevCtrlXAplicarDeEsteCliente" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -175,15 +189,14 @@
                             <th scope="col">TP</th><!--11--> 
                             <th scope="col">Concepto</th><!--12--> 
                             <th scope="col">Pre-dv</th><!--13--> 
-                            <th scope="col">Pre-cg</th><!--14--> 
+                            <th scope="col">Pre-cg</th><!--14-->
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 ">
                 <p class="font-weight-bold text-danger">DETALLE DE LA DEVOLUCIÓN</p>
-
                 <table id="tblDevolucionDetalle" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
                         <tr>
@@ -206,9 +219,13 @@
                     <tbody></tbody>
                 </table>
             </div>
+            <div class="col-12">
+                <p class="total_en_letra text-danger font-italic font-weight-bold">-</p>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
     var pnlTablero = $("#pnlTablero"), ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
             FechaDevolucion = pnlTablero.find('#FechaDevolucion'),
@@ -238,6 +255,33 @@
     $(document).ready(function () {
 
         handleEnterDiv(pnlTablero);
+
+        btnCierraNC.click(function () {
+            getTotal();
+            btnCierraNC.attr('disabled', true);
+            var p = {
+                CLIENTE: ClienteDevolucion.val(),
+                DOCUMENTO: NotaCredito.val(),
+                APLICA: AplicaDevolucion.val(),
+                NC: NotaCredito.val(),
+                TP: TP.val(),
+                CONTROL: Control.val(),
+                ESTILO: Estilo.val(),
+                COLOR: Color.val(),
+                SERIE: Serie.val(),
+                PRECIO: Precio.val(),
+                TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
+            };
+            $.post('<?php print base_url('AplicaDevolucionesDeClientes/onCerrarNC'); ?>', p).done(function (aaa) {
+                console.log(aaa);
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                btnCierraNC.attr('disabled', false);
+            });
+        });
+
+
         btnAcepta.click(function () {
             var p = {
                 CLIENTE: ClienteDevolucion.val(),
@@ -249,7 +293,9 @@
                 ESTILO: Estilo.val(),
                 COLOR: Color.val(),
                 SERIE: Serie.val(),
-                PRECIO: Precio.val()
+                PRECIO: Precio.val(),
+                FECHA: FechaDevolucion.val(),
+                TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
             };
 
             for (var i = 1; i < 23; i++) {
@@ -259,6 +305,7 @@
                     p["PAR" + i] = pnlTablero.find("#xpar" + i).val();
                 }
             }
+
             if (nuevo) {
                 console.log("PARAMETROS => ", p);
                 $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
@@ -271,12 +318,15 @@
                     AplicaDevolucion.attr("readonly", true);
                     TP[0].selectize.disable();
                     tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+                    DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
+                        btnCierraNC.attr('disabled', false);
+                    });
+                    getTotal();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
                 });
-            } else
-            {
+            } else {
 
             }
         });
@@ -346,9 +396,6 @@
             "scrollY": 250,
             "scrollX": true,
             "order": [[3, "desc"]],
-            responsive: {
-                orthogonal: 'responsive'
-            },
             "initComplete": function (settings, json) {
             }
         });
@@ -356,26 +403,6 @@
         tblDocDeEsteCteConSaldo.find('tbody').on('click', 'tr', function () {
             var dtm = DocDeEsteCteConSaldo.row(this).data();
             getImporteSaldoXDocumento(dtm);
-//            if (nuevo) {
-//                if (ClienteDevolucion.val()) {
-//                    AplicaDevolucion.val(dtm.DOCUMENTO);
-//                    documento_dtm = dtm;
-//                    pnlTablero.find("#ImporteFactura").val(dtm.IMPORTE);
-//                    pnlTablero.find(".importe_fact").text(dtm.IMPORTE);
-//                    pnlTablero.find("#SaldoFactura").val(dtm.SALDO);
-//                    pnlTablero.find(".saldo_fact").text(dtm.SALDO);
-//
-//                    getUltimaNC();
-//                    /* BLINK */
-//                    tblDocDeEsteCteConSaldo.parent().removeClass("blinkb");
-//                    tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
-//                } else {
-//                    iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
-//                        DocDeEsteCteConSaldo.rows('.important').deselect();
-//                        ClienteDevolucion[0].selectize.focus();
-//                    });
-//                }
-//            }
         });
 
         DevCtrlXAplicarDeEsteCliente = tblDevCtrlXAplicarDeEsteCliente.DataTable({
@@ -414,9 +441,6 @@
             "scrollY": 250,
             "scrollX": true,
             "order": [[10, "desc"]],
-            responsive: {
-                orthogonal: 'responsive'
-            },
             "initComplete": function (settings, json) {
             }
         });
@@ -590,6 +614,7 @@
     }
 
     function getImporteSaldoXDocumento(dtm) {
+        onBeep(1);
         if (nuevo) {
             if (ClienteDevolucion.val()) {
                 AplicaDevolucion.val(dtm.DOCUMENTO);
@@ -611,13 +636,30 @@
             }
         }
     }
+
+    function getTotal() {
+        var p = {
+            CLIENTE: ClienteDevolucion.val(),
+            NC: NotaCredito.val()
+        };
+        $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getTotal'); ?>', p).done(function (xxx) {
+            console.log(xxx);
+            console.log(NumeroALetras(xxx[0].TOTAL));
+            pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL));
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
+    }
 </script>
-<style> 
+<style>
     .blinkb{ 
         border: 2px solid #ffffff;
         border-radius: 5px;
         -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
-        animation: myfirst 1.5s linear 0.5s infinite alternate;
+        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        box-shadow: 0 0px 12px  #03A9F4;
     }
 
     /* Safari 4.0 - 8.0 */

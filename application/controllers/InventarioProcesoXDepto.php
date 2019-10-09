@@ -60,7 +60,6 @@ class InventarioProcesoXDepto extends CI_Controller {
         switch (intval($x->post('TIPO'))) {
             case 1:
                 $this->db->query('TRUNCATE TABLE invxdeptodia');
-                $deptos = $this->db->select("",false);
                 for ($i = intval($x->post('MAQUILA_INICIAL')); $i <= intval($x->post('MAQUILA_FINAL')); $i++) {
                     for ($ii = intval($x->post('SEMANA_INICIAL')); $ii <= intval($x->post('SEMANA_FINAL')); $ii++) {
                         $this->db->insert('invxdeptodia', array(

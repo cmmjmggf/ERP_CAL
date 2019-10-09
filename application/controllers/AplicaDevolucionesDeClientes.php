@@ -10,7 +10,8 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session');
+        $this->load->library('session')
+                ->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -33,20 +34,33 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         }
     }
 
+    public function getTT() {
+        try {
+            passthru("C:\Mis Comprobantes\Timbrar.exe 8825");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getDocumentadosDeEsteClienteConSaldo() {
         try {
             $x = $this->input->get();
+            $limite = "";
+            if ($x['CLIENTE'] === '') {
+                $limite = "LIMIT 10";
+            }
             print json_encode($this->db->query("SELECT CC.ID AS ID, CC.tipo AS TP, "
                                     . "CC.remicion AS DOCUMENTO, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA, "
                                     . "CC.importe AS IMPORTE, CC.pagos AS PAGOS, "
                                     . "CC.saldo AS SALDO, CC.status AS ST  "
                                     . "FROM cartcliente AS CC "
                                     . "WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN CC.cliente = '{$x['CLIENTE']}' ELSE CC.cliente LIKE '%%' END) "
-                                    . "AND CC.saldo > 1 ORDER BY CC.fecha DESC;")->result());
+                                    . "AND CC.saldo > 1 ORDER BY CC.fecha DESC {$limite};")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
+
     public function getDocumentadosDeEsteClienteConSaldoXDocumento() {
         try {
             $x = $this->input->get();
@@ -66,6 +80,10 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function getControlesPorAplicarDeEsteCliente() {
         try {
             $x = $this->input->get();
+            $limite = "";
+            if ($x['CLIENTE'] === '') {
+                $limite = "LIMIT 10";
+            }
             print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE, 
                 D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES, 
                 D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,  
@@ -73,7 +91,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG 
                 FROM devolucionnp AS D 
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
-                                    . "AND D.staapl < 2  ORDER BY D.fecha DESC")->result());
+                                    . "AND D.staapl = 0  ORDER BY D.fecha DESC {$limite};")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -89,7 +107,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG 
                 FROM devolucionnp AS D 
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
-                                    . "AND D.staapl < 2  "
+                                    . "AND D.staapl = 0  "
                                     . "AND D.docto = {$x["DOCUMENTO"]} "
                                     . "LIMIT 1")->result());
         } catch (Exception $exc) {
@@ -116,7 +134,14 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             if ($x["NC"] !== '') {
                 $this->db->where("D.nc ", $x['NC']);
             }
-            print json_encode($this->db->order_by("D.fecha", "DESC")->get()->result());
+
+            $this->db->order_by("D.fecha", "DESC");
+
+            if ($x["CLIENTE"] === '') {
+                $this->db->limit(10);
+            }
+
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -166,6 +191,14 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function onGuardarNC() {
         try {
             $x = $this->input->post();
+            $fecha = $x["FECHA"];
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+
             $dev = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.control ='{$x["CONTROL"]}' LIMIT 1")->result();
             if (count($dev) > 0) {
                 $r = $dev[0];
@@ -192,7 +225,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "detalle" => $r->detalle,
                     "clasif" => $r->clasif,
                     "cargoa" => $r->cargoa,
-                    "fecha" => Date("Y-m-d h:i:s"),
+                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
                     "estilo" => $x["ESTILO"],
                     "comb" => $x["COLOR"],
                     "seriped" => $r->seriped,
@@ -201,6 +234,13 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "registro" => 0
                 ));
                 $this->db->insert('devctes', $ncc);
+                /*
+                 * COLOCA LA DEVOLUCION COMO APLICADA, SE ASIGNA LA NOTA DE CREDITO A LA DEVOLUCION
+                 *  
+                 */
+                $this->db->set('staapl', 1)->set('nc', $x["NC"])
+                        ->where('control', $x['CONTROL'])
+                        ->update('devolucionnp');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -211,38 +251,83 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->post();
             $HORA = Date("h:i:s");
-            $dnnp = $this->db->query("SELECT * FROM devolucionnp "
-                            . "WHERE cliente = {$x["CLIENTE"]} "
-                            . "AND nc = {$x["NC"]} "
-                            . "AND aplica = {$x["DOCUMENTO"]}")->result();
+            $dnnp = $this->db->query("SELECT D.* FROM devctes AS D "
+                            . "WHERE D.cliente = {$x["CLIENTE"]} "
+                            . "AND D.nc = {$x["NC"]} ")->result();
+            $total_final = 0;
             foreach ($dnnp as $k => $v) {
-                print_r($r);
-            }
-//            $nota_de_credito = array(
-//                "nc" => $x["NC"], "cliente" => $x["CLIENTE"],
-//                "numfac" => $x["xxxxx"],
-//                "tp" => $x["TP"], "orden" => $x["xxxxx"],
-//                "fecha" => $x["xxxxx"], "hora" => $HORA,
-//                "cant" => $x["xxxxx"], "descripcion" => $x["xxxxx"],
-//                "precio" => $x["xxxxx"], "subtot" => $x["xxxxx"],
-//                "concepto" => $x["xxxxx"], "status" => $x["xxxxx"],
-//                "monletra" => $x["xxxxx"], "defecto" => $x["xxxxx"],
-//                "detalle" => $x["xxxxx"], "registro" => $x["xxxxx"],
-//                "tmnda" => $x["xxxxx"], "tcamb" => $x["xxxxx"]);
-//            $this->db->insert('notcred', $nota_de_credito);
-            if (intval($x["TP"]) === 1) {
-                $n = array(
-                    "cliente" => $x["xxxxx"], "remicion" => $x["xxxxx"],
-                    "fecha" => $x["xxxxx"], "importe" => $x["xxxxx"],
-                    "tipo" => $x["xxxxx"], "gcom" => $x["xxxxx"],
-                    "agente" => $x["xxxxx"], "mov" => $x["xxxxx"],
-                    "doctopa" => $x["xxxxx"], "numpol" => $x["xxxxx"],
-                    "numfol" => $x["xxxxx"], "status" => $x["xxxxx"],
-                    "posfe" => $x["xxxxx"], "fechadep" => $x["xxxxx"],
-                    "pagada" => $x["xxxxx"], "fechacap" => $x["xxxxx"],
-                    "nc" => $x["xxxxx"], "control" => $x["xxxxx"],
-                    "stscont" => $x["xxxxx"], "regdev" => $x["xxxxx"]);
-                $this->db->insert('cartctepagos', $nota_de_credito);
+//                var_dump($v);
+                $fecha = $x["FECHA"];
+                $dia = substr($fecha, 0, 2);
+                $mes = substr($fecha, 3, 2);
+                $anio = substr($fecha, 6, 4);
+
+                $nueva_fecha = new DateTime();
+                $nueva_fecha->setDate($anio, $mes, $dia);
+                $cte = $this->db->query("SELECT C.* FROM clientes AS C WHERE C.Clave = {$x["CLIENTE"]} LIMIT 1")->result();
+                $cartctepagos = array(
+                    "cliente" => $x["CLIENTE"], "remicion" => $x["DOCUMENTO"],
+                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "importe" => $v->subtot, "tipo" => $x["TP"],
+                    "gcom" => 0, "agente" => $cte[0]->Agente,
+                    "mov" => 6, "doctopa" => "{$v->conce}-NC{$x["NC"]}",
+                    "numpol" => 0, "numfol" => 0,
+                    "status" => 1, "posfe" => 0,
+                    "fechadep" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "pagada" => 0, "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "nc" => $x["NC"], "control" => $x["CONTROL"],
+                    "stscont" => 0, "regdev" => 0);
+                $this->db->insert('cartctepagos', $cartctepagos);
+                $total_final += $v->subtot;
+
+                $notcred = array(
+                    "nc" => $x["NC"],
+                    "cliente" => $x["CLIENTE"],
+                    "numfac" => $x["DOCUMENTO"],
+                    "tp" => $x["TP"], "orden" => 6,
+                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "hora" => $HORA, "cant" => $v->paredev, "descripcion" => $v->conce,
+                    "precio" => $v->precio, "subtot" => $v->subtot,
+                    "concepto" => NULL,
+                    "monletra" => $x["TOTAL_EN_LETRA"], "defecto" => $v->defecto,
+                    "detalle" => $v->detalle, "registro" => $x["xxxxx"],
+                    "tmnda" => $x["xxxxx"], "tcamb" => $x["xxxxx"]);
+                $notcred["status"] = 0;
+                $this->db->insert('notcred', $notcred);
+                /* SI EL TP ES 1, SE AÑADE A LA NOTADE CREDITO UN */
+                if (intval($x["TP"]) === 1) {
+                    
+                }
+            }/* END FOR */
+
+            /* REPORTE */
+            switch (intval($x["TP"])) {
+                case 1:
+//                    notcreelec
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $jc->setParametros(array("logo" => base_url() . $this->session->LOGO,
+                        "empresa" => $this->session->EMPRESA_RAZON,
+                        "cliente" => $this->input->post('Cliente'),
+                        "tp" => $this->input->post('Tp')));
+                    $jc->setJasperurl('jrxml\notadecredito\notcreelec.jasper');
+                    $jc->setFilename('notcreelec_' . Date('dmYhis'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
+                case 2:
+//                    notacrer2
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $jc->setParametros(array("logo" => base_url() . $this->session->LOGO,
+                        "empresa" => $this->session->EMPRESA_RAZON,
+                        "cliente" => $this->input->post('Cliente'),
+                        "tp" => $this->input->post('Tp')));
+                    $jc->setJasperurl('jrxml\notadecredito\notacrer2.jasper');
+                    $jc->setFilename('notacrer2_' . Date('dmYhis'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -256,6 +341,17 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                                     . "FROM devctes AS D "
                                     . "WHERE D.cliente = {$x["CLIENTE"]} "
                                     . "AND D.nc = {$x["NC"]}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTotal() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT SUM(D.subtot) AS TOTAL FROM devctes AS D "
+                                    . "WHERE D.cliente = {$x["CLIENTE"]} "
+                                    . "AND D.nc = {$x["NC"]} ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
