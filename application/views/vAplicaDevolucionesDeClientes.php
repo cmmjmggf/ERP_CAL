@@ -93,8 +93,34 @@
                         <span class="font-weight-bold text-info serie_text">----</span>
                         <input type="text" id="Serie" name="Serie" class="form-control form-control-sm d-none" readonly=""> 
                     </div>
-
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-nones">
+                    
+                    <div class="w-100 my-1"></div>
+                    
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
+                        <span class="font-weight-bold text-danger">Importe factura: </span> 
+                        <span class="font-weight-bold text-info importe_factura">$ 1,000,000,000.00</span> 
+                    </div>
+                    
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
+                        <span class="font-weight-bold text-danger">Saldo factura: </span> 
+                        <span class="font-weight-bold text-info saldo_factura">$ 1,000,000,000.00</span> 
+                    </div>
+                    
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
+                        <span class="font-weight-bold text-danger">Importe devuelto: </span> 
+                        <span class="font-weight-bold text-info importe_devuelto">$ 1,000,000,000.00</span> 
+                    </div>
+                    
+                    <div class="w-100 my-1"></div>
+                    
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
+                        <span class="font-weight-bold text-danger">Saldo: </span> 
+                        <span class="font-weight-bold text-info total_devuelto">$ 1,000,000,000.00</span> 
+                    </div>
+                    
+                    <div class="w-100 my-1"></div>
+                    
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>IMPORTE FACTURA</label>
                         <input type="text" id="ImporteFactura" name="ImporteFactura" class="form-control form-control-sm" readonly="">
                         <p class="importe_fact">0000</p>
@@ -573,6 +599,7 @@
                     iMsg('LA DEVOLUCIÓN SOBREPASA EL SALDO DEL DOCUMENTO CARGADO, SELECCIONE OTRA DEVOLUCIÓN', 'w', function () {
                         pnlTablero.find("#ImporteDev").val(0);
                         pnlTablero.find(".importe_dev").text('0');
+                        pnlTablero.find(".importe_devuelto").text('0');
                         pnlTablero.find("#NuevoSaldo").val(0);
                         DevCtrlXAplicarDeEsteCliente.rows().deselect();
                         tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
@@ -581,6 +608,7 @@
                     onBeep(1);
                     pnlTablero.find("#ImporteDev").val(idv);
                     pnlTablero.find(".importe_dev").text(idv);
+                    pnlTablero.find(".importe_devuelto").text(idv);
                     pnlTablero.find("#NuevoSaldo").val(total_final);
                     var pp = {
                         CLIENTE: ClienteDevolucion.val(),
@@ -621,8 +649,10 @@
                 documento_dtm = dtm;
                 pnlTablero.find("#ImporteFactura").val(dtm.IMPORTE);
                 pnlTablero.find(".importe_fact").text(dtm.IMPORTE);
+                pnlTablero.find(".importe_factura").text(dtm.IMPORTE);
                 pnlTablero.find("#SaldoFactura").val(dtm.SALDO);
                 pnlTablero.find(".saldo_fact").text(dtm.SALDO);
+                pnlTablero.find(".saldo_factura").text(dtm.SALDO);
 
                 getUltimaNC();
                 /* BLINK */

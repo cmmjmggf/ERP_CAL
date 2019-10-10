@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomfisbanamex" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82c06bc2-fd12-4810-b55f-bf6126804875">
 	<property name="ireport.zoom" value="3.138428376721007"/>
-	<property name="ireport.x" value="38"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -12,7 +12,9 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT D.Clave AS CLAVE, D.Descripcion AS DEPARTAMENTO, E.Numero AS CLAVE_EMPLEADO,
+		<![CDATA[SELECT
+IFNULL(D.Clave,999) AS CLAVE, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
+E.Numero AS CLAVE_EMPLEADO,
 CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_EMPLEADO, (CASE WHEN E.TBanamex = 0 THEN "" ELSE E.TBanamex END) AS CUENTA,
 (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
 PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
@@ -27,17 +29,21 @@ ELSE
 (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)
 END) AS ABONO_NOMINA
 
-FROM empleados AS E INNER JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
+FROM empleados AS E LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
 ON E.Numero = PNL.numemp
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1 ORDER BY ABS(CLAVE) ASC]]>
 	</queryString>
 	<field name="CLAVE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="CLAVE_EMPLEADO" class="java.lang.Integer"/>
 	<field name="NOMBRE_EMPLEADO" class="java.lang.String"/>
-	<field name="CUENTA" class="java.lang.String"/>
+	<field name="CUENTA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="SUELDO_NETO" class="java.lang.Double"/>
 	<field name="SUELDO_FIS" class="java.lang.Float"/>
 	<field name="ABONO_FIS" class="java.lang.Double"/>
@@ -72,6 +78,10 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			<band height="10">
 				<textField>
 					<reportElement x="0" y="0" width="30" height="10" uuid="41d17729-446c-4ebd-852d-8b3a3bc8d06c"/>
+					<box>
+						<topPen lineWidth="2.0"/>
+						<bottomPen lineWidth="2.0"/>
+					</box>
 					<textElement>
 						<font size="6" isBold="true"/>
 					</textElement>
@@ -79,6 +89,10 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				</textField>
 				<textField>
 					<reportElement x="30" y="0" width="117" height="10" uuid="3f4bd097-e982-4370-a64e-6db3051a7680"/>
+					<box>
+						<topPen lineWidth="2.0"/>
+						<bottomPen lineWidth="2.0"/>
+					</box>
 					<textElement>
 						<font size="6" isBold="true"/>
 					</textElement>
@@ -234,7 +248,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="390" y="0" width="108" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -256,7 +270,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="390" y="0" width="108" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="8adcf2c6-dae9-40be-b7fe-c5320ea7e237"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
