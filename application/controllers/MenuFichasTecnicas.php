@@ -16,14 +16,17 @@ class MenuFichasTecnicas extends CI_Controller {
             $this->load->view('vEncabezado')->view('vFondo');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vMenuFichasTecnicas');
+                    break;
+                case 'PRODUCCION':
+                    /* INGENIERIA */
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);

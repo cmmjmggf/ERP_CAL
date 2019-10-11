@@ -27,6 +27,10 @@ class MenuProduccion extends CI_Controller {
                 case 'RECURSOS HUMANOS':
                     $this->load->view('vMenuProduccion');
                     break;
+                case 'PRODUCCION':
+                    /* INGENIERIA */
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    break;
             }
             $this->load->view('vProduccion')->view('vFooter')->view('vWatermark', $dt);
         } else {

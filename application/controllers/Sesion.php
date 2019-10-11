@@ -19,9 +19,7 @@ class Sesion extends CI_Controller {
             $this->load->view('vEncabezado')->view('vFondo');
             switch ($this->session->TipoAcceso) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')
-                            ->view('vMenuPrincipal')
-                            ->view('vQuickMenu');
+                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')->view('vQuickMenu');
                     $is_valid = true;
                     break;
                 case 'VENTAS':
@@ -45,8 +43,7 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')
-                        ->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'PROVEEDORES':

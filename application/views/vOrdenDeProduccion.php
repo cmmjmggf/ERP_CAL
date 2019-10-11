@@ -27,6 +27,13 @@
             <div class="col-12 text-center">
                 <p class="text-danger font-weight-bold total_pares font-italic">-</p>
             </div>
+            <div class="col-12 col-xs-12 col-md-12 col-lg-10 col-xl-10">
+
+            </div>
+            <div class="col-12 col-xs-12 col-md-12 col-lg-2 col-xl-2">
+                <label>Control</label>    
+                <input type="text" class="form-control form-control-sm numbersOnly" id="Control" maxlength="2"  min="1" max="52">
+            </div>
             <div id="Resultado" class="col-12 text-center my-2"></div>
             <div id="Controles" class="table-responsive">
                 <table id="tblControles" class="table table-sm display hover nowrap" style="width:100%">
@@ -65,7 +72,9 @@
     var master_url = base_url + 'index.php/OrdenDeProduccion/';
     var pnlTablero = $("#pnlTablero"), Maquila = pnlTablero.find("#col12_filter"),
             Semana = pnlTablero.find("#col13_filter"), Anio = pnlTablero.find("#col14_filter"),
-            btnGenerar = pnlTablero.find("#btnGenerar"), AnioValido = (new Date()).getFullYear();
+            btnGenerar = pnlTablero.find("#btnGenerar"),
+            AnioValido = (new Date()).getFullYear(),
+            Control = pnlTablero.find("#Control");
 
     var Controles;
     var tblControles = $('#tblControles');
@@ -95,6 +104,7 @@
                 d.MAQUILA = (Maquila.val().trim());
                 d.SEMANA = (Semana.val().trim());
                 d.ANIO = (Anio.val().trim());
+                d.CONTROL = (Control.val().trim());
             }
         },
         "columnDefs": [
@@ -148,7 +158,7 @@
         keys: true,
         "autoWidth": true,
         "colReorder": true,
-        "displayLength": 50,
+        "displayLength": 25,
         "scrollY": 380,
         "scrollX": true,
         "bLengthChange": false,
@@ -190,7 +200,7 @@
                     });
                 }
             });
-            
+
             Semana.keydown(function (e) {
                 if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
                     Controles.ajax.reload(function () {
@@ -198,7 +208,7 @@
                         getParesTotales();
                     });
                 }
-            }).on('keyup keypress',function (e) {
+            }).on('keyup keypress', function (e) {
                 if (Maquila.val() !== '' && Semana.val() !== '') {
                     Controles.ajax.reload(function () {
                         onCloseOverlay();
@@ -208,13 +218,13 @@
             });
 
             btnGenerar.prop("disabled", true);
-            
+
             Anio.val((new Date()).getFullYear());
-            
+
             Anio.focusout(function () {
                 onVerificarFormValido();
                 getParesTotales();
-            }).on('keyup keypress',function (e) {
+            }).on('keyup keypress', function (e) {
                 if (Maquila.val() !== '' && Semana.val() !== '') {
                     Controles.ajax.reload(function () {
                         onCloseOverlay();
@@ -225,7 +235,7 @@
 
             btnReload.click(function () {
                 if (Maquila.val() !== '' && Semana.val() !== '') {
-                     Controles.ajax.reload(function () {
+                    Controles.ajax.reload(function () {
                         onCloseOverlay();
                         getParesTotales();
                     });

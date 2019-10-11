@@ -138,7 +138,7 @@ class OrdenDeProduccion extends CI_Controller {
                                     . "S.T16, S.T17, S.T18, S.T19, S.T20,"
                                     . "S.T21,S.T22,L.Clave AS CLAVE_LINEA, L.Descripcion AS LINEA,"
                                     . "E.Horma AS HORMA, E.Descripcion AS OESTILOT, "
-                                    . "CO.Descripcion AS OCOLORT, P.ID AS PEDIDO_DETALLE,"
+                                    . "CO.Descripcion AS OCOLORT, P.Clave AS PEDIDO_DETALLE,"
                                     . "P.*, P.Clave AS Pedido", false)
                             ->from('pedidox AS P')
                             ->join('clientes AS C', 'P.Cliente = C.Clave', 'left')
@@ -149,12 +149,13 @@ class OrdenDeProduccion extends CI_Controller {
                             ->join('series AS S', 'P.Serie = S.Clave', 'left')
                             ->join('lineas AS L', 'E.Linea = L.Clave', 'left')
                             ->join('controles AS CT', 'CT.PedidoDetalle = P.Clave', 'left')
-                            ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.ID', 'left')
+                            ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.Clave', 'left')
                             ->where('P.Maquila', $x['MAQUILA'])
                             ->where('P.Semana', $x['SEMANA'])
                             ->where('P.Ano', $x['ANO'])
-                            ->where('E.Clave = CO.Estilo '
-                                    . 'AND CT.PedidoDetalle = P.ID  AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
+                            ->where('E.Clave = CO.Estilo  AND CT.PedidoDetalle = P.Clave  '
+                                    . 'AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL '
+                                    . 'AND CT.Control = P.Control', null, false)
                             ->get()->result();
             $str = $this->db->last_query();
 //            PRINT $str;
@@ -208,6 +209,9 @@ class OrdenDeProduccion extends CI_Controller {
                 $piel = 1;
                 $forro = 1;
                 $sintetico = 1;
+                $str = $this->db->last_query();
+//            PRINT $str;
+//            exit(0);
                 foreach ($P_F_S_S as $kk => $vv) {
                     switch ($vv->Grupo) {
                         case 'PIEL':
@@ -238,7 +242,8 @@ class OrdenDeProduccion extends CI_Controller {
                 $op["TotalPiel"] = $total_piel;
                 $op["TotalForro"] = $total_forro;
                 $op["TotalSintetico"] = $total_sintetico;
-
+//                var_dump($op);
+//                exit(0);
                 $op["Suaje"] = '';
 
                 $op["SerieCorrida"] = $v->SERIE;
@@ -312,6 +317,49 @@ class OrdenDeProduccion extends CI_Controller {
                     $opd["PiezaClasificacion"] = $vvv->CLASIFICACION;
                     $opd["DepartamentoArt"] = $vvv->DEPTOART;
                     $this->db->insert('ordendeproducciond', $opd);
+                }
+
+                /* MOVER ESTATUS EN CASO DE MAQUILAS 2,3,4,5...99 */
+                if (intval($x['MAQUILA']) >= 2) {
+                    /*
+                     * CUANDO LOS TRAEN DE UNA MAQUILA QUE NO ES LA 1 (UNO): SE DEBEN DE PROCESAR A ENSUELADO 
+                     * 140 = ENSUELADO
+                     */
+
+                    /* 1.- MOVER EL STSAVAN EN PEDIDOX */
+                    $this->db->set('stsavan', 55)->set('DeptoProduccion', 140)
+                            ->set('EstatusProduccion', 'ENSUELADO')
+                            ->where('Maquila', $x['MAQUILA'])
+                            ->where('Semana', $x['SEMANA'])
+                            ->where('Ano', $x['ANO'])
+                            ->where('Control', $v->Control)
+                            ->update('pedidox');
+
+                    /* 2.- AÑADIR UN AVANCE A ENSUELADO */
+                    $this->db->insert('avance', array(
+                        'Control' => $v->Control,
+                        'Departamento' => 140,
+                        'DepartamentoT' => 'ENSUELADO',
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'FechaAvance' => Date('d/m/Y'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => 397,
+                        'Docto' => 0
+                    ));
+
+                    /* 3.- ACTUALIZAR LA FECHA 55 EN AVAPRD PARA ENSUELADO */
+                    $this->db->set('fec55', Date('Y-m-d h:i:s'))
+                            ->where('contped', $v->Control)
+                            ->update('avaprd');
+
+                    /* 4.- ACTUALIZAR EN CONTROLES  */
+                    $this->db->set('DeptoProduccion', 140)
+                            ->set('EstatusProduccion', 'ENSUELADO')
+                            ->where('Control', $v->Control)
+                            ->update('controles');
                 }
             }
             print count($PEDIDO_DETALLE);
