@@ -697,7 +697,7 @@
 //                if (a.length > 0) {
             if (ClienteFactura.val() && Documento.val() && TPFactura.val()) {
                 onBeep(1);
-                onOpenOverlay('Espere por favor...');
+                onOpenOverlay('Espere un momento por favor...');
                 $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
                     CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
                     DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : '',
@@ -787,6 +787,7 @@
             onBeep(1);
             if (ClienteFactura.val()) {
                 onOpenOverlay('Guardando...');
+
                 var p = {
                     FECHA: FechaFactura.val(),
                     CLIENTE: ClienteFactura.val(),
@@ -794,19 +795,24 @@
                     FACTURA: Documento.val(),
                     MONEDA: TMNDAFactura.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
+                    IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),
-                    REFACTURACION: xRefacturacion[0].cheked ? 1 : 0
+                    REFACTURACION: xRefacturacion[0].cheked ? 1 : 0,
+                    TOTAL_EN_LETRA: TotalLetra.find("span").text(),
+                    REFERENCIA: ReferenciaFacturacion.val()
                 };
                 $.post('<?php print base_url('FacturacionProduccion/onCerrarDocto') ?>', p).done(function (abc) {
+
                     iMsg('SE HA CERRADO EL DOCTO', 's', function () {
                         btnCierraDocto.attr('disabled', true);
-                        ClienteFactura[0].selectize.enable();
-                        TPFactura[0].selectize.enable();
-                        FechaFactura.attr('readonly', false);
-                        Documento.attr('readonly', false);
-                        FCAFactura.attr('readonly', false);
-                        PAGFactura.attr('readonly', false);
-                        TMNDAFactura.attr('readonly', false);
+                        btnVistaPreviaF.trigger('click');
+//                        ClienteFactura[0].selectize.enable();
+//                        TPFactura[0].selectize.enable();
+//                        FechaFactura.attr('readonly', false);
+//                        Documento.attr('readonly', false);
+//                        FCAFactura.attr('readonly', false);
+//                        PAGFactura.attr('readonly', false);
+//                        TMNDAFactura.attr('readonly', false);
                     });
                 }).fail(function (x) {
                     getError(x);
@@ -1471,9 +1477,18 @@
                                         var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
                                         var stt = parseFloat(xx.Precio) * prs;
                                         SubtotalFacturacion.val(stt);
-                                        SubtotalFacturacionIVA.val(stt * 0.16);
+                                        switch (parseInt(TPFactura.val())) {
+                                            case 1:
+                                                SubtotalFacturacionIVA.val(stt * 0.16);
+                                                TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
+                                                break;
+                                            case 2:
+                                                SubtotalFacturacionIVA.val(stt);
+                                                TotalLetra.find("span").text(NumeroALetras(stt));
+                                                break;
+                                        }
                                         //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
-                                        TotalLetra.find("span").text(NumeroALetras(stt));
+
                                         pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
                                         EstatusControl.val(xx.ESTATUS);
                                         btnFacturaXAnticipoDeProducto.attr('disabled', false);

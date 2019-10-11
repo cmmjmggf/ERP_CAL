@@ -130,10 +130,62 @@ class FacturacionProduccion extends CI_Controller {
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
+            $HORA = Date('d/m/Y')/* HORA ES UNA FECHA, NO ES UNA HORA NADA QUE VER EL NOMBRE */;
+            $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
+
+//            foreach ($this->db->query("SELECT * FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']} AND F.staped = 1")->result() AS $k => $v) {
+//                
+//            }
+
+            $this->db->set('staped', $HORAS)
+                    ->set('hora', $HORA)
+                    ->set('horas', $HORAS)
+                    ->set('referen', $x['REFERENCIA'])
+                    ->set('monletra', $x['TOTAL_EN_LETRA'])
+                    ->where('factura', $x['FACTURA'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->where('tp', $x['TP_DOCTO'])
+                    ->where('staped', 1)->update('facturacion');
+            $this->db->set('staped', 2)
+                    ->where('factura', $x['FACTURA'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->where('tp', $x['TP_DOCTO'])
+                    ->where('staped', 1)->update('facturacion');
+
             $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'];
-            if (intval($x['MONEDA']) === 1) {
+            
+            /* MONEDAS 
+             * 1 = PESOS
+             * 2 = DOLARES
+             */
+            switch (intval($x['MONEDA'])) {
+                case 1:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL *= 0.16;
+                            break;
+                        case 2:
+                            $TOTAL = $x['IMPORTE_TOTAL_CON_IVA'];
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL *= $x['TIPO_DE_CAMBIO'];
+                            $TOTAL *= 0.16;
+                            break;
+                        case 2:
+                            $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
+                            break;
+                    }
+                    break;
+            }
+            
+            if (intval($x['MONEDA']) === 2) {
                 $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
             }
+            
             $cc = array(
                 'C.cliente' => $x['CLIENTE'], 'C.remicion' => $x['FACTURA'],
                 'C.fecha' => $x['FECHA'], 'C.importe' => $TOTAL,
@@ -218,6 +270,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["costo"] = NULL;
             $f["obs"] = $x["OBSERVACIONES"];
             $this->db->insert('facturacion', $f);
+
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
                 case 1:

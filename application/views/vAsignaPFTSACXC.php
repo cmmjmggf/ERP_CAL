@@ -975,6 +975,7 @@
             onEntregarMaterial();
         }
     }
+    
     function onEntregarMaterial() {
         var seguro = true;
         if (Entregar.val() > Explosion.val()) {

@@ -83,9 +83,31 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getPieles() {
         try {
-            $x = $this->input;
-            print json_encode($this->apftsacxc->getPieles(
-                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+            $x = $this->input->get();
+//            print json_encode($this->apftsacxc->getPieles(
+//                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+
+            $xdb = $this->db;
+            $xdb->select("OP.ID, OP.ControlT AS CONTROL, OPD.Articulo AS ARTICULO_CLAVE, "
+                            . "OPD.ArticuloT AS ARTICULO_DESCRIPCION, OPD.UnidadMedidaT AS UM, OPD.Pieza AS PIEZA, "
+                            . "OPD.PiezaT AS PIEZA_DESCRIPCION, OPD.Grupo AS GRUPO, FORMAT(OPD.Cantidad,3) AS CANTIDAD, "
+                            . "OP.ControlT AS CONTROL, OP.Semana AS SEMANA, CONCAT(96,99,100) AS FRACCION, "
+                            . "OP.Pares AS PARES")
+                    ->from("ordendeproduccion AS OP")
+                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
+                $xdb->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            }
+            $xdb->where('OPD.Grupo', 1)->where('OPD.Departamento', 10)
+                    ->group_by('OPD.OrdenDeProduccion')
+                    ->group_by('OP.ControlT')
+                    ->group_by('OPD.Pieza')
+                    ->group_by('OPD.Articulo')
+                    ->group_by('OPD.UnidadMedidaT');
+            if ($FT === 1 || $FT === '1') {
+                $xdb->limit(10);/*CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            print json_encode($xdb->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -131,65 +153,79 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function onEntregarPielForroTextilSintetico() {
         try {
-            $x = $this->input;
+            $x = $this->input->post();
+            $xx = $this->input->post();
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
             $ESTATUS = $this->db->select('COUNT(PED.stsavan) AS AVANCECORTE', false)
-                            ->from('pedidox AS PED')->where('PED.Control', $x->post('CONTROL'))->where('PED.stsavan', 2)
+                            ->from('pedidox AS PED')->where('PED.Control', $x['CONTROL'])->where('PED.stsavan', 2)
                             ->get()->result();
             if (intval($ESTATUS[0]->AVANCECORTE) <= 0) {
-                $this->db->set('Piocha', $x->post('ENTREGA'))->where('Control', $x->post('CONTROL'))->update('asignapftsacxc');
+                $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])->update('asignapftsacxc');
             } else {
                 /**/
-                $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x->post('CONTROL'))->get()->result()[0]->Ano;
+                $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
                 /* COMPROBAR SI YA EXISTE EL REGISTRO POR EMPLEADO,SEMANA, CONTROL, FRACCION, ARTICULO */
-                $DT = $this->apftsacxc->onComprobarEntrega($x->post('SEMANA'), $x->post('CONTROL'), $x->post('ARTICULO'), $x->post('FRACCION'));
+//                $DT = $this->apftsacxc->onComprobarEntrega($x['SEMANA'], $x['CONTROL'], $x['ARTICULO'], $x['FRACCION']);
+                $DT = $this->db->select("A.*")
+                                ->from("asignapftsacxc AS A")
+                                ->where('A.Empleado', 0)
+                                ->where("A.Articulo LIKE '{$xx['ARTICULO']}' "
+                                        . "AND A.Semana LIKE '{$xx['SEMANA']}' "
+                                        . "AND A.Control LIKE '{$xx['CONTROL']}' "
+                                        . "AND A.Fraccion LIKE '{$xx['FRACCION']}' ", null, false)
+                                ->get()->result();
                 /* EXISTE LA POSIBILIDAD DE QUE LA FRACCION SEA DIFERENTE Y QUE HAGA UN NUEVO REGISTRO */
                 if (count($DT) > 0) {
-                    $this->db->set('Cargo', ( $DT[0]->Cargo + $x->post('ENTREGA')))->where('ID', $DT[0]->ID)->update('asignapftsacxc');
+                    $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))->where('ID', $DT[0]->ID)->update('asignapftsacxc');
                 } else {
-                    $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x->post('ARTICULO'));
+//                    $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
+                    $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                                    ->from("preciosmaquilas AS PM")
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
+                                    ->where("PM.Maquila", 1)->get()->result();
+//                            if(count((array)$obj)>0){
                     $data = array(
                         'PrecioProgramado' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
                         'PrecioActual' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                        'OrdenProduccion' => $x->post('ORDENDEPRODUCCION'),
-                        'Pares' => $x->post('PARES'),
-                        'Semana' => $x->post('SEMANA'),
-                        'Control' => $x->post('CONTROL'),
-                        'Fraccion' => $x->post('FRACCION'),
+                        'OrdenProduccion' => $x['ORDENDEPRODUCCION'],
+                        'Pares' => $x['PARES'],
+                        'Semana' => $x['SEMANA'],
+                        'Control' => $x['CONTROL'],
+                        'Fraccion' => $x['FRACCION'],
                         'Empleado' => 0,
-                        'Articulo' => $x->post('ARTICULO'),
-                        'Descripcion' => $x->post('ARTICULOT'),
+                        'Articulo' => $x['ARTICULO'],
+                        'Descripcion' => $x['ARTICULOT'],
                         'Fecha' => Date('d/m/Y h:i:s a'),
-                        'Explosion' => $x->post('EXPLOSION'),
-                        'Cargo' => $x->post('EXPLOSION'),
-                        'Abono' => $x->post('ENTREGA'),
+                        'Explosion' => $x['EXPLOSION'],
+                        'Cargo' => $x['EXPLOSION'],
+                        'Abono' => $x['ENTREGA'],
                         'Devolucion' => 0,
                         'Estatus' => 'A',
-                        'TipoMov' => $x->post('TIPO')/* 1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
-                        'Extra' => $x->post('MATERIAL_EXTRA'),
-                        'ExtraT' => ($x->post('MATERIAL_EXTRA') > 0 && $x->post('EXPLOSION') < $x->post('ENTREGA')) ? $x->post('ENTREGA') - $x->post('EXPLOSION') : 0
+                        'TipoMov' => $x['TIPO']/* 1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
+                        'Extra' => $x['MATERIAL_EXTRA'],
+                        'ExtraT' => ($x['MATERIAL_EXTRA'] > 0 && $x['EXPLOSION'] < $x['ENTREGA']) ? $x['ENTREGA'] - $x['EXPLOSION'] : 0
                     );
                     $this->db->insert('asignapftsacxc', $data);
                     $this->db->query("UPDATE asignapftsacxc AS A INNER JOIN ordendeproduccion AS O ON A.OrdenProduccion = O.ID
                     SET A.Estilo = O.Estilo, A.Color = O.Color
-                    WHERE A.Control LIKE '" . $x->post('CONTROL') . "'
-                    AND A.OrdenProduccion = " . $x->post('ORDENDEPRODUCCION')
-                            . " AND A.Articulo = " . $x->post('ARTICULO')
-                            . " AND A.Pares = " . $x->post('PARES')
-                            . " AND A.Semana = " . $x->post('SEMANA')
-                            . " AND A.Fraccion = " . $x->post('FRACCION'));
+                    WHERE A.Control = '" . $x['CONTROL'] . "'
+                    AND A.OrdenProduccion = " . $x['ORDENDEPRODUCCION']
+                            . " AND A.Articulo = " . $x['ARTICULO']
+                            . " AND A.Pares = " . $x['PARES']
+                            . " AND A.Semana = " . $x['SEMANA']
+                            . " AND A.Fraccion = " . $x['FRACCION']);
                     /* GENERAR AVANCE DE CONTROL A CORTE */
 
                     /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
-                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')->where('A.Control', $x->post('CONTROL'))->where('A.Departamento', 10)->get()->result();
+                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
                     print "\n onEntregarPielForroTextilSintetico ESTATUS DE AVANCE: ";
 
                     print "\n *FIN ESTATUS DE AVANCE* \n";
                     if (intval($check_avance[0]->EXISTE) === 0) {
                         /* YA EXISTE UN AVANCE DE CORTE EN ESTE CONTROL */
                         $avance = array(
-                            'Control' => $x->post('CONTROL'),
+                            'Control' => $x['CONTROL'],
                             'FechaAProduccion' => Date('d/m/Y'),
                             'Departamento' => 10,
                             'DepartamentoT' => 'CORTE',
@@ -201,9 +237,11 @@ class AsignaPFTSACXC extends CI_Controller {
                         );
                         $this->db->insert('avance', $avance);
                         $this->db->set('EstatusProduccion', 'CORTE')
-                                ->where('Control', $x->post('CONTROL'))
+                                ->where('Control', $x['CONTROL'])
                                 ->update('controles');
-                        $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                        $this->db->set('stsavan', 10)
+                                ->where('Control', $x['CONTROL'])
+                                ->update('pedidox');
                     }
                     /* FIN DE AVANCE DE CONTROL A CORTE */
 
@@ -214,19 +252,19 @@ class AsignaPFTSACXC extends CI_Controller {
                     }
                     /* AGREGAR MOVIMIENTO DE ARTICULO */
                     $datos = array(
-                        'Articulo' => $x->post('ARTICULO'),
+                        'Articulo' => $x['ARTICULO'],
                         'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                        'CantidadMov' => $x->post('ENTREGA'),
+                        'CantidadMov' => $x['ENTREGA'],
                         'FechaMov' => Date('d/m/Y'),
                         'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
                         'TipoMov' => 'SPR', /* SXP = SALIDA A PRODUCCION */
-                        'DocMov' => $x->post('ORDENDEPRODUCCION'),
+                        'DocMov' => $x['ORDENDEPRODUCCION'],
                         'Tp' => '',
-                        'Maq' => intval(substr($x->post('CONTROL'), 4, 2)),
-                        'Sem' => $x->post('SEMANA'),
+                        'Maq' => intval(substr($x['CONTROL'], 4, 2)),
+                        'Sem' => $x['SEMANA'],
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
-                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x->post('ENTREGA')
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
                     );
                     $this->db->insert("movarticulos_fabrica", $datos);
                 }
@@ -239,80 +277,80 @@ class AsignaPFTSACXC extends CI_Controller {
     public function onDevolverPielForro() {
         try {
             /* AGREGAR MOVIMIENTO DE ARTICULO */
-            $x = $this->input;
+            $x = $this->input->post();
 
-            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x->post('CONTROL'))->get()->result()[0]->Ano;
+            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
 
-            if (floatval($x->post('REGRESO')) === 0) {
+            if (floatval($x['REGRESO']) === 0) {
                 /* OBTENER ULTIMO REGRESO */
-                $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x->post('ID'));
+                $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
-                    $this->db->set('Empleado', $x->post('EMPLEADO'))->set('Empleado', $x->post('EMPLEADO'))
-                            ->set('Devolucion', $x->post('REGRESO') + $REGRESO[0]->REGRESO)
+                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                             ->set('MaterialMalo', 0)
-                            ->where('ID', $x->post('ID'))->update('asignapftsacxc');
+                            ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
-                    $this->db->set('Empleado', $x->post('EMPLEADO'))
-                            ->set('Devolucion', $x->post('REGRESO'))
+                    $this->db->set('Empleado', $x['EMPLEADO'])
+                            ->set('Devolucion', $x['REGRESO'])
                             ->set('MaterialMalo', 0)
-                            ->where('ID', $x->post('ID'))->update('asignapftsacxc');
+                            ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
             } else {
-                $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x->post('ARTICULO'));
-                if ($x->post('REGRESO') >= 0 && $x->post("MATERIALMALO") <= 0) {
+                $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
+                if ($x['REGRESO'] >= 0 && $x->post("MATERIALMALO") <= 0) {
                     $datos = array(
-                        'Articulo' => $x->post('ARTICULO'),
+                        'Articulo' => $x['ARTICULO'],
                         'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                        'CantidadMov' => $x->post('REGRESO'),
+                        'CantidadMov' => $x['REGRESO'],
                         'FechaMov' => Date('d/m/Y'),
                         'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
                         'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
-                        'DocMov' => $x->post('ID'),
+                        'DocMov' => $x['ID'],
                         'Tp' => ''/*                         * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
                         'Maq' => 1,
-                        'Sem' => substr($x->post('CONTROL'), 2, 2),
+                        'Sem' => substr($x['CONTROL'], 2, 2),
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
-                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x->post('REGRESO')
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
                     );
                     $this->db->insert("movarticulos_fabrica", $datos);
 
                     /* OBTENER ULTIMO REGRESO */
-                    $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x->post('ID'));
+                    $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                     if (isset($REGRESO[0]->REGRESO)) {
-                        $this->db->set('Empleado', $x->post('EMPLEADO'))->set('Empleado', $x->post('EMPLEADO'))
-                                ->set('Devolucion', $x->post('REGRESO') + $REGRESO[0]->REGRESO)
+                        $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
+                                ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                                 ->set('MaterialMalo', 0)
-                                ->where('ID', $x->post('ID'))->update('asignapftsacxc');
+                                ->where('ID', $x['ID'])->update('asignapftsacxc');
                     } else {
-                        $this->db->set('Empleado', $x->post('EMPLEADO'))
-                                ->set('Devolucion', $x->post('REGRESO'))
+                        $this->db->set('Empleado', $x['EMPLEADO'])
+                                ->set('Devolucion', $x['REGRESO'])
                                 ->set('MaterialMalo', 0)
-                                ->where('ID', $x->post('ID'))->update('asignapftsacxc');
+                                ->where('ID', $x['ID'])->update('asignapftsacxc');
                     }
                 } else {
                     if ($x->post("MATERIALMALO") > 0) {
                         $datos = array(
-                            'Articulo' => $x->post('ARTICULO'),
+                            'Articulo' => $x['ARTICULO'],
                             'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                            'CantidadMov' => $x->post('REGRESO'),
+                            'CantidadMov' => $x['REGRESO'],
                             'FechaMov' => Date('d/m/Y'),
                             'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
                             'TipoMov' => 'SPR', /* EXP = ENTRADA POR PRODUCCION */
-                            'DocMov' => $x->post('ID'),
+                            'DocMov' => $x['ID'],
                             'Tp' => '',
                             'Maq' => 1,
-                            'Sem' => substr($x->post('CONTROL'), 2, 2),
+                            'Sem' => substr($x['CONTROL'], 2, 2),
                             'Ano' => $Ano,
                             'OrdenCompra' => 'BASURA',
-                            'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x->post('REGRESO')
+                            'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
                         );
                         $this->db->insert("movarticulos_fabrica", $datos);
                         /**/
-                        $this->db->set('Empleado', $x->post('EMPLEADO'))
-                                ->set('Basura', $x->post('REGRESO'))
+                        $this->db->set('Empleado', $x['EMPLEADO'])
+                                ->set('Basura', $x['REGRESO'])
                                 ->set('MaterialMalo', 1)
-                                ->where('ID', $x->post('ID'))->update('asignapftsacxc');
+                                ->where('ID', $x['ID'])->update('asignapftsacxc');
                     } else {
                         print "LA CANTIDAD DEVUELTA ESTA DEFECTUOSA HA SIDO ZERO 0";
                     }
