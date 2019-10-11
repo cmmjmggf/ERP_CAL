@@ -53,7 +53,7 @@
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlEstadoCuentaProveedor);
         setFocusSelectToInputOnChange('#aProveedor', '#btnImprimir', mdlEstadoCuentaProveedor);
-        handleEnter();
+        handleEnterDiv(mdlEstadoCuentaProveedor);
         mdlEstadoCuentaProveedor.on('shown.bs.modal', function () {
             mdlEstadoCuentaProveedor.find("input").val("");
             $.each(mdlEstadoCuentaProveedor.find("select"), function (k, v) {

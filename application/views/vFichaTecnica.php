@@ -626,7 +626,7 @@
         getEstilos();
         getPiezas();
         getArticulos();
-        handleEnter();
+        handleEnterDiv(pnlTablero);
     });
 
 

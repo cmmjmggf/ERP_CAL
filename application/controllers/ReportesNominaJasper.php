@@ -637,8 +637,7 @@ FROM costomanoobratemp CMT
     public function generaArchivoBancoInterna() {
         $mes = Date('m');
         $arr1 = str_split($mes);
-        $arr2 = str_split($mes, 1);
-        $filename = 'D814902' . $arr1[0] . '.' . $arr2[1] . Date('j') . '.txt';
+        $filename = 'D814902' . $arr1[0] . '.' . $arr1[1] . Date('d') . '.txt';
         header("Content-Description: File Transfer");
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . $filename);
@@ -672,8 +671,7 @@ FROM costomanoobratemp CMT
     public function generaArchivoBancoFiscal() {
         $mes = Date('m');
         $arr1 = str_split($mes);
-        $arr2 = str_split($mes, 1);
-        $filename = 'D814901' . $arr1[0] . '.' . $arr2[1] . Date('j') . '.txt';
+        $filename = 'D814901' . $arr1[0] . '.' . $arr1[1] . Date('d') . '.txt';
         header("Content-Description: File Transfer");
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . $filename);
@@ -936,9 +934,8 @@ FROM costomanoobratemp CMT
         $mes = Date('m');
 
         $arr1 = str_split($mes);
-        $arr2 = str_split($mes, 1);
 
-        $filename = 'A814901' . $arr1[0] . '.' . $arr2[1] . Date('j') . '.txt';
+        $filename = 'A814901' . $arr1[0] . '.' . $arr1[1] . Date('d') . '.txt';
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . $filename);
         header('Expires: 0');

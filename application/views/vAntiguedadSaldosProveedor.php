@@ -58,7 +58,7 @@
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlAntiguedadSaldosProveedores);
         setFocusSelectToInputOnChange('#aProveedor', '#FechaIni', mdlAntiguedadSaldosProveedores);
-        handleEnter();
+        handleEnterDiv(mdlAntiguedadSaldosProveedores);
         mdlAntiguedadSaldosProveedores.on('shown.bs.modal', function () {
             mdlAntiguedadSaldosProveedores.find("input").val("");
             $.each(mdlAntiguedadSaldosProveedores.find("select"), function (k, v) {
