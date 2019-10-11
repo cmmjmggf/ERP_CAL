@@ -55,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                     
+
                 </table>
             </div>
         </div>
@@ -164,7 +164,7 @@
                     $(v).addClass('HasMca');
                 }
             });
-        }, 
+        },
         initComplete: function (a, b) {
             HoldOn.close();
         }
@@ -182,37 +182,60 @@
 
             Controles = tblControles.DataTable(options_ordendeproduccion);
 
+            Maquila.keydown(function (e) {
+                if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
+                    Controles.ajax.reload(function () {
+                        onCloseOverlay();
+                        getParesTotales();
+                    });
+                }
+            });
+            
             Semana.keydown(function (e) {
                 if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
                     Controles.ajax.reload(function () {
                         onCloseOverlay();
-                        getParesTotales()
+                        getParesTotales();
+                    });
+                }
+            }).on('keyup keypress',function (e) {
+                if (Maquila.val() !== '' && Semana.val() !== '') {
+                    Controles.ajax.reload(function () {
+                        onCloseOverlay();
+                        getParesTotales();
                     });
                 }
             });
 
             btnGenerar.prop("disabled", true);
+            
             Anio.val((new Date()).getFullYear());
+            
             Anio.focusout(function () {
                 onVerificarFormValido();
-            }).keydown(function (e) {
-                if (e.keyCode === 13 && Maquila.val() !== '' && Semana.val() !== '') {
-                    onOpenOverlay('');
+                getParesTotales();
+            }).on('keyup keypress',function (e) {
+                if (Maquila.val() !== '' && Semana.val() !== '') {
                     Controles.ajax.reload(function () {
                         onCloseOverlay();
+                        getParesTotales();
                     });
                 }
             });
 
             btnReload.click(function () {
                 if (Maquila.val() !== '' && Semana.val() !== '') {
-                    Controles.ajax.reload();
+                     Controles.ajax.reload(function () {
+                        onCloseOverlay();
+                        getParesTotales();
+                    });
                 }
             });
 
             btnGenerar.click(function () {
                 btnGenerar.prop("disabled", true);
                 onAgregarAOrdenDeProduccion();
+                getParesTotales();
             });
         });
     }));
@@ -324,6 +347,7 @@
 
     function getParesTotales() {
         var prs = 0;
+        console.log(Controles.rows().data().count());
         $.each(Controles.rows().data(), function (k, v) {
             prs += parseInt(v.Pares);
         });

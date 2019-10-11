@@ -76,9 +76,9 @@ class OrdenDeProduccion extends CI_Controller {
                                 . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                         ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
                         ->join('series AS S', 'PD.Serie = S.Clave')
-                        ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
-                        ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
-                        ->where('PD.Control <> 0 AND OP.ID IS NULL', null, false)
+                        ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
+                        ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
+                        ->where('PD.Control <> 0 AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
                         ->where('CT.Estatus', 'A');
                 if ($x["ANIO"] !== '') {
                     $this->db->where('PD.Ano', $x["ANIO"]);
@@ -148,13 +148,13 @@ class OrdenDeProduccion extends CI_Controller {
                             ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
                             ->join('series AS S', 'P.Serie = S.Clave', 'left')
                             ->join('lineas AS L', 'E.Linea = L.Clave', 'left')
-                            ->join('controles AS CT', 'CT.PedidoDetalle = P.ID', 'left')
+                            ->join('controles AS CT', 'CT.PedidoDetalle = P.Clave', 'left')
                             ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.ID', 'left')
                             ->where('P.Maquila', $x['MAQUILA'])
                             ->where('P.Semana', $x['SEMANA'])
                             ->where('P.Ano', $x['ANO'])
                             ->where('E.Clave = CO.Estilo '
-                                    . 'AND CT.PedidoDetalle = P.ID  AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL', null, false)
+                                    . 'AND CT.PedidoDetalle = P.ID  AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
                             ->get()->result();
             $str = $this->db->last_query();
 //            PRINT $str;

@@ -1,8 +1,8 @@
-<div class="modal animated fadeIn" id="mdlCopiarFT">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal animated" id="mdlCopiarFT">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Copia ficha tecnica a ficha tecnica</h5>
+                <h5 class="modal-title"><span class="fa fa-clipboard"></span> Copia ficha tecnica a ficha tecnica</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,29 +12,29 @@
                     <div class="col-12">
                         <p class="text-danger font-weight-bold">Copiar Estilo/Color </p>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label>Estilo</label>
                         <input type="text" id="EstiloACopiar" name="EstiloACopiar" class="form-control" maxlength="8" placeholder="Estilo...">
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label>Color</label>
                         <input type="text" id="ColorACopiar" name="ColorACopiar" class="form-control" maxlength="4" placeholder="Color...">
                     </div>
                     <div class="col-12 my-2">
                         <p class="text-danger font-weight-bold">Al Estilo/Color</p>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label>Estilo</label>
                         <input type="text" id="EstiloAReemplazar" name="EstiloAReemplazar" class="form-control" maxlength="8" placeholder="Estilo...">
                     </div> 
-                    <div class="col-12">
+                    <div class="col-6">
                         <label>Color</label>
                         <input type="text" id="ColorAReemplazar" name="ColorAReemplazar" class="form-control" maxlength="4" placeholder="Color...">
                     </div> 
                 </div>
             </div>
             <div class="modal-footer"> 
-                <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
+                <button type="button" class="btn btn-info" id="btnAceptar"><span class="fa fa-check"></span> Aceptar</button>
             </div>
         </div>
     </div>

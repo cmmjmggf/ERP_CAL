@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomfis" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82c06bc2-fd12-4810-b55f-bf6126804875">
-	<property name="ireport.zoom" value="4.177248169415661"/>
-	<property name="ireport.x" value="1070"/>
-	<property name="ireport.y" value="116"/>
+	<property name="ireport.zoom" value="2.1435888100000047"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
@@ -12,7 +12,9 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT D.Clave AS CLAVE, D.Descripcion AS DEPARTAMENTO, E.Numero AS CLAVE_EMPLEADO,
+		<![CDATA[SELECT
+IFNULL(D.Clave,999) AS CLAVE, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
+E.Numero AS CLAVE_EMPLEADO,
 CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_EMPLEADO, (CASE WHEN E.TBanamex = 0 THEN "" ELSE E.TBanamex END) AS CUENTA,
 (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
 PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
@@ -27,17 +29,21 @@ ELSE
 (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)
 END) AS ABONO_NOMINA
 
-FROM empleados AS E INNER JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
+FROM empleados AS E LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
 ON E.Numero = PNL.numemp
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1 ORDER BY ABS(CLAVE) ASC]]>
 	</queryString>
 	<field name="CLAVE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="CLAVE_EMPLEADO" class="java.lang.Integer"/>
 	<field name="NOMBRE_EMPLEADO" class="java.lang.String"/>
-	<field name="CUENTA" class="java.lang.String"/>
+	<field name="CUENTA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="SUELDO_NETO" class="java.lang.Double"/>
 	<field name="SUELDO_FIS" class="java.lang.Float"/>
 	<field name="ABONO_FIS" class="java.lang.Double"/>
@@ -72,14 +78,22 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			<band height="10">
 				<textField>
 					<reportElement x="0" y="0" width="30" height="10" uuid="41d17729-446c-4ebd-852d-8b3a3bc8d06c"/>
-					<textElement>
+					<box>
+						<topPen lineWidth="2.0"/>
+						<bottomPen lineWidth="2.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
 						<font size="6" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CLAVE}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="30" y="0" width="117" height="10" uuid="3f4bd097-e982-4370-a64e-6db3051a7680"/>
-					<textElement>
+					<box>
+						<topPen lineWidth="2.0"/>
+						<bottomPen lineWidth="2.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
 						<font size="6" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
@@ -105,7 +119,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="339" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2c0ce575-aa28-4609-a1a6-721454f98981"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -113,7 +127,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="394" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="97d82888-8c53-45d6-b8eb-dc7369a7792e"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -121,7 +135,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="448" y="0" width="54" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="744cdb1c-29f0-4a27-aeea-178a43605e11"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -129,7 +143,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="502" y="0" width="53" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5657d5d1-3925-4794-8b33-ea19ccd6f071"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -319,32 +333,40 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 				<textFieldExpression><![CDATA[$F{CUENTA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad01d54-90de-4b47-8c61-bd72df72f566"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad01d54-90de-4b47-8c61-bd72df72f566">
+					<printWhenExpression><![CDATA[$F{SUELDO_NETO}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SUELDO_NETO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="393" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1edf75d3-55ad-4e74-952c-7e037ad90cfd"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="393" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1edf75d3-55ad-4e74-952c-7e037ad90cfd">
+					<printWhenExpression><![CDATA[$F{SUELDO_FIS}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SUELDO_FIS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="447" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b3216804-7633-4603-b08c-714907376538"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="447" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b3216804-7633-4603-b08c-714907376538">
+					<printWhenExpression><![CDATA[$F{ABONO_FIS}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ABONO_FIS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="501" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="501" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990">
+					<printWhenExpression><![CDATA[$F{ABONO_NOMINA}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -366,7 +388,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="241662b0-84f7-4ca5-999e-b9505ee6ace2"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -377,7 +399,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</line>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="394" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="140d6e2d-8863-4af5-9461-d96992318d1a"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -385,7 +407,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="448" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8c166553-e47c-4b60-a9fd-35f7ba9a45a5"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -393,7 +415,7 @@ WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1]]>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="502" y="0" width="53" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8adcf2c6-dae9-40be-b7fe-c5320ea7e237"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

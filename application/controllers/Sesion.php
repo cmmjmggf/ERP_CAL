@@ -45,7 +45,8 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')
+                        ->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'PROVEEDORES':

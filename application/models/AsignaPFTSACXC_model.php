@@ -170,7 +170,7 @@ class AsignaPFTSACXC_model extends CI_Model {
 
     public function getExplosionXSemanaControlFraccionArticulo($SEMANA, $CONTROL, $FRACCION, $ARTICULO, $GRUPO) {
         try {
-            $this->db->select("FORMAT(SUM(OPD.Cantidad),3) AS EXPLOSION")
+            $this->db->select("SUM(OPD.Cantidad) AS EXPLOSION")
                     ->from("ordendeproduccion AS OP")
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion')
                     ->join('fraccionesxestilo AS FXE', 'OP.Estilo = FXE.Estilo')
@@ -186,6 +186,9 @@ class AsignaPFTSACXC_model extends CI_Model {
                             ->where('OPD.Grupo', $GRUPO)
                             ->group_by('OPD.Articulo')
                             ->group_by('OPD.UnidadMedida')->get()->result();
+            
+//            SELECT SUM(OPD.Cantidad) AS EXPLOSION FROM ordendeproduccion AS OP 
+//                    INNER JOIN ordendeproduccion AS OP 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
