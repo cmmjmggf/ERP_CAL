@@ -212,10 +212,10 @@ class Pedidos_model extends CI_Model {
         }
     }
 
-    public function getCapacidadMaquila($CLAVE, $SEMANA) {
+    public function getCapacidadMaquila($CLAVE, $SEMANA, $ANIO) {
         try {
             return $this->db->select("`M`.`CapacidadPares` AS `CAPACIDAD`,"
-                                    . "(SELECT SUM(PD.Pares) FROM pedidox AS PD WHERE PD.Maquila = M.Clave AND PD.Semana = '$SEMANA') AS PARES")
+                                    . "(SELECT SUM(PD.Pares) FROM pedidox AS PD WHERE PD.Maquila = M.Clave AND PD.Semana = '$SEMANA' AND PD.Ano = '$ANIO') AS PARES")
                             ->from('maquilas AS M')
                             ->where('M.Clave', $CLAVE)
                             ->limit(1)->get()->result();

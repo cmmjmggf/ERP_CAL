@@ -10,7 +10,7 @@ class ParesPreProgramados_model extends CI_Model {
         parent::__construct();
     }
 
-    public function getParesPreProgramados($CEL, $I, $CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF) {
+    public function getParesPreProgramados($CEL, $I, $CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF, $ANIO) {
         try {
             $this->db->select('C.Clave AS CLAVE_CLIENTE, C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE, A.Nombre AS AGENTE, ES.Descripcion AS ESTADO,
 P.Clave AS PEDIDO, E.Linea AS CLAVE_LINEA, L.Descripcion AS LINEA, P.Estilo AS CLAVE_ESTILO, CO.Descripcion AS COLOR,
@@ -51,6 +51,9 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($SEMANA !== '') {
                 $this->db->where("P.Semana", $SEMANA);
             }
+            if ($ANIO !== '') {
+                $this->db->where("P.Ano", $ANIO);
+            }
             if ($FECHA !== '' && $FECHAF !== '') {
                 $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             } else if ($FECHA !== '') {
@@ -58,15 +61,16 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             } else if ($FECHAF !== '') {
                 $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             }
-            $this->db->where("P.Estatus LIKE 'A' AND P.Control = 0 ", null, false);
+            $this->db->where("P.Estatus = 'A' AND P.Control = 0 AND P.stsavan <> 14 OR P.Control IS NULL", null, false);
             $sql = $this->db->get()->result();
+//            PRINT $this->db->last_query();
             return $sql;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function getClientes($CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF) {
+    public function getClientes($CLIENTE, $ESTILO, $LINEA, $MAQUILA, $SEMANA, $FECHA, $FECHAF, $ANIO) {
         try {
             $this->db->select('C.Clave AS CLAVE_CLIENTE, '
                             . 'C.RazonS AS CLIENTE, '
@@ -95,6 +99,9 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($LINEA !== '') {
                 $this->db->where("L.Clave", $LINEA);
             }
+            if ($ANIO !== '') {
+                $this->db->where("P.Ano", $ANIO);
+            }
             if ($FECHA !== '' && $FECHAF !== '') {
                 $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             } else if ($FECHA !== '') {
@@ -102,7 +109,8 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             } else if ($FECHAF !== '') {
                 $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             }
-            $this->db->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false);
+            $this->db->where(" P.Estatus = 'A' AND P.Control = 0 AND P.stsavan <> 14 OR P.Control IS NULL", null, false);
+
             return $this->db->group_by('C.ID')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -233,7 +241,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
         }
     }
 
-    public function getMaquila($M, $CLIENTE, $ESTILO, $MAQUILA, $SEMANA) {
+    public function getMaquila($M, $CLIENTE, $ESTILO, $MAQUILA, $SEMANA, $ANIO) {
         try {
             $this->db->select('M.Clave AS CLAVE_MAQUILA, CONCAT(M.Clave," - ", M.Nombre) AS MAQUILA, M.CapacidadPares AS CAPACIDAD_PARES', false)
                     ->from('pedidox AS P')
@@ -254,6 +262,9 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($SEMANA !== '') {
                 $this->db->where("P.Semana", $SEMANA);
             }
+            if ($ANIO !== '') {
+                $this->db->where("P.Ano", $ANIO);
+            }
             $this->db->group_by(array('M.Nombre'))->order_by('abs(P.Maquila)', 'ASC')->order_by('abs(P.Semana)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -261,7 +272,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
         }
     }
 
-    public function getParesPreProgramadosPorMaquila($M, $CLIENTE, $ESTILO, $MAQUILA, $SEMANA) {
+    public function getParesPreProgramadosPorMaquila($M, $CLIENTE, $ESTILO, $MAQUILA, $SEMANA, $ANIO) {
         try {
             $this->db->select('M.Clave AS CLAVE_MAQUILA, M.Nombre AS MAQUILA, '
                             . 'M.CapacidadPares AS CAPACIDAD_PARES, P.Semana AS SEMANA, '
@@ -269,8 +280,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                             . 'M.CapacidadPares - SUM(P.Pares) AS DIFERENCIA', false)
                     ->from('pedidox AS P')
                     ->join('maquilas AS M', 'P.Maquila = M.Clave')
-                    ->where('M.Clave', $M)->where('P.Maquila', $M)
-                    ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false);
+                    ->where('M.Clave', $M)->where('P.Maquila', $M);
 
             if ($CLIENTE !== '') {
                 $this->db->where("P.Cliente", $CLIENTE);
@@ -284,10 +294,20 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($SEMANA !== '') {
                 $this->db->where("P.Semana", $SEMANA);
             }
+            if ($ANIO !== '') {
+                $this->db->where("P.Ano", $ANIO);
+            }
+            $this->db->where("P.Control = 0 AND P.Estatus ='A' OR P.Control IS NULL", null, false);
             $this->db->group_by(array('M.Nombre', 'P.Semana'))
                     ->order_by('abs(P.Maquila)', 'ASC')
                     ->order_by('abs(P.Semana)', 'ASC');
-            return $this->db->get()->result();
+//                PRINT $this->db->last_query();
+//              $this->db->get() ;
+//            return $this->db->get()->result();
+
+            $sql = $this->db->get();
+//            PRINT $this->db->last_query();
+            return $sql->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -12,11 +12,11 @@
         </div>
         <div class="card-block">
             <div class="row">
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                     <label>ESTILO</label>
                     <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                     <label>COLOR</label>
                     <select id="Color" name="Color" class="form-control form-control-sm" ></select>
                 </div>
@@ -33,6 +33,11 @@
                         ?>
                     </select>
                 </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 d-none">
+                    <label>ANIO</label>
+                    <input type="text"  id="ANIO" name="ANIO" class="form-control form-control-sm" > 
+                </div>
+                <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <table id="tblPedidox" class="table table-sm table-hover" style="width:100%">
                         <thead>
@@ -58,7 +63,7 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                </div>
+                </div> 
             </div>
         </div>
     </div>
@@ -67,15 +72,20 @@
     var pnlTablero = $("#pnlTablero"), Estilo = pnlTablero.find("#Estilo"),
             Color = pnlTablero.find("#Color"), Cliente = pnlTablero.find("#Cliente"),
             Pedidox, tblPedidox = pnlTablero.find("#tblPedidox"),
-            btnImprimirReporte = pnlTablero.find("#btnImprimirReporte");
+            btnImprimirReporte = pnlTablero.find("#btnImprimirReporte"),
+            AAAA = <?php print Date('Y'); ?>, ANIO = pnlTablero.find('#ANIO');
 
     $(document).ready(function () {
+
         onOpenOverlay('Cargando...');
+
+        ANIO.val(AAAA);
 
         handleEnterDiv(pnlTablero);
 
         btnImprimirReporte.click(function () {
             onBeep(1);
+            getTotales();
             onOpenOverlay('Por favor espere...');
             $.post('<?php print base_url('RastreoDeEstilosEnPedidos/getReporte'); ?>',
                     {
@@ -106,6 +116,7 @@
                         Color[0].selectize.addOption({text: v.Color, value: v.Clave});
                     });
                     Color[0].selectize.open();
+                    getTotales();
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
@@ -120,6 +131,7 @@
             Pedidox.ajax.reload(function () {
                 onCloseOverlay();
                 onRevisarRegistros();
+                getTotales();
             });
         });
 
@@ -130,6 +142,7 @@
                 onRevisarRegistros();
                 Cliente[0].selectize.focus();
                 Cliente[0].selectize.open();
+                getTotales();
             });
         });
 
@@ -143,7 +156,7 @@
                 "data": function (d) {
                     d.CLIENTE = (Cliente.val() ? Cliente.val() : '');
                     d.ESTILO = (Estilo.val() ? Estilo.val() : '');
-                    d.COLOR = (Color.val() ? Color.val() : '');
+                    d.COLOR = (Color.val() ? Color.val() : ''); 
                 }
             },
             "columns": [
@@ -193,5 +206,11 @@
         } else {
             btnImprimirReporte.attr('disabled', true);
         }
+    }
+
+    function getTotales() {
+        $.each(Pedidox.rows().data(), function () {
+            
+        });
     }
 </script>

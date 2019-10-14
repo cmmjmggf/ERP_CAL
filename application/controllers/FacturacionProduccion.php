@@ -42,7 +42,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-            print json_encode($this->db->query("SELECT P.*,P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
+            print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
                                     . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                     . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, P.EstiloT AS ESTILO_TEXT "
@@ -153,7 +153,7 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('staped', 1)->update('facturacion');
 
             $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'];
-            
+
             /* MONEDAS 
              * 1 = PESOS
              * 2 = DOLARES
@@ -181,11 +181,11 @@ class FacturacionProduccion extends CI_Controller {
                     }
                     break;
             }
-            
+
             if (intval($x['MONEDA']) === 2) {
                 $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
             }
-            
+
             $cc = array(
                 'C.cliente' => $x['CLIENTE'], 'C.remicion' => $x['FACTURA'],
                 'C.fecha' => $x['FECHA'], 'C.importe' => $TOTAL,
@@ -268,7 +268,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["regadu"] = NULL;
             $f["periodo"] = Date('Y');
             $f["costo"] = NULL;
-            $f["obs"] = $x["OBSERVACIONES"];
+            $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? $x["OBSERVACIONES"] : "SO";
             $this->db->insert('facturacion', $f);
 
             $tipo_cambio = 0;
@@ -305,6 +305,8 @@ class FacturacionProduccion extends CI_Controller {
             }
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
+            print "SALDO PARES : {$saldopares}";
+            exit(0);
             $facturaciondif = array(
                 'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
                 'staped' => (($saldopares == 0) ? 99 : 98)
@@ -315,8 +317,8 @@ class FacturacionProduccion extends CI_Controller {
             /* SUMA LOS PARES FACTURADOS: SI  SON 36 PARES Y SOLO FACTURAN 18, */
             $PF = (is_numeric($x['PARES_A_FACTURAR']) ? intval($x['PARES_A_FACTURAR']) : 0);
             $this->db->query("UPDATE pedidox "
-                    . "SET ParesFacturados = IFNULL(ParesFacturados,0)+ {$PF} "
-                    . "WHERE Control = {$x['CONTROL']}")->result();
+                    . "SET ParesFacturados = (IFNULL(ParesFacturados,0)+ {$PF}) "
+                    . "WHERE Control = {$x['CONTROL']}");
 
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
             $existe_en_facdetalle = $this->db->query(

@@ -12,7 +12,7 @@ class Ordendeproduccion_model extends CI_Model {
 
     public function getRecords($MAQUILA, $SEMANA, $ANO) {
         try {
-            $this->db->select('PD.ID AS ID, '
+            $this->db->select('PD.Clave AS ID, '
                             . 'PD.Estilo AS IdEstilo, '
                             . 'PD.Color AS IdColor, '
                             . "PD.Estilo AS Estilo, "
@@ -42,8 +42,8 @@ class Ordendeproduccion_model extends CI_Model {
                             . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                     ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
                     ->join('series AS S', 'PD.Serie = S.Clave')
-                    ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
-                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
+                    ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
+                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
                     ->where('PD.Control <> 0 AND OP.ID IS NULL', null, false)
                     ->where('CT.Estatus', 'A');
             if ($ANO !== '') {
@@ -65,7 +65,7 @@ class Ordendeproduccion_model extends CI_Model {
 
     public function getRecordsGenerados() {
         try {
-            return $this->db->select('PD.ID AS ID, '
+            return $this->db->select('PD.Clave AS ID, '
                                     . 'PD.Estilo AS IdEstilo, '
                                     . 'PD.Color AS IdColor, '
                                     . "E.Clave AS Estilo, "
@@ -92,13 +92,13 @@ class Ordendeproduccion_model extends CI_Model {
                                     . "ELSE PD.Control END AS Marca, "
                                     . "CONCAT(CT.Ano, CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
                                     . "S.ID AS SerieID,"
-                                    . "PD.ID AS ID_PEDIDO", false)->from('pedidox AS PD')
+                                    . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                             ->join('clientes AS CL', 'CL.Clave = PD.Cliente')
                             ->join('estilos AS E', 'PD.Estilo = E.Clave')
                             ->join('colores AS C', 'PD.color = C.Clave AND C.Estilo = E.Clave')
                             ->join('series AS S', 'E.Serie = S.Clave')
-                            ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
-                            ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
+                            ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
+                            ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
                             ->where('PD.Control != 0 AND OP.ID IS NOT NULL', null, false)
                             ->where('CT.Estatus', 'A')->get()->result();
         } catch (Exception $exc) {

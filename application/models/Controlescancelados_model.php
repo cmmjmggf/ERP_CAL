@@ -17,7 +17,7 @@ class Controlescancelados_model extends CI_Model {
             $c = '</div></div>';
             $d = 'CASE WHEN';
             $e = 'THEN \'-\' ELSE ';
-            return $this->db->select("CT.ID AS CONTROLID, PD.ID PEDIDOID, PE.Clave AS Pedido, "
+            return $this->db->select("CT.ID AS CONTROLID, PD.Clave PEDIDOID, PE.Clave AS Pedido, "
                                     . " CT.Cancelacion AS Cancelo, "
                                     . "PD.FechaEntrega AS 'Fecha Entrega', "
                                     . "CONCAT(CL.Clave,' - ', SUBSTRING(CL.RazonS, 1, 24),'...')  AS Cliente, E.Clave AS Estilo, "
@@ -47,7 +47,7 @@ class Controlescancelados_model extends CI_Model {
                                     . "CONCAT('$a',($d S.T22='0' $e S.T22 END),'$b', ($d PD.C22='0' $e PD.C22 END),'$c') AS  C22,"
                                     . "PD.Pares, PD.Control,CONCAT(SUBSTRING( CT.Motivo, 1, 24),'...') AS Motivo, CT.Estatus AS ControlEstatus,"
                                     . "(CASE WHEN CT.Estatus = 'A' THEN "
-                                    . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',CT.ID,',',PE.Clave,',',PD.ID,')\">CANCELAR</button>') "
+                                    . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',CT.ID,',',PE.Clave,',',PD.Clave,')\">CANCELAR</button>') "
                                     . " ELSE 'CANCELADO' END)AS CANCELA ", false)
                             ->from('pedidodetalle AS PD')
                             ->join('pedidos AS PE', 'PD.Pedido = PE.Clave')
@@ -55,7 +55,7 @@ class Controlescancelados_model extends CI_Model {
                             ->join('estilos AS E', 'PD.Estilo = E.Clave')
                             ->join('colores AS C', 'PD.color = C.Clave AND C.Estilo = E.Clave')
                             ->join('series AS S', 'E.Serie = S.Clave')
-                            ->join('controles AS CT', 'CT.pedidodetalle = PD.ID')
+                            ->join('controles AS CT', 'CT.pedidodetalle = PD.Clave')
                             ->limit(999)
                             ->get()->result();
         } catch (Exception $exc) {

@@ -8,13 +8,17 @@
                 <label>Cliente</label>
                 <select id="PaPreProCliente" name="PaPreProCliente" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
+            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                 <label>Maquila</label>
                 <select id="PaPreProMaquila" name="PaPreProMaquila" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
+            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                 <label>Semana</label>
                 <input type="text" id="PaPreProSemana" name="PaPreProSemana" class="form-control form-control-sm">
+            </div>
+            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">  
+                <label>Ano</label>
+                <input type="text" id="PaPreProAno" name="PaPreProAno" class="form-control form-control-sm">
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"> 
                 <label>Linea</label>
@@ -53,20 +57,19 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-footer">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
-        </div> 
-    </div>
+    </div> 
 </div>
 
 <script>
     var mdlParesPreProgramados = $("#mdlParesPreProgramados");
     var master_url_pares_preprogramados = base_url + 'index.php/ParesPreProgramados/';
-
+    var Anio = '<?php print Date('Y');?>', PaPreProAno =  mdlParesPreProgramados.find('#PaPreProAno');
+    
+    
     $(document).ready(function () {
-
+    
+        PaPreProAno.val(Anio);
+        
         PaPreProInit();
 
         mdlParesPreProgramados.on('shown.bs.modal', function () {
@@ -107,7 +110,7 @@
                 FechaF = mdlParesPreProgramados.find("#PaPreProFechaF").val(),
                 Linea = mdlParesPreProgramados.find("#PaPreProLinea").val(),
                 Estilo = mdlParesPreProgramados.find("#PaPreProEstilo").val();
-        if (Cliente !== '') {
+//        if (Cliente !== '') {
             HoldOn.open({
                 theme: 'sk-bounce',
                 message: 'Por favor espere...'
@@ -120,7 +123,8 @@
                 FECHAF: FechaF !== '' ? FechaF : '',
                 LINEA: Linea !== '' ? Linea : '',
                 ESTILO: Estilo !== '' ? Estilo : '',
-                TIPO: t
+                TIPO: t,
+                ANIO: PaPreProAno.val()
             }).done(function (data, x, jq) {
                 console.log(data);
                 onBeep(1);
@@ -131,12 +135,12 @@
             }).always(function () {
                 HoldOn.close();
             });
-        } else {
-            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.focus();
-                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.open();
-            });
-        }
+//        } else {
+//            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+//                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.focus();
+//                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.open();
+//            });
+//        }
     }
 
     function PaPreProInit() {
