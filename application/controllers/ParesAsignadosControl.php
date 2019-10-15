@@ -29,6 +29,13 @@ class ParesAsignadosControl extends CI_Controller {
     }
 
     public function getParesAsignadosControl() {
+        
+        /*
+         * MFA.TpoSuPlEn = 1 
+         * 1 = SUELA 
+         * 2 = PLANTA 
+         * 3 = ENTRESUELA
+         */
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -74,7 +81,7 @@ class ParesAsignadosControl extends CI_Controller {
                 $reports['PARESASIGNADOSAMAQUILAESPONJALATEX'] = $jc->getReport();
                 break;
         }
-
+       
         /* 2 PARES ASIGNADOS X LINEA */
         $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/asignados/';
         $jc->setParametros($parametros);
@@ -84,6 +91,8 @@ class ParesAsignadosControl extends CI_Controller {
         $reports['PARESASIGNADOSAMAQUILAXSEMANAXLINEA'] = $jc->getReport();
 
         /* 3 PARES ASIGNADOS X HERRAMENTAL (SUAJE) */
+        UNSET($parametros["SUBREPORT_DIR"]);
+        $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\asignados\ParesAsignadosControlHerramental.jasper');
         $jc->setFilename('ParesAsignadosControlHerramental_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');

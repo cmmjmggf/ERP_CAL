@@ -337,7 +337,7 @@
                                 f.append('FIN', pnlTablero.find("#ControlFinal").val() !== '' ? pnlTablero.find("#ControlFinal").val() : pnlTablero.find("#ControlInicial").val());
                                 f.append('Controles', JSON.stringify(controles));
                                 $.ajax({
-                                    url: master_url + 'onReAsignarControles',
+                                    url: '<?php print base_url('ReasignarControles/onReAsignarControles'); ?>',
                                     type: "POST",
                                     cache: false,
                                     contentType: false,
@@ -459,7 +459,7 @@
     function init() {
         getRecords();
         $("#ControlInicial").focus();
-        handleEnter();
+        handleEnterDiv(pnlTablero);
     }
 
     function getRecords() {
@@ -490,7 +490,7 @@
                 }
             ],
             "ajax": {
-                "url": master_url + 'getRecords',
+                "url": '<?php print base_url('ReasignarControles/getRecords'); ?>',
                 "dataSrc": ""
             },
             "columnDefs": [
@@ -555,19 +555,6 @@
                 [0, 'desc']/*ID*/
             ],
             "createdRow": function (row, data, dataIndex, cells) {
-                $.each($(row).find("td"), function (k, v) {
-                    switch (parseInt(k)) {
-                        case 1:
-                            $(v).attr('title', data["Cliente Razon"]);
-                            break;
-                        case 2:
-                            $(v).attr('title', data["Descripcion Estilo"]);
-                            break;
-                        case 3:
-                            $(v).attr('title', data["Descripcion Color"]);
-                            break;
-                    }
-                });
                 $.each($(row), function (k, v) {
                     if (data["Marca"] === '0' && data["Control"] !== null) {
                         $(v).addClass('HasMca');
@@ -587,18 +574,20 @@
 
     function onObtenerElUltimoControl(e) {
         var control = $(e).val();
-        var semana = parseInt(control.slice(2, 4));
-        var maquila = parseInt(control.slice(4, 6));
-        $.getJSON(master_url + 'onObtenerElUltimoControl', {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
-            var dt = data[0]; 
-            var ControlFinal = pnlTablero.find("#ControlFinal");
-            if (data.length > 0 && ControlFinal.val() === '' && ControlFinal.val().length <= 0) {
-                ControlFinal.val(dt.ULTIMO_CONTROL);
-                onBeep(1);
-            }
-        }).fail(function (x, y, z) {
-            console.log(x.responseText);
-        });
+        if (control) {
+            var semana = parseInt(control.slice(2, 4));
+            var maquila = parseInt(control.slice(4, 6));
+            $.getJSON(master_url + 'onObtenerElUltimoControl', {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
+                var dt = data[0];
+                var ControlFinal = pnlTablero.find("#ControlFinal");
+                if (data.length > 0 && ControlFinal.val() === '' && ControlFinal.val().length <= 0) {
+                    ControlFinal.val(dt.ULTIMO_CONTROL);
+                    onBeep(1);
+                }
+            }).fail(function (x, y, z) {
+                console.log(x.responseText);
+            });
+        }
     }
 </script>
 <style>
@@ -612,7 +601,7 @@
         background-color: #1b4f72;
         color: #fff;
     }
-     
+
 
     td:hover {
         position: relative;

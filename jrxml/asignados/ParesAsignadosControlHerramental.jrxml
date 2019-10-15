@@ -63,16 +63,16 @@ ORDER BY E.Herramental DESC]]>
 	<group name="HERRAMENTAL">
 		<groupExpression><![CDATA[$F{HERRAMENTAL}]]></groupExpression>
 		<groupHeader>
-			<band height="15">
+			<band height="11">
 				<textField>
-					<reportElement x="0" y="0" width="100" height="14" uuid="7ac3631a-3117-4ec5-bb06-b75986f6c355"/>
-					<textElement>
-						<font size="9"/>
+					<reportElement x="0" y="0" width="100" height="10" uuid="7ac3631a-3117-4ec5-bb06-b75986f6c355"/>
+					<textElement textAlignment="Center">
+						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{HERRAMENTAL}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="0" y="14" width="100" height="1" uuid="0069fc7f-4b51-4512-a545-9144fa46df58"/>
+					<reportElement x="0" y="10" width="100" height="1" uuid="0069fc7f-4b51-4512-a545-9144fa46df58"/>
 				</line>
 			</band>
 		</groupHeader>
@@ -186,21 +186,21 @@ ORDER BY E.Herramental DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement x="100" y="0" width="100" height="14" uuid="6e975f1c-60b6-47c4-8297-89b682495f0a"/>
+				<reportElement x="100" y="0" width="100" height="10" uuid="6e975f1c-60b6-47c4-8297-89b682495f0a"/>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTILOT}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="100" y="14" width="150" height="1" uuid="b080f150-d591-4db6-af5f-347387bf7cd2"/>
+				<reportElement x="100" y="10" width="150" height="1" uuid="b080f150-d591-4db6-af5f-347387bf7cd2"/>
 			</line>
 			<textField>
-				<reportElement x="200" y="1" width="50" height="14" uuid="af8d9807-9d18-4fe2-a0ce-16d4a4112730"/>
+				<reportElement x="200" y="0" width="50" height="10" uuid="af8d9807-9d18-4fe2-a0ce-16d4a4112730"/>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
 			</textField>

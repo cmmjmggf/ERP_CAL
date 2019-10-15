@@ -46,9 +46,9 @@ ORDER BY L.Clave ASC]]>
 		<groupExpression><![CDATA[$F{Linea}]]></groupExpression>
 	</group>
 	<detail>
-		<band height="24" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="27" height="12" uuid="c38fe56e-67d9-45af-9e06-ce7ebd365aed"/>
+				<reportElement x="0" y="0" width="27" height="9" uuid="c38fe56e-67d9-45af-9e06-ce7ebd365aed"/>
 				<box>
 					<bottomPen lineWidth="0.0"/>
 				</box>
@@ -58,14 +58,14 @@ ORDER BY L.Clave ASC]]>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="11" width="27" height="12" uuid="56593e6d-c7c8-4cf8-bc94-3ca2de01ccad"/>
+				<reportElement x="0" y="8" width="27" height="9" uuid="56593e6d-c7c8-4cf8-bc94-3ca2de01ccad"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="26" y="0" width="1" height="24" uuid="c8c1f1f2-9f0d-4676-864a-7a6bc1d7b67e"/>
+				<reportElement x="26" y="0" width="1" height="17" uuid="c8c1f1f2-9f0d-4676-864a-7a6bc1d7b67e"/>
 			</line>
 		</band>
 	</detail>

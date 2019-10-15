@@ -1,5 +1,5 @@
 <div class="modal" id="mdlIOP">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-print"></span> Imprime orden de producción</h5>
@@ -42,7 +42,7 @@
         // The $ is now locally scoped
         // Listen for the jQuery ready event on the document
         $(function () {
-            handleEnter();
+            handleEnterDiv(mdlIOP);
 //            getRecords();
 
             $.fn.dataTable.ext.search.push(

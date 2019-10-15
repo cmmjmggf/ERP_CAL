@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXLinea" language="groovy" pageWidth="595" pageHeight="842" columnWidth="571" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="30078ee2-aa69-41c3-b089-7774d6afb523">
-	<property name="ireport.zoom" value="1.5421731577181332"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.0000000000000195"/>
+	<property name="ireport.x" value="1213"/>
+	<property name="ireport.y" value="17"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -56,7 +56,7 @@ ORDER BY L.Clave ASC]]>
 	<columnHeader>
 		<band height="59">
 			<line>
-				<reportElement x="2" y="58" width="570" height="1" uuid="e2c8fdc6-9445-4252-ae72-a96a58bcf55e"/>
+				<reportElement x="0" y="58" width="570" height="1" uuid="e2c8fdc6-9445-4252-ae72-a96a58bcf55e"/>
 			</line>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="79" y="16" width="134" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
@@ -147,13 +147,13 @@ ORDER BY L.Clave ASC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25">
+		<band height="19">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="be55474f-8b23-47d8-bf47-798fcb81ab0b"/>
+				<reportElement x="0" y="0" width="100" height="18" uuid="be55474f-8b23-47d8-bf47-798fcb81ab0b"/>
 				<textFieldExpression><![CDATA[$F{LineaT}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="101" y="0" width="424" height="24" uuid="6db63eab-d3db-444b-9f1e-15ef3e9da140"/>
+				<reportElement x="101" y="0" width="424" height="18" uuid="6db63eab-d3db-444b-9f1e-15ef3e9da140"/>
 				<subreportParameter name="MAQUILAINICIO">
 					<subreportParameterExpression><![CDATA[$P{MAQUILAINICIO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -176,32 +176,32 @@ ORDER BY L.Clave ASC]]>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Horizontal.jasper"]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="525" y="0" width="47" height="24" uuid="b72cff25-3f60-4c2c-a577-cc8bc517d268"/>
+				<reportElement x="525" y="0" width="47" height="18" uuid="b72cff25-3f60-4c2c-a577-cc8bc517d268"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="24" width="572" height="1" uuid="a273391f-1953-4a2e-8c7b-d367b6a16e21"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="18" width="572" height="1" uuid="a273391f-1953-4a2e-8c7b-d367b6a16e21"/>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="101" y="0" width="1" height="25" uuid="841e6293-8502-4200-8df7-fd50523b7fc6"/>
+				<reportElement stretchType="RelativeToBandHeight" x="101" y="0" width="1" height="18" uuid="841e6293-8502-4200-8df7-fd50523b7fc6"/>
 			</line>
 			<line>
-				<reportElement x="525" y="-1" width="1" height="25" uuid="3bf96360-fba7-430d-89f0-e7528dda520c"/>
+				<reportElement x="525" y="-1" width="1" height="19" uuid="3bf96360-fba7-430d-89f0-e7528dda520c"/>
 			</line>
 		</band>
 	</detail>
 	<summary>
-		<band height="22">
+		<band height="13">
 			<textField>
-				<reportElement x="525" y="0" width="46" height="20" uuid="59103ffd-c045-435c-8317-dd1bce0c5c29"/>
+				<reportElement x="525" y="0" width="46" height="13" uuid="59103ffd-c045-435c-8317-dd1bce0c5c29"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{Pares_1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="425" y="0" width="100" height="20" uuid="7085114b-5f1f-4b70-ae9e-93533ce62331"/>
+				<reportElement x="425" y="0" width="100" height="13" uuid="7085114b-5f1f-4b70-ae9e-93533ce62331"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Total]]></text>
 			</staticText>
