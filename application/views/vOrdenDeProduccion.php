@@ -49,7 +49,7 @@
         // The $ is now locally scoped
         // Listen for the jQuery ready event on the document
         $(function () {
-            handleEnter();
+            handleEnterDiv(mdlGeneraOrdenDeProduccion);
             AnoOP.on('keypress', function (e) {
                 if (e.keyCode === 13) {
                     getTotalParesXMaquilaXSemanaXAno();
@@ -71,9 +71,13 @@
             }).focusout(function () {
                 getTotalParesXMaquilaXSemanaXAno();
             });
+            
             mdlGeneraOrdenDeProduccion.on('hidden.bs.modal', function () {
+                btnAceptaOP.attr('disabled', true);
                 AnoOP.val((new Date()).getFullYear());
+                SemanaOP.val('');
                 MaquilaOP.val('');
+                mdlGeneraOrdenDeProduccion.find("p.total_pares_msa").text("0 PARES");
             });
 
             mdlGeneraOrdenDeProduccion.on('shown.bs.modal', function () {
@@ -109,37 +113,6 @@
 
         });
     }));
-
-    function onAgregarAOrdenDeProduccion() {
-        HoldOn.open({
-            theme: 'sk-bounce',
-            message: 'GENERANDO...'
-        });
-        $.post('<?php print base_url('OrdenDeProduccion/onAgregarAOrdenDeProduccion'); ?>',
-                {MAQUILA: Maquila.val(), SEMANA: Semana.val(), ANO: Anio.val()}
-        ).done(function (data) {
-            var nordenes = parseInt(data);
-            if (nordenes > 0) {
-                $("#Resultado").html('<p class="text-info font-weight-bold mt-2"> SE HAN GENERADO ' + nordenes + ' ORDENES DE PRODUCCIÓN</p>');
-                swal('ATENCIÓN', 'SE HAN CREADO ' + nordenes + ' ORDENES DE PRODUCCION DE LA MAQUILA ' + Maquila.val() + ', SEMANA ' + Semana.val() + ', AÑO ' + Anio.val(), 'success').then((value) => {
-                    Maquila.focus().select();
-                });
-            } else {
-                swal('ATENCIÓN', 'NO HAY ORDENES DE PRODUCCION DISPONIBLES EN LA MAQUILA ' + Maquila.val() + ', SEMANA ' + Semana.val() + ', AÑO ' + Anio.val(), 'warning').then((value) => {
-                    Maquila.focus().select();
-                });
-            }
-        }).fail(function (x, y, z) {
-            console.log(x.responseText);
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info').then((value) => {
-                btnGenerar.prop("disabled", false);
-            });
-        }).always(function () {
-            Controles.ajax.reload();
-            btnGenerar.prop("disabled", false);
-            HoldOn.close();
-        });
-    }
 
     function onChecarMaquilaValida(e) {
         var n = $(e);
@@ -215,22 +188,12 @@
         }
     }
 
-    function getParesTotales() {
-        var prs = 0;
-        console.log(Controles.rows().data().count());
-        $.each(Controles.rows().data(), function (k, v) {
-            prs += parseInt(v.Pares);
-        });
-        pnlTablero.find(".total_pares").text(prs + ' pares');
-    }
-
     function getTotalParesXMaquilaXSemanaXAno() {
         $.getJSON('<?php print base_url('OrdenDeProduccion/getTotalParesXMaquilaXSemanaXAno') ?>', {
             MAQUILA: MaquilaOP.val() ? MaquilaOP.val() : '',
             SEMANA: SemanaOP.val() ? SemanaOP.val() : '',
             ANIO: AnoOP.val() ? AnoOP.val() : ''
         }).done(function (x) {
-            console.log(x);
             var prs = 0;
             if (x.length > 0) {
                 prs = parseInt(x[0].PARES);

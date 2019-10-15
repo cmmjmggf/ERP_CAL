@@ -45,7 +45,7 @@ class CerrarProg extends CI_Controller {
             $x = $this->input->get();
 //            print json_encode($this->cprm->getRecords(
 //            $x->get('MAQUILA'), $x->get('SEMANA'), $x->get('ANIO')));
-            $this->db->select('PD.Clave AS ID, '
+            $this->db->select('PD.ID AS ID, '
                             . 'PD.Estilo AS IdEstilo, '
                             . 'PD.Color AS IdColor, '
                             . "PD.Estilo AS Estilo, "
@@ -156,6 +156,8 @@ class CerrarProg extends CI_Controller {
                                     ->where('Semana', $v->Semana)
                                     ->where('Ano', $v->Ano)
                                     ->where('Clave', $v->PedidoDetalle)
+                                    ->where('ID', $v->ID)
+                                    ->where('Control = 0', null, false)
                                     ->update('pedidox');
 //                            print $this->db->last_query();/*QUEDA PARA PRUEBAS*/
 //                            exit(0);

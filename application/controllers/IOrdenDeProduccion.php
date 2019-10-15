@@ -307,23 +307,21 @@ class IOrdenDeProduccion extends CI_Controller {
                     $pdf->Cell(200, 3.5, "", 0/* BORDE */, 1/* SALTO NO */, 'C', 0);
                     $pdf->Line(108, $pdf->GetY(), 210, $pdf->GetY());
                 }
-                list($width, $height, $type, $attr) = getimagesize(base_url($vc->FOTO));
 
                 $pdf->SetLineWidth(0.4);
                 $pdf->Line(5, $Y, 5, $pdf->GetY());
                 $pdf->Line(108, $Y, 108, $pdf->GetY());
                 $pdf->Line(210, $Y, 210, $pdf->GetY());
-                
+
                 $pdf->SetFont('Calibri', 'B', 14);
                 $pdf->SetX(5);
                 $pdf->Code128(5/* X */, $pdf->GetY()/* Y */, $vc->ControlT/* TEXT */, 53/* ANCHO */, 6/* ALTURA */);
-                $width_final = $this->getSize($width, 96);
-                $height_final = $this->getSize($height, 96);
-                $altura_final = $height_final + $pdf->getY();
+
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetX(58);
                 $pdf->Cell(152, 6, utf8_decode("* LEA CUIDADOSAMENTE LAS INSTRUCCIONES, CUALQUIER ERROR LE SERÁ CARGADO *"), 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
                 $OE = strlen($vc->OBSERVACIONES_ESTILO);
+
                 if ($OE > 1) {
                     $pdf->SetX(5);
                     $pdf->Cell(205, 5, (strlen($vc->OBSERVACIONES_ESTILO) > 0) ? utf8_decode($vc->OBSERVACIONES_ESTILO) : '', 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
@@ -333,16 +331,40 @@ class IOrdenDeProduccion extends CI_Controller {
                     $pdf->SetX(5);
                     $pdf->Cell(205, 5, utf8_decode($vc->OBSERVACIONES_COLOR), 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
                 }
-                /* END FOREACH PIEZAS */
-                if ($altura_final > 260) {
-                    if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
-                        $pdf->AddPage();
-                        $pdf->SetAutoPageBreak(true, 10);
-                        $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
-                    }
-                } else {
-                    if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
-                        $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
+
+
+                $path = $vc->FOTO;
+                $width = 0;
+                $height = 0;
+                $width_final = 0;
+                $height_final = 0;
+                $altura_final = 0;
+
+                if ($vc->FOTO !== '') {
+                    if (!is_file($path)) {
+                        // $pdf->Image(base_url() . 'uploads/Empleados/9999.jpg', 68, 11, 30);
+                        $pdf->SetLineWidth(.4);
+                        $pdf->SetY($pdf->GetY() + 11);
+                        $pdf->SetX(85);
+                        $pdf->SetFont('Calibri', 'BI', 13); 
+                        $pdf->MultiCell(50, 6, 'ESTILO SIN FOTO', 0/* BORDE */, 'C');
+                    } else {
+                        list($width, $height, $type, $attr) = getimagesize(base_url($vc->FOTO));
+                        $width_final = $this->getSize($width, 96);
+                        $height_final = $this->getSize($height, 96);
+                        $altura_final = $height_final + $pdf->getY();
+                        /* END FOREACH PIEZAS */
+                        if ($altura_final > 260) {
+                            if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
+                                $pdf->AddPage();
+                                $pdf->SetAutoPageBreak(true, 10);
+                                $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
+                            }
+                        } else {
+                            if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
+                                $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
+                            }
+                        }
                     }
                 }
                 /* TOTALES */

@@ -454,7 +454,7 @@
                     titleAttr: 'Deseleccionar Todos'
                 }
             ], "ajax": {
-                "url": master_url + 'getRecords',
+                "url": '<?php print base_url('CerrarProg/getRecords'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
                     d.MAQUILA = (MaquilaCerrarProg.val().trim());
@@ -536,7 +536,7 @@
                 $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
                     return parseFloat(a) + parseFloat(b);
                 }, 0));
-            } 
+            }
         });
         pnlTablero.find("#col14_filter").val((new Date()).getFullYear());
         pnlTablero.find("#col12_filter").focus();
@@ -666,7 +666,7 @@
                 Cliente: r.Cliente,
                 Pares: r.Pares,
                 Pedido: r.ID_PEDIDO,
-                PedidoDetalle: r.ID,
+                PedidoDetalle: r.ID_PEDIDO,
                 Maquila: r.Maq,
                 Semana: r.Semana,
                 Control: r.Control,
@@ -690,13 +690,13 @@
         f.append('Marca', i);
         f.append('SubControles', JSON.stringify(subcontroles));
         $.ajax({
-            url: master_url + 'onGenerarControles',
+            url: '<?php print base_url('CerrarProg/onGenerarControles'); ?>',
             type: "POST",
             cache: false,
             contentType: false,
             processData: false,
             data: f
-        }).done(function (data, x, jq) { 
+        }).done(function (data, x, jq) {
             swal({
                 title: 'INFO',
                 text: 'SE HAN ' + (i > 0 ? 'MARCADO' : 'DESMARCADO') + ' LOS REGISTROS',

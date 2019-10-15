@@ -191,7 +191,7 @@ class OrdenDeProduccion extends CI_Controller {
                             WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18
                             WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a
                             ELSE 0
-                            END) +1)) * {$v->Pares}) AS CONSUMOTOTAL", false)
+                            END) + 1)) * {$v->Pares}) AS CONSUMOTOTAL", false)
                                 ->from('fichatecnica AS FT')
                                 ->join('articulos AS A', 'FT.Articulo = A.Clave')
                                 ->join('estilos AS E', 'FT.Estilo = E.Clave')
