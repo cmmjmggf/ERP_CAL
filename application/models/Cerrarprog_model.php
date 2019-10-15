@@ -12,7 +12,7 @@ class Cerrarprog_model extends CI_Model {
 
     public function getRecords($MAQUILA, $SEMANA, $ANO) {
         try {
-            $this->db->select('PD.ID AS ID, '
+            $this->db->select('PD.Clave AS ID, '
                             . 'PD.Estilo AS IdEstilo, '
                             . 'PD.Color AS IdColor, '
                             . "PD.Estilo AS Estilo, "
@@ -40,8 +40,8 @@ class Cerrarprog_model extends CI_Model {
                             . "ELSE PD.Control END AS Marca, "
                             . "PD.Control AS Control,"
                             . "S.ID AS SerieID,"
-                            . "PD.ID AS ID_PEDIDO", false)->from('pedidox AS PD')
-                    ->join('controles AS CT', 'CT.pedidodetalle = PD.ID', 'left')
+                            . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
+                    ->join('controles AS CT', 'CT.pedidodetalle = PD.Clave', 'left')
                     ->join('series AS S', 'PD.Serie = S.Clave')
                     ->where('PD.Control', 0);
             if ($ANO !== '') {
@@ -63,7 +63,7 @@ class Cerrarprog_model extends CI_Model {
 
     public function getHistorialDeControles() {
         try {
-            return $this->db->select('PD.ID AS ID, '
+            return $this->db->select('PD.Clave AS ID, '
                                     . 'PD.Estilo AS IdEstilo, '
                                     . 'PD.Color AS IdColor, '
                                     . "PD.Estilo AS Estilo, "
@@ -90,9 +90,9 @@ class Cerrarprog_model extends CI_Model {
                                     . "ELSE PD.Control END AS Marca, "
                                     . "CONCAT(CT.Ano, CT.Semana, CT.Maquila, CT.Consecutivo) AS Control,"
                                     . "S.ID AS SerieID,"
-                                    . "PD.ID AS ID_PEDIDO", false)->from('pedidox AS PD')
+                                    . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                             ->join('series AS S', 'PD.Serie = S.Clave')
-                            ->join('controles AS CT', 'CT.pedidodetalle = PD.ID')
+                            ->join('controles AS CT', 'CT.pedidodetalle = PD.Clave')
                             ->where('PD.Control <> 0', null, false)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -103,7 +103,7 @@ class Cerrarprog_model extends CI_Model {
         try {
             $this->db->select('CASE WHEN CT.Consecutivo IS NULL THEN 1 ELSE CT.Consecutivo+1 END AS MAX', false)
                     ->from('pedidox AS PD')
-                    ->join('controles AS CT', 'CT.pedidodetalle = PD.ID', 'left')
+                    ->join('controles AS CT', 'CT.pedidodetalle = PD.Clave', 'left')
                     ->where_not_in('PD.Control', array(0))->where('PD.Maquila', $M)->where('PD.Semana', $S);
             return $this->db->order_by('CT.Consecutivo', 'DESC')->limit(1)->get()->result();
         } catch (Exception $exc) {

@@ -121,7 +121,14 @@ class Pedidos extends CI_Controller {
 
     public function onComprobarSemanaMaquila() {
         try {
-            print json_encode($this->pem->onComprobarSemanaMaquila($this->input->get('MAQUILA'), $this->input->get('SEMANA')));
+            $x = $this->input->get();
+            print json_encode($this->db->select("COUNT(*) AS EXISTE", false)
+                                    ->from('semanasproduccioncerradas AS SPC')
+                                    ->where('SPC.Maq', $x['MAQUILA'])
+                                    ->where('SPC.Sem', $x['SEMANA'])
+                                    ->where('SPC.Ano', $x['ANIO'])
+                                    ->where('SPC.Estatus', 'CERRADA')
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -137,7 +144,16 @@ class Pedidos extends CI_Controller {
 
     public function getCapacidadMaquila() {
         try {
-            print json_encode($this->pem->getCapacidadMaquila($this->input->get('CLAVE'), $this->input->get('SEMANA')));
+            $x = $this->input->get();
+            $date = DateTime::createFromFormat("d/m/Y", "{$x['ANIO']}");
+                
+//            print json_encode($this->pem->getCapacidadMaquila($x['CLAVE'], $x['SEMANA'], $x['ANIO']));
+            $this->db->select("`M`.`CapacidadPares` AS `CAPACIDAD`,"
+                            . "IFNULL((SELECT SUM(PD.Pares) FROM pedidox AS PD WHERE PD.Maquila = M.Clave AND PD.Semana = '{$x['SEMANA']}' AND PD.Ano = '{$date->format("Y")}'),0) AS PARES")
+                    ->from('maquilas AS M');
+            print json_encode(
+                            $this->db->where('M.Clave', $x['CLAVE'])
+                            ->limit(1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

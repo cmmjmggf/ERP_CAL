@@ -12,7 +12,7 @@ class Iordendeproduccion_model extends CI_Model {
 
     public function getRecords($CI, $CF) {
         try {
-            $this->db->select('PD.ID AS ID, '
+            $this->db->select('PD.Clave AS ID, '
                             . 'PD.Estilo AS IdEstilo, '
                             . 'PD.Color AS IdColor, '
                             . "E.Clave AS Estilo, "
@@ -44,8 +44,8 @@ class Iordendeproduccion_model extends CI_Model {
                     ->join('estilos AS E', 'PD.Estilo = E.Clave')
                     ->join('colores AS C', 'PD.color = C.Clave AND C.Estilo = E.Clave')
                     ->join('series AS S', 'E.Serie = S.Clave')
-                    ->join('controles AS CT', 'CT.PedidoDetalle = PD.ID')
-                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.ID', 'left')
+                    ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
+                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
                     ->where('PD.Control != 0', null, false);
             if ($CI !== '' && $CF !== '') {
                 $this->db->where("OP.ControlT BETWEEN $CI AND $CF", null, false);

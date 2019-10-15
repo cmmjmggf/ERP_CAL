@@ -58,7 +58,7 @@
                             <legend >Pedido</legend>
                         </div>
                         <div class="col-12 col-sm-12 col-md-6 col-lg-6" align="center">
-                            <button type="button" class="btn btn-primary btn-sm" id="btnCapacidad" onclick="onComprobarCapacidades('#Maquila')" data-toggle="tooltip" data-placement="bottom" title="Comprobar capacidad de la maquila">
+                            <button type="button" class="btn btn-primary btn-sm" id="btnCapacidad" onclick="onComprobarCapacidades('#Maquila', 2)" data-toggle="tooltip" data-placement="bottom" title="Comprobar capacidad de la maquila">
                                 <span class="fa fa-eye" ></span>
                             </button>
                         </div>
@@ -126,11 +126,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!--SEGUNDO CONTENEDOR-->
-            <div class="card  m-3 ">
-                <div class="card-body">
+                    
                     <div class="row">
                         <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
                             <label for="Estilo" >Estilo*</label>
@@ -232,13 +228,15 @@
                     </div>
                     <div class="row pt-2">
                         <div class="col-6 col-sm-6 col-md-6" align="right">
-                            <button type="button" class="btn btn-info btn-lg btn-float animated slideInUp d-none" disabled="" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
+                            <button type="button" class="btn btn-info btn-lg btn-float d-none" disabled="" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
                                 <i class="fa fa-save"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--SEGUNDO CONTENEDOR-->
+          
             <!--FIN SEGUNDO CONTENEDOR-->
             <!--DETALLE-->
             <!--SEGUNDO CONTENEDOR-->
@@ -319,7 +317,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">AVISO</h5>
+                <h5 class="modal-title aviso_titulo">AVISO</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -737,7 +735,7 @@
         });
 
         pnlDatos.find("#Maquila").change(function () {
-            onComprobarCapacidades("#Maquila");
+            onComprobarCapacidades("#Maquila", 1);
             onChecarSemanaValida('#Semana');
             onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
         });
@@ -1451,7 +1449,7 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
         }).always(function () {
             HoldOn.close();
-            onComprobarCapacidades("#Maquila");
+            onComprobarCapacidades("#Maquila", 1);
         });
     }
     function onReload() {
@@ -1518,41 +1516,47 @@
         });
     }
 
-    function onComprobarCapacidades(e) {
+    function onComprobarCapacidades(e, t) {
         var Semana = $("#Semana").val();
-        $.getJSON(master_url + 'getCapacidadMaquila', {CLAVE: pnlDatos.find("#Maquila").val(), SEMANA: Semana}).done(function (data) {
-            console.log(data);
-            var dx = data[0];
-            if (data.length > 0) {
-                var x = '<ul class="list-group">';
-                var ligr = '<li class="list-group-item d-flex justify-content-between">', ligrpclose = '</li>';
-                x += ligr + '<span class="text-info font-weight-bold">CAPACIDAD</span>';
-                x += '<span class="badge badge-primary badge-pill font-weight-bold">' + (dx.CAPACIDAD === null ? 0 : dx.CAPACIDAD) + '</span>' + ligrpclose;
-                x += ligr + '<span class="text-info font-weight-bold">PARES EN LA SEMANA </span><span class="text-danger font-weight-bold">' + Semana + '</span>';
-                x += '<span class="badge badge-primary badge-pill font-weight-bold">' + (dx.PARES === null ? 0 : dx.PARES) + '</span>' + ligrpclose;
-                x += ligr + '<span class="text-info font-weight-bold">ESPACIO</span>';
-                x += '<span class="badge badge-primary badge-pill font-weight-bold">' + (dx.CAPACIDAD === null ? 0 : (dx.CAPACIDAD - dx.PARES)) + '</span>' + ligrpclose;
-                x += '</ul>';
-                mdlAviso.find(".modal-body").html(x);
-                if (dx.CAPACIDAD !== null && dx.PARES !== null) {
-                    var CAPACIDAD = parseFloat(dx.CAPACIDAD), PARES = parseFloat(dx.PARES);
-                    if (PARES > CAPACIDAD) {
-                        mdlAviso.modal({backdrop: false});
-                        setTimeout(function () {
-                            mdlAviso.modal('hide');
-                        }, 5000);
+        if (FechaEntrega.val() !== '') {
+            $.getJSON('<?php print base_url('Pedidos/getCapacidadMaquila'); ?>', {CLAVE: pnlDatos.find("#Maquila").val(), SEMANA: Semana, ANIO: FechaEntrega.val()}).done(function (data) {
+                console.log(data);
+                var dx = data[0];
+                if (data.length > 0) {
+                    var x = '<ul class="list-group">';
+                    var ligr = '<li class="list-group-item d-flex justify-content-between">', ligrpclose = '</li>';
+                    x += ligr + '<span class="text-info font-weight-bold">CAPACIDAD</span>';
+                    x += '<span class="text-danger font-weight-bold">' + (dx.CAPACIDAD === null ? 0 : dx.CAPACIDAD) + '</span>' + ligrpclose;
+                    x += ligr + '<span class="text-info font-weight-bold">PARES EN LA SEMANA </span><span class="text-primary font-weight-bold">' + Semana + '</span>';
+                    x += '<span class="text-danger font-weight-bold">' + (dx.PARES === null ? 0 : dx.PARES) + '</span>' + ligrpclose;
+                    x += ligr + '<span class="text-info font-weight-bold">ESPACIO</span>';
+                    x += '<span class="text-danger font-weight-bold">' + (dx.CAPACIDAD === null ? 0 : (dx.CAPACIDAD - dx.PARES)) + '</span>' + ligrpclose;
+                    x += '</ul>';
+                    mdlAviso.find(".modal-body").html(x);
+                    if (dx.CAPACIDAD !== null && dx.PARES !== null) {
+                        var CAPACIDAD = parseFloat(dx.CAPACIDAD), PARES = parseFloat(dx.PARES);
+                        if (t === 2 || PARES > CAPACIDAD) {
+                            mdlAviso.modal({backdrop: false});
+                            setTimeout(function () {
+                                mdlAviso.modal('hide');
+                            }, (t === 2 ? 10000 : 3000));
+                        }
                     }
                 }
-            }
-        }).fail(function (x, y, z) {
-            console.log(x.responseText);
-            swal('ATENCION', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLES', 'warning');
-        });
+            }).fail(function (x, y, z) {
+                console.log(x.responseText);
+                swal('ATENCION', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLES', 'warning');
+            });
+        } else {
+            swal('ATENCION', 'DEBE DE CAPTURAR UN CLIENTE, LAS FECHAS CORRESPONDIENTES AL PEDIDO Y EL ESTILO, PARA PODER REVISAR LAS CAPACIDADES DE LA MAQUILA', 'warning').then((value) => {
+                PedidoxCliente[0].selectize.focus();
+            });
+        }
     }
 
     function onComprobarSemanaMaquila(m, s) {
         /*COMPROBAR FECHA POR SEMANA(ABIERTA,CERRADA) Y MAQUILA*/
-        $.getJSON(master_url + 'onComprobarSemanaMaquila', {MAQUILA: parseInt(m), SEMANA: s}).done(function (data) {
+        $.getJSON('<?php print base_url('Pedidos/onComprobarSemanaMaquila') ?>', {MAQUILA: parseInt(m), SEMANA: s, ANIO: FechaEntrega.val()}).done(function (data) {
             console.log(data);
             var cerrada = data[0].EXISTE;
             if (parseInt(cerrada) === 0) {

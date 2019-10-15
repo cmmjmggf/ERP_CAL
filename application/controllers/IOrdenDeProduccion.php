@@ -243,7 +243,7 @@ class IOrdenDeProduccion extends CI_Controller {
                     $pdf->setAlto(3.5);
                     $col = array(5/* 0 */, 30/* 1 */, 80/* 2 */, 88/* 3 */, 98/* 4 */, 108/* 5 */, 133/* 6 */, 183/* 7 */, 191/* 8 */, 200/* 9 */);
                     $anc = array(25, 50, 8, 10, 10);
-                    $alto_celda = 3;
+                    $alto_celda = 2.75;
                     $COLUMN = 1;
                     $border = 0;
                     $pdf->SetLineWidth(0.2);

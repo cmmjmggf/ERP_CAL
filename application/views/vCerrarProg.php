@@ -186,108 +186,7 @@
     var tblHistorial = mdlHistorial.find('#tblHistorial');
     var pnlTablero = $("#pnlTablero");
     var MaquilaCerrarProg = pnlTablero.find("#col12_filter"), SemanaCerrarProg = pnlTablero.find("#col13_filter"), AnoCerrarProg = pnlTablero.find("#col14_filter");
-    var options_cerrarprog = {
-        dom: 'Brtip',
-        buttons: [
-            {
-                text: "Todos",
-                className: 'btn btn-info btn-sm',
-                titleAttr: 'Todos',
-                action: function (dt) {
-                    CerrarProg.rows({page: 'current'}).select();
-                }
-            },
-            {
-                extend: 'selectNone',
-                className: 'btn btn-info btn-sm',
-                text: 'Ninguno',
-                titleAttr: 'Deseleccionar Todos'
-            }
-        ], "ajax": {
-            "url": master_url + 'getRecords',
-            "dataSrc": "",
-            "data": function (d) {
-                d.MAQUILA = (MaquilaCerrarProg.val().trim());
-                d.SEMANA = (SemanaCerrarProg.val().trim());
-                d.ANIO = (AnoCerrarProg.val().trim());
-            }
-        },
-        "columnDefs": [
-            {
-                "targets": [0],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [1],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [2],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [16],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [17],
-                "visible": false,
-                "searchable": false
-            }],
-        "columns": [
-            {"data": "ID"}, /*0*/
-            {"data": "IdEstilo"}, /*1*/
-            {"data": "IdColor"}, /*2*/
-            {"data": "Pedido"}, /*3*/
-            {"data": "Cliente"}, /*4*/
-            {"data": "Estilo"}, /*5*/
-            {"data": "Color"}, /*6*/
-            {"data": "Serie"}, /*7*/
-            {"data": "Fecha Captura"}, /*8*/
-            {"data": "Fecha Pedido"}, /*9*/
-            {"data": "Fecha Entrega"}, /*10*/
-            {"data": "Pares"}, /*11*/
-            {"data": "Maq"}, /*12*/
-            {"data": "Semana"}, /*13*/
-            {"data": "Anio"}, /*14*/
-            {"data": "Control"}, /*15*/
-            {"data": "SerieID"}/*16*/,
-            {"data": "ID_PEDIDO"}/*17*/
-        ],
-        language: lang,
-        select: true,
-        keys: true,
-        "autoWidth": true,
-        "colReorder": true,
-        "displayLength": 9999999999,
-        "scrollY": 380,
-        "scrollX": true,
-        "bLengthChange": false,
-        "deferRender": true,
-        "scrollCollapse": false,
-        "bSort": true,
-        "aaSorting": [
-            [0, 'desc']/*ID*/
-        ],
-        "createdRow": function (row, data, dataIndex, cells) {
-            $.each($(row), function (k, v) {
-                if (data["Marca"] === '0' && data["Control"] !== null) {
-                    $(v).addClass('HasMca');
-                }
-            });
-        },
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(); //Get access to Datatable API
-            // Update footer
-            $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
-                return parseFloat(a) + parseFloat(b);
-            }, 0));
-        }
-    };
+
 
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
@@ -399,15 +298,15 @@
 // Start the tour
             tour.start();
             init();
-            
+
             AnoCerrarProg.keydown(function (e) {
                 if (e.keyCode === 13) {
                     onFiltrar();
                 }
             });
-            
+
             SemanaCerrarProg.keydown(function (e) {
-                if (e.keyCode === 13) { 
+                if (e.keyCode === 13) {
                     onFiltrar();
                 }
             });
@@ -485,7 +384,6 @@
                         CerrarProg.ajax.reload();
                         HoldOn.close();
                     } else {
-                        CerrarProg = tblCerrarProg.DataTable(options_cerrarprog);
                         HoldOn.close();
                     }
                 } else {
@@ -537,6 +435,109 @@
     }
 
     function init() {
+        AnoCerrarProg.val('<?php print Date('Y'); ?>');
+        CerrarProg = tblCerrarProg.DataTable({
+            dom: 'Brtip',
+            buttons: [
+                {
+                    text: "Todos",
+                    className: 'btn btn-info btn-sm',
+                    titleAttr: 'Todos',
+                    action: function (dt) {
+                        CerrarProg.rows({page: 'current'}).select();
+                    }
+                },
+                {
+                    extend: 'selectNone',
+                    className: 'btn btn-info btn-sm',
+                    text: 'Ninguno',
+                    titleAttr: 'Deseleccionar Todos'
+                }
+            ], "ajax": {
+                "url": master_url + 'getRecords',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MAQUILA = (MaquilaCerrarProg.val().trim());
+                    d.SEMANA = (SemanaCerrarProg.val().trim());
+                    d.ANIO = (AnoCerrarProg.val().trim());
+                }
+            },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [1],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [2],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [16],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [17],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                {"data": "ID"}, /*0*/
+                {"data": "IdEstilo"}, /*1*/
+                {"data": "IdColor"}, /*2*/
+                {"data": "Pedido"}, /*3*/
+                {"data": "Cliente"}, /*4*/
+                {"data": "Estilo"}, /*5*/
+                {"data": "Color"}, /*6*/
+                {"data": "Serie"}, /*7*/
+                {"data": "Fecha Captura"}, /*8*/
+                {"data": "Fecha Pedido"}, /*9*/
+                {"data": "Fecha Entrega"}, /*10*/
+                {"data": "Pares"}, /*11*/
+                {"data": "Maq"}, /*12*/
+                {"data": "Semana"}, /*13*/
+                {"data": "Anio"}, /*14*/
+                {"data": "Control"}, /*15*/
+                {"data": "SerieID"}/*16*/,
+                {"data": "ID_PEDIDO"}/*17*/
+            ],
+            language: lang,
+            select: true,
+            keys: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 9999999999,
+            "scrollY": 380,
+            "scrollX": true,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "aaSorting": [
+                [0, 'desc']/*ID*/
+            ],
+            "createdRow": function (row, data, dataIndex, cells) {
+                $.each($(row), function (k, v) {
+                    if (data["Marca"] === '0' && data["Control"] !== null) {
+                        $(v).addClass('HasMca');
+                    }
+                });
+            },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(); //Get access to Datatable API
+                // Update footer
+                $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0));
+            } 
+        });
         pnlTablero.find("#col14_filter").val((new Date()).getFullYear());
         pnlTablero.find("#col12_filter").focus();
         handleEnter();
@@ -695,8 +696,7 @@
             contentType: false,
             processData: false,
             data: f
-        }).done(function (data, x, jq) {
-            console.log(data);
+        }).done(function (data, x, jq) { 
             swal({
                 title: 'INFO',
                 text: 'SE HAN ' + (i > 0 ? 'MARCADO' : 'DESMARCADO') + ' LOS REGISTROS',

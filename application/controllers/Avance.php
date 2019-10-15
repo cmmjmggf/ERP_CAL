@@ -282,7 +282,7 @@ class Avance extends CI_Controller {
                     'Hora' => Date('h:i:s a'),
                     'Fraccion' => $x->post('FRACCION')
                 ));
-                $this->db->set('stsavan', $depto)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
                 /* DE ADORNO B PASA A ALMACEN DE ADORNO */
                 if ($depto === 220) {
                     $db->set('EstatusProduccion', 'ALMACEN ADORNO')
@@ -291,7 +291,7 @@ class Avance extends CI_Controller {
                     $db->set('EstatusProduccion', 'ALMACEN ADORNO')
                             ->set('DeptoProduccion', $x->post('DEPTO'))
                             ->where('Control', $x->post('CONTROL'))->update('pedidox');
-                    $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                    $this->db->set('stsavan', 11)->where('Control', $x->post('CONTROL'))->update('pedidox');
                 }
                 $id = $db->insert_id();
             }
@@ -377,16 +377,16 @@ class Avance extends CI_Controller {
                             intval($check_maquila[0]->MP3) >= 0 &&
                             intval($check_maquila[0]->MP4) >= 0) {
                         $this->db->set('fec42', Date('Y-m-d h:i:s'))
-                                ->where('contped', $Control)
+                                ->where('contped', $x->post('CONTROL'))
                                 ->update('avaprd');
                         $this->db->set('EstatusProduccion', 'ALMACEN CORTE')
                                 ->set('DeptoProduccion', 105)
-                                ->where('Control', $Control)
+                                ->where('Control', $x->post('CONTROL'))
                                 ->update('controles');
                     } else {
                         $this->db->set('EstatusProduccion', 'MAQUILA')
                                 ->set('DeptoProduccion', 100)
-                                ->where('Control', $Control)
+                                ->where('Control', $x->post('CONTROL'))
                                 ->update('controles');
                     }
                 }

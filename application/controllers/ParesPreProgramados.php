@@ -82,7 +82,8 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosCliente() {
         try {
             $x = $this->input;
-            $CLIENTES = $this->pam->getClientes($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
+            $xx = $this->input->post();
+            $CLIENTES = $this->pam->getClientes($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
 
             $bordes = 0;
             $alto_celda = 4;
@@ -169,7 +170,7 @@ class ParesPreProgramados extends CI_Controller {
                     utf8_decode($v->CLAVE_AGENTE . " " . $v->AGENTE)/* 1 */, /* SI NO TIENE AGENTE O ESTA EN CERO, ES UNA MUESTRA */
                     utf8_decode($v->ESTADO)));
                 $pdf->Line(10, $pdf->GetY(), 110, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_CLIENTE, 1, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_CLIENTE, 1, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 6.5);
                 foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
@@ -229,6 +230,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosEstilo() {
         try {
             $x = $this->input;
+            $xx = $this->input->post();
             $ESTILOS = $this->pam->getEstilos($x->post('ESTILO'), $x->post('CLIENTE'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
             $bordes = 0;
             $alto_celda = 4;
@@ -312,7 +314,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->SetWidths(array(15/* 0 */, 40/* 1 */, 20/* 2 */));
                 $pdf->RowNoBorder(array(utf8_decode($v->CLAVE_ESTILO)/* 0 */, utf8_decode($v->COLOR)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 65, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
                 $bordes = 0;
                 $pdf->SetX(65);
                 foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
@@ -374,6 +376,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosLineas() {
         try {
             $x = $this->input;
+            $xx = $this->input->post();
             $LINEAS = $this->pam->getLineas($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'));
             $bordes = 0;
             $alto_celda = 4;
@@ -457,7 +460,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->SetWidths(array(20/* 0 */, 20/* 1 */, 20/* 2 */));
                 $pdf->RowNoBorder(array(utf8_decode($v->CLAVE_LINEA . " " . $v->LINEA)/* 0 */));
                 $pdf->Line(10, $pdf->GetY(), 30, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_LINEA, 3, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_LINEA, 3, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
                 $bordes = 0;
                 foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
                     $Y = $pdf->GetY();
@@ -517,6 +520,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramadosMaquila() {
         try {
             $xxx = $this->input;
+            $xxxx = $this->input->post();
             $MAQUILAS = $this->pam->getMaquila($xxx->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'));
 
             $bordes = 0;
@@ -589,7 +593,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->setAlto(4);
                 $pdf->RowNoBorder(array(utf8_decode($v->MAQUILA)/* 0 */, utf8_decode($v->CAPACIDAD_PARES)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 130.9, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'));
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'), $xxxx['ANIO']);
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->setAlto(3.5);
@@ -644,8 +648,9 @@ class ParesPreProgramados extends CI_Controller {
 
     public function getParesPreProgramadosSemanaMaquila() {
         try {
+            $z = $this->input->post();
             $xxx = $this->input;
-            $MAQUILAS = $this->pam->getMaquila($this->input->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'));
+            $MAQUILAS = $this->pam->getMaquila($this->input->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'),$z['ANIO']);
 
             $bordes = 0;
             $alto_celda = 4;
@@ -717,7 +722,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->setAlto(4);
                 $pdf->RowNoBorder(array(utf8_decode($v->MAQUILA)/* 0 */, utf8_decode($v->CAPACIDAD_PARES)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 130.9, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'));
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'),$z['ANIO']);
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->setAlto(3.5);

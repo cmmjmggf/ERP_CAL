@@ -42,8 +42,54 @@ class CerrarProg extends CI_Controller {
 
     public function getRecords() {
         try {
-            $x = $this->input;
-            print json_encode($this->cprm->getRecords($x->get('MAQUILA'), $x->get('SEMANA'), $x->get('ANIO')));
+            $x = $this->input->get();
+//            print json_encode($this->cprm->getRecords(
+//            $x->get('MAQUILA'), $x->get('SEMANA'), $x->get('ANIO')));
+            $this->db->select('PD.Clave AS ID, '
+                            . 'PD.Estilo AS IdEstilo, '
+                            . 'PD.Color AS IdColor, '
+                            . "PD.Estilo AS Estilo, "
+                            . "PD.Estilo AS \"Descripcion Estilo\", "
+                            . "PD.color AS Color, "
+                            . "PD.color AS \"Descripcion Color\", "
+                            . "PD.Clave AS Pedido,"
+                            . "PD.FechaPedido AS \"Fecha Pedido\","
+                            . "PD.FechaRecepcion AS \"Fecha Entrega\","
+                            . "PD.Registro AS \"Fecha Captura\","
+                            . "PD.Semana AS Semana,"
+                            . "PD.Maquila AS Maq,"
+                            . "PD.Cliente AS Cliente,"
+                            . "PD.Cliente AS \"Cliente Razon\","
+                            . "PD.Pares AS Pares,"
+                            . "CONCAT('$',PD.Precio) AS Precio , "
+                            . "CONCAT('$',(PD.Precio * PD.Pares)) AS Importe, "
+                            . "CONCAT('$',(PD.Precio * PD.Pares)) AS Descuento,"
+                            . "PD.FechaEntrega AS Entrega,"
+                            . "CONCAT(S.PuntoInicial ,'/',S.PuntoFinal) AS Serie, "
+                            . "PD.Ano AS Anio,"
+                            . " CASE "
+                            . "WHEN PD.Control IS NULL THEN '' "
+                            . "WHEN PD.Control  = 0 THEN '' "
+                            . "ELSE PD.Control END AS Marca, "
+                            . "PD.Control AS Control,"
+                            . "S.ID AS SerieID,"
+                            . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
+                    ->join('series AS S', 'PD.Serie = S.Clave')
+                    ->where('PD.Control', 0);
+            if ($x['ANIO'] !== '') {
+                $this->db->where('PD.Ano', $x['ANIO']);
+            }
+            if ($x['MAQUILA'] !== '') {
+                $this->db->where('PD.Maquila', $x['MAQUILA']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('PD.Semana', $x['SEMANA']);
+            }
+
+
+            $sql = $this->db->get();
+//            PRINT $this->db->last_query();
+            print json_encode($sql->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -59,18 +105,39 @@ class CerrarProg extends CI_Controller {
 
     public function onGenerarControles() {
         try {
-            $controles = json_decode($this->input->post('SubControles'));
-
-            switch ($this->input->post('Marca')) {
+            $x = $this->input->post();
+            $controles = json_decode($x['SubControles']);
+            switch ($x['Marca']) {
                 case 1:
                     foreach ($controles as $k => $v) {
                         if ($v->Control == "" || $v->Control == 0) {
                             $Y = substr(Date('Y'), 2);
                             $M = str_pad($v->Maquila, 2, '0', STR_PAD_LEFT);
                             $S = str_pad($v->Semana, 2, '0', STR_PAD_LEFT);
-                            $C = str_pad($this->cprm->getMaximoConsecutivo($v->Maquila, $v->Semana, 0)[0]->MAX, 3, '0', STR_PAD_LEFT);
-                            $C = $C > 0 ? $C : str_pad(1, 3, '0', STR_PAD_LEFT);
-                            $this->cprm->onAgregarControl(array(
+
+                            $EXISTEN_REGISTROS = $this->db->select('count(*) AS EXISTE', false)
+                                            ->from('controles AS C')
+                                            ->where("C.Ano = ABS({$Y}) AND C.Semana = ABS({$v->Semana}) "
+                                                    . "AND C.Maquila = ABS({$v->Maquila})"
+                                                    . "ORDER BY `C`.`Consecutivo` DESC", null, false)
+                                            ->limit(1)->get()->result();
+
+
+                            $MAXIMO_CONSECUTIVO = $this->db->select('(CT.Consecutivo+1) AS MAX', false)
+                                            ->from('controles AS CT')
+                                            ->where("CT.Maquila = ABS({$v->Maquila}) "
+                                                    . "AND CT.Semana = ABS({$S}) "
+                                                    . "AND CT.Ano = ABS({$Y})", null, false)
+                                            ->order_by('CT.Consecutivo', 'DESC')
+                                            ->limit(1)->get()->result();
+
+//                            print $this->db->last_query();
+//                            exit(0);
+                            $C = str_pad(((intval($EXISTEN_REGISTROS[0]->EXISTE) === 0) ? 1 : $MAXIMO_CONSECUTIVO[0]->MAX), 3, '0', STR_PAD_LEFT);
+                            $C = ((intval($C) > 0) ? $C : str_pad($C, 3, '0', STR_PAD_LEFT));
+
+//                            exit(0);
+                            $this->db->insert("controles", array(
                                 'Control' => $Y . $S . $M . $C,
                                 'FechaProgramacion' => Date('Y-m-d h:i:s'),
                                 'Estilo' => $v->Estilo, 'Color' => $v->Color,
@@ -81,8 +148,17 @@ class CerrarProg extends CI_Controller {
                                 'Ano' => $Y, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
                             ));
                             $Control = $Y . $S . $M . $C;
-                            $this->db->set('Control', $Control)->set('FechaProduccion', Date('Y-m-d h:i:s'))->where('ID', $v->PedidoDetalle)->update('pedidox');
+                            $this->db->set('Control', $Control)->set('FechaProduccion', Date('Y-m-d h:i:s'))
+                                    ->where('Estilo', $v->Estilo)
+                                    ->where('Color', $v->Color)
+                                    ->where('Serie', $v->Serie)
+                                    ->where('Maquila', $v->Maquila)
+                                    ->where('Semana', $v->Semana)
+                                    ->where('Ano', $v->Ano)
+                                    ->where('Clave', $v->PedidoDetalle)
+                                    ->update('pedidox');
 //                            print $this->db->last_query();/*QUEDA PARA PRUEBAS*/
+//                            exit(0);
 
                             /* AGREGAR REGISTRO EN AVAPRD (FILI) */
                             $check_control = $this->db->select('COUNT(A.contped) AS EXISTE', false)

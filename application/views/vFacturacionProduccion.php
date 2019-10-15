@@ -106,12 +106,8 @@
                 <input type="text" id="LPFactura" name="LPFactura" readonly="" data-toggle="tooltip" data-placement="bottom" title="Lista de precios"  class="form-control form-control-sm">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
-                <label>TP</label>
-                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm">
-                    <option></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
+                <label>TP</label> 
+                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>FA-PE.ORCO</label>
@@ -127,7 +123,8 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
-                <input type="number" id="TMNDAFactura" name="TMNDAFactura" max="2" min="0" class="form-control form-control-sm">
+                <input type="text" id="TMNDAFactura" name="TMNDAFactura"  class="form-control form-control-sm numbersOnly"> 
+
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <div class="form-group"> 
@@ -889,7 +886,8 @@
                                         btnElijeControl.attr('disabled', true);
                                         if (facturado) {
                                             ClienteFactura[0].selectize.disable();
-                                            TPFactura[0].selectize.disable();
+                                            TPFactura.attr('disabled', true);
+//                                            TPFactura[0].selectize.disable();
                                             btnElijeControl.addClass("d-none");
                                             btnAcepta.addClass("d-none");
                                         }
@@ -1034,6 +1032,7 @@
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
                     var xxx = ControlesXFacturar.row($(this)).data();
+                    console.log("TR XXX = ",xxx)
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
@@ -1061,43 +1060,12 @@
         });
 
         TPFactura.change(function (e) {
-            $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
-                if (abcde.length > 0) {
-                    TIPODECAMBIO.val(abcde[0].DOLAR);
-                }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-
-            });
-            if (ClienteFactura.val() && TPFactura.val()) {
-                var x = parseInt(TPFactura.val()) === 1 ? 1 : 2;
-                if (x === 1 || x === 2) {
-//                    onOpenOverlay('');
-                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
-                        TP: x
-                    }).done(function (a) {
-                        if (a.length > 0) {
-                            var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
-                            Documento.val(r);
-                            getReferencia();
-                        }
-                        FCAFactura.val(0);
-                        PAGFactura.val(1);
-                        TMNDAFactura.val(0); //0 = pesos mexicanos, 1 = dolares americanos
-                    }).fail(function (xyz) {
-                        getError(xyz);
-                    }).always(function () {
-                        onCloseOverlay();
-                    });
-                } else {
-                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
-                        TPFactura.focus().select();
-                    });
-                }
-            } else {
+            getTipoDeCambioYUltimaFactura();
+        }).keypress(function (e) {
+            if (e.keyCode === 13) {
+                getTipoDeCambioYUltimaFactura();
             }
-        });
+        })
 
         btnClientes.click(function () {
             onBeep(1);
@@ -1465,15 +1433,16 @@
                                         }
                                         getTotalPares();
                                         /*OBTENER CODIGO DEL SAT X ESTILO*/
-                                        onObtenerCodigoSatXEstilo();
                                         FolioFactura.val(xx.CLAVE_PEDIDO);
                                         CorridaFacturacion.val(xx.SERIET);
                                         EstiloFacturacion.val(xx.ESTILOT);
                                         EstiloTFacturacion.val(xx.ESTILO_TEXT);
                                         ColorFacturacion.val(xx.COLORT);
+                                        ColorClaveFacturacion.val(xx.COLOR_CLAVE);
                                         PrecioFacturacion.val(xx.PRECIO);
                                         CajasFacturacion.val(1);
                                         CajasFacturacion.focus().select();
+                                        onObtenerCodigoSatXEstilo();
                                         var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
                                         var stt = parseFloat(xx.Precio) * prs;
                                         SubtotalFacturacion.val(stt);
@@ -1596,9 +1565,7 @@
     function onObtenerCodigoSatXEstilo() {
         /*OBTENER CODIGO DEL SAT X ESTILO*/
         $.getJSON('<?php print base_url('FacturacionProduccion/onObtenerCodigoSatXEstilo'); ?>', {ESTILO: EstiloFacturacion.val()}).done(function (abcd) {
-            if (abcd.length > 0) {
-                CodigoSat.val(abcd[0].CPS);
-            }
+            CodigoSat.val(abcd[0].CPS);
         });
     }
     function onAceptarControl() {
@@ -1606,6 +1573,7 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
+        onObtenerCodigoSatXEstilo();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
@@ -1634,14 +1602,8 @@
         ParesFacturados.row.add(rowx).draw(false);
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         getTotalFacturado();
-        /*DESHABILITAR CAMPOS*/
-        FechaFactura.attr('readonly', true);
-        Documento.attr('readonly', true);
-        FCAFactura.attr('readonly', true);
-        PAGFactura.attr('readonly', true);
-        TMNDAFactura.attr('readonly', true);
-        ClienteFactura[0].selectize.disable();
-        TPFactura[0].selectize.disable();
+
+
         /*REGISTRAR EN FACTURACION*/
         var p = {
             FECHA: FechaFactura.val(),
@@ -1661,6 +1623,7 @@
             PARES_A_FACTURAR: TotalParesEntregaAF.val(),
             TIENDA: Tienda.val()
         };
+        console.log("PARAMETROS 1: ",p);
         for (var i = 1; i < 23; i++) {
             p["C" + i] = ($.isNumeric(pnlTablero.find("#C" + i).val()) ? parseInt(pnlTablero.find("#C" + i).val()) : 0);
             p["CF" + i] = ($.isNumeric(pnlTablero.find("#CF" + i).val()) ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
@@ -1677,7 +1640,7 @@
         p["COLOR_TEXT"] = ColorFacturacion.val();
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
-//        console.log("\p PARAMETROS ", p);
+        console.log("PARAMETROS 2 : ", p);
         $.post('<?php print base_url('FacturacionProduccion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
             /*REINICIAR VALORES POR DEFECTO PARA EL DETALLE*/
@@ -1712,6 +1675,16 @@
 
             btnVistaPreviaF.attr('disabled', false);
             btnReimprimeDocto.attr('disabled', false);
+
+            /*DESHABILITAR CAMPOS*/
+            FechaFactura.attr('readonly', true);
+            Documento.attr('readonly', true);
+            FCAFactura.attr('readonly', true);
+            PAGFactura.attr('readonly', true);
+            TMNDAFactura.attr('readonly', true);
+            ClienteFactura[0].selectize.disable();
+//        TPFactura[0].selectize.disable();
+            TPFactura.attr('disabled', true);
         }).fail(function (x) {
             getError(x);
         }).always(function () {
@@ -1721,6 +1694,7 @@
         Control.val('');
         Control.focus().select();
     }
+
     function onCargarDoctoByNumero() {
         var docto = Documento.val();
     }
@@ -1729,7 +1703,8 @@
         if (tf) {
             FechaFactura.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
-            TPFactura[0].selectize.disable();
+//            TPFactura[0].selectize.disable();
+            TPFactura.attr('disabled', true);
             Documento.attr('disabled', true);
             FCAFactura.attr('disabled', true);
             PAGFactura.attr('disabled', true);
@@ -1759,6 +1734,51 @@
             }
         }
 
+    }
+
+    function getTipoDeCambioYUltimaFactura() {
+        var tpx = parseInt(TPFactura.val());
+        if (tpx >= 1 && tpx <= 2) {
+            $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
+                if (abcde.length > 0) {
+                    TIPODECAMBIO.val(abcde[0].DOLAR);
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+            if (ClienteFactura.val() && TPFactura.val()) {
+                var x = tpx === 1 ? 1 : 2;
+                if (x === 1 || x === 2) {
+                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                        TP: x
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
+                            Documento.val(r);
+                            getReferencia();
+                        }
+                        FCAFactura.val(0);
+                        PAGFactura.val(1);
+                        TMNDAFactura.val(0); //0 = pesos mexicanos, 1 = dolares americanos
+                    }).fail(function (xyz) {
+                        getError(xyz);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
+                        TPFactura.focus().select();
+                    });
+                }
+            } else {
+            }
+        } else {
+            swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
+                TPFactura.focus().select();
+            });
+        }
     }
 </script>
 

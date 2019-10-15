@@ -46,7 +46,7 @@ class Clientes_model extends CI_Model {
 
     public function getID() {
         try {
-            return $this->db->select("A.Clave AS CLAVE")->from("clientes AS A")->order_by("Clave", "DESC")->limit(1)->get()->result();
+            return $this->db->select("(IFNULL(A.Clave,0))  AS CLAVE")->from("clientes AS A")->order_by("abs(Clave)", "DESC")->limit(1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
