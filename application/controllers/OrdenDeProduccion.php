@@ -368,4 +368,33 @@ class OrdenDeProduccion extends CI_Controller {
         }
     }
 
+    public function getTotalParesXMaquilaXSemanaXAno() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("IFNULL(SUM(PD.Pares),0) AS PARES", false)->from('pedidox AS PD')
+                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
+                    ->join('series AS S', 'PD.Serie = S.Clave')
+                    ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
+                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
+                    ->where('PD.Control <> 0 AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
+                    ->where('CT.Estatus', 'A');
+            if ($x["ANIO"] !== '') {
+                $this->db->where('PD.Ano', $x["ANIO"]);
+                $ANIO_CT = substr($x["ANIO"], 2, 2);
+                $this->db->where('CT.Ano', $ANIO_CT);
+            }
+            if ($x["MAQUILA"] !== '') {
+                $this->db->where('PD.Maquila', $x["MAQUILA"]);
+            }
+            if ($x["SEMANA"] !== '') {
+                $this->db->where('PD.Semana', $x["SEMANA"]);
+            } 
+            $sql = $this->db->get();
+//                PRINT $this->db->last_query();
+            print json_encode($sql->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
