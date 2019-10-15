@@ -289,13 +289,13 @@ class FichaTecnica extends CI_Controller {
             $MATERIALNUEVO = $this->input->post('MATERIALNUEVO');
             $CONSUMO = $this->input->post('CONSUMO');
             if ($CONSUMO !== '' && intval($CONSUMO) > 0) {
-                $this->db->query("UPDATE fichatecnica AS FT 
-                INNER JOIN estilos AS E ON FT.Estilo = E.Clave 
-                SET FT.Articulo = {$MATERIALNUEVO} 
+                $this->db->query("UPDATE fichatecnica AS FT
+                INNER JOIN estilos AS E ON FT.Estilo = E.Clave
+                SET FT.Articulo = {$MATERIALNUEVO}
             WHERE E.Linea = {$LINEA}  AND FT.Articulo = $MATERIAL;");
             } else {
-                $this->db->query("UPDATE fichatecnica AS FT 
-                INNER JOIN estilos AS E ON FT.Estilo = E.Clave 
+                $this->db->query("UPDATE fichatecnica AS FT
+                INNER JOIN estilos AS E ON FT.Estilo = E.Clave
                 SET FT.Articulo = {$MATERIALNUEVO} , FT.Consumo = {$CONSUMO}
             WHERE E.Linea = {$LINEA}  AND FT.Articulo = {$MATERIAL};");
             }
@@ -482,7 +482,7 @@ class FichaTecnica extends CI_Controller {
             $ESTILO = $this->input->post('ESTILO');
             $COLOR = $this->input->post('COLOR');
             $ftf = $this->db->select("(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO,
-                            FTF.Pieza AS CLAVE_PIEZA, P.Descripcion AS PIEZA, 
+                            FTF.Pieza AS CLAVE_PIEZA, P.Descripcion AS PIEZA,
                             FTF.Articulo AS CLAVE_ARTICULO, A.Descripcion AS ARTICULO,
                             A.UnidadMedida AS UNIDAD,  FTF.Consumo AS CONSUMO, 0 AS pzXPar, 0 AS ID,
                             CONCAT(D.Clave, ' - ', D.Descripcion) AS DeptoCat, D.Clave AS DEPTO", false)
@@ -557,7 +557,7 @@ class FichaTecnica extends CI_Controller {
             $x = $this->input;
             $data = array(
                 'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
-                'Articulo' => ($x->post('Articulo') !== NULL) ? $x->post('Articulo') : NULL,
+                'Articulo' => ($x->post('eArticulo') !== NULL) ? $x->post('eArticulo') : NULL,
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
                 'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
                 'AfectaPV' => ($x->post('AfectaPV') !== NULL) ? $x->post('AfectaPV') : 0,
@@ -629,7 +629,7 @@ class FichaTecnica extends CI_Controller {
                     'Pieza' => $PIEZA, 'Articulo' => $ARTICULO,
                     'Precio' => $v->PRECIO, 'Consumo' => $CONSUMO,
                     'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
-                $this->db->insert('fichatecnica',$FT);
+                $this->db->insert('fichatecnica', $FT);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

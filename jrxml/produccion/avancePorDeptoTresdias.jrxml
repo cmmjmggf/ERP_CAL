@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.675744345584191"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.2304157239725586"/>
+	<property name="ireport.x" value="505"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -47,11 +47,11 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-C.Pedido, C.Control, C.FechaProgramacion,
+C.Pedido, C.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
 cast(ifnull(D.Clave,'1') as signed) as ClaveDepto,
 ifnull(D.Descripcion,'PROGRAMADO') as nombreDepto,
 case
-when (D.Clave is null) then C.fechaprogramacion
+when (D.Clave is null) then str_to_date(PE.FechaProg,'%Y-%m-%d')
 when (D.Clave = '10') then A.fec2
 when (D.Clave = '20') then A.fec3
 when (D.Clave = '30') then A.fec33
@@ -353,7 +353,7 @@ order by ClaveDepto, C.control ASC]]>
 				<text><![CDATA[Combinación]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="70" y="45" width="38" height="11" forecolor="#000000" uuid="49f2f253-ead5-41f0-9d49-58fb3ad5eacf"/>
+				<reportElement style="Column header" x="70" y="45" width="42" height="11" forecolor="#000000" uuid="49f2f253-ead5-41f0-9d49-58fb3ad5eacf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -416,7 +416,7 @@ order by ClaveDepto, C.control ASC]]>
 				<text><![CDATA[Depto. Avan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="211" y="45" width="38" height="11" forecolor="#000000" uuid="6c634de6-2dd3-4190-a5f0-97a2aac22188"/>
+				<reportElement style="Column header" x="211" y="45" width="40" height="11" forecolor="#000000" uuid="6c634de6-2dd3-4190-a5f0-97a2aac22188"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -465,14 +465,14 @@ order by ClaveDepto, C.control ASC]]>
 				<text><![CDATA[Linea]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="707" y="45" width="35" height="11" forecolor="#000000" uuid="55fe3a08-3873-497f-a302-93690e79031d"/>
+				<reportElement style="Column header" x="707" y="45" width="36" height="11" forecolor="#000000" uuid="55fe3a08-3873-497f-a302-93690e79031d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true" isStrikeThrough="false"/>
 				</textElement>
 				<text><![CDATA[Fec-Ent]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="742" y="37" width="26" height="19" forecolor="#000000" uuid="bfd68601-f521-40b7-89c6-9be86d1e51d6"/>
+				<reportElement style="Column header" x="743" y="37" width="26" height="19" forecolor="#000000" uuid="bfd68601-f521-40b7-89c6-9be86d1e51d6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true" isStrikeThrough="false"/>
 				</textElement>
@@ -486,7 +486,7 @@ order by ClaveDepto, C.control ASC]]>
 				<text><![CDATA[Avance por depto. mayor o igual a 3 días]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="111" y="45" width="18" height="11" forecolor="#000000" uuid="0fb8a235-2604-4b77-8896-270ff07674f2"/>
+				<reportElement style="Column header" x="112" y="45" width="18" height="11" forecolor="#000000" uuid="0fb8a235-2604-4b77-8896-270ff07674f2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -566,14 +566,14 @@ order by ClaveDepto, C.control ASC]]>
 				<textFieldExpression><![CDATA[$F{Pedido}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="70" y="0" width="38" height="9" uuid="08619e0e-04d3-493a-96ce-a4c74c9d5a1b"/>
+				<reportElement x="70" y="0" width="42" height="9" uuid="08619e0e-04d3-493a-96ce-a4c74c9d5a1b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaProgramacion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="211" y="0" width="38" height="9" uuid="fd33db88-ec04-4f73-860b-3496263f377f"/>
+				<reportElement x="211" y="0" width="40" height="9" uuid="fd33db88-ec04-4f73-860b-3496263f377f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -624,14 +624,14 @@ order by ClaveDepto, C.control ASC]]>
 				<textFieldExpression><![CDATA[$F{diaprg}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="707" y="0" width="35" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
+				<reportElement x="707" y="0" width="36" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaEntrega}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="742" y="0" width="25" height="9" uuid="8224a009-c3de-4388-8fe2-6c1592e37c38"/>
+				<reportElement x="743" y="0" width="25" height="9" uuid="8224a009-c3de-4388-8fe2-6c1592e37c38"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -652,7 +652,7 @@ order by ClaveDepto, C.control ASC]]>
 				<textFieldExpression><![CDATA[$V{dias_prog}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
-				<reportElement x="111" y="0" width="18" height="9" uuid="e92de804-ac4b-4863-86dd-48eed60dd277"/>
+				<reportElement x="112" y="0" width="18" height="9" uuid="e92de804-ac4b-4863-86dd-48eed60dd277"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>

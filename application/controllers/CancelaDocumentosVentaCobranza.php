@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
-class CancelaDocumentosVenta extends CI_Controller {
+class CancelaDocumentosVentaCobranza extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -28,7 +28,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFondo')->view('vCancelaDocumentosVenta')->view('vFooter');
+            $this->load->view('vFondo')->view('vCancelaDocumentosVentaCobranza')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -37,13 +37,19 @@ class CancelaDocumentosVenta extends CI_Controller {
     public function onCancelarDocto() {
         try {
             $Tipo = $this->input->post('Tipo');
-            $Timbrada = $this->input->post('Timbrada');
             $Tp = $this->input->post('Tp');
             $NC = $this->input->post('NC');
             $Docto = $this->input->post('Doc');
             $Cliente = $this->input->post('Cliente');
             $Concepto = $this->input->post('Concepto');
+
+            $tmnda = $this->input->post('Moneda');
+            $tcambio = $this->input->post('TipoCambio');
+
             $UUID = '';
+            if ($Tp === '1') {
+                $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
+            }
             if ($Tipo === '1') {//PRODUCCIÓN, SACA LO QUE HABIA EN FACTURACIÓN PARA REGRESARLO A TERMINADO Y QUE SE PUEDAN VOLVER A FACTURAR
                 $Facturacion = $this->db->query("select * from facturacion where factura = $Docto and cliente = $Cliente and tp = $Tp ")->result();
                 foreach ($Facturacion as $key => $v) {
@@ -60,11 +66,6 @@ class CancelaDocumentosVenta extends CI_Controller {
                     //Buscamos las facturas para traer los pares restantes vigentes y compararlos con los del pedido para saber a que estatus mandarlo
                     $paresfact = $this->db->query("select sum(pareped) as paresfact from facturacion where staped = 2 and contped = $txtcontped ")->result()[0]->paresfact;
 
-                    if ($Timbrada === '0') {//Traemos el UUID
-                        if ($Tp === '1') {
-                            $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
-                        }
-                    }
 
                     if (intval($txtcontped) > 0) {
                         $Pedido = $this->db->query("select Pares from pedidox where control = $txtcontped ")->result();
@@ -133,11 +134,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                         exit();
                     }
 
-                    if ($Timbrada === '0') {//Traemos el UUID
-                        if ($Tp === '1') {
-                            $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
-                        }
-                    }
+
 
                     if (intval($txtcontped) > 0) {
                         $Devol = $this->db->query("select paredev,parefac from devolucionnp where control = $txtcontped and registro = $txtregistro ")->result();
@@ -272,32 +269,16 @@ class CancelaDocumentosVenta extends CI_Controller {
                         'defecto' => 0,
                         'detalle' => 0,
                         'status' => ($Tp === '1') ? 0 : 2,
-                        'uuid' => ($Tp === '1') ? $UUID : 0
+                        'uuid' => ($Tp === '1') ? $UUID : 0,
+                        'tmnda' => ($tmnda === '0') ? 0 : $tmnda,
+                        'tcamb' => ($tmnda === '0') ? 0 : $tcambio
                     ));
                 }
 
                 if ($Tp === '1') {
                     //Timbramos la nota de crédito
                     //Se manda llamar el exe de timbrado
-                    /*                     * ************ TimbrarNC.exe *********** */
-                    if ($Timbrada === '0') {//Se ejecuta la cancelación en el SAT de la factura
-                        //Verificamos que la factura esté realizada en el sistema
-                        $CfdiFa = $this->db->query("SELECT uuid FROM cfdifa WHERE factura = $Docto ")->result();
-
-                        if (empty($CfdiFa)) {
-                            //Existe error en la generacion de la factura electronica
-                            //no se encuentra el uuid o no se realizó en el sistema
-                            print 5;
-                            exit();
-                        } else {
-                            $UUID = $CfdiFa[0]->uuid;
-                            //Se ejecuta el programa de cancelación en el SAT
-                            //------------Aqui se ejecuta el cancelarSAT.exe----------
-                            //Editamos el acuse con la fecha de hoy
-                            $FechaHoy = Date('d/m/Y');
-                            $this->db->query("update cfdifa set acuse = '$FechaHoy' where factura = $Docto ");
-                        }
-                    }
+                    /*                     * ************ TimbrarNC.exe $NC $Cliente *********** */
                 }
             }
         } catch (Exception $exc) {

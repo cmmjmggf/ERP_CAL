@@ -15,7 +15,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-8 float-left">
-                <legend class="float-left">Cancela Documentos de Venta/Facturación</legend>
+                <legend class="float-left">Cancela Documentos de Venta/Facturación con Nota de Crédito</legend>
             </div>
             <div class="col-sm-4" align="right">
 
@@ -83,12 +83,20 @@
                         <input type="text" class="form-control form-control-sm numbersOnly" id="NC" name="NC" readonly="" required="">
                     </div>
 
-                    <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-2" >
-                        <label></label>
-                        <div class="custom-control custom-checkbox  ">
-                            <input type="checkbox" class="custom-control-input" id="sTimbradaSat">
-                            <label class="custom-control-label text-info labelCheck" for="sTimbradaSat">Factura No Timbrada</label>
-                        </div>
+                    <div class="col-7 col-sm-5 col-md-3 col-xl-2" >
+                        <label for="" >Moneda</label>
+                        <select id="Moneda" name="Moneda" class="form-control form-control-sm " >
+                            <option value=""></option>
+                            <option value="0">PESOS</option>
+                            <option value="2">DOLAR</option>
+                            <option value="3">EURO</option>
+                            <option value="4">LIBRA</option>
+                            <option value="5">JEN</option>
+                        </select>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                        <label>T.C.</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="TipoCambio" name="TipoCambio" maxlength="5" required="">
                     </div>
                 </div>
                 <div class="row">
@@ -108,7 +116,7 @@
 </div>
 
 <script>
-    var master_url = base_url + 'index.php/CancelaDocumentosVenta/';
+    var master_url = base_url + 'index.php/CancelaDocumentosVentaCobranza/';
     var tblDepositosClientes = $('#tblDepositosClientes');
     var DepositosClientes;
     var pnlTablero = $("#pnlTablero");
@@ -117,6 +125,7 @@
     $(document).ready(function () {
         /*BOTONES*/
         init();
+
         pnlTablero.find("input[name='CancelaDocsVentas']").change(function () {
             pnlTablero.find('#Cliente').focus().select();
         });
@@ -233,9 +242,23 @@
         });
         pnlTablero.find('#Concepto').keypress(function (e) {
             if (e.keyCode === 13) {
-                var txtcte = $(this).val();
-                if (txtcte) {
+                var txtcon = $(this).val();
+                if (txtcon) {
                     btnAceptar.focus();
+                }
+            }
+        });
+        /*Tipo de Cambio*/
+        pnlTablero.find("#Moneda").change(function () {
+            if ($(this).val()) {
+                getTipoCambio($(this).val());
+            }
+        });
+        pnlTablero.find('#TipoCambio').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txttc = $(this).val();
+                if (txttc) {
+                    pnlTablero.find('#Concepto').focus().select();
                 }
             }
         });
@@ -243,11 +266,10 @@
         btnAceptar.click(function () {
             isValid('pnlDatos');
             if (valido) {
+                onOpenOverlay('Cancelando Documento...');
                 var frm = new FormData(pnlTablero.find("#frmCapturaCancelaDctoVta")[0]);
                 var tipo = $("input[name='CancelaDocsVentas']:checked").attr('tipo');
                 frm.append('Tipo', tipo);
-                var timbrada = pnlTablero.find("#sTimbradaSat")[0].checked ? '1' : '0';
-                frm.append('Timbrada', timbrada);
                 $.ajax({
                     url: master_url + 'onCancelarDocto',
                     type: "POST",
@@ -275,6 +297,7 @@
                             init();
                         });
                     }
+                    onCloseOverlay();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -299,6 +322,8 @@
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
+        pnlTablero.find("#Moneda")[0].selectize.addItem('0', true);
+        pnlTablero.find("#TipoCambio").val('1');
 
     }
     var tipo, remi, importe, status, mes, mes_act;
@@ -311,8 +336,6 @@
                 tipo = data[0].tipo;
                 remi = data[0].remicion;
                 status = data[0].status;
-                mes = data[0].mes;
-                mes_act = data[0].mesact;
 
                 if (parseInt(status) > 2) {
                     swal('ATENCIÓN', 'DOCUMENTO CON PAGOS, IMPOSIBLE MODIFICAR', 'warning').then((value) => {
@@ -325,24 +348,13 @@
                     return;
                 }
                 if (parseInt(tipo) === 1) {
-                    if (mes_act !== mes) {//Si el mes es diferente del actual y es fiscal no puede cancelarse
-                        swal('ATENCIÓN', 'DOCUMENTO FUERA DEL MES, IMPOSIBLE CANCELAR', 'warning').then((value) => {
-                            pnlTablero.find('#Doc').val('');
-                            pnlTablero.find("#Tp").val('');
-                            pnlTablero.find("#NC").val('');
-                            pnlTablero.find("#sDoc")[0].selectize.clear(true);
-                            pnlTablero.find("#sDoc")[0].selectize.focus();
-                        });
-                        return;
-                    } else {//Si los meses son iguales procede la cancelación y agregar el folio de la NC
-                        $.getJSON(master_url + 'getFolioNCFiscal').done(function (data) {
-                            if (data.length > 0) {
-                                pnlTablero.find('#NC').val(data[0].nc);
-                            } else {
-                                pnlTablero.find('#NC').val(1);
-                            }
-                        });
-                    }
+                    $.getJSON(master_url + 'getFolioNCFiscal').done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find('#NC').val(data[0].nc);
+                        } else {
+                            pnlTablero.find('#NC').val(1);
+                        }
+                    });
                 }
                 if (parseInt(tipo) === 2) {
                     $.getJSON(master_url + 'getFolioNC').done(function (data) {
@@ -398,6 +410,34 @@
             });
             pnlTablero.find("#sDoc")[0].selectize.focus();
         }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+    function getTipoCambio(mnda) {
+        $.getJSON(base_url + 'index.php/DocDirecSinAfectacion/getTipoCambio').done(function (data) {
+            if (data.length > 0) {
+                switch (mnda) {
+                    case '0':
+                        pnlTablero.find('#TipoCambio').val(1).focus().select();
+                        break;
+                    case '2':
+                        pnlTablero.find('#TipoCambio').val(data[0].Dolar).focus().select();
+                        break;
+                    case '3':
+                        pnlTablero.find('#TipoCambio').val(data[0].Euro).focus().select();
+                        break;
+                    case '4':
+                        pnlTablero.find('#TipoCambio').val(data[0].Libra).focus().select();
+                        break;
+                    case '5':
+                        pnlTablero.find('#TipoCambio').val(data[0].Jen).focus().select();
+                        break;
+                    default:
+                        pnlTablero.find('#TipoCambio').val(1).focus().select();
+                }
+            }
+        }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         });

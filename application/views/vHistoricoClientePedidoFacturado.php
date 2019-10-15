@@ -18,7 +18,7 @@
                 <button type="button" class="btn btn-danger btn-sm " id="btnVerCartera" >
                     <span class="fa fa-dollar-sign" ></span> EDO. CUENTA
                 </button>
-                <button type="button" class="btn btn-danger btn-sm " id="" >
+                <button type="button" class="btn btn-danger btn-sm " id="btnPedidosXEntregar" >
                     <span class="fa fa-file-pdf" ></span> PEDIDOS X ENTREGAR
                 </button>
                 <button type="button" class="btn btn-info btn-sm " id="btnImprimePedidosCliente" >
@@ -376,7 +376,6 @@
     var tblDetallePagosFactura = $('#tblDetallePagosFactura');
     var DetallePagosFactura;
 
-
     function onImprimirReporteRanking() {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
         var frm = new FormData();
@@ -616,6 +615,32 @@
                     pnlTablero.find("#Cliente")[0].selectize.focus();
                 });
             }
+        });
+        pnlTablero.find("#btnPedidosXEntregar").click(function () {
+            $.fancybox.open({
+                src: base_url + '/ClientesEntregadosPorEntregar',
+                type: 'iframe',
+                opts: {
+                    afterShow: function (instance, current) {
+                        console.info('done!');
+                    },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
         });
         pnlTablero.find("#btnVerMovimientos").click(function () {
             $.fancybox.open({
@@ -1075,7 +1100,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

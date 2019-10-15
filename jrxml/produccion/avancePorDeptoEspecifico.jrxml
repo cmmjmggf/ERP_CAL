@@ -61,11 +61,11 @@ else ''
 end as Empleado,
 
 
-C.Pedido, C.Control, C.FechaProgramacion,
+C.Pedido, C.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
 cast(ifnull(D.Clave,'1') as signed) as ClaveDepto,
 ifnull(D.Descripcion,'PROGRAMADO') as nombreDepto,
 case
-when (D.Clave is null) then C.fechaprogramacion
+when (D.Clave is null) then str_to_date(PE.FechaProg,'%Y-%m-%d')
 when (D.Clave = '10') then A.fec2
 when (D.Clave = '20') then A.fec3
 when (D.Clave = '30') then A.fec33

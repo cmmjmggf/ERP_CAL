@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="4.78109418755562"/>
-	<property name="ireport.x" value="1130"/>
+	<property name="ireport.zoom" value="1.6757443455841887"/>
+	<property name="ireport.x" value="54"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -47,11 +47,11 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-C.Pedido, C.Control, C.FechaProgramacion,
+C.Pedido, C.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
 cast(ifnull(D.Clave,'1') as signed) as ClaveDepto,
 ifnull(D.Descripcion,'PROGRAMADO') as nombreDepto,
 case
-when (D.Clave is null) then C.fechaprogramacion
+when (D.Clave is null) then str_to_date(PE.FechaProg,'%Y-%m-%d')
 when (D.Clave = '10') then A.fec2
 when (D.Clave = '20') then A.fec3
 when (D.Clave = '30') then A.fec33
@@ -430,7 +430,7 @@ order by ClaveDepto ASC, ClaveLinea ASC, C.control ASC]]>
 				<text><![CDATA[Linea]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="707" y="45" width="35" height="11" forecolor="#000000" uuid="55fe3a08-3873-497f-a302-93690e79031d"/>
+				<reportElement style="Column header" x="707" y="45" width="45" height="11" forecolor="#000000" uuid="55fe3a08-3873-497f-a302-93690e79031d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true" isStrikeThrough="false"/>
 				</textElement>
@@ -523,7 +523,7 @@ order by ClaveDepto ASC, ClaveLinea ASC, C.control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaProgramacion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yy">
 				<reportElement x="187" y="0" width="38" height="9" uuid="fd33db88-ec04-4f73-860b-3496263f377f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
@@ -559,7 +559,7 @@ order by ClaveDepto ASC, ClaveLinea ASC, C.control ASC]]>
 				<textFieldExpression><![CDATA[$F{diaprg}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="707" y="0" width="35" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
+				<reportElement x="707" y="0" width="45" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>

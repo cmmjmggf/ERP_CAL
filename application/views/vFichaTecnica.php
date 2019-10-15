@@ -615,6 +615,7 @@
                     processData: false,
                     data: frm
                 }).done(function (data, x, jq) {
+                    console.log(data);
                     FichaTecnicaDetalle.ajax.reload();
                     mdlEditarArticulo.modal('hide');
                 }).fail(function (x, y, z) {
@@ -627,6 +628,10 @@
         getPiezas();
         getArticulos();
         handleEnterDiv(pnlTablero);
+        handleEnterDiv(pnlDatos);
+        handleEnterDiv(pnlControlesDetalle);
+        handleEnterDiv(mdlEditarArticulo);
+
     });
 
 

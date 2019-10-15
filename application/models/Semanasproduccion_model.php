@@ -70,9 +70,8 @@ class Semanasproduccion_model extends CI_Model {
 
     public function onEliminar($Ano) {
         try {
-            $this->db->set('Estatus', 'INACTIVO');
             $this->db->where('Ano', $Ano);
-            $this->db->update("semanasproduccion");
+            $this->db->delete("semanasproduccion");
 //            print $str = $this->db->last_query();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
