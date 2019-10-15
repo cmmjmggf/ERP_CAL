@@ -117,15 +117,17 @@ class CerrarProg extends CI_Controller {
 
                             $EXISTEN_REGISTROS = $this->db->select('count(*) AS EXISTE', false)
                                             ->from('controles AS C')
-                                            ->where("C.Ano = {$Y} AND C.Semana = {$v->Semana} "
-                                                    . "AND C.Maquila = {$v->Maquila} "
+                                            ->where("C.Ano = ABS({$Y}) AND C.Semana = ABS({$v->Semana}) "
+                                                    . "AND C.Maquila = ABS({$v->Maquila})"
                                                     . "ORDER BY `C`.`Consecutivo` DESC", null, false)
                                             ->limit(1)->get()->result();
-                                                    
+
 
                             $MAXIMO_CONSECUTIVO = $this->db->select('(CT.Consecutivo+1) AS MAX', false)
                                             ->from('controles AS CT')
-                                            ->where("CT.Maquila = ABS({$v->Maquila}) AND CT.Semana = ABS({$S}) AND CT.Ano = ABS({$Y})", null, false)
+                                            ->where("CT.Maquila = ABS({$v->Maquila}) "
+                                                    . "AND CT.Semana = ABS({$S}) "
+                                                    . "AND CT.Ano = ABS({$Y})", null, false)
                                             ->order_by('CT.Consecutivo', 'DESC')
                                             ->limit(1)->get()->result();
 
