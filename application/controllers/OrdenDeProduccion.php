@@ -95,7 +95,7 @@ class OrdenDeProduccion extends CI_Controller {
                     $this->db->limit(99);
                 }
                 $sql = $this->db->get();
-                PRINT $this->db->last_query();
+//                PRINT $this->db->last_query();
                 print json_encode($sql->result());
             } catch (Exception $exc) {
                 echo $exc->getTraceAsString();

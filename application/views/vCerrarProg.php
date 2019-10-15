@@ -435,6 +435,7 @@
     }
 
     function init() {
+        AnoCerrarProg.val('<?php print Date('Y'); ?>');
         CerrarProg = tblCerrarProg.DataTable({
             dom: 'Brtip',
             buttons: [
@@ -535,7 +536,7 @@
                 $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
                     return parseFloat(a) + parseFloat(b);
                 }, 0));
-            }
+            } 
         });
         pnlTablero.find("#col14_filter").val((new Date()).getFullYear());
         pnlTablero.find("#col12_filter").focus();
@@ -695,8 +696,7 @@
             contentType: false,
             processData: false,
             data: f
-        }).done(function (data, x, jq) {
-            console.log(data);
+        }).done(function (data, x, jq) { 
             swal({
                 title: 'INFO',
                 text: 'SE HAN ' + (i > 0 ? 'MARCADO' : 'DESMARCADO') + ' LOS REGISTROS',
