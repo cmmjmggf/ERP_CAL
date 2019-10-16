@@ -4,56 +4,52 @@
     </div>
     <div class="card-body">
         <div class="row" style="padding-left: 15px">
-            <div class="col-12 col-sm-1 col-lg-1 col-md-1 col-xl-1" align="center">
+            <div class="col-12 col-sm-1 col-lg-1 col-md-1 col-xl-1 d-none" align="center">
                 <button type="button" class="btn btn-warning" id="btnReload" data-toggle="tooltip" data-placement="top" title="Refrescar">
                     <span class="fa fa-retweet"></span>
                 </button>
             </div>
-            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" data-column="12">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Inicial</strong>
-                <input type="text" class="form-control form-control-sm" id="ControlInicial" autofocus placeholder="Ej:180152001">
+                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus placeholder="Ej:180152001">
             </div>
-            <div class="col-12 col-sm-12 col-lg-3" data-column="13">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Final</strong>
-                <input type="text" class="form-control form-control-sm" id="ControlFinal" placeholder="Ej:180152005">
+                <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" placeholder="Ej:180152005">
+            </div> 
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
+                <strong>Maquila asignada</strong>
+                <input type="text" class="form-control form-control-sm column_filter" id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" data-column="12">
-                        <strong>Maquila asignada</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="col12_filter" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" data-column="13">
-                        <strong>Semana asignada</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="col13_filter" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <strong>Maquila a asignar</strong>
-                        <input type="text"  class="form-control form-control-sm column_filter" id="Maquila" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" data-column="15">
-                        <strong>Semana a asignar</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="Semana" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
-                    </div>
-                </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
+                <strong>Semana asignada</strong>
+                <input type="text" class="form-control form-control-sm column_filter" id="SemanaAsignada" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
+            </div> 
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
+                <strong>Maquila a asignar</strong>
+                <input type="text"  class="form-control form-control-sm column_filter" id="Maquila" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
             </div>
-            <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
+                <strong>Semana a asignar</strong>
+                <input type="text" class="form-control form-control-sm column_filter" id="Semana" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
+            </div> 
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-2">
                 <strong>Observaciones</strong>
                 <input type="text" id="ObservacionesTitulo" name="Observaciones" class="form-control form-control-sm mb-3" placeholder="Observacion uno" />
             </div>
-            <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">  
+            <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-2">
                 <strong>Observaciones adicionales</strong>
                 <input type="text" id="Observaciones" name="Adicionales" class="form-control form-control-sm" placeholder="Observacion dos" />
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-3" align="left">
-                <button type="button" class="btn btn-primary" id="btnAsignar" data-toggle="tooltip" data-placement="top" title="Asignar" disabled="">
-                    <span class="fa fa-check"></span>
+                <button type="button" class="btn btn-info" id="btnAsignar" data-toggle="tooltip" data-placement="top" title="Asignar">
+                    <span class="fa fa-check"></span> Acepta
                 </button>
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-3" align="left">
             </div>
         </div>
-        <br>
+        <div class="w-100"></div>
         <div id="ReasignarControles" class="table-responsive">
             <table id="tblReasignarControles" class="table table-sm display hover" style="width:100%">
                 <thead>
@@ -121,7 +117,15 @@
     var btnAsignar = $("#btnAsignar");
     var btnDeshacer = $("#btnDeshacer");
     var btnReload = $("#btnReload");
-    var pnlTablero = $("#pnlTablero");
+    var pnlTablero = $("#pnlTablero"),
+            ObservacionesTitulo = pnlTablero.find("#ObservacionesTitulo"),
+            Observaciones = pnlTablero.find("#Observaciones"),
+            MaquilaAsignada = pnlTablero.find("#MaquilaAsignada"),
+            MaquilaAAsignar = pnlTablero.find("#Maquila"),
+            SemanaAsignada = pnlTablero.find("#SemanaAsignada"),
+            SemanaAAsignar = pnlTablero.find("#Semana"),
+            ControlInicial = pnlTablero.find("#ControlInicial"),
+            ControlFinal = pnlTablero.find("#ControlFinal");
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
         // The global jQuery object is passed as a parameter
@@ -143,12 +147,23 @@
                     }
             );
 
-            pnlTablero.find("#ControlInicial").focusout(function () {
-                onObtenerElUltimoControl(this);
+            ControlFinal.keydown(function (e) {
+                console.log(e.keyCode);
+                if (e.keyCode === 13) { 
+                    ReasignarControles.ajax.reload(function () {
+                        getMaquilaSemanaXControl();
+                    });
+                }
             });
 
-            $("#ControlInicial,#ControlFinal").keyup(function () {
-                ReasignarControles.draw();
+            ControlInicial.keydown(function (e) {
+                console.log(e.keyCode);
+                if (e.keyCode === 13) {
+                    onObtenerElUltimoControl(this);
+                    ReasignarControles.ajax.reload(function () {
+                        getMaquilaSemanaXControl();
+                    });
+                }
             });
 
             // Instance the tour
@@ -288,95 +303,57 @@
             });
 
             btnAsignar.click(function () {
-                var maquila_nueva = $("#Maquila"), semana_nueva = $("#Semana");
-                if (maquila_nueva.val() !== '' && semana_nueva !== '') {
-                    if (maquila_nueva.val() !== '' && semana_nueva !== '') {
-                        swal({
-                            title: "Estas seguro?",
-                            text: "Serán reasignados los '" + tblReasignarControles.find("tbody tr").length + "' controles, una vez completada la acción: " + ReasignarControles.rows().count(),
-                            icon: "warning",
-                            buttons: true
-                        }).then((willDelete) => {
-                            if (willDelete) {
-                                var controles = [];
-                                $.each(tblReasignarControles.find("tbody tr"), function () {
-                                    var r = ReasignarControles.row($(this)).data(), str = r.Anio, res = str.substr(2, 4);
-                                    controles.push({
-                                        ID: r.ID,
-                                        Ano: res,
-                                        Estilo: r.IdEstilo,
-                                        Color: r.IdColor,
-                                        Serie: r.SerieID,
-                                        SerieT: r.Serie,
-                                        Cliente: r.Cliente,
-                                        Pares: r.Pares,
-                                        Pedido: r.ID_PEDIDO,
-                                        PedidoDetalle: r.ID,
-                                        Control: r.Control,
-                                        DescripcionEstilo: r["Descripcion Estilo"],
-                                        ColorDescripcion: r["Descripcion Color"],
-                                        PedidoID: r.Pedido,
-                                        FechaPedido: r["Fecha Pedido"],
-                                        FechaEntregaRecepcion: r["Fecha Entrega"],
-                                        FechaCaptura: r["Fecha Captura"],
-                                        ClaveCliente: r.Cliente,
-                                        ClienteRazon: r["Cliente Razon"],
-                                        Precio: r.Precio,
-                                        Importe: r.Importe,
-                                        Descuento: r.Desc,
-                                        FechaEntrega: r.Entrega,
-                                        Marca: r.Marca,
-                                        Semana: (pnlTablero.find("#Semana").val()),
-                                        Maquila: (pnlTablero.find("#Maquila").val()),
-                                        Observacion: (pnlTablero.find("#Observaciones").val()),
-                                        Adicionales: (pnlTablero.find("#Adicionales").val())
-                                    });
+                if (ControlInicial.val() && ControlFinal.val()) {
+                    swal({
+                        title: "¿Estas seguro?",
+                        text: "Serán reasignados los controles, una vez completada la acción. Nota: Es necesario regenerar las ordenes de producción una vez regenerados los controles. ",
+                        icon: "warning",
+                        buttons: true
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            var f = new FormData();
+                            f.append('OBSERVACIONES', ObservacionesTitulo.val() !== '' ? ObservacionesTitulo.val() : '');
+                            f.append('OBSERVACIONES_ADICIONALES', Observaciones.val() !== '' ? Observaciones.val() : '');
+                            f.append('SEMANA_ASIGNADA', SemanaAsignada.val() !== '' ? SemanaAsignada.val() : '');
+                            f.append('SEMANA_A_ASIGNAR', SemanaAAsignar.val() !== '' ? SemanaAAsignar.val() : '');
+                            f.append('MAQUILA_ASIGNADA', MaquilaAsignada.val() !== '' ? MaquilaAsignada.val() : '');
+                            f.append('MAQUILA_A_ASIGNAR', MaquilaAAsignar.val() !== '' ? MaquilaAAsignar.val() : '');
+                            f.append('INICIO', ControlInicial.val() !== '' ? ControlInicial.val() : '');
+                            f.append('FIN', ControlFinal.val() !== '' ? ControlFinal.val() : '');
+                            $.ajax({
+                                url: '<?php print base_url('ReasignarControles/onReAsignarControles'); ?>',
+                                type: "POST",
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                data: f
+                            }).done(function (data, x, jq) {
+                                console.log(data);
+                                swal({
+                                    title: 'INFO',
+                                    text: 'SE HAN REASIGNADO LOS REGISTROS',
+                                    icon: 'success',
+                                    timer: 1500
                                 });
-                                var f = new FormData();
-                                f.append('INICIO', pnlTablero.find("#ControlInicial").val() !== '' ? pnlTablero.find("#ControlInicial").val() : pnlTablero.find("#ControlInicial").val());
-                                f.append('FIN', pnlTablero.find("#ControlFinal").val() !== '' ? pnlTablero.find("#ControlFinal").val() : pnlTablero.find("#ControlInicial").val());
-                                f.append('Controles', JSON.stringify(controles));
-                                $.ajax({
-                                    url: '<?php print base_url('ReasignarControles/onReAsignarControles'); ?>',
-                                    type: "POST",
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
-                                    data: f
-                                }).done(function (data, x, jq) {
-                                    console.log(data);
-                                    swal({
-                                        title: 'INFO',
-                                        text: 'SE HAN REASIGNADO LOS REGISTROS',
-                                        icon: 'success',
-                                        timer: 1500
-                                    });
-                                    ReasignarControles.ajax.reload();
-                                    $("#col12_filter").focus().select();
-                                    btnAsignar.prop("disabled", true);
-                                }).fail(function (x, y, z) {
-                                    console.log(x, y, z);
-                                }).always(function () {
-                                    HoldOn.close();
-                                });
-                            }
-                        });
-                    } else {
-                        swal('ATENCIÓN', 'ES NECESARIO ESTABLECER UNA MAQUILA Y UNA SEMANA', 'warning').then((willDelete) => {
-                            maquila_nueva.focus();
-                        });
-                    }
+                                ReasignarControles.ajax.reload();
+                                ControlInicial.focus().select();
+                                btnAsignar.prop("disabled", true);
+                            }).fail(function (x, y, z) {
+                                console.log(x, y, z);
+                            }).always(function () {
+                                HoldOn.close();
+                            });
+                        }
+                    });
                 } else {
-                    swal('ATENCIÓN', 'ES NECESARIO ESTABLECER UN CONTROL INICIAL Y UN CONTROL FINAL', 'warning').then((willDelete) => {
-                        maquila_nueva.focus();
+                    onBeep(2);
+                    iMsg('DEBE DE ESPECIFICAR UN CONTROL', 'w', function () {
+                        ControlInicial.focus().select();
                     });
                 }
             });//ASIGNAR
 
-            $('input.column_filter').on('keyup click', function () {
-                var i = $(this).parents('div').attr('data-column');
-                tblReasignarControles.DataTable().column(i).search($('#col' + i + '_filter').val()).draw();
-            });
+
         }
         );
     }));
@@ -491,7 +468,11 @@
             ],
             "ajax": {
                 "url": '<?php print base_url('ReasignarControles/getRecords'); ?>',
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL_INICIAL = ControlInicial.val();
+                    d.CONTROL_FINAL = ControlFinal.val();
+                }
             },
             "columnDefs": [
                 {
@@ -552,7 +533,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [0, 'desc']/*ID*/
+                [15, 'ASC']/*ID*/
             ],
             "createdRow": function (row, data, dataIndex, cells) {
                 $.each($(row), function (k, v) {
@@ -577,10 +558,10 @@
         if (control) {
             var semana = parseInt(control.slice(2, 4));
             var maquila = parseInt(control.slice(4, 6));
-            $.getJSON(master_url + 'onObtenerElUltimoControl', {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
+            $.getJSON('<?php print base_url('ReasignarControles/onObtenerElUltimoControl'); ?>',
+                    {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
                 var dt = data[0];
-                var ControlFinal = pnlTablero.find("#ControlFinal");
-                if (data.length > 0 && ControlFinal.val() === '' && ControlFinal.val().length <= 0) {
+                if (data.length > 0) {
                     ControlFinal.val(dt.ULTIMO_CONTROL);
                     onBeep(1);
                 }
@@ -589,8 +570,34 @@
             });
         }
     }
+
+    function getMaquilaSemanaXControl() {
+        $.getJSON('<?php print base_url('ReasignarControles/getMaquilaSemanaXControl'); ?>', {
+            CONTROL_INICIAL: (ControlInicial.val() ? ControlInicial.val() : ''),
+            CONTROL_FINAL: ControlFinal.val() ? ControlFinal.val() : ControlInicial.val()
+        }).done(function (a) {
+            console.log("MAQUILA SEMANA X CONTROL");
+            console.log(a, a.length);
+            if (a.length > 0) {
+                var xxx = a[0];
+                MaquilaAsignada.val(xxx.MAQUILA);
+                SemanaAsignada.val(xxx.SEMANA);
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            
+        });
+    }
 </script>
 <style>
+    .card{
+        background-color: #f9f9f9;
+        border-width: 1px 2px 2px;
+        border-style: solid; 
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
+        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+    }
     .dropdown-item.active, .dropdown-item:active{
         color: #fff !important;
     }

@@ -202,6 +202,7 @@
 
 
         mdlFichaTecnicaCompra.on('shown.bs.modal', function () {
+            getMaquilasCostosEstilos();
             mdlFichaTecnicaCompra.find("input").val("");
             $.each(mdlFichaTecnicaCompra.find("select"), function (k, v) {
                 mdlFichaTecnicaCompra.find("select")[k].selectize.clear(true);
@@ -269,7 +270,6 @@
             });
         });
         //handleEnterDiv(mdlFichaTecnicaCompra);
-        getMaquilasCostosEstilos();
     });
 
     function getMaquilasCostosEstilos() {
