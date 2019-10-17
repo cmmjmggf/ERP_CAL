@@ -83,7 +83,26 @@ class ParesPreProgramados extends CI_Controller {
         try {
             $x = $this->input;
             $xx = $this->input->post();
-            $CLIENTES = $this->pam->getClientes($x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
+//            $CLIENTES = $this->pam->getClientes(  $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
+
+            $this->db->select('C.Clave AS CLAVE_CLIENTE, '
+                            . 'C.RazonS AS CLIENTE, '
+                            . 'A.Clave AS CLAVE_AGENTE, '
+                            . 'A.Nombre AS AGENTE, '
+                            . 'ES.Clave AS CLAVE_ESTADO, '
+                            . 'ES.Descripcion AS ESTADO', false)
+                    ->from('pedidox AS P');
+            $this->db->join('clientes AS C', 'P.Cliente = C.Clave');
+            $this->db->join('agentes AS A', 'C.Agente = A.Clave');
+            $this->db->join('estados AS ES', 'C.Estado = ES.Clave');
+            $this->db->join('estilos AS E', 'P.Estilo = E.Clave');
+            $this->db->join('lineas AS L', 'E.Linea = L.Clave');
+            $this->db->where("P.Registro BETWEEN STR_TO_DATE('{$xx['FECHA']}', \"%d/%m/%Y\") "
+                    . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\")");
+            $this->db->where("P.Estatus = 'A'", null, false);
+
+            $CLIENTES = $this->db->group_by('C.ID')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
+//            print $this->db->last_query();
 
             $bordes = 0;
             $alto_celda = 4;
@@ -107,10 +126,10 @@ class ParesPreProgramados extends CI_Controller {
             $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
             $pdf->SetX(40);
             $pdf->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por cliente"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(160);
+            $pdf->SetX(50);
             $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(180);
-            $pdf->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
+            $pdf->SetX(70);
+            $pdf->Cell(60, $alto_celda, $x->post('FECHA') . "   a la fecha   " . $x->post('FECHAF'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
             $anchos = array(100/* 0 */, 23/* 1 */, 43/* 2 */, 30/* 3 */, 15/* 4 */, 16/* 5 */, 12/* 6 */, 20/* 7 */);
             $spacex = 10;
@@ -159,48 +178,72 @@ class ParesPreProgramados extends CI_Controller {
             $YF = 0;
 
             foreach ($CLIENTES as $k => $v) {
-                $Y = $pdf->GetY();
-                $pdf->SetFont('Calibri', 'B', 7);
-                $pdf->SetX(10);
-                $pdf->setFilled(0);
-                $pdf->setBorders(0);
-                $pdf->SetAligns(array('L', 'L', 'C'));
-                $pdf->SetWidths(array(43/* 0 */, 35/* 1 */, 22/* 2 */));
-                $pdf->RowNoBorder(array(substr(utf8_decode($v->CLAVE_CLIENTE . " " . $v->CLIENTE), 0, 30)/* 0 */,
-                    utf8_decode($v->CLAVE_AGENTE . " " . $v->AGENTE)/* 1 */, /* SI NO TIENE AGENTE O ESTA EN CERO, ES UNA MUESTRA */
-                    utf8_decode($v->ESTADO)));
-                $pdf->Line(10, $pdf->GetY(), 110, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_CLIENTE, 1, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
-                $bordes = 0;
-                $pdf->SetFont('Calibri', 'B', 6.5);
-                foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
-                    $Y = $pdf->GetY();
-                    $pdf->SetX($spacex);
-                    $pdf->setFilled(0);
-                    $pdf->setBorders(1);
-                    $pdf->SetAligns(array('C', 'C'/* 0 */, 'L'/* 1 */, 'C'/* 2 */, 'L'/* 3 */, 'C'/* 4 */, 'C'/* 5 */, 'C'/* 6 */, 'C'/* 7 */));
-                    $pdf->SetWidths(array(100, 15/* 0 */, 23/* 1 */, 12/* 2 */, 43/* 3 */, 20/* 4 */, 16/* 5 */, 15/* 6 */, 15/* 7 */));
-                    $pdf->RowNoBorder(array('', utf8_decode($vv->PEDIDO)/* 0 */,
-                        utf8_decode($vv->CLAVE_LINEA . " " . $vv->LINEA)/* 1 */,
-                        utf8_decode($vv->CLAVE_ESTILO)/* 2 */,
-                        substr(utf8_decode($vv->COLOR), 0, 28)/* 3 */,
-                        utf8_decode($vv->FECHA_ENTREGA)/* 4 */,
-                        utf8_decode($vv->PARES)/* 5 */,
-                        utf8_decode($vv->MAQUILA)/* 6 */,
-                        utf8_decode($vv->SEMANA)/* 7 */));
-                    $pdf->Line(110, $pdf->GetY(), 269, $pdf->GetY());
-                    $spacex = 10;
-                    $PARES += $vv->PARES;
-                    $TOTAL_PARES += $vv->PARES;
-                }
+                $this->db->select('C.Clave AS CLAVE_CLIENTE, 
+                    C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE, 
+                    A.Nombre AS AGENTE, ES.Descripcion AS ESTADO,P.Clave AS PEDIDO, 
+                    E.Linea AS CLAVE_LINEA, L.Descripcion AS LINEA, P.Estilo AS CLAVE_ESTILO, 
+                    CO.Descripcion AS COLOR,P.FechaEntrega AS FECHA_ENTREGA, 
+                    P.Pares AS PARES, P.Maquila AS MAQUILA, P.Semana AS SEMANA, C.Pais AS PAIS', false)
+                        ->from('pedidox AS P')
+                        ->join('clientes AS C', 'P.Cliente = C.Clave')
+                        ->join('agentes AS A', 'P.Agente = A.Clave')
+                        ->join('estilos AS E', 'P.Estilo = E.Clave')
+                        ->join('colores AS CO', 'E.Clave = CO.Estilo AND P.Color = CO.Clave')
+                        ->join('lineas AS L', 'E.Linea = L.Clave')
+                        ->join('estados AS ES', 'C.Estado = ES.Clave')
+                        ->where("C.Clave", $v->CLAVE_CLIENTE);
+// ->where("C.Clave", 371);
+                $this->db->where("P.Registro BETWEEN str_to_date(\"{$x->post("FECHA")}\",\"%d/%m/%Y\")  AND str_to_date(\"{$x->post("FECHAF")}\" ,\"%d/%m/%Y\") ", null, false);
 
-                $bordes = 0;
-                $pdf->SetFont('Calibri', 'B', 8.5);
-                $pdf->SetX(178);
-                $pdf->Cell(45, $alto_celda, "Total por cliente", $bordes/* BORDE */, 0/* SALTO */, 'R', 0);
-                $pdf->SetX(223);
-                $pdf->Cell(16, $alto_celda, $PARES, $bordes/* BORDE */, 1/* SALTO */, 'C', 0);
-                $PARES = 0;
+                $PARES_PREPROGRAMADOS = $this->db->get()->result();
+//                print $this->db->last_query();
+//                exit(0);
+                if (count($PARES_PREPROGRAMADOS) > 0) {
+                    $Y = $pdf->GetY();
+                    $pdf->SetFont('Calibri', 'B', 7);
+                    $pdf->SetX(10);
+                    $pdf->setFilled(0);
+                    $pdf->setBorders(0);
+                    $pdf->SetAligns(array('L', 'L', 'C'));
+                    $pdf->SetWidths(array(43/* 0 */, 35/* 1 */, 22/* 2 */));
+                    $pdf->RowNoBorder(array(substr(utf8_decode($v->CLAVE_CLIENTE . " " . $v->CLIENTE), 0, 30)/* 0 */,
+                        utf8_decode($v->CLAVE_AGENTE . " " . $v->AGENTE)/* 1 */, /* SI NO TIENE AGENTE O ESTA EN CERO, ES UNA MUESTRA */
+                        utf8_decode($v->ESTADO)));
+                    $pdf->Line(10, $pdf->GetY(), 110, $pdf->GetY());
+//                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_CLIENTE, 1, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), 1/* MAQUILA = 1 */, $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
+
+
+                    $bordes = 0;
+                    $pdf->SetFont('Calibri', 'B', 6.5);
+                    foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
+                        $Y = $pdf->GetY();
+                        $pdf->SetX($spacex);
+                        $pdf->setFilled(0);
+                        $pdf->setBorders(1);
+                        $pdf->SetAligns(array('C', 'C'/* 0 */, 'L'/* 1 */, 'C'/* 2 */, 'L'/* 3 */, 'C'/* 4 */, 'C'/* 5 */, 'C'/* 6 */, 'C'/* 7 */));
+                        $pdf->SetWidths(array(100, 15/* 0 */, 23/* 1 */, 12/* 2 */, 43/* 3 */, 20/* 4 */, 16/* 5 */, 15/* 6 */, 15/* 7 */));
+                        $pdf->RowNoBorder(array('', utf8_decode($vv->PEDIDO)/* 0 */,
+                            utf8_decode($vv->CLAVE_LINEA . " " . $vv->LINEA)/* 1 */,
+                            utf8_decode($vv->CLAVE_ESTILO)/* 2 */,
+                            substr(utf8_decode($vv->COLOR), 0, 28)/* 3 */,
+                            utf8_decode($vv->FECHA_ENTREGA)/* 4 */,
+                            utf8_decode($vv->PARES)/* 5 */,
+                            utf8_decode($vv->MAQUILA)/* 6 */,
+                            utf8_decode($vv->SEMANA)/* 7 */));
+                        $pdf->Line(110, $pdf->GetY(), 269, $pdf->GetY());
+                        $spacex = 10;
+                        $PARES += $vv->PARES;
+                        $TOTAL_PARES += $vv->PARES;
+                    }
+
+                    $bordes = 0;
+                    $pdf->SetFont('Calibri', 'B', 8.5);
+                    $pdf->SetX(178);
+                    $pdf->Cell(45, $alto_celda, "Total por cliente", $bordes/* BORDE */, 0/* SALTO */, 'R', 0);
+                    $pdf->SetX(223);
+                    $pdf->Cell(16, $alto_celda, $PARES, $bordes/* BORDE */, 1/* SALTO */, 'C', 0);
+                    $PARES = 0;
+                }
             }
             $bordes = 0;
             $pdf->SetFont('Calibri', 'B', 8.5);
@@ -650,7 +693,7 @@ class ParesPreProgramados extends CI_Controller {
         try {
             $z = $this->input->post();
             $xxx = $this->input;
-            $MAQUILAS = $this->pam->getMaquila($this->input->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'),$z['ANIO']);
+            $MAQUILAS = $this->pam->getMaquila($this->input->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'), $z['ANIO']);
 
             $bordes = 0;
             $alto_celda = 4;
@@ -722,7 +765,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->setAlto(4);
                 $pdf->RowNoBorder(array(utf8_decode($v->MAQUILA)/* 0 */, utf8_decode($v->CAPACIDAD_PARES)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 130.9, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'),$z['ANIO']);
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'), $z['ANIO']);
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->setAlto(3.5);

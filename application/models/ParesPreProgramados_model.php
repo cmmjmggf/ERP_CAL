@@ -103,15 +103,17 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                 $this->db->where("P.Ano", $ANIO);
             }
             if ($FECHA !== '' && $FECHAF !== '') {
-                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
+                $this->db->where("P.Registro BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             } else if ($FECHA !== '') {
-                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHA', \"%d/%m/%Y\")");
+                $this->db->where("P.Registro BETWEEN STR_TO_DATE('$FECHA', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHA', \"%d/%m/%Y\")");
             } else if ($FECHAF !== '') {
-                $this->db->where("STR_TO_DATE(P.FechaEntrega, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
+                $this->db->where("P.Registro BETWEEN STR_TO_DATE('$FECHAF', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAF', \"%d/%m/%Y\")");
             }
-            $this->db->where(" P.Estatus = 'A' AND P.Control = 0 AND P.stsavan <> 14 OR P.Control IS NULL", null, false);
+            $this->db->where("P.Estatus = 'A'", null, false);
 
-            return $this->db->group_by('C.ID')->get()->result();
+            $this->db->group_by('C.ID') ;
+//            print $this->db->last_query();
+            return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

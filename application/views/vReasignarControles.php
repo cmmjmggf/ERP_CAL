@@ -1,4 +1,4 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
+<!--<div class="card m-3 animated fadeIn" id="mdlReasignarControles">
     <div class="card-header" align="center">
         <h3 class="font-weight-bold">Reasignar controles (Maquila/Semana)</h3>
     </div>
@@ -19,19 +19,19 @@
             </div> 
             <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Maquila asignada</strong>
-                <input type="text" class="form-control form-control-sm column_filter" id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                <input type="text" class="form-control form-control-sm " id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Semana asignada</strong>
-                <input type="text" class="form-control form-control-sm column_filter" id="SemanaAsignada" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
+                <input type="text" class="form-control form-control-sm " id="SemanaAsignada" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
             </div> 
             <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Maquila a asignar</strong>
-                <input type="text"  class="form-control form-control-sm column_filter" id="Maquila" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                <input type="text"  class="form-control form-control-sm " id="Maquila" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-1">
                 <strong>Semana a asignar</strong>
-                <input type="text" class="form-control form-control-sm column_filter" id="Semana" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
+                <input type="text" class="form-control form-control-sm " id="Semana" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
             </div> 
             <div class="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-2">
                 <strong>Observaciones</strong>
@@ -42,8 +42,11 @@
                 <input type="text" id="Observaciones" name="Adicionales" class="form-control form-control-sm" placeholder="Observacion dos" />
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-3" align="left">
-                <button type="button" class="btn btn-info" id="btnAsignar" data-toggle="tooltip" data-placement="top" title="Asignar">
+                <button type="button" class="btn btn-info" id="btnReAsignar" data-toggle="tooltip" data-placement="top" title="Asignar">
                     <span class="fa fa-check"></span> Acepta
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlReasignarControles">
+                    Launch demo modal
                 </button>
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-3" align="left">
@@ -54,26 +57,26 @@
             <table id="tblReasignarControles" class="table table-sm display hover" style="width:100%">
                 <thead>
                     <tr>
-                        <th>ID</th><!--0-->
-                        <th>IdEstilo</th><!--1-->
-                        <th>IdColor</th><!--2-->
-                        <th>Pedido</th><!--3-->
-                        <th>Cliente</th><!--4-->
+                        <th>ID</th>0
+                        <th>IdEstilo</th>1
+                        <th>IdColor</th>2
+                        <th>Pedido</th>3
+                        <th>Cliente</th>4
 
-                        <th>Estilo</th><!--5-->
-                        <th>Color</th><!--6-->
-                        <th>Serie</th><!--7-->
-                        <th>Fecha</th><!--8-->
-                        <th>Fe - Pe</th><!--9-->
+                        <th>Estilo</th>5
+                        <th>Color</th>6
+                        <th>Serie</th>7
+                        <th>Fecha</th>8
+                        <th>Fe - Pe</th>9
 
-                        <th>Fe - En</th><!--10-->
-                        <th>Pars</th><!--11-->
-                        <th>Maq</th><!--12-->
-                        <th>Sem</th><!--13-->
-                        <th>Año</th><!--14-->
+                        <th>Fe - En</th>10
+                        <th>Pars</th>11
+                        <th>Maq</th>12
+                        <th>Sem</th>13
+                        <th>Año</th>14
 
-                        <th>Control</th><!--15-->
-                        <th>SerieID</th><!--16-->
+                        <th>Control</th>15
+                        <th>SerieID</th>16
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -107,25 +110,79 @@
 </div>
 
 <div class="dropdown-menu animated flipInX" style="font-size: 12px;" id='menu'>
-    <a class="dropdown-item text-primary" href="#" onclick="btnAsignar.trigger('click')"><i class="fa fa-check"></i> Asignar</a> 
+    <a class="dropdown-item text-primary" href="#" onclick="btnReAsignar.trigger('click')"><i class="fa fa-check"></i> Asignar</a> 
     <a class="dropdown-item text-info" href="#" onclick="btnReload.trigger('click')"><i class="fa fa-exchange-alt"></i> Refrescar</a> 
+</div>-->
+
+<div class="modal" id="mdlReasignarControles">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-cogs"></span> Reasignar controles (Maquila/Semana)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 15px"> 
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Ctrl.Inicial</strong>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus placeholder="Ej:180152001">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Ctrl.Final</strong>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" placeholder="Ej:180152005">
+                    </div> 
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Maquila asignada</strong>
+                        <input type="text" class="form-control form-control-sm " id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Semana asignada</strong>
+                        <input type="text" class="form-control form-control-sm " id="SemanaAsignada" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
+                    </div> 
+                    <div class="w-100 my-1">
+                        <hr>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Maquila a asignar</strong>
+                        <input type="text"  class="form-control form-control-sm " id="MaquilaAAsignar" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Semana a asignar</strong>
+                        <input type="text" class="form-control form-control-sm " id="SemanaAAsignar" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
+                    </div> 
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Observaciones</strong>
+                        <input type="text" id="ObservacionesTitulo" name="Observaciones" class="form-control form-control-sm mb-3" placeholder="Observacion uno" />
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <strong>Observaciones adicionales</strong>
+                        <input type="text" id="Observaciones" name="Adicionales" class="form-control form-control-sm" placeholder="Observacion dos" />
+                    </div> 
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-3" align="left">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btnReAsignar" disabled=""> <span class="fa fa-save"></span> Acepta</button> 
+            </div>
+        </div>
+    </div>
 </div>
+
 <script>
-    var master_url = base_url + 'index.php/ReasignarControles/';
-    var ReasignarControles;
-    var tblReasignarControles = $('#tblReasignarControles');
-    var btnAsignar = $("#btnAsignar");
-    var btnDeshacer = $("#btnDeshacer");
-    var btnReload = $("#btnReload");
-    var pnlTablero = $("#pnlTablero"),
-            ObservacionesTitulo = pnlTablero.find("#ObservacionesTitulo"),
-            Observaciones = pnlTablero.find("#Observaciones"),
-            MaquilaAsignada = pnlTablero.find("#MaquilaAsignada"),
-            MaquilaAAsignar = pnlTablero.find("#Maquila"),
-            SemanaAsignada = pnlTablero.find("#SemanaAsignada"),
-            SemanaAAsignar = pnlTablero.find("#Semana"),
-            ControlInicial = pnlTablero.find("#ControlInicial"),
-            ControlFinal = pnlTablero.find("#ControlFinal");
+    var mdlReasignarControles = $("#mdlReasignarControles"),
+            ObservacionesTitulo = mdlReasignarControles.find("#ObservacionesTitulo"),
+            Observaciones = mdlReasignarControles.find("#Observaciones"),
+            MaquilaAsignada = mdlReasignarControles.find("#MaquilaAsignada"),
+            MaquilaAAsignar = mdlReasignarControles.find("#MaquilaAAsignar"),
+            SemanaAsignada = mdlReasignarControles.find("#SemanaAsignada"),
+            SemanaAAsignar = mdlReasignarControles.find("#SemanaAAsignar"),
+            ControlInicial = mdlReasignarControles.find("#ControlInicial"),
+            ControlFinal = mdlReasignarControles.find("#ControlFinal"),
+            btnReAsignar = mdlReasignarControles.find("#btnReAsignar");
+
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
         // The global jQuery object is passed as a parameter
@@ -149,10 +206,8 @@
 
             ControlFinal.keydown(function (e) {
                 console.log(e.keyCode);
-                if (e.keyCode === 13) { 
-                    ReasignarControles.ajax.reload(function () {
-                        getMaquilaSemanaXControl();
-                    });
+                if (e.keyCode === 13) {
+                    getMaquilaSemanaXControl();
                 }
             });
 
@@ -160,149 +215,18 @@
                 console.log(e.keyCode);
                 if (e.keyCode === 13) {
                     onObtenerElUltimoControl(this);
-                    ReasignarControles.ajax.reload(function () {
-                        getMaquilaSemanaXControl();
-                    });
+                    getMaquilaSemanaXControl();
                 }
             });
 
-            // Instance the tour
-            var tour = new Tour({
-                name: "tour",
-                steps: [
-                    {
-                        smartPlacement: true,
-                        backdropContainer: 'body',
-                        backdropPadding: 5,
-                        placement: "auto",
-                        element: "#btnAsignar",
-                        title: "Asignación",
-                        content: "Con este boton generas los controles para los registros seleccionados"
-                    },
-                    {
-                        smartPlacement: true,
-                        backdropContainer: 'body',
-                        backdropPadding: 5,
-                        placement: "auto",
-                        element: "#btnDeshacer",
-                        title: "Deshacer",
-                        content: "Con este boton reviertes los controles generados."
-                    },
-                    {
-                        smartPlacement: true,
-                        backdropContainer: 'body',
-                        backdropPadding: 5,
-                        placement: "auto",
-                        element: "#btnReload",
-                        title: "Refrescar",
-                        content: "Permite actualizar los registros sin necesidad de actualizar completamente la página, con un performance excepcional."
-                    }
-                ],
-                container: "body",
-                smartPlacement: true,
-                keyboard: true,
-                storage: window.localStorage,
-                debug: false,
-                backdrop: true,
-                backdropContainer: 'body',
-                backdropPadding: 0,
-                redirect: true,
-                orphan: false,
-                duration: false,
-                delay: false,
-                basePath: "",
-                afterGetState: function (key, value) {},
-                afterSetState: function (key, value) {},
-                afterRemoveState: function (key, value) {},
-                onStart: function (tour) {},
-                onEnd: function (tour) {
-                    swal({
-                        title: "Recorrido finalizado",
-                        text: "En este momento ya es posible conocer a detalle que hace este módulo dentro del sistema.",
-                        icon: "success",
-                        buttons: {
-                            resumetour: {
-                                text: "Reiniciar recorrido",
-                                value: "resumetour"
-                            },
-                            endtour: {
-                                text: "Finalizar",
-                                value: "endtour"
-                            }
-                        }
-                    }).then((value) => {
-                        switch (value) {
-                            case "resumetour":
-                                tour.init();
-                                tour.restart();
-                                break;
-                            case "endtour":
-                                swal.close();
-                                break;
-                        }
-                    });
-                },
-                onShow: function (tour) {},
-                onShown: function (tour) {},
-                onHide: function (tour) {},
-                onHidden: function (tour) {},
-                onNext: function (tour) {},
-                onPrev: function (tour) {},
-                onPause: function (tour, duration) {},
-                onResume: function (tour, duration) {
-                    console.log('RESUMIDO');
-                },
-                onRedirectError: function (tour) {}
-            });
-            // Initialize the tour
-            tour.init();
-            // Start the tour
-            tour.start();
+            handleEnterDiv(mdlReasignarControles);
 
-            init();
-
-            $("#col12_filter, #col13_filter, #Maquila, #Semana").focusout(function () {
-                console.log($(this).val());
+            mdlReasignarControles.on('shown.bs.modal', function () {
+                mdlReasignarControles.find("input").val('');
+                ControlInicial.focus().select();
             });
 
-            $('#ReasignarControles').on("contextmenu", function (e) {
-                e.preventDefault();
-                var top = e.pageY + 5;
-                var left = e.pageX - 160;
-                $("#menu").css({
-                    display: "block",
-                    top: top,
-                    left: left
-                });
-                return false; //blocks default Webbrowser right click menu
-            });
-
-            $(document).click(function () {
-                $("#menu").hide();
-            });
-
-            btnReload.click(function () {
-                ReasignarControles.ajax.reload();
-            });
-
-            btnDeshacer.click(function () {
-                if (tblReasignarControles.find("tbody tr.HasMca.selected").length > 0) {
-                    swal({
-                        title: "Estas seguro?",
-                        text: "Serán desmarcados los '" + tblReasignarControles.find("tbody tr.HasMca.selected").length + "' registros, una vez completada la acción",
-                        icon: "warning",
-                        buttons: true
-                    }).then((willDelete) => {
-                        if (willDelete) {
-                            onMarcarDesMarcar(2);
-                        }
-                    });
-                } else {
-                    swal('ATENCIÓN', 'NO HA SELECCIONADO NINGÚN REGISTRO', 'warning');
-                }
-            });
-
-            btnAsignar.click(function () {
+            btnReAsignar.click(function () {
                 if (ControlInicial.val() && ControlFinal.val()) {
                     swal({
                         title: "¿Estas seguro?",
@@ -334,10 +258,11 @@
                                     text: 'SE HAN REASIGNADO LOS REGISTROS',
                                     icon: 'success',
                                     timer: 1500
+                                }).then((value) => {
+                                    mdlReasignarControles.find("input").val('');
+                                    ControlInicial.focus().select();
+                                    btnReAsignar.prop("disabled", true);
                                 });
-                                ReasignarControles.ajax.reload();
-                                ControlInicial.focus().select();
-                                btnAsignar.prop("disabled", true);
                             }).fail(function (x, y, z) {
                                 console.log(x, y, z);
                             }).always(function () {
@@ -352,8 +277,6 @@
                     });
                 }
             });//ASIGNAR
-
-
         }
         );
     }));
@@ -361,7 +284,7 @@
     function onChecarMaquilaValida(e) {
         var n = $(e);
         if (n.val() !== '') {
-            $.getJSON(master_url + 'onChecarMaquilaValida', {ID: $(e).val()}).done(function (data) {
+            $.getJSON('<?php print base_url('ReasignarControles/onChecarMaquilaValida'); ?>', {ID: $(e).val()}).done(function (data) {
                 if (parseInt(data[0].Maquila) <= 0) {
                     swal({
                         title: "Indique una maquila válida",
@@ -386,7 +309,7 @@
     function onChecarSemanaValida(e) {
         var n = $(e);
         if (n.val() !== '') {
-            $.getJSON(master_url + 'onChecarSemanaValida', {ID: $(e).val()}).done(function (data) {
+            $.getJSON('<?php print base_url('ReasignarControles/onChecarSemanaValida'); ?>', {ID: $(e).val()}).done(function (data) {
                 if (parseInt(data[0].Semana) <= 0) {
                     swal({
                         title: "Indique una semana de producción válida",
@@ -399,7 +322,7 @@
                         $(e).val('').focus().select();
                     });
                 }
-            }).fail(function () {
+            }).fail(function (x) {
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x.responseText);
             }).always(function () {
@@ -414,143 +337,12 @@
     }
 
     function onVerificarFormValido() {
-        var a = pnlTablero.find("#col12_filter"), b = pnlTablero.find("#col13_filter"), c = pnlTablero.find("#Maquila"), d = pnlTablero.find("#Semana");
+        var a = ControlInicial, b = ControlFinal, c = MaquilaAsignada, d = SemanaAsignada;
         if (a.val() !== '' && b.val() !== '' && c.val() !== '' && d.val() !== '') {
-            btnAsignar.prop("disabled", false);
+            btnReAsignar.prop("disabled", false);
         } else {
-            btnAsignar.prop("disabled", true);
+            btnReAsignar.prop("disabled", true);
         }
-    }
-
-    function getOptions(url, comp, key, field) {
-        $.getJSON(master_url + url).done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#" + comp)[0].selectize.addOption({text: v[field], value: v[key]});
-            });
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-
-    function init() {
-        getRecords();
-        $("#ControlInicial").focus();
-        handleEnterDiv(pnlTablero);
-    }
-
-    function getRecords() {
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblReasignarControles')) {
-            tblReasignarControles.DataTable().destroy();
-        }
-        ReasignarControles = tblReasignarControles.DataTable({
-            dom: 'Brt',
-            buttons: [
-                {
-                    text: "Todos",
-                    className: 'btn btn-info btn-sm',
-                    titleAttr: 'Todos',
-                    action: function (dt) {
-                        ReasignarControles.rows({page: 'current'}).select();
-                    }
-                },
-                {
-                    extend: 'selectNone',
-                    className: 'btn btn-info btn-sm',
-                    text: 'Ninguno',
-                    titleAttr: 'Deseleccionar Todos'
-                }
-            ],
-            "ajax": {
-                "url": '<?php print base_url('ReasignarControles/getRecords'); ?>',
-                "dataSrc": "",
-                "data": function (d) {
-                    d.CONTROL_INICIAL = ControlInicial.val();
-                    d.CONTROL_FINAL = ControlFinal.val();
-                }
-            },
-            "columnDefs": [
-                {
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [1],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [2],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [16],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [17],
-                    "visible": false,
-                    "searchable": false
-                }],
-            "columns": [
-                {"data": "ID"}, /*0*/
-                {"data": "IdEstilo"}, /*1*/
-                {"data": "IdColor"}, /*2*/
-                {"data": "Pedido"}, /*3*/
-                {"data": "Cliente"}, /*4*/
-                {"data": "Estilo"}, /*5*/
-                {"data": "Color"}, /*6*/
-                {"data": "Serie"}, /*7*/
-                {"data": "Fecha Captura"}, /*8*/
-                {"data": "Fecha Pedido"}, /*9*/
-                {"data": "Fecha Entrega"}, /*10*/
-                {"data": "Pares"}, /*11*/
-                {"data": "Maq"}, /*12*/
-                {"data": "Semana"}, /*13*/
-                {"data": "Anio"}, /*14*/
-                {"data": "Control"}, /*15*/
-                {"data": "SerieID"}/*16*/,
-                {"data": "ID_PEDIDO"}/*17*/
-            ],
-            language: lang,
-            select: true,
-            keys: true,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 9999999999,
-            "scrollY": 380,
-            "scrollX": true,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            "aaSorting": [
-                [15, 'ASC']/*ID*/
-            ],
-            "createdRow": function (row, data, dataIndex, cells) {
-                $.each($(row), function (k, v) {
-                    if (data["Marca"] === '0' && data["Control"] !== null) {
-                        $(v).addClass('HasMca');
-                    }
-                });
-            },
-            "footerCallback": function (row, data, start, end, display) {
-                var api = this.api(); //Get access to Datatable API
-                // Update footer
-                $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
-                    return parseFloat(a) + parseFloat(b);
-                }, 0));
-            }
-        });
-        HoldOn.close();
     }
 
     function onObtenerElUltimoControl(e) {
@@ -586,7 +378,7 @@
         }).fail(function (x) {
             getError(x);
         }).always(function () {
-            
+
         });
     }
 </script>

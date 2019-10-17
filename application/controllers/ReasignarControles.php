@@ -129,7 +129,10 @@ class ReasignarControles extends CI_Controller {
 
     public function onObtenerElUltimoControl() {
         try {
-            print json_encode($this->Reasignarcontroles_model->onObtenerElUltimoControl($this->input->get('SEMANA'), $this->input->get('MAQUILA')));
+            $x = $this->input->get();
+            print json_encode($this->db->select("C.Control AS ULTIMO_CONTROL")->from("controles AS C")
+                                    ->where("C.Semana = {$x['SEMANA']} AND C.Maquila = {$x['MAQUILA']}", null, false)->order_by('C.Control', 'DESC')
+                                    ->limit(1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -158,11 +161,11 @@ class ReasignarControles extends CI_Controller {
             $Y = substr(Date('Y'), 2);
 
             $this->db->trans_begin();
-            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
-                INNER JOIN OrdenDeProduccion AS OP 
-                ON OPD.OrdenDeProduccion = OP.ID 
-                WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
-            $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+//            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
+//                INNER JOIN OrdenDeProduccion AS OP 
+//                ON OPD.OrdenDeProduccion = OP.ID 
+//                WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+//            $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
             $this->db->query("DELETE FROM controles WHERE ID > 0 AND Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
 
             if ($this->db->trans_status() === FALSE) {
@@ -193,7 +196,7 @@ class ReasignarControles extends CI_Controller {
                                         . "AND C.Maquila = ABS({$MAQUILA_A_ASIGNAR}) AND C.Ano = ABS({$Y})"
                                         . "ORDER BY `C`.`Consecutivo` DESC", null, false)
                                 ->limit(1)->get()->result();
-                print  $this->db->last_query() . "\n";
+                print $this->db->last_query() . "\n";
 
                 print "\n 3.Consecutivo + 1 en controles \n";
                 $MAXIMO_CONSECUTIVO = $this->db->select('(C.Consecutivo + 1) AS MAX', false)->from('controles AS C')
@@ -218,7 +221,7 @@ class ReasignarControles extends CI_Controller {
                 ));
                 print $this->db->last_query() . "\n";
 
-                print "\n 5. update pedidox control,semana,maquila" . $this->db->last_query() . "\n";
+                print "\n 5. update pedidox control,semana,maquila \n";
                 $this->db->set('Control', $Control)
                         ->set('Semana', $SEMANA_A_ASIGNAR)
                         ->set('Maquila', $MAQUILA_A_ASIGNAR)
