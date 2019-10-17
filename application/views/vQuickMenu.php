@@ -94,7 +94,7 @@
         border-width: 1px 2px 2px;
         border-style: solid; 
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #ffcc00, #0099cc, rgb(0,0,0,0)) 1 100% ;
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
     }
 </style>
 <script>
