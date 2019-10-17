@@ -89,6 +89,13 @@
         cursor: pointer !important;
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
     }
+    .card{
+        background-color: #f9f9f9;
+        border-width: 1px 2px 2px;
+        border-style: solid; 
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
+        border-image: linear-gradient(to bottom,  #ffcc00, #0099cc, rgb(0,0,0,0)) 1 100% ;
+    }
 </style>
 <script>
     $(document).ready(function () {

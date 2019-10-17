@@ -48,7 +48,7 @@
         </div>
         <br>
         <div id="ControlesCancelados" class="table-responsive">
-            <table id="tblControlesCancelados" class="table table-sm display hover" style="width:100%">
+            <table id="tblControlesCancelados" class="table table-sm display hover nowrap" style="width:100%">
                 <thead>
                     <tr>
                         <th>CONTROLID</th><!--0-->
@@ -372,13 +372,7 @@
                     onValidarFiltro();
                 }
             });
-
-            $('input.column_filter').on('keyup click', function () {
-                var i = $(this).parents('div').attr('data-column');
-                tblControlesCancelados.DataTable().column(i).search($('#col' + i + '_filter').val()).draw();
-            });
-        }
-        );
+        });
     }));
 
     function onValidarFiltro() {
@@ -648,11 +642,6 @@
     }
 </script> 
 <style>
-    table tbody td{
-        font-weight: bold; 
-        left: 20px;
-        top: -5px;
-    } 
 
     tr.selected > td{
         background-color: #333333;
@@ -662,9 +651,16 @@
         background-color: #2C3E50;
     }
 
-    tr:hover > td div.text-danger{
+    tr:hover > td div.text-danger  {
         font-weight: bold;
         color: #ffff00  !important;
+        font-size: 16px;
+    }
+
+    tr:hover > td {
+        font-weight: bold;
+        color: #ffffff  !important;
+        font-size: 16px;
     }
     tr.selected > td div.text-danger{
         font-weight: bold;
@@ -673,12 +669,5 @@
 
     table tbody tr:hover {
         background-color: #333333;
-    }
-
-    input:in-range {
-        border: 2px solid #99cc00 !important;
-    }
-    input:in-range {
-        border: 2px solid #99cc00 !important;
-    }
+    } 
 </style>

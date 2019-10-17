@@ -42,18 +42,30 @@ class ParesAsignadosXTiempos extends CI_Controller {
     }
 
     public function getParesAsignadosControlXTiempos() {
+
+        $x = $this->input->post();
+
+        $programacion = $this->db->query("SELECT P.control AS CONTROL, P.estilo AS ESTILO, P.diaprg AS DIA, "
+                        . "P.semana AS SEMANA, P.año AS ANIO, P.fecha AS FECHA "
+                        . "FROM programacion AS P "
+                        . "WHERE P.semana = '{$x['SEMANA']}' AND P.año = '{$x['ANIO']}'")->result();
+
+        foreach ($programacion as $k => $v) {
+            $this->db->set('DiaProg', $v->DIA)
+                    ->set('SemProg', $v->SEMANA)
+                    ->set('AnioProg', $v->ANIO)
+                    ->set('FechaProg', $v->FECHA)
+                    ->where('Control', $v->CONTROL)
+                    ->where('Estilo', $v->ESTILO)
+                    ->update('pedidox');
+        }
+
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
-        $parametros = array();
-        $parametros["logo"] = base_url() . $this->session->LOGO;
-        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $x = $this->input;
-        $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
-        $parametros["SEMANA"] = intval($x->post('SEMANA'));
-        $parametros["DIA"] = intval($x->post('DIA'));
-        $parametros["ANO"] = intval($x->post('ANIO'));
 
-        $jc->setParametros($parametros);
+        $jc->setParametros(array("logo" => base_url() . $this->session->LOGO, "empresa" => $this->session->EMPRESA_RAZON,
+            "MAQUILA" => intval($x['MAQUILA']), "SEMANA" => intval($x['SEMANA']),
+            "DIA" => intval($x['DIA']), "ANO" => intval($x['ANIO'])));
 
         $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
         $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));

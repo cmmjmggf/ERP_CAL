@@ -1,75 +1,96 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Pares asignados X Tiempos</h3>
-    </div>
-    <div class="card-body">
-        <div class="row" align="center">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>Maquila</label>
-                <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm numbersOnly" autofocus="">
+<div class="modal" id="mdlParesAsignadosXTiempos">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-stopwatch"></span> Pares asignados X Tiempos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>Semana</label>
-                <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numbersOnly">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label>Maquila</label>
+                        <input type="text" id="MaquilaPAXT" name="MaquilaPAXT" class="form-control form-control-sm numbersOnly" autofocus="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label>Semana</label>
+                        <input type="text" id="SemanaPAXT" name="SemanaPAXT" class="form-control form-control-sm  numbersOnly">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label>Dia</label>
+                        <input type="text" id="DiaPAXT" name="DiaPAXT" class="form-control form-control-sm  numbersOnly">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                        <label>Año</label>
+                        <input type="text" id="AnioPAXT" name="AnioPAXT" class="form-control form-control-sm  numbersOnly">
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                <label>Dia</label>
-                <input type="text" id="Dia" name="Dia" class="form-control form-control-sm  numbersOnly">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptaPAXT"><span class="fa fa-print"></span> Acepta </button> 
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <label>Año</label>
-                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm  numbersOnly">
-            </div>
-            <div class="w-100 my-3"></div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
         </div>
     </div>
 </div>
+
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
-            btnAceptar = pnlTablero.find("#btnAceptar"),
-            Maquila = pnlTablero.find("#Maquila"),
-            Dia = pnlTablero.find("#Dia"),
-            Semana = pnlTablero.find("#Semana");
+
+    var mdlParesAsignadosXTiempos = $("#mdlParesAsignadosXTiempos"),
+            MaquilaPAXT = mdlParesAsignadosXTiempos.find("#MaquilaPAXT"),
+            SemanaPAXT = mdlParesAsignadosXTiempos.find("#SemanaPAXT"),
+            DiaPAXT = mdlParesAsignadosXTiempos.find("#DiaPAXT"),
+            AnioPAXT = mdlParesAsignadosXTiempos.find("#AnioPAXT"),
+            AnioX = '<?php print Date('Y'); ?>',
+            btnAceptaPAXT = mdlParesAsignadosXTiempos.find("#btnAceptaPAXT");
 
     $(document).ready(function () {
+
         Anio.val(new Date().getFullYear());
 
-        btnAceptar.click(function () {
-            if (Maquila.val() && Semana.val() && Anio.val()) {
+        btnAceptaPAXT.click(function () {
+            if (MaquilaPAXT.val() && SemanaPAXT.val() && AnioPAXT.val()) {
+                btnAceptaPAXT.attr('disabled', true);
                 HoldOn.open({
                     theme: 'sk-cube',
                     message: 'Por favor espere...'
                 });
                 $.post('<?php print base_url('ParesAsignadosXTiempos/getParesAsignadosControlXTiempos'); ?>', {
-                    MAQUILA: Maquila.val().trim() !== '' ? parseInt(Maquila.val()) : '',
-                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
-                    DIA: Dia.val().trim() !== '' ? Dia.val() : 0,
-                    ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
+                    MAQUILA: MaquilaPAXT.val().trim() !== '' ? parseInt(MaquilaPAXT.val()) : '',
+                    SEMANA: SemanaPAXT.val().trim() !== '' ? SemanaPAXT.val() : '',
+                    DIA: DiaPAXT.val().trim() !== '' ? DiaPAXT.val() : 0,
+                    ANIO: AnioPAXT.val().trim() !== '' ? AnioPAXT.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);
+                    $.extend($.fancybox.defaults, {
+                        afterClose: function () {
+                            MaquilaPAXT.focus().select();
+                        }
+                    });
                     onImprimirReporteFancy(data);
                 }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                    getError(x);
                 }).always(function () {
                     HoldOn.close();
+                    btnAceptaPAXT.attr('disabled', false);
                 });
             } else {
                 swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                    if (Maquila.val()) {
-                        Maquila.focus();
-                    } else if (Semana.val()) {
-                        Semana.focus().select();
-                    } else if (Anio.val()) {
-                        Anio.focus().select();
+                    if (MaquilaPAXT.val()) {
+                        MaquilaPAXT.focus();
+                    } else if (SemanaPAXT.val()) {
+                        SemanaPAXT.focus().select();
+                    } else if (AnioPAXT.val()) {
+                        AnioPAXT.focus().select();
                     }
                 });
             }
+        });
+
+        mdlParesAsignadosXTiempos.on('shown.bs.modal', function () {
+            mdlParesAsignadosXTiempos.find("input").val('');
+            AnioPAXT.val(AnioX);
+            MaquilaPAXT.focus().select();
         });
 
     });

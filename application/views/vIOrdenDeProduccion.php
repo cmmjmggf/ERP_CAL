@@ -83,7 +83,7 @@
             });
 
             btnGenerarM.click(function () {
-                btnGenerarM.prop("disabled", true);
+                btnGenerarM.attr("disabled", true);
                 HoldOn.open({
                     theme: 'sk-bounce',
                     message: 'GENERANDO...'
@@ -126,7 +126,7 @@
                     swal('ATENCION', 'HA OCURRIDO UN ERROR AL OBTENER EL REPORTE, REVISE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
                     HoldOn.close();
-                    btnGenerarM.prop("disabled", false);
+                    btnGenerarM.attr("disabled", false);
                 });
             });
 

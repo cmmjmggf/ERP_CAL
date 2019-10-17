@@ -43,8 +43,8 @@ FROM pedidox AS P
 INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN colores AS C ON P.Color = C.Clave AND P.Estilo = C.Estilo
 LEFT JOIN estilostiempox AS ETX ON E.Clave = ETX.estilo
-WHERE P.Maquila = $P{MAQUILA} AND P.Semana = $P{SEMANA}
-AND P.Ano = $P{ANO} AND P.Estatus IN ('A','F') AND P.stsavan NOT IN(14) AND P.DiaProg = $P{DIA}]]>
+WHERE P.Semprog = $P{SEMANA}
+AND P.Anioprog = $P{ANO} AND P.Estatus IN ('A','F') AND P.stsavan NOT IN(14) AND P.DiaProg = $P{DIA}]]>
 	</queryString>
 	<field name="Linea" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
