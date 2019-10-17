@@ -161,11 +161,11 @@ class ReasignarControles extends CI_Controller {
             $Y = substr(Date('Y'), 2);
 
             $this->db->trans_begin();
-//            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
-//                INNER JOIN OrdenDeProduccion AS OP 
-//                ON OPD.OrdenDeProduccion = OP.ID 
-//                WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
-//            $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
+                INNER JOIN OrdenDeProduccion AS OP 
+                ON OPD.OrdenDeProduccion = OP.ID 
+                WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+            $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
             $this->db->query("DELETE FROM controles WHERE ID > 0 AND Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
 
             if ($this->db->trans_status() === FALSE) {
