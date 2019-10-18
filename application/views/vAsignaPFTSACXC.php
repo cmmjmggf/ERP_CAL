@@ -525,13 +525,11 @@
             "dom": 'rit',
             buttons: buttons,
             "ajax": {
-                "url": '<?php print base_url('pieles'); ?>',
-                "contentType": "application/json",
+                "url": '<?php print base_url('pieles'); ?>', 
                 "dataSrc": "",
                 "data": function (d) {
                     d.SEMANA = (Semana.val().trim());
-                    d.CONTROL = (Control.val().trim());
-                    d.FT = FT;
+                    d.CONTROL = (Control.val().trim()); 
                 }
             },
             "columns": cols,
@@ -576,8 +574,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim());
-                d.FT = FT;
+                d.CONTROL = (Control.val().trim()); 
             }
         };
         Forros = tblForros.DataTable(xoptions_forros);
@@ -605,8 +602,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim());
-                d.FT = FT;
+                d.CONTROL = (Control.val().trim()); 
             }
         };
         Textiles = tblTextiles.DataTable(xoptions_textiles);
@@ -634,8 +630,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim());
-                d.FT = FT;
+                d.CONTROL = (Control.val().trim()); 
             }
         };
         Sinteticos = tblSinteticos.DataTable(xoptions_sinteticos);
@@ -699,8 +694,12 @@
             "dom": 'Bfrtip',
             buttons: buttons,
             "ajax": {
-                "url": '<?= base_url('controlesasignados'); ?>',
-                "dataSrc": ""
+                "url": '<?php print base_url('AsignaPFTSACXC/getControlesAsignados'); ?>',
+                "dataSrc": "", 
+                "data": function (d) { 
+                    d.SEMANA = (Semana.val() ? Semana.val() : ''); 
+                    d.CONTROL = (Control.val() ? Control.val() : ''); 
+                }
             },
             "columns": [
                 {"data": "ID"}, {"data": "Control"},

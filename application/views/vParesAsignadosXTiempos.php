@@ -35,7 +35,6 @@
 </div>
 
 <script>
-
     var mdlParesAsignadosXTiempos = $("#mdlParesAsignadosXTiempos"),
             MaquilaPAXT = mdlParesAsignadosXTiempos.find("#MaquilaPAXT"),
             SemanaPAXT = mdlParesAsignadosXTiempos.find("#SemanaPAXT"),
@@ -45,8 +44,6 @@
             btnAceptaPAXT = mdlParesAsignadosXTiempos.find("#btnAceptaPAXT");
 
     $(document).ready(function () {
-
-        Anio.val(new Date().getFullYear());
 
         btnAceptaPAXT.click(function () {
             if (MaquilaPAXT.val() && SemanaPAXT.val() && AnioPAXT.val()) {

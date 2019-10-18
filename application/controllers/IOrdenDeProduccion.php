@@ -333,7 +333,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 }
 
 
-                $path = $vc->FOTO;
+                $path = base_url($vc->FOTO);
                 $width = 0;
                 $height = 0;
                 $width_final = 0;
@@ -343,27 +343,63 @@ class IOrdenDeProduccion extends CI_Controller {
                 if ($vc->FOTO !== '') {
                     if (!is_file($path)) {
                         // $pdf->Image(base_url() . 'uploads/Empleados/9999.jpg', 68, 11, 30);
-                        $pdf->SetLineWidth(.4);
-                        $pdf->SetY($pdf->GetY() + 11);
-                        $pdf->SetX(85);
-                        $pdf->SetFont('Calibri', 'BI', 13); 
-                        $pdf->MultiCell(50, 6, 'ESTILO SIN FOTO', 0/* BORDE */, 'C');
-                    } else {
-                        list($width, $height, $type, $attr) = getimagesize(base_url($vc->FOTO));
+//                        $pdf->SetLineWidth(.4);
+//                        $pdf->SetY($pdf->GetY() + 11);
+//                        $pdf->SetX(85);
+//                        $pdf->SetFont('Calibri', 'BI', 13);
+//                        $pdf->MultiCell(50, 6, 'ESTILO SIN FOTO ' . $path, 0/* BORDE */, 'C');
+
+
+
+                        $path = base_url('uploads/Estilos/esf.jpg');
+                        list($width, $height, $type, $attr) = getimagesize($path);
                         $width_final = $this->getSize($width, 96);
                         $height_final = $this->getSize($height, 96);
                         $altura_final = $height_final + $pdf->getY();
-                        /* END FOREACH PIEZAS */
                         if ($altura_final > 260) {
-                            if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
+                            if ($path !== null && $path !== 'NULL') {
                                 $pdf->AddPage();
                                 $pdf->SetAutoPageBreak(true, 10);
-                                $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
+                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
                             }
                         } else {
-                            if ($vc->FOTO !== NULL && $vc->FOTO !== null && $vc->FOTO !== 'NULL') {
-                                $pdf->Image(base_url($vc->FOTO), /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
+                            if ($path !== null && $path !== 'NULL') {
+                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
                             }
+                        }
+                    } else {
+                        list($width, $height, $type, $attr) = getimagesize($path);
+                        $width_final = $this->getSize($width, 48);
+                        $height_final = $this->getSize($height, 48);
+                        $altura_final = $height_final + $pdf->getY();
+                        /* END FOREACH PIEZAS */
+                        if ($altura_final > 260) {
+                            if ($path !== null && $path !== 'NULL') {
+                                $pdf->AddPage();
+                                $pdf->SetAutoPageBreak(true, 10);
+                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
+                            }
+                        } else {
+                            if ($path !== null && $path !== 'NULL') {
+                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
+                            }
+                        }
+                    }
+                } else {
+                    $path = base_url('uploads/Estilos/esf.jpg');
+                    list($width, $height, $type, $attr) = getimagesize($path);
+                    $width_final = $this->getSize($width, 48);
+                    $height_final = $this->getSize($height, 48);
+                    $altura_final = $height_final + $pdf->getY();
+                    if ($altura_final > 260) {
+                        if ($path !== null && $path !== 'NULL') {
+                            $pdf->AddPage();
+                            $pdf->SetAutoPageBreak(true, 10);
+                            $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
+                        }
+                    } else {
+                        if ($path !== null && $path !== 'NULL') {
+                            $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
                         }
                     }
                 }

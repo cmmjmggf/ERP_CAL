@@ -17,19 +17,19 @@
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2" data-column="9">
                 <strong>Maquila</strong>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col9_filter" autofocus maxlength="4">
+                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="MaquilaCoCa" autofocus maxlength="4">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2" data-column="8">
                 <strong>Semana</strong>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col8_filter" maxlength="2"  min="1" max="52">
+                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="SemanaCoCa" maxlength="2"  min="1" max="52">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2" data-column="36">
                 <strong>Año</strong>
-                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="col36_filter" maxlength="4" minlength="1">
+                <input type="text" class="form-control form-control-sm column_filter numbersOnly" id="AnoCoCa" maxlength="4" minlength="1">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2" data-column="2">
                 <strong>Pedido</strong>
-                <input type="text" class="form-control form-control-sm numbersOnly column_filter" id="col2_filter" maxlength="25" minlength="1">
+                <input type="text" class="form-control form-control-sm numbersOnly column_filter" id="PedidoCoCa" maxlength="25" minlength="1">
             </div>
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mt-3">
                 <div class="row">
@@ -191,6 +191,11 @@
     var btnReload = $("#btnReload");
     var pnlTablero = $("#pnlTablero");
     var mdlCancelar = $("#mdlCancelar");
+    var MaquilaCoCa = pnlTablero.find("#MaquilaCoCa"),
+            SemanaCoCa = pnlTablero.find("#SemanaCoCa"),
+            AnoCoCa = pnlTablero.find("#AnoCoCa"),
+            PedidoCoCa = pnlTablero.find("#PedidoCoCa"),
+            Anio = '<?php print Date('Y'); ?>';
 
     // Instance the tour
     var tour = new Tour({
@@ -318,7 +323,6 @@
         },
         onRedirectError: function (tour) {}
     });
-
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
         // The global jQuery object is passed as a parameter
@@ -333,18 +337,11 @@
             $("#btnCancelarSeleccionados").click(function () {
                 onCancelarSeleccionados();
             });
-
-            $('#col9_filter').inputmask({alias: "9999", "placeholder": ""});//MAQUILA
-            $('#col8_filter').inputmask({alias: "99", "placeholder": ""});//SEMANA
-            $('#col36_filter').inputmask({alias: "9999", "placeholder": "_"});//AÑO
-
 // Initialize the tour
             tour.init();
 // Start the tour
             tour.start();
-
             init();
-
             $('#ControlesCancelados').on("contextmenu", function (e) {
                 e.preventDefault();
                 var top = e.pageY + 5;
@@ -356,15 +353,13 @@
                 });
                 return false; //blocks default Webbrowser right click menu
             });
-
             $(document).click(function () {
                 $("#menu").hide();
             });
-
             btnReload.click(function () {
                 ControlesCancelados.ajax.reload();
             });
-
+            
             btnCancelar.click(function () {
                 onValidarFiltro();
             }).keypress(function (e) {
@@ -372,9 +367,29 @@
                     onValidarFiltro();
                 }
             });
+            
+            AnoCoCa.val(Anio);
+            
+            AnoCoCa.on('keydown', function () {
+                if ($(this).val()) {
+                    ControlesCancelados.ajax.reload();
+                }
+            });
+
+            SemanaCoCa.on('keydown', function () {
+                if ($(this).val()) {
+                    ControlesCancelados.ajax.reload();
+                }
+            });
+
+            MaquilaCoCa.on('keydown', function () {
+                console.log('ok')
+                if ($(this).val()) {
+                    ControlesCancelados.ajax.reload();
+                }
+            });
         });
     }));
-
     function onValidarFiltro() {
         var row_count = (tblControlesCancelados.find("tbody tr:not(.Cancelado)").length > 0) ? ControlesCancelados.page.info().recordsDisplay : 0;
         if (row_count > 0) {
@@ -389,9 +404,7 @@
 
     function init() {
         getRecords();
-        $("#col12_filter").focus();
-        handleEnter();
-        pnlTablero.find("#col14_filter").val((new Date()).getFullYear());
+        handleEnterDiv(pnlTablero);
     }
 
     function getRecords() {
@@ -404,29 +417,29 @@
             tblControlesCancelados.DataTable().destroy();
         }
         var cdata = [];
-        cdata.push({"data": "CONTROLID"});/*0*/
-        cdata.push({"data": "PEDIDOID"});/*1*/
-        cdata.push({"data": "Pedido"});/*2*/
-        cdata.push({"data": "Cancelo"});/*3*/
-        cdata.push({"data": "Fecha Entrega"});/*4*/
-        cdata.push({"data": "Cliente"});/*5*/
-        cdata.push({"data": "Estilo"});/*6*/
-        cdata.push({"data": "Color"});/*7*/
-        cdata.push({"data": "Semana"});/*8*/
-        cdata.push({"data": "Maquila"});/*9*/
-        cdata.push({"data": "Serie"});/*10*/
+        cdata.push({"data": "CONTROLID"}); /*0*/
+        cdata.push({"data": "PEDIDOID"}); /*1*/
+        cdata.push({"data": "Pedido"}); /*2*/
+        cdata.push({"data": "Cancelo"}); /*3*/
+        cdata.push({"data": "Fecha Entrega"}); /*4*/
+        cdata.push({"data": "Cliente"}); /*5*/
+        cdata.push({"data": "Estilo"}); /*6*/
+        cdata.push({"data": "Color"}); /*7*/
+        cdata.push({"data": "Semana"}); /*8*/
+        cdata.push({"data": "Maquila"}); /*9*/
+        cdata.push({"data": "Serie"}); /*10*/
         for (var i = 1, max = 22; i <= max; i++) {
-            cdata.push({"data": "C" + i});/*32*/
+            cdata.push({"data": "C" + i}); /*32*/
         }
-        cdata.push({"data": "Pares"});/*33*/
-        cdata.push({"data": "Control"});/*34*/
-        cdata.push({"data": "Motivo"});/*35*/
-        cdata.push({"data": "Anio"});/*36*/
-        cdata.push({"data": "CANCELA"});/*37*/
-        cdata.push({"data": "ControlEstatus"});/*38*/
+        cdata.push({"data": "Pares"}); /*33*/
+        cdata.push({"data": "Control"}); /*34*/
+        cdata.push({"data": "Motivo"}); /*35*/
+        cdata.push({"data": "Anio"}); /*36*/
+        cdata.push({"data": "CANCELA"}); /*37*/
+        cdata.push({"data": "ControlEstatus"}); /*38*/
 
         ControlesCancelados = tblControlesCancelados.DataTable({
-            dom: 'Brt',
+            dom: 'Brit',
             buttons: [
                 {
                     text: "Todos",
@@ -444,8 +457,14 @@
                 }
             ],
             "ajax": {
-                "url": master_url + 'getRecords',
-                "dataSrc": ""
+                "url": '<?php print base_url('ControlesCancelados/getRecords'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MAQUILA = (MaquilaCoCa.val() ? MaquilaCoCa.val() : '');
+                    d.SEMANA = (SemanaCoCa.val() ? SemanaCoCa.val() : '');
+                    d.ANO = (AnoCoCa.val() ? AnoCoCa.val() : '');
+                    d.PEDIDO = (PedidoCoCa.val() ? PedidoCoCa.val() : '');
+                }
             },
             "columnDefs": [
                 {
@@ -514,7 +533,7 @@
         }).then((value) => {
             console.log('VALUE ', value);
             if (value !== '' && value.length > 0) {
-                $.post(master_url + 'onCancelarControlPedido', {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
+                $.post('<?php print base_url('ControlesCancelados/onCancelarControlPedido'); ?>', {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
                     console.log('onCancelarControlPedido: ', data);
                     ControlesCancelados.ajax.reload();
                 }).fail(function (x, y, z) {
@@ -544,7 +563,7 @@
                 var f = new FormData();
                 f.append('Controles', JSON.stringify(controles));
                 $.ajax({
-                    url: master_url + 'onCancelarControlesPedido',
+                    url: '<?php print base_url('ControlesCancelados/onCancelarControlesPedido'); ?>',
                     type: "POST",
                     cache: false,
                     contentType: false,
@@ -612,7 +631,7 @@
                     var f = new FormData();
                     f.append('Controles', JSON.stringify(controles));
                     $.ajax({
-                        url: master_url + 'onCancelarControlesPedido',
+                        url: '<?php print base_url('ControlesCancelados/onCancelarControlesPedido'); ?>',
                         type: "POST",
                         cache: false,
                         contentType: false,
@@ -638,6 +657,24 @@
             });
         } else {
             swal('ATENCIÓN', 'NO HA SELECCIONADO NINGÚN REGISTRO', 'warning');
+        }
+    }
+
+    function onCancelarControles() {
+        if (MaquilaCoCa.val()) {
+            var p = {
+                MAQUILA: MaquilaCoCa.val() ? MaquilaCoCa.val() : '',
+                SEMANA: SemanaCoCa.val() ? SemanaCoCa.val() : '',
+                ANO: AnoCoCa.val() ? AnoCoca.val() : '',
+                PEDIDO: PedidoCoCa.val() ? PedidoCoCa.val() : ''
+            };
+            $.post('<?php print base_url('ControlesCancelados/onCancelarControles'); ?>', p).done(function (a) {
+                console.log("\n A = ", a);
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
         }
     }
 </script> 

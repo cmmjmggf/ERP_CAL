@@ -51,7 +51,16 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getControlesAsignados() {
         try {
-            print json_encode($this->apftsacxc->getControlesAsignados());
+            $x = $this->input->get();
+//            print json_encode($this->apftsacxc->getControlesAsignados());
+            $this->db->select("A.ID, A.Empleado, A.Articulo, A.Descripcion, A.Fecha, A.Cargo, A.Abono, A.Devolucion AS Dev, A.Control AS Control")
+                    ->from("asignapftsacxc AS A");
+            if ($x['SEMANA'] !== '') {
+                $this->db->where("A.Semana", $x['SEMANA']);
+            } else {
+                $this->db->limit(5);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -84,9 +93,6 @@ class AsignaPFTSACXC extends CI_Controller {
     public function getPieles() {
         try {
             $x = $this->input->get();
-//            print json_encode($this->apftsacxc->getPieles(
-//                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
-
             $xdb = $this->db;
             $xdb->select("OP.ID, OP.ControlT AS CONTROL, OPD.Articulo AS ARTICULO_CLAVE, "
                             . "OPD.ArticuloT AS ARTICULO_DESCRIPCION, OPD.UnidadMedidaT AS UM, OPD.Pieza AS PIEZA, "
@@ -104,8 +110,8 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.Pieza')
                     ->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
-            if ($FT === 1 || $FT === '1') {
-                $xdb->limit(10);/*CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
+                $xdb->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($xdb->get()->result());
         } catch (Exception $exc) {
@@ -115,9 +121,26 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getForros() {
         try {
-            $x = $this->input;
-            print json_encode($this->apftsacxc->getForros(
-                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+            $x = $this->input->get();
+
+            $this->db->select("OP.ID, OP.ControlT AS CONTROL, OPD.Articulo AS ARTICULO_CLAVE, "
+                            . "OPD.ArticuloT AS ARTICULO_DESCRIPCION, OPD.UnidadMedidaT AS UM, OPD.Pieza AS PIEZA, "
+                            . "OPD.PiezaT AS PIEZA_DESCRIPCION, OPD.Grupo AS GRUPO, FORMAT(OPD.Cantidad,3) AS CANTIDAD, "
+                            . "OP.ControlT AS CONTROL, OP.Semana AS SEMANA, CONCAT(96,99,100) AS FRACCION, "
+                            . "OP.Pares AS PARES")
+                    ->from("ordendeproduccion AS OP")
+                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            }
+            $this->db->where('OPD.Grupo', 2)->where('OPD.Departamento', 10)
+                    ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
+                    ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
+                    ->group_by('OPD.UnidadMedidaT');
+            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -125,9 +148,27 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getTextiles() {
         try {
-            $x = $this->input;
-            print json_encode($this->apftsacxc->getTextiles(
-                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+            $x = $this->input->get();
+
+            $this->db->select("OP.ID, OP.ControlT AS CONTROL, OPD.Articulo AS ARTICULO_CLAVE, "
+                            . "OPD.ArticuloT AS ARTICULO_DESCRIPCION, OPD.UnidadMedidaT AS UM, OPD.Pieza AS PIEZA, "
+                            . "OPD.PiezaT AS PIEZA_DESCRIPCION, OPD.Grupo AS GRUPO, FORMAT(OPD.Cantidad,3) AS CANTIDAD, "
+                            . "OP.ControlT AS CONTROL, OP.Semana AS SEMANA, CONCAT(96,99,100) AS FRACCION, "
+                            . "OP.Pares AS PARES")
+                    ->from("ordendeproduccion AS OP")
+                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            }
+            $this->db->where('OPD.Grupo', 34)->where('OPD.Departamento', 10)
+                    ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
+                    ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
+                    ->group_by('OPD.UnidadMedidaT');
+
+            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -135,9 +176,29 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getSinteticos() {
         try {
-            $x = $this->input;
-            print json_encode($this->apftsacxc->getSinteticos(
-                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+            $x = $this->input->get();
+//            print json_encode($this->apftsacxc->getSinteticos(
+//                                    isset($_GET['SEMANA']) ? $x->get('SEMANA') : '', isset($_GET['CONTROL']) ? $x->get('CONTROL') : '', $x->get('FT')));
+
+            $this->db->select("OP.ID, OP.ControlT AS CONTROL, OPD.Articulo AS ARTICULO_CLAVE, "
+                            . "OPD.ArticuloT AS ARTICULO_DESCRIPCION, OPD.UnidadMedidaT AS UM, OPD.Pieza AS PIEZA, "
+                            . "OPD.PiezaT AS PIEZA_DESCRIPCION, OPD.Grupo AS GRUPO, FORMAT(OPD.Cantidad,3) AS CANTIDAD, "
+                            . "OP.ControlT AS CONTROL, OP.Semana AS SEMANA, CONCAT(96,99,100) AS FRACCION, "
+                            . "OP.Pares AS PARES")
+                    ->from("ordendeproduccion AS OP")
+                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            }
+            $this->db->where('OPD.Grupo', 40)->where('OPD.Departamento', 10)
+                    ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
+                    ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
+                    ->group_by('OPD.UnidadMedidaT');
+
+            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
