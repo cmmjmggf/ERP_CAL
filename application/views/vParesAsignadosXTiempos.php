@@ -317,8 +317,5 @@
     }
     .switch + .switch {
         margin-left: 1rem;
-    } 
-    .dropdown-menu {
-        margin-top: 0.75rem;
-    }
+    }  
 </style>
