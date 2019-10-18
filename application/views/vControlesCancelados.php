@@ -555,8 +555,8 @@
         }).then((value) => {
             console.log('VALUE ', value);
             if (value) {
-                $.post('<?php print base_url('ControlesCancelados/onCancelarControlPedido'); ?>', 
-                {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
+                $.post('<?php print base_url('ControlesCancelados/onCancelarControlPedido'); ?>',
+                        {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
                     ControlesCancelados.ajax.reload();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
@@ -709,7 +709,8 @@
         $.each(ControlesCancelados.rows().data(), function (k, v) {
             prs += parseInt(v.Pares);
         });
-        pnlTablero.find(".pares_totales").text(prs + " PARES");
+        pnlTablero.find(".pares_totales").text(prs + " PARES"); 
+        btnCancelar.attr('disabled', !(prs > 0)); 
     }
 
     function getPares() {
