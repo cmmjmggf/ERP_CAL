@@ -460,7 +460,11 @@
         handleEnter();
     });
 
-
+    function validate(event, val) {
+        if (((event.which !== 46 || (event.which === 46 && val === '')) || val.indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    }
     function onModificarSemanaXID(value, IDX) {
         $.ajax({
             url: master_url + 'onModificar',

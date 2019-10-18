@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row" style="padding-left: 15px"> 
+                <div class="row" style="padding-left: 15px">
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Ctrl.Inicial</strong>
                         <input type="text" class="form-control form-control-sm numbersOnly" id="ControlInicial" autofocus placeholder="Ej:180152001">
@@ -16,26 +16,26 @@
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Ctrl.Final</strong>
                         <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinal" placeholder="Ej:180152005">
-                    </div> 
+                    </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Maquila asignada</strong>
-                        <input type="text" class="form-control form-control-sm " id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                        <input type="text" class="form-control form-control-sm " id="MaquilaAsignada" placeholder="Maquila 1" maxlength="4" onblur="onChecarMaquilaValida(this)">
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Semana asignada</strong>
                         <input type="text" class="form-control form-control-sm " id="SemanaAsignada" placeholder="Semana 1" maxlength="3" onblur="onChecarSemanaValida(this);">
-                    </div> 
+                    </div>
                     <div class="w-100 my-1">
                         <hr>
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Maquila a asignar</strong>
-                        <input type="text"  class="form-control form-control-sm " id="MaquilaAAsignar" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)"> 
+                        <input type="text"  class="form-control form-control-sm " id="MaquilaAAsignar" placeholder="Maquila 2" maxlength="4" onblur="onChecarMaquilaValida(this)">
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Semana a asignar</strong>
                         <input type="text" class="form-control form-control-sm " id="SemanaAAsignar" placeholder="Semana 2" maxlength="3" onblur="onChecarSemanaValida(this)">
-                    </div> 
+                    </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Observaciones</strong>
                         <input type="text" id="ObservacionesTitulo" name="Observaciones" class="form-control form-control-sm mb-3" placeholder="Observacion uno" />
@@ -43,13 +43,13 @@
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <strong>Observaciones adicionales</strong>
                         <input type="text" id="Observaciones" name="Adicionales" class="form-control form-control-sm" placeholder="Observacion dos" />
-                    </div> 
+                    </div>
                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-3" align="left">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnReAsignar" disabled=""> <span class="fa fa-save"></span> Acepta</button> 
+                <button type="button" class="btn btn-info" id="btnReAsignar" disabled=""> <span class="fa fa-save"></span> Acepta</button>
             </div>
         </div>
     </div>
@@ -267,13 +267,7 @@
     }
 </script>
 <style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid; 
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
-    }
+
     .dropdown-item.active, .dropdown-item:active{
         color: #fff !important;
     }
@@ -294,14 +288,14 @@
         color:  #fff;
     }
     td:hover span.text-info{
-        position: relative; 
+        position: relative;
         font-weight: bold;
         font-size: 14px;
         color:  #ffeb3b !important;
     }
 
     td:hover span.text-danger{
-        position: relative; 
+        position: relative;
         font-weight: bold;
         font-size: 14px;
         color:  #fff !important;

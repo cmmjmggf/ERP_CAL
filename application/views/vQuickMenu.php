@@ -29,16 +29,16 @@
         -webkit-transition: all 1s ease-in-out;
         transition: all 1s ease-in-out;
         z-index: 99  !important;
-    } 
+    }
     .card{
         cursor: pointer !important;
-        font-weight: bold; 
+        font-weight: bold;
         background: #2b2b2b !important;
         color: #fff;
     }
     .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold;        
+        font-weight: bold;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
         background: #ffffff; /* Old browsers */
         background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
@@ -78,7 +78,7 @@
     }
     .card.text-center {
         background-color: #fff;
-    } 
+    }
     .card{
         transition: all 0.3s;
     }
@@ -90,9 +90,8 @@
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
     }
     .card{
-        background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
     }
@@ -102,4 +101,4 @@
         getQuickMenu(1);
         onComprobarModulos(1);
     });
-</script> 
+</script>

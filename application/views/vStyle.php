@@ -298,7 +298,7 @@
         background-color: #673AB7;
     }
     .card {
-        background-color: #dadfe4;
+        background-color: #d7e1e6 !important;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 
@@ -423,6 +423,6 @@
     }
     .fancybox-arrow:after {
         background-color: #8BC34A !important
-        background-size: 36px 36px !important;
+            background-size: 36px 36px !important;
     }
 </style>

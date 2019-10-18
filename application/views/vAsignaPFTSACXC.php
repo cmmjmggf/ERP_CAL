@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body"> 
+    <div class="card-body">
         <div class="row" style="padding-left: 15px">
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1" align="left">
                 <strong>Semana</strong>
@@ -36,7 +36,7 @@
                 <input type="text" class="form-control form-control-sm d-none" id="ClavePieza" readonly="">
                 <input type="text" class="form-control form-control-sm d-none" id="Pieza" readonly="">
                 <input type="text" class="form-control form-control-sm d-none" id="Pares" readonly="">
-            </div> 
+            </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1" align="left">
                 <strong>Explosion</strong>
                 <input type="text" class="form-control form-control-sm" id="Explosion" readonly="">
@@ -186,7 +186,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h4>Sintéticos</h4> 
+                        <h4>Sintéticos</h4>
                         <table id="tblSinteticos" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -221,19 +221,19 @@
                                     <th></th><!--7-->
                                     <th></th><!--8-->
 
-                                    <th></th><!--9--> 
-                                    <th></th><!--10--> 
-                                    <th></th><!--11--> 
+                                    <th></th><!--9-->
+                                    <th></th><!--10-->
+                                    <th></th><!--11-->
                                 </tr>
                             </tfoot>
-                        </table> 
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                 <h4>Controles asignados</h4>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <table id="tblControlesAsignados" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -525,11 +525,11 @@
             "dom": 'rit',
             buttons: buttons,
             "ajax": {
-                "url": '<?php print base_url('pieles'); ?>', 
+                "url": '<?php print base_url('pieles'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
                     d.SEMANA = (Semana.val().trim());
-                    d.CONTROL = (Control.val().trim()); 
+                    d.CONTROL = (Control.val().trim());
                 }
             },
             "columns": cols,
@@ -574,7 +574,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim()); 
+                d.CONTROL = (Control.val().trim());
             }
         };
         Forros = tblForros.DataTable(xoptions_forros);
@@ -602,7 +602,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim()); 
+                d.CONTROL = (Control.val().trim());
             }
         };
         Textiles = tblTextiles.DataTable(xoptions_textiles);
@@ -630,7 +630,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
-                d.CONTROL = (Control.val().trim()); 
+                d.CONTROL = (Control.val().trim());
             }
         };
         Sinteticos = tblSinteticos.DataTable(xoptions_sinteticos);
@@ -673,7 +673,7 @@
                         break;
                 }
             }
-        }); 
+        });
         Control.on('keydown', function (e) {
             FT = 0;
             if (e.keyCode === 13 && Semana.val() && Control.val()) {
@@ -695,10 +695,10 @@
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('AsignaPFTSACXC/getControlesAsignados'); ?>',
-                "dataSrc": "", 
-                "data": function (d) { 
-                    d.SEMANA = (Semana.val() ? Semana.val() : ''); 
-                    d.CONTROL = (Control.val() ? Control.val() : ''); 
+                "dataSrc": "",
+                "data": function (d) {
+                    d.SEMANA = (Semana.val() ? Semana.val() : '');
+                    d.CONTROL = (Control.val() ? Control.val() : '');
                 }
             },
             "columns": [
@@ -806,9 +806,9 @@
                 message: 'Cargando...'
             });
             $.getJSON(master_url + 'getExplosionXSemanaControlFraccionArticulo',
-                    {SEMANA: S.val(), CONTROL: C.val(), 
-                     FRACCION: F.val(), ARTICULO: A, 
-                     GRUPO: G}).done(function (data) {
+                    {SEMANA: S.val(), CONTROL: C.val(),
+                        FRACCION: F.val(), ARTICULO: A,
+                        GRUPO: G}).done(function (data) {
                 if (data.length > 0) {
                     Explosion.val(data[0].EXPLOSION);
                     Entregar.prop('readonly', false);
@@ -974,7 +974,7 @@
             onEntregarMaterial();
         }
     }
-    
+
     function onEntregarMaterial() {
         var seguro = true;
         if (Entregar.val() > Explosion.val()) {
@@ -1006,7 +1006,7 @@
         {
             console.log('Entregar.val() > Explosion.val() ELSE');
         }
-        
+
         if (seguro) {
             $.post(master_url + 'onEntregarPielForroTextilSintetico', {
                 TIPO: tipo_consumo,
@@ -1046,7 +1046,7 @@
             });
         }
     }
-    
+
     function getEmpleados() {
         $.getJSON(master_url + 'getEmpleados').done(function (data) {
             $.each(data, function (k, v) {
@@ -1156,7 +1156,7 @@
             });
         }
     }
-</script> 
+</script>
 <style>
     td {
         padding-top: 0px !important;
@@ -1167,7 +1167,7 @@
         background-color: #3276b1 !important;
         color: #fff;
     }
-    .highlight-rows{ 
+    .highlight-rows{
         width:100px;
         height:20px;
         color: #000;
@@ -1190,18 +1190,17 @@
         0%   {background:#ffcc33;color:#000;}
         50%  {background:#ffffff;color:#000;}
         100%   {background:#ffcc33;color:#000;}
-    } 
+    }
 </style>
 <style>
     .card{
-        background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
-        
+
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }

@@ -64,7 +64,7 @@
                         <th>Pedido</th>
                         <th>Cliente</th>
                         <th></th>
-                        <th>Fecha Entrega</th>
+                        <th>Fec-Ent</th>
                         <th>Año</th>
                         <th>Semana</th>
                         <th>Maquila</th>
@@ -73,8 +73,8 @@
                         <th>Pares</th>
                         <th>Avance</th>
                         <th>Precio</th>
-                        <th>Observaciones</th>
-                        <th>--</th>
+                        <th>Obs</th>
+                        <th>Obs 2</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -83,7 +83,7 @@
         <hr>
         <form id="frmCaptura">
             <!--        tiempos por estilo-->
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-2">
                     <label class="text-strong text-danger mt-4">Tiempo x Estilo</label>
                 </div>
@@ -141,7 +141,7 @@
                 </div>
             </div>
             <!--        personal-->
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-2">
                     <label class="text-strong text-danger">Personal</label>
                 </div>
@@ -187,7 +187,7 @@
                 </div>
             </div>
             <!--        minutaje-->
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-2">
                     <label class="text-strong text-danger">Minutaje Maq-Sem</label>
                 </div>
@@ -233,7 +233,7 @@
                 </div>
             </div>
             <!--        diferencia-->
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-2">
                     <label class="text-strong text-danger">Diferencia</label>
                 </div>
@@ -884,6 +884,68 @@
             console.log(x.responseText);
         });
     }
+    function onModificarObservacion(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Observacion: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarEstilo(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Estilo: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarColor(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Color: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarMaquila(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Maquila: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarSemana(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Semana: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarFechaEntrega(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, FechaEntrega: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarPedido(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Clave: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+    function onModificarAno(value, IDX) {
+        $.post(master_url + 'onModificar', {ID: IDX, Ano: value}).done(function (data) {
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR AL EDITAR REGISTRO', 'info');
+            console.log(x, y, z);
+        });
+    }
+
+    function validate(event, val) {
+        if (((event.which !== 46 || (event.which === 46 && val === '')) || val.indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    }
 
 </script>
 <style>
@@ -892,7 +954,7 @@
     }
 
     table tbody tr {
-        font-size: 0.8rem !important;
+        font-size: 0.75rem !important;
     }
 
     .verde {
@@ -915,10 +977,19 @@
 
     .form-control-sm,  .form-control {
         padding: 0.15rem 0.5rem;
-        margin-top:  0.08rem;
-        margin-bottom: 0.08rem;
+        margin-top:  0.04rem;
+        margin-bottom: 0.04rem;
         font-weight: bold;
-        font-size: 0.85rem !important;
+        font-size: 0.75rem !important;
+    }
+
+
+    .slim{
+        width: 100px !important;
+    }
+
+    .fat{
+        width: 300px !important;
     }
 
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7,
