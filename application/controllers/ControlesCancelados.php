@@ -84,14 +84,16 @@ class ControlesCancelados extends CI_Controller {
                             . "CONCAT('$a',($d S.T22='0' $e S.T22 END),'$b', ($d P.C22='0' $e P.C22 END),'$c') AS  C22,"
                             . "P.Pares, P.Control,CONCAT(SUBSTRING( CT.Motivo, 1, 24),'...') AS Motivo, CT.Estatus AS ControlEstatus,"
                             . "(CASE WHEN CT.Estatus = 'A' THEN "
-                            . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',CT.ID,',',P.Clave,',',P.Clave,')\">CANCELAR</button>') "
+                            . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',P.Control,',',P.Clave,',',P.Clave,')\"><span class=\"fa fa-trash\"></span></button>') "
                             . " ELSE 'CANCELADO' END)AS CANCELA ", false)
                     ->from('pedidox AS P')
                     ->join('clientes AS CL', 'CL.Clave = P.Cliente')
                     ->join('estilos AS E', 'P.Estilo = E.Clave')
                     ->join('colores AS C', 'P.color = C.Clave AND C.Estilo = E.Clave')
                     ->join('series AS S', 'E.Serie = S.Clave')
-                    ->join('controles AS CT', 'CT.pedidodetalle = P.Clave');
+                    ->join('controles AS CT', 'CT.pedidodetalle = P.Clave')
+                    ->where('P.stsavan <= 2', null, false);
+
             if ($x['MAQUILA'] !== '') {
                 $this->db->where('P.Maquila', $x['MAQUILA']);
             }
@@ -107,7 +109,7 @@ class ControlesCancelados extends CI_Controller {
             if ($x['MAQUILA'] === '' && $x['SEMANA'] === '' && $x['ANO'] === '' && $x['PEDIDO'] === '') {
                 $this->db->limit(50);
             } else {
-              $this->db->limit(999);    
+                $this->db->limit(9999);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -133,13 +135,48 @@ class ControlesCancelados extends CI_Controller {
 
     public function onCancelarControlPedido() {
         try {
-            $pedido = $this->input->post('PEDIDO');
-            $pedidodetalle = $this->input->post('PEDIDODETALLE');
-            $motivo = strtoupper($this->input->post('MOTIVO'));
-            $this->db->set('Cancelacion', Date('d/m/Y h:i:s a'))
-                    ->set('Estatus', 'C')->set('Motivo', $motivo)
-                    ->where('Pedido', $pedido)
-                    ->where('PedidoDetalle', $pedidodetalle)->update('Controles');
+//            $pedido = $this->input->post('PEDIDO');
+//            $pedidodetalle = $this->input->post('PEDIDODETALLE');
+//            $motivo = strtoupper($this->input->post('MOTIVO'));
+//            $this->db->set('Cancelacion', Date('d/m/Y h:i:s a'))
+//                    ->set('Estatus', 'C')->set('Motivo', $motivo)
+//                    ->where('Pedido', $pedido)
+//                    ->where('PedidoDetalle', $pedidodetalle)->update('Controles');
+            $x = $this->input->post();
+            if ($x['CONTROL'] !== '') {
+                $this->db->select("CT.ID AS CONTROLID, P.ID PEDIDOID, P.Clave AS PEDIDO_CLAVE, "
+                                . " CT.Cancelacion AS Cancelo, "
+                                . "P.FechaEntrega AS 'Fecha Entrega', "
+                                . "CONCAT(CL.Clave,' - ', SUBSTRING(CL.RazonS, 1, 24),'...')  AS Cliente, E.Clave AS Estilo, "
+                                . "C.Clave AS Color, P.Semana AS Semana, P.Ano AS Anio,"
+                                . "P.Maquila AS Maquila, P.Serie AS Serie, "
+                                . "P.Pares, P.Control,CONCAT(SUBSTRING( CT.Motivo, 1, 24),'...') AS Motivo, "
+                                . "CT.Estatus AS ControlEstatus", false)
+                        ->from('pedidox AS P')
+                        ->join('clientes AS CL', 'CL.Clave = P.Cliente')
+                        ->join('estilos AS E', 'P.Estilo = E.Clave')
+                        ->join('colores AS C', 'P.color = C.Clave AND C.Estilo = E.Clave')
+                        ->join('series AS S', 'E.Serie = S.Clave')
+                        ->join('controles AS CT', 'CT.pedidodetalle = P.Clave')
+                        ->where('P.stsavan <= 2', null, false)
+                        ->where('P.Clave', $x['PEDIDO'])
+                        ->where('P.Control', $x['CONTROL'])->limit(1);
+
+                foreach ($this->db->get()->result() as $k => $v) {
+                    $this->db->set('Cancelacion', Date('d/m/Y h:i:s a'))
+                            ->set('EstatusProduccion', 'CANCELADO')
+                            ->set('DeptoProduccion', '270')
+                            ->set('Motivo', strtoupper($x['MOTIVO']))
+                            ->where('ID', $v->CONTROLID)
+                            ->where('Pedido', $v->PEDIDO_CLAVE)
+                            ->where('PedidoDetalle', $v->PEDIDO_CLAVE)->update('Controles');
+
+                    $this->db->set('EstatusProduccion', 'CANCELADO')
+                            ->set('DeptoProduccion', '270')->set('stsavan', 14)
+                            ->where('ID', $v->PEDIDOID)->where('Control', $v->Control)
+                            ->where('Clave', $v->PEDIDO_CLAVE)->update('pedidox');
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -147,14 +184,48 @@ class ControlesCancelados extends CI_Controller {
 
     public function onCancelarControlesPedido() {
         try {
-            $controles = json_decode($this->input->post('Controles'));
-            foreach ($controles as $k => $v) {
+            $x = $this->input->post();
+            $this->db->select("CT.ID AS CONTROLID, P.ID PEDIDOID, P.Clave AS PEDIDO_CLAVE, "
+                            . " CT.Cancelacion AS Cancelo, "
+                            . "P.FechaEntrega AS 'Fecha Entrega', "
+                            . "CONCAT(CL.Clave,' - ', SUBSTRING(CL.RazonS, 1, 24),'...')  AS Cliente, E.Clave AS Estilo, "
+                            . "C.Clave AS Color, P.Semana AS Semana, P.Ano AS Anio,"
+                            . "P.Maquila AS Maquila, P.Serie AS Serie, "
+                            . "P.Pares, P.Control,CONCAT(SUBSTRING( CT.Motivo, 1, 24),'...') AS Motivo, "
+                            . "CT.Estatus AS ControlEstatus", false)
+                    ->from('pedidox AS P')
+                    ->join('clientes AS CL', 'CL.Clave = P.Cliente')
+                    ->join('estilos AS E', 'P.Estilo = E.Clave')
+                    ->join('colores AS C', 'P.color = C.Clave AND C.Estilo = E.Clave')
+                    ->join('series AS S', 'E.Serie = S.Clave')
+                    ->join('controles AS CT', 'CT.pedidodetalle = P.Clave')
+                    ->where('P.stsavan <= 2', null, false);
+            if ($x['MAQUILA'] !== '') {
+                $this->db->where('P.Maquila', $x['MAQUILA']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('P.Semana', $x['SEMANA']);
+            }
+            if ($x['ANO'] !== '') {
+                $this->db->where('P.Ano', $x['ANO']);
+            }
+            if ($x['PEDIDO'] !== '') {
+                $this->db->where('P.Clave', $x['PEDIDO']);
+            }
+
+            foreach ($this->db->get()->result() as $k => $v) {
                 $this->db->set('Cancelacion', Date('d/m/Y h:i:s a'))
-                        ->set('Estatus', 'C')
-                        ->set('Departamento', '270')
-                        ->set('Motivo', strtoupper($v->Motivo))
-                        ->where('Pedido', $v->Pedido)
-                        ->where('PedidoDetalle', $v->PedidoDetalle)->update('Controles');
+                        ->set('EstatusProduccion', 'CANCELADO')
+                        ->set('DeptoProduccion', '270')
+                        ->set('Motivo', strtoupper($x['MOTIVO']))
+                        ->where('ID', $v->CONTROLID)
+                        ->where('Pedido', $v->PEDIDO_CLAVE)
+                        ->where('PedidoDetalle', $v->PEDIDO_CLAVE)->update('Controles');
+
+                $this->db->set('EstatusProduccion', 'CANCELADO')
+                        ->set('DeptoProduccion', '270')->set('stsavan', 14)
+                        ->where('ID', $v->PEDIDOID)->where('Control', $v->Control)
+                        ->where('Clave', $v->PEDIDO_CLAVE)->update('pedidox');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

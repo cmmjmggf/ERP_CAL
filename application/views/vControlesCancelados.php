@@ -34,19 +34,21 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mt-3">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-danger" id="btnCancelar">
-                            CANCELAR
+                        <button type="button" class="btn btn-danger" id="btnCancelar" disabled="">
+                            <span class="fa fa-trash"></span>    CANCELAR 
                         </button>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-danger notEnter" id="btnCancelarSeleccionados" data-toggle="tooltip" data-placement="top" title="Cancelar búsqueda seleccionada">
-                            CANCELAR (CTRL)
+                        <button type="button" class="btn btn-danger notEnter d-none" id="btnCancelarSeleccionados" data-toggle="tooltip" data-placement="top" title="Cancelar búsqueda seleccionada">
+                            CANCELAR (CTRL) <span class="fa fa-trash"></span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <br>
+        <div class="w-100 text-center">
+            <p class="font-weight-bold text-danger font-italic pares_totales">0 PARES</p>
+        </div>
         <div id="ControlesCancelados" class="table-responsive">
             <table id="tblControlesCancelados" class="table table-sm display hover nowrap" style="width:100%">
                 <thead>
@@ -331,9 +333,11 @@
         // The $ is now locally scoped
         // Listen for the jQuery ready event on the document
         $(function () {
+
             mdlCancelar.find("#btnGuardar").click(function () {
                 onCancelarControlesFiltrados();
             });
+
             $("#btnCancelarSeleccionados").click(function () {
                 onCancelarSeleccionados();
             });
@@ -342,6 +346,7 @@
 // Start the tour
             tour.start();
             init();
+
             $('#ControlesCancelados').on("contextmenu", function (e) {
                 e.preventDefault();
                 var top = e.pageY + 5;
@@ -353,39 +358,52 @@
                 });
                 return false; //blocks default Webbrowser right click menu
             });
+
             $(document).click(function () {
                 $("#menu").hide();
             });
+
             btnReload.click(function () {
                 ControlesCancelados.ajax.reload();
             });
-            
+
             btnCancelar.click(function () {
-                onValidarFiltro();
+                onCancelarControles();
             }).keypress(function (e) {
-                if (e.keyCode === 13) {
-                    onValidarFiltro();
-                }
+                onCancelarControles();
             });
-            
+
             AnoCoCa.val(Anio);
-            
+
             AnoCoCa.on('keydown', function () {
                 if ($(this).val()) {
-                    ControlesCancelados.ajax.reload();
+                    ControlesCancelados.ajax.reload(function () {
+                        getParesTotales();
+                    });
                 }
             });
 
             SemanaCoCa.on('keydown', function () {
                 if ($(this).val()) {
-                    ControlesCancelados.ajax.reload();
+                    ControlesCancelados.ajax.reload(function () {
+                        getParesTotales();
+                    });
                 }
             });
 
             MaquilaCoCa.on('keydown', function () {
-                console.log('ok')
                 if ($(this).val()) {
-                    ControlesCancelados.ajax.reload();
+                    ControlesCancelados.ajax.reload(function () {
+                        getParesTotales();
+                    });
+                }
+            });
+
+            PedidoCoCa.on('keydown', function () {
+                if ($(this).val()) {
+                    ControlesCancelados.ajax.reload(function () {
+                        getParesTotales();
+                    });
                 }
             });
         });
@@ -439,7 +457,7 @@
         cdata.push({"data": "ControlEstatus"}); /*38*/
 
         ControlesCancelados = tblControlesCancelados.DataTable({
-            dom: 'Brit',
+            dom: 'ritp',
             buttons: [
                 {
                     text: "Todos",
@@ -492,13 +510,13 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 9999999999,
+            "displayLength": 50,
             "scrollY": 380,
             "scrollX": true,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "bSort": true,
+            "bSort": true, responsive: true,
             "aaSorting": [
                 [0, 'desc']/*ID*/
             ],
@@ -515,9 +533,13 @@
                 $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
                     return parseFloat(a) + parseFloat(b);
                 }, 0));
+            },
+            "initComplete": function () {
+                HoldOn.close();
+                MaquilaCoCa.focus().select();
+                getParesTotales();
             }
         });
-        HoldOn.close();
     }
 
     function onCancelarControl(e, c, p, pd) {
@@ -532,9 +554,9 @@
             buttons: true
         }).then((value) => {
             console.log('VALUE ', value);
-            if (value !== '' && value.length > 0) {
-                $.post('<?php print base_url('ControlesCancelados/onCancelarControlPedido'); ?>', {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
-                    console.log('onCancelarControlPedido: ', data);
+            if (value) {
+                $.post('<?php print base_url('ControlesCancelados/onCancelarControlPedido'); ?>', 
+                {CONTROL: c, PEDIDO: p, PEDIDODETALLE: pd, MOTIVO: value}).done(function (data) {
                     ControlesCancelados.ajax.reload();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
@@ -661,7 +683,7 @@
     }
 
     function onCancelarControles() {
-        if (MaquilaCoCa.val()) {
+        if (MaquilaCoCa.val() && SemanaCoCa.val()) {
             var p = {
                 MAQUILA: MaquilaCoCa.val() ? MaquilaCoCa.val() : '',
                 SEMANA: SemanaCoCa.val() ? SemanaCoCa.val() : '',
@@ -675,36 +697,84 @@
             }).always(function () {
                 onCloseOverlay();
             });
+        } else {
+            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA MAQUILA Y UNA SEMANA', 'warning').then((value) => {
+                MaquilaCoCa.focus().select();
+            });
         }
+    }
+
+    function getParesTotales() {
+        var prs = 0;
+        $.each(ControlesCancelados.rows().data(), function (k, v) {
+            prs += parseInt(v.Pares);
+        });
+        pnlTablero.find(".pares_totales").text(prs + " PARES");
+    }
+
+    function getPares() {
+        var prs = 0;
+        $.each(ControlesCancelados.rows().data(), function (k, v) {
+            prs += 1;
+        });
+        return prs;
+    }
+
+    function onCancelarControles() {
+        swal({
+            title: "¿Estas seguro? Se van a cancelar " + getPares() + " controles. ",
+            text: "* Escriba el motivo de la cancelación *",
+            icon: "warning",
+            content: "input",
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            buttons: true
+        }).then((value) => {
+            if (value) {
+                var p = {
+                    MAQUILA: MaquilaCoCa.val() ? MaquilaCoCa.val() : '',
+                    SEMANA: SemanaCoCa.val() ? SemanaCoCa.val() : '',
+                    ANO: AnoCoCa.val() ? AnoCoCa.val() : '',
+                    PEDIDO: PedidoCoCa.val() ? PedidoCoCa.val() : '',
+                    MOTIVO: value
+                };
+                $.post('<?php print base_url('ControlesCancelados/onCancelarControlesPedido'); ?>',
+                        p).done(function (data) {
+                    ControlesCancelados.ajax.reload();
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            }
+        });
     }
 </script> 
 <style>
 
-    tr.selected > td{
-        background-color: #333333;
+    tr > td{
+        font-weight: bold; 
     }
 
     tr.selected > td{
-        background-color: #2C3E50;
+        background-color: #000000;
     }
 
     tr:hover > td div.text-danger  {
-        font-weight: bold;
-        color: #ffff00  !important;
-        font-size: 16px;
+        color: #ffff00  !important; 
     }
 
     tr:hover > td {
-        font-weight: bold;
-        color: #ffffff  !important;
-        font-size: 16px;
+        color: #ffffff  !important; 
     }
     tr.selected > td div.text-danger{
-        font-weight: bold;
         color: #ffff00  !important;
     }
 
     table tbody tr:hover {
         background-color: #333333;
-    } 
+    }   
+    .card{ 
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
+    }
 </style>

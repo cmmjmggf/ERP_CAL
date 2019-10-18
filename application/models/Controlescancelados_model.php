@@ -47,7 +47,7 @@ class Controlescancelados_model extends CI_Model {
                                     . "CONCAT('$a',($d S.T22='0' $e S.T22 END),'$b', ($d PD.C22='0' $e PD.C22 END),'$c') AS  C22,"
                                     . "PD.Pares, PD.Control,CONCAT(SUBSTRING( CT.Motivo, 1, 24),'...') AS Motivo, CT.Estatus AS ControlEstatus,"
                                     . "(CASE WHEN CT.Estatus = 'A' THEN "
-                                    . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',CT.ID,',',PE.Clave,',',PD.Clave,')\">CANCELAR</button>') "
+                                    . "CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onCancelarControl(this,',CT.ID,',',PE.Clave,',',PD.Clave,')\"><span class=\"fa fa-trash\"></span>CANCELARX</button>') "
                                     . " ELSE 'CANCELADO' END)AS CANCELA ", false)
                             ->from('pedidodetalle AS PD')
                             ->join('pedidos AS PE', 'PD.Pedido = PE.Clave')
