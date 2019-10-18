@@ -445,7 +445,7 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["sem"] = intval($x->post('Sem'));
         $parametros["asem"] = intval($x->post('aSem'));
         $parametros["ano"] = intval($x->post('Ano'));
-
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/produccion/';
         $jc->setParametros($parametros);
         $reports = array();
 
@@ -454,15 +454,15 @@ class ReportesProduccionJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         $reports['PARESASIGNADOSGENERAL1'] = $jc->getReport();
 
-        $jc->setJasperurl('jrxml\produccion\paresAsignadosMaqSemGen2.jasper');
-        $jc->setFilename('paresAsignadosMaqSemGen2' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        $reports['PARESASIGNADOSGENERAL2'] = $jc->getReport();
-
-        $jc->setJasperurl('jrxml\produccion\paresAsignadosMaqSemGen3.jasper');
-        $jc->setFilename('paresAsignadosMaqSemGen3' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        $reports['PARESASIGNADOSGENERAL3'] = $jc->getReport();
+//        $jc->setJasperurl('jrxml\produccion\paresAsignadosMaqSemGen2.jasper');
+//        $jc->setFilename('paresAsignadosMaqSemGen2' . Date('h_i_s'));
+//        $jc->setDocumentformat('pdf');
+//        $reports['PARESASIGNADOSGENERAL2'] = $jc->getReport();
+//
+//        $jc->setJasperurl('jrxml\produccion\paresAsignadosMaqSemGen3.jasper');
+//        $jc->setFilename('paresAsignadosMaqSemGen3' . Date('h_i_s'));
+//        $jc->setDocumentformat('pdf');
+//        $reports['PARESASIGNADOSGENERAL3'] = $jc->getReport();
         print json_encode($reports);
     }
 
