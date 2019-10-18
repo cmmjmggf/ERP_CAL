@@ -103,37 +103,31 @@
         </div>
         <hr>
         <!--                Tabla-->
-        <div class="row mt-3">
-            <!--Primer tabla-->
-            <div class="col-12" >
-                <div class="card-block">
-                    <div id="Registros" class="datatable-wide">
-                        <table id="tblRegistros" class="table table-sm display " style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th class="d-none">Linea</th>
-                                    <th>Linea</th>
-                                    <th>Estilo</th>
-                                    <th>C-Piel</th>
-                                    <th>C-Forro</th>
-                                    <th>Rayado</th>
-                                    <th>Rebajado</th>
-                                    <th>Foleado</th>
-                                    <th>Entretel</th>
-                                    <th>Pespunte</th>
-                                    <th>Ensuelado</th>
-                                    <th>Prel-Pes</th>
-                                    <th>Laser</th>
-                                    <th>Montado</th>
-                                    <th>Adorno</th>
-                                    <th>Eliminar</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <!--Primer tabla-->
+        <div id="Registros" class="datatable-wide">
+            <table id="tblRegistros" class="table table-sm display " style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="d-none">Linea</th>
+                        <th>Linea</th>
+                        <th>Estilo</th>
+                        <th>C-Piel</th>
+                        <th>C-Forro</th>
+                        <th>Rayado</th>
+                        <th>Rebajado</th>
+                        <th>Foleado</th>
+                        <th>Entretel</th>
+                        <th>Pespunte</th>
+                        <th>Ensuelado</th>
+                        <th>Prel-Pes</th>
+                        <th>Laser</th>
+                        <th>Montado</th>
+                        <th>Adorno</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -376,7 +370,7 @@
     }
 
     table tbody tr {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
     }
 
     .verde {

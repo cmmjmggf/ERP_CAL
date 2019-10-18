@@ -12,7 +12,7 @@ class TiemposXEstilo extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('TiemposXEstiloDepto_model', 'txed')->helper('tiemposxestilos_helper');
+        $this->load->library('session');
     }
 
     public function index() {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="984" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.5234039505310653"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.392300000000001"/>
+	<property name="ireport.x" value="214"/>
+	<property name="ireport.y" value="30"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -55,8 +55,27 @@ and cast(concat('20',C.ano) as signed)= $P{ano}) as emaq3,
 
 (select sum(case when C.maquila = 4  then C.pares else 0 end) from controles C
 where C.estatusproduccion in ('TERMINADO','FACTURADO') and C.semana = PE.semana
-and cast(concat('20',C.ano) as signed)= $P{ano}) as emaq4
+and cast(concat('20',C.ano) as signed)= $P{ano}) as emaq4,
 
+(SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =1 And año = $P{ano} order by conce desc limit 1) as pmaq1,
+(SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =2 And año = $P{ano} order by conce desc limit 1) as pmaq2,
+(SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =3 And año = $P{ano} order by conce desc limit 1) as pmaq3,
+(SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =4 And año = $P{ano} order by conce desc limit 1) as pmaq4,
+
+(SELECT tipes FROM cierrasem  WHERE sem = PE.semana and maq =1 And año = $P{ano} order by conce desc limit 1) as minmaq1,
+(SELECT tipes FROM cierrasem  WHERE sem = PE.semana and maq =2 And año = $P{ano} order by conce desc limit 1) as minmaq2,
+(SELECT tipes FROM cierrasem  WHERE sem = PE.semana and maq =3 And año = $P{ano} order by conce desc limit 1) as minmaq3,
+(SELECT tipes FROM cierrasem  WHERE sem = PE.semana and maq =4 And año = $P{ano} order by conce desc limit 1) as minmaq4,
+
+(SELECT mipes FROM cierrasem  WHERE sem = PE.semana and maq =1 And año = $P{ano} order by conce desc limit 1) as capmaq1,
+(SELECT mipes FROM cierrasem  WHERE sem = PE.semana and maq =2 And año = $P{ano} order by conce desc limit 1) as capmaq2,
+(SELECT mipes FROM cierrasem  WHERE sem = PE.semana and maq =3 And año = $P{ano} order by conce desc limit 1) as capmaq3,
+(SELECT mipes FROM cierrasem  WHERE sem = PE.semana and maq =4 And año = $P{ano} order by conce desc limit 1) as capmaq4,
+
+(SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =1 And año = $P{ano} order by conce desc limit 1) as dimaq1,
+(SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =2 And año = $P{ano} order by conce desc limit 1) as dimaq2,
+(SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =3 And año = $P{ano} order by conce desc limit 1) as dimaq3,
+(SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =4 And año = $P{ano} order by conce desc limit 1) as dimaq4
 
 from pedidox PE where PE.Estatus in ('A','F')
 and cast(PE.semana as signed) between $P{sem} and $P{asem}
@@ -67,14 +86,38 @@ order by sem asc;]]>
 	<field name="sem" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="maq1" class="java.lang.Double"/>
-	<field name="maq2" class="java.lang.Double"/>
-	<field name="maq3" class="java.lang.Double"/>
-	<field name="maq4" class="java.lang.Double"/>
+	<field name="maq1" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maq2" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maq3" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maq4" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="emaq1" class="java.lang.Double"/>
 	<field name="emaq2" class="java.lang.Double"/>
 	<field name="emaq3" class="java.lang.Double"/>
 	<field name="emaq4" class="java.lang.Double"/>
+	<field name="pmaq1" class="java.lang.Double"/>
+	<field name="pmaq2" class="java.lang.Double"/>
+	<field name="pmaq3" class="java.lang.Double"/>
+	<field name="pmaq4" class="java.lang.Double"/>
+	<field name="minmaq1" class="java.lang.Double"/>
+	<field name="minmaq2" class="java.lang.Double"/>
+	<field name="minmaq3" class="java.lang.Double"/>
+	<field name="minmaq4" class="java.lang.Double"/>
+	<field name="capmaq1" class="java.lang.Double"/>
+	<field name="capmaq2" class="java.lang.Double"/>
+	<field name="capmaq3" class="java.lang.Double"/>
+	<field name="capmaq4" class="java.lang.Double"/>
+	<field name="dimaq1" class="java.lang.Double"/>
+	<field name="dimaq2" class="java.lang.Double"/>
+	<field name="dimaq3" class="java.lang.Double"/>
+	<field name="dimaq4" class="java.lang.Double"/>
 	<variable name="maq1_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{maq1}]]></variableExpression>
 	</variable>
@@ -371,6 +414,34 @@ order by sem asc;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ano}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Column header" x="108" y="50" width="19" height="11" forecolor="#000000" uuid="e58eac3c-1700-4e41-89b6-707cd55027a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pers]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="127" y="50" width="36" height="11" forecolor="#000000" uuid="f7a13d85-574c-41de-ac5b-cf09e7b31ac7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Program]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="163" y="50" width="37" height="11" forecolor="#000000" uuid="3c25cf16-c926-4b9d-96c3-398123c36351"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Capacidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="200" y="49" width="43" height="11" forecolor="#000000" uuid="2f64761a-441c-43d5-a486-0582f1d675db"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diferencia]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -528,6 +599,46 @@ order by sem asc;]]>
 					<paragraph lineSpacing="Single" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{maq4}-$F{emaq4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="108" y="0" width="19" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="741466e0-9642-45f8-b901-4ffba72a6ec4">
+					<printWhenExpression><![CDATA[$F{pmaq1} != 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pmaq1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="127" y="0" width="36" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="514bd2af-c7bf-4870-8baf-7ff6ee400baa">
+					<printWhenExpression><![CDATA[$F{minmaq1}!= 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{minmaq1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="163" y="0" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a1602ded-3b29-448e-9a68-b601c42f8542">
+					<printWhenExpression><![CDATA[$F{capmaq1} != 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{capmaq1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="200" y="0" width="43" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="e7efc166-91dc-4232-b63b-10d57e042717">
+					<printWhenExpression><![CDATA[$F{dimaq1} != 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dimaq1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
