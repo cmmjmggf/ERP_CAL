@@ -620,7 +620,7 @@
             btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
             btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"),
             btnElijeControl = pnlTablero.find("#btnElijeControl"),
-            mdlCosignarA = $("#mdlCosignarA"), CosignarATienda = mdlCosignarA.find("#Tienda");
+            mdlCosignarA = $("#mdlCosignarA"), ConsignarATienda = mdlCosignarA.find("#Tienda");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -638,12 +638,12 @@
         });
 
         mdlCosignarA.on('shown.bs.modal', function () {
-            console.log(CosignarATienda.val());
-            if (CosignarATienda.val() === '') {
-                CosignarATienda[0].selectize.focus();
-                CosignarATienda[0].selectize.open();
+            console.log(ConsignarATienda.val());
+            if (ConsignarATienda.val() === '') {
+                ConsignarATienda[0].selectize.focus();
+                ConsignarATienda[0].selectize.open();
             } else {
-                CosignarATienda[0].selectize.focus();
+                ConsignarATienda[0].selectize.focus();
             }
         });
 
@@ -808,7 +808,7 @@
         });
 
         Documento.on('keydown', function (e) {
-            if (e.keyCode === 13) { 
+            if (e.keyCode === 13) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
                         {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: Documento.val()
                         }).done(function (a) {
@@ -1600,7 +1600,7 @@
             PARES: TotalParesEntrega.val(),
             PARES_FACTURADOS: TotalParesEntregaF.val(),
             PARES_A_FACTURAR: TotalParesEntregaAF.val(),
-            TIENDA: Con
+            TIENDA: ConsignarATienda.val() ? ConsignarATienda.val() : ''
         };
         console.log("PARAMETROS 1: ", p);
         for (var i = 1; i < 23; i++) {
@@ -1610,8 +1610,16 @@
         }
         p["PRECIO"] = PrecioFacturacion.val();
         p["SUBTOTAL"] = SubtotalFacturacion.val();
-        p["IVA"] = (SubtotalFacturacion.val() * 0.16);
-        p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+        switch (parseInt(TPFactura.val())) {
+            case 1:
+                p["IVA"] = (SubtotalFacturacion.val() * 0.16);
+                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+                break;
+            case 2:
+                p["IVA"] = 0;
+                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+                break;
+        }
         p["MONEDA"] = TMNDAFactura.val();
         p["TIPO_CAMBIO"] = TIPODECAMBIO.val();
         p["CAJAS"] = CajasFacturacion.val();
