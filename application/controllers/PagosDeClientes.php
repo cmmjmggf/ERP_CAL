@@ -13,9 +13,16 @@ class PagosDeClientes extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado')->view('vNavGeneral')
-                    ->view('vMenuClientes')->view('vPagosDeClientes')
-                    ->view('vFooter');
+            $this->load->view('vEncabezado');
+            switch ($this->session->userdata["TipoAcceso"]) {
+                case 'SUPER ADMINISTRADOR':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
+                case 'VENTAS':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
+            }
+            $this->load->view('vPagosDeClientes')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
@@ -195,8 +202,8 @@ class PagosDeClientes extends CI_Controller {
     public function getAgenteXCliente() {
         try {
             print json_encode($this->db->query(
-                    "SELECT C.agente AS AGENTE "
-                    . "FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
+                                    "SELECT C.agente AS AGENTE "
+                                    . "FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

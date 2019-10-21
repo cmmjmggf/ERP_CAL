@@ -1,8 +1,10 @@
 <div class="modal" id="mdlReimprimeDocto">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Regenera pdf y xml factura y reimprimer nota</h5>
+                <h6 class="modal-title">
+                    <span class="fa fa-print"></span> Regenera PDF y XML (Factura) y reimprime nota
+                </h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

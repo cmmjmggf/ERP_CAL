@@ -23,7 +23,10 @@ class FacturacionProduccion extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
             }
             $this->load->view('vFacturacionProduccion')->view('vFooter');
@@ -146,6 +149,7 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('cliente', $x['CLIENTE'])
                     ->where('tp', $x['TP_DOCTO'])
                     ->where('staped', 1)->update('facturacion');
+            
             $this->db->set('staped', 2)
                     ->where('factura', $x['FACTURA'])
                     ->where('cliente', $x['CLIENTE'])
@@ -785,6 +789,14 @@ class FacturacionProduccion extends CI_Controller {
             FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
                                     . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getParesDevueltos() {
+        try {
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -82,7 +82,7 @@
                 <div class="form-group">
                     <label class="control-label">Cliente</label>
                     <div class="form-group">
-                        <div class="input-group mb-3"> 
+                        <div class="input-group mb-3">
                             <select id="ClienteFactura" name="ClienteFactura" class="form-control">
                                 <option></option>
                                 <?php
@@ -93,7 +93,7 @@
                                 ?>
                             </select>
                             <div class="input-group-append">
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
+                                <button type="button" id="btnVerTienda" name="btnVerTienda" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn"  data-toggle="tooltip" data-placement="bottom" title="Ver tiendas">
                                     <span class="fa fa-exclamation"></span>
                                 </button>
                             </div>
@@ -180,7 +180,7 @@
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
                               id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
                               data-placement="top" title="ELIJE UN CONTROL">
-                            <i class="fa fa-chess-pawn"></i> CONTROLES X FACTURAR
+                            <i class="fa fa-chess-pawn"></i> SELECCIONA UN CONTROL
                         </span>
                     </span>
                 </div>
@@ -194,65 +194,7 @@
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-none">
                 <label>Corrida</label>
                 <input type="text" id="Corrida" name="Corrida" class="form-control form-control-sm" readonly="">
-            </div> 
-
-
-            <!--            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                                    <div class="row">
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Producción</h5>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Fabricados : </span>
-                                            <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
-                                            <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Facturados : </span>
-                                            <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
-                                            <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Saldo : </span>
-                                            <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
-                                            <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
-                                        </div> 
-                                    </div> 
-                                </div> 
-                            </div> 
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body" style="padding: 7px 10px 10px 10px;">
-                                    <div class="row">
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                            <h5 class="font-weight-bold text-danger font-italic" style="margin-bottom: 0px;">Devoluciones</h5> 
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Devueltos:</span>
-                                            <span class="font-weight-bold text-danger devueltos"> 0 </span> 
-                                            <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Facturados: </span>
-                                            <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span> 
-                                            <input type="text" id="PrsFacturadosDevueltos" name="PrsFacturadosDevueltos" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"> 
-                                            <span class="font-weight-bold">Saldo: </span>
-                                            <span class="font-weight-bold text-danger saldodevuelto"> 0 </span> 
-                                            <input type="text" id="PrsSaldoDevuelto" name="PrsSaldoDevuelto" readonly=""  class="d-none form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
-
-
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
                     <div class="col-6" style="border-bottom: 1px solid #0202; ">
@@ -593,6 +535,38 @@
         </div>
     </div>
 </div>
+
+<div class="modal " id="mdlCosignarA">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content blinkb">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-store-alt"></span> Consignar a</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <select id="Tienda" name="Tienda" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
+                                    ->from('consignatarios AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
+                            }
+                            ?>
+                        </select> 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <span class="fa fa-save"></span> Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
             btnNuevo = pnlTablero.find("#btnNuevo"),
@@ -644,7 +618,9 @@
             TotalLetra = pnlTablero.find("#TotalLetra"), ZonaFacturacion = pnlTablero.find("#ZonaFacturacion"),
             SubtotalFacturacionIVA = pnlTablero.find("#SubtotalFacturacionIVA"),
             btnVistaPreviaF = pnlTablero.find("#btnVistaPreviaF"),
-            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"), btnElijeControl = pnlTablero.find("#btnElijeControl");
+            btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"),
+            btnElijeControl = pnlTablero.find("#btnElijeControl"),
+            mdlCosignarA = $("#mdlCosignarA"), CosignarATienda = mdlCosignarA.find("#Tienda");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -652,6 +628,24 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+
+        handleEnterDiv(mdlCosignarA);
+
+        mdlCosignarA.on('hidden.bs.modal', function () {
+            handleEnterDiv(pnlTablero);
+            btnVerTienda.removeClass("d-none");
+            TPFactura.focus().select();
+        });
+
+        mdlCosignarA.on('shown.bs.modal', function () {
+            console.log(CosignarATienda.val());
+            if (CosignarATienda.val() === '') {
+                CosignarATienda[0].selectize.focus();
+                CosignarATienda[0].selectize.open();
+            } else {
+                CosignarATienda[0].selectize.focus();
+            }
+        });
 
         btnNuevo.click(function () {
             onOpenOverlay('');
@@ -783,33 +777,23 @@
         btnCierraDocto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
-                onOpenOverlay('Guardando...');
-
+                onOpenOverlay('Cerrando...');
                 var p = {
-                    FECHA: FechaFactura.val(),
-                    CLIENTE: ClienteFactura.val(),
-                    TP_DOCTO: TPFactura.val(),
-                    FACTURA: Documento.val(),
+                    FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
+                    TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(),
                     MONEDA: TMNDAFactura.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
                     IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),
-                    REFACTURACION: xRefacturacion[0].cheked ? 1 : 0,
+                    REFACTURACION: (xRefacturacion[0].cheked ? 1 : 0),
                     TOTAL_EN_LETRA: TotalLetra.find("span").text(),
                     REFERENCIA: ReferenciaFacturacion.val()
                 };
                 $.post('<?php print base_url('FacturacionProduccion/onCerrarDocto') ?>', p).done(function (abc) {
-
                     iMsg('SE HA CERRADO EL DOCTO', 's', function () {
                         btnCierraDocto.attr('disabled', true);
+                        btnAcepta.attr('disabled', true);
                         btnVistaPreviaF.trigger('click');
-//                        ClienteFactura[0].selectize.enable();
-//                        TPFactura[0].selectize.enable();
-//                        FechaFactura.attr('readonly', false);
-//                        Documento.attr('readonly', false);
-//                        FCAFactura.attr('readonly', false);
-//                        PAGFactura.attr('readonly', false);
-//                        TMNDAFactura.attr('readonly', false);
                     });
                 }).fail(function (x) {
                     getError(x);
@@ -824,8 +808,7 @@
         });
 
         Documento.on('keydown', function (e) {
-            if (e.keyCode === 13) {
-                onOpenOverlay('Espere un momento por favor...');
+            if (e.keyCode === 13) { 
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
                         {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: Documento.val()
                         }).done(function (a) {
@@ -887,7 +870,7 @@
                                         if (facturado) {
                                             ClienteFactura[0].selectize.disable();
                                             TPFactura.attr('disabled', true);
-//                                            TPFactura[0].selectize.disable();
+                                            //                                            TPFactura[0].selectize.disable();
                                             btnElijeControl.addClass("d-none");
                                             btnAcepta.addClass("d-none");
                                         }
@@ -1032,7 +1015,7 @@
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
                     var xxx = ControlesXFacturar.row($(this)).data();
-                    console.log("TR XXX = ",xxx)
+                    console.log("TR XXX = ", xxx);
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
@@ -1059,14 +1042,6 @@
             }
         });
 
-        TPFactura.change(function (e) {
-            getTipoDeCambioYUltimaFactura();
-        }).keypress(function (e) {
-            if (e.keyCode === 13) {
-                getTipoDeCambioYUltimaFactura();
-            }
-        })
-
         btnClientes.click(function () {
             onBeep(1);
             onOpenWindow('<?php print base_url('Clientes'); ?>');
@@ -1090,10 +1065,10 @@
         ClienteFactura[0].selectize.focus();
         handleEnterDiv(pnlTablero);
 
-        TPFactura.on('change', function () {
-            if (!onoffhandle && parseInt(ClienteFactura.val()) === 2121) {
-                handleEnterDiv(pnlTablero);
-                onoffhandle = true;
+        TPFactura.keydown(function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode === 13) {
+                getTipoDeCambioYUltimaFactura();
             }
         });
 
@@ -1120,7 +1095,7 @@
                 } else {
                     btnVerTienda.addClass("d-none");
                 }
-//                onOpenOverlay('');
+                //                onOpenOverlay('');
                 $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
                     CLIENTE: ClienteFactura.val()
                 }).done(function (a) {
@@ -1226,11 +1201,15 @@
     }
 
     function onVerTienda() {
-        $("#ConsignarATienda").toggleClass("d-none");
-        btnVerTienda.toggleClass('d-none');
+//        $("#ConsignarATienda").toggleClass("d-none");
+//        btnVerTienda.removeClass('d-none');
         pnlTablero.off("keydown");
-        onoffhandle = !onoffhandle;
-        Tienda[0].selectize.focus();
+//        onoffhandle = !onoffhandle;
+//        Tienda[0].selectize.focus();
+
+        mdlCosignarA.modal({
+            backdrop: false
+        });
     }
 
     function onDesactivarEnter() {
@@ -1568,8 +1547,8 @@
             CodigoSat.val(abcd[0].CPS);
         });
     }
-    function onAceptarControl() {
 
+    function onAceptarControl() {
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
@@ -1621,9 +1600,9 @@
             PARES: TotalParesEntrega.val(),
             PARES_FACTURADOS: TotalParesEntregaF.val(),
             PARES_A_FACTURAR: TotalParesEntregaAF.val(),
-            TIENDA: Tienda.val()
+            TIENDA: Con
         };
-        console.log("PARAMETROS 1: ",p);
+        console.log("PARAMETROS 1: ", p);
         for (var i = 1; i < 23; i++) {
             p["C" + i] = ($.isNumeric(pnlTablero.find("#C" + i).val()) ? parseInt(pnlTablero.find("#C" + i).val()) : 0);
             p["CF" + i] = ($.isNumeric(pnlTablero.find("#CF" + i).val()) ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
@@ -1683,7 +1662,7 @@
             PAGFactura.attr('readonly', true);
             TMNDAFactura.attr('readonly', true);
             ClienteFactura[0].selectize.disable();
-//        TPFactura[0].selectize.disable();
+            //        TPFactura[0].selectize.disable();
             TPFactura.attr('disabled', true);
         }).fail(function (x) {
             getError(x);
@@ -1703,7 +1682,7 @@
         if (tf) {
             FechaFactura.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
-//            TPFactura[0].selectize.disable();
+            //            TPFactura[0].selectize.disable();
             TPFactura.attr('disabled', true);
             Documento.attr('disabled', true);
             FCAFactura.attr('disabled', true);
@@ -1761,29 +1740,50 @@
                         }
                         FCAFactura.val(0);
                         PAGFactura.val(1);
-                        TMNDAFactura.val(0); //0 = pesos mexicanos, 1 = dolares americanos
+                        TMNDAFactura.val(1); //1 = pesos mexicanos, 2 = dolares americanos
                     }).fail(function (xyz) {
                         getError(xyz);
                     }).always(function () {
                         onCloseOverlay();
                     });
                 } else {
-                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
+                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2 x', 'warning').then((value) => {
                         TPFactura.focus().select();
                     });
                 }
             } else {
             }
         } else {
-            swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
+            swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2 xx', 'warning').then((value) => {
                 TPFactura.focus().select();
             });
         }
     }
+
+    function getListaDePreciosXCliente() {
+        $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
+            CLIENTE: ClienteFactura.val()
+        }).done(function (a) {
+            if (a.length > 0) {
+                var xxx = JSON.parse(a);
+                LPFactura.val(xxx[0].LP);
+                DescuentoFacturacion.val((parseFloat(xxx[0].DESCUENTO) > 1) ? xxx[0].DESCUENTO : (100 * parseFloat(xxx[0].DESCUENTO)));
+                ZonaFacturacion.val(xxx[0].ZONA);
+                AgenteCliente.val(xxx[0].AGENTE);
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 </script>
 
 <style> 
-    .card{border: solid 1px #607D8B;}
+    .card{ 
+        border: 2px solid #000;
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
+    }
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }
@@ -1795,5 +1795,51 @@
         border-left:    1px solid #ccc;
         height:         10vh;
         width:          1px;       
+    }
+    input{
+        padding-top: 2px !important;
+        padding-bottom:  2px !important;
+    } 
+    .blinkb{ 
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
+        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        box-shadow: 0 0px 12px  #03A9F4;
+    }
+
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes myfirst { 
+        25%  { 
+            border-color:  #007bff; 
+        }
+        50%  {  
+            border-color:  #ffffff; 
+        }
+        75%  {  
+            border-color:  #007bff; 
+        }
+        100% {  
+            border-color:  #ffffff; 
+        }
+    }
+
+    /* Standard syntax */
+    @keyframes myfirst {
+        0%   { 
+            border-color:  #007bff; 
+        }
+        25%  { 
+            border-color:  #ffffff; 
+        }
+        50%  { 
+            border-color:  #007bff; 
+        }
+        75%  {
+            border-color:  #ffffff; 
+        }
+        100% {
+            border-color:  #007bff; 
+        }
     }
 </style>

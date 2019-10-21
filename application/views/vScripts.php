@@ -1358,8 +1358,7 @@
     function getAccesosDirectosXModuloXUsuario(m) {
         var usr = '<?php print $this->session->ID; ?>' !== '' ? '<?php print $this->session->ID; ?>' : 0;
         $.getJSON('<?php print base_url('accesos_directos_x_usuario') ?>',
-                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) {
-            console.log(a);
+                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) { 
             var accesos_directos = "";
             if (a.length > 0) {
                 var burl = '<?php print base_url(); ?>';
