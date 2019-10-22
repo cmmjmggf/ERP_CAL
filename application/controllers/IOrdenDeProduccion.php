@@ -80,6 +80,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $P = $OP[0];
                 $pdf->setCliente($P->Clave . " " . $P->Cliente);
                 $pdf->setFechaEntrega($P->FechaEntrega);
+                $pdf->setObs("{$P->Observaciones}");
                 $pdf->setControl($P->ControlT);
                 $pdf->setFechaPedido($P->FechaPedido);
                 $pdf->setPedido($P->Pedido);

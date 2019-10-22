@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePago" language="groovy" pageWidth="1330" pageHeight="950" orientation="Landscape" columnWidth="1290" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.483685292236641"/>
-	<property name="ireport.x" value="768"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -60,7 +60,7 @@ INNER JOIN articulos A ON FT.Articulo = A.Clave
 INNER JOIN series S ON P.Serie = S.Clave
 INNER JOIN colores AS CO ON  CO.Clave = FT.Color AND CO.Estilo = FT.Estilo
 WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 3  AND P.stsavan NOT IN(13,14) AND FT.Pieza BETWEEN 90 AND 95
- ORDER BY A.Descripcion ASC,ABS(P.Serie) ASC;]]>
+ ORDER BY ABS(P.Serie) ASC, A.Descripcion ASC;]]>
 	</queryString>
 	<field name="Clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

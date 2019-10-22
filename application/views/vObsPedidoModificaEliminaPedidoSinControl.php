@@ -1,5 +1,5 @@
 <div class="modal modal-fullscreen" id="mdlObsPedidoModificaEliminaPedidoSinControl"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg"  role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable"  role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Editar Renglón Pedido</h5>
@@ -105,8 +105,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-info" id="btnAceptar"><span class="fa fa-check"></span> Acepta</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -138,6 +138,7 @@
                     console.log(data);
                     HoldOn.close();
                     mdlObsPedidoModificaEliminaPedidoSinControl.modal("hide");
+                    PedidoDetalle.ajax.reload();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                     HoldOn.close();

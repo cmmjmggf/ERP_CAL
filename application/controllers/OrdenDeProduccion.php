@@ -182,6 +182,8 @@ class OrdenDeProduccion extends CI_Controller {
                 $op["Semana"] = $x['SEMANA'];
                 $op["Maquila"] = $x['MAQUILA'];
                 $op["Ano"] = $x['ANO'];
+                $op["Observaciones"] = $v->Observacion;
+                $op["ObservacionesDetalle"] = $v->ObservacionDetalle;
 
                 $P_F_S_S = $this->db->select("G.Clave, G.Nombre AS Grupo, A.Descripcion AS PIEL_FORRO_SINTETICO_SUELA ,
                             ((sum(FT.Consumo) * (

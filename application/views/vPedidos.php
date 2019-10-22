@@ -54,15 +54,18 @@
             <div class="card  m-3 ">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 float-left">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 float-left">
                             <legend >Pedido</legend>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-6 col-lg-6" align="center">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5" align="center">
                             <button type="button" class="btn btn-primary btn-sm" id="btnCapacidad" onclick="onComprobarCapacidades('#Maquila', 2)" data-toggle="tooltip" data-placement="bottom" title="Comprobar capacidad de la maquila">
                                 <span class="fa fa-eye" ></span>
                             </button>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-3  col-lg-3" align="right">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4" align="right">
+                            <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevoX" data-toggle="tooltip" data-placement="left" title="Agregar">
+                                <span class="fa fa-plus"></span><br>
+                            </button>
                             <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                                 <span class="fa fa-arrow-left" ></span> VER PEDIDOS
                             </button>
@@ -126,7 +129,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
                             <label for="Estilo" >Estilo*</label>
@@ -236,7 +239,7 @@
                 </div>
             </div>
             <!--SEGUNDO CONTENEDOR-->
-          
+
             <!--FIN SEGUNDO CONTENEDOR-->
             <!--DETALLE-->
             <!--SEGUNDO CONTENEDOR-->
@@ -343,7 +346,7 @@
             FechaPedido = pnlDatos.find('#FechaPedido'), FechaEntrega = pnlDatos.find('#FechaEntrega'),
             FechaRecepcion = pnlDatos.find('#FechaRecepcion'), Recibido = pnlDatos.find('#Recibido'),
             Recio = pnlDatos.find('#Recio'), Serie = pnlDatos.find('#Serie'), Observacion = pnlDatos.find('#Observacion'),
-            ObservacionDetalle = pnlDatos.find('#ObservacionDetalle');
+            ObservacionDetalle = pnlDatos.find('#ObservacionDetalle'), btnNuevoX = $("#btnNuevoX");
 
     var nuevo = false;
     var _animate_ = {enter: 'animated fadeInLeft', exit: 'animated fadeOutDown'}, _placement_ = {from: "bottom", align: "left"};
@@ -489,6 +492,10 @@
     $(document).ready(function () {
         init();
         handleEnter();
+
+        btnNuevoX.click(function () {
+            btnNuevo.trigger('click');
+        });
 
         btnAcepta.click(function () {
             if (Clave.val() && PedidoxCliente.val() && Agente.val() && FechaPedido.val()
@@ -749,7 +756,7 @@
         btnImprimir.click(function () {
             if (temp !== '') {
                 HoldOn.open({message: 'Espere...', theme: 'sk-cube'});
-                $.post(master_url + 'onImprimirPedidoReducido', {ID: temp, CLIENTE: pnlDatos.find("#PedidoxCliente").val()}).done(function (data) {
+                $.post('<?php print base_url('Pedidos/onImprimirPedidoReducido'); ?>', {ID: temp, CLIENTE: pnlDatos.find("#PedidoxCliente").val()}).done(function (data) {
                     //check Apple device
                     if (isAppleDevice() || isMobile) {
                         window.open(data, '_blank');
@@ -990,7 +997,7 @@
                 PedidoDetalle = tblPedidoDetalle.DataTable(opciones_detalle);
                 $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
             }
-            getID();
+//            getID();
         });
 
         btnCancelar.click(function () {
@@ -1642,12 +1649,12 @@
         height: 300px !important;
     }
 
-    
+
 
     #tblPedidoDetalle tbody tr td{
         border: 2px solid #fff !important;
     }
-    
+
     #tblPedidoDetalle tbody tr:hover td{
         /*border: 2px solid #007bff !important;*/
         border-width: 2px !important;

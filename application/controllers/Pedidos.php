@@ -146,14 +146,14 @@ class Pedidos extends CI_Controller {
         try {
             $x = $this->input->get();
             $date = DateTime::createFromFormat("d/m/Y", "{$x['ANIO']}");
-                
+
 //            print json_encode($this->pem->getCapacidadMaquila($x['CLAVE'], $x['SEMANA'], $x['ANIO']));
             $this->db->select("`M`.`CapacidadPares` AS `CAPACIDAD`,"
                             . "IFNULL((SELECT SUM(PD.Pares) FROM pedidox AS PD WHERE PD.Maquila = M.Clave AND PD.Semana = '{$x['SEMANA']}' AND PD.Ano = '{$date->format("Y")}'),0) AS PARES")
                     ->from('maquilas AS M');
             print json_encode(
                             $this->db->where('M.Clave', $x['CLAVE'])
-                            ->limit(1)->get()->result());
+                                    ->limit(1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -298,7 +298,7 @@ class Pedidos extends CI_Controller {
                 "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
                 "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
                 "Empleado" => NULL, "Tiempo" => NULL, "EstatusProduccion" => NULL,
-                "DeptoProduccion" => NULL
+                "DeptoProduccion" => NULL, "stsavan" => 0
             );
             $this->db->insert('pedidox', $p);
             if ($this->db->trans_status() === FALSE) {
@@ -483,8 +483,44 @@ class Pedidos extends CI_Controller {
 
             $IDX = $this->input->post('ID');
             $CLIENTE = $this->input->post('CLIENTE');
-            $Pedido = $this->pem->getPedidoByID($IDX, $CLIENTE);
-            $Series = $this->pem->getSerieXPedido($IDX, $CLIENTE);
+//            $Pedido = $this->pem->getPedidoByID($IDX, $CLIENTE);
+            $Pedido = $this->db->select("P.ID as PDID, P.Clave, P.Cliente, P.Agente, P.FechaPedido, P.FechaRecepcion, P.Usuario, P.Estatus, P.Registro,
+                                    P.Clave, P.Estilo,P.EstiloT, P.Color, P.ColorT,P.FechaEntrega, P.Maquila, P.Semana, P.Ano, P.Recio, P.Precio,
+                                    P.Observacion AS OBSTITULO, P.ObservacionDetalle AS OBSCONTENIDO, P.Serie, P.Control,
+                                    P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, P.C11,
+                                    P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, P.C21, P.C22,
+                                    'A' AS EstatusDetalle, P.Recibido, C.ciudad AS Ciudad, CONCAT(E.Clave,' - ',E.Descripcion) AS Estado, C.RFC, C.TelPart AS Tel,
+                                    S.Clave AS Serie, P.Pares, CONCAT(C.Clave,'-',C.RazonS) AS ClienteT, C.Direccion AS Dir,C.CodigoPostal AS CP,
+                                    CONCAT(A.Clave, \" - \", A.Nombre) AS AgenteT, P.Observacion AS Obs, T.Descripcion AS Transporte, C.Observaciones AS OBSCLIENTE,
+                                    S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11,
+                                    S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22", false)
+                            ->from('pedidox AS P')
+                            ->join('series AS S', 'P.Serie = S.Clave')->join('clientes AS C', 'P.Cliente = C.Clave')
+                            ->join('estados AS E', 'C.Estado = E.Clave', 'left')->join('agentes AS A', 'P.Agente = A.Clave', 'left')
+                            ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
+                            ->where('P.Clave', $IDX)
+                            ->where('P.Cliente', $CLIENTE) 
+                            ->order_by('P.ID', 'DESC')
+                            ->get()->result();
+
+//            $Series = $this->pem->getSerieXPedido($IDX, $CLIENTE);
+
+            $this->db->query("set sql_mode=''");
+            $Series = $this->db->select("P.ID as PDID, P.Clave,
+                                    S.Clave AS Serie,
+                                    S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10,
+                                    S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20,
+                                    S.T21, S.T22", false)
+                            ->from('pedidox AS P')
+                            ->join('series AS S', 'P.Serie = S.Clave')
+                            ->join('clientes AS C', 'P.Cliente = C.Clave')
+                            ->join('estados AS E', 'C.Estado = E.Clave')
+                            ->join('agentes AS A', 'P.Agente = A.Clave')
+                            ->group_by(array('S.Clave'))
+                            ->order_by('S.Clave', 'ASC')
+                            ->where('P.Clave', $IDX)
+                            ->where('P.Cliente', $CLIENTE)
+                            ->get()->result();
 
             $pdf->SetFont('Calibri', '', 7.5);
             $E = $Pedido[0];

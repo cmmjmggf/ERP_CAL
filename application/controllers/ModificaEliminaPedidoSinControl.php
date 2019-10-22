@@ -21,13 +21,10 @@ class ModificaEliminaPedidoSinControl extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
-                    $this->load->view('vMenuClientes');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuProduccion');
-                    break;
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break; 
                 case 'FACTURACION':
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
             }
 

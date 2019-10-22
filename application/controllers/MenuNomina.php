@@ -27,6 +27,10 @@ class MenuNomina extends CI_Controller {
                 case 'RECURSOS HUMANOS':
                     $this->load->view('vMenuNominas');
                     break;
+                case 'PRODUCCION':
+                    /* INGENIERIA */
+                    $this->load->view('vNavGeneral')->view('vMenuNominas');
+                    break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);
         } else {

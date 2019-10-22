@@ -95,7 +95,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" data-column="12">
                         <strong>Maquila</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="col12_filter_history" autofocus>
+                        <input type="text" class="form-control form-control-sm column_filter maquila" id="col12_filter_history" autofocus>
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" data-column="13">
                         <strong>Semana</strong>
@@ -568,8 +568,11 @@
                 }
             ],
             "ajax": {
-                "url": master_url + 'getHistorialDeControles',
-                "dataSrc": ""
+                "url": '<?php print base_url('CerrarProg/getHistorialDeControles'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MAQUILA = ClienteFactura.val();
+                }
             },
             "columnDefs": [
                 {

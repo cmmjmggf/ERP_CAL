@@ -79,6 +79,7 @@ class Iordendeproduccion_model extends CI_Model {
                             . "OP.C11, OP.C12, OP.C13, OP.C14, OP.C15, OP.C16, OP.C17, OP.C18, OP.C19, OP.C20, "
                             . "OP.C21, OP.C22,"
                             . "OP.Observaciones,"
+                            . "OP.ObservacionesDetalle,"
                             . "OP.EstatusProduccion, OPD.Departamento AS DEPARTAMENTO, "
                             . "OPD.DepartamentoT AS DEPARTAMENTOT, OPD.PiezaT AS PIEZA, "
                             . "OPD.ArticuloT AS ARTICULOT, OPD.PzXPar AS PZXPAR, "
@@ -124,6 +125,7 @@ class Iordendeproduccion_model extends CI_Model {
 //            }
             $this->db->where('E.Clave = C.Estilo', null, false);
             $this->db->group_by(array('OP.ControlT'));
+            $this->db->order_by('ABS(OP.ControlT)', 'ASC');
             $this->db->order_by('ABS(OPD.Departamento)', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {

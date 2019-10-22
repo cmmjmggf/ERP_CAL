@@ -112,7 +112,7 @@
                     var Cliente = pnlTablero.find("#ClienteModEliPedido").val();
                     var Clave = $(this).val();
                     //Buscar pedido
-                    $.getJSON(master_url + 'getPedidoByClienteNumero', {Pedido: $(this).val(), Cliente: Cliente}).done(function (data) {
+                    $.getJSON('<?php print base_url('ModificaEliminaPedidoSinControl/getPedidoByClienteNumero'); ?>', {Pedido: $(this).val(), Cliente: Cliente}).done(function (data) {
                         if (data.length > 0) {
                             //existe y se puede manipular desde aqui
                             getDetallePedido(Cliente, Clave);
@@ -214,7 +214,7 @@
         }).then((action) => {
             if (action) {
                 $.ajax({
-                    url: master_url + 'onEliminarDetalleByID',
+                    url: '<?php print base_url('ModificaEliminaPedidoSinControl/onEliminarDetalleByID'); ?>',
                     type: "POST",
                     data: {
 
@@ -244,7 +244,7 @@
         }
         PedidoDetalle = tblPedidoDetalle.DataTable({
             "ajax": {
-                "url": master_url + 'getPedidoDByID',
+                "url": '<?php print base_url('ModificaEliminaPedidoSinControl/getPedidoDByID'); ?>',
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": {
@@ -373,7 +373,7 @@
         }).then((willDelete) => {
             if (willDelete) {
                 var dt = PedidoDetalle.row($(r).parents('tr')).data();
-                $.post(master_url + 'onEliminar', {ID: dt[0]}).done(function (data) {
+                $.post('<?php print base_url('ModificaEliminaPedidoSinControl/onEliminar'); ?>', {ID: dt[0]}).done(function (data) {
                     PedidoDetalle.row($(r).parents('tr')).remove().draw();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
