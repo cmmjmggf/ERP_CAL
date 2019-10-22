@@ -1,21 +1,21 @@
-<div class="card mt-2 mx-2 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center">
-        <div class="row m-4" style="margin-right: 0px;"> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-12">
-                <h3 class="font-weight-bold">Avance</h3>
+<div class="card mt-2 mx-2 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+    <div class="card-header">
+        <div class="row" style="margin-right: 0px;"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                <h3 class="font-weight-bold ml-4">Avance</h3>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-primary" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="right">
+                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
                 </button>
-                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info ml-2" >
                     <span class="fa fa-globe"></span> 
                     Rastreo X Control
                 </button>
-                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-primary ml-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-info ml-2" >
                     <span class="fa fa-paint-brush"></span> 
-                    Desarrollo de muestras
+                    Desarrollo de muestras  
                 </button>
             </div>
         </div>
@@ -81,7 +81,7 @@
                     <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" readonly="" maxlength="5">
                 </div>
                 <div class="col-12 col-sm-12 col-sm-1 col-lg-1 col-xl-1">
-                    <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-primary mt-4"  data-toggle="tooltip" data-placement="right" title="Aceptar">
+                    <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-info mt-4"  data-toggle="tooltip" data-placement="right" title="Aceptar">
                         <span class="fa fa-check"></span>
                     </button>
                 </div>
@@ -115,29 +115,29 @@
                         <button type="button" id="btnBorrar" name="btnBorrar" class="btn btn-danger">
                             <span class="fa fa-trash"></span>
                         </button>
-                    </div>
+                    </div> 
+                    <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Emp</th>
+                                <th scope="col">Semana</th>
+
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Control</th>
+                                <th scope="col">Maq</th>
+
+                                <th scope="col">Estilo</th>
+                                <th scope="col">Frac</th>
+                                <th scope="col">Precio</th>
+
+                                <th scope="col">Pares</th>
+                                <th scope="col">SubTotal</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table> 
                 </div>
-                <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Emp</th>
-                            <th scope="col">Semana</th>
-
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Control</th>
-                            <th scope="col">Maq</th>
-
-                            <th scope="col">Estilo</th>
-                            <th scope="col">Frac</th>
-                            <th scope="col">Precio</th>
-
-                            <th scope="col">Pares</th>
-                            <th scope="col">SubTotal</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table> 
             </div>
             <!--SECCION TRES-->
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
@@ -148,7 +148,7 @@
 </div>
 <!--RASTREO X CONCEPTO-->
 <div class="modal animated fadeIn" id="mdlRastreoXConcepto">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">RASTREO POR CONCEPTO</h5>
@@ -167,7 +167,7 @@
                         <select id="ConceptoRXC" name="ConceptoRXC" class="form-control"></select>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblRastreoXConcepto" class="table table-hover">
+                        <table id="tblRastreoXConcepto" class="table table-hover table-sm"   style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -187,7 +187,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Acepta</button>
+                <button type="button" class="btn btn-info">Acepta</button>
             </div>
         </div>
     </div>
@@ -226,7 +226,7 @@
                         <input type="text" id="AvanceActual" name="AvanceActual" class="form-control form-control-sm" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblRastreoXControl" class="table table-hover">
+                        <table id="tblRastreoXControl" class="table table-hover table-sm" style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -247,7 +247,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Acepta</button>
+                <button type="button" class="btn btn-info">Acepta</button>
             </div>
         </div>
     </div>
@@ -280,6 +280,11 @@
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras");
 
     $(document).ready(function () {
+
+        mdlRastreoXConcepto.on('shown.bs.modal', function () {
+            EmpleadoRXC[0].selectize.focus();
+            EmpleadoRXC[0].selectize.open();
+        });
 
         FraccionRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
@@ -317,7 +322,7 @@
             }
         });
 
-        btnDesarrolloDeMuestras.click(function () { 
+        btnDesarrolloDeMuestras.click(function () {
             $.fancybox.open({
                 src: '<?php print base_url('DesarrolloMuestras/?origen=PRODUCCION'); ?>',
                 type: 'iframe',
@@ -456,12 +461,12 @@
             if (e.keyCode === 13) {
                 getDeptosXControl($(this));
                 getDeptoActualXControl();
-                $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>',{CONTROL: Control.val()}).done(function(a,b,c){
-                    console.log("CONTROL",a);
-                }).fail(function(x,y,z){
+                $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val()}).done(function (a, b, c) {
+                    console.log("CONTROL", a);
+                }).fail(function (x, y, z) {
                     getError(x);
-                }).always(function(){
-                    
+                }).always(function () {
+
                 });
                 Avances.ajax.reload();
             }
@@ -502,14 +507,12 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getAvancesNomina'); ?>',
-                "type": "POST",
-                "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CONTROL = (Control.val().trim());
+                    d.CONTROL = Control.val() ? Control.val() : '';
                 }
             },
             buttons: buttons,
@@ -519,7 +522,7 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -535,7 +538,6 @@
             "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getRastreoXConcepto'); ?>',
-                "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
                     d.EMPLEADO = (EmpleadoRXC.val().trim());
@@ -559,12 +561,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 500,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "350px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
@@ -741,9 +743,9 @@
                 ul.find("li").removeClass('li-selected');
                 var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
                 var depto = parseInt(clave);
-                if (depto >= 180 || depto === 30 || depto === 40 || 
-                    depto === 90 || depto === 100 || depto === 105 || 
-                    depto === 110 || depto === 140 || depto === 150) {
+                if (depto >= 180 || depto === 30 || depto === 40 ||
+                        depto === 90 || depto === 100 || depto === 105 ||
+                        depto === 110 || depto === 140 || depto === 150) {
                     if (Control.val()) {
                         li.addClass('li-selected');
                         Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
@@ -780,12 +782,10 @@
     }
 </script>
 <style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid; 
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+
+    .card{ 
+        border: 2px solid #000;
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
     }
     .card-header{ 
         background-color: transparent;

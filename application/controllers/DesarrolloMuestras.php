@@ -46,7 +46,26 @@ class DesarrolloMuestras extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->dmm->getRecords($this->input->get('ESTILO'), $this->input->get('COLOR')));
+            $x = $this->input->get();
+//            print json_encode($this->dmm->getRecords($this->input->get('ESTILO'), 
+//            $this->input->get('COLOR')));
+
+            $this->db->select('FT.ID, E.Clave AS Estilo, FT.Color, FT.Pieza AS Pza, '
+                            . 'P.Descripcion AS PzaT, A.Clave AS Articulo, FT.Precio, '
+                            . 'FT.Consumo AS Cons, FT.PzXPar, FT.Estatus, FT.FechaAlta, '
+                            . 'FT.AfectaPV, P.Departamento AS Sec,'
+                            . '(CASE WHEN P.Rango IS NULL THEN "" ELSE P.Rango END) AS Rango, '
+                            . 'A.Descripcion AS ArticuloT, E.Linea AS Linea, E.Foto AS Foto', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
+                    ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                    ->join('estilos AS E', 'FT.Estilo = E.Clave');
+            if ($x['ESTILO'] !== '' && $x['COLOR'] !== '') {
+                $this->db->where('E.Clave', $x['ESTILO'])->where('FT.Color', $x['COLOR']);
+            } else {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

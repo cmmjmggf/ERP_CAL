@@ -349,6 +349,19 @@ class OrdenDeProduccion extends CI_Controller {
                         'Fraccion' => 397,
                         'Docto' => 0
                     ));
+                    $this->db->insert('avance', array(
+                        'Control' => $v->Control,
+                        'Departamento' => 140,
+                        'DepartamentoT' => 'ENSUELADO',
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'FechaAvance' => Date('d/m/Y'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => 397,
+                        'Docto' => 0
+                    ));
 
                     /* 3.- ACTUALIZAR LA FECHA 55 EN AVAPRD PARA ENSUELADO */
                     $this->db->set('fec55', Date('Y-m-d h:i:s'))

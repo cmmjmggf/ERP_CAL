@@ -1,10 +1,13 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
+<!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
+        
+    </div>-->
+    <div class="card-body " style="padding: 7px 10px 10px 10px !important;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
 
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-6">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-6 text-center">
                 <h5 class="font-weight-bold font-italic text-danger">DOCUMENTOS DIRECTOS DE CLIENTES VARIOS</h5>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3" align="right">
@@ -22,8 +25,6 @@
                 </button>
             </div>
         </div>
-    </div>
-    <div class="card-body " style="padding: 7px 10px 10px 10px !important;">
         <div class="row">    
             <div class="col-12 d-none"> 
                 <label>Referencia</label>
@@ -165,7 +166,7 @@
                 <input type="text" id="OrdenCompraClaveIncotem" name="OrdenCompraClaveIncotem" class="form-control form-control-sm">
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 my-1" align="LEFT">
-                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-primary mt-2" disabled="">
+                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info mt-2" disabled="">
                     <span class="fa fa-check"></span> Acepta
                 </button>
             </div>
@@ -182,7 +183,7 @@
                 <span class="font-weight-bold font-italic text-danger"> - </span>
             </div> 
 
-            <div class="w-100 my-2"></div>
+            <div class="w-100"></div>
 
             <!--DETALLE DE LA FACTURA-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
@@ -412,7 +413,7 @@
             Documento.val('');
 
             FechaFactura.attr('disabled', false);
-            btnAcepta.attr('disabled', false);
+            btnAcepta.attr('disabled', true);
             btnDeshacer.addClass("d-none");
             btnDeshacer.attr('disabled', true);
             ClienteFactura[0].selectize.clear();
@@ -1084,8 +1085,11 @@
     }
 </script>
 
-<style> 
-    .card{border: solid 1px #607D8B;}
+<style>  
+    .card{ 
+        border: 2px solid #000;
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
+    }
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }

@@ -37,7 +37,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 $this->db->where('F.cliente', $x["CLIENTE"])->order_by("F.fecha", "DESC");
             }
             if ($x["CLIENTE"] === '') {
-                $this->db->order_by("F.fecha", "DESC")->limit(99);
+                $this->db->order_by("F.fecha", "DESC")->limit(15);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -94,7 +94,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 $this->db->where('D.control', $x['CONTROL'])->order_by("D.fecha", "DESC");
             }
             if ($x['CLIENTE'] === '' && $x['CONTROL'] === '') {
-                $this->db->order_by("D.ID", "DESC")->order_by("D.fecha", "DESC")->limit(99);
+                $this->db->order_by("D.ID", "DESC")->order_by("D.fecha", "DESC")->limit(15);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {

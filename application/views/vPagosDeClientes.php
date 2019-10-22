@@ -5,22 +5,22 @@
                 <h4 class="card-title">Pagos de clientes</h4>  
             </div> 
             <div class="col-12 col-sm-12 col-xs-12 col-lg-8 col-xl-8" align="right"> 
-                <button type="button" id="btnActualizaDescuentos" name="btnActualizaDescuentos" class="btn btn-info btn-sm">
+                <button type="button" id="btnActualizaDescuentos" name="btnActualizaDescuentos" disabled="" class="btn btn-info btn-sm">
                     Actualiza descuentos
                 </button>
-                <button type="button" id="btnActualizaDevoluciones" name="btnActualizaDevoluciones" class="btn btn-info my-1 btn-sm">
+                <button type="button" id="btnActualizaDevoluciones" name="btnActualizaDevoluciones" disabled="" class="btn btn-info my-1 btn-sm">
                     Actualiza devoluciones
                 </button> 
-                <button type="button" id="btnAplicaAnticiposDeClientes" name="btnAplicaAnticiposDeClientes" class="btn btn-info  btn-sm">
+                <button type="button" id="btnAplicaAnticiposDeClientes" name="btnAplicaAnticiposDeClientes" disabled="" class="btn btn-info  btn-sm">
                     Aplica anticipos de clientes
                 </button> 
-                <button type="button" id="btnLocPlazas" name="btnLocPlazas" class="btn btn-warning  btn-sm">
+                <button type="button" id="btnLocPlazas" disabled="" name="btnLocPlazas" class="btn btn-warning  btn-sm">
                     Loc-Plazas
                 </button>
                 <button type="button" id="btnNotaDeCredito" name="btnNotaDeCredito" class="btn btn-danger  btn-sm">
                     Nota de credito
                 </button> 
-                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-primary  btn-sm">
+                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info  btn-sm">
                     Movimientos
                 </button>
             </div>
@@ -79,7 +79,7 @@
                 <span class="badge badge-info border border-primary">7 = Dif precio </span>
                 <span class="badge badge-info border border-primary">9 = Otros </span>
             </div>
-            <div class="w-100 my-3"><hr></div>
+            <div class="w-100 my-1"><hr></div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-5 col-xl-5 ">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -187,7 +187,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 my-3"><hr></div>
+            <div class="w-100 my-1"><hr></div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4 text-center mt-1" style="cursor:pointer !important; ">
                 <p class="text-danger font-weight-bold font-italic">SOLO EN CASO DE * * * EFECTIVO Y DEPOSITO * * *</p>
             </div>
@@ -201,14 +201,14 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <br>
-                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary btn-sm btn-block">
-                    Acepta
+                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-info btn-sm ">
+                    <span class="fa fa-check"></span>  Acepta
                 </button>
             </div>
-            <div class="w-100 my-3"><hr></div>
+            <div class="w-100 my-1"><hr></div>
             <!--TABLA DE PAGOS POR DOCUMENTO-->
             <div class="col-12 col-xs-12 col-sm-12 col-lg-10 col-xl-10" align="center">
-                <h3 class="text-info font-italic">Pagos de este documento</h3>
+                <h6 class="text-info font-italic font-weight-bold">Pagos de este documento</h6>
             </div>
 
             <div class="col-12 col-xs-12 col-sm-12 col-lg-10 col-xl-10" align="">
@@ -261,7 +261,7 @@
             <!--TABLA DE DOCUMENTOS CON SALDO POR CLIENTE-->
             <div class="w-100 my-3"><hr></div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-10 col-xl-10" align="center">
-                <h3 class="text-info font-italic">Documentos con saldo de este cliente</h3>
+                <h6 class="text-info font-italic font-weight-bold">Documentos con saldo de este cliente</h6>
                 <div id="DocumentosConSaldoXClientes" class="table-responsive">
                     <table id="tblDocumentosConSaldoXClientes" class="table table-sm display " style="width:100%">
                         <thead>
@@ -683,7 +683,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "scrollY": "300px",
+            "scrollY": "150px",
             "bSort": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/
@@ -736,7 +736,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "scrollY": "300px",
+            "scrollY": "150px",
             "bSort": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/

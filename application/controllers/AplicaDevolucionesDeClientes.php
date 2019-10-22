@@ -137,7 +137,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
 
             $this->db->order_by("D.fecha", "DESC");
 
-            if ($x["CLIENTE"] === '') {
+            if ($x["CLIENTE"] === '' || $x["NC"] === '') {
                 $this->db->limit(10);
             }
 

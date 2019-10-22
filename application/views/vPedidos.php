@@ -255,32 +255,32 @@
                                     <th scope="col">Sem</th><!--6-->
                                     <th scope="col">Maq</th><!--7-->
 
-                                    <th scope="col"></th><!--8-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--10-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--12-->
+                                    <th scope="col">-</th><!--8-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--10-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--12-->
 
-                                    <th scope="col"></th><!--13-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--15-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--17-->
+                                    <th scope="col">-</th><!--13-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--15-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--17-->
 
-                                    <th scope="col"></th><!--18-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--20-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--22-->
+                                    <th scope="col">-</th><!--18-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--20-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--22-->
 
-                                    <th scope="col"></th><!--23-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--25-->
-                                    <th scope="col"></th>
-                                    <th scope="col"></th><!--27-->
+                                    <th scope="col">-</th><!--23-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--25-->
+                                    <th scope="col">-</th>
+                                    <th scope="col">-</th><!--27-->
 
-                                    <th scope="col"></th><!--28-->
-                                    <th scope="col"></th><!--29-->
+                                    <th scope="col">-</th><!--28-->
+                                    <th scope="col">-</th><!--29-->
 
                                     <th scope="col">Precio</th><!--30-->
                                     <th scope="col">Pares</th><!--31-->
@@ -300,10 +300,8 @@
                     </div><!--ROW-->
                     <div class="row mt-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 font-weight-bold "></div>
-
                         <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">Pares</div>
                         <div id="ParesTotales" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center"></div>
-
                         <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">Total</div>
                         <div id="Total" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center"></div>
                     </div>
@@ -1644,15 +1642,12 @@
         height: 300px !important;
     }
 
-    #tblPedidoDetalle tbody td{
-        font-weight: bold;
-        left: 20px;
-        top: -5px;
-    }
+    
 
     #tblPedidoDetalle tbody tr td{
         border: 2px solid #fff !important;
     }
+    
     #tblPedidoDetalle tbody tr:hover td{
         /*border: 2px solid #007bff !important;*/
         border-width: 2px !important;
@@ -1690,7 +1685,7 @@
         color: #fff !important;
     }
 
-    table.dataTable tbody>tr.selected, table.dataTable tbody>tr.selected td{
+    table.dataTable tbody > tr.selected, table.dataTable tbody > tr.selected td{
         border-width: 2px !important;
         border-style: solid !important;
         border-bottom-color: #007bff !important;

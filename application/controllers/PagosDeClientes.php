@@ -30,18 +30,19 @@ class PagosDeClientes extends CI_Controller {
 
     public function getPagosXDocumentos() {
         try {
+            $x = $this->input->get();
             $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO, 
-                CCP.tipo AS TP, CCP.fecha AS FECHA_DEPOSITO, CCP.fechacap AS FECHA_CAPTURA, 
+                CCP.tipo AS TP, DATE_FORMAT(CCP.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO, 
+                 DATE_FORMAT(CCP.fechacap,\"%d/%m/%Y\") AS FECHA_CAPTURA, 
                 FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA, 
-                CCP.numfol AS DIAS ", false)
-                    ->from("cartctepagos AS CCP");
-            if ($this->input->get('DOCUMENTO') !== '') {
-                $this->db->where('CCP.remicion', $this->input->get('DOCUMENTO'));
+                CCP.numfol AS DIAS ", false)->from("cartctepagos AS CCP");
+            if ($x['DOCUMENTO'] !== '') {
+                $this->db->where('CCP.remicion', $x['DOCUMENTO']);
             }
-            if ($this->input->get('CLIENTE') !== '') {
-                $this->db->where('CCP.cliente', $this->input->get('CLIENTE'));
+            if ($x['CLIENTE'] !== '') {
+                $this->db->where('CCP.cliente', $x['CLIENTE']);
             }
-            if ($this->input->get('CLIENTE') === '' && $this->input->get('DOCUMENTO') === '') {
+            if ($x['CLIENTE'] === '' && $x['DOCUMENTO'] === '') {
                 $this->db->order_by("CCP.fecha", "DESC")->limit(99);
             } else {
                 $this->db->order_by("CCP.fecha", "DESC");
@@ -86,7 +87,7 @@ class PagosDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("CC.ID AS ID, CC.cliente AS CLIENTE, CC.remicion AS DOCUMENTO,
-                CC.tipo AS TP, CC.fecha AS FECHA_DEPOSITO,  
+                CC.tipo AS TP, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO,  
                 FORMAT(CC.importe,2) AS IMPORTE, FORMAT(CC.pagos,2) AS PAGOS, FORMAT(CC.saldo,2) AS SALDO, 
                 CC.status AS ST, DATEDIFF(NOW(),fecha) AS DIAS, CC.saldo AS SALDOX", false)
                     ->from("cartcliente AS CC");

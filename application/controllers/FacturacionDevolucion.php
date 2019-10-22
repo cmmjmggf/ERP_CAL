@@ -19,10 +19,10 @@ class FacturacionDevolucion extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
-                    $this->load->view('vMenuClientes');
+                   $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
             }
-            $this->load->view('vDevoluciones')->view('vFooter');
+            $this->load->view('vFacturacionDevolucion')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

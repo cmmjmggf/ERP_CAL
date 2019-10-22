@@ -46,7 +46,20 @@ class Avance extends CI_Controller {
 
     public function getAvancesNomina() {
         try {
-            print json_encode($this->avm->getAvancesNomina($this->input->post('CONTROL')));
+//            print json_encode($this->avm->getAvancesNomina($this->input->post('CONTROL')));
+            $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
+                            . "F.control AS CONTROL, F.estilo AS ESTILO, F.numfrac AS NUM_FRACCION, "
+                            . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
+                            . "F.status, F.fecha AS FECHA, F.semana AS SEMANA, F.depto, "
+                            . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
+                    ->from("fracpagnomina AS F");
+
+            if ($this->input->get('CONTROL') !== '') {
+                $this->db->like('F.control', $this->input->get('CONTROL'));
+            } else {
+                $this->db->limit(999);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -54,8 +67,29 @@ class Avance extends CI_Controller {
 
     public function getRastreoXConcepto() {
         try {
-            $x = $this->input;
-            print json_encode($this->avm->getRastreoXConcepto($x->get('EMPLEADO'), $x->get('CONCEPTO')));
+            $x = $this->input->get();
+//            print json_encode($this->avm->getRastreoXConcepto($x->get('EMPLEADO'), $x->get('CONCEPTO')));
+
+            $this->db->select("PN.ID, "
+                            . "PN.numsem AS SEMANA,"
+                            . "PN.numemp AS EMPLEADO, "
+                            . "PN.numcon AS CONCEPTO, "
+                            . "PN.fecha AS FECHA, "
+                            . "PN.tpcon AS PER, "
+                            . "PN.importe AS IMPORTE, "
+                            . "PN.tpcond AS DED, "
+                            . "PN.imported AS SUBTOTAL")
+                    ->from("prenomina AS PN");
+            if ($x['EMPLEADO'] !== "") {
+                $this->db->where('PN.numemp', $x['EMPLEADO']);
+            }
+            if ($x['CONCEPTO'] !== '') {
+                $this->db->where('PN.numcon', $x['CONCEPTO']);
+            }
+            if ($x['EMPLEADO'] === "" && $x['CONCEPTO'] === "") {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -79,7 +113,8 @@ class Avance extends CI_Controller {
 
     public function getEmpleados() {
         try {
-            print json_encode($this->avm->getEmpleados());
+            print json_encode($this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+                                    ->from("empleados AS E")->where_in('E.FijoDestajoAmbos', array(2, 3))->where('E.AltaBaja', 1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -87,7 +122,11 @@ class Avance extends CI_Controller {
 
     public function getFracciones() {
         try {
-            print json_encode($this->avm->getFracciones());
+            print json_encode($this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
+                                    ->from('fracciones AS F')
+                                    ->where_not_in('F.Departamento', array(10, 20))
+                                    ->order_by('ABS(F.Clave)', 'ASC')
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -95,7 +134,12 @@ class Avance extends CI_Controller {
 
     public function getSemanasDeProduccion() {
         try {
-            print json_encode($this->avm->getSemanaByFecha(Date('d/m/Y')));
+//            print json_encode($this->avm->getSemanaByFecha(Date('d/m/Y')));
+            $fechin = Date('d/m/Y');
+            print json_encode($this->db->select("U.Sem, '$fechin' AS Fecha", false)
+                                    ->from('semanasproduccion AS U')
+                                    ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")")
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -103,7 +147,13 @@ class Avance extends CI_Controller {
 
     public function getSemanaNomina() {
         try {
-            print json_encode($this->avm->getSemanaNomina($this->input->post('FECHA')));
+//            print json_encode($this->avm->getSemanaNomina($this->input->post('FECHA')));
+
+            $fechin = $this->input->post('FECHA');
+            print json_encode($this->db->select("S.Sem AS SEMANA", false)
+                                    ->from('semanasnomina AS S')
+                                    ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -111,7 +161,13 @@ class Avance extends CI_Controller {
 
     public function getDeptoActual() {
         try {
-            print json_encode($this->avm->getDeptoActual($this->input->post('CONTROL')));
+//            print json_encode($this->avm->getDeptoActual($this->input->post('CONTROL')));
+            print json_encode($this->db->select("A.Departamento AS DEPTO, C.Estilo AS ESTILO, C.Pares AS PARES", false)
+                                    ->from('avance AS A')
+                                    ->join('controles AS C', 'A.Control = C.Control')
+                                    ->like("A.Control", $this->input->post('CONTROL'))
+                                    ->order_by("A.ID", "DESC")
+                                    ->limit(1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -119,8 +175,13 @@ class Avance extends CI_Controller {
 
     public function getPrecioFraccionXEstiloFraccion() {
         try {
-            $x = $this->input;
-            print json_encode($this->avm->getPrecioFraccionXEstiloFraccion($x->get('ESTILO'), $x->get('FRACCION')));
+//            $x = $this->input->get();
+//            print json_encode($this->avm->getPrecioFraccionXEstiloFraccion($x->get('ESTILO'), $x->get('FRACCION')));
+            print json_encode($this->db->select("FXE.ID, FXE.Estilo AS ESTILO, FXE.FechaAlta AS FECHA_ALTA, "
+                                            . "FXE.Fraccion AS FRACCION, FXE.CostoMO AS COSTO_MO", false)
+                                    ->from('fraccionesxestilo AS FXE')
+                                    ->where("FXE.Estilo = '{$x['ESTILO']}' AND FXE.Fraccion = {$x['FRACCION']}", null, false)
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -128,7 +189,11 @@ class Avance extends CI_Controller {
 
     public function getMaquilasPlantillas() {
         try {
-            print json_encode($this->avm->getMaquilasPlantillas());
+//            print json_encode($this->avm->getMaquilasPlantillas());
+            print json_encode($this->db->select("CAST(MP.Clave AS SIGNED ) AS Clave, MP.Descripcion AS MaquilasPlantillas")
+                            ->from("maquilasplantillas AS MP")
+                            ->order_by('MP.Clave', 'ASC')
+                            ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

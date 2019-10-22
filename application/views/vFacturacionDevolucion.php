@@ -79,12 +79,15 @@
                 <label>Fecha</label>
                 <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
             </div>
+            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-1"  style="padding-left: 5px; padding-right: 5px;"> 
+                <label class="control-label">Cliente</label>
+                <input type="text" id="ClienteClave" name="ClienteClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
+            </div>
             <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3"  style="padding-left: 5px; padding-right: 5px;"> 
                 <div class="form-group">
-                    <label class="control-label">Cliente</label>
                     <div class="form-group">
-                        <div class="input-group mb-3"> 
-                            <select id="ClienteFactura" name="ClienteFactura" class="form-control">
+                        <div class="input-group mb-3">
+                            <select id="ClienteFactura" name="ClienteFactura" class="form-control form-control-sm notEnter mt-4 ">
                                 <option></option>
                                 <?php
                                 foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
@@ -94,8 +97,11 @@
                                 ?>
                             </select>
                             <div class="input-group-append">
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
-                                    <span class="fa fa-exclamation"></span>
+                                <button type="button" id="btnVerTiendax" name="btnVerTiendax" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
+                                    <span class="fa fa-eye"></span>
+                                </button>
+                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info d-none" style="padding: 8px 15px 8px 15px !important; ">
+                                    <span class="fa fa-eye"></span>
                                 </button>
                             </div>
                         </div>
@@ -176,7 +182,7 @@
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
                               id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
                               data-placement="top" title="ELIJE UN CONTROL">
-                            <i class="fa fa-chess-pawn"></i> CONTROLES X FACTURAR
+                            <i class="fa fa-chess-pawn"></i> SELECCIONA UN CONTROL
                         </span>
                     </span>
                 </div>
@@ -191,7 +197,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <div class="row">
-                    <div class="col-6" style="border-bottom: 1px solid #0202; ">
+                    <div class="col-6" style="border-bottom: 1px solid #020202; ">
                         <div class="row">
                             <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
                                 <span class="font-weight-bold">Producción</span>
@@ -213,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6" style="border-bottom: 1px solid #0202; ">
+                    <div class="col-6" style="border-bottom: 1px solid #020202; ">
                         <div class="row">
                             <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
                                 <span class="font-weight-bold">Devoluciones</span>
@@ -533,12 +539,48 @@
         </div>
     </div>
 </div>
+<div class="modal " id="mdlConsignarA">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content blinkb">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-store-alt"></span> Consignar a</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <label>Tienda</label>
+                        <input type="text" id="TiendaClave" name="TiendaClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                        <select id="Tienda" name="Tienda" class="form-control form-control-sm mt-4 selectNotEnter">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
+                                    ->from('consignatarios AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
+                            }
+                            ?>
+                        </select> 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btnCerrarTiendaModal">
+                    <span class="fa fa-save"></span> Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
             btnNuevo = pnlTablero.find("#btnNuevo"),
             btnVerTienda = pnlTablero.find("#btnVerTienda"),
             btnControlesXFac = pnlTablero.find("#btnControlesXFac"),
             tblParesFacturados = pnlTablero.find("#tblParesFacturados"),
+            ClienteClave = pnlTablero.find("#ClienteClave"),
             ClienteFactura = pnlTablero.find("#ClienteFactura"),
             AgenteCliente = pnlTablero.find("#AgenteCliente"),
             Tienda = pnlTablero.find("#Tienda"),
@@ -587,7 +629,10 @@
             btnReimprimeDocto = pnlTablero.find("#btnReimprimeDocto"),
             btnElijeControl = pnlTablero.find("#btnElijeControl"),
             btnRastreoDeEstilosClientesFechasEnVentas = pnlTablero.find("#btnRastreoDeEstilosClientesFechasEnVentas"),
-            btnRastreoDeControlesEnDocumento = pnlTablero.find("#btnRastreoDeControlesEnDocumento");
+            btnRastreoDeControlesEnDocumento = pnlTablero.find("#btnRastreoDeControlesEnDocumento"),
+            mdlConsignarA = $("#mdlConsignarA"), TiendaClave = mdlConsignarA.find("#TiendaClave"),
+            ConsignarATienda = mdlConsignarA.find("#Tienda"),
+            btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -595,6 +640,43 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
+                handleEnterDiv(mdlConsignarA);
+
+        ClienteClave.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ClienteFactura[0].selectize.setValue(ClienteClave.val());
+            }
+        }); 
+
+        TiendaClave.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ConsignarATienda[0].selectize.setValue(TiendaClave.val()); 
+            }
+        });
+
+        btnCerrarTiendaModal.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                mdlConsignarA.modal('hide');
+                btnVerTienda.removeClass("d-none");
+                TPFactura[0].selectize.focus();
+                TPFactura[0].selectize.open();
+                handleEnterDiv(pnlTablero);
+            }
+        }).click(function () {
+            mdlConsignarA.modal('hide');
+            btnVerTienda.removeClass("d-none");
+            TPFactura[0].selectize.focus();
+            TPFactura[0].selectize.open();
+            handleEnterDiv(pnlTablero);
+        });
+
+        mdlConsignarA.on('shown.bs.modal', function () {
+            if (TiendaClave.val() === '') {
+                TiendaClave.focus().select();
+            } else {
+                TiendaClave.focus().select();
+            }
+        });
 
         pnlTablero.find("#CAF22").on('keydown', function (e) {
             console.log(e, e.keyCode);
@@ -633,7 +715,7 @@
             LPFactura.val('');
             btnNuevo.attr('disabled', true);
             btnNuevo.addClass("d-none");
-            ClienteFactura[0].selectize.focus();
+            ClienteClave.focus().select();
             btnVerTienda.addClass("d-none");
             onCloseOverlay();
         });
@@ -652,9 +734,9 @@
                 onBeep(1);
                 onOpenOverlay('Espere por favor...');
                 $.post('<?php print base_url('FacturacionDevolucion/getVistaPrevia'); ?>', {
-                    CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
-                    DOCUMENTO_FACTURA: FAPEORCOFactura.val().trim() !== '' ? FAPEORCOFactura.val() : '',
-                    TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+                    CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '',
+                    DOCUMENTO_FACTURA: FAPEORCOFactura.val() !== '' ? FAPEORCOFactura.val() : '',
+                    TP: TPFactura.val() !== '' ? TPFactura.val() : ''
                 }).done(function (data, x, jq) {
                     onBeep(1);
                     onImprimirReporteFancy(data);
@@ -666,7 +748,7 @@
             } else {
                 onBeep(2);
                 iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
 //                } else {
@@ -767,7 +849,7 @@
                 });
             } else {
                 iMsg('LOS SIGUIENTES CAMPOS SON REQUERIDOS', 'w', function () {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
         });
@@ -849,7 +931,7 @@
                                 });
                             } else {
                                 iMsg('ESTA FACTURA NO PERTENECE A ESTE CLIENTE', 'w', function () {
-                                    ClienteFactura[0].selectize.focus();
+                                    ClienteClave.focus().select();
                                 });
                             }
                         }
@@ -900,7 +982,7 @@
                 }
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
         });
@@ -921,7 +1003,7 @@
                 }
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
         });
@@ -969,13 +1051,16 @@
                     select: true,
                     "autoWidth": true,
                     "colReorder": true,
-                    "displayLength": 100,
+                    "displayLength": 50,
                     "bLengthChange": false,
                     "deferRender": true,
                     "scrollCollapse": false,
                     "bSort": true,
                     "scrollY": 450,
-                    "scrollX": true
+                    "scrollX": true,
+                    "aaSorting": [
+                        [4, 'desc']/*ID*/
+                    ]
                 });
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
@@ -1001,7 +1086,7 @@
                 mdlControlesXFacturar.modal({backdrop: false, keyboard: false});
             } else {
                 swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
         });
@@ -1030,7 +1115,7 @@
                         }
                         FCAFactura.val(0);
                         PAGFactura.val(1);
-                        TMNDAFactura.val(0); //0 = pesos mexicanos, 1 = dolares americanos
+                        TMNDAFactura.val(1); //1 = pesos mexicanos, 2 = dolares americanos
                     }).fail(function (xyz) {
                         getError(xyz);
                     }).always(function () {
@@ -1058,14 +1143,14 @@
                 }
             } else {
                 swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
                 $(".swal-button--confirm").focus();
             }
         });
 
         FechaFactura.val(Hoy);
-        ClienteFactura[0].selectize.focus();
+        ClienteClave.focus().select();
         handleEnterDiv(pnlTablero);
 
         TPFactura.on('change', function () {
@@ -1204,11 +1289,14 @@
     }
 
     function onVerTienda() {
-        $("#ConsignarATienda").toggleClass("d-none");
-        btnVerTienda.toggleClass('d-none');
+//        $("#ConsignarATienda").toggleClass("d-none");
+//        btnVerTienda.toggleClass('d-none');
         pnlTablero.off("keydown");
-        onoffhandle = !onoffhandle;
-        Tienda[0].selectize.focus();
+//        onoffhandle = !onoffhandle;
+//        Tienda[0].selectize.focus();
+        mdlConsignarA.modal({
+            backdrop: false
+        });
     }
 
     function onDesactivarEnter() {
@@ -1521,8 +1609,16 @@
         }
         p["PRECIO"] = PrecioFacturacion.val();
         p["SUBTOTAL"] = SubtotalFacturacion.val();
-        p["IVA"] = (SubtotalFacturacion.val() * 0.16);
-        p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+        switch (parseInt(TPFactura.val())) {
+            case 1:
+                p["IVA"] = (SubtotalFacturacion.val() * 0.16);
+                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+                break;
+            case 2:
+                p["IVA"] = 0;
+                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+                break;
+        }
         p["MONEDA"] = TMNDAFactura.val();
         p["TIPO_CAMBIO"] = TIPODECAMBIO.val();
         p["CAJAS"] = CajasFacturacion.val();
@@ -1718,7 +1814,14 @@
 </script>
 
 <style> 
-    .card{border: solid 1px #607D8B;}
+    .card{ 
+        border: 2px solid #000;
+        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
+    }
+    input{
+        padding-top: 2px !important;
+        padding-bottom:  2px !important;
+    } 
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }
@@ -1730,5 +1833,47 @@
         border-left:    1px solid #ccc;
         height:         10vh;
         width:          1px;       
+    }
+    .blinkb{ 
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
+        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        box-shadow: 0 0px 12px  #03A9F4;
+    }
+
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes myfirst { 
+        25%  { 
+            border-color:  #007bff; 
+        }
+        50%  {  
+            border-color:  #ffffff; 
+        }
+        75%  {  
+            border-color:  #007bff; 
+        }
+        100% {  
+            border-color:  #ffffff; 
+        }
+    }
+
+    /* Standard syntax */
+    @keyframes myfirst {
+        0%   { 
+            border-color:  #007bff; 
+        }
+        25%  { 
+            border-color:  #ffffff; 
+        }
+        50%  { 
+            border-color:  #007bff; 
+        }
+        75%  {
+            border-color:  #ffffff; 
+        }
+        100% {
+            border-color:  #007bff; 
+        }
     }
 </style>

@@ -126,8 +126,8 @@
                 <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
                 <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
                 <input type="text" id="MAQUILA" name="MAQUILA" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
-                <button type="button" class="btn btn-black-o btn-block mt-1" id="btnControlCompleto" name="btnControlCompleto" disabled="">
-                    <span class="fa fa-dot-circle"></span>  Ctrl /Completo
+                <button type="button" class="btn btn-info btn-block mt-1" id="btnControlCompleto" name="btnControlCompleto" disabled="">
+                    <span class="fa fa-bolt"></span>  Ctrl /Completo
                 </button>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-7">
@@ -228,28 +228,31 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-black-o btn-block" id="btnAcepta" name="btnAcepta" disabled="">
+                        <button type="button" class="btn btn-info btn-block" id="btnAcepta" name="btnAcepta" disabled="">
                             <span class="fa fa-check"></span>  Acepta
                         </button>
                     </div>
+                    <div class="col-12 my-1">
+                        <HR>
+                    </div>
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-black-o btn-block" id="btnReportesDev" name="btnReportesDev">
+                        <button type="button" class="btn btn-info btn-block" id="btnReportesDev" name="btnReportesDev">
                             <span class="fa fa-file"></span>  Reportes
                         </button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-black-o notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-file"></span>  Defecto</button>
+                        <button type="button" class="btn btn-info notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-asterisk"></span>  Defecto</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-black-o notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-dot-circle"></span>  Detalle</button>
+                        <button type="button" class="btn btn-info notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-ban"></span>  Detalle</button>
                     </div>
                     <div class="w-100 my-1"></div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
-                        <button type="button" class="btn btn-black-o notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-file"></span> Rastreo ctr/doc</button>
+                        <button type="button" class="btn btn-info notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
-                        <button type="button" class="btn btn-black-o notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-file"></span> Rastreo est/cte</button>
+                        <button type="button" class="btn btn-info notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-search"></span> Rastreo est/cte</button>
                     </div>
                 </div>
             </div>
@@ -262,7 +265,8 @@
     <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Devoluciones no aplicadas ni facturadas</h5>
+
+                <h5 class="modal-title"><span class="fa fa-print"></span> Devoluciones no aplicadas ni facturadas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -320,7 +324,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptaReporteDevolucion">Aceptar</button>
+                <button type="button" class="btn btn-info" id="btnAceptaReporteDevolucion"><span class="fa fa-print"></span> Aceptar</button>
             </div>
         </div>
     </div>
@@ -387,7 +391,7 @@
                             /*1 = NORMAL (4 REPORTES)*/
                             onOpenOverlay('');
                             $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
-                                 
+
 
                                 if (aaa.length > 0) {
                                     onImprimirReporteFancyArray(JSON.parse(aaa));

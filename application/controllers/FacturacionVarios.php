@@ -263,7 +263,7 @@ class FacturacionVarios extends CI_Controller {
     public function getDetalleDocumento() {
         try {
             $x = $this->input->get();
-            $this->db->select("F.ID, F.cliente AS CLIENTE, F.factura AS DOCTO, F.fecha AS FECHA, "
+            $this->db->select("F.ID, F.cliente AS CLIENTE, F.factura AS DOCTO, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, "
                             . "F.estilo AS CONCEPTO, F.tp AS TP, (F.subtot + F.iva) AS IMPORTE, F.pareped AS CANTIDAD, "
                             . "F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva", false)
                     ->from("facturacion AS F");
@@ -281,7 +281,8 @@ class FacturacionVarios extends CI_Controller {
     public function getDocumentosXCliente() {
         try {
             $x = $this->input->get();
-            $this->db->select("CC.ID, CC.cliente AS CLIENTE, CC.remicion AS DOCTO, date_format(CC.fecha,\"%d/%m/%Y\") AS FECHA, CC.tipo AS TP, CC.importe AS IMPORTE,  CC.pagos AS PAGOS, (CC.importe - CC.pagos) AS SALDO ", false)
+            $this->db->select("CC.ID, CC.cliente AS CLIENTE, CC.remicion AS DOCTO, "
+                    . "date_format(CC.fecha,\"%d/%m/%Y\") AS FECHA, CC.tipo AS TP, CC.importe AS IMPORTE,  CC.pagos AS PAGOS, (CC.importe - CC.pagos) AS SALDO ", false)
                     ->from("cartcliente as CC");
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('CC.cliente', $x["CLIENTE"]);

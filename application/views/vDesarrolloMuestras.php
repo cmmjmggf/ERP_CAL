@@ -35,7 +35,7 @@
                     </div>
                     <div class="w-100"><br></div>
                     <div class="col-12 col-xs-12 col-md-12 col-lg-12 col-xl-12">
-                        <table class="table table-hover" id="tblFichaTecnica">
+                        <table class="table table-hover  table-sm"  id="tblFichaTecnica"  style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>

@@ -98,24 +98,24 @@
                     
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe factura: </span> 
-                        <span class="font-weight-bold text-info importe_factura">$ 1,000,000,000.00</span> 
+                        <span class="font-weight-bold text-info importe_factura">$ 0.00</span> 
                     </div>
                     
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo factura: </span> 
-                        <span class="font-weight-bold text-info saldo_factura">$ 1,000,000,000.00</span> 
+                        <span class="font-weight-bold text-info saldo_factura">$ 0.00</span> 
                     </div>
                     
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe devuelto: </span> 
-                        <span class="font-weight-bold text-info importe_devuelto">$ 1,000,000,000.00</span> 
+                        <span class="font-weight-bold text-info importe_devuelto">$ 0.00</span> 
                     </div>
                     
                     <div class="w-100 my-1"></div>
                     
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo: </span> 
-                        <span class="font-weight-bold text-info total_devuelto">$ 1,000,000,000.00</span> 
+                        <span class="font-weight-bold text-info total_devuelto">$ 0.00</span> 
                     </div>
                     
                     <div class="w-100 my-1"></div>
