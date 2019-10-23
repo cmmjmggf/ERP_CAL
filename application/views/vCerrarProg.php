@@ -9,7 +9,7 @@
             </div>
             <div class="col-12 col-sm-6 col-lg-3" data-column="12">
                 <strong>Maquila</strong>
-                <input type="text" class="form-control form-control-sm column_filter" id="col12_filter" autofocus>
+                <input type="text" class="form-control form-control-sm column_filter " id="col12_filter" autofocus>
             </div>
             <div class="col-12 col-sm-6 col-lg-3" data-column="13">
                 <strong>Semana</strong>
@@ -82,8 +82,8 @@
     </div>
 </div>
 
-<div id="mdlHistorial" class="modal modal-fullscreen">
-    <div class="modal-dialog modal-lg" role="document">
+<div id="mdlHistorial" class="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Historial de controles generados</h5>
@@ -95,15 +95,15 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" data-column="12">
                         <strong>Maquila</strong>
-                        <input type="text" class="form-control form-control-sm column_filter maquila" id="col12_filter_history" autofocus>
+                        <input type="text" class="form-control form-control-sm column_filter maquilax" id="col12_filter_history" autofocus>
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" data-column="13">
                         <strong>Semana</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="col13_filter_history">
+                        <input type="text" class="form-control form-control-sm column_filter semanax" id="col13_filter_history">
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" data-column="14">
                         <strong>Año</strong>
-                        <input type="text" class="form-control form-control-sm column_filter" id="col14_filter_history">
+                        <input type="text" class="form-control form-control-sm column_filter aniox" id="col14_filter_history">
                     </div>
                 </div>
                 <div class="w-100 m-3"></div>
@@ -114,6 +114,7 @@
                                 <th>ID</th>
                                 <th>IdEstilo</th>
                                 <th>IdColor</th>
+                                <th>Control</th>
                                 <th>Pedido</th>
                                 <th>Cliente</th>
 
@@ -129,7 +130,6 @@
                                 <th>Sem</th>
                                 <th>Año</th>
 
-                                <th>Control</th>
                                 <th>SerieID</th>
                             </tr>
                         </thead>
@@ -162,7 +162,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">CERRAR</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <span class="fa fa-times"></span> CERRAR
+                </button>
             </div>
         </div>
     </div>
@@ -328,6 +330,24 @@
             btnHistorialDeControles.click(function () {
                 mdlHistorial.modal('show');
             });
+            mdlHistorial.find("input.maquilax").keydown(function (e) {
+                if (e.keyCode === 13) {
+                    Historial.ajax.reload();
+                }
+            });
+            
+            mdlHistorial.find("input.semanax").keydown(function (e) {
+                if (e.keyCode === 13) {
+                    Historial.ajax.reload();
+                }
+            });
+            
+            mdlHistorial.find("input.aniox").keydown(function (e) {
+                if (e.keyCode === 13) {
+                    Historial.ajax.reload();
+                }
+            });
+            
             mdlHistorial.on('shown.bs.modal', function () {
                 HoldOn.open({
                     theme: 'sk-bounce',
@@ -457,9 +477,9 @@
                 "url": '<?php print base_url('CerrarProg/getRecords'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.MAQUILA = (MaquilaCerrarProg.val().trim());
-                    d.SEMANA = (SemanaCerrarProg.val().trim());
-                    d.ANIO = (AnoCerrarProg.val().trim());
+                    d.MAQUILA = MaquilaCerrarProg.val() ? MaquilaCerrarProg.val() : '';
+                    d.SEMANA = SemanaCerrarProg.val() ? SemanaCerrarProg.val() : '';
+                    d.ANIO = AnoCerrarProg.val() ? AnoCerrarProg.val() : '';
                 }
             },
             "columnDefs": [
@@ -550,7 +570,7 @@
             tblHistorial.DataTable().destroy();
         }
         Historial = tblHistorial.DataTable({
-            dom: 'Brt',
+            dom: 'Brtip',
             buttons: [
                 {
                     text: "Todos",
@@ -571,7 +591,9 @@
                 "url": '<?php print base_url('CerrarProg/getHistorialDeControles'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.MAQUILA = ClienteFactura.val();
+                    d.MAQUILA = mdlHistorial.find("input.maquilax").val() ? mdlHistorial.find("input.maquilax").val() : '';
+                    d.SEMANA = mdlHistorial.find("input.semanax").val() ? mdlHistorial.find("input.semanax").val() : '';
+                    d.ANIO = mdlHistorial.find("input.aniox").val() ? mdlHistorial.find("input.aniox").val() : '';
                 }
             },
             "columnDefs": [
@@ -604,6 +626,7 @@
                 {"data": "ID"}, /*0*/
                 {"data": "IdEstilo"}, /*1*/
                 {"data": "IdColor"}, /*2*/
+                {"data": "Control"}, /*15*/
                 {"data": "Pedido"}, /*3*/
                 {"data": "Cliente"}, /*4*/
                 {"data": "Estilo"}, /*5*/
@@ -616,7 +639,6 @@
                 {"data": "Maq"}, /*12*/
                 {"data": "Semana"}, /*13*/
                 {"data": "Anio"}, /*14*/
-                {"data": "Control"}, /*15*/
                 {"data": "SerieID"}/*16*/,
                 {"data": "ID_PEDIDO"}/*17*/
             ],
@@ -625,23 +647,12 @@
             keys: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 9999999999,
+            "displayLength": 50,
             "scrollY": 380,
             "scrollX": true,
             "bLengthChange": false,
             "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            "aaSorting": [
-                [0, 'desc']/*ID*/
-            ],
-            "createdRow": function (row, data, dataIndex, cells) {
-                $.each($(row), function (k, v) {
-                    if (data["Marca"] === '0' && data["Control"] !== null) {
-                        $(v).addClass('HasMca');
-                    }
-                });
-            },
+            "scrollCollapse": false, 
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api(); //Get access to Datatable API
                 // Update footer

@@ -55,7 +55,7 @@ class CerrarProg extends CI_Controller {
                             . "PD.Clave AS Pedido,"
                             . "PD.FechaPedido AS \"Fecha Pedido\","
                             . "PD.FechaRecepcion AS \"Fecha Entrega\","
-                            . "PD.Registro AS \"Fecha Captura\","
+                            . "DATE_FORMAT(PD.Registro,\"%d/%m/%Y\") AS \"Fecha Captura\","
                             . "PD.Semana AS Semana,"
                             . "PD.Maquila AS Maq,"
                             . "PD.Cliente AS Cliente,"
@@ -85,6 +85,10 @@ class CerrarProg extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where('PD.Semana', $x['SEMANA']);
             }
+            $this->db->order_by('PD.ID','DESC');
+            if ($x['MAQUILA'] === '' && $x['SEMANA'] === '') {
+                $this->db->limit(25);
+            }
 
 
             $sql = $this->db->get();
@@ -109,7 +113,7 @@ class CerrarProg extends CI_Controller {
                             . "PD.Clave AS Pedido,"
                             . "PD.FechaPedido AS \"Fecha Pedido\","
                             . "PD.FechaRecepcion AS \"Fecha Entrega\","
-                            . "PD.Registro AS \"Fecha Captura\","
+                            . "DATE_FORMAT(PD.Registro,\"%d/%m/%Y\") AS \"Fecha Captura\","
                             . "PD.Semana AS Semana,"
                             . "PD.Maquila AS Maq,"
                             . "PD.Cliente AS Cliente,"
@@ -128,21 +132,24 @@ class CerrarProg extends CI_Controller {
                             . "S.ID AS SerieID,"
                             . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
                     ->join('series AS S', 'PD.Serie = S.Clave')
-                    ->join('controles AS CT', 'CT.pedidodetalle = PD.Clave')
+                    ->join('controles AS CT', 'CT.Control = PD.Control')
                     ->where('PD.Control <> 0', null, false);
-            if ($x['MAQUILA'] === '') {
+            if ($x['MAQUILA'] !== '') {
                 $this->db->where('PD.Maquila', $x['MAQUILA']);
             }
-            if ($x['SEMANA'] === '') {
+            if ($x['SEMANA'] !== '') {
                 $this->db->where('PD.Semana', $x['SEMANA']);
             }
-            if ($x['ANO'] === '') {
-                $this->db->where('PD.Ano', $x['ANO']);
+            if ($x['ANIO'] !== '') {
+                $this->db->where('PD.Ano', $x['ANIO']);
             }
-            if ($x['MAQUILA'] === '' && $x['SEMANA'] === '' && $x['ANO'] === '') {
-                $this->db->limit(25);
+            $this->db->order_by('PD.ID','DESC');
+            if ($x['MAQUILA'] === '' && $x['SEMANA'] === '' && $x['ANIO'] === '') {
+                $this->db->limit(100);
             }
-            print json_encode($this->db->get()->result());
+            $dtm = $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
