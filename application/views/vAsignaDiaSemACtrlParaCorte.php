@@ -227,15 +227,15 @@
                 titleAttr: 'Deseleccionar'
             }
         ], "ajax": {
-            "url": '<?= base_url('AsignaDiaSemACtrlParaCorte/getRecords') ?>',
+            "url": '<?php print base_url('AsignaDiaSemACtrlParaCorte/getRecords'); ?>',
             "dataSrc": "",
             "data": function (d) {
-                d.ANIO = (Anio.val().trim());
-                d.SEMANA = (Semana.val().trim());
-                d.CORTADOR = (Cortador.val().trim());
-                d.CONTROL = (Control.val().trim());
-                d.ESTILO = (Estilo.val().trim());
-                d.COLOR = (Color.val().trim());
+                d.ANIO = Anio.val() ? Anio.val() : '';
+                d.SEMANA = Semana.val() ? Semana.val() : '';
+                d.CORTADOR = Cortador.val() ? Cortador.val() : '';
+                d.CONTROL = Control.val() ? Control.val() : '';
+                d.ESTILO = Estilo.val() ? Estilo.val() : '';
+                d.COLOR = Color.val() ? Color.val() : '';
             }
         },
         "columnDefs": [
@@ -502,12 +502,12 @@
                 "url": '<?= base_url('AsignaDiaSemACtrlParaCorte/getProgramacion') ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.ANIO = (Anio.val().trim());
-                    d.SEMANA = (Semana.val().trim());
-                    d.CORTADOR = (Cortador.val().trim());
-                    d.CONTROL = (Control.val().trim());
-                    d.ESTILO = (Estilo.val().trim());
-                    d.COLOR = (Color.val().trim());
+                    d.ANIO = Anio.val() ? Anio.val() : '';
+                    d.SEMANA = Semana.val() ? Semana.val() : '';
+                    d.CORTADOR = Cortador.val() ? Cortador.val() : '';
+                    d.CONTROL = Control.val() ? Control.val() : '';
+                    d.ESTILO = Estilo.val() ? Estilo.val() : '';
+                    d.COLOR = Color.val() ? Color.val() : '';
                 }
             },
             "columnDefs": [
@@ -596,7 +596,7 @@
         var FRACCIONES = [];
         $.each(Fraccion.val(), function (k, v) {
             FRACCIONES.push({
-                FRACCIONES: v   
+                FRACCIONES: v
             });
         });
         console.log(FRACCIONES);

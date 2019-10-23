@@ -43,7 +43,32 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->adscpc->getRecords());
+//            print json_encode($this->adscpc->getRecords());
+            $x = $this->input->get();
+            $this->db->select("P.ID, CONCAT('<span class=\"badge badge-info\" style=\"font-size: 100%;\">',P.Control,'</span>') AS Control, P.Cliente, "
+                            . "P.Estilo, P.Color, P.Pares, "
+                            . "P.Semana AS Semana", false)
+                    ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
+                    ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
+                    ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
+                    ->where('PR.Control IS NULL', null, false)
+                    ->where_not_in('P.Control', array(0));
+            if ($x['ANIO'] !== '') {
+                $this->db->where('P.Ano', $x['ANIO']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('P.Semana', $x['SEMANA']);
+            }
+            if ($x['CORTADOR'] !== '') {
+                $this->db->where('P.Semana', $x['CORTADOR']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('P.Semana', $x['CONTROL']);
+            }
+            if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CORTADOR'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -67,7 +92,45 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
 
     public function getProgramacion() {
         try {
-            print json_encode($this->adscpc->getProgramacion());
+//            print json_encode($this->adscpc->getProgramacion());
+            $x = $this->input->get();
+
+            $styl = 'style=\"font-size: 100%;\"';
+            $sp = "<span class=\"badge badge-pill badge-info\" {$styl}>";
+            $spbf = "<span class=\"badge badge-pill badge-fusion\" {$styl}>";
+            $sps = "<span class=\"badge badge-pill badge-fusion-success\" {$styl}>";
+            $spda = "<span class=\"badge badge-pill badge-danger\" {$styl}>";
+            $spd = "<span class=\"badge badge-pill badge-dark\" {$styl}>";
+            $spw = "<span class=\"badge badge-pill badge-warning\" {$styl}>";
+            $spf = '</span>';
+            $this->db->select("PR.ID, CONCAT('{$sps}',PR.numemp,'{$spf}') AS Emp, CONCAT('{$spw}',PR.control,'{$spf}') AS Control, "
+                            . "PR.año AS Ano, CONCAT('{$spda}',PR.semana,'{$spf}') AS Sem, ELT(PR.diaprg,"
+                            . "'{$sp}JUEVES{$spf}','{$sp}VIERNES{$spf}','{$sp}SABADO{$spf}',"
+                            . "'{$sp}LUNES{$spf}','{$sp}MARTES{$spf}','{$sp}MIERCOLES{$spf}',"
+                            . "'{$sp}DOMINGO{$spf}') AS Dia, "
+                            . " CONCAT('{$spbf}',PR.frac,'{$spf}') AS Frac, DATE_FORMAT(PR.fecha, \"%d/%m/%Y\") AS Fecha, PR.estilo AS Estilo, "
+                            . "PR.par AS Pares, PR.tiempo AS Tiempo, PR.precio AS Precio, "
+                            . "PR.nomart", false)
+                    ->from("programacion AS PR")->where_in("PR.frac", array(99, 100));
+            if ($x['ANIO'] !== '') {
+                $this->db->where('PR.año', $x['ANIO']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('PR.semana', $x['SEMANA']);
+            }
+            if ($x['CORTADOR'] !== '') {
+                $this->db->where('PR.numemp', $x['CORTADOR']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('PR.control', $x['CONTROL']);
+            }
+            if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CORTADOR'] === '' && $x['CONTROL'] === '') {
+                $this->db->where("ORDER BY YEAR(PR.fecha) DESC, MONTH(PR.fecha) DESC, DAY(PR.fecha) DESC", null, false);
+                $this->db->limit(25);
+            }
+
+
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

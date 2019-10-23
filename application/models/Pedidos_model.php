@@ -137,9 +137,9 @@ class Pedidos_model extends CI_Model {
                             ->join('series AS S', 'P.Serie = S.Clave')->join('clientes AS C', 'P.Cliente = C.Clave')
                             ->join('estados AS E', 'C.Estado = E.Clave', 'left')->join('agentes AS A', 'P.Agente = A.Clave', 'left')
                             ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
-                            ->order_by('P.ID', 'DESC')
                             ->where('P.Clave', $ID)
                             ->where('P.Cliente', $CLIENTE)
+                            ->order_by('P.ID', 'DESC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
