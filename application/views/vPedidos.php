@@ -689,8 +689,7 @@
                                 pnlDatos.find("#sColor")[0].selectize.clear(true);
                                 pnlDatos.find("#Color").val('');
                                 pnlDatos.find("#Maquila").val('');
-                                pnlDatos.find("[name*='T']").val('');
-                                pnlDatos.find("[name*='C']").val('');
+                                pnlDatos.find("#tblTallas").find('input').val('');
                                 pnlDatos.find('#Estilo').focus().val('');
                             });
                         }
@@ -702,8 +701,7 @@
                     pnlDatos.find("#sColor")[0].selectize.clear(true);
                     pnlDatos.find("#Color").val('');
                     pnlDatos.find("#Maquila").val('');
-                    pnlDatos.find("[name*='T']").val('');
-                    pnlDatos.find("[name*='C']").val('');
+                    pnlDatos.find("#tblTallas").find('input').val('');
                     pnlDatos.find('#Estilo').focus().val('');
                 }
             }
@@ -778,12 +776,15 @@
                     theme: 'sk-bounce',
                     message: 'Por favor espere...'
                 });
-                $.getJSON(master_url + 'getIDXClave',
-                        {
-                            PEDIDO: $(this).val(),
-                            CLIENTE: pnlTablero.find("#ClientePedido").val()
-                        }).done(function (data) {
-                    getPedidoByID(data[0].ID, data[0].Cliente);
+                $.getJSON(master_url + 'getIDXClave', {PEDIDO: $(this).val(), CLIENTE: pnlTablero.find("#ClientePedido").val()}).done(function (data) {
+                    if (data.length > 0) {
+                        getPedidoByID(data[0].ID, data[0].Cliente);
+                    } else {
+                        HoldOn.close();
+                        swal('ATENCIÓN', 'EL CLIENTE/PEDIDO NO EXISTE', 'error').then((value) => {
+                            pnlTablero.find("#NumeroDePedido").focus().val('');
+                        });
+                    }
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
@@ -826,10 +827,19 @@
         pnlDatos.find("#Maquila").keydown(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onComprobarCapacidades("#Maquila", 1);
-                    onChecarSemanaValida('#Semana');
-                    onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
-                    getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                    $.getJSON(master_url + 'onVerificaMaquilas', {Maquila: $(this).val()}).done(function (data) {
+                        if (data.length > 0) {
+                            onChecarSemanaValida('#Semana');
+                            onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                            getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                        } else {
+                            swal('ERROR', 'LA MAQUILA NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find('#Maquila').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        getError(x);
+                    });
                 }
             }
         });
@@ -928,6 +938,7 @@
             Clave.prop('readonly', false);
             pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
+            pnlDatos.find("#iPedidoxCliente").prop('readonly', false);
             pnlDatos.find("#FechaPedido").prop('readonly', false);
             pnlDatos.find("#FechaRecepcion").prop('readonly', false);
             pnlDatos.find("input,textarea").val("");
@@ -1169,8 +1180,7 @@
             icon: "warning",
             buttons: ["Cancelar", "Aceptar"],
             closeOnClickOutside: false,
-            closeOnEsc: false,
-            dangerMode: true
+            closeOnEsc: false
         }).then((willDelete) => {
             if (willDelete) {
                 switch (index) {
@@ -1181,23 +1191,15 @@
                     case 2:
                         //CHECAR SI TIENE CONTROL
                         var dt = PedidoDetalle.row($(r).parents('tr')).data();
-                        $.getJSON(master_url + 'onVerificarByID', {ID: dt[0]}).done(function (data) {
+
+                        $.getJSON(master_url + 'onVerificarByID', {ID: dt.PDID}).done(function (data) {
                             console.log(data);
                             var x = data[0];
                             if (parseInt(x.Control) <= 0) {
-                                console.log('No Tiene control ', dt[0]);
-                                $.post(master_url + 'onEliminar', {ID: dt[0]}).done(function (data) {
+                                console.log('No Tiene control ', dt.PDID);
+                                $.post(master_url + 'onEliminar', {ID: dt.PDID}).done(function (data) {
                                     //REMOVER AL EDITAR (GUARDADO)
                                     PedidoDetalle.row($(r).parents('tr')).remove().draw();
-                                    swal({
-                                        title: "ATENCIÓN",
-                                        text: "SE HA ELIMINADO EL REGISTRO",
-                                        icon: "success",
-                                        closeOnClickOutside: false,
-                                        closeOnEsc: false,
-                                        buttons: false,
-                                        timer: 1500
-                                    });
                                 }).fail(function (x, y, z) {
                                     console.log(x, y, z);
                                 }).always(function () {
@@ -1237,6 +1239,7 @@
             pnlDatos.find("#ID").val(dt.PDID);
             Clave.val(dt.Clave);
             pnlDatos.find("#pedcte").val(dt.Cliente);
+            pnlDatos.find("#iPedidoxCliente").val(dt.Cliente);
             pnlDatos.find("#PedidoxCliente")[0].selectize.setValue(dt.Cliente);
             pnlDatos.find("#FechaPedido").val(dt.FechaPedido);
             pnlDatos.find("#FechaRecepcion").val(dt.FechaRecepcion);
@@ -1247,14 +1250,15 @@
             pnlDatos.find("#Recibido")[0].selectize.setValue(dt.Recibido);
 
             Clave.prop('readonly', true);
-            pnlDatos.find("#FechaPedido").prop('readonly', true);
-            pnlDatos.find("#FechaRecepcion").prop('readonly', true);
-            pnlDatos.find("#FechaEntrega").prop('readonly', true);
+            pnlDatos.find("#FechaPedido").attr('readonly', true);
+            pnlDatos.find("#FechaRecepcion").attr('readonly', true);
+            pnlDatos.find("#FechaEntrega").attr('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
             pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlDatos.find("#Agente")[0].selectize.disable();
 
             btnImprimir.removeClass("d-none");
+            pnlDatos.find("#iPedidoxCliente").attr('readonly', true);
             pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
@@ -1274,6 +1278,7 @@
                 tblPedidoDetalle.DataTable().destroy();
             }
             PedidoDetalle = tblPedidoDetalle.DataTable(opciones_detalle);
+            $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
         }).always(function () {
@@ -1371,11 +1376,6 @@
                             }, (t === 2 ? 10000 : 3000));
                         }
                     }
-                } else {
-                    swal('ERROR', 'LA MAQUILA NO EXISTE', 'warning').then((value) => {
-                        pnlDatos.find('#Maquila').focus().val('');
-                        return;
-                    });
                 }
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
