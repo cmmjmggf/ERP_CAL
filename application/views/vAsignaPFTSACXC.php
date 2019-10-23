@@ -18,11 +18,11 @@
         <div class="row" style="padding-left: 15px">
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1" align="left">
                 <strong>Semana</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric" id="Semana" data-toggle="tooltip" data-placement="bottom" title="Por favor escriba la semana..." autofocus onkeyup="onChecarSemanaValida(this)">
+                <input type="text" class="form-control form-control-sm column_filter numeric" id="Semana" autofocus onkeyup="onChecarSemanaValida(this)">
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2" align="left">
                 <strong>Control</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric" id="Control" data-toggle="tooltip" data-placement="bottom" title="Especifique el control..." >
+                <input type="text" class="form-control form-control-sm column_filter numeric" id="Control"  >
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2" align="left">
                 <strong>Fracción</strong>
@@ -272,13 +272,17 @@
                         <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm d-none" readonly="">
                         <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-1 col-xl-1">
                         <label>Cortador</label>
-                        <select id="Cortador" name="Cortador" class="form-control form-control-sm">
+                        <input type="text" id="CortadorClave" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+
+                        <select id="Cortador" name="Cortador" class="form-control form-control-sm mt-4">
                             <option></option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
                         <label>1 = PIEL / 2 = FORRO</label>
                         <select id="PielForro" name="PielForro" class="form-control form-control-sm">
                             <option></option>
@@ -329,7 +333,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblRegresos" class="table table-hover" style="width: 100%;">
+                        <table id="tblRegresos" class="table table-hover table-sm" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th><!--0-->
@@ -360,7 +364,8 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="left">
-                            <button type="button" class="btn btn-primary" id="btnAceptar" name="btnAceptar">Aceptar</button>
+                            <button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
+                                <span class="fa fa-check"></span> Aceptar</button>
                         </div>
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -403,7 +408,9 @@
 
     var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"), Regresos = $("#Regresos");
     var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"), Regreso = mdlRetornaMaterial.find("#Regreso"),
-            MatMalo = mdlRetornaMaterial.find("#MatMalo");
+            MatMalo = mdlRetornaMaterial.find("#MatMalo"),
+            CortadorClave = mdlRetornaMaterial.find("#CortadorClave"),
+            Cortador = mdlRetornaMaterial.find("#Cortador");
 
     var tipo_consumo = 0, FT = 1;
 
@@ -411,6 +418,26 @@
 
         btnEntregar.click(function () {
             onEntregarMaterial();
+        });
+
+        CortadorClave.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                Cortador[0].selectize.setValue(CortadorClave.val());
+                if (Cortador.val() === '') {
+                    iMsg("DEBE DE ESPECIFICAR UN CORTADOR VALIDO", 'w', function () {
+                        CortadorClave.focus().select();
+                    });
+                }
+            }
+
+        });
+
+        mdlRetornaMaterial.on('shown.bs.modal', function () {
+            mdlRetornaMaterial.find("input").val('');
+            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
+                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
+            });
+            CortadorClave.focus();
         });
 
         mdlRetornaMaterial.find("#Control").focusout(function () {

@@ -15,20 +15,26 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
     public function index() {
         $is_valid = false;
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vEncabezado')->view('vNavGeneral')->view('vMenuProduccion')->view('vAsignaDiaSemACtrlParaCorte')->view('vFooter');
+                    $this->load->view('vEncabezado')->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vEncabezado')->view('vMenuFichasTecnicas')->view('vAsignaDiaSemACtrlParaCorte')->view('vFooter');
+                    $this->load->view('vEncabezado')->view('vMenuFichasTecnicas');
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vMenuMateriales')->view('vAsignaDiaSemACtrlParaCorte')->view('vFooter');
+                    $this->load->view('vMenuMateriales');
+                    $is_valid = true;
+                    break;
+                case 'PRODUCCION':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
             }
+            $this->load->view('vAsignaDiaSemACtrlParaCorte')->view('vFooter');
         }
         if (!$is_valid) {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
