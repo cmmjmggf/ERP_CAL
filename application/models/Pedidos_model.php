@@ -383,11 +383,11 @@ class Pedidos_model extends CI_Model {
 
     public function getColoresXEstilo($Estilo) {
         try {
-            return $this->db->select("CAST(C.Clave AS SIGNED) AS Clave, CONCAT(C.Clave,'-', C.Descripcion) AS Color", false)
+            return $this->db->select("CAST(C.Clave AS SIGNED) AS Clave, C.Descripcion AS Color", false)
                             ->from('colores AS C')
                             ->where('C.Estilo', $Estilo)
                             ->where('C.Estatus', 'ACTIVO')
-                            ->order_by('C.Clave', 'ASC')
+                            ->order_by('Color', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

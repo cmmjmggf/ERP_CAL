@@ -84,12 +84,18 @@
                             <label for="Pedido" >Pedido*</label>
                             <input type="text" class="form-control form-control-sm numbersOnly selectNotEnter" id="Clave" required="" placeholder="" autofocus="">
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                            <label for="Cliente" >Cliente*</label>
-                            <select class="form-control form-control-sm" id="PedidoxCliente" name="PedidoxCliente" required="" placeholder="">
+                        <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
+                            <label for="iPedidoxCliente" >Cliente*</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="iPedidoxCliente" name="iPedidoxCliente" required="" placeholder="">
+                        </div>
+                        <div class="col-12 col-sm-5 col-md-3 col-lg-2 col-xl-3">
+                            <label for="Cliente" >--</label>
+                            <select class="form-control form-control-sm NotSelectize selectNotEnter" id="PedidoxCliente" name="PedidoxCliente" required="" placeholder="">
                                 <option></option>
                                 <?php
-                                foreach ($clientes as $k => $v) {
+                                //YA CONTIENE LOS BLOQUEOS DE VENTA
+                                $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY C.RazonS ASC;")->result();
+                                foreach ($clientesPnl as $k => $v) {
                                     print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -97,7 +103,7 @@
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <label for="Agente" >Agente*</label>
-                            <select class="form-control form-control-sm" id="Agente" name="Agente" required="" placeholder="">
+                            <select class="form-control form-control-sm " id="Agente" name="Agente" required="" placeholder="">
                                 <option></option>
                                 <?php
                                 foreach ($this->db->query("SELECT A.Clave, CONCAT(A.Clave, \" - \", A.Nombre) AS Agente FROM agentes AS A")->result() as $k => $v) {
@@ -106,11 +112,11 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2">
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
                             <label for="FechaPedido" >Fec-Pedido*</label>
                             <input type="text" id="FechaPedido" name="FechaPedido" class="form-control form-control-sm date notEnter" required="">
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
                             <label for="FechaEntrega" >Fec-Entrega*</label>
                             <input type="text" id="FechaEntrega" name="FechaEntrega" class="form-control form-control-sm date notEnter">
                         </div>
@@ -118,9 +124,9 @@
                             <label for="FechaRecepcion" >Fec-Recep*</label>
                             <input type="text" id="FechaRecepcion" name="FechaRecepcion" class="form-control form-control-sm date notEnter" required="">
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-1">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <label for="Recibido" >Recibido*</label>
-                            <select class="form-control form-control-sm" id="Recibido" name="Recibido" required placeholder="">
+                            <select class="form-control form-control-sm " id="Recibido" name="Recibido" required placeholder="">
                                 <option></option>
                                 <option value="1">1 - Age</option>
                                 <option value="3">3 - Tel</option>
@@ -131,27 +137,22 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                        <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
                             <label for="Estilo" >Estilo*</label>
-                            <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
-                                <option></option>
-                                <?php
-                                foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
-                                    print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
-                                }
-                                ?>
+                            <input type="text" class="form-control form-control-sm" maxlength="6" id="Estilo" name="Estilo" required="" placeholder="">
+                        </div>
+                        <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
+                            <label for="Estilo" >Color*</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="2" id="Color" name="Color" required="" placeholder="">
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-3">
+                            <label for="Color" >--</label>
+                            <select class="form-control form-control-sm NotSelectize selectNotEnter" id="sColor" name="sColor" required placeholder="">
                             </select>
                         </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                            <label for="Color" >Color*</label>
-                            <select class="form-control form-control-sm" id="Color" name="Color" required placeholder="">
-                            </select>
-                            <div id="spin" class="d-none" align="center"><span class="fa fa-cog fa-spin fa-2x"></span></div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                            <label for="Maquila" >Maquila*</label>
-                            <select class="form-control form-control-sm"  type="text" id="Maquila" name="Maquila">
-                            </select>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-1 col-xl-1">
+                            <label for="Maquila" >Maq*</label>
+                            <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm numbersOnly" maxlength="2" placeholder="">
                         </div>
                         <div class="col-12 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                             <label for="Semana" >Sem*</label>
@@ -217,9 +218,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-5 d-none" align="left">
-                                    <button type="button" class="btn btn-primary" id="btnAgregarDetalle"><span class="fa fa-check"></span></button>
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-5" align="right">
                                     <button type="button" class="btn btn-primary" id="btnAcepta">
@@ -352,7 +350,6 @@
     var _animate_ = {enter: 'animated fadeInLeft', exit: 'animated fadeOutDown'}, _placement_ = {from: "bottom", align: "left"};
     var Cliente = '';
     var mdlAviso = $("#mdlAviso");
-    var btnAgregarDetalle = pnlDatos.find("#btnAgregarDetalle");
     var opciones_detalle = {
         dom: 'rt',
         buttons: buttons,
@@ -489,6 +486,8 @@
     };
 
     $.fn.dataTable.ext.errMode = 'throw';
+
+    var nomEstilo, nomColor;
     $(document).ready(function () {
         init();
         handleEnter();
@@ -523,7 +522,7 @@
                     C19: pnlDatos.find("input[name='C19']").val(), C20: pnlDatos.find("input[name='C20']").val(),
                     C21: pnlDatos.find("input[name='C21']").val(), C22: pnlDatos.find("input[name='C22']").val(),
                     RECIBIDO: Recibido.val(), PARES: pnlDatos.find('#TPares').val(),
-                    ESTILOT: Estilo.text(), COLORT: Color.text(), SERIE: Serie.val()
+                    ESTILOT: nomEstilo, COLORT: nomColor, SERIE: Serie.val()
                 };
                 if (nuevo) {
                     /*NUEVO*/
@@ -558,40 +557,217 @@
                 });
             }
         });
+        pnlDatos.find("#Estilo").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var estilo = $(this).val();
+                if (estilo) {
+                    $.getJSON(master_url + 'onVerificaEstilo', {Estilo: estilo}).done(function (data) {
+                        if (data.length > 0) {
+                            nomEstilo = data[0].Estilo;
+                            pnlDatos.find("#sColor")[0].selectize.clear(true);
+                            pnlDatos.find("#sColor")[0].selectize.clearOptions();
 
-        Estilo.change(function (e) {
-            if ($(this).val()) {
-                onOpenOverlay('Por favor espere...');
-                /*COMPROBAR QUE EL ESTILO TENGA DEFINIDA SU FICHA TECNICA Y LAS FRACCIONES X ESTILO*/
-                $.getJSON('<?php print base_url('Pedidos/onComprobarFichaTecnicaXEstilo'); ?>', {ESTILO: Estilo.val()})
-                        .done(function (a) {
-                            if (a.length > 0) {
-                                if (parseInt(a[0].TIENEFICHA) > 0) {
-                                    $.getJSON('<?php print base_url('Pedidos/onComprobarFraccionesXEstilo'); ?>', {ESTILO: Estilo.val()})
-                                            .done(function (a) {
-                                                if (a.length > 0) {
-                                                    /*YOUR WIN*/
-                                                } else {
-                                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE FRACCIONES DEFINIDAS', 'warning').then((value) => {
-                                                        Estilo[0].selectize.focus();
-                                                    });
-                                                }
-                                            }).fail(function (x) {
-                                        getError(x);
-                                    }).always(function () {
-                                        onCloseOverlay();
+
+                            //OBTENER COLORES POR ESTILO
+                            $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo'); ?>', {Estilo: estilo}).done(function (data) {
+                                $.each(data, function (k, v) {
+                                    pnlDatos.find("#sColor")[0].selectize.addOption({text: v.Color, value: v.Clave});
+                                });
+                                pnlDatos.find("#Color").focus();
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            });
+
+                            /*COMPROBAR QUE EL ESTILO TENGA DEFINIDA SU FICHA TECNICA Y LAS FRACCIONES X ESTILO*/
+                            $.getJSON('<?php print base_url('Pedidos/onComprobarFichaTecnicaXEstilo'); ?>', {ESTILO: Estilo.val()})
+                                    .done(function (a) {
+                                        if (a.length > 0) {
+                                            if (parseInt(a[0].TIENEFICHA) > 0) {
+                                                $.getJSON('<?php print base_url('Pedidos/onComprobarFraccionesXEstilo'); ?>', {ESTILO: Estilo.val()})
+                                                        .done(function (a) {
+                                                            if (a.length > 0) {
+                                                                /*YOUR WIN*/
+                                                            } else {
+                                                                swal('ATENCIÓN', 'ESTE ESTILO NO TIENE FRACCIONES DEFINIDAS', 'warning').then((value) => {
+                                                                    Estilo.focus();
+                                                                    return;
+                                                                });
+                                                            }
+                                                        }).fail(function (x) {
+                                                    getError(x);
+                                                }).always(function () {
+                                                    onCloseOverlay();
+                                                });
+                                            } else {
+                                                swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA UNA FICHA TECNICA', 'warning').then((value) => {
+                                                    Estilo.focus();
+                                                });
+                                            }
+                                        }
+                                    }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                                onCloseOverlay();
+                            });
+
+                            //OBTENER MAQUILA/SERIE
+                            $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: estilo}).done(function (data) {
+                                if (data.length > 0) {
+                                    var dtm = data[0];
+                                    pnlDatos.find("#Serie").val(data[0].Serie);
+                                    pnlDatos.find("#Maquila").val(data[0].Maquila);
+                                    onComprobarSemanaMaquila(data[0].Maquila, pnlDatos.find("#Semana").val());
+                                    //SET TALLAS
+                                    $.each(data[0], function (k, v) {
+                                        var Can = k.replace("T", "C");
+                                        if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
+                                            pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', true);
+                                        } else {
+                                            pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', false);
+                                            pnlDatos.find('#tblTallas').find("[name='" + k + "']").val(v);
+                                        }
                                     });
+                                    //MOSTRAR FOTO
+                                    if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                                        var ext = getExt(dtm.Foto);
+                                        if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                            $.notify({
+                                                // options
+                                                icon: base_url + dtm.Foto
+                                            }, {
+                                                // settings
+                                                placement: _placement_,
+                                                animate: _animate_,
+                                                icon_type: 'img',
+                                                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                        '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                        '</div>'
+                                            });
+                                        }
+                                        if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                            $.notify({
+                                                // options
+                                                icon: base_url + dtm.Foto
+                                            }, {
+                                                // settings
+                                                placement: _placement_,
+                                                animate: _animate_,
+                                                icon_type: 'img',
+                                                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                        '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                        '</div>'
+                                            });
+                                        }
+                                    } else {
+                                        $.notify({
+                                            // options
+                                            icon: base_url + dtm.Foto
+                                        }, {
+                                            // settings
+                                            placement: _placement_,
+                                            animate: _animate_,
+                                            icon_type: 'img',
+                                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                    '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                    '</div>'
+                                        });
+                                    }
                                 } else {
-                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA UNA FICHA TECNICA', 'warning').then((value) => {
-                                        Estilo[0].selectize.focus();
-                                    });
+                                    pnlDatos.find('#tblTallas').find("input").val("");
+                                    pnlDatos.find('#rCantidades').find("input").prop('disabled', true);
                                 }
-                            }
-                        }).fail(function (x) {
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            });
+
+
+                        } else {
+                            swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find("#sColor")[0].selectize.clear(true);
+                                pnlDatos.find("#Color").val('');
+                                pnlDatos.find("#Maquila").val('');
+                                pnlDatos.find("[name*='T']").val('');
+                                pnlDatos.find("[name*='C']").val('');
+                                pnlDatos.find('#Estilo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    pnlDatos.find("#sColor")[0].selectize.clear(true);
+                    pnlDatos.find("#Color").val('');
+                    pnlDatos.find("#Maquila").val('');
+                    pnlDatos.find("[name*='T']").val('');
+                    pnlDatos.find("[name*='C']").val('');
+                    pnlDatos.find('#Estilo').focus().val('');
+                }
+            }
+        });
+
+        pnlDatos.find("#Color").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var color = $(this).val();
+                var estilo = pnlDatos.find("#Estilo").val();
+                var cliente = pnlDatos.find("#PedidoxCliente").val();
+                if (color) {
+                    $.getJSON(master_url + 'onVerificaColorXEstilo', {Estilo: estilo, Color: color}).done(function (data) {
+                        if (data.length > 0) {
+                            nomColor = data[0].Color;
+                            //OBTENER PRECIO ESTILO/COLOR
+                            $.getJSON('<?php print base_url('Pedidos/getPrecioEstiloColor'); ?>', {Color: color, Estilo: estilo, Cliente: cliente}).done(function (data) {
+                                if (data.length > 0) {
+                                    pnlDatos.find("#Precio").val(data[0].preaut);
+                                }
+                                pnlDatos.find("#Precio").prop('readonly', false);
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            });
+                            pnlDatos.find("#sColor")[0].selectize.addItem(color, false);
+                            pnlDatos.find("#Maquila").focus().select();
+                        } else {
+                            swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find('#Color').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        getError(x);
+                    });
+                } else {
+                    pnlDatos.find("#Precio").prop('readonly', true);
+                    pnlDatos.find("#sColor")[0].selectize.clear(true);
+                    pnlDatos.find("#Maquila").val('');
+                    pnlDatos.find('#Color').focus().val('');
+                }
+            }
+        });
+
+        pnlDatos.find("#sColor").change(function () {
+            var color = $(this).val();
+            var estilo = pnlDatos.find("#Estilo").val();
+            var cliente = pnlDatos.find("#PedidoxCliente").val();
+            if (color !== '') {
+                //OBTENER PRECIO ESTILO/COLOR
+                $.getJSON('<?php print base_url('Pedidos/getPrecioEstiloColor'); ?>', {Color: color, Estilo: estilo, Cliente: cliente}).done(function (data) {
+                    if (data.length > 0) {
+                        pnlDatos.find("#Precio").val(data[0].preaut);
+                    }
+                    pnlDatos.find("#Precio").prop('readonly', false);
+                }).fail(function (x, y, z) {
                     getError(x);
-                }).always(function () {
-                    onCloseOverlay();
                 });
+                pnlDatos.find('#Color').val(color);
+                pnlDatos.find("#Maquila").focus().select();
+
+            } else {
+                pnlDatos.find("#Precio").prop('readonly', true);
+                pnlDatos.find("#sColor")[0].selectize.clear(true);
+                pnlDatos.find("#Maquila").val('');
+                pnlDatos.find('#Color').focus().val('');
             }
         });
 
@@ -631,118 +807,31 @@
             }
         });
 
-        btnAgregarDetalle.click(function () {
-            if (pedido_valido) {
-                pnlDatos.find("#Recibido")[0].selectize.enable();
-                var Color = pnlDatos.find("#Color");
-                var Semana = pnlDatos.find("#Semana");
-                var Maquila = pnlDatos.find("#Maquila");
-                var Precio = pnlDatos.find("#Precio");
-                var FechaDeEntrega = pnlDatos.find("#FechaEntrega");
-                var Recibido = pnlDatos.find("#Recibido");
-                var Recio = pnlDatos.find("#Recio");
-                var Titulo = pnlDatos.find("#Observacion");
-                var Observaciones = pnlDatos.find("#ObservacionDetalle");
-                var total_pares = 0;
-                $.each(pnlDatos.find("#tblTallas input[name*='C']"), function (k, v) {
-                    total_pares += (parseInt($(v).val()) > 0) ? parseInt($(v).val()) : 0;
-                    pnlDatos.find("#TPares").val(total_pares);
-                });
-                if (total_pares > 0) {
-                    //REVISAR SI ESE ESTILO/COLOR NO HA SIDO AGREGADO CON ANTERIORIDAD
-                    onRevisarRegistro(Estilo.val(), Color.val());
-                    if (!added) {
-                        /*
-                         //AÑADIR FILA
-                         var tal = '<div class="row"><div class="col-12 text-danger text-nowrap talla" align="center">';
-                         var cnt = '</div><div class="col-12 cantidad" align="center">';
-                         var dtm = [
-                         0, //ID
-                         Recibido.val(), //Recibido
-                         Estilo.val(), //EstiloID
-                         Estilo.text(), //Estilo
-                         Color.val(), //ColorID
-                         Color.text(),
-                         Semana.val(),
-                         Maquila.val(),
-                         tal + getTalla('T1') + cnt + getCantidad('C1') + '</div></div>',
-                         tal + getTalla('T2') + cnt + getCantidad('C2') + '</div></div>',
-                         tal + getTalla('T3') + cnt + getCantidad('C3') + '</div></div>',
-                         tal + getTalla('T4') + cnt + getCantidad('C4') + '</div></div>',
-                         tal + getTalla('T5') + cnt + getCantidad('C5') + '</div></div>',
-                         tal + getTalla('T6') + cnt + getCantidad('C6') + '</div></div>',
-                         tal + getTalla('T7') + cnt + getCantidad('C7') + '</div></div>',
-                         tal + getTalla('T8') + cnt + getCantidad('C8') + '</div></div>',
-                         tal + getTalla('T9') + cnt + getCantidad('C9') + '</div></div>',
-                         tal + getTalla('T10') + cnt + getCantidad('C10') + '</div></div>',
-                         tal + getTalla('T11') + cnt + getCantidad('C11') + '</div></div>',
-                         tal + getTalla('T12') + cnt + getCantidad('C12') + '</div></div>',
-                         tal + getTalla('T13') + cnt + getCantidad('C13') + '</div></div>',
-                         tal + getTalla('T14') + cnt + getCantidad('C14') + '</div></div>',
-                         tal + getTalla('T15') + cnt + getCantidad('C15') + '</div></div>',
-                         tal + getTalla('T16') + cnt + getCantidad('C16') + '</div></div>',
-                         tal + getTalla('T17') + cnt + getCantidad('C17') + '</div></div>',
-                         tal + getTalla('T18') + cnt + getCantidad('C18') + '</div></div>',
-                         tal + getTalla('T19') + cnt + getCantidad('C19') + '</div></div>',
-                         tal + getTalla('T20') + cnt + getCantidad('C20') + '</div></div>',
-                         tal + getTalla('T21') + cnt + getCantidad('C21') + '</div></div>',
-                         tal + getTalla('T22') + cnt + getCantidad('C22') + '</div></div>',
-                         Precio.val(),
-                         total_pares,
-                         FechaDeEntrega.val(),
-                         '<button type="button" class="btn btn-danger" onclick="onEliminar(this,1)"><span class="fa fa-trash"></span></button>',
-                         Recio.val(),
-                         Titulo.val(),
-                         Observaciones.val(),
-                         pnlDatos.find("#Serie").val(),
-                         'N', (total_pares * Precio.val())
-                         ];
-                         PedidoDetalle.row.add(dtm).draw(false);*/
-                        //CLEAR
-                        total_pares = 0;
-                        pnlDatos.find("#TPares").val(0);
-                        pnlDatos.find("[name*='C']").val('');
-                        FechaDeEntrega.prop('readonly', true);
-                        Semana.prop('readonly', true);
-                        Recibido[0].selectize.disable();
-                        Maquila[0].selectize.clear(true);
-                        Recio.val('');
-                        Precio.val('');
-                        Estilo[0].selectize.clear(true);
-                        agregado = 1;
-                        btnGuardar.trigger('click');
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "ESTA COMBINACION DE ESTILO/COLOR YA HA SIDO AGREGADA",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                            buttons: false,
-                            timer: 2000
-                        });
-                    }
-                } else {
-                    //ZERO PARES
-                    console.log('zero');
-                }
-            }
-        });
-
         mdlAviso.draggable({
             handle: ".modal-header"
         });
 
-        pnlDatos.find("#Semana").focusout(function () {
-            onValidarAnioDeEntrega();
-            onChecarSemanaValida('#Semana');
-            onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+        pnlDatos.find("#Semana").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onValidarAnioDeEntrega();
+                    onChecarSemanaValida('#Semana');
+                    onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                    getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                }
+            }
+
         });
 
-        pnlDatos.find("#Maquila").change(function () {
-            onComprobarCapacidades("#Maquila", 1);
-            onChecarSemanaValida('#Semana');
-            onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+        pnlDatos.find("#Maquila").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onComprobarCapacidades("#Maquila", 1);
+                    onChecarSemanaValida('#Semana');
+                    onComprobarSemanaMaquila(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                    getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), pnlDatos.find("#Semana").val());
+                }
+            }
         });
 
         validacionSelectPorContenedor(pnlDatos);
@@ -821,7 +910,6 @@
             $.getJSON(master_url + 'getSemanaXFechaDeEntrega', {Fecha: $(this).val()}).done(function (data) {
                 if (data.length > 0) {
                     pnlDatos.find("#Semana").val(data[0].Semana);
-                    getProduccionMaquilaSemana(pnlDatos.find("#Maquila").val(), data[0].Semana);
                 }
             }).fail(function (x, y, z) {
                 getError(x);
@@ -830,148 +918,6 @@
             });
         });
 
-        btnGuardar.click(function () {
-            var f = new FormData();
-            f.append('Clave', Clave.val());
-            f.append('Cliente', pnlDatos.find("#PedidoxCliente").val());
-            f.append('Agente', pnlDatos.find("#Agente").val());
-            f.append('FechaPedido', pnlDatos.find("#FechaPedido").val());
-            f.append('Observacion', pnlDatos.find("#Observacion").val());
-            f.append('FechaRecepcion', pnlDatos.find("#FechaRecepcion").val());
-            var cte = pnlDatos.find("#pedcte").val();
-            if (!nuevo) {
-                var detalle = [];
-                $.each(tblPedidoDetalle.find("tbody tr"), function (k, v) {
-                    var tr = PedidoDetalle.row($(this)).data();
-                    if (tr[38] === 'N') {
-                        var d = new Date(tr[32]);
-                        var n = d.getFullYear();
-                        detalle.push({
-                            Cte: pnlDatos.find("#IDCliente").val(),
-                            Estilo: tr[2],
-                            EstiloT: tr[3],
-                            Color: tr[4],
-                            ColorT: tr[5],
-                            FechaEntrega: tr[32],
-                            Maquila: tr[7],
-                            Semana: tr[6],
-                            Recio: tr[34],
-                            Precio: tr[30],
-                            Observacion: tr[35],
-                            ObservacionDetalle: tr[36],
-                            Serie: tr[37],
-                            Ano: n,
-                            Recibido: tr[1],
-                            Pares: tr[31],
-                            C1: $(tr[8]).find("div.cantidad").text(),
-                            C2: $(tr[9]).find("div.cantidad").text(),
-                            C3: $(tr[10]).find("div.cantidad").text(),
-                            C4: $(tr[11]).find("div.cantidad").text(),
-                            C5: $(tr[12]).find("div.cantidad").text(),
-                            C6: $(tr[13]).find("div.cantidad").text(),
-                            C7: $(tr[14]).find("div.cantidad").text(),
-                            C8: $(tr[15]).find("div.cantidad").text(),
-                            C9: $(tr[16]).find("div.cantidad").text(),
-                            C10: $(tr[17]).find("div.cantidad").text(),
-                            C11: $(tr[18]).find("div.cantidad").text(),
-                            C12: $(tr[19]).find("div.cantidad").text(),
-                            C13: $(tr[20]).find("div.cantidad").text(),
-                            C14: $(tr[21]).find("div.cantidad").text(),
-                            C15: $(tr[22]).find("div.cantidad").text(),
-                            C16: $(tr[23]).find("div.cantidad").text(),
-                            C17: $(tr[24]).find("div.cantidad").text(),
-                            C18: $(tr[25]).find("div.cantidad").text(),
-                            C19: $(tr[26]).find("div.cantidad").text(),
-                            C20: $(tr[27]).find("div.cantidad").text(),
-                            C21: $(tr[28]).find("div.cantidad").text(),
-                            C22: $(tr[29]).find("div.cantidad").text()
-                        });
-                    }
-                });
-                f.append('Detalle', JSON.stringify(detalle));
-                f.append('ID', temp);
-                onSave('onModificar', f, function (e) {
-                    nuevo = false;
-                    if ($.fn.DataTable.isDataTable('#tblPedidos')) {
-                        Pedidos.ajax.reload();
-                    } else {
-                        getRecords();
-                    }
-                    getPedidoByID(temp, pnlDatos.find("#PedidoxCliente").val());
-                    pnlDatos.find("#Estilo")[0].selectize.focus();
-                });
-            } else {
-                var detalle = [];
-                $.each(tblPedidoDetalle.find("tbody tr"), function (k, v) {
-                    var tr = PedidoDetalle.row($(this)).data();
-                    var d = new Date(tr[32]);
-                    var n = d.getFullYear();
-                    detalle.push({
-                        Estilo: tr[2],
-                        EstiloT: tr[3],
-                        Color: tr[4],
-                        ColorT: tr[5],
-                        FechaEntrega: tr[32],
-                        Maquila: tr[7],
-                        Semana: tr[6],
-                        Recio: tr[34],
-                        Precio: tr[30],
-                        Observacion: tr[35],
-                        ObservacionDetalle: tr[36],
-                        Serie: tr[37],
-                        Ano: n,
-                        Recibido: tr[1],
-                        Pares: tr[31],
-                        C1: $(tr[8]).find("div.cantidad").text(),
-                        C2: $(tr[9]).find("div.cantidad").text(),
-                        C3: $(tr[10]).find("div.cantidad").text(),
-                        C4: $(tr[11]).find("div.cantidad").text(),
-                        C5: $(tr[12]).find("div.cantidad").text(),
-                        C6: $(tr[13]).find("div.cantidad").text(),
-                        C7: $(tr[14]).find("div.cantidad").text(),
-                        C8: $(tr[15]).find("div.cantidad").text(),
-                        C9: $(tr[16]).find("div.cantidad").text(),
-                        C10: $(tr[17]).find("div.cantidad").text(),
-                        C11: $(tr[18]).find("div.cantidad").text(),
-                        C12: $(tr[19]).find("div.cantidad").text(),
-                        C13: $(tr[20]).find("div.cantidad").text(),
-                        C14: $(tr[21]).find("div.cantidad").text(),
-                        C15: $(tr[22]).find("div.cantidad").text(),
-                        C16: $(tr[23]).find("div.cantidad").text(),
-                        C17: $(tr[24]).find("div.cantidad").text(),
-                        C18: $(tr[25]).find("div.cantidad").text(),
-                        C19: $(tr[26]).find("div.cantidad").text(),
-                        C20: $(tr[27]).find("div.cantidad").text(),
-                        C21: $(tr[28]).find("div.cantidad").text(),
-                        C22: $(tr[29]).find("div.cantidad").text()
-                    });
-                });
-                f.append('Detalle', JSON.stringify(detalle));
-                onSave('onAgregar', f, function (e) {
-                    nuevo = false;
-                    var dtm = JSON.parse(e);
-                    getPedidoByID(dtm.ID, pnlDatos.find("#PedidoxCliente").val());
-                    temp = dtm.ID;
-//                        $.each(tblPedidoDetalle.find("tbody tr"), function (k, v) {
-//                            PedidoDetalle.cell($(this), 38).data('N').draw();
-//                        });
-
-                    if ($.fn.DataTable.isDataTable('#tblPedidos')) {
-                        Pedidos.ajax.reload();
-                    } else {
-                        getRecords();
-                    }
-                    //NUEVO > MODIFICAR
-                    Clave.prop('readonly', true);
-                    pnlDatos.find("#FechaPedido").prop('readonly', true);
-                    pnlDatos.find("#FechaRecepcion").prop('readonly', true);
-                    pnlDatos.find("#FechaEntrega").prop('readonly', true);
-                    pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
-                    pnlDatos.find("#Agente")[0].selectize.disable();
-                    pnlDatos.find("#Estilo")[0].selectize.focus();
-                });
-            }
-        });
 
         btnNuevo.click(function () {
             nuevo = true;
@@ -1031,6 +977,7 @@
                 Cliente = pnlDatos.find("#PedidoxCliente").val();
                 $.getJSON(master_url + 'getAgenteXCliente', {Cliente: Cliente}).done(function (data) {
                     if (data.length > 0) {
+                        pnlDatos.find('#iPedidoxCliente').val(Cliente);
                         pnlDatos.find("#Agente")[0].selectize.clear(true);
                         pnlDatos.find("#Agente")[0].selectize.setValue(data[0].Agente);
                         pnlDatos.find("#Agente")[0].selectize.focus();
@@ -1042,136 +989,38 @@
                 pnlDatos.find("#Agente")[0].selectize.clear(true);
             }
         });
-
-        pnlDatos.find("#Color").change(function () {
-            var color = $(this).val();
-            var estilo = pnlDatos.find("#Estilo").val();
-            var cliente = pnlDatos.find("#PedidoxCliente").val();
-            if (color !== '') {
-                //OBTENER PRECIO ESTILO/COLOR
-                $.getJSON('<?php print base_url('Pedidos/getPrecioEstiloColor'); ?>', {Color: color, Estilo: estilo, Cliente: cliente}).done(function (data) {
-                    if (data.length > 0) {
-                        pnlDatos.find("#Precio").val(data[0].preaut);
-
-                    }
-                    pnlDatos.find("#Precio").prop('readonly', false);
-                }).fail(function (x, y, z) {
-                    getError(x);
-                });
-
-
-            } else {
-                pnlDatos.find("#Precio").prop('readonly', true);
-            }
-        });
-
-        pnlDatos.find("#Estilo").change(function () {
-            var estilo = $(this).val();
-            if (estilo !== '') {
-                pnlDatos.find("#spin").removeClass("d-none");
-                pnlDatos.find("#Color").addClass("d-none");
-                pnlDatos.find("#Color")[0].selectize.clear(true);
-                pnlDatos.find("#Color")[0].selectize.clearOptions();
-                //OBTENER COLORES POR ESTILO
-                $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo'); ?>', {Estilo: $(this).val()}).done(function (data) {
-                    $.each(data, function (k, v) {
-                        pnlDatos.find("#Color")[0].selectize.addOption({text: v.Color, value: v.Clave});
-                    });
-                    pnlDatos.find("#spin").addClass("d-none");
-                    pnlDatos.find("#Color").removeClass("d-none");
-                    pnlDatos.find("#Color")[0].selectize.open();
-                }).fail(function (x, y, z) {
-                    getError(x);
-                });
-                //OBTENER MAQUILA/SERIE
-                $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: $(this).val()}).done(function (data) {
-                    if (data.length > 0) {
-                        var dtm = data[0];
-                        pnlDatos.find("#Serie").val(data[0].Serie);
-                        pnlDatos.find("#Maquila")[0].selectize.clear(true);
-                        pnlDatos.find("#Maquila")[0].selectize.setValue(data[0].Maquila);
-                        onComprobarSemanaMaquila(data[0].Maquila, pnlDatos.find("#Semana").val());
-                        //SET TALLAS
-                        $.each(data[0], function (k, v) {
-                            var Can = k.replace("T", "C");
-                            if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
-                                pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', true);
-                            } else {
-                                pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', false);
-                                pnlDatos.find('#tblTallas').find("[name='" + k + "']").val(v);
-                            }
-                        });
-                        //MOSTRAR FOTO
-                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                            var ext = getExt(dtm.Foto);
-                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                                $.notify({
-                                    // options
-                                    icon: base_url + dtm.Foto
-                                }, {
-                                    // settings
-                                    placement: _placement_,
-                                    animate: _animate_,
-                                    icon_type: 'img',
-                                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                            '</div>'
-                                });
-                            }
-                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                                $.notify({
-                                    // options
-                                    icon: base_url + dtm.Foto
-                                }, {
-                                    // settings
-                                    placement: _placement_,
-                                    animate: _animate_,
-                                    icon_type: 'img',
-                                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                            '</div>'
-                                });
-                            }
+        pnlDatos.find('#iPedidoxCliente').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtcliente = $(this).val();
+                if (txtcliente) {
+                    $.getJSON(master_url + 'onVerificaCliente', {Cliente: txtcliente}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlDatos.find("#PedidoxCliente")[0].selectize.addItem(txtcliente, false);
                         } else {
-                            $.notify({
-                                // options
-                                icon: base_url + dtm.Foto
-                            }, {
-                                // settings
-                                placement: _placement_,
-                                animate: _animate_,
-                                icon_type: 'img',
-                                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                        '</div>'
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find("#Agente")[0].selectize.clear(true);
+                                pnlDatos.find("#PedidoxCliente")[0].selectize.clear(true);
+                                pnlDatos.find('#iPedidoxCliente').focus().val('');
                             });
                         }
-                    } else {
-                        pnlDatos.find('#tblTallas').find("input").val("");
-                        pnlDatos.find('#rCantidades').find("input").prop('disabled', true);
-                    }
-                }).fail(function (x, y, z) {
-                    getError(x);
-                });
-            } else {
-                pnlDatos.find("#Color")[0].selectize.clear(true);
-                pnlDatos.find("#Maquila")[0].selectize.clear(true);
-                pnlDatos.find("[name*='T']").val('');
-                pnlDatos.find("[name*='C']").val('');
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
             }
-        }).focusout(function () {
-            console.log('Estilo; ', $(this).val());
         });
+
         /*CALLS*/
 
         btnNuevo.trigger('click');
     });
 
     function init() {
-        getOptions("getMaquilas", "Maquila", "Clave", "Maquila", pnlDatos); //Maquilas
+        pnlDatos.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
     }
 
     function getRecords() {
@@ -1237,15 +1086,6 @@
         }
     }
 
-    function getOptions(url, comp, key, field, parent) {
-        $.getJSON(master_url + url).done(function (data) {
-            $.each(data, function (k, v) {
-                parent.find("#" + comp)[0].selectize.addOption({text: v[field], value: v[key]});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        });
-    }
 
     function onSave(u, f, fu) {
         $.ajax({
@@ -1310,7 +1150,6 @@
                 if (Precio.val() !== '' && Precio.val().length > 0) {
                     if (indice_valor === '') {
                         if (total_pares > 0) {
-                            btnAgregarDetalle.focus();
                         } else {
                             //ZERO PARES
                             console.log('zero');
@@ -1387,21 +1226,6 @@
         return parseInt(pnlDatos.find("#tblTallas tbody tr:eq(1)").find("[name='" + e + "']").val()) > 0 ? pnlDatos.find("#tblTallas tbody tr:eq(1)").find("[name='" + e + "']").val() : 0;
     }
 
-    function onRevisarRegistro(estilo, color) {
-        added = false;
-        if (PedidoDetalle.rows().count() > 0) {
-            $.each(tblPedidoDetalle.find("tbody tr"), function () {
-                var tr = PedidoDetalle.row($(this)).data();
-                if (tr[2] === estilo && tr[4] === color) {
-                    added = true;
-                    return false;
-                }
-            });
-        } else {
-            added = false;
-        }
-    }
-
     function getPedidoByID(idx, cliente) {
         $.getJSON('<?php print base_url('pedsid'); ?>', {ID: idx, CLIENTE: cliente}).done(function (data) {
             pnlDatos.find("input").val("");
@@ -1434,7 +1258,7 @@
             pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
-            pnlDatos.find("#Estilo")[0].selectize.focus();
+            pnlDatos.find("#Estilo").focus();
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
             temp = dt.Clave;
             opciones_detalle.ajax = {
@@ -1514,7 +1338,7 @@
                     Clave.focus().select();
                 });
             } else {
-                pnlDatos.find("#PedidoxCliente")[0].selectize.focus();
+                pnlDatos.find("#iPedidoxCliente").focus().select();
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1547,6 +1371,11 @@
                             }, (t === 2 ? 10000 : 3000));
                         }
                     }
+                } else {
+                    swal('ERROR', 'LA MAQUILA NO EXISTE', 'warning').then((value) => {
+                        pnlDatos.find('#Maquila').focus().val('');
+                        return;
+                    });
                 }
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
@@ -1554,7 +1383,7 @@
             });
         } else {
             swal('ATENCION', 'DEBE DE CAPTURAR UN CLIENTE, LAS FECHAS CORRESPONDIENTES AL PEDIDO Y EL ESTILO, PARA PODER REVISAR LAS CAPACIDADES DE LA MAQUILA', 'warning').then((value) => {
-                PedidoxCliente[0].selectize.focus();
+                pnlDatos.find('#iPedidoxCliente').focus();
             });
         }
     }

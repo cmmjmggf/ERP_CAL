@@ -48,6 +48,37 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function onVerificaColorXEstilo() {
+        try {
+            $x = $this->input->get();
+            $ESTILO = $x['Estilo'];
+            $Color = $x['Color'];
+            print json_encode($this->db->query("SELECT E.Descripcion AS Color FROM colores AS E  WHERE E.Estilo= '$ESTILO' and clave = $Color ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificaEstilo() {
+        try {
+            $x = $this->input->get();
+            $ESTILO = $x['Estilo'];
+            print json_encode($this->db->query("SELECT E.Descripcion AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' and E.clave = '$ESTILO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificaCliente() {
+        try {
+            $x = $this->input->get();
+            $CLIENTE = $x['Cliente'];
+            print json_encode($this->db->query("select clave from clientes where clave = '$CLIENTE' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPrecioEstiloColor() {
         try {
             $x = $this->input->get();
@@ -499,7 +530,7 @@ class Pedidos extends CI_Controller {
                             ->join('estados AS E', 'C.Estado = E.Clave', 'left')->join('agentes AS A', 'P.Agente = A.Clave', 'left')
                             ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
                             ->where('P.Clave', $IDX)
-                            ->where('P.Cliente', $CLIENTE) 
+                            ->where('P.Cliente', $CLIENTE)
                             ->order_by('P.ID', 'DESC')
                             ->get()->result();
 
