@@ -55,6 +55,7 @@
 
     $(document).ready(function () {
         mdlComprasPorFechaPorArticulo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlComprasPorFechaPorArticulo);
             mdlComprasPorFechaPorArticulo.find("input").val("");
             $.each(mdlComprasPorFechaPorArticulo.find("select"), function (k, v) {
                 mdlComprasPorFechaPorArticulo.find("select")[k].selectize.clear(true);

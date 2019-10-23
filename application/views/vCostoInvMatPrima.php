@@ -58,6 +58,7 @@
         setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlCostoInvMatPrima);
         setFocusSelectToInputOnChange('#Mes', '#btnAceptar', mdlCostoInvMatPrima);
         mdlCostoInvMatPrima.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCostoInvMatPrima);
             mdlCostoInvMatPrima.find("input").val("");
             $.each(mdlCostoInvMatPrima.find("select"), function (k, v) {
                 mdlCostoInvMatPrima.find("select")[k].selectize.clear(true);

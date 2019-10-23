@@ -79,6 +79,7 @@
     var mdlOrdenesCompraSemMaq = $('#mdlOrdenesCompraSemMaq');
     $(document).ready(function () {
         mdlOrdenesCompraSemMaq.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlOrdenesCompraSemMaq);
             mdlOrdenesCompraSemMaq.find("input").val("");
             $.each(mdlOrdenesCompraSemMaq.find("select"), function (k, v) {
                 mdlOrdenesCompraSemMaq.find("select")[k].selectize.clear(true);

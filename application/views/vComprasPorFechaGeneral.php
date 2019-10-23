@@ -97,6 +97,7 @@
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlComprasPorFechaGeneral);
 
         mdlComprasPorFechaGeneral.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlComprasPorFechaGeneral);
             mdlComprasPorFechaGeneral.find("input").val("");
             $.each(mdlComprasPorFechaGeneral.find("select"), function (k, v) {
                 mdlComprasPorFechaGeneral.find("select")[k].selectize.clear(true);

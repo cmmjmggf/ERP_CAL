@@ -45,6 +45,7 @@
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlReporteMovimientosEntradasOtros);
 
         mdlReporteMovimientosEntradasOtros.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReporteMovimientosEntradasOtros);
             mdlReporteMovimientosEntradasOtros.find("input").val("");
             $.each(mdlReporteMovimientosEntradasOtros.find("select"), function (k, v) {
                 mdlReporteMovimientosEntradasOtros.find("select")[k].selectize.clear(true);

@@ -48,6 +48,7 @@
         validacionSelectPorContenedor(mdlEtiquetasInventario);
         setFocusSelectToSelectOnChange('#Grupo', '#aGrupo', mdlEtiquetasInventario);
         mdlEtiquetasInventario.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEtiquetasInventario);
             mdlEtiquetasInventario.find("input").val("");
             $.each(mdlEtiquetasInventario.find("select"), function (k, v) {
                 mdlEtiquetasInventario.find("select")[k].selectize.clear(true);

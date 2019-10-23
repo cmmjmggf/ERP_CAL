@@ -43,6 +43,7 @@
         setFocusSelectToSelectOnChange('#Proveedor', '#NotaCargo', mdlReimprimirNotaCargo);
         setFocusSelectToInputOnChange('#NotaCargo', '#btnImprimir', mdlReimprimirNotaCargo);
         mdlReimprimirNotaCargo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReimprimirNotaCargo);
             mdlReimprimirNotaCargo.find("input").val("");
             $.each(mdlReimprimirNotaCargo.find("select"), function (k, v) {
                 mdlReimprimirNotaCargo.find("select")[k].selectize.clear(true);

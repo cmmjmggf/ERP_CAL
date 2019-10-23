@@ -75,6 +75,7 @@
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlSalidasMaquilasPorDia);
 
         mdlSalidasMaquilasPorDia.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlSalidasMaquilasPorDia);
             mdlSalidasMaquilasPorDia.find("input").val("");
             $.each(mdlSalidasMaquilasPorDia.find("select"), function (k, v) {
                 mdlSalidasMaquilasPorDia.find("select")[k].selectize.clear(true);

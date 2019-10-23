@@ -79,6 +79,7 @@
         setFocusSelectToInputOnChange('#Articulo', '#Maq', mdlExplosionSemanalArticulo);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlExplosionSemanalArticulo);
         mdlExplosionSemanalArticulo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlExplosionSemanalArticulo);
             mdlExplosionSemanalArticulo.find("input").val("");
             $.each(mdlExplosionSemanalArticulo.find("select"), function (k, v) {
                 mdlExplosionSemanalArticulo.find("select")[k].selectize.clear(true);

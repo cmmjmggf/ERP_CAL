@@ -52,6 +52,7 @@
         validacionSelectPorContenedor(mdlConciliaFabricaProduccion);
         setFocusSelectToInputOnChange('#Precio', '#btnImprimir', mdlConciliaFabricaProduccion);
         mdlConciliaFabricaProduccion.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlConciliaFabricaProduccion);
             mdlConciliaFabricaProduccion.find("input").val("");
             $.each(mdlConciliaFabricaProduccion.find("select"), function (k, v) {
                 mdlConciliaFabricaProduccion.find("select")[k].selectize.clear(true);

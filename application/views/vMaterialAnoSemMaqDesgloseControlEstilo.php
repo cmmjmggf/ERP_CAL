@@ -79,6 +79,7 @@
         setFocusSelectToInputOnChange('#Estatus', '#btnImprimir', mdlMaterialAnoSemMaqDesgloseControlEstilo);
 
         mdlMaterialAnoSemMaqDesgloseControlEstilo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlMaterialAnoSemMaqDesgloseControlEstilo);
             mdlMaterialAnoSemMaqDesgloseControlEstilo.find("input").val("");
             $.each(mdlMaterialAnoSemMaqDesgloseControlEstilo.find("select"), function (k, v) {
                 mdlMaterialAnoSemMaqDesgloseControlEstilo.find("select")[k].selectize.clear(true);

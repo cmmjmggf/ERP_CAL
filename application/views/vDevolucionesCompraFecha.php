@@ -39,6 +39,7 @@
     var mdlDevolucionesCompraFecha = $('#mdlDevolucionesCompraFecha');
     $(document).ready(function () {
         mdlDevolucionesCompraFecha.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlDevolucionesCompraFecha);
             mdlDevolucionesCompraFecha.find("input").val("");
             $.each(mdlDevolucionesCompraFecha.find("select"), function (k, v) {
                 mdlDevolucionesCompraFecha.find("select")[k].selectize.clear(true);

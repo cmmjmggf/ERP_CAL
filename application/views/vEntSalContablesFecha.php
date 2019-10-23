@@ -37,6 +37,7 @@
 
         mdlEntSalContablesFecha.on('shown.bs.modal', function () {
             //getGrupos();
+            handleEnterDiv(mdlEntSalContablesFecha);
             mdlEntSalContablesFecha.find("input").val("");
             $.each(mdlEntSalContablesFecha.find("select"), function (k, v) {
                 mdlEntSalContablesFecha.find("select")[k].selectize.clear(true);

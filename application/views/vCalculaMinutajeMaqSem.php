@@ -369,10 +369,17 @@
 
         });
         pnlTablero.find("#Cliente").change(function () {
-            getRegistrosPorCliente($(this).val());
+            pnlTablero.find("#Pedido").focus().select();
         });
-        pnlTablero.find("#Pedido").change(function () {
-            Registros.column(0).search('^' + $(this).val() + '$', true, false).draw();
+        pnlTablero.find("#Pedido").keydown(function (e) {
+            //Registros.column(0).search('^' + $(this).val() + '$', true, false).draw();
+            if (e.keyCode === 13) {
+                var cte = pnlTablero.find("#Cliente").val();
+                if ($(this).val()) {
+                    getRegistrosPorCliente(cte, $(this).val());
+                }
+            }
+
         });
         pnlTablero.find("#btnCalculaMinutaje").click(function () {
             isValid('pnlValidacion');
@@ -656,7 +663,7 @@
 
         });
     });
-    function getRegistrosPorCliente(cte) {
+    function getRegistrosPorCliente(cte, pedido) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblRegistros')) {
             tblRegistros.DataTable().destroy();
@@ -668,7 +675,7 @@
             "ajax": {
                 "url": master_url + 'getRegistrosPorCliente',
                 "dataSrc": "",
-                "data": {Cliente: cte},
+                "data": {Cliente: cte, Pedido: pedido},
                 "type": "GET"
             },
             "columns": [

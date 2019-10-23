@@ -61,6 +61,7 @@
         validacionSelectPorContenedor(mdlCotejaExplosionOrdCom);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlCotejaExplosionOrdCom);
         mdlCotejaExplosionOrdCom.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCotejaExplosionOrdCom);
             mdlCotejaExplosionOrdCom.find("input").val("");
             $.each(mdlCotejaExplosionOrdCom.find("select"), function (k, v) {
                 mdlCotejaExplosionOrdCom.find("select")[k].selectize.clear(true);

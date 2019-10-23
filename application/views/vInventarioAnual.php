@@ -38,6 +38,7 @@
         validacionSelectPorContenedor(mdlInventarioAnual);
         setFocusSelectToInputOnChange('#Maq', '#btnAceptar', mdlInventarioAnual);
         mdlInventarioAnual.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlInventarioAnual);
             mdlInventarioAnual.find("input").val("");
             $.each(mdlInventarioAnual.find("select"), function (k, v) {
                 mdlInventarioAnual.find("select")[k].selectize.clear(true);

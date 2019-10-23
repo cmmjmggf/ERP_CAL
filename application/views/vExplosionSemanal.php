@@ -88,6 +88,7 @@
         validacionSelectPorContenedor(mdlExplosionSemanal);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlExplosionSemanal);
         mdlExplosionSemanal.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlExplosionSemanal);
             mdlExplosionSemanal.find("input").val("");
             $.each(mdlExplosionSemanal.find("select"), function (k, v) {
                 mdlExplosionSemanal.find("select")[k].selectize.clear(true);

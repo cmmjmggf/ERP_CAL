@@ -73,6 +73,7 @@
         setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlComparativoInvFisInvSis);
         setFocusSelectToInputOnChange('#Mes', '#Ano', mdlComparativoInvFisInvSis);
         mdlComparativoInvFisInvSis.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlComparativoInvFisInvSis);
             mdlComparativoInvFisInvSis.find("input").val("");
             $.each(mdlComparativoInvFisInvSis.find("select"), function (k, v) {
                 mdlComparativoInvFisInvSis.find("select")[k].selectize.clear(true);

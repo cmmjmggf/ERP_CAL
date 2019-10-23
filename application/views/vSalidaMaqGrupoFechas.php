@@ -45,6 +45,7 @@
         setFocusSelectToInputOnChange('#Grupo', '#btnImprimir', mdlSalidaMaqGrupoFechas);
 
         mdlSalidaMaqGrupoFechas.on('shown.bs.modal', function () {
+            handlmdlSalidaMaqGrupoFechas(mdlSalidaMaqGrupoFechas);
             getGrupos();
             mdlSalidaMaqGrupoFechas.find("input").val("");
             $.each(mdlSalidaMaqGrupoFechas.find("select"), function (k, v) {

@@ -45,6 +45,7 @@
         setFocusSelectToInputOnChange('#Grupo', '#btnImprimir', mdlMaterialRecibidoPedido);
 
         mdlMaterialRecibidoPedido.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlMaterialRecibidoPedido);
             getGruposMatRecibidoPedido();
             mdlMaterialRecibidoPedido.find("input").val("");
             $.each(mdlMaterialRecibidoPedido.find("select"), function (k, v) {

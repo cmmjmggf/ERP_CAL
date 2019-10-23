@@ -63,6 +63,7 @@
         setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlMovPorAjuste);
         setFocusSelectToInputOnChange('#Mes', '#Ano', mdlMovPorAjuste);
         mdlMovPorAjuste.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlMovPorAjuste);
             mdlMovPorAjuste.find("input").val("");
             $.each(mdlMovPorAjuste.find("select"), function (k, v) {
                 mdlMovPorAjuste.find("select")[k].selectize.clear(true);

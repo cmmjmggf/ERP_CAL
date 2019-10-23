@@ -55,6 +55,7 @@
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlListadoOrdComMaqSem);
 
         mdlListadoOrdComMaqSem.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlListadoOrdComMaqSem);
             mdlListadoOrdComMaqSem.find("input").val("");
             $.each(mdlListadoOrdComMaqSem.find("select"), function (k, v) {
                 mdlListadoOrdComMaqSem.find("select")[k].selectize.clear(true);

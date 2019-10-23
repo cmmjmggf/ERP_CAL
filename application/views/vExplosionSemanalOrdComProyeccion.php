@@ -77,6 +77,7 @@
         validacionSelectPorContenedor(mdlExplosionSemanalOrdComProyeccion);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlExplosionSemanalOrdComProyeccion);
         mdlExplosionSemanalOrdComProyeccion.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlExplosionSemanalOrdComProyeccion);
             mdlExplosionSemanalOrdComProyeccion.find("input").val("");
             $.each(mdlExplosionSemanalOrdComProyeccion.find("select"), function (k, v) {
                 mdlExplosionSemanalOrdComProyeccion.find("select")[k].selectize.clear(true);

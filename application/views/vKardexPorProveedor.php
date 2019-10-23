@@ -55,6 +55,7 @@
         setFocusSelectToInputOnChange('#ProveedorKardex', '#btnImprimir', mdlKardexPorProveedor);
 
         mdlKardexPorProveedor.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlKardexPorProveedor);
             mdlKardexPorProveedor.find("input").val("");
             $.each(mdlKardexPorProveedor.find("select"), function (k, v) {
                 mdlKardexPorProveedor.find("select")[k].selectize.clear(true);

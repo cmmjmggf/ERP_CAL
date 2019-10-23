@@ -52,6 +52,7 @@
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlMaterialSemanaProduccionEstilo);
 
         mdlMaterialSemanaProduccionEstilo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlMaterialSemanaProduccionEstilo);
             mdlMaterialSemanaProduccionEstilo.find("input").val("");
             $.each(mdlMaterialSemanaProduccionEstilo.find("select"), function (k, v) {
                 mdlMaterialSemanaProduccionEstilo.find("select")[k].selectize.clear(true);

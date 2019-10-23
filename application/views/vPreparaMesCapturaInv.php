@@ -65,6 +65,7 @@
         setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlPreparaMesCapturaInv);
         setFocusSelectToInputOnChange('#Mes', '#btnAceptar', mdlPreparaMesCapturaInv);
         mdlPreparaMesCapturaInv.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlPreparaMesCapturaInv);
             mdlPreparaMesCapturaInv.find("input").val("");
             $.each(mdlPreparaMesCapturaInv.find("select"), function (k, v) {
                 mdlPreparaMesCapturaInv.find("select")[k].selectize.clear(true);

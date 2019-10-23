@@ -49,6 +49,7 @@
         setFocusSelectToInputOnChange('#Articulo', '#btnImprimir', mdlKardexPorArticulo);
 
         mdlKardexPorArticulo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlKardexPorArticulo);
             mdlKardexPorArticulo.find("input").val("");
             $.each(mdlKardexPorArticulo.find("select"), function (k, v) {
                 mdlKardexPorArticulo.find("select")[k].selectize.clear(true);

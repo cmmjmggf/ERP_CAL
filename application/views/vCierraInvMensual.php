@@ -67,6 +67,7 @@
         setFocusSelectToSelectOnChange('#Maq', '#Mes', mdlCierraInventarioMensual);
         setFocusSelectToInputOnChange('#Mes', '#btnAceptar', mdlCierraInventarioMensual);
         mdlCierraInventarioMensual.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCierraInventarioMensual);
             mdlCierraInventarioMensual.find("input").val("");
             $.each(mdlCierraInventarioMensual.find("select"), function (k, v) {
                 mdlCierraInventarioMensual.find("select")[k].selectize.clear(true);

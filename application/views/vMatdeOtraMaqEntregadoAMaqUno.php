@@ -41,6 +41,7 @@
     $(document).ready(function () {
 
         mdlMatdeOtraMaqEntregadoAMaqUno.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlMatdeOtraMaqEntregadoAMaqUno);
             mdlMatdeOtraMaqEntregadoAMaqUno.find("input").val("");
             $.each(mdlMatdeOtraMaqEntregadoAMaqUno.find("select"), function (k, v) {
                 mdlMatdeOtraMaqEntregadoAMaqUno.find("select")[k].selectize.clear(true);

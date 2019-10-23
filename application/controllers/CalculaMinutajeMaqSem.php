@@ -178,10 +178,56 @@ class CalculaMinutajeMaqSem extends CI_Controller {
         try {
             $Cliente = $this->input->get('Cliente');
             $Pedido = $this->input->get('Pedido');
-            print json_encode($this->db->query("select clave as pedido, cliente, (select razons from clientes where clave = cliente) as nomcliente,
-                                                    FechaEntrega as fecent, ano, semana, maquila, estilo, color, pares,
-                                                    stsavan, precio, Observacion, ObservacionDetalle
-                                                    from pedidox where Cliente = '$Cliente' and estatus <> 'C' and Control = 0 or control is null
+            print json_encode($this->db->query("select "
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', clave ,''' onchange=''onModificarPedido(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')"
+                                    . "else clave "
+                                    . "end as pedido, "
+                                    . ""
+                                    . "cliente,
+                                    (select razons from clientes where clave = cliente) as nomcliente,
+                                     "
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', FechaEntrega ,''' onchange=''onModificarFechaEntrega(this.value,',ID ,')'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />') "
+                                    . "else FechaEntrega "
+                                    . "end as fecent, "
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', ano ,''' onchange=''onModificarAno(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')   "
+                                    . "else ano "
+                                    . "end as ano, "
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', semana ,''' onchange=''onModificarSemana(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')  "
+                                    . "else semana "
+                                    . "end as semana, "
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', maquila ,''' onchange=''onModificarMaquila(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')  "
+                                    . "else maquila "
+                                    . "end as maquila, "
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', estilo ,''' onchange=''onModificarEstilo(this.value,',ID ,')'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />') "
+                                    . "else estilo "
+                                    . "end as estilo,"
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', color ,''' onchange=''onModificarColor(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')  "
+                                    . "else color "
+                                    . "end as color, "
+                                    . ""
+                                    . "pares,
+                                       stsavan,
+                                       precio, "
+                                    . ""
+                                    . "case when stsavan not in ('13','14') then "
+                                    . "CONCAT('<input type=''text'' value=''', Observacion ,''' onchange=''onModificarObservacion(this.value,',ID ,')'' class=''form-control form-control-sm fat'' onpaste= ''return false;''  />')  "
+                                    . "else Observacion "
+                                    . "end as Observacion, "
+                                    . ""
+                                    . "ObservacionDetalle
+                                    from pedidox where cliente = $Cliente and clave = $Pedido and estatus <> 'C'
   ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

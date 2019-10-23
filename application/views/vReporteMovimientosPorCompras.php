@@ -46,6 +46,7 @@
     var mdlReporteMovimientosPorCompras = $('#mdlReporteMovimientosPorCompras');
     $(document).ready(function () {
         mdlReporteMovimientosPorCompras.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReporteMovimientosPorCompras);
             mdlReporteMovimientosPorCompras.find("input").val("");
             $.each(mdlReporteMovimientosPorCompras.find("select"), function (k, v) {
                 mdlReporteMovimientosPorCompras.find("select")[k].selectize.clear(true);

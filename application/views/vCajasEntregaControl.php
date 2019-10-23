@@ -32,6 +32,7 @@
     var mdlCajasEntregaControl = $('#mdlCajasEntregaControl');
     $(document).ready(function () {
         mdlCajasEntregaControl.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCajasEntregaControl);
             mdlCajasEntregaControl.find("input").val("");
             $.each(mdlCajasEntregaControl.find("select"), function (k, v) {
                 mdlCajasEntregaControl.find("select")[k].selectize.clear(true);

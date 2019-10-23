@@ -79,6 +79,7 @@
         setFocusSelectToSelectOnChange('#Mes', '#Articulo', mdlCapturaConteoInvFisico);
         setFocusSelectToInputOnChange('#Articulo', '#ExistenciaFisica', mdlCapturaConteoInvFisico);
         mdlCapturaConteoInvFisico.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCapturaConteoInvFisico);
             mdlCapturaConteoInvFisico.find("input").val("");
             $.each(mdlCapturaConteoInvFisico.find("select"), function (k, v) {
                 mdlCapturaConteoInvFisico.find("select")[k].selectize.clear(true);

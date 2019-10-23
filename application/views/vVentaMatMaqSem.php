@@ -54,6 +54,7 @@
         setFocusSelectToInputOnChange('#Precio', '#btnImprimir', mdlVentaMatMaqSem);
 
         mdlVentaMatMaqSem.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlVentaMatMaqSem);
             mdlVentaMatMaqSem.find("input").val("");
             $.each(mdlVentaMatMaqSem.find("select"), function (k, v) {
                 mdlVentaMatMaqSem.find("select")[k].selectize.clear(true);

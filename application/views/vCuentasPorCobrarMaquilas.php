@@ -38,6 +38,7 @@
         validacionSelectPorContenedor(mdlCuentasPorCobrarMaquilas);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlCuentasPorCobrarMaquilas);
         mdlCuentasPorCobrarMaquilas.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCuentasPorCobrarMaquilas);
             mdlCuentasPorCobrarMaquilas.find("input").val("");
             $.each(mdlCuentasPorCobrarMaquilas.find("select"), function (k, v) {
                 mdlCuentasPorCobrarMaquilas.find("select")[k].selectize.clear(true);

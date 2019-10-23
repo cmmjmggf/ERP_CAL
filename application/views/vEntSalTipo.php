@@ -79,6 +79,7 @@
     $(document).ready(function () {
 
         mdlEntSalTipo.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEntSalTipo);
             getGrupos();
             mdlEntSalTipo.find("input").val("");
             $.each(mdlEntSalTipo.find("select"), function (k, v) {

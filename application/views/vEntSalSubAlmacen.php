@@ -37,6 +37,7 @@
 
         mdlEntSalSubAlmacen.on('shown.bs.modal', function () {
             getGrupos();
+            handleEnterDiv(mdlEntSalSubAlmacen);
             mdlEntSalSubAlmacen.find("input").val("");
             $.each(mdlEntSalSubAlmacen.find("select"), function (k, v) {
                 mdlEntSalSubAlmacen.find("select")[k].selectize.clear(true);

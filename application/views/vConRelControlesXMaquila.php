@@ -40,6 +40,7 @@
     var mdlConRelControlesXMaquila = $('#mdlConRelControlesXMaquila');
     $(document).ready(function () {
         mdlConRelControlesXMaquila.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlConRelControlesXMaquila);
             mdlConRelControlesXMaquila.find("input").val("");
             $.each(mdlConRelControlesXMaquila.find("select"), function (k, v) {
                 mdlConRelControlesXMaquila.find("select")[k].selectize.clear(true);

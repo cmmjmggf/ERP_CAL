@@ -41,6 +41,7 @@
     $(document).ready(function () {
 
         mdlCosteoMatMaq.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlCosteoMatMaq);
             mdlCosteoMatMaq.find("input").val("");
             $.each(mdlCosteoMatMaq.find("select"), function (k, v) {
                 mdlCosteoMatMaq.find("select")[k].selectize.clear(true);

@@ -11,7 +11,7 @@
                 <form id="frmCaptura">
                     <div class="row" >
                         <div class="col-6" >
-                            <label>Usuario Destino</label>
+                            <label>Usuario Asigna</label>
                             <select id="UsuarioAsigna" name="UsuarioAsigna" class="form-control form-control-sm ">
                                 <option value=""></option>
                             </select>
