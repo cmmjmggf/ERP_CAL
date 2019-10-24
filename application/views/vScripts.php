@@ -1173,7 +1173,8 @@
                 var uitems = [], items = [], usubitems = [], subitems = [], usubsubitems = [], subsubitems = [];
 
                 /*USR VAR*/
-                var u = <?php print $this->session->ID; ?>, ui = 0, uis = 0,
+                var usr = '<?php print $this->session->ID; ?>';
+                var u = (usr !== '' ? parseInt(usr) : 0), ui = 0, uis = 0,
                         uiss = 0;
 
                 $.each(dtm, function (i, el) {
@@ -1188,21 +1189,26 @@
                     }
                     /*ITEMS TIENEN SUBITEMS*/
                     if ($.inArray(el.SubItem, usubitems) === -1) {
-                        usubitems.push(el.SubItem);
-                        subitems.push({Item: el.Item, SubItem: el.SubItem, IconSubItem: el.IconSubItem,
-                            RefSubItem: el.RefSubItem, SubItemModal: el.SubItemModal,
-                            SubItemBackdrop: el.SubItemBackdrop, SubItemDropdown: el.SubItemDropdown,
-                            Function: parseInt(el.FunctionSubItem),
-                            Trigger: el.TriggerSubItem, IsSubItem: el.is_subitem});
+                        ui = parseInt(el.USUARIO_ITEM), uis = parseInt(el.USUARIO_SUBITEM);
+
+//                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss, el);
+//                        console.log(u === ui, u === uis, u === uiss);
+                        if (u === ui && u === uis) {
+                            usubitems.push(el.SubItem);
+                            subitems.push({Item: el.Item, SubItem: el.SubItem, IconSubItem: el.IconSubItem,
+                                RefSubItem: el.RefSubItem, SubItemModal: el.SubItemModal,
+                                SubItemBackdrop: el.SubItemBackdrop, SubItemDropdown: el.SubItemDropdown,
+                                Function: parseInt(el.FunctionSubItem),
+                                Trigger: el.TriggerSubItem, IsSubItem: el.is_subitem});
+                        }
                     }
                     /*SUBITEMS TIENEN SUBSUBITEMS*/
                     if ($.inArray(el.SubSubItem, usubsubitems) === -1 && el.RefItem === '#' && el.RefSubItem === '#' && parseInt(el.SubItemDropdown) === 1) {
                         ui = parseInt(el.USUARIO_ITEM), uis = parseInt(el.USUARIO_SUBITEM),
                                 uiss = parseInt(el.USUARIO_SUBSUBITEM);
 
-//                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss, "el", el);
-                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss);
-                        console.log(u === ui, u === uis, u === uiss);
+//                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss);
+//                        console.log(u === ui, u === uis, u === uiss);
                         if (u === ui && u === uis && u === uiss) {
                             usubsubitems.push(el.SubSubItem);
                             subsubitems.push({SubItem: el.SubItem, SubSubItem: el.SubSubItem, IconSubSubItem: el.IconSubSubItem,
