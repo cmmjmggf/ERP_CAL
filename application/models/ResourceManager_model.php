@@ -56,6 +56,7 @@ class ResourceManager_model extends CI_Model {
                                         LEFT JOIN `subsubitemsxitemxopcionxmoduloxusuario` AS `J` ON `A`.`ID` = `J`.`Modulo` AND   B.Button = 1
                                         $wheres 
                                         $orders")->result();
+                
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

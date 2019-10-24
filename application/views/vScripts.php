@@ -1171,6 +1171,11 @@
                 });
                 var n = 0, burl = '<?php print base_url(); ?>';
                 var uitems = [], items = [], usubitems = [], subitems = [], usubsubitems = [], subsubitems = [];
+
+                /*USR VAR*/
+                var u = <?php print $this->session->ID; ?>, ui = 0, uis = 0,
+                        uiss = 0;
+
                 $.each(dtm, function (i, el) {
                     /*ITEMS*/
                     if ($.inArray(el.Item, uitems) === -1) {
@@ -1192,17 +1197,25 @@
                     }
                     /*SUBITEMS TIENEN SUBSUBITEMS*/
                     if ($.inArray(el.SubSubItem, usubsubitems) === -1 && el.RefItem === '#' && el.RefSubItem === '#' && parseInt(el.SubItemDropdown) === 1) {
-                        usubsubitems.push(el.SubSubItem);
-                        subsubitems.push({SubItem: el.SubItem, SubSubItem: el.SubSubItem, IconSubSubItem: el.IconSubSubItem,
-                            RefSubSubItem: el.RefSubSubItem, SubSubItemModal: el.SubSubItemModal, IsSubSubItem: el.is_subsubitem,
-                            SubSubItemBackdrop: el.SubSubItemBackdrop});
+                        ui = parseInt(el.USUARIO_ITEM), uis = parseInt(el.USUARIO_SUBITEM),
+                                uiss = parseInt(el.USUARIO_SUBSUBITEM);
+
+//                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss, "el", el);
+                        console.log(u, "=> ", ui, ", ", uis, ", ", uiss);
+                        console.log(u === ui, u === uis, u === uiss);
+                        if (u === ui && u === uis && u === uiss) {
+                            usubsubitems.push(el.SubSubItem);
+                            subsubitems.push({SubItem: el.SubItem, SubSubItem: el.SubSubItem, IconSubSubItem: el.IconSubSubItem,
+                                RefSubSubItem: el.RefSubSubItem, SubSubItemModal: el.SubSubItemModal, IsSubSubItem: el.is_subsubitem,
+                                SubSubItemBackdrop: el.SubSubItemBackdrop});
+                        }
                     }
                 });
                 $.each(menus, function (k, v) {
                     if (parseInt(v.Button) === 0) {
                         opcion += '<li class="nav-item dropdown">';
                         opcion += '<a class="btn btn-primary dropdown-toggle" href="' + v.Ref + '" id="nav' + v.Opcion + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                        opcion += '<span class="fas fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
+                        opcion += '<span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
                         /*START ITEMS*/
                         opcion += '<ul class="dropdown-menu animate  slideIn" aria-labelledby="nav' + v.Opcion + '">';
                         $.each(items, function (kk, vv) {
@@ -1213,15 +1226,15 @@
                                             case 0:
                                                 switch (parseInt(vv.Function)) {
                                                     case 0:
-                                                        opcion += '<a class="dropdown-item" href="' + (burl + vv.RefItem) + '"><span class="fas fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                        opcion += '<a class="dropdown-item" href="' + (burl + vv.RefItem) + '"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                         break;
                                                     case 1:
-                                                        opcion += '<a class="dropdown-item" href="#" onclick="' + vv.Trigger + '()"><span class="fas fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                        opcion += '<a class="dropdown-item" href="#" onclick="' + vv.Trigger + '()"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                         break;
                                                 }
                                                 break;
                                             case 1:
-                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vv.RefItem + '" data-backdrop=\'true\'><span class="fas fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vv.RefItem + '" data-backdrop=\'true\'><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                 break;
                                         }
                                         break;
@@ -1243,19 +1256,19 @@
                                                                     switch (parseInt(vvv.Function)) {
                                                                         case 0:
                                                                             if (vvv.IsSubItem !== null) {
-                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vvv.RefSubItem) + '"><span class="fas fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
+                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vvv.RefSubItem) + '"><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
                                                                             }
                                                                             break;
                                                                         case 1:
                                                                             if (vvv.IsSubItem !== null) {
-                                                                                opcion += '<a class="dropdown-item" href="#" onclick="' + vvv.Trigger + '()"><span class="fas fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
+                                                                                opcion += '<a class="dropdown-item" href="#" onclick="' + vvv.Trigger + '()"><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
                                                                             }
                                                                             break;
                                                                     }
                                                                     break;
                                                                 case 1:
                                                                     if (vvv.IsSubItem !== null) {
-                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + vvv.SubItemBackdrop + '\'><span class="fas fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
+                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + vvv.SubItemBackdrop + '\'><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
                                                                     }
                                                                     break;
                                                             }
@@ -1269,13 +1282,14 @@
                                                                     opcion += '<ul class="dropdown-menu  animate slideIn">';
                                                                 }
                                                                 $.each(subsubitems, function (kss, vss) {
+                                                                    console.log("vss.IsSubSubItem", vss)
                                                                     if (vss.IsSubSubItem !== null) {
                                                                         switch (parseInt(vss.SubSubItemModal)) {
                                                                             case 0:
-                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fas fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
                                                                                 break;
                                                                             case 1:
-                                                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fas fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
                                                                                 break;
                                                                         }
                                                                         nav_subsubitems = 1;
@@ -1358,7 +1372,7 @@
     function getAccesosDirectosXModuloXUsuario(m) {
         var usr = '<?php print $this->session->ID; ?>' !== '' ? '<?php print $this->session->ID; ?>' : 0;
         $.getJSON('<?php print base_url('accesos_directos_x_usuario') ?>',
-                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) { 
+                {MODULO: parseInt(m), USUARIO: usr}).done(function (a) {
             var accesos_directos = "";
             if (a.length > 0) {
                 var burl = '<?php print base_url(); ?>';

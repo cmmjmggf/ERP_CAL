@@ -24,7 +24,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vMenuFichasTecnicas');
                     $is_valid = true;
-                    break; 
+                    break;
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
@@ -216,6 +216,9 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             $x = $this->input->post();
             $xx = $this->input->post();
+            $CONTROL = $this->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+            $CONTROL_SEMANA_MAQUILA = $CONTROL[0];
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
             $ESTATUS = $this->db->select('COUNT(PED.stsavan) AS AVANCECORTE', false)
@@ -241,11 +244,19 @@ class AsignaPFTSACXC extends CI_Controller {
                     $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))->where('ID', $DT[0]->ID)->update('asignapftsacxc');
                 } else {
 //                    $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
+                    /* MAQUILA UNO FIJO */
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
                                     ->from("preciosmaquilas AS PM")
                                     ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
                                     ->where("PM.Maquila", 1)->get()->result();
+                    $MAQUILA_X_CONTROL = $this->db->select("P.Maquila AS MAQUILA")
+                                    ->from("pedidox AS P")->where("P.Control", $x['CONTROL'])
+                                    ->get()->result();
+                    $MAQUILA_CONTROL = 1;
 //                            if(count((array)$obj)>0){
+                    if (count($MAQUILA_X_CONTROL) > 0) {
+                        $MAQUILA_CONTROL = $MAQUILA_X_CONTROL[0]->MAQUILA;
+                    }
                     $data = array(
                         'PrecioProgramado' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
                         'PrecioActual' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
@@ -262,6 +273,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'Cargo' => $x['EXPLOSION'],
                         'Abono' => $x['ENTREGA'],
                         'Devolucion' => 0,
+                        'Maquila' => $MAQUILA_CONTROL,
                         'Estatus' => 'A',
                         'TipoMov' => $x['TIPO']/* 1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
                         'Extra' => $x['MATERIAL_EXTRA'],
@@ -303,6 +315,9 @@ class AsignaPFTSACXC extends CI_Controller {
                         $this->db->set('stsavan', 10)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('pedidox');
+                        $this->db->set('fec2', Date('Y-m-d h:i:s'))
+                                ->where('contped', $x['CONTROL'])
+                                ->update('avaprd');
                     }
                     /* FIN DE AVANCE DE CONTROL A CORTE */
 
@@ -321,7 +336,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'TipoMov' => 'SPR', /* SXP = SALIDA A PRODUCCION */
                         'DocMov' => $x['ORDENDEPRODUCCION'],
                         'Tp' => '',
-                        'Maq' => intval(substr($x['CONTROL'], 4, 2)),
+                        'Maq' => $CONTROL_SEMANA_MAQUILA->MAQUILA,
                         'Sem' => $x['SEMANA'],
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
@@ -339,6 +354,8 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             /* AGREGAR MOVIMIENTO DE ARTICULO */
             $x = $this->input->post();
+            $CONTROL = $this->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
 
             $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
 
@@ -369,7 +386,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'DocMov' => $x['ID'],
                         'Tp' => ''/*                         * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
                         'Maq' => 1,
-                        'Sem' => substr($x['CONTROL'], 2, 2),
+                        'Sem' => $CONTROL[0]->SEMANA,
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
                         'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
@@ -401,7 +418,7 @@ class AsignaPFTSACXC extends CI_Controller {
                             'DocMov' => $x['ID'],
                             'Tp' => '',
                             'Maq' => 1,
-                            'Sem' => substr($x['CONTROL'], 2, 2),
+                            'Sem' => $CONTROL[0]->SEMANA,
                             'Ano' => $Ano,
                             'OrdenCompra' => 'BASURA',
                             'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']

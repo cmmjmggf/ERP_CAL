@@ -68,28 +68,69 @@
                         <input type="radio" name="btnTodos" id="btnTodos" autocomplete="off"> TODOS
                     </label>
                 </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-
-            </div>
+            </div> 
         </div>
     </div>
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
             <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
         </div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlParesProducidosPorDepartamento">
+            Launch demo modal
+        </button>
     </div>
 </div>
+
+<div class="modal" id="mdlParesProducidosPorDepartamento">
+    <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-print"></span> Pares producidos por departamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                        <label>De la fecha</label>
+                        <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date notEnter" autofocus="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                        <label>A la fecha</label>
+                        <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                        <label>Maq</label>
+                        <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm  numbersOnly">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"><span class="fa fa-print"></span> Acepta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             FechaInicial = pnlTablero.find("#FechaInicial"),
             FechaFinal = pnlTablero.find("#FechaFinal"),
-            Maquila = pnlTablero.find("#Maquila");
+            Maquila = pnlTablero.find("#Maquila"),
+            Hoy = '<?php print Date('d/m/Y'); ?>',
+            mdlParesProducidosPorDepartamento = $("#mdlParesProducidosPorDepartamento");
 
     $(document).ready(function () {
         btnAceptar.attr('disabled', true);
         Anio.val(new Date().getFullYear());
+        
+        mdlParesProducidosPorDepartamento.on('shown.bs.modal',function(){
+            mdlParesProducidosPorDepartamento.find("#FechaInicial").val(Hoy);
+        });
+
+        FechaInicial.val(Hoy);
 
         $("input[type='radio']").on('change', function () {
             onHabilitar();
@@ -384,4 +425,4 @@
     .dropdown-menu {
         margin-top: 0.75rem;
     }
-</style>A
+</style>

@@ -148,8 +148,8 @@
     </div>
 </div>
 <div class="modal" id="mdlReportePago">
-    <div class="modal-dialog  modal-dialog-centered  " role="document">
-        <div class="modal-content  ">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-print"></span> Maquila x fecha</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -213,6 +213,10 @@
         getMaquilasPlantillas();
         getRecords();
         getUltimoDocumento();
+
+        Proveedor.change(function () {
+            ControlPlantilla.ajax.reload();
+        });
 
         btnAceptaReportePago.click(function () {
             getReport(1);
