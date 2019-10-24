@@ -63,7 +63,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Reimprime</label>
-                <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm date">
+                <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm">
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
                 <button type="button" class="btn btn-primary" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
@@ -121,7 +121,7 @@
                 <br>
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table class="table table-hover" id="tblRetornaDocumento">
+                    <table class="table table-hover table-sm" id="tblRetornaDocumento">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -141,22 +141,17 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <button type="button" class="btn btn-primary" id="btnAceptaRetorno" >Acepta</button>
-                </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-print"></span> Acepta</button> 
             </div>
         </div>
     </div>
 </div>
-<div class="modal animated slideInDown" id="mdlReportePago">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content  modal-lg">
+<div class="modal" id="mdlReportePago">
+    <div class="modal-dialog  modal-dialog-centered  " role="document">
+        <div class="modal-content  ">
             <div class="modal-header">
-                <h5 class="modal-title">Maquila x fecha</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Maquila x fecha</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -165,11 +160,11 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>De la fecha</label>
-                        <input type="text" id="DeLaFecha" name="DeLaFecha" class="form-control date">
+                        <input type="text" id="DeLaFecha" name="DeLaFecha" class="form-control date notEnter">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>A la fecha</label>
-                        <input type="text" id="ALaFecha" name="ALaFecha" class="form-control date">
+                        <input type="text" id="ALaFecha" name="ALaFecha" class="form-control date notEnter">
                     </div>
                     <div class="col-12">
                         <br>
@@ -188,14 +183,9 @@
                     </div>             
                 </div>          
             </div>
-            <div class="modal-footer">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <button type="button" class="btn btn-primary" id="btnAceptaReportePago">Acepta</button>
-                </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-info" id="btnAceptaReportePago"><span class="fa fa-print"></span> Acepta</button>
+            </div>  
         </div>
     </div>
 </div>
@@ -226,6 +216,13 @@
 
         btnAceptaReportePago.click(function () {
             getReport(1);
+        });
+
+        mdlReportePago.on('shown.bs.modal', function () {
+            mdlReportePago.find("input").val('');
+            mdlReportePago.find("#chkSinRecibir")[0].checked = false;
+            mdlReportePago.find("#chkRecibido")[0].checked = false;
+            mdlReportePago.find("#DeLaFecha").focus();
         });
 
         mdlReportePago.find("#chkRecibido").change(function () {
@@ -337,9 +334,10 @@
                     "dom": 'rit',
                     "ajax": {
                         "url": '<?php print base_url('ControlPlantilla/getEntregados'); ?>',
-                        "type": "POST",
-                        "contentType": "application/json",
-                        "dataSrc": ""
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.DOCUMENTO = DocumentoRetorno.val() ? DocumentoRetorno.val() : '';
+                        }
                     },
                     buttons: buttons,
                     "columns": cols,
@@ -453,7 +451,7 @@
             console.log(data);
             var ext = getExt(data);
             if (data.length > 0) {
-                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") { 
+                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                         type: 'iframe',
@@ -522,9 +520,11 @@
             "dom": 'rit',
             "ajax": {
                 "url": '<?php print base_url('ControlPlantilla/getRecords'); ?>',
-                "type": "POST",
-                "contentType": "application/json",
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.PROVEEDOR = Proveedor.val() ? Proveedor.val() : '';
+                }
+
             },
             buttons: buttons,
             "columns": cols,

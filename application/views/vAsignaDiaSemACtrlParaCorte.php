@@ -34,13 +34,14 @@
             <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center"> 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-indigo">
-                        <input type="radio" name="btnPiel" id="btnPiel" autocomplete="off" checked> PIEL
+                        <input type="radio" name="btnPiel" id="btnPiel" autocomplete="off" checked>
+                        <span class="fa fa-dot-circle"></span> PIEL
                     </label>
                     <label class="btn btn-indigo">
-                        <input type="radio" name="btnForro" id="btnForro" autocomplete="off"> FORRO
+                        <input type="radio" name="btnForro" id="btnForro" autocomplete="off"> <span class="fa fa-dot-circle"></span> FORRO
                     </label>
                     <label class="btn btn-indigo">
-                        <input type="radio" name="btnAmbas" id="btnAmbas" autocomplete="off"> AMBAS
+                        <input type="radio" name="btnAmbas" id="btnAmbas" autocomplete="off"> <span class="fa fa-dot-circle"></span> AMBAS
                     </label>
                 </div>
             </div>
@@ -280,8 +281,10 @@
     };
     $(document).ready(function () {
 
+        Semana.focus().select();
+
         pnlTablero.find("#btnFraccionCheck").click(function () {
-            console.log(Fraccion.val())
+            console.log(Fraccion.val());
         });
 
         btnTiemposXEstilos.click(function () {
@@ -340,7 +343,7 @@
 
         btnFraccionesXEstilos.click(function () {
             $.fancybox.open({
-                src: '<?= base_url('FraccionesXEstilo/?origen=PRODUCCION'); ?>',
+                src: '<?php print base_url('FraccionesXEstilo/?origen=PRODUCCION'); ?>',
                 type: 'iframe',
                 opts: {
                     afterShow: function (instance, current) {
@@ -386,13 +389,14 @@
         });
 
         Cortador.change(function () {
-            var op = $(this).val();
-            var dt = tblControlesAsignadosAlDia.DataTable().column(1);
-            if (op) {
-                dt.search(op).draw();
-            } else {
-                dt.search('').draw();
-            }
+//            var op = $(this).val();
+//            var dt = tblControlesAsignadosAlDia.DataTable().column(1);
+//            if (op) {
+//                dt.search(op).draw();
+//            } else {
+//                dt.search('').draw();
+//            }
+            ControlesAsignadosAlDia.ajax.reload();
         });
 
         btnAnadir.click(function () {
@@ -408,7 +412,7 @@
         });
 
         Fraccion.on('change', function () {
-            console.log($(this).val())
+            console.log($(this).val());
             FraccionesSeleccionadas.val("99,100");
         });
 
@@ -430,7 +434,7 @@
             }
         });
 
-        Dia.on('keydown keypress keyup', function () {
+        Dia.on('keydown keypress keyup', function (e) {
             if (parseInt(Dia.val()) >= 1 && parseInt(Dia.val()) <= 7) {
                 if (Dia.val().length !== '') {
                     if (parseInt(Dia.val()) === 0) {
@@ -451,32 +455,38 @@
         });
 
         Control.on('keydown focusout keyup', function (e) {
-            var dt = tblControlesSinAsignarAlDia.DataTable().column(1);
-            if ($(this).val() !== '') {
-                dt.search($(this).val()).draw();
-            } else {
-                dt.search('').draw();
+            if (e.keyCode === 13) {
+                ControlesSinAsignarAlDia.ajax.reload();
             }
-            if (e.keyCode === 13 && $(this).val() && $(this).val().length > 5) {
-                console.log('Buscando...');
-                getEstiloColorParesTxParPorControl($(this).val());
-                dt.search($(this).val()).draw();
-            }
+//            var dt = tblControlesSinAsignarAlDia.DataTable().column(1);
+//            if ($(this).val() !== '') {
+//                dt.search($(this).val()).draw();
+//            } else {
+//                dt.search('').draw();
+//            }
+//            if (e.keyCode === 13 && $(this).val() && $(this).val().length > 5) {
+//                console.log('Buscando...');
+//                getEstiloColorParesTxParPorControl($(this).val());
+//                dt.search($(this).val()).draw();
+//            }
         });
 
-        Semana.on('keydown focusout keyup', function () {
-            var dt = tblControlesSinAsignarAlDia.DataTable().column(6);
-            if ($(this).val() !== '') {
-                dt.search($(this).val()).draw();
-            } else {
-                dt.search('').draw();
+        Semana.on('keydown', function (e) {
+//            var dt = tblControlesSinAsignarAlDia.DataTable().column(6);
+//            if ($(this).val() !== '') {
+//                dt.search($(this).val()).draw();
+//            } else {
+//                dt.search('').draw();
+//            }
+            if (e.keyCode === 13) {
+                ControlesSinAsignarAlDia.ajax.reload();
             }
         }).blur(function () {
-            if (Semana.val() !== '') {
-                tblControlesSinAsignarAlDia.DataTable().column(6).search(Semana.val()).draw();
-            } else {
-                tblControlesSinAsignarAlDia.DataTable().column(6).search('').draw();
-            }
+//            if (Semana.val() !== '') {
+//                tblControlesSinAsignarAlDia.DataTable().column(6).search(Semana.val()).draw();
+//            } else {
+//                tblControlesSinAsignarAlDia.DataTable().column(6).search('').draw();
+//            }
         });
         btnRefrescar.trigger('click');
         Anio.val(new Date().getFullYear());

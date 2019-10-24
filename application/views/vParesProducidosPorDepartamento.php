@@ -6,11 +6,11 @@
         <div class="row" align="center">
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>De la fecha</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date notEnter" autofocus="">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>A la fecha</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" autofocus="">
+                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                 <label>Maq</label>

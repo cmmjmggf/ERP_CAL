@@ -45,7 +45,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
         try {
 //            print json_encode($this->adscpc->getRecords());
             $x = $this->input->get();
-            $this->db->select("P.ID, CONCAT('<span class=\"badge badge-info\" style=\"font-size: 100%;\">',P.Control,'</span>') AS Control, P.Cliente, "
+            $this->db->select("P.ID, CONCAT('<span class=\"font-weight-bold\">',P.Control,'</span>') AS Control, P.Cliente, "
                             . "P.Estilo, P.Color, P.Pares, "
                             . "P.Semana AS Semana", false)
                     ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
@@ -60,11 +60,12 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                 $this->db->where('P.Semana', $x['SEMANA']);
             }
             if ($x['CORTADOR'] !== '') {
-                $this->db->where('P.Semana', $x['CORTADOR']);
+                $this->db->where('PR.numemp', $x['CORTADOR']);
             }
             if ($x['CONTROL'] !== '') {
                 $this->db->where('P.Semana', $x['CONTROL']);
             }
+            $this->db->order_by("YEAR(PR.fecha)", "DESC")->order_by("MONTH(PR.fecha)", "DESC")->order_by("DAY(PR.fecha)", "DESC");
             if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CORTADOR'] === '' && $x['CONTROL'] === '') {
                 $this->db->limit(25);
             }
@@ -124,8 +125,9 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('PR.control', $x['CONTROL']);
             }
+            $this->db->order_by("YEAR(PR.fecha)", "DESC")->order_by("MONTH(PR.fecha)", "DESC")
+                    ->order_by("DAY(PR.fecha)", "DESC");
             if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CORTADOR'] === '' && $x['CONTROL'] === '') {
-                $this->db->where("ORDER BY YEAR(PR.fecha) DESC, MONTH(PR.fecha) DESC, DAY(PR.fecha) DESC", null, false);
                 $this->db->limit(25);
             }
 

@@ -22,7 +22,7 @@
  WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
  WHEN CTP.Fraccion = 306 THEN  ((CTP.Pares * CTP.Precio)*0.38 )
 END) AS STT_PORCTJ
- FROM lobo_solo.controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")]]>
+ FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")]]>
 	</queryString>
 	<field name="PROVEEDOR" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

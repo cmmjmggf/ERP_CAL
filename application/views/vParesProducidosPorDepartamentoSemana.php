@@ -138,8 +138,8 @@
             });
             if (Anio.val() && Semana.val() && FechaInicial.val() && FechaFinal.val()) {
                 $.post('<?php print base_url('ParesProducidosPorDepartamentoSemana/getReporte'); ?>', {
-                    FECHA_INICIAL: FechaInicial.val().trim() !== '' ? parseInt(FechaInicial.val()) : '',
-                    FECHA_FINAL: FechaFinal.val().trim() !== '' ? parseInt(FechaFinal.val()) : '',
+                    FECHA_INICIAL: FechaInicial.val()? FechaInicial.val() : '',
+                    FECHA_FINAL: FechaFinal.val() ? FechaFinal.val() : '',
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
                     SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
                     TIPO: pnlTablero.find("#chkDetallePespunte")[0].checked ? 1 :

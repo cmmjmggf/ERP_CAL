@@ -45,7 +45,32 @@ class ControlPlantilla extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->cpm->getRecords());
+//            print json_encode($this->cpm->getRecords());
+            $this->db->select('CP.`ID`,
+                                        CP.`Proveedor` AS PROVEEDOR,
+                                        CP.`Tipo` AS ESTATUS,
+                                        CP.`Documento` AS DOCUMENTO,
+                                        CP.`Control` AS CONTROL,
+                                        CP.`Estilo` AS ESTILO,
+                                        CP.`Color` AS COLOR,
+                                        CP.`Pares` AS PARES,
+                                        CP.`Fraccion` AS FRACCION,
+                                        CP.`FraccionT` AS FRACCIONT,
+                                        CP.`Precio` AS PRECIO,
+                                        CP.`Fecha` AS FECHA,
+                                        CP.`Registro`,
+                                        CP.`Estatus` AS ESTATUS,
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
+                    ->from('controlpla AS CP')->where_in('CP.Estatus', array(1, 2));
+
+            $x = $this->input->get();
+            if ($x['PROVEEDOR'] !== '') {
+                $this->db->where('CP.Proveedor', $x['PROVEEDOR']);
+            }
+            if ($x['PROVEEDOR'] === '') {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -53,7 +78,32 @@ class ControlPlantilla extends CI_Controller {
 
     public function getEntregados() {
         try {
-            print json_encode($this->cpm->getEntregados());
+//            print json_encode($this->cpm->getEntregados());
+            $this->db->select('CP.`ID`,
+                                        CP.`Tipo` AS ESTATUS,
+                                        CP.Documento AS DOCUMENTO,
+                                        CP.`Proveedor` AS PROVEEDOR,
+                                        CP.`Fecha` AS FECHA,
+                                        CP.FechaRetorna AS FECHA_RETORNA,
+                                        CP.`Control` AS CONTROL,
+                                        CP.`Estilo` AS ESTILO,
+                                        CP.`Color` AS COLOR,
+                                        CP.`Pares` AS PARES,
+                                        CP.`Fraccion` AS FRACCION,
+                                        CP.`FraccionT` AS FRACCIONT,
+                                        CP.`Precio` AS PRECIO,
+                                        CP.`Registro`,
+                                        CP.`Estatus` AS ESTATUS,
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
+                    ->from('controlpla AS CP')->where_in('CP.Estatus', array(2));
+            $x = $this->input->get();
+            if ($x['DOCUMENTO'] !== '') {
+                $this->db->where('CP.Documento', $x['DOCUMENTO']);
+            }
+            if ($x['DOCUMENTO'] === '') {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -185,26 +235,38 @@ class ControlPlantilla extends CI_Controller {
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $parametros["FECHAINICIAL"] = $this->input->post('FECHAINICIAL');
         $parametros["FECHAFINAL"] = $this->input->post('FECHAFINAL');
-        $jc->setParametros($parametros);
         switch (intval($this->input->post('STS'))) {
             case 1:
+                $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\plantilla\ReportePagoSinRecibir.jasper');
                 $jc->setFilename('ReporteDePagoSinRecibir_' . Date('h_i_s'));
+
+                switch (intval($this->input->post('TDOC'))) {
+                    case 1:
+                        $jc->setDocumentformat('pdf');
+                        break;
+                    case 2:
+                        $jc->setDocumentformat('xls');
+                        break;
+                }
+                PRINT $jc->getReport();
                 break;
             case 2:
+                $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\plantilla\ReportePagoRecibido.jasper');
                 $jc->setFilename('ReporteDePagoRecibido_' . Date('h_i_s'));
+
+                switch (intval($this->input->post('TDOC'))) {
+                    case 1:
+                        $jc->setDocumentformat('pdf');
+                        break;
+                    case 2:
+                        $jc->setDocumentformat('xls');
+                        break;
+                }
+                PRINT $jc->getReport();
                 break;
         }
-        switch (intval($this->input->post('TDOC'))) {
-            case 1:
-                $jc->setDocumentformat('pdf');
-                break;
-            case 2:
-                $jc->setDocumentformat('xls');
-                break;
-        }
-        PRINT $jc->getReport();
     }
 
 }
