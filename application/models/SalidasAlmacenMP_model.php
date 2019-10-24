@@ -64,6 +64,7 @@ class SalidasAlmacenMP_model extends CI_Model {
 
     public function getDatosByArticulo($Mat, $Maq, $d1, $d2, $d3) {
         try {
+            $Maquila = ($Maq === '97') ? 1 : $Maq;
             $this->db->select("PM.Precio, U.Descripcion AS Unidad, M.grupo "
                             . "")
                     ->from("articulos AS M")
@@ -71,7 +72,7 @@ class SalidasAlmacenMP_model extends CI_Model {
                     ->join("preciosmaquilas AS PM", 'ON M.Clave = PM.Articulo')
                     ->where_in("M.Departamento", array($d1, $d2, $d3))
                     ->where("M.Clave", $Mat)
-                    ->where("PM.Maquila", $Maq);
+                    ->where("PM.Maquila", $Maquila);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

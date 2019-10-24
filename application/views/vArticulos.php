@@ -43,7 +43,10 @@
                                 <span class="fa fa-trash fa-1x"></span> ELIMINAR
                             </button>
                             <button type="button" class="btn btn-raised btn-success btn-sm d-none" id="btnIgualaPrecios">
-                                <span class="fa fa-money-bill"></span> PRECIO MAQUILAS  = MAQ-1
+                                <span class="fa fa-money-bill"></span> IGUALAR PRECIOS A MAQUILAS = MAQ-1
+                            </button>
+                            <button type="button" class="btn btn-raised btn-info btn-sm d-none" id="btnGeneraPreciosMaq">
+                                <span class="fa fa-cogs"></span> GENERAR PRECIO MAQUILAS = MAQ-1
                             </button>
                         </div>
                     </div>
@@ -212,7 +215,8 @@
     var master_url = base_url + 'index.php/Articulos/';
     var tblArticulos = $('#tblArticulos');
     var Articulos;
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar"), btnIgualaPrecios = $("#btnIgualaPrecios");
+    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar"),
+            btnIgualaPrecios = $("#btnIgualaPrecios"), btnGeneraPreciosMaq = $("#btnGeneraPreciosMaq");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos"), pnlDatosDetalle = $("#pnlDatosDetalle");
     var PrecioVentaParaMaquilas, tblPrecioVentaParaMaquilas = $("#tblPrecioVentaParaMaquilas");
     var nuevo = false, precio_actual = 0;
@@ -234,7 +238,8 @@
         setFocusSelectToInputOnChange('#Maquila', '#Precio', pnlDatosDetalle);
 
         /*FUNCIONES X BOTON*/
-        btnIgualaPrecios.click(function () {
+
+        btnGeneraPreciosMaq.click(function () {
             swal({
                 title: "¿Estas seguro?",
                 text: "Nota: Esta acción no se puede deshacer",
@@ -246,6 +251,51 @@
                     },
                     cambiar: {
                         text: "Aceptar",
+                        value: "cambiar"
+                    }
+                }
+            }).then((value) => {
+                switch (value) {
+                    case "cambiar":
+                        HoldOn.open({theme: 'sk-cube', message: 'ESPERE...'});
+                        $.post(master_url + 'onGenerarPreciosBaseMaquilaUno', {Clave: pnlDatos.find("#Clave").val()}).done(function (data) {
+                            console.log(data);
+                            if (parseInt(data) === 1) {
+                                swal('ATENCIÓN', 'DEBE DE CAPTURAR EL PRECIO PARA LA MAQUILA 1', 'error');
+                            } else {
+                                /*Si todo sale bien ejecutamos esto para actualizar*/
+                                PrecioVentaParaMaquilas.clear().draw();
+                                getDetalleByID(ClaveArticulo);
+                                HoldOn.close();
+                                swal('ATENCIÓN', 'SE HAN GENERADO LOS PRECIOS EN BASE A MAQUILA 1', 'success');
+                            }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                            HoldOn.close();
+                        });
+                        console.log('CAMBIANDO PRECIO...');
+                        break;
+                    case "cancelar":
+                        swal.close();
+                        HoldOn.close();
+                        break;
+                }
+            });
+        });
+
+
+
+        btnIgualaPrecios.click(function () {
+            swal({
+                title: "¿Estas seguro?",
+                text: "Nota: Esta acción no se puede deshacer",
+                icon: "warning",
+                buttons: {cancelar: {text: "Cancelar",
+                        value: "cancelar"
+                    },
+                    cambiar: {text: "Aceptar",
                         value: "cambiar"
                     }
                 }
@@ -301,6 +351,8 @@
                             btn]).draw(false);
 
                         Precio.val('');
+                        btnIgualaPrecios.removeClass("d-none");
+                        btnGeneraPreciosMaq.removeClass("d-none");
                         Maquila[0].selectize.focus();
                         Maquila[0].selectize.clear(true);
                     } else {
@@ -330,7 +382,6 @@
                     if (PrecioVentaParaMaquilas.data().count()) {
                         var precios = [];
                         $.each(tblPrecioVentaParaMaquilas.find("tbody tr"), function (k, v) {
-
                             var r = PrecioVentaParaMaquilas.row($(this)).data();
 
                             if (r[3] === 'NUEVO') {
@@ -404,13 +455,10 @@
                 title: "¿Estas seguro?",
                 text: "Nota: No se eliminara ninguna Articulo que tenga alguna relacion con otro dato dentro del sistema",
                 icon: "warning",
-                buttons: {
-                    cancelar: {
-                        text: "Cancelar",
+                buttons: {cancelar: {text: "Cancelar",
                         value: "cancelar"
                     },
-                    eliminar: {
-                        text: "Finalizar",
+                    eliminar: {text: "Finalizar",
                         value: "eliminar"
                     }
                 }
@@ -451,6 +499,7 @@
             getID();
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
             btnIgualaPrecios.addClass("d-none");
+            btnGeneraPreciosMaq.addClass("d-none");
             pnlDatos.find("#UnidadMedida")[0].selectize.enable();
             pnlDatos.find("#PrecioUno").prop("readonly", false);
             pnlDatos.find("#PrecioDos").prop("readonly", false);
@@ -487,17 +536,20 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "aaSorting": [
-                [4, 'asc']/*ID*/
+            "aaSorting": [[4, 'asc']/*ID*/
             ],
-            "columnDefs": [
-                {
+            "columnDefs": [{
                     "targets": [0],
                     "visible": false,
                     "searchable": false
                 },
                 {
                     "targets": [3],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [4],
                     "visible": false,
                     "searchable": false
                 }
@@ -557,13 +609,10 @@
                 title: "¿Estas seguro?",
                 text: "Nota: Al cambiar un precio puede afectar las fichas tecnicas que contengan este articulo",
                 icon: "warning",
-                buttons: {
-                    cancelar: {
-                        text: "Cancelar",
+                buttons: {cancelar: {text: "Cancelar",
                         value: "cancelar"
                     },
-                    aceptar: {
-                        text: "Aceptar",
+                    aceptar: {text: "Aceptar",
                         value: "aceptar"
                     }
                 }
@@ -612,15 +661,12 @@
         Articulos = tblArticulos.DataTable({
             "dom": 'Bfrtip',
             buttons: buttons,
-            "ajax": {
-                "url": master_url + 'getRecords',
+            "ajax": {"url": master_url + 'getRecords',
                 "dataSrc": ""
             },
-            "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}
+            "columns": [{"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}
             ],
-            "columnDefs": [
-                {
+            "columnDefs": [{
                     "targets": [0],
                     "visible": false,
                     "searchable": false
@@ -635,8 +681,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "aaSorting": [
-                [1, 'desc']/*ID*/
+            "aaSorting": [[1, 'desc']/*ID*/
             ],
             initComplete: function (a, b) {
                 HoldOn.close();
@@ -672,6 +717,7 @@
                     }
                 });
                 btnIgualaPrecios.removeClass("d-none");
+                btnGeneraPreciosMaq.removeClass("d-none");
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
                 pnlDatosDetalle.removeClass('d-none');
@@ -699,8 +745,7 @@
 
     }
 
-    function getDetalleByID(IDX) {
-        /*DETALLE*/
+    function getDetalleByID(IDX) {         /*DETALLE*/
         $.getJSON(master_url + 'getDetalleByID', {ID: IDX}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {
@@ -723,7 +768,6 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         }).always(function () {
-
         });
     }
     function getUnidades() {
@@ -735,7 +779,6 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         }).always(function () {
-
         });
     }
     function getProveedores() {
@@ -749,7 +792,6 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         }).always(function () {
-
         });
     }
     function getMaquilas() {
@@ -761,7 +803,6 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         }).always(function () {
-
         });
     }
     function getID() {
@@ -783,13 +824,10 @@
             title: "¿Estas seguro?",
             text: "Nota: Esta acción no se puede deshacer",
             icon: "warning",
-            buttons: {
-                cancelar: {
-                    text: "Cancelar",
+            buttons: {cancelar: {text: "Cancelar",
                     value: "cancelar"
                 },
-                eliminar: {
-                    text: "Finalizar",
+                eliminar: {text: "Finalizar",
                     value: "eliminar"
                 }
             }
@@ -814,8 +852,7 @@
         PrecioVentaParaMaquilas.row($(e).parents('tr')).remove().draw();
     }
     function onEditarPrecioPorMaquila(x) {
-        $.post(master_url + 'onEditarPrecioPorMaquila', x).done(function (data) {
-        }).fail(function (x, y, z) {
+        $.post(master_url + 'onEditarPrecioPorMaquila', x).done(function (data) { }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
     }

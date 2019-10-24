@@ -95,7 +95,6 @@ class CancelaEntradasSalidas_model extends CI_Model {
                     ->set('TipoMov', 'CAN')
                     ->where('DocMov', $DocMov)
                     ->where('Sem', $sem)
-                    ->where('Maq', $Maq)
                     ->where('Ano', $Ano)
                     ->update("movarticulos_fabrica");
         } catch (Exception $exc) {

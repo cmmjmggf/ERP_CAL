@@ -50,6 +50,27 @@ class Articulos extends CI_Controller {
         }
     }
 
+    public function onGenerarPreciosBaseMaquilaUno() {
+        try {
+            $Art = $this->input->post('Clave');
+            $Existe = $this->db->query("SELECT precio FROM preciosmaquilas where Articulo = '$Art' and Maquila = '1' and Estatus = 'A' ")->result();
+            if (!empty($Existe)) {
+                $Precio = $Existe[0]->precio;
+                $this->db->query("delete from preciosmaquilas where Articulo = '$Art' ");
+                $this->db->query("INSERT INTO `preciosmaquilas`
+                                (`Articulo`,
+                                `Maquila`,
+                                `Precio`,
+                                `Estatus`)
+                                select '$Art', clave, $Precio, 'A' from maquilas where estatus = 'ACTIVO' ");
+            } else {
+                print 1;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->Articulos_model->getRecords());
