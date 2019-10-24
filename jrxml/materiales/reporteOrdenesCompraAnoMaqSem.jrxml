@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="4.594972986357269"/>
-	<property name="ireport.x" value="2338"/>
-	<property name="ireport.y" value="19"/>
+	<property name="ireport.zoom" value="3.797498335832455"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -55,7 +55,7 @@ else oc.Estatus in ('ACTIVA','PENDIENTE','RECIBIDA') end)
 and (case when $P{proveedor} <> '' then  oc.Proveedor = $P{proveedor}  else  oc.Proveedor like '%%' end)
 and cast(oc.maq as signed) between $P{maq} and $P{amaq}
 and cast(oc.sem as signed) between $P{sem} and $P{asem}
-order by numgrupo, numprov, a.Descripcion asc;]]>
+order by numprov, numgrupo, a.Descripcion asc;]]>
 	</queryString>
 	<field name="numgrupo" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -135,78 +135,13 @@ order by numgrupo, numprov, a.Descripcion asc;]]>
 	<variable name="SubTotal_3" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{SubTotal}]]></variableExpression>
 	</variable>
-	<group name="Grupo" isReprintHeaderOnEachPage="true">
-		<groupExpression><![CDATA[$F{numgrupo}]]></groupExpression>
+	<group name="Proveedor" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{numprov}]]></groupExpression>
 		<groupHeader>
 			<band height="11">
 				<rectangle>
 					<reportElement x="0" y="0" width="190" height="11" uuid="243b80fd-df85-4856-873c-75a92b401ef2"/>
 				</rectangle>
-				<textField pattern="">
-					<reportElement x="25" y="0" width="21" height="11" isPrintInFirstWholeBand="true" uuid="ff688b07-2f51-4b0d-9e20-085de8d137da"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{numgrupo}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="49" y="0" width="141" height="11" isPrintInFirstWholeBand="true" uuid="62bd0f6c-cb91-45cb-94c0-ca2094c15d7c"/>
-					<textElement verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{nomgrupo}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement style="Column header" x="0" y="0" width="25" height="11" forecolor="#000000" uuid="be967398-1e18-47ca-b280-5ff2965a383e"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="7" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Grupo]]></text>
-				</staticText>
-			</band>
-		</groupHeader>
-		<groupFooter>
-			<band height="10">
-				<staticText>
-					<reportElement style="Column header" x="348" y="0" width="77" height="10" forecolor="#000000" uuid="0388ae41-b9d3-428f-860b-2eff321bca38"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="7" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Total por Grupo]]></text>
-				</staticText>
-				<line>
-					<reportElement x="348" y="0" width="299" height="1" uuid="487ae15d-8c28-42a5-bd4d-399262cd1711"/>
-				</line>
-				<textField pattern="###0.00">
-					<reportElement x="425" y="0" width="47" height="10" uuid="4c207fb1-ad09-4b0a-b8c7-f2fa98ba5d39"/>
-					<textElement textAlignment="Right">
-						<font size="7" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{Cantidad_2}]]></textFieldExpression>
-				</textField>
-				<textField pattern="###0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="472" y="0" width="47" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b9286f68-eec7-43e9-bb17-fe6084af7772"/>
-					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{CantidadRecibida_2}]]></textFieldExpression>
-				</textField>
-				<textField pattern="¤#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="600" y="1" width="47" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="111a9ec3-c4eb-48b9-bef5-ec380aa851b6"/>
-					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{SubTotal_2}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupFooter>
-	</group>
-	<group name="Proveedor" isReprintHeaderOnEachPage="true">
-		<groupExpression><![CDATA[$F{numprov}]]></groupExpression>
-		<groupHeader>
-			<band height="11">
 				<staticText>
 					<reportElement style="Column header" x="0" y="0" width="39" height="11" forecolor="#000000" uuid="836ef9f5-2de1-4b18-8810-bf8a13ac59c0"/>
 					<textElement verticalAlignment="Middle">
@@ -214,9 +149,6 @@ order by numgrupo, numprov, a.Descripcion asc;]]>
 					</textElement>
 					<text><![CDATA[Proveedor]]></text>
 				</staticText>
-				<line>
-					<reportElement x="0" y="10" width="190" height="1" uuid="33091d17-ba3c-406e-8582-3ed88a89f225"/>
-				</line>
 				<textField>
 					<reportElement x="63" y="0" width="127" height="11" isPrintInFirstWholeBand="true" uuid="57440ce2-b36a-4303-8939-eb523effa9c7"/>
 					<textElement verticalAlignment="Middle">
@@ -264,6 +196,74 @@ order by numgrupo, numprov, a.Descripcion asc;]]>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SubTotal_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Grupo" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{numgrupo}]]></groupExpression>
+		<groupHeader>
+			<band height="11">
+				<textField pattern="">
+					<reportElement x="25" y="0" width="21" height="11" isPrintInFirstWholeBand="true" uuid="ff688b07-2f51-4b0d-9e20-085de8d137da"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numgrupo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="49" y="0" width="141" height="11" isPrintInFirstWholeBand="true" uuid="62bd0f6c-cb91-45cb-94c0-ca2094c15d7c"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomgrupo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="0" y="0" width="25" height="11" forecolor="#000000" uuid="be967398-1e18-47ca-b280-5ff2965a383e"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Grupo]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="10" width="190" height="1" uuid="33091d17-ba3c-406e-8582-3ed88a89f225"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10">
+				<staticText>
+					<reportElement style="Column header" x="348" y="0" width="77" height="10" forecolor="#000000" uuid="0388ae41-b9d3-428f-860b-2eff321bca38"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total por Grupo]]></text>
+				</staticText>
+				<line>
+					<reportElement x="348" y="0" width="299" height="1" uuid="487ae15d-8c28-42a5-bd4d-399262cd1711"/>
+				</line>
+				<textField pattern="###0.00">
+					<reportElement x="425" y="0" width="47" height="10" uuid="4c207fb1-ad09-4b0a-b8c7-f2fa98ba5d39"/>
+					<textElement textAlignment="Right">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Cantidad_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="472" y="0" width="47" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b9286f68-eec7-43e9-bb17-fe6084af7772"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{CantidadRecibida_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="600" y="1" width="47" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="111a9ec3-c4eb-48b9-bef5-ec380aa851b6"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SubTotal_2}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>

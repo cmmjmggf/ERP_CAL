@@ -156,7 +156,7 @@
                     </div>
                     <div class="col-12 col-md-4 col-xl-2">
                         <label for="">% P' Compras x Pedido F</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" placeholder="Ej: 0.15 para un %15" required="" maxlength="8" id="PorcentajeComprasPorPedidoF"   name="PorcentajeComprasPorPedidoF"  >
+                        <input type="text" class="form-control form-control-sm numbersOnly" placeholder="Ej: 0.15 para un %15"  maxlength="8" id="PorcentajeComprasPorPedidoF"   name="PorcentajeComprasPorPedidoF"  >
                     </div>
                     <div class="col-12 col-md-4 col-xl-2">
                         <label for="">% P' Compras x Pedido R</label>
@@ -258,6 +258,8 @@
             isValid('pnlDatos');
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                frm.append('PorcentajeComprasPorPedidoF', 0);
+                frm.append('PorcentajeComprasPorPedidoR', 0);
                 if (!nuevo) {
                     $.ajax({
                         url: master_url + 'onModificar',
@@ -301,25 +303,25 @@
             }
         });
         //Valida RFC
-        pnlDatos.find("[name='RFC']").blur(function () {
-            var rfc = $(this).val().trim(); // -Elimina los espacios que pueda tener antes o después
-            var rfcCorrecto = rfcValido(rfc); //Comprobar RFC
-            if (rfcCorrecto) {
-            } else {
+        pnlDatos.find("[name='RFC']").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var rfc = $(this).val().trim(); // -Elimina los espacios que pueda tener antes o después
+                var rfcCorrecto = rfcValido(rfc); //Comprobar RFC
+                if (rfcCorrecto) {
+                } else {
 
-                swal({
-                    title: "ATENCIÓN",
-                    text: "RFC NO VÁLIDO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1200
-                }).then((action) => {
-                    pnlDatos.find("[name='RFC']").val("");
-                    pnlDatos.find("[name='RFC']").focus();
-                });
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "RFC NO VÁLIDO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlDatos.find("[name='RFC']").val("");
+                        pnlDatos.find("[name='RFC']").focus();
+                    });
 
+                }
             }
         });
         /*CALLS*/

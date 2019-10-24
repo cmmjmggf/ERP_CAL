@@ -113,7 +113,7 @@ class ReportesCompras extends CI_Controller {
                                                         $pdf->SetFont('Calibri', '', 9);
                                                         $pdf->Row(array(
                                                             $A->ClaveArt,
-                                                            utf8_decode(mb_strimwidth($A->Articulo, 0, 48, "")),
+                                                            utf8_decode(mb_strimwidth($A->Articulo, 0, 38, "")),
                                                             $A->Unidad,
                                                             $A->FechaMov,
                                                             number_format($A->CantidadMov, 2, ".", ","),
@@ -158,7 +158,7 @@ class ReportesCompras extends CI_Controller {
                                             '',
                                             '$' . number_format($T_SDocs, 2, ".", ","),
                                             '',
-                                            ''), 0);
+                                            ''), 'T');
                                     }
                                 }
                                 $pdf->SetFillColor(255, 204, 153);
@@ -610,7 +610,7 @@ class ReportesCompras extends CI_Controller {
                             $pdf->SetFont('Calibri', '', 9);
                             $pdf->Cell(10, 4, utf8_decode($A->Clave), 'B'/* BORDE */, 0, 'R');
                             $pdf->SetX($pdf->GetX());
-                            $pdf->Cell(60, 4, mb_strimwidth(utf8_decode($A->Articulo), 0, 45, ""), 'B'/* BORDE */, 0, 'L');
+                            $pdf->Cell(60, 4, utf8_decode(mb_strimwidth($A->Articulo, 0, 45, "")), 'B'/* BORDE */, 0, 'L');
                             $pdf->SetX($pdf->GetX());
                             $pdf->Cell(12, 4, utf8_decode($A->Unidad), 'B'/* BORDE */, 0, 'C');
                             $pdf->SetX($pdf->GetX());

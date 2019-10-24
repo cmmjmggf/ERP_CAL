@@ -284,12 +284,13 @@ class NotasCargo extends CI_Controller {
             $pdf->SetAutoPageBreak(true, 15);
 
             $TP_IMPORTE = 0;
-            $pdf->SetFont('Calibri', '', 10);
+            $pdf->SetFont('Calibri', '', 9.5);
             foreach ($Articulos as $key => $D) {
 
 
                 $pdf->Row(array(
                     number_format($D->Cantidad, 2, ".", ","),
+                    utf8_decode($D->Unidad),
                     utf8_decode($D->Clave . ' ' . $D->Descripcion),
                     '$' . number_format($D->Precio, 2, ".", ","),
                     '$' . number_format($D->Subtotal, 2, ".", ",")
@@ -301,28 +302,28 @@ class NotasCargo extends CI_Controller {
 
             $pdf->SetY($pdf->GetY() + 5);
             $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 10);
+            $pdf->SetFont('Calibri', 'B', 9.5);
             $pdf->Cell(60, 5, utf8_decode('Importe con Letra: '), 'B'/* BORDE */, 1, 'L');
-            $pdf->SetFont('Calibri', '', 10);
+            $pdf->SetFont('Calibri', '', 9.5);
             $pdf->SetX(5);
-            $pdf->Cell(60, 5, utf8_decode($Articulos[0]->CantidadLetra), 0/* BORDE */, 0, 'L');
+            $pdf->Cell(60, 5, strtoupper(utf8_decode($Articulos[0]->CantidadLetra)), 0/* BORDE */, 0, 'L');
 
 
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->Row(array('', '', 'Subtotal:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 'T');
+            $pdf->SetFont('Calibri', 'B', 9.5);
+            $pdf->Row(array('', '', '', 'Subtotal:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 'T');
 
             if ($Tp === '1') {
-                $pdf->Row(array('', '', 'I.V.A. 16%:', '$' . number_format($TP_IMPORTE * .16, 2, ".", ","),), 0);
-                $pdf->Row(array('', '', 'Total:', '$' . number_format($TP_IMPORTE * 1.16, 2, ".", ","),), 0);
+                $pdf->Row(array('', '', '', 'I.V.A. 16%:', '$' . number_format($TP_IMPORTE * .16, 2, ".", ","),), 0);
+                $pdf->Row(array('', '', '', 'Total:', '$' . number_format($TP_IMPORTE * 1.16, 2, ".", ","),), 0);
             }
 
 
 
             $pdf->SetY($pdf->GetY() + 5);
             $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 10);
+            $pdf->SetFont('Calibri', 'B', 9.5);
             $pdf->Cell(60, 5, utf8_decode('Observaciones: '), 'B'/* BORDE */, 1, 'L');
-            $pdf->SetFont('Calibri', '', 10);
+            $pdf->SetFont('Calibri', '', 9.5);
             $pdf->SetX(5);
             $pdf->Cell(150, 5, utf8_decode($Articulos[0]->Concepto), 0/* BORDE */, 1, 'L');
 

@@ -110,48 +110,42 @@
                             <input type="text" class="form-control form-control-sm" id="Max" name="Max" >
                         </div>
                     </div>
-                </div>
-            </div>
-            <!--            SEGUNDO CONTENEDOR-->
-            <div class="card  m-3 ">
-                <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3" align="center">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3 d-none" align="center">
                             <legend>Proveedores del Artículo</legend>
                         </div>
                         <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                            <label for="Max" >Proveedor 1</label>
                             <select id="ProveedorUno" name="ProveedorUno" class="form-control form-control-sm mb-2 required" required="">
                                 <option value=""></option>
                             </select>
                             <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioUno" name="PrecioUno"  placeholder="Precio pactado">
                         </div>
                         <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                            <label for="Max" >Proveedor 2</label>
                             <select id="ProveedorDos" name="ProveedorDos" class="form-control form-control-sm mb-2" required="">
                                 <option value=""></option>
                             </select>
                             <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioDos" name="PrecioDos"   placeholder="Precio pactado">
                         </div>
                         <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                            <label for="Max" >Proveedor 3</label>
                             <select id="ProveedorTres" name="ProveedorTres" class="form-control form-control-sm mb-2" required="">
                                 <option value=""></option>
                             </select>
                             <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioTres" name="PrecioTres"   placeholder="Precio pactado">
                         </div>
-                        <div id="ProveedorUltimaCompra" class="col-12 col-sm-12 col-md-12 col-xl-12">
+                        <div id="ProveedorUltimaCompra" class="col-12 col-sm-12 col-md-12 col-xl-12 d-none">
                             <p>Proveedor U.C</p>
                             <p class="text-info">* * * * *</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!--            TERCER CONTENEDOR-->
-            <div class="card  m-3 ">
-                <div class="card-body">
-                    <div class="row">
+                    <div class="row d-none">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3" align="center">
                             <legend>Ubicación del Almacén</legend>
                         </div>
                         <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
+                            <label for="Max" >Proveedor 3</label>
                             <input type="text" class="form-control form-control-sm" id="UbicacionUno" name="UbicacionUno" placeholder="UBICACION 1">
                         </div>
                         <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
@@ -164,14 +158,14 @@
                             <input type="text" class="form-control form-control-sm" id="UbicacionCuatro" name="UbicacionCuatro"  placeholder="UBICACION 4">
                         </div>
                     </div>
-                    <div class="row pt-2">
+                    <div class="row pt-1">
                         <div class="col-6 col-md-6 ">
                             <h6 class="text-danger">Los campos con * son obligatorios</h6>
                         </div>
-
                     </div>
                 </div>
             </div>
+
         </fieldset>
     </form>
 </div>

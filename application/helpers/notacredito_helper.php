@@ -59,32 +59,32 @@ class PDFNotaCredito extends FPDF {
         $this->SetY(5);
         $this->SetX(36);
         $this->Cell(60, 5, utf8_decode($_SESSION["EMPRESA_RAZON"]), 0/* BORDE */, 0, 'L');
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9.5);
         $this->SetX(140);
         $this->Cell(70, 5, utf8_decode("Nota de Cargo"), 1/* BORDE */, 1, 'C');
 
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9.5);
         $this->SetX(36);
         $this->Cell(20, 5, utf8_decode("Proveedor: "), 0/* BORDE */, 0, 'L');
         $this->SetX(55);
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9.5);
         $this->Cell(55, 5, utf8_decode($this->getProveedor()), 0/* BORDE */, 0, 'L');
 
 
 
         $this->SetX(140);
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9.5);
         $this->Cell(70, 5, utf8_decode($this->getFolio()), 1/* BORDE */, 1, 'C');
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9.5);
         $this->SetX(140);
         $this->Cell(70, 5, utf8_decode("Fecha y Hora:"), 1/* BORDE */, 1, 'C');
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9.5);
         $this->SetX(140);
         $this->Cell(70, 5, utf8_decode($this->getFecha()), 1/* BORDE */, 1, 'C');
         $this->SetX(140);
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9.5);
         $this->Cell(70, 5, utf8_decode("Referencia:"), 1/* BORDE */, 1, 'C');
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9.5);
         $this->SetX(140);
         $this->Cell(70, 5, utf8_decode($this->getTp() . '   ' . $this->getDocCartProv()), 1/* BORDE */, 1, 'C');
 
@@ -94,14 +94,15 @@ class PDFNotaCredito extends FPDF {
 
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(40/* 1 */, 100/* 2 */, 30/* 3 */, 30/* 4 */);
-        $aligns = array('L', 'L', 'R', 'R');
+        $anchos = array(15/* 0 */, 25/* 1 */, 100/* 2 */, 30/* 3 */, 30/* 4 */);
+        $aligns = array('L', 'C', 'L', 'R', 'R');
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Calibri', 'B', 10);
-        $this->Row(array('Cantidad', 'Descripcion', 'Precio', 'Importe'), 'B');
+        $this->SetFont('Calibri', 'B', 9.5);
+        $this->Row(array('Cantidad', 'U.M.', 'Descripcion', 'Precio', 'Importe'), 'B');
 
+        $aligns = array('R', 'C', 'L', 'R', 'R');
         $this->SetAligns($aligns);
         $this->SetWidths($anchos);
     }

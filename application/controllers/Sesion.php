@@ -19,8 +19,7 @@ class Sesion extends CI_Controller {
             $this->load->view('vEncabezado')->view('vFondo');
             switch ($this->session->TipoAcceso) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')
-                        ->view('vQuickMenu');
+                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')->view('vQuickMenu');
                     $is_valid = true;
                     break;
                 case 'VENTAS':
@@ -40,7 +39,7 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vMenuMateriales');
+                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')->view('vQuickMenu');
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':
@@ -60,7 +59,7 @@ class Sesion extends CI_Controller {
                     switch ($this->session->USERNAME) {
                         case '777777':
                             /*
-                             * 
+                             *
                              * 60 FOLEAR CORTE CALIDAD
                              * 70 TROQUELAR PLANTILLA
                              * 71 TROQUELAR MUESTRA
@@ -68,7 +67,7 @@ class Sesion extends CI_Controller {
                              * 75 TROQUELAR CORTE
                              * 204 EMPALMAR P'LASER
                              * 337 RECORTAR FORRO LASER
-                             * 
+                             *
                              * */
                             $dt["TYPE"] = 2;
                             $this->load->view('vAvance7');
@@ -76,7 +75,7 @@ class Sesion extends CI_Controller {
                             break;
                         case '888888':
                             /*
-                             * 
+                             *
                              * 51 ENTRETELADO
                              * 70 TROQUELAR PLANTILLA
                              * 60 FOLEAR CORTE Y CALIDAD
@@ -96,7 +95,7 @@ class Sesion extends CI_Controller {
                              * 333 PONER CASCO PESPUNTE
                              * 502 PEGADO DE SUELA
                              * 72 TROQUELAR NORMA
-                             * 
+                             *
                              * */
                             $dt["TYPE"] = 2;
                             $this->load->view('vAvance8');
@@ -104,11 +103,11 @@ class Sesion extends CI_Controller {
                             break;
                         case '999999':
                             /*
-                             * 
+                             *
                              * 99 CORTE FORRO
                              * 100 CORTE PIEL
-                             * 96 CORTE MUESTRAS 
-                             * 
+                             * 96 CORTE MUESTRAS
+                             *
                              * */
                             $dt["TYPE"] = 2;
                             $this->load->view('vAvance9');

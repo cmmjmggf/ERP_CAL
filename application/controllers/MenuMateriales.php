@@ -30,6 +30,9 @@ class MenuMateriales extends CI_Controller {
                 case 'CONTABILIDAD':
                     $this->load->view('vMenuMateriales');
                     break;
+                case 'ALMACEN':
+                    $this->load->view('vNavGeneral')->view('vMenuMateriales');
+                    break;
             }
             $this->load->view('vWatermark', $dt)->view('vFooter');
         } else {

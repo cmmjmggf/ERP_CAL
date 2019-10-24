@@ -121,12 +121,14 @@ class NotasCargo_model extends CI_Model {
                                     . "A.Clave, "
                                     . "A.Descripcion, "
                                     . "NC.Cantidad, "
+                                    . "U.Descripcion as Unidad,"
                                     . "NC.Precio, "
                                     . "NC.Subtotal "
                                     . "", false)
                             ->from("notascreditoprov NC")
                             ->join("articulos A", 'ON NC.Articulo = A.Clave')
                             ->join("proveedores P", 'ON P.Clave = NC.Proveedor')
+                            ->join("unidades U", 'ON U.Clave = A.UnidadMedida')
                             ->where('NC.Proveedor', $Proveedor)
                             ->where('NC.Folio', $Folio)
                             ->where('NC.Tp', $Tp)

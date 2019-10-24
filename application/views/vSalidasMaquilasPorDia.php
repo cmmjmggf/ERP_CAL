@@ -36,22 +36,18 @@
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-12">
-                            <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">0 DIRECTAS, 10 Piel/Forro, 80 Suela, 90 Peletería, P' AUDITORÍA</span></label>
-                            <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >
-                                <option value=""></option>
-                                <option value="1">TODO</option>
-                                <option value="0">0 DIRECTOS</option>
-                                <option value="10">10 PIEL Y FORRO</option>
-                                <option value="80">80 SUELA</option>
-                                <option value="90">90 INDIRECTOS/PELETERÍA</option>
-                                <option value="100">PARA AUDITORÍA</option>
-                            </select>
+                            <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">0 DIRECTAS, 10 Piel/Forro, 80 Suela, 90 Peletería, 100 P' AUDITORÍA</span></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" id="Tipo" name="Tipo" >
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-6">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="SalConDesgloce" name="SalConDesgloce" >
+                                <input type="checkbox" class="custom-control-input selectNotEnter" id="SalConDesgloce" name="SalConDesgloce" >
                                 <label class="custom-control-label text-info labelCheck" for="SalConDesgloce">Desglosado</label>
                             </div>
                         </div>
@@ -59,8 +55,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-primary " id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-secondary selectNotEnter" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
     </div>
@@ -71,8 +67,6 @@
     var mdlReporte = $('#mdlReporte');
     var generado = false;
     $(document).ready(function () {
-        validacionSelectPorContenedor(mdlSalidasMaquilasPorDia);
-        setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlSalidasMaquilasPorDia);
 
         mdlSalidasMaquilasPorDia.on('shown.bs.modal', function () {
             handleEnterDiv(mdlSalidasMaquilasPorDia);
@@ -86,89 +80,89 @@
 
 
         mdlSalidasMaquilasPorDia.find('#btnImprimir').on("click", function () {
-            var Tipo = parseInt(mdlSalidasMaquilasPorDia.find('#Tipo').val());
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlSalidasMaquilasPorDia.find("#frmCaptura")[0]);
 
-            if (Tipo > 0) {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData(mdlSalidasMaquilasPorDia.find("#frmCaptura")[0]);
+            var Tipo = (mdlSalidasMaquilasPorDia.find('#Tipo').val() === '') ? 1 : parseInt(mdlSalidasMaquilasPorDia.find('#Tipo').val());
+            var desglosado = mdlSalidasMaquilasPorDia.find("#SalConDesgloce")[0].checked ? true : false;
+            var Reporte = '';
 
-                var Tipo = parseInt(mdlSalidasMaquilasPorDia.find('#Tipo').val());
-                var desglosado = mdlSalidasMaquilasPorDia.find("#SalConDesgloce")[0].checked ? true : false;
-                var Reporte = '';
-
-                if (Tipo > 90) {
-                    Reporte = 'index.php/ReportesCompras/onReporteAuditoriaMovimientos';
+            if (Tipo > 90) {
+                Reporte = 'index.php/ReportesCompras/onReporteAuditoriaMovimientos';
+            } else {
+                if (desglosado) {
+                    Reporte = 'index.php/ReportesCompras/onReporteSalidasMaquilasPorDiaDesglosado';
                 } else {
-                    if (desglosado) {
-                        Reporte = 'index.php/ReportesCompras/onReporteSalidasMaquilasPorDiaDesglosado';
-                    } else {
-                        Reporte = 'index.php/ReportesCompras/onReporteSalidasMaquilasPorDia';
-                    }
-
+                    Reporte = 'index.php/ReportesCompras/onReporteSalidasMaquilasPorDia';
                 }
 
-                $.ajax({
-                    url: base_url + Reporte,
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (data.length > 0) {
+            }
+            frm.append('Tipo', Tipo);
+            $.ajax({
+                url: base_url + Reporte,
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
 
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "95%",
+                                    height: "95%"
                                 },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "95%",
-                                        height: "95%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
                                 }
                             }
-                        });
+                        }
+                    });
 
 
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                            icon: "error"
-                        }).then((action) => {
-                            mdlSalidasMaquilasPorDia.find('#Maq').focus();
-                        });
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES DE SELECCIONAR UN TIPO",
-                    icon: "error"
-                }).then((action) => {
-                    mdlSalidasMaquilasPorDia.find('#Tipo')[0].selectize.focus();
-                });
-            }
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlSalidasMaquilasPorDia.find('#Maq').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
         });
 
+        mdlSalidasMaquilasPorDia.find("#Tipo").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var tipo = $(this).val();
+                if (tipo === '' || tipo === '0' || tipo === '1' || tipo === '10' || tipo === '80' || tipo === '90' || tipo === '100') {
+                    mdlSalidasMaquilasPorDia.find('#btnImprimir').focus();
+                } else {
+                    swal('ERROR', 'TIPO NO VALIDO', 'error').then((value) => {
+                        mdlSalidasMaquilasPorDia.find("#Tipo").focus().val('');
+                    });
+                }
+            }
+        });
         mdlSalidasMaquilasPorDia.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
