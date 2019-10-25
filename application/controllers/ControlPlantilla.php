@@ -228,20 +228,21 @@ class ControlPlantilla extends CI_Controller {
     }
 
     public function getReporteDePago() {
+        $x = $this->input->post();
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["FECHAINICIAL"] = $this->input->post('FECHAINICIAL');
-        $parametros["FECHAFINAL"] = $this->input->post('FECHAFINAL');
-        switch (intval($this->input->post('STS'))) {
+        $parametros["FECHAINICIAL"] = $x['FECHAINICIAL'];
+        $parametros["FECHAFINAL"] = $x['FECHAFINAL'];
+        switch (intval($x['STS'])) {
             case 1:
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\plantilla\ReportePagoSinRecibir.jasper');
                 $jc->setFilename('ReporteDePagoSinRecibir_' . Date('h_i_s'));
 
-                switch (intval($this->input->post('TDOC'))) {
+                switch (intval($x['TDOC'])) {
                     case 1:
                         $jc->setDocumentformat('pdf');
                         break;
@@ -256,7 +257,7 @@ class ControlPlantilla extends CI_Controller {
                 $jc->setJasperurl('jrxml\plantilla\ReportePagoRecibido.jasper');
                 $jc->setFilename('ReporteDePagoRecibido_' . Date('h_i_s'));
 
-                switch (intval($this->input->post('TDOC'))) {
+                switch (intval($x['TDOC'])) {
                     case 1:
                         $jc->setDocumentformat('pdf');
                         break;
@@ -264,6 +265,7 @@ class ControlPlantilla extends CI_Controller {
                         $jc->setDocumentformat('xls');
                         break;
                 }
+                $l = new Logs("Captura plantillas para maquila", "GENERO UN REPORTE DE PAGO '{$x['FECHAINICIAL']}' - '{$x['FECHAFINAL']}' , " . (intval($x['STS']) === 1 ? "sin recibir" : "recibido") . ". ", $this->session);
                 PRINT $jc->getReport();
                 break;
         }

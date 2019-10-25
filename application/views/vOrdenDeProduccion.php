@@ -1,5 +1,5 @@
 <div id="mdlGeneraOrdenDeProduccion" class="modal">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-cogs"></span> Genera orden de producción semana / maquila</h5>

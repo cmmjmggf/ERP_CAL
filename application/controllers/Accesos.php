@@ -71,6 +71,7 @@ class Accesos extends CI_Controller {
             $this->db->query("INSERT INTO subsubitemsxitemxopcionxmoduloxusuario(SubSubItem,SubItem,Item,Opcion,Modulo,Usuario,UsuarioAsigna,Fecha)
                                 select SubSubItem, SubItem, Item, Opcion, Modulo, $usuario_recibe as usuario, 1 as usuario_asigna, date_format(now(),'%d/%m/%Y %h:%i:%s %p')
                                 from subsubitemsxitemxopcionxmoduloxusuario where usuario = $usuario_asigna ;  ");
+            $l = new Logs("Accesos", "LE COPIO LOS ACCESOS A {$usuario_recibe} AL USUARIO {$usuario_asigna}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

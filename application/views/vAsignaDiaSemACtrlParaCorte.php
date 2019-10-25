@@ -1,11 +1,17 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header"> 
         <div class="row">
+            <div class="w-100  my-2"></div>
             <div class="col-4 col-md-4 col-lg-4 col-xl-4">
                 <button type="button" id="btnRefrescar" name="btnRefrescar" class="btn btn-sm btn-warning " data-toggle="tooltip" data-placement="top" title="Refrescar">
                     <span class="fa fa-retweet"></span>
                 </button>
-
+                <button type="button" id="btnImprimeXDia" name="btnImprimeXDia" class="btn btn-sm btn-info " data-toggle="tooltip" data-placement="top" title="Imprime x dia">
+                    <span class="fa fa-print"></span> X dia
+                </button>
+                <button type="button" id="btnImprimeXSem" name="btnImprimeXSem" class="btn btn-sm btn-info " data-toggle="tooltip" data-placement="top" title="Imprime x Sem">
+                    <span class="fa fa-print"></span> X sem
+                </button>
             </div>
             <div class="col-4 col-md-4 col-lg-4 col-xl-4">
                 <h4 class="font-weight-bold text-center">
@@ -14,15 +20,15 @@
             </div>
             <div class="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
                 <button type="button" id="btnTiemposXEstilos" name="btnTiemposXEstilos" class="btn btn-sm btn-danger " data-toggle="tooltip" data-placement="top" title="Tiempos por estilos">
-                    <span class="fa fa-clock"></span>
+                    <span class="fa fa-clock"></span> Tiempos x estilo
                 </button>
 
                 <button type="button" id="btnFracciones" name="btnFracciones" class="btn btn-sm btn-ok mx-4" data-toggle="tooltip" data-placement="top" title="Fracciones">
-                    <span class="fa fa-puzzle-piece"></span>
+                    <span class="fa fa-puzzle-piece"></span> Fracciones
                 </button>
 
                 <button type="button" id="btnFraccionesXEstilos" name="btnFraccionesXEstilos" class="btn btn-sm btn-indigo" data-toggle="tooltip" data-placement="top" title="Fracciones por estilos">
-                    <span class="fa fa-check-double"></span>
+                    <span class="fa fa-check-double"></span> Fracciones x estilo
                 </button>
             </div>
         </div>
@@ -206,8 +212,11 @@
             btnPiel = $("#btnPiel"), btnForro = $("#btnForro"), btnAmbas = $("#btnAmbas"),
             btnAnadir = $("#Anadir"), btnQuitar = $("#Quitar"), btnRefrescar = pnlTablero.find("#btnRefrescar"),
             btnTiemposXEstilos = pnlTablero.find("#btnTiemposXEstilos"), btnFracciones = pnlTablero.find("#btnFracciones"),
-            btnFraccionesXEstilos = pnlTablero.find("#btnFraccionesXEstilos");
-    var Cortadores = pnlTablero.find("#Cortador"), mdlFracciones = $("#mdlFracciones");
+            btnFraccionesXEstilos = pnlTablero.find("#btnFraccionesXEstilos"),
+            Cortadores = pnlTablero.find("#Cortador"), mdlFracciones = $("#mdlFracciones"),
+            btnImprimeXDia = pnlTablero.find("#btnImprimeXDia"),
+            btnImprimeXSem = pnlTablero.find("#btnImprimeXSem");
+
     var dias = {
         1: 'LUNES',
         2: 'MARTES',
@@ -280,6 +289,32 @@
         }
     };
     $(document).ready(function () {
+
+        btnImprimeXSem.click(function () {
+            if (Semana.val()) { 
+                
+            } else {
+                iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
+                    Semana.focus().select();
+                });
+            }
+        });
+
+        btnImprimeXDia.click(function () {
+            if (Semana.val()) {
+                if (Dia.val()) {
+                    
+                } else {
+                    iMsg('DEBE DE ESPECIFICAR UN DIA', 'w', function () {
+                        Dia.focus().select();
+                    });
+                }
+            } else {
+                iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
+                    Semana.focus().select();
+                });
+            }
+        });
 
         Semana.focus().select();
 

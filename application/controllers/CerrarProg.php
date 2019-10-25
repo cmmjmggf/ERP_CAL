@@ -85,7 +85,7 @@ class CerrarProg extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where('PD.Semana', $x['SEMANA']);
             }
-            $this->db->order_by('PD.ID','DESC');
+            $this->db->order_by('PD.ID', 'DESC');
             if ($x['MAQUILA'] === '' && $x['SEMANA'] === '') {
                 $this->db->limit(25);
             }
@@ -143,7 +143,7 @@ class CerrarProg extends CI_Controller {
             if ($x['ANIO'] !== '') {
                 $this->db->where('PD.Ano', $x['ANIO']);
             }
-            $this->db->order_by('PD.ID','DESC');
+            $this->db->order_by('PD.ID', 'DESC');
             if ($x['MAQUILA'] === '' && $x['SEMANA'] === '' && $x['ANIO'] === '') {
                 $this->db->limit(100);
             }
@@ -219,7 +219,7 @@ class CerrarProg extends CI_Controller {
                                             ->from('avaprd AS A')
                                             ->where('A.contped', $Control)
                                             ->get()->result();
-                            if ($check_control[0]->EXISTE <= 0) {
+                            if (intval($check_control[0]->EXISTE) <= 0) {
                                 $this->db->insert('avaprd', array(
                                     'contped' => $Control,
                                     'status' => 1,
@@ -232,6 +232,8 @@ class CerrarProg extends CI_Controller {
                             }
                         }
                     }
+
+                    $l = new Logs("Seleccionar pedidos por maquilador/semana/año para generar control", "GENERO CONTROLES DE LA MAQUILA {$x['MAQUILA']}, SEMANA {$x['SEMANA']}, AÑO {$x['ANIO']}.", $this->session);
                     break;
                 case 2:
                     foreach ($controles as $k => $v) {
@@ -263,6 +265,8 @@ class CerrarProg extends CI_Controller {
                         $this->db->where('Pedido', $v->Pedido)->where('PedidoDetalle', $v->PedidoDetalle)->delete('Controles');
                         $this->db->set('Control', 0)->where('ID', $v->PedidoDetalle)->update('pedidox');
                     }
+                    $l = new Logs("Seleccionar pedidos por maquilador/semana/año para generar control", "ELIMINO CONTROLES DE LA MAQUILA {$x['MAQUILA']}, SEMANA {$x['SEMANA']}, AÑO {$x['ANIO']}.", $this->session);
+
                     break;
             }
         } catch (Exception $exc) {

@@ -172,6 +172,7 @@ class Sesion extends CI_Controller {
                 $this->session->set_userdata($newdata);
                 $this->um->onModificarUltimoAcceso($dt->ID, date("d-m-Y H:i:s"));
 
+                $l = new Logs("INICIO DE SESIÓN", "INGRESO AL SISTEMA", $this->session);
                 print 1;
             } else {
                 print 'ACCESO DENEGADO, VERIFIQUE SU USUARIO Y/O CONTRASEÑA';
@@ -195,6 +196,7 @@ class Sesion extends CI_Controller {
 
     public function onSalir() {
         try {
+            $l = new Logs("SALIO DEL SISTEMA", "SALIO DEL SISTEMA", $this->session);
             $array_items = array('USERNAME', 'PASSWORD', 'LOGGED');
             $this->session->unset_userdata($array_items);
             header('Location: ' . base_url());

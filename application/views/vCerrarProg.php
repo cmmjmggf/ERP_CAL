@@ -335,19 +335,19 @@
                     Historial.ajax.reload();
                 }
             });
-            
+
             mdlHistorial.find("input.semanax").keydown(function (e) {
                 if (e.keyCode === 13) {
                     Historial.ajax.reload();
                 }
             });
-            
+
             mdlHistorial.find("input.aniox").keydown(function (e) {
                 if (e.keyCode === 13) {
                     Historial.ajax.reload();
                 }
             });
-            
+
             mdlHistorial.on('shown.bs.modal', function () {
                 HoldOn.open({
                     theme: 'sk-bounce',
@@ -652,7 +652,7 @@
             "scrollX": true,
             "bLengthChange": false,
             "deferRender": true,
-            "scrollCollapse": false, 
+            "scrollCollapse": false,
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api(); //Get access to Datatable API
                 // Update footer
@@ -701,6 +701,9 @@
             });
         });
         var f = new FormData();
+        f.append('MAQUILA', pnlTablero.find("#col12_filter").val());
+        f.append('SEMANA', pnlTablero.find("#col13_filter").val());
+        f.append('ANIO', pnlTablero.find("#col14_filter").val());
         f.append('Marca', i);
         f.append('SubControles', JSON.stringify(subcontroles));
         $.ajax({

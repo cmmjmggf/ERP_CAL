@@ -839,8 +839,8 @@ class Pedidos extends CI_Controller {
             $url = $path . '/' . $file_name . '.pdf';
             /* Borramos el archivo anterior */
 
-            $pdf->Output($url);
-            $this->onLog("GENERO UN REPORTE DEL PEDIDO $IDX");
+            $pdf->Output($url); 
+            $l = new Logs("PEDIDOS", "GENERO UN REPORTE DEL PEDIDO CON LA CLAVE $IDX.", $this->session);
             print base_url() . $url;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

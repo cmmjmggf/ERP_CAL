@@ -84,7 +84,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $pdf->setControl($P->ControlT);
                 $pdf->setFechaPedido($P->FechaPedido);
                 $pdf->setPedido($P->Pedido);
-                $pdf->setEstilo($P->Estilo . "       " . $P->Color . "  " . $P->ColorT);
+                $pdf->setEstilo($P->Estilo . " - " . $P->Color . " - " . $P->ColorT);
                 $pdf->setAgente($P->Agente);
                 $pdf->setTrasp($P->Transporte);
                 $pdf->setSuela($P->SuelaT);
@@ -420,8 +420,8 @@ class IOrdenDeProduccion extends CI_Controller {
             $url = $path . '/' . $file_name . '.pdf';
             /* Borramos el archivo anterior */
 
-            $pdf->Output($url);
-            $this->onLog("GENERO UN REPORTE DE ORDEN DE PRODUCCIÓN");
+            $pdf->Output($url); 
+            $l = new Logs("IMPRIME ORDEN DE PRODUCCIÓN", "GENERO UN REPORTE DE ORDEN DE PRODUCCIÓN DEL CONTROL {$INICIO} AL CONTROL {$FIN}.", $this->session);
             print base_url() . $url;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

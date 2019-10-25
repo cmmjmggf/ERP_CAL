@@ -272,6 +272,7 @@ class Accesos_model extends CI_Model {
             $sql_cinco = "INSERT INTO `accesos_directos_x_usuario` (`Acceso_directo`, `Usuario`, `UsuarioAsigna`, `Fecha`) "
                     . "SELECT AD.ID, {$USUARIO}, {$USUARIO_ASIGNA}, '{$FECHA}' FROM accesos_directos_x_usuario AS ADU RIGHT JOIN accesos_directos AS AD ON ADU.Acceso_directo = AD.ID WHERE ADU.ID IS NULL";
             $this->db->query($sql_cinco);
+            $l = new Logs("Accesos", " LE ASIGNO ACCESOS A {$USUARIO}.", $this->session);
 
             $this->db->trans_complete();
         } catch (Exception $exc) {
