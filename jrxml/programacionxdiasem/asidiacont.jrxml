@@ -518,7 +518,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_par}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="510" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="0eb09077-7c17-4f4f-a848-7eda42549249"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -526,7 +526,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_tiempo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="545" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="91e59e67-4e0e-473c-910d-72c2172f6426"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -534,7 +534,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_precio}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="613" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="def2df5b-9066-4f2d-a88f-26bae8f23a59"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -542,7 +542,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_par_x_tiempo_entre_60}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="579" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="20331474-d6bd-4e5e-99ee-c41dd6391dde"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -550,7 +550,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_par_x_tiempo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="647" y="0" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="56209de2-c759-4dda-841a-825fc66d02db"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

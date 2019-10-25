@@ -1,4 +1,4 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
+<div class="card m-3 " id="pnlTablero">
     <div class="card-body">
         <div class="row" >
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -146,11 +146,11 @@
     </div>
 </div>
 <!--RASTREO X CONCEPTO-->
-<div class="modal animated fadeIn" id="mdlRastreoXConcepto">
+<div class="modal " id="mdlRastreoXConcepto">
     <div class="modal-dialog modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">RASTREO POR CONCEPTO</h5>
+                <h5 class="modal-title"><span class="fa fa-search"></span> RASTREO POR CONCEPTO</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -193,11 +193,11 @@
 </div>
 
 <!--RASTREO X CONTROL-->
-<div class="modal animated fadeIn" id="mdlRastreoXControl">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal " id="mdlRastreoXControl">
+    <div class="modal-dialog modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">RASTREO POR CONTROL</h5>
+                <h5 class="modal-title"><span class="fa fa-search"></span> RASTREO POR CONTROL</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -282,7 +282,26 @@
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
+
+        mdlRastreoXControl.on('hidden.bs.modal', function () {
+            Control.focus().select();
+        });
+        mdlRastreoXConcepto.on('hidden.bs.modal', function () {
+            Control.focus().select();
+        });
+        mdlRastreoXControl.on('shown.bs.modal', function () {
+            mdlRastreoXControl.find("input").val('');
+            $.each(mdlRastreoXControl.find("select"), function (k, v) {
+                mdlRastreoXControl.find("select")[k].selectize.clear(true);
+            });
+            ControlRXCTROL.focus();
+        });
+
         mdlRastreoXConcepto.on('shown.bs.modal', function () {
+            mdlRastreoXConcepto.find("input").val('');
+            $.each(mdlRastreoXConcepto.find("select"), function (k, v) {
+                mdlRastreoXConcepto.find("select")[k].selectize.clear(true);
+            });
             EmpleadoRXC[0].selectize.focus();
             EmpleadoRXC[0].selectize.open();
         });
@@ -541,8 +560,8 @@
                 "url": '<?php print base_url('Avance/getRastreoXConcepto'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.EMPLEADO = (EmpleadoRXC.val().trim());
-                    d.CONCEPTO = (ConceptoRXC.val().trim());
+                    d.EMPLEADO = EmpleadoRXC.val() ? EmpleadoRXC.val() : '';
+                    d.CONCEPTO = ConceptoRXC.val() ? ConceptoRXC.val() : '';
                 }
             },
             buttons: buttons,
@@ -581,9 +600,9 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CONTROL = (ControlRXCTROL.val().trim());
-                    d.SEMANA = (SemanaRXCTROL.val().trim());
-                    d.EMPLEADO = (EmpleadoRXCTROL.val().trim());
+                    d.CONTROL = ControlRXCTROL.val() ? ControlRXCTROL.val() : '';
+                    d.SEMANA = SemanaRXCTROL.val() ? SemanaRXCTROL.val() : '';
+                    d.EMPLEADO = EmpleadoRXCTROL.val() ? EmpleadoRXCTROL.val() : '';
                 }
             },
             buttons: buttons,
@@ -604,12 +623,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "250px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']

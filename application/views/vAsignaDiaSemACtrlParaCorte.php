@@ -19,15 +19,15 @@
                 </h4> 
             </div>
             <div class="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
-                <button type="button" id="btnTiemposXEstilos" name="btnTiemposXEstilos" class="btn btn-sm btn-danger " data-toggle="tooltip" data-placement="top" title="Tiempos por estilos">
+                <button type="button" id="btnTiemposXEstilos" name="btnTiemposXEstilos" class="btn btn-sm btn-danger "  >
                     <span class="fa fa-clock"></span> Tiempos x estilo
                 </button>
 
-                <button type="button" id="btnFracciones" name="btnFracciones" class="btn btn-sm btn-ok mx-4" data-toggle="tooltip" data-placement="top" title="Fracciones">
+                <button type="button" id="btnFracciones" name="btnFracciones" class="btn btn-sm btn-ok mx-4" >
                     <span class="fa fa-puzzle-piece"></span> Fracciones
                 </button>
 
-                <button type="button" id="btnFraccionesXEstilos" name="btnFraccionesXEstilos" class="btn btn-sm btn-indigo" data-toggle="tooltip" data-placement="top" title="Fracciones por estilos">
+                <button type="button" id="btnFraccionesXEstilos" name="btnFraccionesXEstilos" class="btn btn-sm btn-indigo"  >
                     <span class="fa fa-check-double"></span> Fracciones x estilo
                 </button>
             </div>
@@ -347,81 +347,21 @@
             console.log(Fraccion.val());
         });
         btnTiemposXEstilos.click(function () {
-            $.fancybox.open({
-                src: '<?= base_url('TiemposXEstiloDepto/?origen=PRODUCCION'); ?>',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
+            btnTiemposXEstilos.attr('disabled', true);
+            onOpenWindowAFC('<?php print base_url('TiemposXEstiloDepto/?origen=PRODUCCION'); ?>', function (instance, current) {
+                btnTiemposXEstilos.attr('disabled', false);
             });
         });
         btnFracciones.click(function () {
-            $.fancybox.open({
-                src: '<?= base_url('Fracciones/?origen=PRODUCCION'); ?>',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
+            btnFracciones.attr('disabled', true);
+            onOpenWindowAFC('<?php print base_url('Fracciones/?origen=PRODUCCION'); ?>', function (instance, current) {
+                btnFracciones.attr('disabled', false);
             });
         });
         btnFraccionesXEstilos.click(function () {
-            $.fancybox.open({
-                src: '<?php print base_url('FraccionesXEstilo/?origen=PRODUCCION'); ?>',
-                type: 'iframe',
-                opts: {
-                    afterShow: function (instance, current) {
-                        console.info('done!');
-                    },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
-                }
+            btnFraccionesXEstilos.attr('disabled', true);
+            onOpenWindowAFC('<?php print base_url('FraccionesXEstilo/?origen=PRODUCCION'); ?>', function (instance, current) {
+                btnFraccionesXEstilos.attr('disabled', false);
             });
         });
         btnRefrescar.click(function () {

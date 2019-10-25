@@ -15,14 +15,14 @@ class Avance_model extends CI_Model {
             $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, F.numfrac AS NUM_FRACCION, "
                             . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
-                            . "F.status, F.fecha AS FECHA, F.semana AS SEMANA, F.depto, "
+                            . "F.status, DATE_FORMAT(F.fecha,'\%d/%m/%Y\')  AS FECHA, F.semana AS SEMANA, F.depto, "
                             . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
                     ->from("fracpagnomina AS F");
 
             if ($CONTROL !== '') {
                 $this->db->like('F.control', $CONTROL);
             }
-            $this->db->limit(99);
+            $this->db->limit(50);
 
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -83,11 +83,11 @@ class Avance_model extends CI_Model {
     public function getRastreoXControl() {
         try {
             return $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
-                                    . "FP.numfrac AS NUM_FRACCION, FP.fecha AS FECHA, "
-                                    . "FP.fecha AS FECHA,FP.Semana AS SEMANA, "
+                                    . "FP.numfrac AS NUM_FRACCION, DATE_FORMAT(FP.fecha,'\%d/%m/%Y\')  AS FECHA, "
+                                    . "DATE_FORMAT(FP.fecha,'\%d/%m/%Y\')  AS FECHA,FP.Semana AS SEMANA, "
                                     . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
                                     . "FP.subtot AS SUBTOTAL")
-                            ->from("fracpagnomina AS FP")->limit(999)->get()->result();
+                            ->from("fracpagnomina AS FP")->limit(509)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -99,17 +99,21 @@ class Avance_model extends CI_Model {
                             . "PN.numsem AS SEMANA,"
                             . "PN.numemp AS EMPLEADO, "
                             . "PN.numcon AS CONCEPTO, "
-                            . "PN.fecha AS FECHA, "
+                            . "DATE_FORMAT(PN.fecha,'\%d/%m/%Y\') AS FECHA, "
                             . "PN.tpcon AS PER, "
                             . "PN.importe AS IMPORTE, "
                             . "PN.tpcond AS DED, "
                             . "PN.imported AS SUBTOTAL")
-                    ->from("prenomina AS PN")->limit(999);
+                    ->from("prenomina AS PN");
             if ($E !== "") {
                 $this->db->where('PN.numemp', $E);
             }
             if ($C !== '') {
                 $this->db->where('PN.numcon', $C);
+            } 
+            $this->db->order_by('PN.numsem', 'DESC');
+            if ($E === '' && $C === '') {
+                $this->db->limit(50);
             }
             return $this->db->get()->result();
         } catch (Exception $exc) {

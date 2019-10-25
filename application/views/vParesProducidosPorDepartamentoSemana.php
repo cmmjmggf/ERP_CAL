@@ -231,7 +231,7 @@
         background-color: transparent;
         border-bottom: 0px;
     }
-    .card-body{
+    #pnlTablero.card-body{
         padding-top: 10px;
     }
     .card-header{

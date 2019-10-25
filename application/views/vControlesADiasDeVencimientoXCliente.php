@@ -103,11 +103,11 @@
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{
+    #pnlTablero.card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
-    .card-body{
+    #pnlTablero.card-body{
         padding-top: 10px;
     }
     .card-header{

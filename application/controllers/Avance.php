@@ -50,14 +50,14 @@ class Avance extends CI_Controller {
             $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, F.numfrac AS NUM_FRACCION, "
                             . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
-                            . "F.status, F.fecha AS FECHA, F.semana AS SEMANA, F.depto, "
+                            . "F.status, DATE_FORMAT(F.fecha,\"%d/%m/%Y\")  AS FECHA, F.semana AS SEMANA, F.depto, "
                             . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
                     ->from("fracpagnomina AS F");
 
             if ($this->input->get('CONTROL') !== '') {
                 $this->db->like('F.control', $this->input->get('CONTROL'));
             } else {
-                $this->db->limit(999);
+                $this->db->limit(509);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -74,7 +74,7 @@ class Avance extends CI_Controller {
                             . "PN.numsem AS SEMANA,"
                             . "PN.numemp AS EMPLEADO, "
                             . "PN.numcon AS CONCEPTO, "
-                            . "PN.fecha AS FECHA, "
+                            . "DATE_FORMAT(PN.fecha,\"%d/%m/%Y\")  AS FECHA, "
                             . "PN.tpcon AS PER, "
                             . "PN.importe AS IMPORTE, "
                             . "PN.tpcond AS DED, "
@@ -97,7 +97,29 @@ class Avance extends CI_Controller {
 
     public function getRastreoXControl() {
         try {
-            print json_encode($this->avm->getRastreoXControl());
+//            print json_encode($this->avm->getRastreoXControl());
+            $x = $this->input->get();
+            $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
+                            . "FP.numfrac AS NUM_FRACCION, DATE_FORMAT(FP.fecha,\"%d/%m/%Y\")  AS FECHA, "
+                            . "DATE_FORMAT(FP.fecha,\"%d/%m/%Y\")  AS FECHA,FP.Semana AS SEMANA, "
+                            . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
+                            . "FP.subtot AS SUBTOTAL")
+                    ->from("fracpagnomina AS FP");
+
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('FP.Semana', $x['SEMANA']);
+            }
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('FP.numeroempleado', $x['EMPLEADO']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('FP.control', $x['CONTROL']);
+            }
+            $this->db->order_by('FP.ID', 'DESC');
+            if ($x['SEMANA'] === '' && $x['EMPLEADO'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(50);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -191,9 +213,9 @@ class Avance extends CI_Controller {
         try {
 //            print json_encode($this->avm->getMaquilasPlantillas());
             print json_encode($this->db->select("CAST(MP.Clave AS SIGNED ) AS Clave, MP.Descripcion AS MaquilasPlantillas")
-                            ->from("maquilasplantillas AS MP")
-                            ->order_by('MP.Clave', 'ASC')
-                            ->get()->result());
+                                    ->from("maquilasplantillas AS MP")
+                                    ->order_by('MP.Clave', 'ASC')
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

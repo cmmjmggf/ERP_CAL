@@ -327,7 +327,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             $P["SEMANA"] = $x['SEMANA'];
             $P["DIA"] = $x['DIA'];
             $P["DIAT"] = $x['DIAT'];
-            $P["ANO"] = $x['ANO'];
+            $P["ANO"] = $x['ANO']; 
             
             /* 1. REPORTE Pares programados para corte de la sem - tiempos, pares, pares x tiempo , precio por par*/
             $jc->setParametros($P);
