@@ -216,7 +216,6 @@
             Cortadores = pnlTablero.find("#Cortador"), mdlFracciones = $("#mdlFracciones"),
             btnImprimeXDia = pnlTablero.find("#btnImprimeXDia"),
             btnImprimeXSem = pnlTablero.find("#btnImprimeXSem");
-
     var dias = {
         1: 'LUNES',
         2: 'MARTES',
@@ -291,7 +290,6 @@
     $(document).ready(function () {
 
         handleEnterDiv(pnlTablero);
-
         btnImprimeXSem.click(function () {
             if (Semana.val()) {
 
@@ -301,7 +299,6 @@
                 });
             }
         });
-
         btnImprimeXDia.click(function () {
             if (Anio.val()) {
                 if (Semana.val()) {
@@ -313,9 +310,12 @@
                             ANO: Anio.val() ? Anio.val() : ''
                         };
                         onOpenOverlay('Espere un momento...');
+                        btnImprimeXDia.attr('disabled', true);
                         $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/getReportesXSemDiaAno'); ?>', p).done(function (xxx) {
                             if (xxx.length > 0) {
-                                onImprimirReporteFancyArray(JSON.parse(xxx));
+                                onImprimirReporteFancyArrayAFC(JSON.parse(xxx), function (instance, current) {
+                                    btnImprimeXDia.attr('disabled', false);
+                                });
                             } else {
                                 iMsg('NO SE HA PODIDO GENERAR LOS REPORTES SOLICITADOS, INTENTE DE NUEVO O MÁS TARDE', 'w', function () {
                                     Semana.focus().select();
@@ -342,13 +342,10 @@
                 });
             }
         });
-
         Semana.focus().select();
-
         pnlTablero.find("#btnFraccionCheck").click(function () {
             console.log(Fraccion.val());
         });
-
         btnTiemposXEstilos.click(function () {
             $.fancybox.open({
                 src: '<?= base_url('TiemposXEstiloDepto/?origen=PRODUCCION'); ?>',
@@ -375,7 +372,6 @@
                 }
             });
         });
-
         btnFracciones.click(function () {
             $.fancybox.open({
                 src: '<?= base_url('Fracciones/?origen=PRODUCCION'); ?>',
@@ -402,7 +398,6 @@
                 }
             });
         });
-
         btnFraccionesXEstilos.click(function () {
             $.fancybox.open({
                 src: '<?php print base_url('FraccionesXEstilo/?origen=PRODUCCION'); ?>',
@@ -429,7 +424,6 @@
                 }
             });
         });
-
         btnRefrescar.click(function () {
             if ($.fn.DataTable.isDataTable('#tblControlesSinAsignarAlDia') && $.fn.DataTable.isDataTable('#tblControlesAsignadosAlDia')) {
                 ControlesSinAsignarAlDia.ajax.reload();
@@ -449,7 +443,6 @@
                 getControlesSinAsignarYAsignadosAlDia();
             }
         });
-
         Cortador.change(function () {
 //            var op = $(this).val();
 //            var dt = tblControlesAsignadosAlDia.DataTable().column(1);
@@ -460,24 +453,19 @@
             //            }
             ControlesAsignadosAlDia.ajax.reload();
         });
-
         btnAnadir.click(function () {
             onAnadirAsignacion();
         });
-
         btnQuitar.click(function () {
             onEliminarAsignacion();
         });
-
         btnGuardar.click(function () {
             onGuardarAsignacionDeDiaXControl();
         });
-
         Fraccion.on('change', function () {
             console.log($(this).val());
             FraccionesSeleccionadas.val("99,100");
         });
-
         $("#btnAmbas, #btnPiel, #btnForro").change(function () {
             onBeep(3);
             switch ($(this).attr('id')) {
@@ -495,7 +483,6 @@
                     break;
             }
         });
-
         Dia.on('keydown keypress keyup', function (e) {
             if (parseInt(Dia.val()) >= 1 && parseInt(Dia.val()) <= 7) {
                 if (Dia.val().length !== '') {
@@ -515,7 +502,6 @@
                 }
             }
         });
-
         Control.on('keydown focusout keyup', function (e) {
             if (e.keyCode === 13) {
                 ControlesSinAsignarAlDia.ajax.reload();
@@ -532,7 +518,6 @@
 //                dt.search($(this).val()).draw();
             //            }
         });
-
         Semana.on('keydown', function (e) {
 //            var dt = tblControlesSinAsignarAlDia.DataTable().column(6);
 //            if ($(this).val() !== '') {
@@ -553,7 +538,6 @@
         btnRefrescar.trigger('click');
         Anio.val(new Date().getFullYear());
     });
-
     function getControlesSinAsignarYAsignadosAlDia() {
         HoldOn.open({
             theme: 'sk-rect',

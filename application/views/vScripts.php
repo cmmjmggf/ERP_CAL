@@ -42,13 +42,39 @@
     }
     function onImprimirReporteFancy(url) {
         $.fancybox.open({
-            toolbar: false,
+            closeExisting: true,
             smallBtn: true,
             src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + url + '#pagemode=thumbs',
             type: 'iframe',
             opts: {
-                afterShow: function (instance, current) {
+                afterClose: function (instance, current) {
                 },
+                iframe: {
+                    // Iframe template
+                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                    preload: true,
+                    // Custom CSS styling for iframe wrapping element
+                    // You can use this to set custom iframe dimensions
+                    css: {
+                        width: "100%",
+                        height: "100%"
+                    },
+                    // Iframe tag attributes
+                    attr: {
+                        scrolling: "auto"
+                    }
+                }
+            }
+        });
+    }
+    function onImprimirReporteFancyAFC(url, doafterClose) {
+        $.fancybox.open({
+            closeExisting: true,
+            smallBtn: true,
+            src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + url + '#pagemode=thumbs',
+            type: 'iframe',
+            opts: {
+                afterClose: doafterClose,
                 iframe: {
                     // Iframe template
                     tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
@@ -81,6 +107,39 @@
                     afterShow: function (instance, current) {
 
                     },
+                    iframe: {
+                        // Iframe template
+                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                        preload: true,
+                        // Custom CSS styling for iframe wrapping element
+                        // You can use this to set custom iframe dimensions
+                        css: {
+                            width: "100%",
+                            height: "100%"
+                        },
+                        // Iframe tag attributes
+                        attr: {
+                            scrolling: "auto"
+                        }
+                    }
+                }
+            });
+        });
+        $.fancybox.open(files);
+    }
+
+
+    function onImprimirReporteFancyArrayAFC(urls, doafterClose) {
+        console.log(urls);
+        var files = [];
+        $.each(urls, function (k, v) {
+            files.push({
+                toolbar: false,
+                smallBtn: true,
+                src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#pagemode=thumbs',
+                type: 'iframe',
+                opts: {
+                    afterClose: doafterClose,
                     iframe: {
                         // Iframe template
                         tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
