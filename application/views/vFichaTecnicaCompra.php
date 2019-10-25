@@ -211,6 +211,7 @@
         });
 
         mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').on("click", function () {
+            mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').attr('disabled', true);
             var TipoFicha = mdlFichaTecnicaCompra.find("#FichaSinPrecios")[0].checked ? 'onImprimirFichaTecnicaSinPrecios' : 'onImprimirFichaTecnicaCompra';
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData($('#mdlFichaTecnicaCompra').find("#frmFichaTecnicaCompras")[0]);
@@ -225,9 +226,8 @@
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
-                console.log(data);
+                mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').attr('disabled', false);
                 if (data.length > 0) {
-
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                         type: 'iframe',
