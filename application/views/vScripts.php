@@ -16,13 +16,7 @@
     var base_url = "<?php print base_url(); ?>";
     var isMobile = false;
     var seg = <?php print (isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : 0); ?>;
-    function onOpenWindow(url) {
-        onBeep(1);
-        $.fancybox.open({
-            src: url,
-            type: 'iframe',
-            opts: {
-                iframe: {
+    var iframe_opts ={ 
                     // Iframe template
                     tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
                     preload: true,
@@ -35,8 +29,15 @@
                     // Iframe tag attributes
                     attr: {
                         scrolling: "auto"
-                    }
-                }
+                    } 
+    };
+    function onOpenWindow(url) {
+        onBeep(1);
+        $.fancybox.open({
+            src: url,
+            type: 'iframe',
+            opts: {
+                iframe: iframe_opts
             }
         });
     }
@@ -49,21 +50,7 @@
             opts: {
                 afterClose: function (instance, current) {
                 },
-                iframe: {
-                    // Iframe template
-                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                    preload: true,
-                    // Custom CSS styling for iframe wrapping element
-                    // You can use this to set custom iframe dimensions
-                    css: {
-                        width: "100%",
-                        height: "100%"
-                    },
-                    // Iframe tag attributes
-                    attr: {
-                        scrolling: "auto"
-                    }
-                }
+                iframe: iframe_opts
             }
         });
     }
@@ -75,21 +62,7 @@
             type: 'iframe',
             opts: {
                 afterClose: doafterClose,
-                iframe: {
-                    // Iframe template
-                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                    preload: true,
-                    // Custom CSS styling for iframe wrapping element
-                    // You can use this to set custom iframe dimensions
-                    css: {
-                        width: "100%",
-                        height: "100%"
-                    },
-                    // Iframe tag attributes
-                    attr: {
-                        scrolling: "auto"
-                    }
-                }
+                iframe: iframe_opts
             }
         });
     }
@@ -107,21 +80,7 @@
                     afterShow: function (instance, current) {
 
                     },
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
+                    iframe: iframe_opts
                 }
             });
         });
@@ -140,21 +99,7 @@
                 type: 'iframe',
                 opts: {
                     afterClose: doafterClose,
-                    iframe: {
-                        // Iframe template
-                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                        preload: true,
-                        // Custom CSS styling for iframe wrapping element
-                        // You can use this to set custom iframe dimensions
-                        css: {
-                            width: "100%",
-                            height: "100%"
-                        },
-                        // Iframe tag attributes
-                        attr: {
-                            scrolling: "auto"
-                        }
-                    }
+                    iframe: iframe_opts
                 }
             });
         });
