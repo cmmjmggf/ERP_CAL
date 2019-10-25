@@ -79,7 +79,7 @@
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
-            $.post(master_url_modal + 'getReportePielForroGeneral',
+            $.post('<?php print base_url('ConsumoPielForroXCortador/getReportePielForroGeneral'); ?>',
                     {
                         TIPO: 2,
                         MAQUILA: Maquila.val(),
@@ -107,7 +107,7 @@
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
-            $.post(master_url_modal + 'getReportePielForroGeneral',
+            $.post('<?php print base_url('ConsumoPielForroXCortador/getReportePielForroGeneral'); ?>',
                     {
                         TIPO: 1,
                         MAQUILA: Maquila.val(),
@@ -135,7 +135,7 @@
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
-            $.post(master_url_modal + 'getReportePielForro',
+            $.post('<?php print base_url('ConsumoPielForroXCortador/getReportePielForro'); ?>',
                     {
                         TIPO: 2,
                         MAQUILA: Maquila.val(),
@@ -159,11 +159,12 @@
         });
 
         btnAceptarPiel.click(function () {
+            console.log('xxxxxxxxxxxxxxxxxxxxxx')
             HoldOn.open({
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
-            $.post(master_url_modal + 'getReportePielForro',
+            $.post('<?php print base_url('ConsumoPielForroXCortador/getReportePielForro'); ?>',
                     {
                         TIPO: 1,
                         MAQUILA: Maquila.val(),
@@ -236,7 +237,7 @@
 
     function onComprobarMaquilas(e, input) {
         if (e.keyCode === 13 && input.val() !== '') {
-            $.getJSON(master_url_modal + 'onComprobarMaquilas', {MAQUILA: input.val()}).done(function (data, x, jq) {
+            $.getJSON('<?php print base_url('ConsumoPielForroXCortador/onComprobarMaquilas'); ?>', {MAQUILA: input.val()}).done(function (data, x, jq) {
                 if (parseInt(data[0].EXISTE_MAQUILA) <= 0) {
                     swal('ATENCIÓN', 'LA MAQUILA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
                         input.focus();
@@ -252,7 +253,7 @@
 
     function onVerificarSemana(e, input) {
         if (e.keyCode === 13 && input.val() !== '') {
-            $.getJSON(master_url_modal + 'onChecarSemanaValida', {SEMANA: input.val()}).done(function (data, x, jq) {
+            $.getJSON('<?php print base_url('ConsumoPielForroXCortador/onChecarSemanaValida'); ?>', {SEMANA: input.val()}).done(function (data, x, jq) {
                 if (parseInt(data[0].SEMANA_NO_CERRADA) === 1) {
                     swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
                         input.focus();

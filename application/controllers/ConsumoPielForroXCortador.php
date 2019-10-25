@@ -9,7 +9,8 @@ class ConsumoPielForroXCortador extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('ConsumoPielForroXCortador_model', 'cpfxc')->helper('consumopielforro_helper');
+        $this->load->library('session')->model('ConsumoPielForroXCortador_model', 'cpfxc')
+                ->helper('consumopielforro_helper');
     }
 
     public function index() {
@@ -98,7 +99,30 @@ class ConsumoPielForroXCortador extends CI_Controller {
             $aligns = array('L', 'L', 'L', 'L', 'L');
             $pdf->SetTextColor(0, 0, 0);
             $pdf->SetFont('Calibri', 'B', 10);
-            $CORTADORES = $this->cpfxc->getCortadoresXMaquilaSemanaArticulo($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $TIPO);
+//            $CORTADORES = $this->cpfxc->getCortadoresXMaquilaSemanaArticulo($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $TIPO);
+            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA, 
+                                   IFNULL(E.Numero,0) AS NUMERO, CONCAT(IFNULL(E.PrimerNombre,\"\"), \" \", IFNULL(E.SegundoNombre,\"\"), \" \", IFNULL(E.Paterno,\"\"), \" \", IFNULL(E.Materno,\"\")) AS CORTADOR", false)
+                    ->from("asignapftsacxc AS A")
+                    ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
+            if ($ARTICULO !== '') {
+                $this->db->where("A.Articulo LIKE  '$ARTICULO'", null, false);
+            }
+            if ($CORTADOR !== '') {
+                $this->db->where("A.Empleado = '$CORTADOR'", null, false)
+                        ->where("E.Numero = '$CORTADOR'", null, false);
+            }
+            if ($SEMANA_INICIAL !== '' && $SEMANA_FINAL !== '') {
+                $this->db->where("A.Semana BETWEEN '$SEMANA_INICIAL' AND '$SEMANA_FINAL'", null, false);
+            }
+            if ($MAQUILA !== '') {
+                $this->db->where("substr(A.Control,5,2) = '$MAQUILA'", null, false);
+            }
+            if ($ANIO !== '') {
+                $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANIO'", null, false);
+            }
+            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->where('E.AltaBaja', 1);
+            $CORTADORES =  $this->db->get()->result();
+
             $base = 6;
             $alto_celda = 4;
             /* ANCHO DESPUÉS DE LOS MARGENES = 259, ES DE 215, PERO SON 10 DE MARGEN IZQ Y 10 DE MARGEN DER */
