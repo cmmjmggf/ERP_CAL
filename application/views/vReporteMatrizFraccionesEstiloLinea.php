@@ -30,6 +30,7 @@
     $(document).ready(function () {
 
         mdlReporteMatrizFraccionesEstiloLinea.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlReporteMatrizFraccionesEstiloLinea);
             mdlReporteMatrizFraccionesEstiloLinea.find("input").val("");
 
             mdlReporteMatrizFraccionesEstiloLinea.find('#Linea').focus();

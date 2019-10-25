@@ -75,7 +75,7 @@
     var is_showed = false;
 
     $(document).ready(function () {
-        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlParesAsignados);
         ParesAnio.val(new Date().getFullYear());
 
         mdlParesAsignados.find("input[type='radio']").change(function () {
@@ -140,7 +140,7 @@
             $.getJSON(master_url_pares_asignados + 'onComprobarMaquilas', {MAQUILA: input.val()}).done(function (data, x, jq) {
                 if (parseInt(data[0].EXISTE_MAQUILA) <= 0) {
                     swal('ATENCIÓN', 'LA MAQUILA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
-                        input.focus();
+                        input.val('').focus();
                     });
                 }
             }).fail(function (x, y, z) {
@@ -157,7 +157,7 @@
                 console.log('SEMANA VÁLIDA ? ', data);
                 if (parseInt(data[0].SEMANA_NO_CERRADA) === 0) {
                     swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
-                        input.focus();
+                        input.val('').focus();
                     });
                 }
             }).fail(function (x, y, z) {

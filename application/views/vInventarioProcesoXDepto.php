@@ -52,7 +52,7 @@
             SemanaDias = pnlTablero.find("#SemanaDias");
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
         Anio.val(new Date().getFullYear());
 
         btnAceptar.click(function () {
@@ -78,7 +78,7 @@
                     processData: false,
                     data: f
                 }).done(function (data, x, jq) {
-                    onImprimirReporteFancy( data );
+                    onImprimirReporteFancy(data);
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -98,11 +98,11 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }

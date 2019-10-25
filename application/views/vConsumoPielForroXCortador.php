@@ -37,14 +37,14 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <label>Fecha Final</label>
                 <input type="text" id="FechaFinal" name="FechaFinal"  class="form-control form-control-sm date notEnter" placeholder="" >
-            </div> 
+            </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-2">
-                <div class="alert alert-dismissible alert-danger"> 
+                <div class="alert alert-dismissible alert-danger">
                     <strong>Nota!</strong> Si desea información entre fechas solo capture maquila y fechas.
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-2">
-                <div class="alert alert-dismissible alert-danger"> 
+                <div class="alert alert-dismissible alert-danger">
                     <strong>Nota!</strong> El resultado de este reporte es lo que se ha entregado de almacen a corte solamente. No tiene que ser el programa completo.
                 </div>
             </div>
@@ -73,7 +73,7 @@
             btnAceptarForroGeneral = mdlConsumosPielForro.find("#btnAceptarForroGeneral");
 
     $(document).ready(function () {
-
+        handleEnterDiv(mdlConsumosPielForro);
         btnAceptarForroGeneral.click(function () {
             HoldOn.open({
                 theme: 'sk-cube',
@@ -240,7 +240,7 @@
             $.getJSON('<?php print base_url('ConsumoPielForroXCortador/onComprobarMaquilas'); ?>', {MAQUILA: input.val()}).done(function (data, x, jq) {
                 if (parseInt(data[0].EXISTE_MAQUILA) <= 0) {
                     swal('ATENCIÓN', 'LA MAQUILA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
-                        input.focus();
+                        input.val('').focus();
                     });
                 }
             }).fail(function (x, y, z) {
@@ -256,7 +256,7 @@
             $.getJSON('<?php print base_url('ConsumoPielForroXCortador/onChecarSemanaValida'); ?>', {SEMANA: input.val()}).done(function (data, x, jq) {
                 if (parseInt(data[0].SEMANA_NO_CERRADA) === 1) {
                     swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
-                        input.focus();
+                        input.val('').focus();
                     });
                 }
             }).fail(function (x, y, z) {

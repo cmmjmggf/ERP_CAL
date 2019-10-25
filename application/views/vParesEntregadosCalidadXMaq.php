@@ -38,6 +38,7 @@
     $(document).ready(function () {
 
         mdlParesEntregadosCalidadXMaq.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlParesEntregadosCalidadXMaq);
             mdlParesEntregadosCalidadXMaq.find("input").val("");
             $.each(mdlParesEntregadosCalidadXMaq.find("select"), function (k, v) {
                 mdlParesEntregadosCalidadXMaq.find("select")[k].selectize.clear(true);

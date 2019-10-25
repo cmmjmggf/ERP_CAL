@@ -43,6 +43,7 @@
     var mdlAvanceProduccionSemanaDia = $('#mdlAvanceProduccionSemanaDia');
     $(document).ready(function () {
         mdlAvanceProduccionSemanaDia.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlAvanceProduccionSemanaDia);
             mdlAvanceProduccionSemanaDia.find("input").val("");
             $.each(mdlAvanceProduccionSemanaDia.find("select"), function (k, v) {
                 mdlAvanceProduccionSemanaDia.find("select")[k].selectize.clear(true);

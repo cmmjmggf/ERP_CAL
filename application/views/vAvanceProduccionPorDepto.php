@@ -42,6 +42,7 @@
     var mdlAvanceProduccionPorDepto = $('#mdlAvanceProduccionPorDepto');
     $(document).ready(function () {
         mdlAvanceProduccionPorDepto.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlAvanceProduccionPorDepto);
             mdlAvanceProduccionPorDepto.find("input").val("");
             $.each(mdlAvanceProduccionPorDepto.find("select"), function (k, v) {
                 mdlAvanceProduccionPorDepto.find("select")[k].selectize.clear(true);

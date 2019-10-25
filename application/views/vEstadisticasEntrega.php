@@ -57,7 +57,7 @@
 <script>
     var mdlEstadisticasEntrega = $('#mdlEstadisticasEntrega');
     $(document).ready(function () {
-
+        handleEnterDiv(mdlEstadisticasEntrega);
         validacionSelectPorContenedor(mdlEstadisticasEntrega);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlEstadisticasEntrega);
         mdlEstadisticasEntrega.on('shown.bs.modal', function () {

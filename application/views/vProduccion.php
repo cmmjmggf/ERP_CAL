@@ -4,16 +4,16 @@
         -webkit-transition: all 1s ease-in-out;
         transition: all 1s ease-in-out;
         z-index: 99  !important;
-    } 
+    }
     .card{
         cursor: pointer !important;
-        font-weight: bold; 
+        font-weight: bold;
         background: #2b2b2b !important;
         color: #fff;
     }
     .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold;        
+        font-weight: bold;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
         background: #ffffff !important; /* Old browsers */
         background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
@@ -53,7 +53,7 @@
     }
     .card.text-center {
         background-color: #fff;
-    } 
+    }
     .card{
         transition: all 0.3s;
     }

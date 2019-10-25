@@ -47,6 +47,7 @@
     var mdlAvanceProduccionPorLinea = $('#mdlAvanceProduccionPorLinea');
     $(document).ready(function () {
         mdlAvanceProduccionPorLinea.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlAvanceProduccionPorLinea);
             mdlAvanceProduccionPorLinea.find("input").val("");
             $.each(mdlAvanceProduccionPorLinea.find("select"), function (k, v) {
                 mdlAvanceProduccionPorLinea.find("select")[k].selectize.clear(true);

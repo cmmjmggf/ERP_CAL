@@ -63,6 +63,7 @@
     var mdlEtiCajaXCliente = $('#mdlEtiCajaXCliente');
     $(document).ready(function () {
         mdlEtiCajaXCliente.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlEtiCajaXCliente);
             mdlEtiCajaXCliente.find("input").val("");
             $.each(mdlEtiCajaXCliente.find("select"), function (k, v) {
                 mdlEtiCajaXCliente.find("select")[k].selectize.clear(true);

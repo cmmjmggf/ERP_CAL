@@ -49,6 +49,7 @@
 
 
         mdlDiasPromedioEntregaPorCliente.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlDiasPromedioEntregaPorCliente);
             mdlDiasPromedioEntregaPorCliente.find("input").val("");
             $.each(mdlDiasPromedioEntregaPorCliente.find("select"), function (k, v) {
                 mdlDiasPromedioEntregaPorCliente.find("select")[k].selectize.clear(true);

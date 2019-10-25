@@ -66,6 +66,8 @@
     var btnGeneraCostos = $('#btnGeneraCostos')
     $(document).ready(function () {
 
+        handleEnterDiv(mdlCostoInventariosProceso);
+
         btnGeneraCostos.click(function () {
             $.fancybox.open({
                 src: base_url + '/GenerarCostosFabricacion.shoes/?origen=PRODUCCION',

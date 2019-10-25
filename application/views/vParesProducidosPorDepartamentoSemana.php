@@ -79,6 +79,7 @@
         pnlTablero.find("#" + chk)[0].checked = true;
     }
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
         Anio.val(new Date().getFullYear());
         getSemanaActual('<?php print Date('d/m/Y'); ?>');
 
@@ -138,7 +139,7 @@
             });
             if (Anio.val() && Semana.val() && FechaInicial.val() && FechaFinal.val()) {
                 $.post('<?php print base_url('ParesProducidosPorDepartamentoSemana/getReporte'); ?>', {
-                    FECHA_INICIAL: FechaInicial.val()? FechaInicial.val() : '',
+                    FECHA_INICIAL: FechaInicial.val() ? FechaInicial.val() : '',
                     FECHA_FINAL: FechaFinal.val() ? FechaFinal.val() : '',
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
                     SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
@@ -211,22 +212,22 @@
         background-color: #3F51B5;
         border-color: #3F51B5;
     }
-    .btn-indigo:not(:disabled):not(.disabled):active, 
-    .btn-indigo:not(:disabled):not(.disabled).active, 
+    .btn-indigo:not(:disabled):not(.disabled):active,
+    .btn-indigo:not(:disabled):not(.disabled).active,
     .show > .btn-indigo.dropdown-toggle {
         color: #fff;
         background-color: #99cc00;
         border: 2px solid #99cc00;
         font-weight: bold;
-    }   
+    }
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
@@ -236,42 +237,42 @@
     .card-header{
         padding: 0px;
     }
-    li.list-group-item {  
+    li.list-group-item {
         padding-top: 3px;
         padding-bottom: 3px;
-    }  
-    li.list-group-item:hover { 
-        font-weight: bold; 
+    }
+    li.list-group-item:hover {
+        font-weight: bold;
         color: #fff;
         cursor: pointer;
-        background-color: #3f51b5;  
+        background-color: #3f51b5;
         -webkit-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         -moz-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         padding-top: 3px;
-        padding-bottom: 3px; 
+        padding-bottom: 3px;
         animation: myfirst .4s;
         -moz-animation:myfirst 1.4s infinite; /* Firefox */
         -webkit-animation:myfirst 1.4s infinite; /* Safari and Chrome */
         border-radius: 5px;
     }
     .li-selected{
-        font-weight: bold; 
+        font-weight: bold;
         color: #D32F2F;
         cursor: pointer;
-        background-color: #fff;   
+        background-color: #fff;
         padding-top: 3px;
-        padding-bottom: 3px;  
+        padding-bottom: 3px;
         border-radius: 0px;
         font-weight: bold;
     }
     .li-selected span.badge-primary{
-        font-weight: bold; 
+        font-weight: bold;
         color: #fff;
-        background-color: #D32F2F;   
+        background-color: #D32F2F;
         padding-top: 3px;
-        padding-bottom: 3px;   
-    } 
+        padding-bottom: 3px;
+    }
     ul.list-group {
         animation: highlight .4s;
         -moz-animation:highlight 1.4s infinite; /* Firefox */
@@ -279,8 +280,8 @@
         border-radius: 5px;
     }
 
-    table tbody tr:hover { 
-        font-weight:normal !important; 
+    table tbody tr:hover {
+        font-weight:normal !important;
     }
 
     .box-success{
@@ -430,7 +431,7 @@
     }
     .switch + .switch {
         margin-left: 1rem;
-    } 
+    }
     .dropdown-menu {
         margin-top: 0.75rem;
     }

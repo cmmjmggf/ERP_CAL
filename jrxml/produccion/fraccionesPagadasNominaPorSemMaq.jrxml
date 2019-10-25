@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fraccionesPagadasNominaPorSemMaq" language="groovy" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="188" columnSpacing="12" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.23041572397254"/>
-	<property name="ireport.x" value="116"/>
+	<property name="ireport.x" value="95"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -22,7 +22,7 @@ fpn.semana,
 fpn.fecha,
 fpn.estilo,
 fpn.pares,
-concat(fpn.numfrac,' ',fpn.fraccion) as nombreFracc,
+concat(fpn.numfrac,' ',(select descripcion from fracciones where clave = fpn.numfrac)) as nombreFracc,
 fpn.preciofrac,
 fpn.preciofrac * fpn.pares as total
 FROM fracpagnomina fpn
@@ -69,7 +69,7 @@ order by NumEmpleado asc, fpn.fecha asc, fpn.control asc]]>
 	<variable name="total_2" class="java.lang.Double" resetType="Group" resetGroup="Empelado" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
-	<variable name="total_3" class="java.lang.Double" resetType="Group" resetGroup="Empelado" calculation="Sum">
+	<variable name="total_3" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
 	<group name="Empelado" isReprintHeaderOnEachPage="true">

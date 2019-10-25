@@ -39,6 +39,7 @@
     var mdlParesAsignadosMaqSemGen = $('#mdlParesAsignadosMaqSemGen');
     $(document).ready(function () {
         mdlParesAsignadosMaqSemGen.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlParesAsignadosMaqSemGen);
             mdlParesAsignadosMaqSemGen.find("input").val("");
 
             mdlParesAsignadosMaqSemGen.find('#Ano').focus();

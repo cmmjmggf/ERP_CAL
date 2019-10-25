@@ -48,6 +48,7 @@
     var mdlFraccionesCapturadasNominaSem = $('#mdlFraccionesCapturadasNominaSem');
     $(document).ready(function () {
         mdlFraccionesCapturadasNominaSem.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlFraccionesCapturadasNominaSem);
             mdlFraccionesCapturadasNominaSem.find("input").val("");
             $.each(mdlFraccionesCapturadasNominaSem.find("select"), function (k, v) {
                 mdlFraccionesCapturadasNominaSem.find("select")[k].selectize.clear(true);
