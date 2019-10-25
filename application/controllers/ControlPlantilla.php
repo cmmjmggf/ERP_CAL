@@ -60,7 +60,7 @@ class ControlPlantilla extends CI_Controller {
                                         CP.`Fecha` AS FECHA,
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
-                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
                     ->from('controlpla AS CP')->where_in('CP.Estatus', array(1, 2));
 
             $x = $this->input->get();
@@ -94,7 +94,7 @@ class ControlPlantilla extends CI_Controller {
                                         CP.`Precio` AS PRECIO,
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
-                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
                     ->from('controlpla AS CP')->where_in('CP.Estatus', array(2));
             $x = $this->input->get();
             if ($x['DOCUMENTO'] !== '') {
@@ -176,7 +176,7 @@ class ControlPlantilla extends CI_Controller {
     public function onGuardar() {
         try {
             /*
-             *  ESTATUS  
+             *  ESTATUS
              *  1 = ENTREGADO A MAQUILA / EN PROCESO / EN TRANSITO
              *  2 = ENTREGADO/RECIBIDO/RETORNADO
              *  3 = PROCESADO COMO PLANTILLA

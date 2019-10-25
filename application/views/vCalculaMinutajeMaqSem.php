@@ -290,6 +290,7 @@
 
     $(document).ready(function () {
         init();
+        handleEnterDiv(pnlTablero);
         pnlTablero.find("#btnTiemposXEstilo").click(function () {
             $.fancybox.open({
                 src: base_url + '/TiemposXEstilo.shoes/?origen=PRODUCCION',

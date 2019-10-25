@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                         <legend class="float-left font-weight-bold">Desarrollo de muestras</legend>
-                    </div>                    
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4" align="center">
                         <button type="button" id="btnMuestras" class="btn btn-info"><span class="fa fa-eye"></span> VER TODAS LAS MUESTRAS</button>
                     </div>
@@ -30,7 +30,7 @@
                         <select id="Color" name="Color" class="form-control"></select>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                        <label>Depto</label> 
+                        <label>Depto</label>
                         <select id="Depto" name="Depto" class="form-control">                        </select>
                     </div>
                     <div class="w-100"><br></div>
@@ -55,11 +55,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-2" style="overflow-y:auto; height:500px !important"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-2" style="overflow-y:auto; height:500px !important">
                 <div id="ldeptos" class="list-group">
                     <a href="#" class="list-group-item list-group-item-action active font-weight-bold">
                         DEPARTAMENTO
-                    </a> 
+                    </a>
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-4 text-center justify-content-center" align="center">
@@ -90,10 +90,10 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                         <button type="button" id="btnCancelarPanelMuestras" class="btn btn-danger">
                             <span class="fa fa-arrow-left"></span> VOLVER</button>
-                    </div>                    
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4" align="center">
                         <legend class="float-left font-weight-bold">Muestras</legend>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="col-12">
@@ -121,7 +121,7 @@
                                 <th scope="col">FOLEADO</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (FOLEADO)</th>
-                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">FECHA A.C</th>
                                 <th scope="col">LASER</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (LASER)</th>
@@ -149,7 +149,7 @@
                                 <th scope="col">PREL-PESPUNTE</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (PREL-PESPUNTE)</th>
-                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">FECHA A.C</th>
                                 <th scope="col">ENSUELADO</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (ENSUELADO)</th>
@@ -157,7 +157,7 @@
                                 <th scope="col">TEJIDO</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (TEJIDO)</th>
-                                <th scope="col">FECHA A.C</th> 
+                                <th scope="col">FECHA A.C</th>
                                 <th scope="col">CHOFERES</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">A.C (CHOFERES)</th>
@@ -206,12 +206,13 @@
             nuevo = true;
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(pnlTableroMuestras);
         getDepartamentos();
 
         btnCancelarPanelMuestras.click(function () {
             pnlTableroMuestras.addClass('d-none');
-            pnlTablero.removeClass('d-none'); 
+            pnlTablero.removeClass('d-none');
         });
 
         Depto.change(function () {
@@ -583,11 +584,11 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
 
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
@@ -609,42 +610,42 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px grey;  
+        box-shadow: inset 0 0 5px grey;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #2C3E50;  
+        background: #2C3E50;
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #2C3E50; 
+        background: #2C3E50;
     }
 
     /*LEATHER THEME*/
-        /*.text-success.navbar-brand{
-            color: #FFEB3B !important;
-            text-shadow: 2px 2px 8px #000000;
-        }
-        nav > .btn-primary, nav li > .btn-primary{
-            background-color: transparent !important; 
-            border-color: transparent !important; 
-        } 
-        .bg-primary{
-            background-image: url("<?php print base_url('css/images/leather.jpg'); ?>") !important;
-            background-size: contain;   
-        }
-        #sidebar.bg-primary{
-            background-image: url("<?php print base_url('css/images/xxx.jpg'); ?>") !important;
-            background-size: contain;   
-        }
-        .dropdown-item:hover, .dropdown-item:focus {
-            color: #ffffff;
-            font-weight: bold;
-            text-decoration: none;
-            background-color: transparent;
-            background-image: url(http://127.0.0.1/ERP_CAL/css/images/leather.jpg) !important;
-            background-size: contain;
-        }*/
+    /*.text-success.navbar-brand{
+        color: #FFEB3B !important;
+        text-shadow: 2px 2px 8px #000000;
+    }
+    nav > .btn-primary, nav li > .btn-primary{
+        background-color: transparent !important;
+        border-color: transparent !important;
+    }
+    .bg-primary{
+        background-image: url("<?php print base_url('css/images/leather.jpg'); ?>") !important;
+        background-size: contain;
+    }
+    #sidebar.bg-primary{
+        background-image: url("<?php print base_url('css/images/xxx.jpg'); ?>") !important;
+        background-size: contain;
+    }
+    .dropdown-item:hover, .dropdown-item:focus {
+        color: #ffffff;
+        font-weight: bold;
+        text-decoration: none;
+        background-color: transparent;
+        background-image: url(http://127.0.0.1/ERP_CAL/css/images/leather.jpg) !important;
+        background-size: contain;
+    }*/
 </style>

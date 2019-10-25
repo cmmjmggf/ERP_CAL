@@ -67,6 +67,7 @@
     $(document).ready(function () {
         setFocusSelectToInputOnChange('#DeptoAvance', '#DoctoAvance', mdlAvanceAnterior);
         mdlAvanceAnterior.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlAvanceAnterior);
             mdlAvanceAnterior.find("input").val("");
             $.each(mdlAvanceAnterior.find("select"), function (k, v) {
                 mdlAvanceAnterior.find("select")[k].selectize.clear(true);
@@ -459,7 +460,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

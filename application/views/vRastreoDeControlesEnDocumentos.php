@@ -42,7 +42,7 @@
                     <div class="col text-center">
                         <p class="font-weight-bold">FECHAS DEL PEDIDO</p>
                     </div>
-                    <div class="w-100"></div> 
+                    <div class="w-100"></div>
                     <table id="tblFechasDelPedido" class="table table-sm table-hover" style="width:100%">
                         <thead>
                             <tr>
@@ -54,7 +54,7 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-                    </table> 
+                    </table>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
                     <div class="col text-center">
@@ -118,7 +118,7 @@
                                 <th scope="col">Terminado</th>
                             </tr>
                         </thead>
-                        <tbody> 
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
@@ -190,7 +190,7 @@
             FechasDeAvance, tblFechasDeAvance = pnlTablero.find("#tblFechasDeAvance"),
             RastreoDeControlesEnNomina, tblRastreoDeControlesEnNomina = pnlTablero.find("#tblRastreoDeControlesEnNomina");
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
         Control.focus();
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
@@ -426,7 +426,7 @@
     }
 
     function getInfoXControl(e) {
-        if (e) { 
+        if (e) {
             onOpenOverlay('Espere un momento por favor...');
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
                 if (x.length > 0) {

@@ -11,44 +11,44 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-5">
-                        <label>Estilo</label>     
+                        <label>Estilo</label>
                         <input type="text" class="form-control form-control-sm" autofocus id="Estilo" name="Estilo" maxlength="10"  min="1" max="10">
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-5">
                         <label>Fecha</label>
                         <input type="text" class="form-control form-control-sm date" id="Fecha" maxlength="10" name="Fecha">
-                    </div>  
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                        <label>Conteo no.</label>     
+                        <label>Conteo no.</label>
                         <input type="text" class="form-control form-control-sm numbersOnly" autofocus id="Conteo" name="Conteo" maxlength="10"  min="1" max="10">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label>Departamento</label>
                         <select id="Departamento" name="Departamento" class="form-control form-control-sm"></select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label>Fracción</label>
                         <select id="Fraccion" name="Fraccion" class="form-control form-control-sm"></select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label>Sub-Fracción</label>
                         <select id="SubFraccion" name="SubFraccion" class="form-control form-control-sm"></select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label>Linea</label>
                         <select id="Linea" name="Linea" class="form-control form-control-sm"></select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
-                        <label>Operar</label>     
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <label>Operar</label>
                         <select id="Operar" name="Operar" class="form-control form-control-sm"></select>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                        <label>Pares</label>     
+                        <label>Pares</label>
                         <input type="text" class="form-control form-control-sm" autofocus id="Operar" name="Operar" >
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4"></div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                        <label>Productividad</label>     
+                        <label>Productividad</label>
                         <input type="text" class="form-control form-control-sm" autofocus id="Productividad" name="Productividad" >
                     </div>
                     <div class="w-100"></div>
@@ -151,7 +151,7 @@
                             </div>
 
                         </div>
-                    </div>        
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
                         <label>Fin</label>
                         <input type="text" class="form-control form-control-sm" id="Fin" name="Fin" >
@@ -184,9 +184,9 @@
                             <th>ESTILO</th><!--2-->
                             <th>DEPARTAMENTO</th><!--3-->
 
-                            <th>TIEMPO</th><!--4--> 
-                            <th></th><!--5--> 
-                            <th></th><!--6--> 
+                            <th>TIEMPO</th><!--4-->
+                            <th></th><!--5-->
+                            <th></th><!--6-->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -211,7 +211,7 @@
     };
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
         btnGuardarTiempo.click(function () {
             if (isValidInput(Linea) && isValidInput(Estilo)) {
                 var deptos = [];
@@ -533,7 +533,7 @@
         Departamentos.find("span.ed-total").text($.number(t, 2, '.', ','));
     }
 </script>
-<style> 
+<style>
     table.dataTable tr.group td{
         font-size: 14px;
         font-weight: normal;
@@ -549,7 +549,7 @@
         color: #FFEB3B !important;
     }
 
-    .highlight-input{  
+    .highlight-input{
         color: #000;
         background:#e1fcff;
         animation: myfirst .4s;

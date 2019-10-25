@@ -64,7 +64,7 @@
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToInputOnChange('#Empleado', '#Ano', pnlTablero);
         init();
-        handleEnter();
+        handleEnterDiv(pnlTablero);
         pnlTablero.find("input").val("");
         $(':input:text:enabled:visible:first').focus();
 
@@ -266,7 +266,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

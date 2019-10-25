@@ -1,5 +1,5 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header">   
+    <div class="card-header">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
                 <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance a pespunte x maquila</h3>
@@ -11,7 +11,7 @@
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Maquila</label>
                 <select id="Maquila" name="Maquila" class="form-control"></select>
-            </div> 
+            </div>
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Documento</label>
                 <input type="text" id="Documento" name="Documento" class="form-control form-control-sm">
@@ -48,7 +48,7 @@
                 <label>Fecha</label>
                 <input id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter">
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1"> 
+            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <button type="button" id="btnAgregar" name="btnAgregar" class="btn btn-primary mt-4">
                     <span class="fa fa-check"></span>
                 </button>
@@ -72,7 +72,7 @@
                 </table>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <h4>Controles entregados</h4> 
+                <h4>Controles entregados</h4>
                 <table id="tblControlesEntregados" class="table table-hover table-sm table-bordered  compact nowrap" style="width:  100%;">
                     <thead>
                         <tr>
@@ -89,15 +89,15 @@
 
                             <th scope="col">Pares</th>
                             <th scope="col">Docto</th>
-                            <th scope="col">-</th> 
+                            <th scope="col">-</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
-        </div> 
+        </div>
     </div>
-</div>  
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"), Maquila = pnlTablero.find("#Maquila");
     var ControlesListosParaPespunte, tblControlesListosParaPespunte = pnlTablero.find("#tblControlesListosParaPespunte"),
@@ -109,6 +109,8 @@
             Documento = pnlTablero.find("#Documento");
 
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
+        Maquila[0].selectize.focus();
         getMaquilas();
 
         Maquila.on('change', function () {
@@ -376,12 +378,12 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #0099cc, #cc0000, rgb(0,0,0,0)) 1 100% ;
         border-image: linear-gradient(to bottom,  #0099cc, #cc0000, rgb(0,0,0,0)) 1 100% ;
 
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
 

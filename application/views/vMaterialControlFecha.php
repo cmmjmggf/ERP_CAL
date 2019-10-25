@@ -105,7 +105,8 @@
     var valida = false;
     $(document).ready(function () {
 
-        handleEnter();
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlMaterialParaEntregaMaqSemAno);
         init();
         pnlTablero.find('#Control').keydown(function (e) {
             if (e.keyCode === 13) {

@@ -64,7 +64,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Reimprime</label>
                 <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm">
-            </div> 
+            </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
                 <button type="button" class="btn btn-primary" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
             </div>
@@ -141,8 +141,8 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer"> 
-                <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-print"></span> Acepta</button> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-print"></span> Acepta</button>
             </div>
         </div>
     </div>
@@ -174,18 +174,18 @@
                             <input type="checkbox" class="custom-control-input" id="chkRecibido">
                             <label class="custom-control-label" for="chkRecibido">Lo recibido</label>
                         </div>
-                    </div>   
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="chkSinRecibir">
                             <label class="custom-control-label" for="chkSinRecibir">Sin recibir</label>
                         </div>
-                    </div>             
-                </div>          
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <button type="button" class="btn btn-info" id="btnAceptaReportePago"><span class="fa fa-print"></span> Acepta</button>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -209,6 +209,9 @@
     var FechaActual = '<?php print Date('d/m/Y'); ?>';
 
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlReportePago);
+        handleEnterDiv(mdlRetorno);
         getProveedores();
         getMaquilasPlantillas();
         getRecords();
@@ -711,12 +714,12 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
-    } 
+    }
 </style>

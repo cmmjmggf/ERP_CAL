@@ -1,33 +1,32 @@
-<div class="card mt-2 mx-2 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-header">
-        <div class="row" style="margin-right: 0px;"> 
+<div class="card m-3 animated fadeIn" id="pnlTablero">
+    <div class="card-body">
+        <div class="row" >
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <h3 class="font-weight-bold ml-4">Avance</h3>
+                <h3 class="font-weight-bold ">Avance</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="right">
                 <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
                 </button>
-                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info ml-2" >
-                    <span class="fa fa-globe"></span> 
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info" >
+                    <span class="fa fa-globe"></span>
                     Rastreo X Control
                 </button>
-                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-info ml-2" >
-                    <span class="fa fa-paint-brush"></span> 
-                    Desarrollo de muestras  
+                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-info" >
+                    <span class="fa fa-paint-brush"></span>
+                    Desarrollo de muestras
                 </button>
             </div>
         </div>
-    </div>
-    <div class="card-body">
+        <hr>
         <div class="row">
             <!--SECCION UNO-->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <input type="text" id="usuario" name="usuario" class="form-control form-control-sm"> 
+                    <input type="text" id="usuario" name="usuario" class="form-control form-control-sm">
                 </div>
-                <div class="w-100"></div>   
+                <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <label>Control</label>
                     <div class="input-group mb-3">
@@ -39,22 +38,22 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Fecha</label>
-                    <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" > 
+                    <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" >
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <label>Departamento</label>
-                    <select type="text" id="Departamento" name="Departamento" class="form-control form-control-sm"></select> 
+                    <select type="text" id="Departamento" name="Departamento" class="form-control form-control-sm"></select>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Semana</label>
                     <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numbersOnly" maxlength="2">
                 </div>
-                <div class="w-100"></div> 
+                <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <ul id="deptos" class="list-group my-2"> 
-                    </ul> 
+                    <ul id="deptos" class="list-group my-2">
+                    </ul>
                 </div>
-                <div class="w-100"></div>  
+                <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <label>Proceso maquila</label>
                     <select id="ProcesoMaquila" name="ProcesoMaquila" class="form-control form-control-sm"></select>
@@ -67,7 +66,7 @@
                     <label>Fracción</label>
                     <select id="Fraccion" name="Fraccion" class="form-control form-control-sm"></select>
                 </div>
-                <div class="w-100"></div> 
+                <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <label>Estilo</label>
                     <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm numbersOnly" maxlength="2"  readonly="">
@@ -87,7 +86,7 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" aling="center">
                     <hr>
-                </div>                
+                </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 d-none">
                     <label>Depto des</label>
                     <input type="text" id="DeptoDes" name="DeptoDes" class="form-control" readonly="">
@@ -110,12 +109,12 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h4>Fracciones pagadas en nomina de este control</h4>
-                    </div> 
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <button type="button" id="btnBorrar" name="btnBorrar" class="btn btn-danger">
                             <span class="fa fa-trash"></span>
                         </button>
-                    </div> 
+                    </div>
                     <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap">
                         <thead>
                             <tr>
@@ -136,12 +135,12 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-                    </table> 
+                    </table>
                 </div>
             </div>
             <!--SECCION TRES-->
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
-                <img src="<?= base_url('img/LS.png'); ?>" class="img-responsive"> 
+                <img src="<?= base_url('img/LS.png'); ?>" class="img-responsive">
             </div>
         </div>
     </div>
@@ -235,7 +234,7 @@
                                     <th scope="col">Estilo</th>
                                     <th scope="col">Frac</th>
                                     <th scope="col">Fecha</th>
-                                    <th scope="col">Semana</th>  
+                                    <th scope="col">Semana</th>
                                     <th scope="col">Pares</th>
                                     <th scope="col">Precio</th>
                                     <th scope="col">SubTotal</th>
@@ -280,7 +279,9 @@
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras");
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlRastreoXConcepto);
+        handleEnterDiv(mdlRastreoXControl);
         mdlRastreoXConcepto.on('shown.bs.modal', function () {
             EmpleadoRXC[0].selectize.focus();
             EmpleadoRXC[0].selectize.open();
@@ -783,56 +784,42 @@
 </script>
 <style>
 
-    .card{ 
-        border: 2px solid #000;
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    }
-    .card-header{ 
-        background-color: transparent;
-        border-bottom: 0px;
-    }
-    .card-body{
-        padding-top: 10px;
-    }
-    .card-header{
-        padding: 0px;
-    }
-    li.list-group-item {  
+    li.list-group-item {
         padding-top: 3px;
         padding-bottom: 3px;
-    }  
-    li.list-group-item:hover { 
-        font-weight: bold; 
+    }
+    li.list-group-item:hover {
+        font-weight: bold;
         color: #fff;
         cursor: pointer;
-        background-color: #3f51b5;  
+        background-color: #3f51b5;
         -webkit-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         -moz-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
         padding-top: 3px;
-        padding-bottom: 3px; 
+        padding-bottom: 3px;
         animation: myfirst .4s;
         -moz-animation:myfirst 1.4s infinite; /* Firefox */
         -webkit-animation:myfirst 1.4s infinite; /* Safari and Chrome */
         border-radius: 5px;
     }
     .li-selected{
-        font-weight: bold; 
+        font-weight: bold;
         color: #D32F2F;
         cursor: pointer;
-        background-color: #fff;   
+        background-color: #fff;
         padding-top: 3px;
-        padding-bottom: 3px;  
+        padding-bottom: 3px;
         border-radius: 0px;
         font-weight: bold;
     }
     .li-selected span.badge-primary{
-        font-weight: bold; 
+        font-weight: bold;
         color: #fff;
-        background-color: #D32F2F;   
+        background-color: #D32F2F;
         padding-top: 3px;
-        padding-bottom: 3px;   
-    } 
+        padding-bottom: 3px;
+    }
     ul.list-group {
         animation: highlight .4s;
         -moz-animation:highlight 1.4s infinite; /* Firefox */
@@ -840,8 +827,8 @@
         border-radius: 5px;
     }
 
-    table tbody tr:hover { 
-        font-weight:normal !important; 
+    table tbody tr:hover {
+        font-weight:normal !important;
     }
 
     .box-success{

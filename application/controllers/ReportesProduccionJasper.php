@@ -482,7 +482,7 @@ class ReportesProduccionJasper extends CI_Controller {
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\avancePorDepto.jasper');
         $jc->setFilename('REPORTE_AVANCE_DEPTO_' . Date('h_i_s'));
-        $jc->setDocumentformat('xls');
+        $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
 

@@ -415,7 +415,8 @@
     var tipo_consumo = 0, FT = 1;
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlRetornaMaterial);
         btnEntregar.click(function () {
             onEntregarMaterial();
         });

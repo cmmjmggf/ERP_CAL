@@ -11,8 +11,8 @@
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Control</label>
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly" autofocus="">
-                </div> 
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"></div> 
+                </div>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                     <label>Docto</label>
                     <input type="text" id="Docto" name="Docto" class="form-control">
@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-                    </table> 
+                    </table>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                     <div class="row">
@@ -140,7 +140,7 @@
             OrdenDevs = 0, btnMovimientosClientes = pnlTablero.find("#btnMovimientosClientes");
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
         Control.focus();
 
         btnMovimientosClientes.click(function () {

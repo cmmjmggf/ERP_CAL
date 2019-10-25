@@ -9,7 +9,7 @@
             <div class="col-4 col-md-4 col-lg-4 col-xl-4">
                 <h4 class="font-weight-bold text-center">
                     Asigna dia semana a control para pespunte y preliminar
-                </h4> 
+                </h4>
             </div>
             <div class="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
                 <button type="button" id="btnTiemposXEstilos" name="btnTiemposXEstilos" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Tiempos por estilos">
@@ -24,20 +24,20 @@
                     <span class="fa fa-check-double"></span>
                 </button>
             </div>
-        </div>        
+        </div>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-2">
             </div>
-            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center"> 
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnPespunte" id="btnPespunte" autocomplete="off" checked> PESPUNTE
                     </label>
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnPreliminar" id="btnPreliminar" autocomplete="off"> PRELIMINAR
-                    </label> 
+                    </label>
                 </div>
             </div>
             <div class="col-2">
@@ -54,7 +54,7 @@
                 <label>Dia</label>
                 <input type="text" id="Dia" name="Dia" class="form-control form-control-sm numbersOnly" maxlength="1"  data-toggle="tooltip" data-placement="left" title="Dias entre 1 y 7">
             </div>
-            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2"> 
+            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <label>Dia/Nombre</label>
                 <input type="text" id="DiaNombre" name="DiaNombre" class="form-control form-control-sm" readonly="" maxlength="2">
             </div>
@@ -101,17 +101,17 @@
                 <label>Articulo</label>
                 <input type="text" id="ClaveArticulo" name="ClaveArticulo" class="form-control form-control-sm d-none" readonly="" maxlength="50">
                 <input type="text" id="Articulo" name="Articulo" class="form-control form-control-sm d-none" readonly="" maxlength="250">
-            </div> 
+            </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Pesos</label>
                 <input type="text" id="Pesos" name="Pesos" class="form-control form-control-sm numbersOnly" maxlength="10">
-            </div> 
+            </div>
             <button type="button" class="btn btn-info btn-lg btn-float animated tada" id="btnGuardar" name="btnGuardar"  data-toggle="tooltip" data-placement="left" title="Guardar">
                 <span class="fa fa-save"></span>
             </button>
             <div class="w-100 my-2"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                <h3>Controles por asignar</h3> 
+                <h3>Controles por asignar</h3>
                 <table id="tblControlesSinAsignarAlDia" class="table table-hover table-sm table-bordered  compact nowrap" style="width:100%">
                     <thead>
                         <tr>
@@ -132,14 +132,14 @@
                             <td>6</td><!--6-->
                         </tr>
                     </tbody>
-                </table> 
+                </table>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 d-flex align-items-center justify-content-center flex-column"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 d-flex align-items-center justify-content-center flex-column">
                 <button id="Anadir" name="Anadir" class="btn btn-primary m-1 animated slideInRight" data-toggle="tooltip" data-placement="left" title="Añadir"><span class="fa fa-arrow-right"></span></button>
                 <button id="Quitar" name="Quitar" class="btn btn-danger m-1 animated slideInLeft"  data-toggle="tooltip" data-placement="left" title="Quitar"><span class="fa fa-arrow-left"></span></button>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <h3>Controles asignados a este día</h3> 
+                <h3>Controles asignados a este día</h3>
                 <table id="tblControlesAsignadosAlDia" class="table table-hover table-sm table-bordered  compact nowrap"  style="width:100%">
                     <thead>
                         <tr>
@@ -158,7 +158,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table> 
+                </table>
             </div>
 
         </div><!--END ROW-->
@@ -271,6 +271,8 @@
         }
     };
     $(document).ready(function () {
+
+        handleEnterDiv(pnlTablero);
 
         btnTiemposXEstilos.click(function () {
             $.fancybox.open({
@@ -729,14 +731,14 @@
     }
 </script>
 <style>
-    .btn-indigo:not(:disabled):not(.disabled):active, 
-    .btn-indigo:not(:disabled):not(.disabled).active, 
+    .btn-indigo:not(:disabled):not(.disabled):active,
+    .btn-indigo:not(:disabled):not(.disabled).active,
     .show > .btn-indigo.dropdown-toggle {
         color: #fff;
         background-color: #99cc00;
         border: 2px solid #99cc00;
         font-weight: bold;
-    }   
+    }
     .selectize-control.multi .selectize-input > div {
         cursor: pointer;
         margin: 0 3px 3px 0;
@@ -753,22 +755,22 @@
         border: 0 solid rgba(0, 0, 0, 0);
         font-weight: bold;
     }
-    .highlight-input,.highlight-input:focus{  
+    .highlight-input,.highlight-input:focus{
         color: #000;
         background:#ffcc00;
         animation: illuminate .4s;
         font-weight: bold;
         -moz-animation:illuminate .4s infinite; /* Firefox */
         -webkit-animation:illuminate .4s infinite; /* Safari and Chrome */
-    } 
-    .highlight-rows,.highlight-rows:focus{  
+    }
+    .highlight-rows,.highlight-rows:focus{
         color: #000;
         background:#ffffff ;
         animation: illuminaterow .4s;
         font-weight: bold;
         -moz-animation:illuminaterow .4s infinite; /* Firefox */
         -webkit-animation:illuminaterow .4s infinite; /* Safari and Chrome */
-    } 
+    }
 
     .btn-indigo {
         color: #fff;
@@ -779,7 +781,7 @@
     .btn-ok{
         color: #fff;
         background-color: #99cc00;
-        border-color: #99cc00; 
+        border-color: #99cc00;
     }
     @-moz-keyframes illuminaterow /* Firefox */
     {
@@ -808,7 +810,7 @@
         0%   {    border: 1px solid #2196F3; background:#ff3300;}
         50%  {    border: 1px solid #ff0000;font-weight: bold;        background:#ffcc00;}
         100%   {border: 1px solid #2196F3; background:#ff3300;}
-    } 
+    }
 
     .animation-delay-100 {
         -webkit-animation-delay: 0.1s;

@@ -1,5 +1,5 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header">   
+    <div class="card-header">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
                 <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance a tejido</h3>
@@ -74,14 +74,14 @@
                             <th scope="col">Maq</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                     </tbody>
                 </table>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
                     <div class="col-10">
-                        <h4>Controles entregados</h4>     
+                        <h4>Controles entregados</h4>
                     </div>
                     <div class="col-2">
                         <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Imprimir vale"><span class="fa fa-print"></span></button>
@@ -108,9 +108,9 @@
                     </tbody>
                 </table>
             </div>
-        </div> 
+        </div>
     </div>
-</div> 
+</div>
 <script>
     var pnlTablero = $("#pnlTablero");
     var Chofer = pnlTablero.find("#Chofer"), Tejedora = pnlTablero.find("#Tejedora"),
@@ -125,7 +125,8 @@
             btnImprimirVale = pnlTablero.find("#btnImprimirVale"), btnImprimirValeAyuda = pnlTablero.find("#btnImprimirValeAyuda");
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
+        Chofer[0].selectize.focus();
         btnImprimirValeAyuda.click(function () {
         });
 
@@ -145,7 +146,7 @@
                     console.log(data);
                     var ext = getExt(data);
                     if (data.length > 0) {
-                        if (ext === "pdf" || ext === "PDF" || ext === "Pdf") { 
+                        if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
                             $.fancybox.defaults.animationDuration = 366;
                             $.fancybox.open({
                                 src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
@@ -459,7 +460,7 @@
                 {CONTROL: Control.val()}).done(function (a) {
             if (a.length > 0) {
                 if (parseInt(a[0].EXISTE) > 0) {
-                    swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL','warning').then((value) => {
+                    swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL', 'warning').then((value) => {
                         Control.focus().select();
                         Fra.val('');
                         Estilo.val('');
@@ -550,12 +551,12 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
 
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
