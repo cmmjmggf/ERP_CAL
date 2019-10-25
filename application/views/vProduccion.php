@@ -39,12 +39,7 @@
     }
     .fa-2x {
         font-size: 7.5em;
-    }
-    .mt-2, .my-2 {
-        margin-top: 0.5rem !important;
-        margin-right: 0px;
-        margin-left: 0px;
-    }
+    } 
 
     @media (min-width: 100px) and (max-width: 1199.98px)  {
         #MnuBlock{

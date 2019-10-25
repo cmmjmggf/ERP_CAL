@@ -39,7 +39,8 @@
                         </div>
 
                     </div>
-                    <div class="row mt-2">
+                    <div class="w-100 mt-2"></div>
+                    <div class="row">
                         <div class="col-12 col-sm-12">
                             <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">10 Piel/Forro, 80 Suela, 90 Peletería</span></label>
                             <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >

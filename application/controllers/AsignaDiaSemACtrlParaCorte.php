@@ -9,7 +9,8 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('AsignaDiaSemACtrlParaCorte_model', 'adscpc');
+        $this->load->library('session')->model('AsignaDiaSemACtrlParaCorte_model', 'adscpc')
+                ->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -295,20 +296,64 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
 
     public function getReporte() {
         try {
+            $x = $this->input->post();
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $parametros = array();
-            $parametros["logo"] = base_url() . $this->session->LOGO;
-            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-            $parametros["FECHA_INICIAL"] = $this->input->post('FECHA_INICIAL');
-            $parametros["FECHA_FINAL"] = $this->input->post('FECHA_FINAL');
-            $jc->setParametros($parametros);
-            $jc->setJasperurl('jrxml\asignados\PrefabricacionDePlantillasXFecha.jasper');
-            $jc->setFilename('PARES_PARA_PREPARAR_PLANTILLA_A_TEJIDO_X_FECHA');
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["ANO"] = $x['ANO'];
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\produccion\asidiacont.jasper');
+            $jc->setFilename('asidiacont');
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
+
+    public function getReportesXSemDiaAno() {
+        try {
+            $reports = array();
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $x = $this->input->post();
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["DIAT"] = $x['DIAT'];
+            $P["ANO"] = $x['ANO'];
+            
+            /* 1. REPORTE Pares programados para corte de la sem - tiempos, pares, pares x tiempo , precio por par*/
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\programacionxdiasem\asidiacont.jasper');
+            $jc->setFilename('asidiacont_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports["1UNO"] = $jc->getReport();
+
+            /* 2. REPORTE Entrega de material para corte del programa - agrupado empleado  */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmat.jasper');
+            $jc->setFilename('asidiacontmat_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['2DOS'] = $jc->getReport();
+
+            /* 3. REPORTE Entrega de material para corte del programa - agrupado grupos de articulo */
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatg.jasper');
+            $jc->setFilename('asidiacontmatg_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['3TRES'] = $jc->getReport();
+                
+            print json_encode($reports);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

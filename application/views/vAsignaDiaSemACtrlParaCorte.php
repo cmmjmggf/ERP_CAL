@@ -56,7 +56,7 @@
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-1 col-xl-1">
                 <label>Año</label>
-                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm" maxlength="4">
+                <input type="text" id="Anio" name="Anio" class="form-control form-control-sm numbersOnly" maxlength="4">
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-1 col-xl-1">
                 <label>Semana</label>
@@ -199,7 +199,7 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"), Dia = pnlTablero.find("#Dia"),
+    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"), Dia = pnlTablero.find("#Dia"), DiaT = pnlTablero.find("#DiaNombre"),
             Semana = pnlTablero.find("#Semana"), Cortador = pnlTablero.find("#Cortador"),
             Fraccion = pnlTablero.find("#Fraccion"), FraccionesSeleccionadas = pnlTablero.find("#FraccionesSeleccionadas"),
             Control = pnlTablero.find("#Control"),
@@ -290,9 +290,11 @@
     };
     $(document).ready(function () {
 
+        handleEnterDiv(pnlTablero);
+
         btnImprimeXSem.click(function () {
-            if (Semana.val()) { 
-                
+            if (Semana.val()) {
+
             } else {
                 iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
                     Semana.focus().select();
@@ -301,17 +303,42 @@
         });
 
         btnImprimeXDia.click(function () {
-            if (Semana.val()) {
-                if (Dia.val()) {
-                    
+            if (Anio.val()) {
+                if (Semana.val()) {
+                    if (Dia.val()) {
+                        var p = {
+                            SEMANA: Semana.val() ? Semana.val() : '',
+                            DIA: Dia.val() ? Dia.val() : '',
+                            DIAT: DiaT.val() ? DiaT.val() : '',
+                            ANO: Anio.val() ? Anio.val() : ''
+                        };
+                        onOpenOverlay('Espere un momento...');
+                        $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/getReportesXSemDiaAno'); ?>', p).done(function (xxx) {
+                            if (xxx.length > 0) {
+                                onImprimirReporteFancyArray(JSON.parse(xxx));
+                            } else {
+                                iMsg('NO SE HA PODIDO GENERAR LOS REPORTES SOLICITADOS, INTENTE DE NUEVO O MÁS TARDE', 'w', function () {
+                                    Semana.focus().select();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        }).always(function () {
+                            onCloseOverlay();
+                        });
+                    } else {
+                        iMsg('DEBE DE ESPECIFICAR UN DIA', 'w', function () {
+                            Dia.focus().select();
+                        });
+                    }
                 } else {
-                    iMsg('DEBE DE ESPECIFICAR UN DIA', 'w', function () {
-                        Dia.focus().select();
+                    iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
+                        Semana.focus().select();
                     });
                 }
             } else {
-                iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
-                    Semana.focus().select();
+                iMsg('DEBE DE ESPECIFICAR UN AÑO', 'w', function () {
+                    Anio.focus().select();
                 });
             }
         });
@@ -430,7 +457,7 @@
 //                dt.search(op).draw();
 //            } else {
 //                dt.search('').draw();
-//            }
+            //            }
             ControlesAsignadosAlDia.ajax.reload();
         });
 
@@ -503,7 +530,7 @@
 //                console.log('Buscando...');
 //                getEstiloColorParesTxParPorControl($(this).val());
 //                dt.search($(this).val()).draw();
-//            }
+            //            }
         });
 
         Semana.on('keydown', function (e) {
@@ -512,7 +539,7 @@
 //                dt.search($(this).val()).draw();
 //            } else {
 //                dt.search('').draw();
-//            }
+            //            }
             if (e.keyCode === 13) {
                 ControlesSinAsignarAlDia.ajax.reload();
             }
@@ -521,7 +548,7 @@
 //                tblControlesSinAsignarAlDia.DataTable().column(6).search(Semana.val()).draw();
 //            } else {
 //                tblControlesSinAsignarAlDia.DataTable().column(6).search('').draw();
-//            }
+            //            }
         });
         btnRefrescar.trigger('click');
         Anio.val(new Date().getFullYear());
