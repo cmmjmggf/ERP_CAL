@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.2304157239725555"/>
-	<property name="ireport.x" value="504"/>
+	<property name="ireport.zoom" value="1.6757443455841887"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -490,91 +490,91 @@ order by ClaveDepto, C.control ASC]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="422" y="0" width="24" height="9" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
+				<reportElement stretchType="RelativeToTallestObject" x="422" y="0" width="24" height="9" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="30" y="0" width="40" height="9" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<reportElement stretchType="RelativeToTallestObject" x="30" y="0" width="40" height="9" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="450" y="0" width="85" height="9" uuid="7cdcb5c2-06d2-4256-8889-e4b8eebe2d68"/>
+				<reportElement stretchType="RelativeToTallestObject" x="450" y="0" width="85" height="9" uuid="7cdcb5c2-06d2-4256-8889-e4b8eebe2d68"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ColorT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="341" y="0" width="37" height="9" uuid="4f7573f2-6669-41d0-91e1-341474e70dae"/>
+				<reportElement stretchType="RelativeToTallestObject" x="341" y="0" width="37" height="9" uuid="4f7573f2-6669-41d0-91e1-341474e70dae"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Herramental}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="539" y="0" width="21" height="9" uuid="06d9fffa-f2b5-40f3-a4e3-23cbfbf4d7f0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="539" y="0" width="21" height="9" uuid="06d9fffa-f2b5-40f3-a4e3-23cbfbf4d7f0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="564" y="0" width="107" height="9" uuid="07abc963-aa66-45cc-a761-852ef55b5a08"/>
+				<reportElement stretchType="RelativeToTallestObject" x="564" y="0" width="107" height="9" uuid="07abc963-aa66-45cc-a761-852ef55b5a08"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ClienteNombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="108" y="0" width="15" height="9" uuid="408fe924-c1ed-4f4c-93ad-d2de52dc106b"/>
+				<reportElement stretchType="RelativeToTallestObject" x="108" y="0" width="15" height="9" uuid="408fe924-c1ed-4f4c-93ad-d2de52dc106b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ClaveDepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="125" y="0" width="60" height="9" uuid="bb0338da-3ca1-4399-b37b-467a6f458b7b"/>
+				<reportElement stretchType="RelativeToTallestObject" x="125" y="0" width="60" height="9" uuid="bb0338da-3ca1-4399-b37b-467a6f458b7b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreDepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="30" height="9" uuid="1e8bce7a-53e9-4ca8-975e-d095510c6ad0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="9" uuid="1e8bce7a-53e9-4ca8-975e-d095510c6ad0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pedido}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
-				<reportElement x="70" y="0" width="38" height="9" uuid="08619e0e-04d3-493a-96ce-a4c74c9d5a1b"/>
+				<reportElement stretchType="RelativeToTallestObject" x="70" y="0" width="38" height="9" uuid="08619e0e-04d3-493a-96ce-a4c74c9d5a1b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaProgramacion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yy">
-				<reportElement x="187" y="0" width="38" height="9" uuid="fd33db88-ec04-4f73-860b-3496263f377f"/>
+				<reportElement stretchType="RelativeToTallestObject" x="187" y="0" width="38" height="9" uuid="fd33db88-ec04-4f73-860b-3496263f377f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
-				<reportElement x="268" y="0" width="22" height="9" uuid="c3d0ba95-d098-4ee7-8a30-cd67106a834d"/>
+				<reportElement stretchType="RelativeToTallestObject" x="268" y="0" width="22" height="9" uuid="c3d0ba95-d098-4ee7-8a30-cd67106a834d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="290" y="0" width="18" height="9" uuid="d67e3acd-54d3-4413-8071-f19e5d52342f">
+				<reportElement stretchType="RelativeToTallestObject" x="290" y="0" width="18" height="9" uuid="d67e3acd-54d3-4413-8071-f19e5d52342f">
 					<printWhenExpression><![CDATA[$F{ParesFacturados}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -583,56 +583,56 @@ order by ClaveDepto, C.control ASC]]>
 				<textFieldExpression><![CDATA[$F{ParesFacturados}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="310" y="0" width="28" height="9" uuid="5dbd43f7-4130-44cd-9d3f-62079b5ff111"/>
+				<reportElement stretchType="RelativeToTallestObject" x="310" y="0" width="28" height="9" uuid="5dbd43f7-4130-44cd-9d3f-62079b5ff111"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}-$F{ParesFacturados}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="382" y="0" width="35" height="9" uuid="f208c566-7712-45a6-90a1-d68e8deb3de9"/>
+				<reportElement stretchType="RelativeToTallestObject" x="382" y="0" width="35" height="9" uuid="f208c566-7712-45a6-90a1-d68e8deb3de9"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{linea}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="672" y="0" width="18" height="9" uuid="43f7a538-136e-4fd0-a581-0e2dd7901212"/>
+				<reportElement stretchType="RelativeToTallestObject" x="672" y="0" width="18" height="9" uuid="43f7a538-136e-4fd0-a581-0e2dd7901212"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{semana}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="690" y="0" width="17" height="9" uuid="6745f73b-cff1-40d8-8e59-e2eabe8b60a5"/>
+				<reportElement stretchType="RelativeToTallestObject" x="690" y="0" width="17" height="9" uuid="6745f73b-cff1-40d8-8e59-e2eabe8b60a5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{diaprg}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="707" y="0" width="36" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
+				<reportElement stretchType="RelativeToTallestObject" x="707" y="0" width="36" height="9" uuid="87d65f08-9969-4fe6-8d8f-b615166d54db"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaEntrega}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="743" y="0" width="25" height="9" uuid="8224a009-c3de-4388-8fe2-6c1592e37c38"/>
+				<reportElement stretchType="RelativeToTallestObject" x="743" y="0" width="25" height="9" uuid="8224a009-c3de-4388-8fe2-6c1592e37c38"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{suela}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
-				<reportElement x="225" y="0" width="18" height="9" uuid="ef3d7f50-26ae-4246-8a1c-f2cacf175017"/>
+				<reportElement stretchType="RelativeToTallestObject" x="225" y="0" width="18" height="9" uuid="ef3d7f50-26ae-4246-8a1c-f2cacf175017"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{dias_ava}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
-				<reportElement x="243" y="0" width="25" height="9" uuid="04f08886-cb3c-4c08-9364-62c3c75613d8"/>
+				<reportElement stretchType="RelativeToTallestObject" x="243" y="0" width="25" height="9" uuid="04f08886-cb3c-4c08-9364-62c3c75613d8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>

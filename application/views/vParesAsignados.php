@@ -24,7 +24,7 @@
                 <label>Año</label>
                 <input type="text" id="ParesAnio" name="ParesAnio" class="form-control form-control-sm">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="form-group">
@@ -61,7 +61,7 @@
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
             <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
-        </div> 
+        </div>
     </div>
 </div>
 <script>
@@ -75,7 +75,7 @@
     var is_showed = false;
 
     $(document).ready(function () {
-
+        handleEnterDiv(pnlTablero);
         ParesAnio.val(new Date().getFullYear());
 
         mdlParesAsignados.find("input[type='radio']").change(function () {
@@ -154,7 +154,7 @@
     function onVerificarSemanaPares(e, input) {
         if (e.keyCode === 13 && input.val() !== '') {
             $.getJSON(master_url_pares_asignados + 'onChecarSemanaValida', {SEMANA: input.val()}).done(function (data, x, jq) {
-                console.log('SEMANA VÁLIDA ? ',data);
+                console.log('SEMANA VÁLIDA ? ', data);
                 if (parseInt(data[0].SEMANA_NO_CERRADA) === 0) {
                     swal('ATENCIÓN', 'LA SEMANA ESPECIFICADA NO EXISTE', 'warning').then((value) => {
                         input.focus();

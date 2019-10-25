@@ -217,7 +217,7 @@ class Estilos extends CI_Controller {
                         if (!file_exists(utf8_decode($URL_DOC))) {
                             mkdir(utf8_decode($URL_DOC), 0777, true);
                         }
-                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . utf8_decode($_FILES["Foto"]["name"]))) {
+                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . '/' . utf8_decode($_FILES["Foto"]["name"]))) {
                             $img = $master_url . $_FILES["Foto"]["name"];
                             $this->load->library('image_lib');
                             $config['image_library'] = 'gd2';

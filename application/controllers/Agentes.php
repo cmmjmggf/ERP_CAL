@@ -18,11 +18,18 @@ class Agentes extends CI_Controller {
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuClientes');
+                    $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
+
+                    if ($Origen === 'CLIENTES') {
+                        $this->load->view('vMenuClientes');
+                    } else if ($Origen === 'PRODUCCION') {
+                        $this->load->view('vMenuProduccion');
+                    }
+
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
-                    break;  
+                    break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');
                     break;
@@ -31,7 +38,7 @@ class Agentes extends CI_Controller {
                     break;
                 case 'FACTURACION':
                     $this->load->view('vMenuFacturacion');
-                    break; 
+                    break;
                 case 'PRODUCCION':
                     $this->load->view('vMenuProduccion');
                     break;
