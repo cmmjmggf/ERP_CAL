@@ -37,11 +37,13 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
         $Controles = $this->ReporteMaterialProduccionEstilo_model->onImprimirReporte($this->input->post('Ano'), $this->input->post('Sem'), $this->input->post('Articulo'));
         if (!empty($Controles)) {
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
-
+            $pdf->setAno($this->input->post('Ano'));
+            $pdf->setSem($this->input->post('Sem'));
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
 
             $Subtotal = 0;
+            $Pares = 0;
             foreach ($Controles as $keyFT => $F) {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', '', 8.5);
@@ -53,10 +55,11 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
                     utf8_decode($F->Color),
                     mb_strimwidth(utf8_decode($F->Articulo . '   ' . $F->ArticuloT), 0, 70, ""),
                     number_format($F->Cantidad, 2, ".", ","),
-                    utf8_decode($F->UnidadMedidaT),
+                    utf8_decode($F->Unidad),
                     utf8_decode($F->Pares)
                         ), 'B');
                 $Subtotal += $F->Cantidad;
+                $Pares += $F->Pares;
             }
             $pdf->SetFont('Calibri', 'B', 8.5);
             $pdf->Row(array(
@@ -66,7 +69,7 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
                 'Total',
                 number_format($Subtotal, 2, ".", ","),
                 '',
-                ''
+                number_format($Pares, 0, ".", ",")
                     ), 0);
 
 
@@ -88,7 +91,7 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
 
     public function onReporteMaterialSemanaDesgloseProdEstilo() {
         $Controles = $this->ReporteMaterialProduccionEstilo_model->onImprimirReporteDesglosado(
-                $this->input->post('Ano'), $this->input->post('dSem'), $this->input->post('aSem'), $this->input->post('Articulo'));
+                $this->input->post('Ano'), $this->input->post('dSem'), $this->input->post('aSem'), $this->input->post('Articulo'), $this->input->post('Tipo'), $this->input->post('Estatus'));
         if (!empty($Controles)) {
             $pdf = new PDFDesglose('P', 'mm', array(215.9, 279.4));
 
@@ -103,7 +106,7 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
             $pdf->SetLineWidth(0.5);
             $pdf->SetX(5);
             $pdf->SetFont('Calibri', '', 8);
-            $pdf->Cell(80, 5, utf8_decode($Controles[0]->Articulo . '   ' . $Controles[0]->ArticuloT . '  ======> ' . $Controles[0]->UnidadMedidaT), 'B'/* BORDE */, 1, 'L');
+            $pdf->Cell(80, 5, utf8_decode($Controles[0]->Articulo . '   ' . $Controles[0]->ArticuloT), 'B'/* BORDE */, 1, 'L');
 
             $Subtotal = 0;
             $Pares = 0;
@@ -140,7 +143,7 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
                 '',
                 '',
                 number_format($Subtotal, 2, ".", ","),
-                $Pares), 0);
+                number_format($Pares, 0, ".", ",")), 0);
 
 
 

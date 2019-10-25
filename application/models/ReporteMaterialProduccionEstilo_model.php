@@ -40,23 +40,35 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
     public function onImprimirReporte($Ano, $Sem, $Articulo) {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select("ODP.ControlT, "
-                    . "ODP.Estilo, "
-                    . "ODP.Color,  "
-                    . "ODPD.Articulo, "
-                    . "ODPD.ArticuloT ,"
-                    . "sum(ODPD.Cantidad) AS Cantidad, "
-                    . "ODPD.UnidadMedidaT, "
-                    . "ODP.Pares  "
-                    . " ", false);
-            $this->db->from('ordendeproduccion ODP');
-            $this->db->join('ordendeproducciond ODPD', 'ON ODP.ID = ODPD.OrdenDeProduccion');
-            $this->db->where('ODP.Ano', $Ano);
-            $this->db->where('ODP.Semana', $Sem);
-            $this->db->where('ODPD.Articulo', $Articulo);
-            $this->db->where('ODPD.Estatus', 'A');
-            $this->db->group_by('ODP.ControlT');
-            $this->db->order_by('ODP.ControlT', 'ASC');
+            $this->db->select(" EXPL.Articulo, EXPL.Descripcion as ArticuloT, EXPL.Unidad,
+                                EXPL.Control as ControlT, EXPL.Estilo, EXPL.Color,
+                                sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as Pares
+                                from (
+                                SELECT
+                                FT.Articulo, A.Descripcion, U.Descripcion AS Unidad,
+                                PE.Control, PE.Estilo, PE.Color,
+                                case when A.Departamento = '10' then
+                                (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                                WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
+                                WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
+                                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )
+                                else (PE.Pares *  FT.Consumo)
+                                end AS Explosion,
+                                PE.Pares
+                                FROM `pedidox` `PE`
+                                JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
+                                JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+                                JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
+                                AND cast(PE.Semana as signed) = $Sem
+                                AND `PE`.`Ano` = '$Ano'
+                                AND FT.Articulo = '$Articulo'
+                                AND PE.stsavan <> 14
+                                AND PE.Maquila = 1
+                                ) as EXPL
+                                group by EXPL.Control
+                                order by EXPL.Control asc ", false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -70,32 +82,48 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
         }
     }
 
-    public function onImprimirReporteDesglosado($Ano, $dSem, $aSem, $Articulo) {
+    public function onImprimirReporteDesglosado($Ano, $dSem, $aSem, $Articulo, $TipoE, $sts) {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select("ODP.ControlT, "
-                    . "ODP.Clave,  "
-                    . "ODP.Cliente,  "
-                    . "ODP.FechaEntrega,  "
-                    . "ODP.Pedido,  "
-                    . "ODP.Semana,  "
-                    . "ODP.Maquila,  "
-                    . "ODP.Estilo, "
-                    . "ODP.Color,  "
-                    . "ODPD.Articulo, "
-                    . "ODPD.ArticuloT ,"
-                    . "sum(ODPD.Cantidad) AS Cantidad, "
-                    . "ODPD.UnidadMedidaT, "
-                    . "ODP.Pares  "
-                    . " ", false);
-            $this->db->from('ordendeproduccion ODP');
-            $this->db->join('ordendeproducciond ODPD', 'ON ODP.ID = ODPD.OrdenDeProduccion');
-            $this->db->where('ODP.Ano', $Ano);
-            $this->db->where("ODP.Semana BETWEEN $dSem AND $aSem");
-            $this->db->where('ODPD.Articulo', $Articulo);
-            $this->db->where('ODPD.Estatus', 'A');
-            $this->db->group_by('ODP.ControlT');
-            $this->db->order_by('ODP.ControlT', 'ASC');
+            $this->db->select("
+                            EXPL.Articulo, EXPL.Descripcion as ArticuloT,
+                            EXPL.Control as ControlT, EXPL.Pedido, EXPL.FechaEntrega, EXPL.Estilo, EXPL.Cliente as Clave,
+                            (select razons from clientes where clave = EXPL.Cliente) as Cliente,
+                            EXPL.Semana, EXPL.Maquila,
+                            sum(EXPL.Explosion) as Cantidad, EXPL.Pares
+                            from (
+
+                            SELECT
+                            FT.Articulo, A.Descripcion,
+                            PE.Control, PE.Clave as Pedido, PE.FechaEntrega, PE.Estilo, PE.Cliente,
+                            PE.Semana, PE.Maquila,
+                            case when $TipoE = '10' then
+                            (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                            WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
+                            WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
+                            WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )
+                            else
+                            (PE.Pares *  FT.Consumo)
+                            end AS Explosion,
+                            PE.Pares
+                            FROM `pedidox` `PE`
+                            JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
+                            JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+                            JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                            JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                            AND cast(PE.Semana as signed) BETWEEN $dSem AND $aSem
+                            AND `PE`.`Ano` = '$Ano'
+                            AND FT.Articulo = '$Articulo'
+                            AND
+                            case
+                            when $sts = 1 then PE.stsavan < 3
+                            when $sts = 2 then PE.stsavan <> 14
+                            end
+
+                            ) as EXPL
+
+                            group by EXPL.Control
+                            order by EXPL.Control asc ", false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

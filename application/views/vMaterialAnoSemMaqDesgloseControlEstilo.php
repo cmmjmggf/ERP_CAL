@@ -213,7 +213,6 @@
         mdlMaterialAnoSemMaqDesgloseControlEstilo.find("#Articulo")[0].selectize.clear(true);
         mdlMaterialAnoSemMaqDesgloseControlEstilo.find("#Articulo")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReporteMaterialProduccionEstilo/getArticulosXDepto', {Tipo: tipo}).done(function (data) {
-            console.log(data);
             $.each(data, function (k, v) {
                 mdlMaterialAnoSemMaqDesgloseControlEstilo.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
             });

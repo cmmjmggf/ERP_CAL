@@ -86,7 +86,7 @@ class PDFDesglose extends FPDF {
         $anchos = array(30/* 0 */, 16/* 1 */, 15/* 2 */, 17/* 3 */, 13/* 4 */, 0.1/* 5 */, 69.9/* 6 */, 10/* 7 */, 10/* 8 */, 14/* 9 */, 10/* 10 */);
         $aligns = array('L', 'L', 'C', 'C', 'C', 'C', 'L', 'C', 'C', 'C', 'C');
 
-        $this->SetY(22);
+        $this->SetY(18);
         $this->SetX(5);
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
@@ -122,7 +122,7 @@ class PDFDesglose extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -140,7 +140,7 @@ class PDFDesglose extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], $border, $a);
+            $this->MultiCell($w, 3.5, $data[$i], $border, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -202,6 +202,25 @@ class PDFDesglose extends FPDF {
 
 class PDF extends FPDF {
 
+    public $ano;
+    public $sem;
+
+    function getAno() {
+        return $this->ano;
+    }
+
+    function getSem() {
+        return $this->sem;
+    }
+
+    function setAno($ano) {
+        $this->ano = $ano;
+    }
+
+    function setSem($sem) {
+        $this->sem = $sem;
+    }
+
     function Header() {
 
         $this->AddFont('Calibri', '');
@@ -213,10 +232,21 @@ class PDF extends FPDF {
         $this->SetY(5);
         $this->SetX(36);
         $this->Cell(60, 4, utf8_decode($_SESSION["EMPRESA_RAZON"]), 0/* BORDE */, 1, 'L');
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9);
         $this->SetX(36);
-        $this->Cell(60, 4, utf8_decode("Material en semana de producción"), 0/* BORDE */, 1, 'L');
+        $this->Cell(60, 4, utf8_decode("Material de producción de la semana:"), 0/* BORDE */, 0, 'L');
 
+        $this->SetFont('Calibri', '', 9);
+        $this->SetX(90);
+        $this->Cell(8, 4, utf8_decode($this->getSem()), 0/* BORDE */, 1, 'C');
+
+        $this->SetFont('Calibri', 'B', 9);
+        $this->SetX(36);
+        $this->Cell(20, 4, utf8_decode("Del Año:"), 0/* BORDE */, 0, 'L');
+
+        $this->SetFont('Calibri', '', 9);
+        $this->SetX(50);
+        $this->Cell(10, 4, utf8_decode($this->getAno()), 0/* BORDE */, 0, 'C');
 
 
         //Paginador
@@ -239,14 +269,14 @@ class PDF extends FPDF {
         $anchos = array(18/* 0 */, 14/* 1 */, 12/* 2 */, 80/* 3 */, 17/* 4 */, 17/* 5 */, 17/* 6 */);
         $aligns = array('L', 'L', 'L', 'L', 'C', 'C', 'C');
 
-        $this->SetY(22);
+        $this->SetY(18);
         $this->SetX(5);
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
         $this->Row(array('Control', 'Estilo', 'Color', utf8_decode('Artículo'), 'Cant.', 'U.M.', 'Pares'), 'B');
 
         $anchos = array(18/* 0 */, 14/* 1 */, 12/* 2 */, 80/* 3 */, 17/* 4 */, 17/* 5 */, 17/* 6 */);
-        $aligns = array('L', 'L', 'L', 'L', 'C', 'C', 'C');
+        $aligns = array('L', 'L', 'L', 'L', 'R', 'C', 'C');
         $this->SetAligns($aligns);
         $this->SetWidths($anchos);
     }
@@ -275,7 +305,7 @@ class PDF extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -293,7 +323,7 @@ class PDF extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], $border, $a);
+            $this->MultiCell($w, 3.5, $data[$i], $border, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }

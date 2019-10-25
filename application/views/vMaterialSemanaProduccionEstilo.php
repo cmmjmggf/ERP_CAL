@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="col-12 col-sm-12 mt-2">
-                        <legend class="badge badge-danger" style="font-size: 14px;">Nota: Sólo para maquila</legend>
+                        <legend class="badge badge-danger" style="font-size: 14px;">Nota: Sólo para maquila 1</legend>
                     </div>
 
                     <div class="row">
