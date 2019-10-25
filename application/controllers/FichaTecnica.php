@@ -47,6 +47,15 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function onGetInfoArticulo() {
+        try {
+            $Art = $this->input->get('Articulo');
+            print json_encode($this->db->query("SELECT U.Descripcion as unidad from articulos a join unidades u on u.clave=a.UnidadMedida where A.Clave = '$Art' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             $this->ftm->onLimpiarTabla();
@@ -539,7 +548,8 @@ class FichaTecnica extends CI_Controller {
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
                 'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
                 'AfectaPV' => ($x->post('AfectaPV') !== NULL) ? $x->post('AfectaPV') : 0,
-                'Estatus' => 'ACTIVO'
+                'Estatus' => 'ACTIVO',
+                'FechaAlta' => Date('d/m/Y')
             );
             if (isset($PRECIO[0])) {
                 $data["Precio"] = $PRECIO[0]->PRECIO;

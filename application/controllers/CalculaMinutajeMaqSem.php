@@ -226,7 +226,7 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                                     . "else Observacion "
                                     . "end as Observacion, "
                                     . ""
-                                    . "ObservacionDetalle
+                                    . "ObservacionDetalle, clave as bpedido, concat(estilo,color) as besticolor, str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega
                                     from pedidox where cliente = $Cliente and clave = $Pedido and estatus <> 'C'
   ")->result());
         } catch (Exception $exc) {
@@ -287,7 +287,7 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                                     . "else Observacion "
                                     . "end as Observacion, "
                                     . ""
-                                    . "ObservacionDetalle
+                                    . "ObservacionDetalle, clave as bpedido, concat(estilo,color) as besticolor, str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega
                                     from pedidox where ano =$Ano and maquila = $Maq and semana = $Sem and estatus <> 'C'
   ")->result());
         } catch (Exception $exc) {

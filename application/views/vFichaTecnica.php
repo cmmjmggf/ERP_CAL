@@ -131,11 +131,15 @@
                     </select>
                 </div>
 
-                <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+                <div class="col-12 col-sm-12 col-md-3 col-lg-1">
                     <label for="Consumo">PzXPar</label>
                     <input type="text" id="PzXPar" name="PzXPar" class="form-control form-control-sm numbersOnly" maxlength="4">
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+                <div class="col-12 col-sm-12 col-md-3 col-lg-1">
+                    <label for="Unidad">Unidad</label>
+                    <input type="text"  id="Unidad" name="Unidad" class="form-control form-control-sm numbersOnly" readonly="" maxlength="7">
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-lg-1">
                     <label for="Consumo">Consumo</label>
                     <input type="text"  id="Consumo" name="Consumo" class="form-control form-control-sm numbersOnly" maxlength="7">
                 </div>
@@ -530,6 +534,18 @@
             if (valido) {
                 pnlDatos.find("#FechaAlta").prop("readonly", true);
                 onAgregarFila();
+            }
+        });
+        pnlDatos.find("[name='Articulo']").change(function () {
+            if (nuevo) {
+                $.getJSON(master_url + 'onGetInfoArticulo', {Articulo: $(this).val()}).done(function (data) {
+                    if (data.length > 0) {
+                        pnlDatos.find("#Unidad").val(data[0].unidad);
+                    }
+                }).fail(function (x) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
             }
         });
         pnlDatos.find("[name='Estilo']").change(function () {

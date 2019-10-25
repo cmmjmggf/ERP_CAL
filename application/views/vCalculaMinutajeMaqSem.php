@@ -56,6 +56,22 @@
             </div>
         </div>
         <hr>
+
+        <!--        Ordenamiento-->
+        <div class="row">
+            <div class="col-1 ">
+                <label class="text-info">Ordenar por:</label>
+            </div>
+            <div class="col-1 ">
+                <button type="button" class="btn btn-info btn-sm" id="btnOrdenaXPedido" onclick="ordenaPorPedido()"><i class="fa fa-archive"></i> Pedido</button>
+            </div>
+            <div class="col-1 ">
+                <button type="button" class="btn btn-info btn-sm" id="btnOrdenaXEstiloColor" onclick="ordenaPorEstiloColor()"><i class="fa fa-shoe-prints"></i> Estilo-Color</button>
+            </div>
+            <div class="col-1 ">
+                <button type="button" class="btn btn-info btn-sm" id="btnOrdenaXFecEnt" onclick="ordenaPorFechaEntrega()"><i class="fa fa-calendar-alt"></i> Fecha Entrega</button>
+            </div>
+        </div>
         <!--Tabla-->
         <div id="Registros" class="datatable-wide">
             <table id="tblRegistros" class="table table-sm display " style="width:100%">
@@ -75,6 +91,9 @@
                         <th>Precio</th>
                         <th>Obs</th>
                         <th>Obs 2</th>
+                        <th class="d-none">bPedido</th>
+                        <th class="d-none">besticolor</th>
+                        <th class="d-none">bfecha</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -287,7 +306,39 @@
     var pnlTablero = $("#pnlTablero");
     var tblRegistros = $('#tblRegistros');
     var Registros;
+    var asc = true;
+    var asc2 = true;
+    var asc3 = true;
 
+    function ordenaPorFechaEntrega() {
+        if (asc3) {
+            Registros.order([16, 'asc']).draw();
+            asc3 = false;
+        } else {
+            Registros.order([16, 'desc']).draw();
+            asc3 = true;
+        }
+    }
+
+    function ordenaPorPedido() {
+        if (asc) {
+            Registros.order([14, 'asc']).draw();
+            asc = false;
+        } else {
+            Registros.order([14, 'desc']).draw();
+            asc = true;
+        }
+    }
+
+    function ordenaPorEstiloColor() {
+        if (asc2) {
+            Registros.order([15, 'asc']).draw();
+            asc2 = false;
+        } else {
+            Registros.order([15, 'desc']).draw();
+            asc2 = true;
+        }
+    }
     $(document).ready(function () {
         init();
         handleEnterDiv(pnlTablero);
@@ -693,7 +744,10 @@
                 {"data": "stsavan"},
                 {"data": "precio"},
                 {"data": "Observacion"},
-                {"data": "ObservacionDetalle"}
+                {"data": "ObservacionDetalle"},
+                {"data": "bpedido"},
+                {"data": "besticolor"},
+                {"data": "bfechaentrega"}
             ],
             "columnDefs": [
                 {
@@ -701,6 +755,21 @@
                     "render": function (data, type, row) {
                         return  $.number(parseFloat(data), 2, '.', ',');
                     }
+                },
+                {
+                    "targets": [14],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [15],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [16],
+                    "visible": false,
+                    "searchable": true
                 }
             ],
             "createdRow": function (row, data, index) {
@@ -764,7 +833,10 @@
                 {"data": "stsavan"},
                 {"data": "precio"},
                 {"data": "Observacion"},
-                {"data": "ObservacionDetalle"}
+                {"data": "ObservacionDetalle"},
+                {"data": "bpedido"},
+                {"data": "besticolor"},
+                {"data": "bfechaentrega"}
             ],
             "columnDefs": [
                 {
@@ -772,6 +844,21 @@
                     "render": function (data, type, row) {
                         return  $.number(parseFloat(data), 2, '.', ',');
                     }
+                },
+                {
+                    "targets": [14],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [15],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [16],
+                    "visible": false,
+                    "searchable": true
                 }
             ],
             "createdRow": function (row, data, index) {
