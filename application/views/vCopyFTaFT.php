@@ -56,7 +56,7 @@
                             ESTILO: mdlCopiarFT.find("#EstiloAReemplazar").val(),
                             COLOR: mdlCopiarFT.find("#ColorAReemplazar").val()
                         }).done(function (a) {
-                    console.log(a);
+//                    console.log(a);
                     if (parseInt(a[0].FICHAS_X_ESTILO) > 0) {
                         swal('ATENCIÓN', 'NO SE PUEDE COPIAR LA FICHA TECNICA DE ESTE ESTILO-COLOR A ESTE ESTILO-COLOR, PORQUE YA TIENE ESTABLECIDAS FICHAS TECNICAS', 'warning').then((value) => {
                             mdlCopiarFT.find("#EstiloACopiar").focus().select();

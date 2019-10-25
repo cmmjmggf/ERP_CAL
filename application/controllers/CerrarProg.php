@@ -200,7 +200,9 @@ class CerrarProg extends CI_Controller {
                                 'Ano' => $Y, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
                             ));
                             $Control = $Y . $S . $M . $C;
-                            $this->db->set('Control', $Control)->set('FechaProduccion', Date('Y-m-d h:i:s'))
+                            $this->db->set('Control', $Control)
+                                    ->set('FechaProduccion', Date('Y-m-d h:i:s'))
+                                    ->set('FechaProg', Date('Y-m-d h:i:s'))
                                     ->where('Estilo', $v->Estilo)
                                     ->where('Color', $v->Color)
                                     ->where('Serie', $v->Serie)

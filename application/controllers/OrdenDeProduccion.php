@@ -322,7 +322,7 @@ class OrdenDeProduccion extends CI_Controller {
                 }
 
                 /* MOVER ESTATUS EN CASO DE MAQUILAS 2,3,4,5...99 */
-                if (intval($x['MAQUILA']) >= 2) {
+                if (intval($v->Maquila) > 1) {
                     /*
                      * CUANDO LOS TRAEN DE UNA MAQUILA QUE NO ES LA 1 (UNO): SE DEBEN DE PROCESAR A ENSUELADO 
                      * 140 = ENSUELADO
@@ -403,7 +403,7 @@ class OrdenDeProduccion extends CI_Controller {
             }
             if ($x["SEMANA"] !== '') {
                 $this->db->where('PD.Semana', $x["SEMANA"]);
-            } 
+            }
             $sql = $this->db->get();
 //                PRINT $this->db->last_query();
             print json_encode($sql->result());

@@ -221,17 +221,43 @@ class ReasignarControles extends CI_Controller {
                 ));
                 print $this->db->last_query() . "\n";
 
-                print "\n 5. update pedidox control,semana,maquila \n";
-                $this->db->set('Control', $Control)
-                        ->set('Semana', $SEMANA_A_ASIGNAR)
-                        ->set('Maquila', $MAQUILA_A_ASIGNAR)
+
+                  print "\n 5. Se crea una copia del control a reasignar \n";
+
+                $this->db->query("INSERT INTO `pedidox`
+(`Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Estilo`,`Color`,`FechaEntrega`,`Maquila`,
+`Semana`,`Ano`,`Recio`,`Precio`,`Observacion`,`ObservacionDetalle`,`Serie`,`Control`,`C1`,`C2`,
+`C3`,`C4`,`C5`,`C6`,`C7`,`C8`,`C9`,`C10`,`C11`,`C12`,`C13`,
+`C14`,`C15`,`C16`,`C17`,`C18`,`C19`,`C20`,`C21`,`C22`,`Estatus`,
+`Registro`,`Recibido`,`Pares`,`ParesFacturados`,`EstiloT`,`ColorT`,`DiaProg`,`SemProg`,`AnioProg`,`FechaProg`,`HoraProg`,
+`Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion`) 
+SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Estilo`,`Color`,`FechaEntrega`,{$MAQUILA_A_ASIGNAR},
+{$SEMANA_A_ASIGNAR},`Ano`,`Recio`,`Precio`,`Observacion`,`ObservacionDetalle`,`Serie`,{$Control},`C1`,`C2`,
+`C3`,`C4`,`C5`,`C6`,`C7`,`C8`,`C9`,`C10`,`C11`,`C12`,`C13`,
+`C14`,`C15`,`C16`,`C17`,`C18`,`C19`,`C20`,`C21`,`C22`,`Estatus`,
+`Registro`,`Recibido`,`Pares`,`ParesFacturados`,`EstiloT`,`ColorT`,`DiaProg`,`SemProg`,`AnioProg`,`FechaProg`,`HoraProg`,
+`Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion` FROM pedidox AS PP WHERE PP.Control = {$v->Control} limit 1;");
+
+//                  print "\n 5. update pedidox control,semana,maquila \n";
+//                $this->db->set('Control', $Control)
+//                        ->set('Semana', $SEMANA_A_ASIGNAR)
+//                        ->set('Maquila', $MAQUILA_A_ASIGNAR)
+//                        ->set('Observacion', $OBSERVACIONES)
+//                        ->set('ObservacionDetalle', $OBSERVACIONES_ADICIONALES)
+//                        ->set('FechaProduccion', Date('Y-m-d h:i:s'))
+//                        ->where('Estilo', $v->Estilo)->where('Color', $v->Color)
+//                        ->where('Serie', $v->Serie)->where('Maquila', $v->Maquila)
+//                        ->where('Semana', $v->Semana)->where('Ano', $v->Ano)
+//                        ->where('Clave', $v->Clave)->where('ID', $v->ID)
+//                        ->update('pedidox');
+                  print "\n 5.1 Se cancela el control y se deja la copia \n";
+                $this->db->set('Estatus', 'I')->set('EstatusProduccion', 'CANCELADO')->set('DeptoProduccion', 270)->set('stsavan', 14)
                         ->set('Observacion', $OBSERVACIONES)
                         ->set('ObservacionDetalle', $OBSERVACIONES_ADICIONALES)
-                        ->set('FechaProduccion', Date('Y-m-d h:i:s'))
                         ->where('Estilo', $v->Estilo)->where('Color', $v->Color)
                         ->where('Serie', $v->Serie)->where('Maquila', $v->Maquila)
                         ->where('Semana', $v->Semana)->where('Ano', $v->Ano)
-                        ->where('Clave', $v->Clave)->where('ID', $v->ID)
+                        ->where('Clave', $v->Clave)->where('Control', $v->Control)->where('ID', $v->ID)
                         ->update('pedidox');
                 print $this->db->last_query() . "\n";
 
