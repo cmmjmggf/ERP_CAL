@@ -73,7 +73,7 @@
             btnAceptarForroGeneral = mdlConsumosPielForro.find("#btnAceptarForroGeneral");
 
     $(document).ready(function () {
-        handleEnterDiv(mdlConsumosPielForro);
+
         btnAceptarForroGeneral.click(function () {
             HoldOn.open({
                 theme: 'sk-cube',
@@ -201,7 +201,7 @@
 
         getCortadores();
         getArticulos();
-
+        handleEnterDiv(mdlConsumosPielForro);
         mdlConsumosPielForro.find("input").val('');
         mdlConsumosPielForro.find("#Articulo")[0].selectize.clear(true);
         mdlConsumosPielForro.find("#Cortador")[0].selectize.clear(true);

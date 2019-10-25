@@ -37,14 +37,14 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <label>Fecha Final</label>
                 <input type="text" id="FechaFinal" name="FechaFinal"  class="form-control form-control-sm date notEnter" placeholder="" >
-            </div> 
+            </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-2">
-                <div class="alert alert-dismissible alert-danger"> 
+                <div class="alert alert-dismissible alert-danger">
                     <strong>Nota!</strong> Si desea información entre fechas solo capture maquila y fechas.
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-2">
-                <div class="alert alert-dismissible alert-danger"> 
+                <div class="alert alert-dismissible alert-danger">
                     <strong>Nota!</strong> El resultado de este reporte es lo que se ha entregado de almacen a corte solamente. No tiene que ser el programa completo.
                 </div>
             </div>
@@ -202,7 +202,7 @@
 
         getCortadores();
         getArticulos();
-
+        handleEnterDiv(mdlConsumosPielForro);
         mdlConsumosPielForro.find("input").val('');
         mdlConsumosPielForro.find("#Articulo")[0].selectize.clear(true);
         mdlConsumosPielForro.find("#Cortador")[0].selectize.clear(true);

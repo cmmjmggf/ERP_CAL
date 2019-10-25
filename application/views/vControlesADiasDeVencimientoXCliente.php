@@ -3,12 +3,12 @@
         <h3 class="font-weight-bold">Controles a dias de vencimiento por cliente</h3>
     </div>
     <div class="card-body">
-        <div class="row"> 
+        <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Cliente</label>
                 <select id="Cliente" name="Cliente" class="form-control form-control-sm numeric">
                 </select>
-            </div>  
+            </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                 <label>Año</label>
                 <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numeric" maxlength="4">
@@ -24,7 +24,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                 <label>Dias</label>
                 <input type="text" id="Dias" name="Dias" class="form-control form-control-sm numeric" maxlength="2">
-            </div>  
+            </div>
         </div>
     </div>
     <div class="card-footer">
@@ -42,9 +42,10 @@
             Dias = pnlTablero.find("#Dias");
 
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
         getClientes();
         Anio.val(new Date().getFullYear());
-        
+
         btnAceptar.click(function () {
             if (Cliente.val() && MaquilaInicial.val() && MaquilaFinal.val() &&
                     Dias.val() && Anio.val()) {
@@ -80,11 +81,11 @@
             }
         });
     });
-    
+
     function getClientes() {
         Cliente[0].selectize.clear(true);
         Cliente[0].selectize.clearOptions();
-        $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/getClientes');?>').done(function (data) {
+        $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/getClientes'); ?>').done(function (data) {
             $.each(data, function (k, v) {
                 Cliente[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
@@ -98,11 +99,11 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
@@ -111,5 +112,5 @@
     }
     .card-header{
         padding: 0px;
-    } 
+    }
 </style>

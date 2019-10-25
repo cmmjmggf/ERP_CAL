@@ -85,6 +85,7 @@
         });
 
         mdlParesAsignadosXTiempos.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlParesAsignadosXTiempos);
             mdlParesAsignadosXTiempos.find("input").val('');
             AnioPAXT.val(AnioX);
             MaquilaPAXT.focus().select();

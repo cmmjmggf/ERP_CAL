@@ -122,7 +122,7 @@ class ReporteMaterialProduccionEstilo extends CI_Controller {
                     $F->FechaEntrega,
                     $F->Estilo,
                     $F->Clave,
-                    mb_strimwidth(utf8_decode($F->Cliente), 0, 43, ""),
+                    mb_strimwidth(utf8_decode($F->Cliente), 0, 42, ""),
                     $F->Semana,
                     $F->Maquila,
                     number_format($F->Cantidad, 2, ".", ","),
