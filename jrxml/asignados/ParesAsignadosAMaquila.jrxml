@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePago" language="groovy" pageWidth="991" pageHeight="1405" columnWidth="951" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.0490403660952117"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="419"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -29,7 +29,7 @@ FROM pedidox AS P
 INNER JOIN maquilas AS M ON P.Maquila = M.Clave
 INNER JOIN clientes AS C ON C.Clave = P.Cliente
 WHERE CAST(P.Maquila AS UNSIGNED) BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND CAST(P.Semana AS UNSIGNED) BETWEEN  $P{SEMANAINICIO} AND $P{SEMANAFIN}
-AND P.Control <> 0 AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13);]]>
+AND P.Control <> 0 AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13) ORDER BY ABS(P.Maquila) ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -93,7 +93,7 @@ AND P.Control <> 0 AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13);]]>
 	<field name="Estatus" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Registro" class="java.lang.String">
+	<field name="Registro" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Recibido" class="java.lang.String">
@@ -170,7 +170,7 @@ AND P.Control <> 0 AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13);]]>
 					<textFieldExpression><![CDATA[$V{Pares_1}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement style="Column header" isPrintRepeatedValues="false" x="492" y="0" width="102" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="60d6f8c1-9fc8-48e4-a387-624f9946a843"/>
+					<reportElement style="Column header" x="492" y="0" width="102" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="60d6f8c1-9fc8-48e4-a387-624f9946a843"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="SansSerif" size="9" isBold="true"/>
 					</textElement>

@@ -188,31 +188,31 @@
         }).done(function (data, x, jq) {
             console.log(data);
             if (data.length > 0) {
-
-                $.fancybox.open({
-                    src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                    type: 'iframe',
-                    opts: {
-                        afterShow: function (instance, current) {
-                            console.info('done!');
-                        },
-                        iframe: {
-                            // Iframe template
-                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                            preload: true,
-                            // Custom CSS styling for iframe wrapping element
-                            // You can use this to set custom iframe dimensions
-                            css: {
-                                width: "85%",
-                                height: "85%"
-                            },
-                            // Iframe tag attributes
-                            attr: {
-                                scrolling: "auto"
-                            }
-                        }
-                    }
-                });
+                window.open(data, '_blank');
+//                $.fancybox.open({
+//                    src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+//                    type: 'iframe',
+//                    opts: {
+//                        afterShow: function (instance, current) {
+//                            console.info('done!');
+//                        },
+//                        iframe: {
+//                            // Iframe template
+//                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+//                            preload: true,
+//                            // Custom CSS styling for iframe wrapping element
+//                            // You can use this to set custom iframe dimensions
+//                            css: {
+//                                width: "85%",
+//                                height: "85%"
+//                            },
+//                            // Iframe tag attributes
+//                            attr: {
+//                                scrolling: "auto"
+//                            }
+//                        }
+//                    }
+//                });
             } else {
                 swal({
                     title: "ATENCIÓN",

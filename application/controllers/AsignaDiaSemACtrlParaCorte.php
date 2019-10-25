@@ -293,4 +293,22 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
         }
     }
 
+    public function getReporte() {
+        try {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["FECHA_INICIAL"] = $this->input->post('FECHA_INICIAL');
+            $parametros["FECHA_FINAL"] = $this->input->post('FECHA_FINAL');
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\asignados\PrefabricacionDePlantillasXFecha.jasper');
+            $jc->setFilename('PARES_PARA_PREPARAR_PLANTILLA_A_TEJIDO_X_FECHA');
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

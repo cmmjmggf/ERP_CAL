@@ -118,10 +118,11 @@ class FichaTecnica extends CI_Controller {
     public function getFichasXEstilo() {
         try {
             $Estilo = $this->input->get('ESTILO');
+            $Color = $this->input->get('COLOR');
             print json_encode(
                             $this->db->query("SELECT COUNT(*) AS FICHAS_X_ESTILO FROM "
                                     . "(SELECT COUNT(*) FROM fichatecnica AS FT "
-                                    . "WHERE FT.Estilo LIKE '$Estilo' "
+                                    . "WHERE FT.Estilo = '{$Estilo}' AND FT.Color = '{$Color}' "
                                     . "GROUP BY FT.Estilo, FT.Color) AS X")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
