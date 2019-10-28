@@ -1,7 +1,9 @@
 <div class="card m-3" id="pnlTablero">
     <div class="card-header">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-2">
+            <div class="w-100 my-1"></div>
+            <div class="col-12 col-sm-12 col-md-2"></div>
+            <div class="col-12 col-sm-12 col-md-2 d-none">
                 <button type="button" class="btn btn-default text-muted" id="btnReload"><span class="fa fa-retweet"></span></button>
             </div>
             <div class="col-12 col-sm-12 col-md-8 text-center">
@@ -10,7 +12,7 @@
                 </h4>
             </div>
             <div class="col-12 col-sm-12 col-md-2" align="right">
-                <button type="button" class="btn btn-primary" id="btnRetornaMaterial">Retornar material</button>
+                <button type="button" class="btn btn-info" id="btnRetornaMaterial"><span class="fa fa-retweet"></span> Retornar material</button>
             </div>
         </div>
     </div>
@@ -256,10 +258,10 @@
 </div>
 
 <div class="modal modal-fullscreen" id="mdlRetornaMaterial">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" align="center">
-                <h4 class="modal-title">Regresa materiales de corte a almacen</h4>
+                <h4 class="modal-title"><span class="fa fa-retweet"></span> Regresa materiales de corte a almacen</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -274,7 +276,7 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-1 col-xl-1">
                         <label>Cortador</label>
-                        <input type="text" id="CortadorClave" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
+                        <input type="text" id="CortadorClave" autofocus="" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 
@@ -434,11 +436,11 @@
         });
 
         mdlRetornaMaterial.on('shown.bs.modal', function () {
-            mdlRetornaMaterial.find("input").val('');
-            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
-                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
-            });
-            CortadorClave.focus();
+//            mdlRetornaMaterial.find("input").val('');
+//            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
+//                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
+//            });
+            CortadorClave.focus().select();
         });
 
         mdlRetornaMaterial.find("#Control").focusout(function () {
@@ -502,7 +504,6 @@
             $.each(mdlRetornaMaterial.find("select"), function (k, v) {
                 mdlRetornaMaterial.find("select")[k].selectize.clear(true);
             });
-            Regresos.ajax.reload();
             mdlRetornaMaterial.modal('show');
         });
         Entregar.keydown(function (event) {

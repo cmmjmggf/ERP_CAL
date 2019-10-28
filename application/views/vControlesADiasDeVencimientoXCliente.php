@@ -1,64 +1,118 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Controles a dias de vencimiento por cliente</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <label>Cliente</label>
-                <select id="Cliente" name="Cliente" class="form-control form-control-sm numeric">
-                </select>
+<div class="modal" id="mdlControlesADiasDeVencimientoXCliente">
+    <div class="modal-dialog modal-dialog-centered notdraggable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-calendar"></span> Controles a dias de vencimiento por cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <label>Año</label>
-                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numeric" maxlength="4">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-5 col-md-2 col-lg-4 col-xl-4">
+                        <label for="" >Cliente*</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" autofocus="" maxlength="5" id="IDClienteCAV" name="IDClienteCAV" required="" placeholder="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4">
+
+                        <select id="ClienteCAV" name="ClienteCAV" class="form-control form-control-sm selectNotEnter">
+                            <option></option>
+                            <?php
+                            //YA CONTIENE LOS BLOQUEOS DE VENTA
+                            $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY C.RazonS ASC;")->result();
+                            foreach ($clientesPnl as $k => $v) {
+                                print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                        <label>Año</label>
+                        <input type="text" id="AnoCAV" name="AnoCAV" class="form-control form-control-sm  numeric" maxlength="4">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 d-none">
+                        <label>De la maquila</label>
+                        <input type="text" id="MaqInicialCAV" name="MaqInicialCAV" readonly="" class="form-control form-control-sm numeric"  maxlength="2">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3  d-none" >
+                        <label>A la maquila</label>
+                        <input type="text" id="MaqFinalCAV" name="MaqFinalCAV"  readonly="" class="form-control form-control-sm numeric" maxlength="2">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3  d-none">
+                        <label>Dias</label>
+                        <input type="text" id="DiasCAV" name="DiasCAV"  readonly="" class="form-control form-control-sm numeric" maxlength="2">
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <label>De la maquila</label>
-                <input type="text" id="MaqInicial" name="MaqInicial" class="form-control form-control-sm numeric" autofocus="" maxlength="2">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btnAceptarCAV"><span class="fa fa-print"></span> Acepta</button>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <label>A la maquila</label>
-                <input type="text" id="MaqFinal" name="MaqFinal" class="form-control form-control-sm numeric" maxlength="2">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <label>Dias</label>
-                <input type="text" id="Dias" name="Dias" class="form-control form-control-sm numeric" maxlength="2">
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
         </div>
     </div>
 </div>
+
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Ano"),
-            MaquilaInicial = pnlTablero.find("#MaqInicial"),
-            MaquilaFinal = pnlTablero.find("#MaqFinal"),
-            btnAceptar = pnlTablero.find("#btnAceptar"),
-            Cliente = pnlTablero.find("#Cliente"),
-            Dias = pnlTablero.find("#Dias");
+
+    var mdlControlesADiasDeVencimientoXCliente = $("#mdlControlesADiasDeVencimientoXCliente"),
+            IDClienteCAV = mdlControlesADiasDeVencimientoXCliente.find("#IDClienteCAV"),
+            ClienteCAV = mdlControlesADiasDeVencimientoXCliente.find("#ClienteCAV"),
+            AnoCAV = mdlControlesADiasDeVencimientoXCliente.find("#AnoCAV"),
+            MaqInicialCAV = mdlControlesADiasDeVencimientoXCliente.find("#MaqInicialCAV"),
+            MaqFinalCAV = mdlControlesADiasDeVencimientoXCliente.find("#MaqFinalCAV"),
+            DiasCAV = mdlControlesADiasDeVencimientoXCliente.find("#DiasCAV"),
+            btnAceptarCAV = mdlControlesADiasDeVencimientoXCliente.find("#btnAceptarCAV");
 
     $(document).ready(function () {
-        handleEnterDiv(pnlTablero);
-        getClientes();
-        Anio.val(new Date().getFullYear());
+        handleEnterDiv(mdlControlesADiasDeVencimientoXCliente);
+        AnoCAV.val(new Date().getFullYear());
+        ClienteCAV[0].selectize.disable();
 
-        btnAceptar.click(function () {
-            if (Cliente.val() && MaquilaInicial.val() && MaquilaFinal.val() &&
-                    Dias.val() && Anio.val()) {
+        mdlControlesADiasDeVencimientoXCliente.on('hidden.bs.modal', function () {
+            mdlControlesADiasDeVencimientoXCliente.find('input').val('');
+            $.each(mdlControlesADiasDeVencimientoXCliente.find("select"), function (k, v) {
+                mdlControlesADiasDeVencimientoXCliente.find("select")[k].selectize.clear(true);
+            });
+        });
+
+        IDClienteCAV.keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtcliente = $(this).val();
+                if (txtcliente) {
+                    $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/onVerificaCliente'); ?>', {Cliente: txtcliente}).done(function (data) {
+                        if (data.length > 0) {
+                            ClienteCAV[0].selectize.setValue(txtcliente); 
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                ClienteCAV[0].selectize.clear(true);
+                                ClienteCAV[0].selectize.focus();
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        mdlControlesADiasDeVencimientoXCliente.on('shown.bs.modal', function () {
+            IDClienteCAV.focus().select();
+        });
+
+
+        btnAceptarCAV.click(function () {
+            btnAceptarCAV.attr('disabled', true);
+            if (ClienteCAV.val()) {
                 HoldOn.open({
                     theme: 'sk-rect',
                     message: 'Por favor espere...'
-                });
-                btnAceptar.attr('disabled', true);
+                }); 
                 var f = new FormData();
-                f.append('MAQUILA_INICIAL', MaquilaInicial.val());
-                f.append('MAQUILA_FINAL', MaquilaFinal.val());
-                f.append('DIAS', Dias.val());
-                f.append('ANIO', Anio.val());
+                f.append('CLIENTE', ClienteCAV.val());
+                f.append('MAQUILA_INICIAL', MaqInicialCAV.val());
+                f.append('MAQUILA_FINAL', MaqFinalCAV.val());
+                f.append('DIAS', DiasCAV.val());
+                f.append('ANIO', AnoCAV.val());
                 $.ajax({
                     url: '<?php print base_url('ControlesADiasDevencimientoXCliente/getReporte'); ?>',
                     type: "POST",
@@ -67,50 +121,21 @@
                     processData: false,
                     data: f
                 }).done(function (data, x, jq) {
-                    onImprimirReporteFancy(data);
+                    onImprimirReporteFancyAFC(data, function (instance, current) {
+                        IDClienteCAV.focus().select();
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
                     HoldOn.close();
-                    btnAceptar.attr('disabled', false);
+                    btnAceptarCAV.attr('disabled', false);
                 });
             } else {
-                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODOS LOS CAMPOS', 'warning').then((value) => {
-                    MaquilaInicial.focus().select();
+                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                    ClienteCAV[0].selectize.focus();
                 });
             }
         });
-    });
 
-    function getClientes() {
-        Cliente[0].selectize.clear(true);
-        Cliente[0].selectize.clearOptions();
-        $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/getClientes'); ?>').done(function (data) {
-            $.each(data, function (k, v) {
-                Cliente[0].selectize.addOption({text: v.Cliente, value: v.Clave});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-</script>
-<style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid;
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
-    }
-    #pnlTablero.card-header{
-        background-color: transparent;
-        border-bottom: 0px;
-    }
-    #pnlTablero.card-body{
-        padding-top: 10px;
-    }
-    .card-header{
-        padding: 0px;
-    }
-</style>
+    });
+</script> 

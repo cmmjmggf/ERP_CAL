@@ -22,8 +22,10 @@ P.Estilo AS ESTILO, P.Color AS COLOR, P.ColorT AS COLORT,
 P.Control AS CONTROL, P.Pares AS PARES, cast(P.Pares AS SIGNED) AS PARESC,
 P.FechaPedido AS PEDIDO, P.FechaRecepcion AS CAPTURA,
 P.FechaProg AS FECHA_PROD, P.FechaEntrega AS FECHA_ENTREGA,
-DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) AS DIAS, P.stsavan AS AVANCE, P.Registro AS PEDIDOFE
-FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) <= $P{DIAS} AND P.Ano =  $P{ANIO} AND P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL}  ORDER BY P.Cliente ASC]]>
+DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) AS DIAS, P.stsavan AS AVANCE, date_format(P.Registro,"%d/%m/%Y") AS PEDIDOFE
+FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) <= $P{DIAS} AND P.Ano =  $P{ANIO} AND P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL}
+AND P.stsavan IN(1, 10, 11, 12, 2, 3, 33, 4, 42, 44, 5, 55, 6, 7, 8, 9)
+ORDER BY ABS(P.Cliente) ASC, ABS(P.Estilo) DESC ]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -72,35 +74,37 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 	<group name="CLIENTE">
 		<groupExpression><![CDATA[$F{CLIENTE}]]></groupExpression>
 		<groupHeader>
-			<band height="15">
+			<band height="13">
 				<textField>
-					<reportElement x="0" y="0" width="50" height="15" uuid="6b6b479d-2be2-4628-a75e-39352ada0830"/>
-					<textElement textAlignment="Center">
-						<font isBold="true"/>
+					<reportElement x="0" y="0" width="50" height="13" uuid="6b6b479d-2be2-4628-a75e-39352ada0830"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CLIENTE}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="50" y="0" width="288" height="15" uuid="3cec596e-b26f-47e3-aff6-e6d3339a43e9"/>
-					<textElement>
-						<font isBold="true"/>
+					<reportElement x="50" y="0" width="288" height="13" uuid="3cec596e-b26f-47e3-aff6-e6d3339a43e9"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CLIENTET}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="12">
 				<staticText>
-					<reportElement x="393" y="0" width="105" height="13" uuid="728fa466-7ba6-4ce1-9677-8765eee9a68c"/>
+					<reportElement x="393" y="0" width="105" height="12" uuid="728fa466-7ba6-4ce1-9677-8765eee9a68c"/>
 					<textElement textAlignment="Center">
-						<font isBold="true"/>
+						<font size="9" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total por cliente]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="498" y="0" width="35" height="13" uuid="dfc93df2-bb1b-4552-be88-22f068e069b4"/>
-					<textElement textAlignment="Center"/>
+					<reportElement x="498" y="0" width="35" height="12" uuid="dfc93df2-bb1b-4552-be88-22f068e069b4"/>
+					<textElement textAlignment="Center">
+						<font size="9"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$V{PARESC_1}]]></textFieldExpression>
 				</textField>
 			</band>
@@ -266,100 +270,100 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="122" y="0" width="25" height="13" uuid="60164052-57fe-43f0-a022-a38c6f3f107e"/>
+				<reportElement x="122" y="0" width="25" height="10" uuid="60164052-57fe-43f0-a022-a38c6f3f107e"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MAQUILA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="147" y="0" width="25" height="13" uuid="e3cb25ad-40fb-46c4-84bf-f9519eb6396b"/>
+				<reportElement x="147" y="0" width="25" height="10" uuid="e3cb25ad-40fb-46c4-84bf-f9519eb6396b"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SEMANA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="172" y="0" width="50" height="13" uuid="cedd776e-b719-447b-a9a6-8d13ebd45354"/>
+				<reportElement x="172" y="0" width="50" height="10" uuid="cedd776e-b719-447b-a9a6-8d13ebd45354"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="50" y="0" width="72" height="13" uuid="16756c63-9d7e-403f-a64f-c8d380a9aca8"/>
+				<reportElement isPrintRepeatedValues="false" x="50" y="0" width="72" height="10" uuid="16756c63-9d7e-403f-a64f-c8d380a9aca8"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PEDIDO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="222" y="0" width="35" height="13" uuid="fef60dfd-b07a-4595-8a31-36b6880ab072"/>
+				<reportElement x="222" y="0" width="35" height="10" uuid="fef60dfd-b07a-4595-8a31-36b6880ab072"/>
 				<textElement>
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="257" y="0" width="182" height="13" uuid="ebe5baea-6ad6-4873-bdc7-267f458952b5"/>
+				<reportElement x="257" y="0" width="182" height="10" uuid="ebe5baea-6ad6-4873-bdc7-267f458952b5"/>
 				<textElement>
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLORT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="439" y="0" width="60" height="13" uuid="7e35927c-3da5-4d77-b07b-9ea850aa0253"/>
+				<reportElement x="439" y="0" width="60" height="10" uuid="7e35927c-3da5-4d77-b07b-9ea850aa0253"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="498" y="0" width="35" height="13" uuid="0245730f-2159-40e1-bb78-c487d89d0285"/>
+				<reportElement x="498" y="0" width="35" height="10" uuid="0245730f-2159-40e1-bb78-c487d89d0285"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="584" y="0" width="50" height="13" uuid="86090c2f-e41c-4e79-9c42-0549e6e18061"/>
+				<reportElement x="584" y="0" width="50" height="10" uuid="86090c2f-e41c-4e79-9c42-0549e6e18061"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CAPTURA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="634" y="0" width="50" height="13" uuid="f58259ba-25ec-46ce-bb9a-b6e91b84f228"/>
+				<reportElement x="634" y="0" width="50" height="10" uuid="f58259ba-25ec-46ce-bb9a-b6e91b84f228"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_PROD}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="533" y="0" width="50" height="13" uuid="662dfa06-a9a6-4a98-b4a2-4f3a319e27a2"/>
+				<reportElement x="533" y="0" width="50" height="10" uuid="662dfa06-a9a6-4a98-b4a2-4f3a319e27a2"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PEDIDOFE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="684" y="0" width="50" height="13" uuid="8468a85d-277c-4536-bba7-aa481d52b2f0"/>
+				<reportElement x="684" y="0" width="50" height="10" uuid="8468a85d-277c-4536-bba7-aa481d52b2f0"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_ENTREGA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="734" y="0" width="50" height="13" uuid="10b34c5f-dcb7-471c-916b-7cb329dcb7f6"/>
+				<reportElement x="734" y="0" width="50" height="10" uuid="10b34c5f-dcb7-471c-916b-7cb329dcb7f6"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DIAS}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="13" width="802" height="1" uuid="df3c8c58-a3d8-4f4c-ab9b-062a5a54af18"/>
+				<reportElement x="50" y="10" width="752" height="1" uuid="df3c8c58-a3d8-4f4c-ab9b-062a5a54af18"/>
 			</line>
 		</band>
 	</detail>
@@ -372,7 +376,7 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 				</textElement>
 				<text><![CDATA[Total general]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="498" y="0" width="71" height="13" uuid="2ea07587-1df2-470f-b636-8542c863a9bb"/>
 				<textFieldExpression><![CDATA[$V{PARESC_2}]]></textFieldExpression>
 			</textField>
