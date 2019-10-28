@@ -113,7 +113,16 @@ class AvanceTejido extends CI_Controller {
 
     public function getControlesParaTejido() {
         try {
-            print json_encode($this->avtm->getControlesParaTejido());
+//            print json_encode($this->avtm->getControlesParaTejido());
+            $this->db->select("C.ID, C.Control AS CONTROL, "
+            . "C.Estilo AS ESTILO, C.Color AS COLOR, C.Pares AS PARES, "
+            . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
+            ->from('controles AS C')
+            ->join('pedidox AS P', 'C.Control = P.Control')
+            ->join('controltej AS CT', 'CT.Control = C.Control', 'left')
+            ->where('CT.ID IS NULL', null, false)
+            ->where('C.EstatusProduccion', 'ALM-PESPUNTE'); 
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -121,7 +130,23 @@ class AvanceTejido extends CI_Controller {
 
     public function getControlesEnTejido() {
         try {
-            print json_encode($this->avtm->getControlesEnTejido());
+//            print json_encode($this->avtm->getControlesEnTejido());
+            $x = $this->input->get();
+
+            $this->db->select("C.ID, C.numcho AS CHOFER, "
+                            . "C.numtej AS TEJEDORA, C.fechapre AS FECHA, "
+                            . "C.control AS CONTROL, C.estilo AS ESTILO, "
+                            . "C.color AS COLOR, C.nomcolo AS COLORT, "
+                            . "C.docto AS DOCTO, C.pares AS PARES", false)
+                    ->from('controltej AS C');
+            if ($x['CHOFER'] !== '') {
+                $this->db->where('C.numcho', $x['CHOFER']);
+            }
+            $this->db->order_by('C.fechapre', 'DESC');
+            if ($x['CHOFER'] === '') {
+                $this->db->limit(99);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -176,7 +201,7 @@ class AvanceTejido extends CI_Controller {
             $db->set('EstatusProduccion', 'ALMACEN TEJIDO')
                     ->set('DeptoProduccion', 150)
                     ->where('Control', $x->post('CONTROL'))->update('pedidox');
-            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES)*/
+            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
             $this->db->set('fec7', Date('Y-m-d h:i:s'))
                     ->where('contped', $x->post('CONTROL'))
                     ->update('avaprd');

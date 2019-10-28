@@ -100,6 +100,8 @@
                     console.log(x, y, z);
                     HoldOn.close();
                 }).always(function () {
+                    btnIngresar.attr('disabled', false);
+                    btnOlvidasteContrasena.attr('disabled', false);
                 });
             }, 1000);
         } else {
@@ -110,6 +112,8 @@
         Usuario.val("");
         Contrasena.val("");
         btnIngresar.click(function () {
+            btnIngresar.attr('disabled', true);
+            btnOlvidasteContrasena.attr('disabled', true);
             login();
         });
         Contrasena.on('keydown', function (e) {
