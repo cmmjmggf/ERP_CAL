@@ -127,6 +127,9 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         Chofer[0].selectize.focus();
+        Chofer.change(function () {
+            ControlesEntregados.ajax.reload();
+        });
         btnImprimirValeAyuda.click(function () {
         });
 
@@ -356,7 +359,7 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -383,12 +386,13 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('AvanceTejido/getControlesEnTejido'); ?>',
-                "type": "POST",
-                "contentType": "application/json",
-                "dataSrc": ""
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CHOFER = (Chofer.val() ? Chofer.val() : '');
+                }
             },
             buttons: buttons,
             "columns": cols,
@@ -397,7 +401,7 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
