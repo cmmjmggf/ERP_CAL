@@ -16,22 +16,22 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
     public function index() {
         $is_valid = false;
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
+            $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vEncabezado')->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vEncabezado')->view('vMenuFichasTecnicas');
+                    $this->load->view('vMenuFichasTecnicas');
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vMenuMateriales');
+                    $this->load->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     $is_valid = true;
                     break;
             }

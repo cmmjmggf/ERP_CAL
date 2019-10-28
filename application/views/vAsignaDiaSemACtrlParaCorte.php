@@ -217,13 +217,13 @@
             btnImprimeXDia = pnlTablero.find("#btnImprimeXDia"),
             btnImprimeXSem = pnlTablero.find("#btnImprimeXSem");
     var dias = {
-        1: 'LUNES',
-        2: 'MARTES',
-        3: 'MIERCOLES',
-        4: 'JUEVES',
-        5: 'VIERNES',
+        3: 'LUNES',
+        4: 'MARTES',
+        5: 'MIERCOLES',
+        1: 'JUEVES',
+        2: 'VIERNES',
         6: 'SABADO',
-        7: 'DOMINGO'
+        0: 'DOMINGO'
     };
     var c = {};
     var options = {

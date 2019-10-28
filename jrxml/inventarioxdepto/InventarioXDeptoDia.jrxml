@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventarioXDeptoDia" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="4.177248169415715"/>
-	<property name="ireport.x" value="1172"/>
-	<property name="ireport.y" value="93"/>
+	<property name="ireport.zoom" value="3.1384283767210515"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="MAQUILA_FINAL" class="java.lang.Integer">
@@ -21,49 +21,71 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.Maquila AS MAQUILA, P.Semana AS SEM, P.stsavan AS CLAVE_DEPTO,  D.Descripcion AS DEPTO , SUM(P.Pares) AS PARES,
+		<![CDATA[SELECT P.Maquila AS MAQUILA, P.Semana AS SEM, P.stsavan AS CLAVE_DEPTO,  (CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE"
+WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 4 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO"
+WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALM-CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO"
+WHEN P.stsavan = 6 THEN "ALM-PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALM-TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO"
+WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALM-ADORNO"
+WHEN P.stsavan = 12 THEN "TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO"
+END)  AS DEPTO ,
+
+
+(CASE
+WHEN P.stsavan = 1 THEN "1" WHEN P.stsavan = 2 THEN "2"
+WHEN P.stsavan = 3 THEN "3" WHEN P.stsavan = 33 THEN "4"
+WHEN P.stsavan = 4 THEN "5" WHEN P.stsavan = 40 THEN "6"
+WHEN P.stsavan = 42 THEN "7" WHEN P.stsavan = 44 THEN "8"
+WHEN P.stsavan = 5 THEN "9" WHEN P.stsavan = 55 THEN "10"
+WHEN P.stsavan = 6 THEN "11" WHEN P.stsavan = 7 THEN "12"
+WHEN P.stsavan = 8 THEN "13" WHEN P.stsavan = 9 THEN "14"
+WHEN P.stsavan = 10 THEN "15" WHEN P.stsavan = 11 THEN "16"
+WHEN P.stsavan = 12 THEN "17" WHEN P.stsavan = 13 THEN "18"
+END)  AS DEPTO_N,
+
+SUM(P.Pares) AS PARES,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 0 )  AS DOMINGO_SABADO,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 1 )  AS JUEVES,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 2 )  AS VIERNES,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 3 )  AS LUNES,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 4 )  AS MARTES,
 
 (SELECT SUM(PP.Pares) AS PARES
 FROM pedidox AS PP
-INNER JOIN departamentos AS DD ON PP.stsavan = DD.Clave
 WHERE PP.Maquila = P.Maquila AND PP.Ano = P.Ano AND PP.Semana = P.Semana AND PP.stsavan <> 14  AND PP.DiaProg = 5 )  AS MIERCOLES
 
 FROM pedidox AS P
-INNER JOIN departamentos AS D ON P.stsavan = D.Clave
 WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14 AND P.DiaProg IN(0,1,2,3,4,5)
-GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
+GROUP BY P.Maquila, P.Semana, P.stsavan
+ORDER BY P.Semana ASC,  ABS(DEPTO_N) ASC;]]>
 	</queryString>
 	<field name="MAQUILA" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="SEM" class="java.lang.String"/>
 	<field name="CLAVE_DEPTO" class="java.lang.Integer"/>
-	<field name="DEPTO" class="java.lang.String"/>
+	<field name="DEPTO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DEPTO_N" class="java.lang.String"/>
 	<field name="PARES" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -104,20 +126,102 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 	<variable name="MIERCOLES_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{MIERCOLES}]]></variableExpression>
 	</variable>
+	<variable name="DOMINGO_SABADO_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{DOMINGO_SABADO}]]></variableExpression>
+	</variable>
+	<variable name="JUEVES_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUEVES}]]></variableExpression>
+	</variable>
+	<variable name="VIERNES_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{VIERNES}]]></variableExpression>
+	</variable>
+	<variable name="LUNES_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{LUNES}]]></variableExpression>
+	</variable>
+	<variable name="MARTES_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{MARTES}]]></variableExpression>
+	</variable>
+	<variable name="MIERCOLES_2" class="java.lang.Double" resetType="Group" resetGroup="SEMANA" calculation="Sum">
+		<variableExpression><![CDATA[$F{MIERCOLES}]]></variableExpression>
+	</variable>
 	<group name="SEMANA">
 		<groupExpression><![CDATA[$F{SEM}]]></groupExpression>
-		<groupHeader>
-			<band/>
-		</groupHeader>
 		<groupFooter>
-			<band/>
+			<band height="14">
+				<staticText>
+					<reportElement x="3" y="1" width="200" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="d6dacf63-287c-4804-9d13-9de2180d1cf6"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Totales por semanas]]></text>
+				</staticText>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="204" y="1" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="bf23ea85-dc2a-42cb-8319-52771bd1f4a1"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{DOMINGO_SABADO_2}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="1" y="0" width="552" height="1" uuid="69ddc483-46f9-4343-9861-fc1cb59120cc"/>
+				</line>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="255" y="1" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6b335332-119b-425c-926f-741c0f5fec5e"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{JUEVES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="304" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="507a7a0b-ad79-456f-b0e9-84e61541982a"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{VIERNES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="355" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="42d89e74-174b-41b8-9b57-b6187602e946"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{LUNES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="404" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0a0dcf94-9759-454f-871b-a2d569095880"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{MARTES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="454" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="2ec07fad-152a-4a67-86c0-d9349e31c2d1"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{MIERCOLES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="505" y="1" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="75306742-31ca-4ad6-aab7-5d0008afe3b5"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+				</textField>
+			</band>
 		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="63" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="72" y="13" width="433" height="14" isPrintInFirstWholeBand="true" uuid="e8ecfabe-45d6-401f-88b5-53edf348c6a2"/>
 				<textElement>
@@ -194,9 +298,6 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<text><![CDATA[Departamento]]></text>
 			</staticText>
-			<line>
-				<reportElement x="0" y="62" width="554" height="1" uuid="bbf1f5ef-61d2-4e3a-b287-fe062ebdb1b7"/>
-			</line>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" mode="Opaque" x="255" y="36" width="249" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" forecolor="#333333" backcolor="#FFFFFF" uuid="e1f3c377-031d-4522-90f0-f7c4b1e88721"/>
 				<textElement textAlignment="Center">
@@ -265,9 +366,6 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 	<detail>
 		<band height="14" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="13" width="504" height="1" uuid="69ddc483-46f9-4343-9861-fc1cb59120cc"/>
-			</line>
-			<line>
 				<reportElement x="203" y="0" width="1" height="13" uuid="2be63891-c077-4304-954e-9271ce0d9e58"/>
 			</line>
 			<line>
@@ -292,8 +390,10 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				<reportElement x="0" y="0" width="1" height="13" uuid="b34f971e-9c34-42c1-ac2d-8bb9233338d3"/>
 			</line>
 			<textField>
-				<reportElement x="1" y="0" width="35" height="13" uuid="c4aa55d0-3de0-445a-888c-a71442e1e8b9"/>
-				<textElement textAlignment="Center"/>
+				<reportElement isPrintRepeatedValues="false" x="1" y="0" width="35" height="13" uuid="c4aa55d0-3de0-445a-888c-a71442e1e8b9"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{SEM}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -305,7 +405,7 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{DOMINGO_SABADO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="254" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0539a62d-52df-4785-a79d-fced1d800ac6"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -313,7 +413,7 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{JUEVES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="071741c6-009d-4fe0-a1e8-4de8f9f9dd66"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -321,7 +421,7 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VIERNES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="355" y="0" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e7c70e85-f0dd-47ef-b22a-6c7c5b4667c7"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -329,7 +429,7 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{LUNES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="404" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="170d8b2a-af46-427a-a06c-80fdfe212fbd"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -337,7 +437,7 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MARTES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="454" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="af7498c3-0e8a-4683-88b8-95cc7ae47250"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -345,57 +445,17 @@ GROUP BY P.Maquila, P.Semana,  D.Clave;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MIERCOLES}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="505" y="0" width="48" height="14" uuid="bfd14838-1673-4a02-b1f0-f35b281fc23f"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="553" y="0" width="1" height="14" uuid="40b48d6b-42a9-48d2-a9a5-38a9d9123b75"/>
+			</line>
+			<line>
+				<reportElement x="1" y="0" width="552" height="1" uuid="c48ab149-6506-4cfa-8ecd-be70e6011c2c"/>
+			</line>
 		</band>
 	</detail>
-	<summary>
-		<band height="13" splitType="Stretch">
-			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="200" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="d6dacf63-287c-4804-9d13-9de2180d1cf6"/>
-				<textElement textAlignment="Right">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Totales por semanas]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="203" y="0" width="50" height="13" uuid="b394e671-5891-42a7-9c78-8f612225a7b1"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{DOMINGO_SABADO_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="254" y="0" width="50" height="13" uuid="883714e1-5292-43f2-9f01-168f3e6b876f"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{JUEVES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="45394991-d836-428c-a752-9bcaf80719c2"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{VIERNES_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="354" y="0" width="50" height="13" uuid="441646f5-bc13-4388-9e6a-bce093637175"/>
-				<textElement textAlignment="Center">
-					<font isStrikeThrough="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{LUNES_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="403" y="0" width="50" height="13" uuid="d6419d84-2338-4ce9-9b0e-5aec1f7f7327"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{MARTES_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="453" y="0" width="50" height="13" uuid="4fb2164a-f369-4d00-ae65-96477e2592ae"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{MIERCOLES_1}]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
 </jasperReport>
