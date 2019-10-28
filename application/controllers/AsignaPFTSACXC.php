@@ -29,6 +29,10 @@ class AsignaPFTSACXC extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
+                case 'ALMACEN':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $is_valid = true;
+                    break;
             }
             $this->load->view('vAsignaPFTSACXC')->view('vFooter');
         }
