@@ -424,11 +424,8 @@
             }
         });
         Dia.on('keydown keypress keyup', function (e) {
-            if (parseInt(Dia.val()) >= 1 && parseInt(Dia.val()) <= 7) {
-                if (Dia.val().length !== '') {
-                    if (parseInt(Dia.val()) === 0) {
-                        Dia.val(1);
-                    }
+            if (parseInt(Dia.val()) >= 0 && parseInt(Dia.val()) <= 7) {
+                if (Dia.val().length !== '') { 
                     $.each(dias, function (k, v) {
                         if (parseInt(Dia.val()) === parseInt(k))
                         {
