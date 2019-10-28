@@ -83,7 +83,7 @@ class ReportesKardex extends CI_Controller {
 
                 break;
             case 10:
-                $Texto_Mes = 'OCUBRE';
+                $Texto_Mes = 'OCTUBRE';
 
                 break;
             case 11:
@@ -436,7 +436,7 @@ class ReportesKardex extends CI_Controller {
 
                 break;
             case 10:
-                $Texto_Mes = 'OCUBRE';
+                $Texto_Mes = 'OCTUBRE';
 
                 break;
             case 11:
@@ -698,7 +698,7 @@ class ReportesKardex extends CI_Controller {
 
                 break;
             case 10:
-                $Texto_Mes = 'OCUBRE';
+                $Texto_Mes = 'OCTUBRE';
 
                 break;
             case 11:

@@ -54,7 +54,7 @@
             $.each(mdlKardexPorArticulo.find("select"), function (k, v) {
                 mdlKardexPorArticulo.find("select")[k].selectize.clear(true);
             });
-            getArticulos();
+            getArticulosKardexPorArt();
 
             mdlKardexPorArticulo.find('#FechaIni').val(getFirstDayMonth());
             mdlKardexPorArticulo.find('#FechaFin').val(getLastDayMonth());
@@ -131,7 +131,7 @@
 
     });
 
-    function getArticulos() {
+    function getArticulosKardexPorArt() {
         mdlKardexPorArticulo.find("#Articulo")[0].selectize.clear(true);
         mdlKardexPorArticulo.find("#Articulo")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReportesKardex/getArticulos').done(function (data) {

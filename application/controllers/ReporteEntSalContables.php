@@ -64,7 +64,7 @@ class ReporteEntSalContables extends CI_Controller {
                 $Texto_Mes_Act_Query = 'Sep';
                 break;
             case 10:
-                $Texto_Mes = 'OCUBRE';
+                $Texto_Mes = 'OCTUBRE';
                 $Texto_Mes_Act_Query = 'Oct';
                 break;
             case 11:

@@ -22,6 +22,7 @@ class MenuMateriales extends CI_Controller {
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'RECURSOS HUMANOS':

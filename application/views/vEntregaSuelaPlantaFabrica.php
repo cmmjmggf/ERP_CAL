@@ -287,6 +287,7 @@
 
     function init() {
         pnlTablero.find('#Tipo')[0].selectize.focus();
+        pnlTablero.find('#Tipo')[0].selectize.open();
         pnlTablero.find("#FechaMov").val(getToday());
     }
     function getFolio() {
