@@ -5,141 +5,262 @@
                 <legend class="float-left">Notas de crédito</legend>
             </div>
             <div class="col-sm-6" align="right">
-                <button type="button" class="btn btn-primary btn-sm " id="btnAplicarDepositos" >
-                    <span class="fa fa-users" ></span> ACTUALIZA DESCUENTOS
+                <button type="button" class="btn btn-primary btn-sm " id="btnVerMovimientos" >
+                    <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
                 </button>
                 <button type="button" class="btn btn-danger btn-sm " id="btnImprimir" >
-                    <span class="fa fa-file-pdf" ></span> NOTAS DE CRÉDITO
+                    <span class="fa fa-file-pdf" ></span> RE-IMPRIME NOTA DE CRÉDITO
                 </button>
-                <button type="button" class="btn btn-success btn-sm " id="btnVerMovimientos" >
-                    <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
+                <button type="button" class="btn btn-success btn-sm " id="btnCerrarNotaCredito" >
+                    <span class="fa fa-check" ></span> CERRAR NOTA DE CRÉDITO
                 </button>
             </div>
         </div>
-        <div class="row ">
-            <!--primer columna-->
-            <div class="col-12 border border-info border-left-0  border-bottom-0">
-                <div class="row">
-                    <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
-                        <label for="iPedidoxCliente" >Cliente</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cliente" name="Cliente" required="" placeholder="">
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >-</label>
-                        <select id="sCliente" name="sCliente" class="form-control form-control-sm required" >
-                            <option value=""></option>
-                            <?php
-                            //YA CONTIENE LOS BLOQUEOS DE VENTA
-                            $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
-                            foreach ($clientesPnl as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
-                        <label>Tp</label>
-                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >Banco</label>
-                        <select id="Banco" name="Banco" class="form-control form-control-sm required" required="" >
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >Documento</label>
-                        <select id="Doc" name="Doc" class="form-control form-control-sm required" >
-                            <option value=""></option>
-                        </select>
-                    </div>
+        <hr>
+        <!--Datos-->
+        <div class="row">
+            <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
+                <label for="Cliente" >Cliente</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cliente" name="Cliente" required="" placeholder="">
+            </div>
+            <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
+                <label for="" >-</label>
+                <select id="sCliente" class="form-control form-control-sm required NotSelectize" >
+                    <option value=""></option>
+                    <?php
+                    $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
+                    foreach ($clientesPnl as $k => $v) {
+                        print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Tp</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" name="Tp" maxlength="1" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <label>Docto</label>
+                <input type="text" class="form-control form-control-sm numbersOnly " id="Docto" name="Docto" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <label>Fecha</label>
+                <input type="text" class="form-control form-control-sm verde" id="FechaDoc" name="FechaDoc" readonly="" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Importe</label>
+                <input type="text" class="form-control form-control-sm azul" id="Importe" name="Importe" readonly="" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Pagos</label>
+                <input type="text" class="form-control form-control-sm azul" id="Pagos" name="Pagos" readonly="" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Saldo</label>
+                <input type="text" class="form-control form-control-sm azul" id="Saldo" name="Saldo" readonly="" required="">
+            </div>
 
-                    <div class="w-100"></div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Importe</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="ImporteDeposito" name="ImporteDeposito" maxlength="10"  required="" >
+            <div class="w-100"></div>
+            <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
+                <label for="" >Tipo <span class="badge badge-danger" style="font-size: 14px;">5=Desc.  7=Dif.Pre  9=Otros</span></label>
+                <select id="Tipo" name="Tipo" class="form-control form-control-sm required NotSelectize" >
+                    <option value=""></option>
+                    <option value="5">5 Descuentos</option>
+                    <option value="7">7 Diferencia de Precios</option>
+                    <option value="9">9 Otros</option>
+                </select>
+            </div>
+            <div class="col-7 col-sm-5 col-md-3 col-xl-2" >
+                <label for="" >Moneda <span class="badge badge-danger" style="font-size: 14px;">1=Pesos  2=Dolar</span></label>
+                <select id="Moneda" name="Moneda" class="form-control form-control-sm " >
+                    <option value=""></option>
+                    <option value="0">1 PESOS</option>
+                    <option value="2">2 DOLAR</option>
+                    <option value="3">3 EURO</option>
+                    <option value="4">4 LIBRA</option>
+                    <option value="5">5 JEN</option>
+                </select>
+            </div>
+            <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>T.C.</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" id="TipoCambio" name="TipoCambio" maxlength="5" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Fecha Cap</label>
+                <input type="text" class="form-control form-control-sm date notEnter" id="fechacap" name="fechacap"  required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Fecha Dep</label>
+                <input type="text" class="form-control form-control-sm date notEnter" id="fechadep" name="fechadep"  required="">
+            </div>
+            <div class="w-100"></div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Importe NC</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" id="ImporteNC" name="ImporteNC" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-3">
+                <label>Concepto</label>
+                <input type="text" class="form-control form-control-sm" id="Concepto" name="Concepto" required="">
+            </div>
+            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+                <label for="" >Defecto</label>
+                <select id="Defecto" name="Defecto" class="form-control form-control-sm " >
+                    <option value=""></option>
+                    <?php
+                    $defectos = $this->db->query("SELECT C.Clave AS CLAVE, concat(c.clave,'-',C.Descripcion) AS DESCRIPCION FROM defectos AS C WHERE C.Estatus IN('ACTIVO') ORDER BY abs(C.Clave) ASC;")->result();
+                    foreach ($defectos as $k => $v) {
+                        print "<option value=\"{$v->CLAVE}\">{$v->DESCRIPCION}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+                <label for="" >Detalle</label>
+                <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm ">
+                    <option value=""></option>
+                    <?php
+                    $detalle = $this->db->query("SELECT C.Clave AS CLAVE, concat(c.clave,'-',C.Descripcion) AS DESCRIPCION FROM defectosdetalle AS C WHERE C.Estatus IN('ACTIVO') ORDER BY abs(C.Clave) ASC;")->result();
+                    foreach ($detalle as $k => $v) {
+                        print "<option value=\"{$v->CLAVE}\">{$v->DESCRIPCION}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-12 col-sm-2 col-md-6 col-lg-7 col-xl-4">
+                <label>UUID</label>
+                <input type="text" class="form-control form-control-sm azul" id="UUID" name="UUID" readonly="">
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!--Primer tabla-->
+            <div class="col-6 mt-1" >
+                <label>Documentos con saldo del cliente</label>
+                <div class="card-block">
+                    <div id="DoctosCliente" class="datatable-wide">
+                        <table id="tblDoctosCliente" class="table table-sm display " style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Docto</th>
+                                    <th>Tp</th>
+                                    <th>Fecha</th>
+                                    <th>Importe</th>
+                                    <th>Pagos</th>
+                                    <th>Saldo</th>
+                                    <th>Estatus</th>
+                                    <th>Días</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Aplicado</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="PagosDeposito" name="PagosDeposito" maxlength="10" required=""  >
-                    </div>
-                    <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
-                        <label>Saldo</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly " readonly="" id="SaldoDeposito" name="SaldoDeposito" maxlength="10" required=""  >
-                    </div>
-                    <div class="w-100 border border-info mt-1 border-right-0  border-left-0 border-bottom-0"></div>
-                    <!--Primer tabla-->
-                    <div class="col-12 mt-1" >
-                        <label>Documentos con saldo del cliente <span class="badge badge-info" style="font-size: 13px !important;">Doble click para seleccionar</span></label>
-                        <div class="card-block">
-                            <div id="AplicaDepositosCliente" class="datatable-wide">
-                                <table id="tblAplicaDepositosCliente" class="table table-sm display " style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Cliente</th>
-                                            <th>Docto</th>
-                                            <th>Tp</th>
-                                            <th>Fecha</th>
-                                            <th>Importe</th>
-                                            <th>Pagos</th>
-                                            <th>Saldo</th>
-                                            <th>Estatus</th>
-                                            <th>Días</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-100 border border-info mt-1 border-right-0  border-left-0 border-bottom-0"></div>
-                    <!--segunda tabla-->
-                    <div class="col-12 mt-2" >
-                        <label>Pagos de este documento</label>
-                        <div class="card-block ">
-                            <div id="PagosDoctos">
-                                <table id="tblPagosDocto" class="table table-sm display " style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Cliente</th>
-                                            <th>Docto</th>
-                                            <th>Tp</th>
-                                            <th>Fecha Dep</th>
-                                            <th>Fecha Cap</th>
-                                            <th>Importe</th>
-                                            <th>Mv</th>
-                                            <th>Referencia</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <!--segunda tabla-->
+            <div class="col-6 mt-1" >
+                <label>Pagos de este documento</label>
+                <div class="card-block ">
+                    <div id="PagosDoctos">
+                        <table id="tblPagosDocto" class="table table-sm display " style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Docto</th>
+                                    <th>Tp</th>
+                                    <th>Fecha Dep</th>
+                                    <th>Fecha Cap</th>
+                                    <th>Importe</th>
+                                    <th>Mv</th>
+                                    <th>Referencia</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 <script>
-    var master_url = base_url + 'index.php/NotasCreditoClientes/';
-    var tblAplicaDepositosCliente = $('#tblAplicaDepositosCliente');
-    var AplicaDepositosCliente;
+    var master_url = base_url + 'index.php/NotaCreditoClientes/';
+    var tblDoctosCliente = $('#tblDoctosCliente');
+    var DoctosCliente;
     var tblPagosDocto = $('#tblPagosDocto');
     var PagosDoctos;
     var pnlTablero = $("#pnlTablero");
     var btnGuardar = pnlTablero.find('#btnGuardar');
-    var ctaCheques, agente;
-    $(document).ready(function () {
+    var txtcondcte, txtagente, txtcondi;
+
+    function init() {
         /*FUNCIONES INICIALES*/
         pnlTablero.find("input").val("");
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
-        //getClientes();
-        //getRecords('', '');
+        txtcondcte = 0;
+        txtagente = 0;
+        txtcondi = 0;
+        getRecords('');
         //getPagosByClienteFactTp('', '', '')
-        pnlTablero.find("#Tp").focus();
+        pnlTablero.find("#fechacap").val(getToday());
+        pnlTablero.find("#fechadep").val(getToday());
+        pnlTablero.find("#Cliente").focus();
+    }
+
+    $(document).ready(function () {
+        init();
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtCliente = $(this).val();
+                if (txtCliente) {
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtCliente}).done(function (data) {
+                        if (data.length > 0) {
+                            txtcondcte = data[0].Descuento;
+                            txtagente = data[0].Agente;
+                            txtcondi = (parseFloat(txtcondcte) * 100) / 1;
+                            getRecords(txtCliente);
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtCliente, true);
+                            pnlTablero.find('#Tp').focus().select();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE CAPTURADO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#sCliente').change(function () {
+            if ($(this).val()) {
+                var txtCliente = $(this).val();
+                $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtCliente}).done(function (data) {
+                    if (data.length > 0) {
+                        txtcondcte = data[0].Descuento;
+                        txtagente = data[0].Agente;
+                        txtcondi = (parseFloat(txtcondcte) * 100) / 1;
+                        getRecords(txtCliente);
+                        pnlTablero.find('#Cliente').val(txtCliente);
+                        pnlTablero.find('#Tp').focus().select();
+                    }
+                }).fail(function (x) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+            }
+        });
         pnlTablero.find("#Tp").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
@@ -147,88 +268,145 @@
                 }
             }
         });
-        pnlTablero.find("#Banco").change(function () {
-            if ($(this).val()) {
-                var tp = pnlTablero.find("#Tp").val();
-                var banco = pnlTablero.find("#Banco").val();
-                pnlTablero.find("#Doc")[0].selectize.clear(true);
-                pnlTablero.find("#Doc")[0].selectize.clearOptions();
-                $.getJSON(master_url + 'getDocumentos', {
-                    Banco: banco,
-                    Tp: tp
-                }).done(function (data) {
-                    $.each(data, function (k, v) {
-                        pnlTablero.find("#Doc")[0].selectize.addOption({text: v.docto + '-' + v.banco + '-' + v.cuenta + ' - $' + v.importe, value: v.docto});
-                    });
-                    pnlTablero.find("#Doc")[0].selectize.focus();
-                }).fail(function (x, y, z) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
-            }
-        });
-        pnlTablero.find("#Doc").change(function () {
-            if ($(this).val()) {
-                $.getJSON(master_url + 'getDepositobyDocto', {
-                    Docto: $(this).val()
-                }).done(function (data) {
-                    if (data.length > 0) {
-                        pnlTablero.find("#ImporteDeposito").val(parseFloat(data[0].importe).toFixed(2));
-                        pnlTablero.find("#PagosDeposito").val(parseFloat(data[0].pagos).toFixed(2));
-                        pnlTablero.find("#SaldoDeposito").val((data[0].importe - data[0].pagos).toFixed(2));
-                        pnlTablero.find("#FechaDeposito").val(data[0].fechaF);
-                        pnlTablero.find("#EstatusDeposito").val(data[0].status);
-                        pnlTablero.find("#CuentaDeposito").val(data[0].cuenta);
-                        pnlTablero.find("#Cliente")[0].selectize.focus();
-                    }
-                }).fail(function (x, y, z) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
-
-            }
-        });
-        pnlTablero.find("#Cliente").change(function () {
-            var cliente = $(this).val();
-            var tp = pnlTablero.find("#Tp").val();
-            if (cliente) {
-                $.getJSON(master_url + 'getDatosCliente', {
-                    Cliente: cliente
-                }).done(function (data) {
-                    if (data.length > 0) {
-                        agente = data[0].Agente;
-                    }
-                    //obtenemos los documentos de este cliente con saldo
-                    getRecords(tp, cliente);
-                }).fail(function (x, y, z) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
-            }
-        });
-        pnlTablero.find("#ImporteAPagar").keypress(function (e) {
-            var importeaPag = parseFloat(pnlTablero.find("#ImporteAPagar").val());
-            var saldo = parseFloat(pnlTablero.find("#SaldoDeposito").val());
-            var saldoDoc = parseFloat(pnlTablero.find("#SaldoDocto").val());
+        pnlTablero.find('#Docto').keypress(function (e) {
             if (e.keyCode === 13) {
-                if ($(this).val()) {
-                    /*valida la cantidad a pagar sea menor al saldo del deposito y menor al saldo del docto*/
-                    if (importeaPag > saldo || importeaPag > saldoDoc) {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "EL IMPORTE DE LA APLICACIÓN DEBE DE SER MENOR AL DEL DEPOSITO Y MENOR AL DEL DOCUMENTO",
-                            icon: "error",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            $(this).val('').focus();
+                var txtDocto = $(this).val();
+                var txtCliente = pnlTablero.find('#Cliente').val();
+                var txtTp = pnlTablero.find('#Tp').val();
+                if (txtDocto) {
+                    $.getJSON(master_url + 'onVerificarDocumento', {Remicion: txtDocto, Tp: txtTp, Cliente: txtCliente}).done(function (data) {
+                        if (data.length > 0) {
+                            if (parseFloat(data[0].saldo) <= 0 || parseInt(data[0].status) >= 3) {
+                                swal('ERROR', 'DOCUMENTO SALDADO, APLICACIÓN NO ACEPTADA', 'warning').then((value) => {
+                                    pnlTablero.find('#Docto').focus().val('');
+                                });
+                            } else {
+                                pnlTablero.find('#FechaDoc').val(data[0].fecha);
+                                pnlTablero.find('#Importe').val(parseFloat(data[0].importe).toFixed(2));
+                                pnlTablero.find('#Pagos').val(parseFloat(data[0].pagos).toFixed(2));
+                                pnlTablero.find('#Saldo').val(parseFloat(data[0].saldo).toFixed(2));
+                                pnlTablero.find('#Tipo')[0].selectize.focus();
+                            }
+                        } else {
+                            swal('ERROR', 'EL DOCUMENTO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#Docto').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                    //Si es factura trae el UUID
+                    if (parseInt(txtTp) === 1) {
+                        $.getJSON(master_url + 'getUUID', {Remicion: txtDocto, Tp: txtTp, Cliente: txtCliente}).done(function (data) {
+                            if (data.length > 0) {
+                                pnlTablero.find('#UUID').val((data[0].uuid).toUpperCase());
+                            } else {
+                                swal('ERROR', 'FACTURA NO TIMBRADA EN SISTEMA DE LOBO SOLO', 'warning').then((value) => {
+                                    pnlTablero.find('#Docto').focus().val('');
+                                });
+                            }
+                        }).fail(function (x) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
                         });
-                    } else {
-                        btnGuardar.focus();
                     }
                 }
             }
         });
+        pnlTablero.find("#Tipo").change(function () {
+            var tpomov = $(this).val();
+            if ($(this).val()) {
+                switch (tpomov) {
+                    case '5':
+                        pnlTablero.find('#Concepto').val('Desc.' + txtcondi + '% Nc-');
+                        break;
+                    case '7':
+                        pnlTablero.find('#Concepto').val('Dif.pre Nc-');
+                        break;
+                    case '9':
+                        pnlTablero.find('#Concepto').val('otros Nc-');
+                        break;
+                    default:
+                        pnlTablero.find('#Concepto').val('');
+                        break;
+                }
+                pnlTablero.find("#Moneda")[0].selectize.focus();
+            }
+        });
+        pnlTablero.find("#Moneda").change(function () {
+            if ($(this).val()) {
+                getTipoCambio($(this).val());
+            }
+        });
+        pnlTablero.find('#TipoCambio').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txttc = $(this).val();
+                if (txttc) {
+                    pnlTablero.find('#fechacap').focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#fechacap').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtfc = $(this).val();
+                if (txtfc) {
+                    pnlTablero.find('#fechadep').focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#fechadep').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtfd = $(this).val();
+                if (txtfd) {
+                    pnlTablero.find('#ImporteNC').focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#ImporteNC').keypress(function (e) {
+            var tp = pnlTablero.find("#Tp").val();
+            var txtsaldo = pnlTablero.find("#Saldo").val();
+            var txttc = pnlTablero.find("#TipoCambio").val();
+            var total = 0;
+            if (e.keyCode === 13) {
+                var txtimponc = $(this).val();
+                if (txtimponc) {
+                    if (parseFloat(txtimponc) > parseFloat(txtsaldo)) {
+                        swal('ERROR', 'IMPORTA A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO', 'warning').then((value) => {
+                            pnlTablero.find('#ImporteNC').focus().val('');
+                        });
+                    } else {
+                        total = txtimponc * txttc;
+                        if (parseInt(tp) === 1) {
+                            pnlTablero.find('#ImporteNC').val((total / 1.16).toFixed(2));
+                        } else {
+                            pnlTablero.find('#ImporteNC').val(total.toFixed(2));
+                        }
+                        pnlTablero.find('#Concepto').focus();
+                    }
+
+
+                }
+            }
+        });
+        pnlTablero.find('#Concepto').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtconc = $(this).val();
+                if (txtconc) {
+                    pnlTablero.find('#Defecto')[0].selectize.focus();
+                }
+            }
+        });
+
+        pnlTablero.find('#Defecto').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtconc = $(this).val();
+                if (txtconc) {
+                    pnlTablero.find('#Defecto')[0].selectize.focus();
+                }
+            }
+        });
+
         btnGuardar.click(function () {
             isValid('pnlTablero');
             if (valido) {
@@ -295,7 +473,7 @@
                                     pnlTablero.find("#Tp").focus();
                                 }
                                 PagosDoctos.ajax.reload();
-                                AplicaDepositosCliente.ajax.reload();
+                                DoctosCliente.ajax.reload();
                                 HoldOn.close();
                                 onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
 
@@ -335,24 +513,23 @@
             });
         });
     });
-    function getRecords(tp, cliente) {
+    function getRecords(cliente) {
         $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblAplicaDepositosCliente')) {
-            tblAplicaDepositosCliente.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tblDoctosCliente')) {
+            tblDoctosCliente.DataTable().destroy();
         }
-        AplicaDepositosCliente = tblAplicaDepositosCliente.DataTable({
-            "dom": 'frt',
+        DoctosCliente = tblDoctosCliente.DataTable({
+            "dom": 'rt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "data": {Tp: tp, Cliente: cliente},
+                "data": {Cliente: cliente},
                 "type": "GET"
             },
             "columns": [
-                {"data": "cliente"},
                 {"data": "docto"},
                 {"data": "tipo"},
                 {"data": "fecha"},
@@ -364,6 +541,12 @@
             ],
             "columnDefs": [
                 {
+                    "targets": [3],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                },
+                {
                     "targets": [4],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
@@ -371,12 +554,6 @@
                 },
                 {
                     "targets": [5],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [6],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
@@ -393,7 +570,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [3, 'desc'], [1, 'asc']
+                [2, 'asc'], [0, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -401,31 +578,27 @@
                     var index = parseInt(k);
                     switch (index) {
                         case 0:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
                             /*FECHA ENTREGA*/
                             c.addClass('text-strong');
                             break;
 
-                        case 2:
+                        case 1:
                             /*fecha conf*/
                             c.addClass('text-info text-strong');
                             break;
-                        case 4:
+                        case 3:
                             /*fecha conf*/
                             c.addClass('text-success text-strong');
                             break;
-                        case 5:
+                        case 4:
                             /*fecha conf*/
                             c.addClass('text-strong');
                             break;
-                        case 6:
+                        case 5:
                             /*fecha conf*/
                             c.addClass('text-danger text-strong');
                             break;
-                        case 8:
+                        case 7:
                             /*fecha conf*/
                             c.addClass('text-warning text-strong');
                             break;
@@ -437,12 +610,12 @@
             }
         });
 
-        tblAplicaDepositosCliente.find('tbody').on('click', 'tr', function () {
-            tblAplicaDepositosCliente.find("tbody tr").removeClass("success");
+        tblDoctosCliente.find('tbody').on('click', 'tr', function () {
+            tblDoctosCliente.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
-        tblAplicaDepositosCliente.find('tbody').on('dblclick', 'tr', function () {
-            var dtm = AplicaDepositosCliente.row(this).data();
+        tblDoctosCliente.find('tbody').on('dblclick', 'tr', function () {
+            var dtm = DoctosCliente.row(this).data();
             /*Obtenemos el folio fiscal*/
             $.getJSON(master_url + 'getFolioFiscal', {Factura: dtm.docto, Tp: dtm.tipo}).done(function (data) {
                 if (data.length > 0) {
@@ -552,8 +725,8 @@
     function onVerificarTp(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-            getBancos(tp);
-            pnlTablero.find('#Banco')[0].selectize.focus();
+            pnlTablero.find('#ImporteNC').val('');
+            pnlTablero.find('#Docto').focus().select().val('');
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -566,26 +739,30 @@
             });
         }
     }
-    function getBancos(tp) {
-        pnlTablero.find("#Banco")[0].selectize.clear(true);
-        pnlTablero.find("#Banco")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getBancos', {Tp: tp}).done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Banco")[0].selectize.addOption({text: v.Banco, value: v.Clave});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-    function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getClientes').done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
-            });
-        }).fail(function (x) {
+    function getTipoCambio(mnda) {
+        $.getJSON(base_url + 'index.php/DocDirecSinAfectacion/getTipoCambio').done(function (data) {
+            if (data.length > 0) {
+                switch (mnda) {
+                    case '0':
+                        pnlTablero.find('#TipoCambio').val(1).focus().select();
+                        break;
+                    case '2':
+                        pnlTablero.find('#TipoCambio').val(data[0].Dolar).focus().select();
+                        break;
+                    case '3':
+                        pnlTablero.find('#TipoCambio').val(data[0].Euro).focus().select();
+                        break;
+                    case '4':
+                        pnlTablero.find('#TipoCambio').val(data[0].Libra).focus().select();
+                        break;
+                    case '5':
+                        pnlTablero.find('#TipoCambio').val(data[0].Jen).focus().select();
+                        break;
+                    default:
+                        pnlTablero.find('#TipoCambio').val(1).focus().select();
+                }
+            }
+        }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         });
@@ -612,5 +789,23 @@
     div.datatable-wide {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .verde {
+
+        background-color: #B9F5A2 !important;
+    }
+
+    .azul  {
+        background-color: #4BEFF1 !important;
+    }
+
+    .rojomas {
+        background-color: #EC8E75 !important;
+
+    }
+    .rojo {
+        background-color: #FFBEAC !important;
+
     }
 </style>

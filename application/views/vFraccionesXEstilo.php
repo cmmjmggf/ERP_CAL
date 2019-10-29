@@ -545,7 +545,11 @@
         getEstilos();
         getDepartamentos();
         getFracciones();
-        handleEnter();
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(pnlDatos);
+        handleEnterDiv(mdlEditarRenglon);
+        handleEnterDiv(mdlAumentaPrecioFracciones);
+
     });
 
     var tblFraccionesXEstiloDetalle = pnlDetalle.find('#tblFraccionesXEstiloDetalle');

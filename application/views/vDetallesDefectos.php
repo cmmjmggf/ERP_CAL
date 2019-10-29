@@ -84,8 +84,8 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
-
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(pnlDatos);
         /*FUNCIONES X BOTON*/
         btnGuardar.click(function () {
             isValid('pnlDatos');

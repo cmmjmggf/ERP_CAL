@@ -28,19 +28,54 @@ class NotaCreditoClientes extends CI_Controller {
                     $this->load->view('vMenuClientes');
                     break;
             }
-
-            //$this->load->view('vFondo')->view('vNotaCredito')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 
-    public function getNotasByTpByCliente() {
+    public function getUUID() {
+        try {
+            $Remicion = $this->input->get('Remicion');
+            $Tp = $this->input->get('Tp');
+            print json_encode($this->db->query("select uuid from cfdifa where Factura = $Remicion and numero = $Tp ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarDocumento() {
+        try {
+            $Remicion = $this->input->get('Remicion');
+            $Cliente = $this->input->get('Cliente');
+            $Tp = $this->input->get('Tp');
+            print json_encode($this->db->query("select importe, pagos, saldo, status, date_format(fecha,'%d/%m/%Y') as fecha "
+                                    . " from cartcliente "
+                                    . " where cliente = '$Cliente' and remicion = '$Remicion' and tipo = $Tp ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select * from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getRecords() {
         try {
             $cte = $this->input->get('Cliente');
-            $tipo = $this->input->get('Tp');
-            print json_encode($this->db->query("SELECT nc FROM notcred "
-                                    . " where cliente = $cte and tp = $tipo group by nc order by nc asc ")->result());
+            print json_encode($this->db->query("SELECT
+                                                cliente, remicion as docto, tipo,
+                                                date_format(fecha,'%d/%m/%Y') as fecha, importe, pagos, importe-pagos as saldo,
+                                                status, datediff(now(),fecha) as dias
+                                                FROM cartcliente
+                                                where cliente = '$cte'
+                                                and status < 3
+                                                and saldo > 5 ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
