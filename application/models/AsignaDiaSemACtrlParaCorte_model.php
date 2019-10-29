@@ -31,7 +31,7 @@ class AsignaDiaSemACtrlParaCorte_model extends CI_Model {
 
     public function getProgramacion() {
         try {
-            $styl= 'style=\"font-size: 100%;\"';
+            $styl = 'style=\"font-size: 100%;\"';
             $sp = "<span class=\"badge badge-pill badge-info\" {$styl}>";
             $spbf = "<span class=\"badge badge-pill badge-fusion\" {$styl}>";
             $sps = "<span class=\"badge badge-pill badge-fusion-success\" {$styl}>";
@@ -68,6 +68,7 @@ class AsignaDiaSemACtrlParaCorte_model extends CI_Model {
             return $this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
                             ->from('fracciones AS F')
                             ->where('F.Departamento = 10', null, false)
+                            ->where_in('F.Clave', array(99, 100))
                             ->order_by('ABS(F.Clave)', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
@@ -77,6 +78,16 @@ class AsignaDiaSemACtrlParaCorte_model extends CI_Model {
 
     public function getEstiloColorParesTxParPorControl($CONTROL, $FRACCION) {
         try {
+            $tipo = "";
+            $FRACCIONES = json_decode($FRACCION);
+//            var_dump($FRACCIONES);
+//            exit(0);
+            for ($index = 0; $index < count($FRACCIONES); $index++) {
+                $tipo .= $FRACCIONES[$index]->FRACCIONES;
+            }
+//            PRINT "TIPO : {$tipo}";
+//            exit(0);
+
             $this->db->select('FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, '
                             . 'FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, '
                             . 'A.Descripcion AS ARTICULO, FR.Departamento AS CLAVE_DEPARTAMENTO, '
@@ -94,22 +105,30 @@ class AsignaDiaSemACtrlParaCorte_model extends CI_Model {
             if ($CONTROL !== '') {
                 $this->db->like("PE.Control", $CONTROL);
             }
-            switch ($FRACCION) {
+
+            switch (intval($tipo)) {
                 case 99:
-                    $this->db->where("FXE.Fraccion = ", $FRACCION)->where_in("A.Grupo", array(2));
+//                    print $tipo . "\n";
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2));
                     break;
                 case 100:
-                    $this->db->where("FXE.Fraccion = ", $FRACCION)->where_in("A.Grupo", array(1));
+//                    print $tipo . "\n";
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(1));
                     break;
                 case 99100:
-                    $this->db->where("FXE.Fraccion = ", $FRACCION)->where_in("A.Grupo", array(1, 2));
+//                    print $tipo . "\n";
+                    $this->db->where_in("FXE.Fraccion ", array(99, 100))->where_in("A.Grupo", array(1, 2));
                     break;
-                default:
-                    $this->db->where("FXE.Fraccion = ", $FRACCION)->where_in("A.Grupo", array(1, 2));
+                case 10099:
+//                    print $tipo . "\n";
+                    $this->db->where_in("FXE.Fraccion ", array(99, 100))->where_in("A.Grupo", array(1, 2));
                     break;
             }
             $this->db->group_by('A.Descripcion');
-            return $this->db->get()->result();
+            $DTM = $this->db->get()->result();
+//            PRINT $this->db->last_query() . "\n";
+//            exit(0);
+            return $dtm;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -79,7 +79,7 @@
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <label>Cortador</label>
-                <select id="Cortador" name="Cortador" class="form-control form-control-sm">
+                <select id="CortadorADSCPC" name="CortadorADSCPC" class="form-control form-control-sm">
                 </select>
             </div> 
             <div class="w-100"></div>
@@ -94,7 +94,7 @@
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <label>Color</label>
                 <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" maxlength="10">
-                <input type="text" id="ColorNombre" name="ColorNombre" class="form-control form-control-sm" maxlength="10">
+                <input type="text" id="ColorNombre" name="ColorNombre" class="form-control form-control-sm" readonly="" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Pares</label>
@@ -150,8 +150,8 @@
                 </table> 
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 d-flex align-items-center justify-content-center flex-column"> 
-                <button id="Anadir" name="Anadir" class="btn btn-primary m-1 animated slideInRight" data-toggle="tooltip" data-placement="left" title="Añadir"><span class="fa fa-arrow-right"></span></button>
-                <button id="Quitar" name="Quitar" class="btn btn-danger m-1 animated slideInLeft"  data-toggle="tooltip" data-placement="left" title="Quitar"><span class="fa fa-arrow-left"></span></button>
+                <button id="Anadir" name="Anadir" class="btn d-none btn-primary m-1 animated slideInRight" data-toggle="tooltip" data-placement="left" title="Añadir"><span class="fa fa-arrow-right"></span></button>
+                <button id="Quitar" name="Quitar" class="btn btn-danger m-1 animated slideInLeft"  data-toggle="tooltip" data-placement="left" title="Quitar"><span class="fa fa-trash"></span></button>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <h3>Controles asignados a este día</h3> 
@@ -200,7 +200,7 @@
 </div>
 <script>
     var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"), Dia = pnlTablero.find("#Dia"), DiaT = pnlTablero.find("#DiaNombre"),
-            Semana = pnlTablero.find("#Semana"), Cortador = pnlTablero.find("#Cortador"),
+            Semana = pnlTablero.find("#Semana"), CortadorADSCPC = pnlTablero.find("#CortadorADSCPC"),
             Fraccion = pnlTablero.find("#Fraccion"), FraccionesSeleccionadas = pnlTablero.find("#FraccionesSeleccionadas"),
             Control = pnlTablero.find("#Control"),
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"), Pares = pnlTablero.find("#Pares"),
@@ -213,7 +213,7 @@
             btnAnadir = $("#Anadir"), btnQuitar = $("#Quitar"), btnRefrescar = pnlTablero.find("#btnRefrescar"),
             btnTiemposXEstilos = pnlTablero.find("#btnTiemposXEstilos"), btnFracciones = pnlTablero.find("#btnFracciones"),
             btnFraccionesXEstilos = pnlTablero.find("#btnFraccionesXEstilos"),
-            Cortadores = pnlTablero.find("#Cortador"), mdlFracciones = $("#mdlFracciones"),
+            Cortadores = pnlTablero.find("#CortadorADSCPC"), mdlFracciones = $("#mdlFracciones"),
             btnImprimeXDia = pnlTablero.find("#btnImprimeXDia"),
             btnImprimeXSem = pnlTablero.find("#btnImprimeXSem");
     var dias = {
@@ -241,7 +241,6 @@
             "data": function (d) {
                 d.ANIO = Anio.val() ? Anio.val() : '';
                 d.SEMANA = Semana.val() ? Semana.val() : '';
-                d.CORTADOR = Cortador.val() ? Cortador.val() : '';
                 d.CONTROL = Control.val() ? Control.val() : '';
                 d.ESTILO = Estilo.val() ? Estilo.val() : '';
                 d.COLOR = Color.val() ? Color.val() : '';
@@ -383,14 +382,8 @@
                 getControlesSinAsignarYAsignadosAlDia();
             }
         });
-        Cortador.change(function () {
-//            var op = $(this).val();
-//            var dt = tblControlesAsignadosAlDia.DataTable().column(1);
-//            if (op) {
-//                dt.search(op).draw();
-//            } else {
-//                dt.search('').draw();
-            //            }
+        CortadorADSCPC.change(function () {
+// 
             ControlesAsignadosAlDia.ajax.reload();
         });
         btnAnadir.click(function () {
@@ -400,7 +393,30 @@
             onEliminarAsignacion();
         });
         btnGuardar.click(function () {
-            onGuardarAsignacionDeDiaXControl();
+            var FRACCIONES = [];
+            $.each(Fraccion.val(), function (k, v) {
+                FRACCIONES.push({
+                    FRACCIONES: v
+                });
+            });
+            $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/onRevisarSiYaEstaProgramadoConEsaFraccion'); ?>', {
+                CONTROL: Control.val(),
+                FRACCIONES: JSON.stringify(FRACCIONES)
+            }).done(function (a) {
+                if (a.length > 0) {
+                    var r = a[0];
+                    if (parseInt(r.ENCONTRADOS) <= 0) {
+                        onGuardarAsignacionDeDiaXControl();
+                    } else {
+                        iMsg('YA SE HA PROGRAMADO EL FORRO O LA PIEL PARA ESTE CONTROL, VERIFIQUE ANTES DE AAGREGARLO', 'w', function () {
+                            Control.focus().select();
+                        });
+                    }
+                }
+            }).fail(function (x) {
+                getErro(x);
+            });
+//            onGuardarAsignacionDeDiaXControl();
         });
         Fraccion.on('change', function () {
             console.log($(this).val());
@@ -422,10 +438,16 @@
                     FraccionesSeleccionadas.val("99,100");
                     break;
             }
+            if (Control.val()) {
+                getEstiloColorParesTxParPorControl(Control.val());
+            } else {
+                CortadorADSCPC[0].selectize.focus();
+                CortadorADSCPC[0].selectize.open();
+            }
         });
         Dia.on('keydown keypress keyup', function (e) {
             if (parseInt(Dia.val()) >= 0 && parseInt(Dia.val()) <= 7) {
-                if (Dia.val().length !== '') { 
+                if (Dia.val().length !== '') {
                     $.each(dias, function (k, v) {
                         if (parseInt(Dia.val()) === parseInt(k))
                         {
@@ -439,38 +461,30 @@
                 }
             }
         });
-        Control.on('keydown focusout keyup', function (e) {
-            if (e.keyCode === 13) {
-                ControlesSinAsignarAlDia.ajax.reload();
+        Control.on('keydown', function (e) {
+            if (e.keyCode === 13 && Control.val()) {
+//                $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/getInfoXControl'); ?>',
+//                        {
+//                            CONTROL: Control.val() ? Control.val() : ''
+//                        }).done(function (a) {
+//                    if (a.length > 0) {
+//                        var z = a[0];
+//                        Estilo.val(z.Estilo);
+//                ControlesSinAsignarAlDia.ajax.reload();
+                getEstiloColorParesTxParPorControl(Control.val());
+//                    }
+//                }).fail(function (x) {
+//                    getError(x);
+//                }).always(function () {
+//
+//                });
             }
-//            var dt = tblControlesSinAsignarAlDia.DataTable().column(1);
-//            if ($(this).val() !== '') {
-//                dt.search($(this).val()).draw();
-//            } else {
-//                dt.search('').draw();
-//            }
-//            if (e.keyCode === 13 && $(this).val() && $(this).val().length > 5) {
-//                console.log('Buscando...');
-//                getEstiloColorParesTxParPorControl($(this).val());
-//                dt.search($(this).val()).draw();
-            //            }
         });
         Semana.on('keydown', function (e) {
-//            var dt = tblControlesSinAsignarAlDia.DataTable().column(6);
-//            if ($(this).val() !== '') {
-//                dt.search($(this).val()).draw();
-//            } else {
-//                dt.search('').draw();
-            //            }
             if (e.keyCode === 13) {
                 ControlesSinAsignarAlDia.ajax.reload();
+                ControlesAsignadosAlDia.ajax.reload();
             }
-        }).blur(function () {
-//            if (Semana.val() !== '') {
-//                tblControlesSinAsignarAlDia.DataTable().column(6).search(Semana.val()).draw();
-//            } else {
-//                tblControlesSinAsignarAlDia.DataTable().column(6).search('').draw();
-            //            }
         });
         btnRefrescar.trigger('click');
         Anio.val(new Date().getFullYear());
@@ -492,12 +506,12 @@
                 }
             ],
             "ajax": {
-                "url": '<?= base_url('AsignaDiaSemACtrlParaCorte/getProgramacion') ?>',
+                "url": '<?php print base_url('AsignaDiaSemACtrlParaCorte/getProgramacion') ?>',
                 "dataSrc": "",
                 "data": function (d) {
                     d.ANIO = Anio.val() ? Anio.val() : '';
                     d.SEMANA = Semana.val() ? Semana.val() : '';
-                    d.CORTADOR = Cortador.val() ? Cortador.val() : '';
+                    d.CORTADOR = CortadorADSCPC.val() ? CortadorADSCPC.val() : '';
                     d.CONTROL = Control.val() ? Control.val() : '';
                     d.ESTILO = Estilo.val() ? Estilo.val() : '';
                     d.COLOR = Color.val() ? Color.val() : '';
@@ -549,7 +563,7 @@
     function getCortadores() {
         Cortadores[0].selectize.clear(true);
         Cortadores[0].selectize.clearOptions();
-        $.getJSON('<?= base_url('AsignaDiaSemACtrlParaCorte/getCortadores') ?>').done(function (data) {
+        $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/getCortadores') ?>').done(function (data) {
             $.each(data, function (k, v) {
                 Cortadores[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
             });
@@ -571,7 +585,7 @@
         });
         Fraccion[0].selectize.clear(true);
         Fraccion[0].selectize.clearOptions();
-        $.getJSON('<?= base_url('AsignaDiaSemACtrlParaCorte/getFracciones') ?>').done(function (data) {
+        $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/getFracciones') ?>').done(function (data) {
             $.each(data, function (k, v) {
                 Fraccion[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
             });
@@ -593,22 +607,38 @@
             });
         });
         console.log(FRACCIONES);
-        $.getJSON('<?= base_url('AsignaDiaSemACtrlParaCorte/getEstiloColorParesTxParPorControl') ?>', {
-            CONTROL: e, TIPO: FRACCIONES
+        $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/getEstiloColorParesTxParPorControl'); ?>', {
+            CONTROL: e, TIPO: JSON.stringify(FRACCIONES)
         }).done(function (data, x, jq) {
             var r = data[0];
-            if (r) {
+            var precio_final = 0, tx_final = 0;
+            console.log("# Fracciones => ", FRACCIONES.length);
+            $.each(data, function (k, v) {
+                precio_final += parseFloat(v.PRECIO);
+                tx_final += parseFloat(v.TXPAR);
+            });
+
+            if (data.length > 0) {
+                precio_final = precio_final.toFixed(2);
+                tx_final = tx_final.toFixed(2);
                 Estilo.val(r.ESTILO);
                 Color.val(r.COLOR);
                 ColorNombre.val(r.DES_COLOR);
                 Pares.val(r.PARES);
                 Precio.val(r.PRECIO);
                 TxPar.val(r.TXPAR);
-                Tiempo.val(r.TIEMPO);
-                Pesos.val(r.PESOS);
+                var xtiempo = r.TXPAR * r.PARES, xpesos = r.PARES * r.PRECIO;
+                Tiempo.val(xtiempo.toFixed(2));
+                Pesos.val(xpesos.toFixed(2));
+                if (FRACCIONES.length >= 2) {
+                    Precio.val(precio_final);
+                    TxPar.val(tx_final);
+                    xtiempo = tx_final * r.PARES;
+                    Tiempo.val(xtiempo.toFixed(2));
+                    Pesos.val(r.PARES * precio_final);
+                }
                 Articulo.val(r.ARTICULO);
                 ClaveArticulo.val(r.CLAVE_ARTICULO);
-                Estilo.focus().select();
             } else {
                 swal('ATENCIÓN', 'NO SE HAN ESTABLECIDO TIEMPOS PARA ESTE CONTROL EN CORTE', 'warning').then((value) => {
                     Control.focus().select();
@@ -623,27 +653,43 @@
 
     function onGuardarAsignacionDeDiaXControl() {
         if (Anio.val() && Semana.val() && Dia.val() &&
-                Fraccion.val().length > 0 && Cortador.val() && Control.val() &&
+                Fraccion.val().length > 0 && CortadorADSCPC.val() && Control.val() &&
                 Estilo.val() && Color.val() && Pesos.val() &&
                 Articulo.val() && ClaveArticulo.val()) {
-            $.post('<?= base_url('AsignaDiaSemACtrlParaCorte/onGuardarAsignacionDeDiaXControl'); ?>',
+            var FRACCIONES = [];
+            $.each(Fraccion.val(), function (k, v) {
+                FRACCIONES.push({
+                    FRACCIONES: v
+                });
+            });
+            onBeep(1);
+            $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/onGuardarAsignacionDeDiaXControl'); ?>',
                     {
-                        CORTADOR: Cortador.val(),
+                        CORTADOR: CortadorADSCPC.val(),
                         CONTROL: Control.val(),
                         ANIO: Anio.val(),
                         SEMANA: Semana.val(),
                         DIA: Dia.val(),
-                        FRACCION: Fraccion.val()[0],
+                        FRACCION: JSON.stringify(FRACCIONES),
                         ESTILO: Estilo.val(),
                         PARES: Pares.val(),
-                        TIEMPO: Pares.val(),
-                        PRECIO: Pares.val(),
+                        TIEMPO: TxPar.val(),
+                        PRECIO: Precio.val(),
                         ARTICULO: Articulo.val()
                     }).done(function (data, x, jq) {
-                pnlTablero.find("input[type='text'].form-control").val('');
-                Cortador[0].selectize.clear(true);
+
+                Control.val('');
+                Estilo.val('');
+                Color.val('');
+                Pares.val('');
+                TxPar.val('');
+                Precio.val('');
+                Tiempo.val('');
+                Pesos.val('');
                 ControlesSinAsignarAlDia.ajax.reload();
-                ControlesAsignadosAlDia.ajax.reload();
+                ControlesAsignadosAlDia.ajax.reload(function () {
+                    Control.focus().select();
+                });
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             });
@@ -665,16 +711,16 @@
     function onAnadirAsignacion() {
         if (Dia.val()) {
             if (Fraccion.val().length > 0) {
-                if (Cortador.val()) {
+                if (CortadorADSCPC.val()) {
                     var row = ControlesSinAsignarAlDia.row(tblControlesSinAsignarAlDia.find("tbody tr.selected")).data();
                     if (row) {
                         row["ANIO"] = Anio.val();
                         row["CONTROL"] = $(row.Control).text();
                         row["DIA"] = Dia.val();
-                        row["CORTADOR"] = Cortador.val();
+                        row["CORTADOR"] = CortadorADSCPC.val();
                         row["FRACCION"] = Fraccion.val()[0];
-                        $.post('<?= base_url('AsignaDiaSemACtrlParaCorte/onAnadirAsignacion'); ?>', row).done(function (data, x, jq) {
-                            Cortador[0].selectize.clear(true);
+                        $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/onAnadirAsignacion'); ?>', row).done(function (data, x, jq) {
+                            CortadorADSCPC[0].selectize.clear(true);
                             ControlesSinAsignarAlDia.ajax.reload();
                             ControlesAsignadosAlDia.ajax.reload();
                         }).fail(function (x, y, z) {
@@ -692,8 +738,8 @@
                 } else {
                     onBeep(2);
                     swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR UN CORTADOR', 'warning').then((value) => {
-                        Cortador[0].selectize.focus();
-                        Cortador[0].selectize.open();
+                        CortadorADSCPC[0].selectize.focus();
+                        CortadorADSCPC[0].selectize.open();
                     });
                 }
             } else {
@@ -722,7 +768,7 @@
                 theme: 'sk-bounce',
                 message: 'Eliminando...'
             });
-            $.post('<?= base_url('AsignaDiaSemACtrlParaCorte/onEliminarAsignacion'); ?>', row).done(function (data, x, jq) {
+            $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/onEliminarAsignacion'); ?>', row).done(function (data, x, jq) {
                 console.log(data);
                 HoldOn.close();
                 ControlesSinAsignarAlDia.ajax.reload();
@@ -740,6 +786,7 @@
                 }, 1500);
             });
         }
+        Control.focus().select();
     }
 </script>
 <style>
