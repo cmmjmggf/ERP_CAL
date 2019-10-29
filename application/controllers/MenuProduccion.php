@@ -17,7 +17,7 @@ class MenuProduccion extends CI_Controller {
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
-                    break;
+                    break; 
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
                     break;

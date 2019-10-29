@@ -60,7 +60,7 @@
     </div>
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
+            <button type="button" class="btn btn-info" id="btnAceptar"><span class="fa fa-print"></span> Aceptar</button>
         </div>
     </div>
 </div>

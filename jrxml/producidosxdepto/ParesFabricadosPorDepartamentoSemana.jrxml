@@ -1,146 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamentoSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="2.0000000000000218"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.9282000000000323"/>
+	<property name="ireport.x" value="276"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.String"/>
 	<parameter name="ANO" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="FECHA_INICIAL" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT SP.FechaIni AS JUEVES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 1 DAY), '%d/%m/%Y') AS VIERNES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 2 DAY), '%d/%m/%Y') AS SABADO,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 3 DAY), '%d/%m/%Y') AS DOMINGO,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 4 DAY), '%d/%m/%Y') AS LUNES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 5 DAY), '%d/%m/%Y') AS MARTES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'),
-INTERVAL 6 DAY), '%d/%m/%Y') AS MIERCOLES,  F.depto AS DEPTO, DEP.Descripcion AS DEPARTAMENTO,
-sum(F.pares) AS TOTAL_PARES,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d')),0) AS TOTAL_PARES_JUEVES,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 1 DAY)),0)
- AS TOTAL_PARES_VIERNES,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 2 DAY)),0)
- AS TOTAL_PARES_SABADO,
-
-
-(SELECT IFNULL(SUM(FF.Pares),0) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 3 DAY))
- AS TOTAL_PARES_DOMINGO,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 4 DAY)),0)
- AS TOTAL_PARES_LUNES,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 5 DAY)),0)
- AS TOTAL_PARES_MARTES,
-
-IFNULL(
-(SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
-WHERE FF.semana = F.semana AND FF.depto = F.depto
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
-INTERVAL 6 DAY)),0)
- AS TOTAL_PARES_MIERCOLES
-FROM semanasproduccion AS SP INNER JOIN fracpagnomina AS F LEFT JOIN departamentos AS DEP ON F.depto = DEP.Clave
-WHERE SP.Ano = $P{ANO} AND SP.Sem = $P{SEMANA} AND SP.Sem = F.semana AND SP.Ano = F.anio AND DEP.Descripcion IS NOT NULL
-GROUP BY F.depto ORDER BY F.depto ASC;]]>
+		<![CDATA[SELECT A.DEPTOCLAVE, A.DEPARTAMENTO, DATE_FORMAT(A.FECHA_JUEVES,"%d/%m/%Y") AS FECHA_JUEVES, DATE_FORMAT(A.FECHA_VIERNES,"%d/%m/%Y") AS FECHA_VIERNES, DATE_FORMAT(A.FECHA_SABADO,"%d/%m/%Y") AS FECHA_SABADO, DATE_FORMAT(A.FECHA_DOMINGO,"%d/%m/%Y") AS FECHA_DOMINGO, DATE_FORMAT(A.FECHA_LUNES,"%d/%m/%Y") AS FECHA_LUNES, DATE_FORMAT(A.FECHA_MARTES,"%d/%m/%Y") AS FECHA_MARTES, DATE_FORMAT(A.FECHA_MIERCOLES,"%d/%m/%Y") AS FECHA_MIERCOLES, A.TOTALES, A.CANTIDAD_JUEVES, A.CANTIDAD_VIERNES, A.CANTIDAD_SABADO, A.CANTIDAD_DOMINGO, A.CANTIDAD_LUNES, A.CANTIDAD_MARTES, A.CANTIDAD_MIERCOLES, A.REGISTRO, A.SEM, A.ANIO FROM fabricadosxdeptoxsem AS A WHERE A.ANIO = $P{ANO} AND A.SEM = $P{SEMANA}]]>
 	</queryString>
-	<field name="JUEVES" class="java.lang.String"/>
-	<field name="VIERNES" class="java.lang.String"/>
-	<field name="SABADO" class="java.lang.String"/>
-	<field name="DOMINGO" class="java.lang.String"/>
-	<field name="LUNES" class="java.lang.String">
+	<field name="DEPTOCLAVE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="MARTES" class="java.lang.String">
+	<field name="DEPARTAMENTO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="MIERCOLES" class="java.lang.String"/>
-	<field name="DEPTO" class="java.lang.Integer">
+	<field name="FECHA_JUEVES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEPARTAMENTO" class="java.lang.String"/>
-	<field name="TOTAL_PARES" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_JUEVES" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_VIERNES" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_SABADO" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_DOMINGO" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_LUNES" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_MARTES" class="java.lang.Double"/>
-	<field name="TOTAL_PARES_MIERCOLES" class="java.lang.Double"/>
-	<variable name="TOTAL_PARES_JUEVES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_JUEVES}]]></variableExpression>
+	<field name="FECHA_VIERNES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA_SABADO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA_DOMINGO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA_LUNES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA_MARTES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA_MIERCOLES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTALES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_JUEVES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_VIERNES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_SABADO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_DOMINGO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_LUNES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_MARTES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CANTIDAD_MIERCOLES" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REGISTRO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SEM" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ANIO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="CANTIDAD_JUEVES_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_JUEVES}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_VIERNES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_VIERNES}]]></variableExpression>
+	<variable name="CANTIDAD_VIERNES_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_VIERNES}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_SABADO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_SABADO}]]></variableExpression>
+	<variable name="CANTIDAD_SABADO_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_SABADO}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_DOMINGO_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_DOMINGO}]]></variableExpression>
+	<variable name="CANTIDAD_DOMINGO_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_DOMINGO}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_LUNES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_LUNES}]]></variableExpression>
+	<variable name="CANTIDAD_LUNES_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_LUNES}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_MARTES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_MARTES}]]></variableExpression>
+	<variable name="CANTIDAD_MARTES_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_MARTES}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_MIERCOLES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES_MIERCOLES}]]></variableExpression>
+	<variable name="CANTIDAD_MIERCOLES_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD_MIERCOLES}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_PARES_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL_PARES}]]></variableExpression>
+	<variable name="TOTALES_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{TOTALES}]]></variableExpression>
 	</variable>
-	<variable name="PORCENTAJE_JUEVES" class="java.lang.Float">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_JUEVES_1}/$V{TOTAL_PARES_1}]]></variableExpression>
+	<variable name="TOTALES_2" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTALES}]]></variableExpression>
 	</variable>
-	<variable name="PORCENTAJE_VIERNES" class="java.lang.String">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_VIERNES_1}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
-	<variable name="PORCENTAJE_SABADO" class="java.lang.String">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_SABADO_1}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
-	<variable name="PORCENTAJE_DOMINGO" class="java.lang.String">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_DOMINGO_1}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
-	<variable name="PORCENTAJE_LUNES" class="java.lang.String">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
-	<variable name="PORCENTAJE_MARTES" class="java.lang.String">
-		<variableExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
-	<variable name="PORCENTAJE_MIERCOLES" class="java.lang.String">
-		<variableExpression><![CDATA[$V{PORCENTAJE_MIERCOLES}/$V{TOTAL_PARES_1}]]></variableExpression>
-	</variable>
+	<variable name="PORCENTAJE_JUEVES" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -194,37 +154,51 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 			</staticText>
 			<staticText>
 				<reportElement x="145" y="30" width="50" height="13" uuid="024810c3-e663-4495-ba68-e022207ae5f0"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Jueves]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="195" y="30" width="50" height="13" uuid="0e4b5f55-f2da-4999-aa2c-52816a6453ad"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Viernes]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="245" y="30" width="50" height="13" uuid="7d18af64-7cd0-477b-9e09-fab88d54b46c"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Sabado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="295" y="30" width="50" height="13" uuid="ca9e2667-93f9-4038-a97d-16fddea6c3c5"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Domingo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="345" y="30" width="50" height="13" uuid="76c579e2-6d44-42da-91b9-57e6f1da8716"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Lunes]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="394" y="30" width="50" height="13" uuid="5dddfcd0-ae8d-4379-abdf-633ba00052ad"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Martes]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="443" y="30" width="50" height="13" uuid="82934f7b-a0ab-4ce9-9fcd-9af7e3c8f854"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Miercoles]]></text>
 			</staticText>
 			<staticText>
@@ -237,62 +211,6 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 			<line>
 				<reportElement x="0" y="56" width="555" height="1" uuid="bbf1f5ef-61d2-4e3a-b287-fe062ebdb1b7"/>
 			</line>
-			<textField>
-				<reportElement mode="Transparent" x="145" y="42" width="50" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="5ffbe7b6-6351-413a-8c4b-aca295007b30"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{JUEVES}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="195" y="42" width="50" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="d4101860-6c77-40ba-b1e8-ea75bb18df73"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{VIERNES}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="245" y="42" width="50" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="3346e501-4d81-4569-a5b2-f26011241ba8"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{SABADO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="295" y="42" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f3a42ee4-feca-4fcb-9a34-5e5cae72909e"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DOMINGO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="345" y="42" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="abe3d6ee-1e36-457e-8afd-309511263eca"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{LUNES}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="394" y="42" width="50" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="021a6a73-0403-4156-a9b2-53007566cca0"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{MARTES}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="443" y="42" width="50" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="71787d72-f657-40c0-b077-d459643f6c13"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{MIERCOLES}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement x="311" y="13" width="24" height="14" uuid="14da106e-e03f-4f34-877f-e402758a673f"/>
 				<textElement textAlignment="Center">
@@ -344,107 +262,181 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 			<line>
 				<reportElement x="554" y="30" width="1" height="26" uuid="69dad53d-4b9b-40f1-9f4a-72a54d29a93c"/>
 			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="146" y="42" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="aa3c6fd3-e235-404f-a0ab-d1d95126ae09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_JUEVES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="42" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8fee1739-66ba-492a-b0e5-80c002392b5f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_VIERNES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="245" y="42" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d7be6f6d-d357-483f-b143-7410b475f1ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_SABADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="295" y="42" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="922082da-b472-4c1a-bec9-c3c794e4046a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_DOMINGO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="345" y="42" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="cae032d9-7372-46ed-b9d6-bdced46b85bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_LUNES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="394" y="42" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="cef04db9-b341-4a1f-9831-0faff044ed53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_MARTES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="444" y="42" width="49" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="865baf4c-cf39-4399-9ad8-bb11ea4ab6ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_MIERCOLES}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="146" height="15" uuid="ed550fcd-a820-49c4-bd6c-239625656513"/>
+		<band height="13" splitType="Stretch">
+			<line>
+				<reportElement x="146" y="-1" width="1" height="13" uuid="0a9ae400-5327-417c-b058-5647f13cd0c9"/>
+			</line>
+			<line>
+				<reportElement x="0" y="12" width="555" height="1" uuid="a56573af-e500-4b7b-9752-641473430864"/>
+			</line>
+			<line>
+				<reportElement x="195" y="-1" width="1" height="13" uuid="41c43d9b-6cbf-401d-958f-1aacf42ca896"/>
+			</line>
+			<line>
+				<reportElement x="245" y="0" width="1" height="13" uuid="d12bbb7e-121d-4fd3-8b19-4e99fa4a97f9"/>
+			</line>
+			<line>
+				<reportElement x="294" y="0" width="1" height="13" uuid="80cd204b-7e46-4d69-bbcd-213b4f9ea0b4"/>
+			</line>
+			<line>
+				<reportElement x="394" y="0" width="1" height="13" uuid="0537620d-fa04-46d4-81ab-06574e544381"/>
+			</line>
+			<line>
+				<reportElement x="345" y="0" width="1" height="13" uuid="a5070da5-cd06-46e2-9bb5-6ea40262dcc0"/>
+			</line>
+			<line>
+				<reportElement x="443" y="0" width="1" height="13" uuid="38f6170b-385c-4b76-b0ab-5474554be04f"/>
+			</line>
+			<line>
+				<reportElement x="493" y="0" width="1" height="13" uuid="8954997d-78ff-49a6-9e17-8ea396502bfa"/>
+			</line>
+			<line>
+				<reportElement x="554" y="-1" width="1" height="13" uuid="082e3f18-3c17-48e0-bbf2-d6aa5781750b"/>
+			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="0" width="137" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39a4027c-d219-49c5-ac11-e0f7fa38f69c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="146" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6a3c5450-ca95-46a9-8c5d-27763046652d"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="148" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="41b4f75c-6f1d-4b35-95cc-dfb2a6ad993a">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_JUEVES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_JUEVES}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_JUEVES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="195" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="84a4f703-ad26-46a1-afbe-b195877db2b2"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="196" y="0" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5c4578bc-87f7-4788-a1f6-0197ddc219fb">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_VIERNES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_VIERNES}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_VIERNES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="245" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5dd28d01-bc20-40d8-8690-2aff2f567627"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="246" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="62aaf7bc-7ab0-4caa-bb43-fb7b7f50d38c">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_SABADO}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_SABADO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_SABADO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="295" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="e85ede6c-c97b-4c46-abef-449ea97178a6"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="295" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5fb0e940-f321-46b7-ae7a-a3b396f1bfa1">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_DOMINGO}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_DOMINGO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_DOMINGO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="346" y="0" width="48" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="10ede4ae-6e55-43b2-9176-d9862076a4f9"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="346" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="90586a1c-f57d-4df2-95c5-f96a0ae64082">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_LUNES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_LUNES}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_LUNES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="395" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b36e63e8-b785-4bbf-84ec-6ae034f6736e"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="395" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b930b7fd-b2e8-41ed-839b-d30da7106a62">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_MARTES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_MARTES}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_MARTES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="444" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0c856409-c7ba-45ed-95a3-b554dda7de81"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="444" y="0" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="acb4da26-46bd-4240-9034-3859d106091f">
+					<printWhenExpression><![CDATA[$F{CANTIDAD_MIERCOLES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES_MIERCOLES}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CANTIDAD_MIERCOLES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="493" y="0" width="62" height="15" uuid="e5bbaa18-983d-4d45-af4d-685a137103b1"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PARES}]]></textFieldExpression>
+			<textField pattern="#,##0">
+				<reportElement x="494" y="0" width="60" height="13" uuid="1330a823-c8f8-447d-ab10-edd23ec77213">
+					<printWhenExpression><![CDATA[$F{TOTALES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TOTALES}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="146" y="-1" width="1" height="16" uuid="0a9ae400-5327-417c-b058-5647f13cd0c9"/>
-			</line>
-			<line>
-				<reportElement x="0" y="14" width="555" height="1" uuid="a56573af-e500-4b7b-9752-641473430864"/>
-			</line>
-			<line>
-				<reportElement x="195" y="-1" width="1" height="15" uuid="41c43d9b-6cbf-401d-958f-1aacf42ca896"/>
-			</line>
-			<line>
-				<reportElement x="245" y="-1" width="1" height="16" uuid="d12bbb7e-121d-4fd3-8b19-4e99fa4a97f9"/>
-			</line>
-			<line>
-				<reportElement x="294" y="-1" width="1" height="15" uuid="80cd204b-7e46-4d69-bbcd-213b4f9ea0b4"/>
-			</line>
-			<line>
-				<reportElement x="394" y="-1" width="1" height="15" uuid="0537620d-fa04-46d4-81ab-06574e544381"/>
-			</line>
-			<line>
-				<reportElement x="345" y="-1" width="1" height="16" uuid="a5070da5-cd06-46e2-9bb5-6ea40262dcc0"/>
-			</line>
-			<line>
-				<reportElement x="443" y="-1" width="1" height="15" uuid="38f6170b-385c-4b76-b0ab-5474554be04f"/>
-			</line>
-			<line>
-				<reportElement x="493" y="-1" width="1" height="16" uuid="8954997d-78ff-49a6-9e17-8ea396502bfa"/>
-			</line>
-			<line>
-				<reportElement x="554" y="-1" width="1" height="15" uuid="082e3f18-3c17-48e0-bbf2-d6aa5781750b"/>
-			</line>
 		</band>
 	</detail>
 	<summary>
@@ -463,84 +455,6 @@ GROUP BY F.depto ORDER BY F.depto ASC;]]>
 				</textElement>
 				<text><![CDATA[---- % ----]]></text>
 			</staticText>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="146" y="0" width="50" height="13" uuid="e2a56ae2-a713-468f-956b-520e80033431"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_JUEVES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="195" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="896f56c2-316c-4096-a1f5-6e61b7f69e94"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_VIERNES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="245" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="e0deb488-723d-4cb2-83dd-a4f9a8aa8be6"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_SABADO_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="295" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="df01c06d-e9e9-4fa9-b6a8-12b39d97def1"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_DOMINGO_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="345" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0416c84e-1d4b-43ec-89cf-e994ad646a38"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="394" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="136e7787-ff87-4566-93fe-38c975c37f4b"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="443" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="11406c29-b965-43cd-81f4-2e068a4f83fb"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MIERCOLES_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="493" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5c29d6fd-c61a-4434-8108-4e9c6eae455c"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="146" y="13" width="50" height="14" uuid="8fb5ed75-e872-4908-ae5e-782ddd53ebac"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[
-$V{PORCENTAJE_JUEVES} == 0 ?
-0 : String.valueOf($V{PORCENTAJE_JUEVES}).length() > 3 ?
-String.valueOf($V{PORCENTAJE_JUEVES}).substring(0,4) : 0]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="195" y="13" width="50" height="14" uuid="0888707c-99f6-4563-a206-02670e01154f"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{PORCENTAJE_VIERNES} == 0 ?
-0 : String.valueOf($V{PORCENTAJE_VIERNES}).length() > 3 ?
-String.valueOf($V{PORCENTAJE_VIERNES}).substring(0,4) : 0]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="13" width="555" height="1" uuid="e36b1661-e8fe-481d-9fcc-6e30e51e6a25"/>
 			</line>
@@ -601,58 +515,140 @@ String.valueOf($V{PORCENTAJE_VIERNES}).substring(0,4) : 0]]></textFieldExpressio
 			<line>
 				<reportElement x="554" y="0" width="1" height="14" uuid="089a1120-0983-4cfd-8249-c71f2c74e949"/>
 			</line>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="246" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="1c07cad9-ec20-4b76-a5ce-de45c7d590d3"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="148" y="0" width="47" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="38ae0b09-03a1-4099-8036-d8975ebc8285">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_JUEVES_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PORCENTAJE_SABADO} == 0 ?
-0 : String.valueOf($V{PORCENTAJE_SABADO}).length() > 3 ?
-String.valueOf($V{PORCENTAJE_SABADO}).substring(0,4) : 0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_JUEVES_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="295" y="14" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b3bf7ef0-16b4-4953-b4c0-2ed8e139c058"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="196" y="0" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ac4df9dc-3230-4371-af79-40871e92b874">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_VIERNES_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PORCENTAJE_DOMINGO} == 0 ?
-0 : String.valueOf($V{PORCENTAJE_DOMINGO}).length() > 3 ?
-String.valueOf($V{PORCENTAJE_DOMINGO}).substring(0,4) : 0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_VIERNES_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="345" y="14" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5eaa9b7a-44fb-4c51-8d95-dd384fe67508"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="247" y="0" width="47" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="dc2a0163-2a6a-4288-a710-bf176afc1868">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_SABADO_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1} == 0 ?
-0 : String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_LUNES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_SABADO_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="395" y="14" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0fe27eeb-bfe2-41df-a6c3-bf7bd9b92f08"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="295" y="0" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="55faa6f9-3756-4c2e-831e-f725cff7d218">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_DOMINGO_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1} == 0 ?
-0 : String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_MARTES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_DOMINGO_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="444" y="14" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b2468869-e146-4ba4-8661-47aa6c8946b9"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="346" y="0" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="037fc7ce-177a-4ee4-88be-40bf55a6a974">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_LUNES_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1} == 0 ?
-0 : String.valueOf($V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1}).length() > 3 ?
-String.valueOf($V{TOTAL_PARES_MIERCOLES_1}/$V{TOTAL_PARES_1}).substring(0,4) : 0
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_LUNES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="395" y="0" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="3b892121-d684-4baa-9584-53dbf66b83e5">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_MARTES_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_MARTES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="444" y="0" width="49" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="cbccf2fa-1073-46cb-bff6-f8db61cd9214">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_MIERCOLES_1}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_MIERCOLES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="494" y="0" width="60" height="13" uuid="65d4982e-675e-4291-b2ef-0a00fe213c40">
+					<printWhenExpression><![CDATA[$V{TOTALES_2}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="147" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="bb4ff9a5-d599-4d17-8e37-37b53f7b2ad7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_JUEVES_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="196" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="fae8a112-6126-4855-b4db-278d3b158d68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_VIERNES_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="246" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b98dc223-c20e-4037-9959-fe1989702a1d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_SABADO_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="295" y="14" width="50" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="4c4ef98d-29f8-417a-8e72-7d2304d6b088">
+					<printWhenExpression><![CDATA[$V{CANTIDAD_DOMINGO_1}/$V{TOTALES_2}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_DOMINGO_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="347" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="bce14d91-84f0-44c4-bb5e-7b6d6d556066"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_LUNES_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="395" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e64e87f0-d27e-483a-87c8-7ef1417306ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_MARTES_1}/$V{TOTALES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="444" y="14" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="495a31f5-eea7-4ef7-8c6b-9cb30496815c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_MIERCOLES_1}/$V{TOTALES_2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
