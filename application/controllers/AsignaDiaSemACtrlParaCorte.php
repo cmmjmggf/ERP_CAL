@@ -16,22 +16,22 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
     public function index() {
         $is_valid = false;
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
+            $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vEncabezado')->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vEncabezado')->view('vMenuFichasTecnicas');
+                    $this->load->view('vMenuFichasTecnicas');
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vMenuMateriales');
+                    $this->load->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     $is_valid = true;
                     break;
             }
@@ -50,7 +50,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                             . "P.Estilo, P.Color, P.Pares, "
                             . "P.Semana AS Semana", false)
                     ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
-                    ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
+                    ->join('estilostiempox AS TXE', 'P.Estilo = TXE.estilo')
                     ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
                     ->where('PR.Control IS NULL', null, false)
                     ->where_not_in('P.Control', array(0));
@@ -60,15 +60,25 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where('P.Semana', $x['SEMANA']);
             }
-            if ($x['CORTADOR'] !== '') {
-                $this->db->where('PR.numemp', $x['CORTADOR']);
-            }
             if ($x['CONTROL'] !== '') {
                 $this->db->where('P.Semana', $x['CONTROL']);
             }
             $this->db->order_by("YEAR(PR.fecha)", "DESC")->order_by("MONTH(PR.fecha)", "DESC")->order_by("DAY(PR.fecha)", "DESC");
-            if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CORTADOR'] === '' && $x['CONTROL'] === '') {
+            if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CONTROL'] === '') {
                 $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("P.*", false)->from("pedidox AS P");
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('P.Control', $x['CONTROL'])->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -221,8 +231,106 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
 
     public function getEstiloColorParesTxParPorControl() {
         try {
-            $x = $this->input;
-            print json_encode($this->adscpc->getEstiloColorParesTxParPorControl($x->get('CONTROL'), $x->get('TIPO')));
+            $x = $this->input->get();
+//            $x = $this->input;
+//            print json_encode($this->adscpc->getEstiloColorParesTxParPorControl($x->get('CONTROL'), $x->get('TIPO')));
+
+            $CONTROL = $x['CONTROL'];
+            $FRACCION = $x['TIPO'];
+            $tipo = "";
+            $FRACCIONES = json_decode($FRACCION);
+//            var_dump($FRACCIONES);
+//            exit(0);
+            for ($index = 0; $index < count($FRACCIONES); $index++) {
+                $tipo .= $FRACCIONES[$index]->FRACCIONES;
+            }
+//            PRINT "TIPO : {$tipo}";
+//            exit(0); 
+            switch (intval($tipo)) {
+                case 99:
+//                    print $tipo . "\n";
+
+                    $this->db->select('FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, '
+                                    . 'FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, '
+                                    . 'A.Descripcion AS ARTICULO, FR.Departamento AS CLAVE_DEPARTAMENTO, '
+                                    . 'PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, '
+                                    . '(TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS', false)
+                            ->from('pedidox AS PE')
+                            ->join('colores AS C', 'PE.Color = C.Clave AND C.Estilo = PE.Estilo')
+                            ->join('fichatecnica AS FT', 'PE.Estilo = FT.Estilo AND PE.Color = FT.Color')
+                            ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                            ->join('fraccionesxestilo AS FXE', 'FXE.Estilo = FT.Estilo')
+                            ->join('fracciones AS FR', 'FXE.Fraccion = FR.Clave')
+                            ->join('estilostiempox AS TXE', 'PE.Estilo = TXE.estilo');
+                    $this->db->where("FR.Departamento = 10", null, false);
+                    if ($CONTROL !== '') {
+                        $this->db->where("PE.Control", $CONTROL);
+                    }
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2))->group_by('A.Descripcion');
+                    $DTM = $this->db->get()->result();
+                    break;
+                case 100:
+//                    print $tipo . "\n";
+                    $this->db->select('FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, '
+                                    . 'FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, '
+                                    . 'A.Descripcion AS ARTICULO, FR.Departamento AS CLAVE_DEPARTAMENTO, '
+                                    . 'PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, '
+                                    . '(TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS', false)
+                            ->from('pedidox AS PE')
+                            ->join('colores AS C', 'PE.Color = C.Clave AND C.Estilo = PE.Estilo')
+                            ->join('fichatecnica AS FT', 'PE.Estilo = FT.Estilo AND PE.Color = FT.Color')
+                            ->join('articulos AS A', 'FT.Articulo = A.Clave')
+                            ->join('fraccionesxestilo AS FXE', 'FXE.Estilo = FT.Estilo')
+                            ->join('fracciones AS FR', 'FXE.Fraccion = FR.Clave')
+                            ->join('estilostiempox AS TXE', 'PE.Estilo = TXE.estilo');
+                    $this->db->where("FR.Departamento = 10", null, false);
+                    if ($CONTROL !== '') {
+                        $this->db->where("PE.Control", $CONTROL);
+                    }
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(1))->group_by('A.Descripcion');
+
+                    $DTM = $this->db->get()->result();
+                    break;
+                case 99100:
+//                    print $tipo . "\n";
+                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
+UNION 
+(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS 
+FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` 
+JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` 
+JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
+                    break;
+                case 10099:
+//                    print $tipo . "\n";
+                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo` 
+WHERE FR.Departamento = 10 AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
+UNION 
+(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS 
+FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` 
+JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` 
+JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo` 
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
+                    break;
+            }
+//            PRINT $this->db->last_query() . "\n";
+//            exit(0);
+            print json_encode($DTM);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -230,22 +338,51 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
 
     public function onGuardarAsignacionDeDiaXControl() {
         try {
-            $x = $this->input;
-            $data = array(
-                'CORTADOR' => $x->post('CORTADOR'),
-                'control' => $x->post('CONTROL'),
-                'año' => $x->post('ANIO'),
-                'semana' => $x->post('SEMANA'),
-                'diaprg' => $x->post('DIA'),
-                'frac' => $x->post('FRACCION'),
-                'fecha' => Date('d/m/Y h:i:s a'),
-                'estilo' => $x->post('ESTILO'),
-                'par' => $x->post('PARES'),
-                'tiempo' => $x->post('TIEMPO'),
-                'precio' => $x->post('PRECIO'),
-                'nomart' => $x->post('ARTICULO')
-            );
-            $this->db->insert('programacion', $data);
+
+            $x = $this->input->post();
+
+            $CONTROL = $x['CONTROL'];
+            $FRACCIONES = json_decode($x['FRACCION']);
+//            var_dump($FRACCIONES);
+//            exit(0);
+            for ($index = 0; $index < count($FRACCIONES); $index++) {
+                $FRACCION = $FRACCIONES[$index]->FRACCIONES;
+                $TIEMPO_PRECIO_ARTICULO_X_FRACCION = 0;
+                switch (intval($FRACCION)) {
+                    case 99:
+                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) GROUP BY `A`.`Descripcion`)")->result();
+                        break;
+                    case 100:
+                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)")->result();
+                        break;
+                }
+
+                $data = array(
+                    'numemp' => $x['CORTADOR'],
+                    'control' => $x['CONTROL'],
+                    'año' => $x['ANIO'],
+                    'semana' => $x['SEMANA'],
+                    'diaprg' => $x['DIA'],
+                    'frac' => $FRACCION,
+                    'fecha' => Date('Y-m-d h:i:s'),
+                    'estilo' => $x['ESTILO'],
+                    'par' => $x['PARES'],
+                    'tiempo' => $TIEMPO_PRECIO_ARTICULO_X_FRACCION[0]->TIEMPO,
+                    'precio' => $TIEMPO_PRECIO_ARTICULO_X_FRACCION[0]->PRECIO,
+                    'nomart' => $TIEMPO_PRECIO_ARTICULO_X_FRACCION[0]->ARTICULO
+                );
+                $this->db->insert('programacion', $data);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -272,7 +409,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     'semana' => $x->post('Semana'),
                     'diaprg' => $x->post('DIA'),
                     'frac' => $x->post('FRACCION'),
-                    'fecha' => Date('d/m/Y h:i:s a'),
+                    'fecha' => Date('Y-m-d h:i:s'),
                     'estilo' => $x->post('Estilo'),
                     'par' => $x->post('Pares'),
                     'tiempo' => $r->TIEMPO,
@@ -327,9 +464,9 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             $P["SEMANA"] = $x['SEMANA'];
             $P["DIA"] = $x['DIA'];
             $P["DIAT"] = $x['DIAT'];
-            $P["ANO"] = $x['ANO']; 
-            
-            /* 1. REPORTE Pares programados para corte de la sem - tiempos, pares, pares x tiempo , precio por par*/
+            $P["ANO"] = $x['ANO'];
+
+            /* 1. REPORTE Pares programados para corte de la sem - tiempos, pares, pares x tiempo , precio por par */
             $jc->setParametros($P);
             $jc->setJasperurl('jrxml\programacionxdiasem\asidiacont.jasper');
             $jc->setFilename('asidiacont_' . Date('dmYhis'));
@@ -349,8 +486,32 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             $jc->setFilename('asidiacontmatg_' . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             $reports['3TRES'] = $jc->getReport();
-                
+
             print json_encode($reports);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRevisarSiYaEstaProgramadoConEsaFraccion() {
+        try {
+            $x = $this->input->get();
+            $F = json_decode($x['FRACCIONES']);
+            $ENCONTRADOS = 0;
+            foreach ($F as $key => $v) {
+                switch (intval($v->FRACCIONES)) {
+                    case 99:
+                        $FORRO = $this->db->query("SELECT COUNT(*) AS EXISTE_EN_FORRO FROM programacion AS P WHERE P.control = '{$x['CONTROL']}' AND P.frac = '99'")->result();
+                        $ENCONTRADOS += intval($FORRO[0]->EXISTE_EN_FORRO);
+                        break;
+                    case 100:
+                        $PIEL = $this->db->query("SELECT COUNT(*) AS EXISTE_EN_PIEL FROM programacion AS P WHERE P.control = '{$x['CONTROL']}' AND P.frac = '100'")->result();
+                        $ENCONTRADOS += intval($PIEL[0]->EXISTE_EN_PIEL);
+                        break;
+                }
+            } 
+            $EXISTE = '[{"ENCONTRADOS":"' . $ENCONTRADOS . '"}]';
+            print $EXISTE; 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

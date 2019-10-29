@@ -5,6 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="MAQUILA_INICIAL" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<parameter name="MAQUILA_FINAL" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -17,11 +20,32 @@
 	<parameter name="ANO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="MAQUILA_INICIAL" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.Pares AS PARES, D.Descripcion AS DEPTO,
+		<![CDATA[SELECT P.Pares AS PARES ,  (CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO" WHEN P.stsavan = 2 THEN "CORTE"
+WHEN P.stsavan = 3 THEN "RAYADO" WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 4 THEN "FOLEADO" WHEN P.stsavan = 40 THEN "ENTRETELADO"
+WHEN P.stsavan = 42 THEN "MAQUILA" WHEN P.stsavan = 44 THEN "ALM-CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE" WHEN P.stsavan = 55 THEN "ENSUELADO"
+WHEN P.stsavan = 6 THEN "ALM-PESPUNTE" WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALM-TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO"
+WHEN P.stsavan = 10 THEN "ADORNO" WHEN P.stsavan = 11 THEN "ALM-ADORNO"
+WHEN P.stsavan = 12 THEN "TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO"
+END)  AS DEPTO,
+
+
+(CASE
+WHEN P.stsavan = 1 THEN "1" WHEN P.stsavan = 2 THEN "2"
+WHEN P.stsavan = 3 THEN "3" WHEN P.stsavan = 33 THEN "4"
+WHEN P.stsavan = 4 THEN "5" WHEN P.stsavan = 40 THEN "6"
+WHEN P.stsavan = 42 THEN "7" WHEN P.stsavan = 44 THEN "8"
+WHEN P.stsavan = 5 THEN "9" WHEN P.stsavan = 55 THEN "10"
+WHEN P.stsavan = 6 THEN "11" WHEN P.stsavan = 7 THEN "12"
+WHEN P.stsavan = 8 THEN "13" WHEN P.stsavan = 9 THEN "14"
+WHEN P.stsavan = 10 THEN "15" WHEN P.stsavan = 11 THEN "16"
+WHEN P.stsavan = 12 THEN "17" WHEN P.stsavan = 13 THEN "18"
+END)  AS DEPTO_N,
+
 $P{SEMANA_INICIAL} AS SEMANA_ZERO,
 ($P{SEMANA_INICIAL} + 1 ) AS SEMANA_UNO, ($P{SEMANA_INICIAL} + 2 ) AS SEMANA_DOS, ($P{SEMANA_INICIAL} + 3 ) AS SEMANA_TRES,
 ($P{SEMANA_INICIAL} + 4 ) AS SEMANA_CUATRO, ($P{SEMANA_INICIAL} + 5 ) AS SEMANA_CINCO, ($P{SEMANA_INICIAL} + 6 ) AS SEMANA_SEIS,
@@ -57,15 +81,19 @@ IFNULL(
 (SELECT SUM(PP.Pares) FROM pedidox AS PP WHERE PP.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND PP.Ano = $P{ANO}
 AND PP.Semana = ($P{SEMANA_INICIAL} + 9) AND PP.stsavan <> 14 AND PP.stsavan = P.stsavan),0) AS PARES_NUEVE
 
-FROM pedidox AS P INNER JOIN departamentos AS D ON P.stsavan = D.Clave
+FROM pedidox AS P
 WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Ano = $P{ANO}
 AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.stsavan <> 14
-GROUP BY D.Clave;]]>
+GROUP BY P.stsavan
+ORDER BY  ABS(DEPTO_N) ASC;]]>
 	</queryString>
 	<field name="PARES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEPTO" class="java.lang.String"/>
+	<field name="DEPTO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DEPTO_N" class="java.lang.String"/>
 	<field name="SEMANA_ZERO" class="java.lang.Object"/>
 	<field name="SEMANA_UNO" class="java.lang.Double"/>
 	<field name="SEMANA_DOS" class="java.lang.Double"/>

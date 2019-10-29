@@ -14,10 +14,10 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
+            $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vMenuFichasTecnicas');
@@ -26,7 +26,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion'); 
+                    $this->load->view('vMenuProduccion'); 
                     break;
             }
             $this->load->view('vAsignaDiaSemACtrlParaPespuntePreliminar')->view('vFooter');

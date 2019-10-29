@@ -145,7 +145,7 @@ class JasperCommand {
                 }
                 $cmd = "{$this->getJasperurlsoftware()} pr {$this->getJasperurl()} -o {$this->getFolder()}/{$this->getFilename()} {$parametros_finales} -f {$this->getDocumentformat()} -t {$this->getDbtype()} -H {$this->getIp()} -u {$this->getDbuser()} -p {$this->getDbpassword()} -n {$this->getDbname()} --db-port {$this->getDbport()}";
                 $command_esc = escapeshellcmd($cmd);
-                //print $cmd;
+//                print $cmd;
                 passthru($command_esc);
                 return base_url("{$this->getFolder()}/{$this->getFilename()}.{$this->getDocumentformat()}");
             } else {

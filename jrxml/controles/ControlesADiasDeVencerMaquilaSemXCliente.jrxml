@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ControlesADiasDeVencerMaquilaSemXCliente" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0fdffacf-3846-4f2a-a7c2-47dfc9705603">
-	<property name="ireport.zoom" value="2.4157650000000013"/>
+	<property name="ireport.zoom" value="1.6500000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -24,7 +24,10 @@ P.Control AS CONTROL, P.Pares AS PARES, cast(P.Pares AS SIGNED) AS PARESC,
 P.FechaPedido AS PEDIDO, P.FechaRecepcion AS CAPTURA,
 P.FechaProg AS FECHA_PROD, P.FechaEntrega AS FECHA_ENTREGA,
 DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) AS DIAS, P.stsavan AS AVANCE, P.Registro AS PEDIDOFE
-FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF(DATE_FORMAT(str_to_date(P.FechaEntrega,"%d/%m/%Y"), "%Y-%m-%d"), NOW()) <= $P{DIAS} AND P.Ano =  $P{ANIO} AND P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Cliente = $P{CLIENTE} ORDER BY P.Cliente ASC]]>
+FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave
+WHERE  P.Ano = $P{ANIO}
+AND P.Cliente = $P{CLIENTE} AND P.stsavan IN(1, 10, 11, 12, 2, 3, 33, 4, 42, 44, 5, 55, 6, 7, 8, 9)
+ORDER BY P.Cliente ASC]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -60,7 +63,7 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="AVANCE" class="java.lang.Integer"/>
-	<field name="PEDIDOFE" class="java.lang.String"/>
+	<field name="PEDIDOFE" class="java.sql.Timestamp"/>
 	<variable name="PARES_1" class="java.lang.Integer" resetType="Group" resetGroup="CLIENTE" calculation="Count">
 		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
 	</variable>
@@ -151,13 +154,6 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 				</textElement>
 				<text><![CDATA[Reporte de controles por vencerce a]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="255" y="14" width="46" height="15" uuid="b9e3c7d9-4274-42f7-a7df-bb546b3a33d8"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{DIAS}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="301" y="14" width="92" height="15" uuid="2bbfb99c-1974-429e-950e-53f78e0689c7"/>
 				<textElement textAlignment="Center">
@@ -267,100 +263,100 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="122" y="0" width="25" height="13" uuid="60164052-57fe-43f0-a022-a38c6f3f107e"/>
+				<reportElement x="122" y="0" width="25" height="11" uuid="60164052-57fe-43f0-a022-a38c6f3f107e"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MAQUILA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="147" y="0" width="25" height="13" uuid="e3cb25ad-40fb-46c4-84bf-f9519eb6396b"/>
+				<reportElement x="147" y="0" width="25" height="11" uuid="e3cb25ad-40fb-46c4-84bf-f9519eb6396b"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SEMANA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="172" y="0" width="50" height="13" uuid="cedd776e-b719-447b-a9a6-8d13ebd45354"/>
+				<reportElement x="172" y="0" width="50" height="11" uuid="cedd776e-b719-447b-a9a6-8d13ebd45354"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="50" y="0" width="72" height="13" uuid="16756c63-9d7e-403f-a64f-c8d380a9aca8"/>
+				<reportElement x="50" y="0" width="72" height="11" uuid="16756c63-9d7e-403f-a64f-c8d380a9aca8"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PEDIDO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="222" y="0" width="35" height="13" uuid="fef60dfd-b07a-4595-8a31-36b6880ab072"/>
+				<reportElement x="222" y="0" width="35" height="11" uuid="fef60dfd-b07a-4595-8a31-36b6880ab072"/>
 				<textElement>
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="257" y="0" width="182" height="13" uuid="ebe5baea-6ad6-4873-bdc7-267f458952b5"/>
+				<reportElement x="257" y="0" width="182" height="11" uuid="ebe5baea-6ad6-4873-bdc7-267f458952b5"/>
 				<textElement>
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLORT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="439" y="0" width="60" height="13" uuid="7e35927c-3da5-4d77-b07b-9ea850aa0253"/>
+				<reportElement x="439" y="0" width="60" height="11" uuid="7e35927c-3da5-4d77-b07b-9ea850aa0253"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="498" y="0" width="35" height="13" uuid="0245730f-2159-40e1-bb78-c487d89d0285"/>
+				<reportElement x="498" y="0" width="35" height="11" uuid="0245730f-2159-40e1-bb78-c487d89d0285"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="584" y="0" width="50" height="13" uuid="86090c2f-e41c-4e79-9c42-0549e6e18061"/>
+				<reportElement x="584" y="0" width="50" height="11" uuid="86090c2f-e41c-4e79-9c42-0549e6e18061"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CAPTURA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="634" y="0" width="50" height="13" uuid="f58259ba-25ec-46ce-bb9a-b6e91b84f228"/>
+				<reportElement x="634" y="0" width="50" height="11" uuid="f58259ba-25ec-46ce-bb9a-b6e91b84f228"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_PROD}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="533" y="0" width="50" height="13" uuid="662dfa06-a9a6-4a98-b4a2-4f3a319e27a2"/>
+				<reportElement x="533" y="0" width="50" height="11" uuid="662dfa06-a9a6-4a98-b4a2-4f3a319e27a2"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PEDIDOFE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="684" y="0" width="50" height="13" uuid="8468a85d-277c-4536-bba7-aa481d52b2f0"/>
+				<reportElement x="684" y="0" width="50" height="11" uuid="8468a85d-277c-4536-bba7-aa481d52b2f0"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_ENTREGA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="734" y="0" width="50" height="13" uuid="10b34c5f-dcb7-471c-916b-7cb329dcb7f6"/>
+				<reportElement x="734" y="0" width="50" height="11" uuid="10b34c5f-dcb7-471c-916b-7cb329dcb7f6"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DIAS}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="13" width="802" height="1" uuid="df3c8c58-a3d8-4f4c-ab9b-062a5a54af18"/>
+				<reportElement x="0" y="11" width="802" height="1" uuid="df3c8c58-a3d8-4f4c-ab9b-062a5a54af18"/>
 			</line>
 		</band>
 	</detail>
@@ -377,6 +373,9 @@ FROM pedidox AS P INNER JOIN Clientes AS C ON P.Cliente = C.Clave WHERE DATEDIFF
 				<reportElement x="498" y="0" width="71" height="13" uuid="2ea07587-1df2-470f-b636-8542c863a9bb"/>
 				<textFieldExpression><![CDATA[$V{PARESC_2}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="393" y="0" width="176" height="1" uuid="9cb2a2d9-ffba-40b7-9982-f325c86c2a9d"/>
+			</line>
 		</band>
 	</summary>
 </jasperReport>
