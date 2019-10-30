@@ -479,7 +479,7 @@
             "colReorder": true,
             "displayLength": 400,
             "scrollX": true,
-            "scrollY": height,
+            "scrollY": "250px",
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,

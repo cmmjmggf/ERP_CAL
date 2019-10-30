@@ -61,8 +61,10 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->from("asignapftsacxc AS A");
             if ($x['SEMANA'] !== '') {
                 $this->db->where("A.Semana", $x['SEMANA']);
-            } else {
-                $this->db->limit(5);
+            }
+            $this->db->order_by('A.Fecha', 'DESC');
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(99);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -76,7 +78,7 @@ class AsignaPFTSACXC extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
                             . "A.Estilo, A.Color, A.Pares, A.Articulo, A.Descripcion AS ArticuloT, "
-                            . "A.Abono AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo")
+                            . "A.Abono AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
                     ->from("asignapftsacxc AS A")
                     ->where_in('A.TipoMov', array(1, 2, 34, 40));
             if ($x['CORTADOR'] !== '') {
@@ -85,6 +87,8 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['PIFO'] !== '') {
                 $this->db->where('A.Fraccion', $x['PIFO']);
             }
+            $this->db->order_by('A.ID', 'DESC');
+            $this->db->order_by('A.Semana', 'DESC'); 
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
                 $this->db->limit(25);
             }
@@ -130,8 +134,13 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.Pieza')
                     ->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
-            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $xdb->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            $xdb->order_by('OP.Semana', 'DESC');
+
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            if ($x['CONTROL'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($xdb->get()->result());
         } catch (Exception $exc) {
@@ -157,8 +166,12 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
-            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            if ($x['CONTROL'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -185,8 +198,11 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
 
-            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            if ($x['CONTROL'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -215,8 +231,11 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
 
-            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $this->db->limit(5); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+            }
+            if ($x['CONTROL'] === '') {
+                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -246,7 +265,10 @@ class AsignaPFTSACXC extends CI_Controller {
             $ESTATUS = $this->db->select('COUNT(PED.stsavan) AS AVANCECORTE', false)
                             ->from('pedidox AS PED')->where('PED.Control', $x['CONTROL'])->where('PED.stsavan', 2)
                             ->get()->result();
-            if (intval($ESTATUS[0]->AVANCECORTE) <= 0) {
+//            print "\n ESTATUS \n";
+//            var_dump($ESTATUS);
+//            exit(0);
+            if (intval($ESTATUS[0]->AVANCECORTE) > 0) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])->update('asignapftsacxc');
             } else {
                 /**/
@@ -261,6 +283,8 @@ class AsignaPFTSACXC extends CI_Controller {
                                         . "AND A.Control LIKE '{$xx['CONTROL']}' "
                                         . "AND A.Fraccion LIKE '{$xx['FRACCION']}' ", null, false)
                                 ->get()->result();
+//                var_dump($DT);
+//                exit(0);
                 /* EXISTE LA POSIBILIDAD DE QUE LA FRACCION SEA DIFERENTE Y QUE HAGA UN NUEVO REGISTRO */
                 if (count($DT) > 0) {
                     $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))->where('ID', $DT[0]->ID)->update('asignapftsacxc');
@@ -274,6 +298,9 @@ class AsignaPFTSACXC extends CI_Controller {
                     $MAQUILA_X_CONTROL = $this->db->select("P.Maquila AS MAQUILA")
                                     ->from("pedidox AS P")->where("P.Control", $x['CONTROL'])
                                     ->get()->result();
+//                    var_dump($PRECIO);
+//                    var_dump($MAQUILA_X_CONTROL);
+//                    exit(0);
                     $MAQUILA_CONTROL = 1;
 //                            if(count((array)$obj)>0){
                     if (count($MAQUILA_X_CONTROL) > 0) {
@@ -290,7 +317,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'Empleado' => 0,
                         'Articulo' => $x['ARTICULO'],
                         'Descripcion' => $x['ARTICULOT'],
-                        'Fecha' => Date('d/m/Y h:i:s a'),
+                        'Fecha' => Date('d/m/Y'),
                         'Explosion' => $x['EXPLOSION'],
                         'Cargo' => $x['EXPLOSION'],
                         'Abono' => $x['ENTREGA'],
@@ -302,6 +329,9 @@ class AsignaPFTSACXC extends CI_Controller {
                         'ExtraT' => ($x['MATERIAL_EXTRA'] > 0 && $x['EXPLOSION'] < $x['ENTREGA']) ? $x['ENTREGA'] - $x['EXPLOSION'] : 0
                     );
                     $this->db->insert('asignapftsacxc', $data);
+//                    var_dump($data);
+//                    exit(0);
+
                     $this->db->query("UPDATE asignapftsacxc AS A INNER JOIN ordendeproduccion AS O ON A.OrdenProduccion = O.ID
                     SET A.Estilo = O.Estilo, A.Color = O.Color
                     WHERE A.Control = '" . $x['CONTROL'] . "'

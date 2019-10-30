@@ -257,7 +257,7 @@
     </div>
 </div>
 
-<div class="modal modal-fullscreen" id="mdlRetornaMaterial">
+<div class="modal" id="mdlRetornaMaterial">
     <div class="modal-dialog modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" align="center">
@@ -274,17 +274,17 @@
                         <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm d-none" readonly="">
                         <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-1 col-xl-1">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                         <label>Cortador</label>
                         <input type="text" id="CortadorClave" autofocus="" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
 
                         <select id="Cortador" name="Cortador" class="form-control form-control-sm">
                             <option></option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                         <label>1 = PIEL / 2 = FORRO</label>
                         <select id="PielForro" name="PielForro" class="form-control form-control-sm">
                             <option></option>
@@ -294,6 +294,7 @@
                             <option value="40">40 SINTETICO</option>
                         </select>
                     </div>
+                    <div class="w-100"></div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                         <label>Control</label>
                         <input type="text" class="form-control form-control-sm numeric" id="Control" name="Control">
@@ -302,7 +303,6 @@
                         <label>Pares</label>
                         <input type="text" class="form-control form-control-sm notEnter" id="Pares" name="Pares" readonly="">
                     </div>
-                    <div class="w-100"></div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
                         <label>Entrego</label>
                         <input type="text" class="form-control form-control-sm" id="Entrego" name="Entrego" readonly="">
@@ -316,13 +316,14 @@
                         <label>Mat-Malo</label>
                         <input type="text" class="form-control form-control-sm numericdot" id="MatMalo" name="MatMalo"  data-toggle="tooltip" data-placement="bottom" title="Escriba 0 si no devolvio material malo/defectuoso.">
                     </div>
+                    <div class="w-100"></div>
                     <div class="col-2 col-sm-12 col-md-6 col-lg-2 col-xl-2 mt-4 text-center" align="center">
                         <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                             <input type="checkbox" class="custom-control-input selectNotEnter" id="MaterialExtraRetorna" name="MaterialExtraRetorna" style="cursor: pointer !important;">
                             <label class="custom-control-label text-danger labelCheck" for="MaterialExtraRetorna" style="cursor: pointer !important;">Material Extra</label>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-8 col-lg-10 col-xl-10">
                         <label>Articulo</label>
                         <div class="row">
                             <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -423,6 +424,13 @@
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
         Cortador[0].selectize.disable();
+        Semana.on('keydown', function (e) {
+            Pieles.ajax.reload();
+            Forros.ajax.reload();
+            Sinteticos.ajax.reload();
+            Textiles.ajax.reload();
+            ControlesAsignados.ajax.reload();
+        });
 
         btnEntregar.click(function () {
             onEntregarMaterial();
@@ -448,16 +456,17 @@
         mdlRetornaMaterial.on('shown.bs.modal', function () {
             console.log('okokokokokokook');
             CortadorClave.focus();
+            Regresos.ajax.reload();
         });
 
         mdlRetornaMaterial.find("#Control").focusout(function () {
             if (mdlRetornaMaterial.find("#Control").val()) {
-                swal('SUCCESS', 'AHORA,DEBE DE SELECCIONAR UN REGISTRO DE LA TABLA CON EL CONTROL ESPECIFICADO', 'success').then((value) => {
+//                swal('SUCCESS', 'AHORA,DEBE DE SELECCIONAR UN REGISTRO DE LA TABLA CON EL CONTROL ESPECIFICADO', 'success').then((value) => {
                     mdlRetornaMaterial.find("#tblRegresos tbody tr").addClass("highlight-rows");
                     setTimeout(function () {
                         mdlRetornaMaterial.find("#tblRegresos tbody tr").removeClass("highlight-rows");
                     }, 2500);
-                });
+//                });
             }
         });
         mdlRetornaMaterial.find("#PielForro").change(function () {
@@ -554,7 +563,7 @@
             }
         ];
         var xoptions_pieles = {
-            "dom": 'rit',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('pieles'); ?>',
@@ -756,8 +765,9 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
+            "scrollY": "250px",
             "aaSorting": [
-                [1, 'desc']/*ID*/
+                [0, 'desc'], [5, 'desc']
             ],
             initComplete: function (a, b) {
                 $("#tblControlesAsignados_filter").find("input").addClass("selectNotEnter");
@@ -769,7 +779,7 @@
         }
 
         Regresos = tblRegresos.DataTable({
-            "dom": 'frtip',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('AsignaPFTSACXC/getRegresos'); ?>',
@@ -783,11 +793,16 @@
                 {"data": "ID"}/*0*/, {"data": "Cortador"}/*1*/, {"data": "Control"}/*2*/, {"data": "PiFoFraccion"},
                 {"data": "Estilo"}, {"data": "Color"}, {"data": "Pares"},
                 {"data": "Articulo"}, {"data": "ArticuloT"}, {"data": "Entregado"},
-                {"data": "Regreso"}, {"data": "Tipo"}
+                {"data": "Regreso"}, {"data": "Tipo"}, {"data": "Fecha"}
             ],
             "columnDefs": [
                 {
                     "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [12],
                     "visible": false,
                     "searchable": false
                 }
@@ -798,12 +813,13 @@
             "colReorder": true,
             "displayLength": 20,
             "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
             "bSort": true,
+            "scrollY": "250px",
             "aaSorting": [
-                [1, 'desc']/*ID*/
-            ]
+                [12, 'desc']
+            ],
+            "deferRender": true,
+            "scrollCollapse": false
         });
         tblRegresos.on('click', 'tr', function () {
             var data = Regresos.row(this).data();
@@ -1058,7 +1074,7 @@
             }).done(function (data) {
                 console.log(data);
                 swal('ATENCIÓN', 'SE HA ENTREGADO ' + Entregar.val() + ' DEL MATERIAL SOLICITADO, EN LA SEMANA ' + Semana.val() + ' PARA LA FRACCIÓN "' + Fraccion.val(), 'success').then((value) => {
-                    Semana.val('');
+
                     Control.val('');
                     Fraccion.val('');
                     ClaveArticulo.val('');
@@ -1071,7 +1087,7 @@
                     onBuscarX(9, '');
                     onBuscarX(10, '');
                     ControlesAsignados.ajax.reload();
-                    Semana.focus();
+                    Semana.focus().select();
                     tipo_consumo = 0;
                 });
             }).fail(function (x, y, z) {
