@@ -41,10 +41,10 @@
         mdlParesAsignadosMaqSemGen.on('shown.bs.modal', function () {
             handleEnterDiv(mdlParesAsignadosMaqSemGen);
             mdlParesAsignadosMaqSemGen.find("input").val("");
-
-            mdlParesAsignadosMaqSemGen.find('#Ano').focus();
+            mdlParesAsignadosMaqSemGen.find('#Ano').val(getYear()).focus().select();
         });
         mdlParesAsignadosMaqSemGen.find('#btnImprimir').on("click", function () {
+            mdlParesAsignadosMaqSemGen.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
             var frm = new FormData(mdlParesAsignadosMaqSemGen.find("#frmCaptura")[0]);
             $.ajax({
@@ -55,7 +55,10 @@
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
-                onImprimirReporteFancyArray(JSON.parse(data));
+
+                onImprimirReporteFancyArrayAFC(JSON.parse(data), function (a, b) {
+                    mdlParesAsignadosMaqSemGen.find('#btnImprimir').attr('disabled', false);
+                });
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
