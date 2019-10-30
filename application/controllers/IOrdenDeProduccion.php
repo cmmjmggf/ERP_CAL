@@ -251,7 +251,7 @@ class IOrdenDeProduccion extends CI_Controller {
                     foreach ($OP as $k => $v) {
                         /* PRIMER DETALLE */
                         if ($vc->ControlT === $v->ControlT && $v->DEPARTAMENTO === $dv->DEPARTAMENTO) {
-                            $pdf->SetFont('Calibri', '', 6.5);
+                            $pdf->SetFont('Calibri', '', 6.8);
                             switch ($COLUMN) {
                                 case 1:
                                     $COLUMN += 1;
@@ -261,15 +261,15 @@ class IOrdenDeProduccion extends CI_Controller {
                                     $pdf->SetX($col[1]);
                                     $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[2]);
                                     $pdf->Cell($anc[2], $alto_celda, ($v->PZXPAR > 0) ? $v->PZXPAR : '', $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[3]);
                                     $pdf->Cell($anc[3], $alto_celda, $v->UNIDAD, $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[4]);
                                     $pdf->Cell($anc[4], $alto_celda, $v->CANTIDAD, $border/* BORDE */, 0/* SALTO NO */, 'R', 0);
                                     $pdf->Line(5, $pdf->GetY() + $alto_celda, 108, $pdf->GetY() + $alto_celda);
@@ -283,15 +283,15 @@ class IOrdenDeProduccion extends CI_Controller {
                                     $pdf->SetX($col[6]);
                                     $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[7]);
                                     $pdf->Cell($anc[2], $alto_celda, ($v->PZXPAR > 0) ? $v->PZXPAR : '', $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[8]);
                                     $pdf->Cell($anc[3], $alto_celda, $v->UNIDAD, $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.5);
+                                    $pdf->SetFont('Calibri', 'B', 6.8);
                                     $pdf->SetX($col[9]);
                                     $pdf->Cell($anc[4], $alto_celda, $v->CANTIDAD, $border/* BORDE */, 1/* SALTO SI */, 'R', 0);
                                     $pdf->Line(108, $pdf->GetY(), 210, $pdf->GetY());
@@ -334,74 +334,17 @@ class IOrdenDeProduccion extends CI_Controller {
                 }
 
 
-                $path = base_url($vc->FOTO);
-                $width = 0;
-                $height = 0;
-                $width_final = 0;
-                $height_final = 0;
-                $altura_final = 0;
+                $path = $vc->FOTO;
 
                 if ($vc->FOTO !== '') {
                     if (!is_file($path)) {
                         // $pdf->Image(base_url() . 'uploads/Empleados/9999.jpg', 68, 11, 30);
-//                        $pdf->SetLineWidth(.4);
-//                        $pdf->SetY($pdf->GetY() + 11);
-//                        $pdf->SetX(85);
-//                        $pdf->SetFont('Calibri', 'BI', 13);
-//                        $pdf->MultiCell(50, 6, 'ESTILO SIN FOTO ' . $path, 0/* BORDE */, 'C');
-
-
-
-                        $path = base_url('uploads/Estilos/esf.jpg');
-                        list($width, $height, $type, $attr) = getimagesize($path);
-                        $width_final = $this->getSize($width, 96);
-                        $height_final = $this->getSize($height, 96);
-                        $altura_final = $height_final + $pdf->getY();
-                        if ($altura_final > 260) {
-                            if ($path !== null && $path !== 'NULL') {
-                                $pdf->AddPage();
-                                $pdf->SetAutoPageBreak(true, 10);
-                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
-                            }
-                        } else {
-                            if ($path !== null && $path !== 'NULL') {
-                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
-                            }
-                        }
+                        $pdf->SetLineWidth(.4);
+                        $pdf->SetY($pdf->getY());
+                        $pdf->SetX(75);
+                        $pdf->Image(base_url() . 'uploads/Estilos/esf.jpg', 96, $pdf->getY() + 1, 28);
                     } else {
-                        list($width, $height, $type, $attr) = getimagesize($path);
-                        $width_final = $this->getSize($width, 48);
-                        $height_final = $this->getSize($height, 48);
-                        $altura_final = $height_final + $pdf->getY();
-                        /* END FOREACH PIEZAS */
-                        if ($altura_final > 260) {
-                            if ($path !== null && $path !== 'NULL') {
-                                $pdf->AddPage();
-                                $pdf->SetAutoPageBreak(true, 10);
-                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
-                            }
-                        } else {
-                            if ($path !== null && $path !== 'NULL') {
-                                $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
-                            }
-                        }
-                    }
-                } else {
-                    $path = base_url('uploads/Estilos/esf.jpg');
-                    list($width, $height, $type, $attr) = getimagesize($path);
-                    $width_final = $this->getSize($width, 48);
-                    $height_final = $this->getSize($height, 48);
-                    $altura_final = $height_final + $pdf->getY();
-                    if ($altura_final > 260) {
-                        if ($path !== null && $path !== 'NULL') {
-                            $pdf->AddPage();
-                            $pdf->SetAutoPageBreak(true, 10);
-                            $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0) /* TOP */, /* ANCHO */ $width_final);
-                        }
-                    } else {
-                        if ($path !== null && $path !== 'NULL') {
-                            $pdf->Image($path, /* LEFT */ 80, $pdf->GetY() + ($OE > 1 ? ($OC > 1) ? 2 : 0 : 0)/* TOP */, /* ANCHO */ $width_final);
-                        }
+                        $pdf->Image(base_url() . $vc->FOTO, 96, $pdf->getY() + 1, 28);
                     }
                 }
                 /* TOTALES */
@@ -420,7 +363,7 @@ class IOrdenDeProduccion extends CI_Controller {
             $url = $path . '/' . $file_name . '.pdf';
             /* Borramos el archivo anterior */
 
-            $pdf->Output($url); 
+            $pdf->Output($url);
             $l = new Logs("IMPRIME ORDEN DE PRODUCCIÓN", "GENERO UN REPORTE DE ORDEN DE PRODUCCIÓN DEL CONTROL {$INICIO} AL CONTROL {$FIN}.", $this->session);
             print base_url() . $url;
         } catch (Exception $exc) {
