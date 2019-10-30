@@ -12,15 +12,11 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Del Estilo</label>
-                            <select id="dEstilo" name="dEstilo" class="form-control form-control-sm required">
-                                <option value=""></option>
-                            </select>
+                            <input id="dEstilo" name="dEstilo" class="form-control form-control-sm required" maxlength="6">
                         </div>
                         <div class="col-6">
                             <label>Al Estilo</label>
-                            <select id="aEstilo" name="aEstilo" class="form-control form-control-sm required">
-                                <option value=""></option>
-                            </select>
+                            <input id="aEstilo" name="aEstilo" class="form-control form-control-sm required" maxlength="6">
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -45,13 +41,41 @@
     $(document).ready(function () {
         mdlCopiaFraccionesEstilo.on('shown.bs.modal', function () {
             handleEnterDiv(mdlCopiaFraccionesEstilo);
-            validacionSelectPorContenedor(mdlCopiaFraccionesEstilo);
             mdlCopiaFraccionesEstilo.find("input").val("");
-            $.each(mdlCopiaFraccionesEstilo.find("select"), function (k, v) {
-                mdlCopiaFraccionesEstilo.find("select")[k].selectize.clear(true);
-            });
-            getEstilosCopyFraccionEstilo();
-            mdlCopiaFraccionesEstilo.find('#dEstilo')[0].selectize.focus();
+            mdlCopiaFraccionesEstilo.find('#dEstilo').focus();
+        });
+
+        mdlCopiaFraccionesEstilo.find("#dEstilo").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var estilo = $(this).val();
+                if (estilo) {
+                    $.getJSON(base_url + 'index.php/Pedidos/onVerificaEstilo', {Estilo: estilo}).done(function (data) {
+                        if (data.length > 0) {
+
+                        } else {
+                            swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
+                                mdlCopiaFraccionesEstilo.find('#dEstilo').focus().val('');
+                            });
+                        }
+                    });
+                }
+            }
+        });
+        mdlCopiaFraccionesEstilo.find("#aEstilo").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var estilo = $(this).val();
+                if (estilo) {
+                    $.getJSON(base_url + 'index.php/Pedidos/onVerificaEstilo', {Estilo: estilo}).done(function (data) {
+                        if (data.length > 0) {
+
+                        } else {
+                            swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
+                                mdlCopiaFraccionesEstilo.find('#aEstilo').focus().val('');
+                            });
+                        }
+                    });
+                }
+            }
         });
 
         mdlCopiaFraccionesEstilo.find('#btnImprimir').on("click", function () {
@@ -75,10 +99,7 @@
                     icon: "success"
                 }).then((willDelete) => {
                     mdlCopiaFraccionesEstilo.find("input").val("");
-                    $.each(mdlCopiaFraccionesEstilo.find("select"), function (k, v) {
-                        mdlCopiaFraccionesEstilo.find("select")[k].selectize.clear(true);
-                    });
-                    mdlCopiaFraccionesEstilo.find('#dEstilo')[0].selectize.focus();
+                    mdlCopiaFraccionesEstilo.find('#dEstilo').focus();
                 });
 
 
@@ -90,18 +111,6 @@
         });
 
     });
-    function getEstilosCopyFraccionEstilo() {
-        $.getJSON(base_url + 'index.php/Estilos/' + 'getEstilosSelect').done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlCopiaFraccionesEstilo.find("#dEstilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-                mdlCopiaFraccionesEstilo.find("#aEstilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
 </script>
 
 

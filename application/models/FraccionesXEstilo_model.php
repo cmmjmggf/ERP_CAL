@@ -228,7 +228,7 @@ class FraccionesXEstilo_model extends CI_Model {
             CONCAT(\'<span class="fa fa-trash fa-lg " onclick="onEliminarFraccion(\', FE.ID, \')">\', \'</span>\') AS Eliminar,
             cast(D.Clave as signed) depto_orden,
             CONCAT(D.Clave, \' - \', D.Descripcion) AS DeptoCat,
-            FE.Fraccion AS Fraccion_ID, FE.AfectaCostoVTA
+            FE.Fraccion AS Fraccion_ID, FE.AfectaCostoVTA, cast(F.Clave as signed) as numfrac
             ', false)
                     ->from('fraccionesxestilo AS FE')
                     ->join('`fracciones` AS `F`', '`FE`.`Fraccion` = `F`.`Clave`')

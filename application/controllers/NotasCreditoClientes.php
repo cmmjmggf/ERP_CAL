@@ -71,8 +71,9 @@ class NotasCreditoClientes extends CI_Controller {
                     'control' => 0,
                     'uuid' => ($txttp === '1') ? $txtuuid : 0
                 );
+                $this->db->insert("cartctepagos", $datospago);
             }
-            $this->db->insert("cartctepagos", $datospago);
+
             //Capturamos el pago de IVA del total de la nota de crédito desglosado
             $txtiva = 0;
             if ($x['Tp'] === '1') {
@@ -100,6 +101,8 @@ class NotasCreditoClientes extends CI_Controller {
                 'uuid' => ($txttp === '1') ? $txtuuid : 0
             );
             $this->db->insert("cartctepagos", $datospagoIVA);
+
+            //Actualiza statua a nota de crédito
             $statusnc = ($x['Tp'] === '1') ? 0 : 2;
             $sql = "update notcred set status = {$statusnc} , monletra = '{$x['totalletra']}' "
                     . " WHERE nc = {$x['nc']} and tp = {$x['Tp']} and cliente = {$x['Cliente']} ";
@@ -363,8 +366,8 @@ class NotasCreditoClientes extends CI_Controller {
             $aligns = array('L', 'L', 'L', 'C', 'C', 'R', 'R');
             $pdf->SetAligns($aligns);
             $pdf->Row(array('', '', '', '', '', 'Subtotal:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 0, false);
-            $pdf->Row(array('', '', '', '', '', 'I.V.A. 16%:', '$' . number_format(0, 2, ".", ","),), 0, false);
-            $pdf->Row(array('', '', '', '', '', 'Total:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 0, false);
+            $pdf->Row(array('', '', '', '', '', 'I.V.A. 16%:', '$' . number_format($TP_IMPORTE * 0.16, 2, ".", ","),), 0, false);
+            $pdf->Row(array('', '', '', '', '', 'Total:', '$' . number_format($TP_IMPORTE + ($TP_IMPORTE * 0.16), 2, ".", ","),), 0, false);
 
             $pdf->SetY($pdf->GetY());
             $pdf->SetX(5);
@@ -749,8 +752,8 @@ class NotasCreditoClientes extends CI_Controller {
             $aligns = array('L', 'L', 'L', 'C', 'C', 'R', 'R');
             $pdf->SetAligns($aligns);
             $pdf->Row(array('', '', '', '', '', 'Subtotal:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 0, false);
-            $pdf->Row(array('', '', '', '', '', 'I.V.A. 16%:', '$' . number_format(0, 2, ".", ","),), 0, false);
-            $pdf->Row(array('', '', '', '', '', 'Total:', '$' . number_format($TP_IMPORTE, 2, ".", ","),), 0, false);
+            $pdf->Row(array('', '', '', '', '', 'I.V.A. 16%:', '$' . number_format($TP_IMPORTE * 0.16, 2, ".", ","),), 0, false);
+            $pdf->Row(array('', '', '', '', '', 'Total:', '$' . number_format($TP_IMPORTE + ($TP_IMPORTE * 0.16), 2, ".", ","),), 0, false);
 
             $pdf->SetY($pdf->GetY());
             $pdf->SetX(5);

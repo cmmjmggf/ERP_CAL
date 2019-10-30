@@ -866,11 +866,11 @@ class PDF extends FPDF {
 
         $base = 5;
         $alto_celda = 3.25;
-
+        $cliente = utf8_decode($this->getCliente());
         /* CLIENTE */
         $this->SetY($base);
         $this->SetX($pos[0]);
-        $this->Cell(70, $alto_celda, utf8_decode($this->getCliente()), 1/* BORDE */, 0, 'L', 0);
+        $this->Cell(70, $alto_celda, (strlen($cliente) > 50) ? substr($cliente, 0, 50) . '' : $cliente, 1/* BORDE */, 0, 'L', 0);
 
         /* FECHA ENTREGA */
         $this->SetX($pos[1]);
@@ -908,7 +908,7 @@ class PDF extends FPDF {
         /* CODIGO DE BARRAS */
         $this->SetFont('Calibri', 'B', 14);
         $this->SetX($pos[3]);
-        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */); 
+        $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */);
         $this->Cell(42.5, 6, "", 0/* BORDE */, 1, 'C', 0);
         $this->SetFont('Calibri', 'B', 8);
 
@@ -1414,7 +1414,7 @@ class PDF extends FPDF {
             $y = $this->GetY();
             //Draw the border
             $this->Rect($x, $y, $w, $h);
-            //Print the text 
+            //Print the text
             $this->SetFillColor(0, 0, 0);
             $this->MultiCell($w, $this->getAlto(), $data[$i], $this->getBorders(), $a, $this->getFilled());
             //Put the position to the right of the cell

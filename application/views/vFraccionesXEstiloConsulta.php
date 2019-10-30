@@ -76,6 +76,7 @@
                                     <th>DeptoCat</th>
                                     <th>Fraccion_ID</th>
                                     <th>depto_orden</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -83,6 +84,7 @@
                                 <tr>
                                     <th></th>
                                     <th>Totales:</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -236,6 +238,11 @@
                     "targets": [8],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [9],
+                    "visible": false,
+                    "searchable": false
                 }
 
             ],
@@ -248,7 +255,8 @@
                 {"data": "Eliminar"}, /*5*/
                 {"data": "DeptoCat"}, /*6*/
                 {"data": "Fraccion_ID"}, /*7*/
-                {"data": "depto_orden"}
+                {"data": "depto_orden"},
+                {"data": "numfrac"}
             ],
             rowGroup: {
                 endRender: function (rows, group) {
@@ -319,7 +327,7 @@
             "scrollCollapse": true,
             "bSort": true,
             "keys": true,
-            order: [[8, 'asc']],
+            order: [[8, 'asc'], [9, 'asc']],
 
             "initComplete": function (x, y) {
                 HoldOn.close();
@@ -453,6 +461,6 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 </style>
 

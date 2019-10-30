@@ -537,7 +537,7 @@
                             console.log(data);
 
                             onNotifyOld('fa fa-check', 'NOTA DE CRÉDITO CERRADA', 'success');
-                            //init();
+                            init();
 
                             if (data.length > 0) {
                                 $.fancybox.open({
