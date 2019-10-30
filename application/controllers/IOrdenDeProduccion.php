@@ -189,7 +189,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $X = 108;
 
                 /* COLUMNA UNO */
-                $pdf->SetFont('Calibri', 'B', 7);
+                $pdf->SetFont('Calibri', 'B', 7.1);
                 $col = array(5/* 0 */, 40/* 1 */, 80/* 2 */, 88/* 3 */, 98/* 4 */, 108/* 5 */, 143/* 6 */, 183/* 7 */, 191/* 8 */, 201/* 9 */);
                 $anc = array(35, 40, 8, 10, 10);
                 $alto_celda = 3;
@@ -244,14 +244,14 @@ class IOrdenDeProduccion extends CI_Controller {
                     $pdf->setAlto(3.5);
                     $col = array(5/* 0 */, 30/* 1 */, 80/* 2 */, 88/* 3 */, 98/* 4 */, 108/* 5 */, 133/* 6 */, 183/* 7 */, 191/* 8 */, 200/* 9 */);
                     $anc = array(25, 50, 8, 10, 10);
-                    $alto_celda = 2.75;
+                    $alto_celda = 3;
                     $COLUMN = 1;
                     $border = 0;
                     $pdf->SetLineWidth(0.2);
                     foreach ($OP as $k => $v) {
                         /* PRIMER DETALLE */
                         if ($vc->ControlT === $v->ControlT && $v->DEPARTAMENTO === $dv->DEPARTAMENTO) {
-                            $pdf->SetFont('Calibri', '', 6.8);
+                            $pdf->SetFont('Calibri', '', 7.1);
                             switch ($COLUMN) {
                                 case 1:
                                     $COLUMN += 1;
@@ -261,15 +261,15 @@ class IOrdenDeProduccion extends CI_Controller {
                                     $pdf->SetX($col[1]);
                                     $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[2]);
                                     $pdf->Cell($anc[2], $alto_celda, ($v->PZXPAR > 0) ? $v->PZXPAR : '', $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[3]);
                                     $pdf->Cell($anc[3], $alto_celda, $v->UNIDAD, $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[4]);
                                     $pdf->Cell($anc[4], $alto_celda, $v->CANTIDAD, $border/* BORDE */, 0/* SALTO NO */, 'R', 0);
                                     $pdf->Line(5, $pdf->GetY() + $alto_celda, 108, $pdf->GetY() + $alto_celda);
@@ -283,15 +283,15 @@ class IOrdenDeProduccion extends CI_Controller {
                                     $pdf->SetX($col[6]);
                                     $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[7]);
                                     $pdf->Cell($anc[2], $alto_celda, ($v->PZXPAR > 0) ? $v->PZXPAR : '', $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[8]);
                                     $pdf->Cell($anc[3], $alto_celda, $v->UNIDAD, $border/* BORDE */, 0, 'C', 0);
 
-                                    $pdf->SetFont('Calibri', 'B', 6.8);
+                                    $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[9]);
                                     $pdf->Cell($anc[4], $alto_celda, $v->CANTIDAD, $border/* BORDE */, 1/* SALTO SI */, 'R', 0);
                                     $pdf->Line(108, $pdf->GetY(), 210, $pdf->GetY());
