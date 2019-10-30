@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Notas de crédito</legend>
+                <legend class="float-left">Nota de crédito: <span class="text-info text-strong" id ="FolioNC"></span></legend>
             </div>
             <div class="col-sm-6" align="right">
                 <button type="button" class="btn btn-primary btn-sm " id="btnVerMovimientos" >
@@ -10,9 +10,6 @@
                 </button>
                 <button type="button" class="btn btn-danger btn-sm " id="btnImprimir" >
                     <span class="fa fa-file-pdf" ></span> RE-IMPRIME NOTA DE CRÉDITO
-                </button>
-                <button type="button" class="btn btn-success btn-sm " id="btnCerrarNotaCredito" >
-                    <span class="fa fa-check" ></span> CERRAR NOTA DE CRÉDITO
                 </button>
             </div>
         </div>
@@ -59,11 +56,11 @@
                 <label>Saldo</label>
                 <input type="text" class="form-control form-control-sm azul" id="Saldo" name="Saldo" readonly="" required="">
             </div>
-
-            <div class="w-100"></div>
+        </div>
+        <div class="row mt-2">
             <div class="col-6 col-sm-2 col-md-4 col-lg-2 col-xl-2" >
                 <label for="" >Tipo <span class="badge badge-danger" style="font-size: 14px;">5=Desc.  7=Dif.Pre  9=Otros</span></label>
-                <select id="Tipo" name="Tipo" class="form-control form-control-sm required NotSelectize" >
+                <select id="Tipo" name="Tipo" class="form-control form-control-sm NotSelectize" >
                     <option value=""></option>
                     <option value="5">5 Descuentos</option>
                     <option value="7">7 Diferencia de Precios</option>
@@ -93,6 +90,10 @@
                 <label>Fecha Dep</label>
                 <input type="text" class="form-control form-control-sm date notEnter" id="fechadep" name="fechadep"  required="">
             </div>
+            <div class="col-12 col-sm-2 col-md-6 col-lg-7 col-xl-3">
+                <label>UUID</label>
+                <input type="text" class="form-control form-control-sm azul" id="UUID" name="UUID" readonly="">
+            </div>
             <div class="w-100"></div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
                 <label>Importe NC</label>
@@ -102,9 +103,9 @@
                 <label>Concepto</label>
                 <input type="text" class="form-control form-control-sm" id="Concepto" name="Concepto" required="">
             </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 d-none" id="dDefecto">
                 <label for="" >Defecto</label>
-                <select id="Defecto" name="Defecto" class="form-control form-control-sm " >
+                <select id="Defecto" name="Defecto" class="form-control form-control-sm" >
                     <option value=""></option>
                     <?php
                     $defectos = $this->db->query("SELECT C.Clave AS CLAVE, concat(c.clave,'-',C.Descripcion) AS DESCRIPCION FROM defectos AS C WHERE C.Estatus IN('ACTIVO') ORDER BY abs(C.Clave) ASC;")->result();
@@ -114,9 +115,9 @@
                     ?>
                 </select>
             </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 d-none" id="dDetalle">
                 <label for="" >Detalle</label>
-                <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm ">
+                <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm">
                     <option value=""></option>
                     <?php
                     $detalle = $this->db->query("SELECT C.Clave AS CLAVE, concat(c.clave,'-',C.Descripcion) AS DESCRIPCION FROM defectosdetalle AS C WHERE C.Estatus IN('ACTIVO') ORDER BY abs(C.Clave) ASC;")->result();
@@ -126,16 +127,16 @@
                     ?>
                 </select>
             </div>
-            <div class="w-100"></div>
-            <div class="col-12 col-sm-2 col-md-6 col-lg-7 col-xl-4">
-                <label>UUID</label>
-                <input type="text" class="form-control form-control-sm azul" id="UUID" name="UUID" readonly="">
+            <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3 d-sm-block pt-4">
+                <button type="button" id="btnAceptar" class="btn btn-primary btn-sm ">
+                    <span class="fa fa-save"></span> ACEPTAR
+                </button>
+                <button type="button" class="btn btn-success btn-sm " id="btnCerrarNotaCredito" >
+                    <span class="fa fa-check" ></span> CERRAR NOTA DE CRÉDITO
+                </button>
             </div>
-
         </div>
-
         <hr>
-
         <div class="row">
             <!--Primer tabla-->
             <div class="col-6 mt-1" >
@@ -162,20 +163,20 @@
             </div>
             <!--segunda tabla-->
             <div class="col-6 mt-1" >
-                <label>Pagos de este documento</label>
+                <label>Detalle Nota Crédito</label>
                 <div class="card-block ">
-                    <div id="PagosDoctos">
-                        <table id="tblPagosDocto" class="table table-sm display " style="width:100%">
+                    <div id="DetalleNC">
+                        <table id="tblDetalleNC" class="table table-sm display " style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>N.C.</th>
                                     <th>Cliente</th>
                                     <th>Docto</th>
-                                    <th>Tp</th>
-                                    <th>Fecha Dep</th>
-                                    <th>Fecha Cap</th>
+                                    <th>Mov</th>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
                                     <th>Importe</th>
-                                    <th>Mv</th>
-                                    <th>Referencia</th>
+                                    <th>Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -186,16 +187,18 @@
         </div>
     </div>
 </div>
-</div>
+
 <script>
-    var master_url = base_url + 'index.php/NotaCreditoClientes/';
+    var master_url = base_url + 'index.php/NotasCreditoClientes/';
     var tblDoctosCliente = $('#tblDoctosCliente');
     var DoctosCliente;
-    var tblPagosDocto = $('#tblPagosDocto');
-    var PagosDoctos;
+    var tblDetalleNC = $('#tblDetalleNC');
+    var DetalleNC;
     var pnlTablero = $("#pnlTablero");
-    var btnGuardar = pnlTablero.find('#btnGuardar');
-    var txtcondcte, txtagente, txtcondi;
+    var btnImprimir = pnlTablero.find('#btnImprimir');
+    var btnAceptar = pnlTablero.find('#btnAceptar');
+    var btnCerrarNotaCredito = pnlTablero.find('#btnCerrarNotaCredito');
+    var txtcondcte, txtagente, txtcondi, ctipo, notcred, totalFinal, nuevo;
 
     function init() {
         /*FUNCIONES INICIALES*/
@@ -207,11 +210,16 @@
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
+        pnlTablero.find("#FolioNC").html('');
         txtcondcte = 0;
         txtagente = 0;
         txtcondi = 0;
-        getRecords('');
-        //getPagosByClienteFactTp('', '', '')
+        notcred = 0;
+        totalFinal = 0;
+        nuevo = 1;
+        ctipo = false;
+        getRecords(0);
+        getDetalleNC(0, 0, 0);
         pnlTablero.find("#fechacap").val(getToday());
         pnlTablero.find("#fechadep").val(getToday());
         pnlTablero.find("#Cliente").focus();
@@ -310,33 +318,65 @@
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);
                         });
+                    } else {
+                        pnlTablero.find("#UUID").val('');
                     }
                 }
             }
         });
         pnlTablero.find("#Tipo").change(function () {
             var tpomov = $(this).val();
-            if ($(this).val()) {
+            if (tpomov) {
                 switch (tpomov) {
                     case '5':
                         pnlTablero.find('#Concepto').val('Desc.' + txtcondi + '% Nc-');
+                        pnlTablero.find("#dDefecto").removeClass('d-none');
+                        pnlTablero.find("#dDetalle").removeClass('d-none');
+                        pnlTablero.find("#Defecto").addClass('required');
+                        pnlTablero.find("#DetalleDefecto").addClass('required');
                         break;
                     case '7':
                         pnlTablero.find('#Concepto').val('Dif.pre Nc-');
+                        pnlTablero.find("#dDefecto").removeClass('d-none');
+                        pnlTablero.find("#dDetalle").removeClass('d-none');
+                        pnlTablero.find("#Defecto").addClass('required');
+                        pnlTablero.find("#DetalleDefecto").addClass('required');
                         break;
                     case '9':
                         pnlTablero.find('#Concepto').val('otros Nc-');
-                        break;
-                    default:
-                        pnlTablero.find('#Concepto').val('');
+                        pnlTablero.find("#dDefecto").removeClass('d-none');
+                        pnlTablero.find("#dDetalle").removeClass('d-none');
+                        pnlTablero.find("#Defecto").addClass('required');
+                        pnlTablero.find("#DetalleDefecto").addClass('required');
                         break;
                 }
+                ctipo = true;
+                pnlTablero.find("#Moneda")[0].selectize.focus();
+            } else {
+                ctipo = false;
+                pnlTablero.find('#Concepto').val('');
+                pnlTablero.find("#dDefecto").addClass('d-none');
+                pnlTablero.find("#dDetalle").addClass('d-none');
+                pnlTablero.find("#Defecto").removeClass('required');
+                pnlTablero.find("#DetalleDefecto").removeClass('required');
+                pnlTablero.find("#Moneda")[0].selectize.focus();
+            }
+        });
+        pnlTablero.find('.selectize-control').find('input#Tipo-selectized').on('keypress', function (e) {
+            if (e.keyCode === 13) {
                 pnlTablero.find("#Moneda")[0].selectize.focus();
             }
         });
         pnlTablero.find("#Moneda").change(function () {
             if ($(this).val()) {
                 getTipoCambio($(this).val());
+            } else {
+                pnlTablero.find("#TipoCambio").focus().select();
+            }
+        });
+        pnlTablero.find('.selectize-control').find('input#Moneda-selectized').on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                pnlTablero.find("#TipoCambio").focus().select();
             }
         });
         pnlTablero.find('#TipoCambio').keypress(function (e) {
@@ -372,7 +412,7 @@
                 var txtimponc = $(this).val();
                 if (txtimponc) {
                     if (parseFloat(txtimponc) > parseFloat(txtsaldo)) {
-                        swal('ERROR', 'IMPORTA A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO', 'warning').then((value) => {
+                        swal('ERROR', 'IMPORTE A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO', 'warning').then((value) => {
                             pnlTablero.find('#ImporteNC').focus().val('');
                         });
                     } else {
@@ -384,8 +424,6 @@
                         }
                         pnlTablero.find('#Concepto').focus();
                     }
-
-
                 }
             }
         });
@@ -393,99 +431,169 @@
             if (e.keyCode === 13) {
                 var txtconc = $(this).val();
                 if (txtconc) {
-                    pnlTablero.find('#Defecto')[0].selectize.focus();
+                    if (ctipo) {
+                        pnlTablero.find('#Defecto')[0].selectize.focus();
+                    } else {
+                        btnAceptar.focus();
+                    }
+
                 }
             }
         });
-
-        pnlTablero.find('#Defecto').keypress(function (e) {
-            if (e.keyCode === 13) {
-                var txtconc = $(this).val();
-                if (txtconc) {
-                    pnlTablero.find('#Defecto')[0].selectize.focus();
-                }
+        pnlTablero.find('#Defecto').change(function () {
+            var txtconc = $(this).val();
+            if (txtconc) {
+                pnlTablero.find('#DetalleDefecto')[0].selectize.focus();
             }
         });
-
-        btnGuardar.click(function () {
+        pnlTablero.find('#DetalleDefecto').change(function () {
+            var txtconc = $(this).val();
+            if (txtconc) {
+                btnAceptar.focus();
+            }
+        });
+        btnAceptar.click(function () {
             isValid('pnlTablero');
             if (valido) {
-                var importeaPag = parseFloat(pnlTablero.find("#ImporteAPagar").val());
-                var saldo = parseFloat(pnlTablero.find("#SaldoDeposito").val());
-                var saldoDoc = parseFloat(pnlTablero.find("#SaldoDocto").val());
-
-                if (importeaPag > saldo || importeaPag > saldoDoc) {
+                var importenc = pnlTablero.find("#ImporteNC").val();
+                var txtsaldo = pnlTablero.find("#Saldo").val();
+                if (parseFloat(importenc) > parseFloat(txtsaldo)) {
                     swal({
                         title: "ATENCIÓN",
-                        text: "EL IMPORTE DE LA APLICACIÓN DEBE DE SER MENOR AL DEL DEPOSITO Y MENOR AL DEL DOCUMENTO",
+                        text: "IMPORTE A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO",
                         icon: "error",
                         closeOnClickOutside: false,
                         closeOnEsc: false
                     }).then((action) => {
-                        pnlTablero.find("#ImporteAPagar").val('').focus();
+                        pnlTablero.find("#ImporteNC").val('').focus();
                     });
                 } else {
-                    swal({
-                        buttons: ["Cancelar", "Aceptar"],
-                        title: 'Estás Seguro?',
-                        text: "Esta acción no se puede revertir",
-                        icon: "warning",
-                        closeOnEsc: false,
-                        closeOnClickOutside: false
-                    }).then((action) => {
-                        if (action) {
-                            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                            $.post(master_url + 'onAgregar', {
-                                Tp: pnlTablero.find("#Tp").val(),
-                                Cliente: pnlTablero.find("#Cliente").val(),
-                                SaldoDeposito: pnlTablero.find("#SaldoDeposito").val(),
-                                ImporteAPagar: pnlTablero.find("#ImporteAPagar").val(),
-                                Documento: pnlTablero.find("#Doc").val(),
-                                Banco: pnlTablero.find("#Banco").val(),
-                                DocFac: pnlTablero.find("#Docto").val(),
-                                FechaDeposito: pnlTablero.find("#FechaDeposito").val(),
-                                CuentaDeposito: pnlTablero.find("#CuentaDeposito").val(),
-                                Agente: agente,
-                                UUID: pnlTablero.find("#FolioDeposito").val(),
-                                ImporteDocto: pnlTablero.find("#ImporteDocto").val(),
-                                PagosDocto: pnlTablero.find("#PagosDocto").val(),
-                                SaldoDocto: pnlTablero.find("#SaldoDocto").val()
-                            }).done(function (data) {
-
-                                var saldoActDepo = parseFloat(pnlTablero.find("#SaldoDeposito").val()) - parseFloat(pnlTablero.find("#ImporteAPagar").val());
-
-                                if (saldoActDepo > 0) {
-                                    pnlTablero.find("#SaldoDeposito").val(saldoActDepo.toFixed(2));
-                                    pnlTablero.find("#Docto").val('');
-                                    pnlTablero.find("#FechaDocto").val('');
-                                    pnlTablero.find("#ImporteDocto").val('');
-                                    pnlTablero.find("#PagosDocto").val('');
-                                    pnlTablero.find("#SaldoDocto").val('');
-                                    pnlTablero.find("#FolioDeposito").val('');
-                                    pnlTablero.find("#ImporteAPagar").val('');
-                                } else if (saldoActDepo <= 0) {
-                                    agente = 0;
-                                    ctaCheques = 0;
-                                    pnlTablero.find("input").val("");
-                                    $.each(pnlTablero.find("select"), function (k, v) {
-                                        pnlTablero.find("select")[k].selectize.clear(true);
-                                    });
-                                    pnlTablero.find("#Tp").focus();
-                                }
-                                PagosDoctos.ajax.reload();
-                                DoctosCliente.ajax.reload();
-                                HoldOn.close();
-                                onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
-
-                            }).fail(function (x, y, z) {
-                                console.log(x, y, z);
-                            });
+                    //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                    $.post(master_url + 'onAgregar', {
+                        tp: pnlTablero.find("#Tp").val(),
+                        cliente: pnlTablero.find("#Cliente").val(),
+                        numfac: pnlTablero.find("#Docto").val(),
+                        orden: pnlTablero.find("#Tipo").val(),
+                        fecha: pnlTablero.find("#fechacap").val(),
+                        descripcion: pnlTablero.find("#Concepto").val(),
+                        precio: importenc,
+                        subtot: importenc,
+                        defecto: pnlTablero.find("#Defecto").val(),
+                        detalle: pnlTablero.find("#DetalleDefecto").val(),
+                        tmnda: pnlTablero.find("#Moneda").val(),
+                        tcamb: pnlTablero.find("#TipoCambio").val(),
+                        uuid: pnlTablero.find("#UUID").val(),
+                        nuevo: nuevo,
+                        folioact: notcred
+                    }).done(function (data) {
+                        notcred = data;
+                        totalFinal += parseFloat(importenc);
+                        if (nuevo) {
+                            getDetalleNC(pnlTablero.find("#Cliente").val(), notcred, pnlTablero.find("#Tp").val());
+                        } else {
+                            DetalleNC.ajax.reload();
                         }
+                        nuevo = 0;
+                        var conc = pnlTablero.find("#Concepto").val();
+                        pnlTablero.find("#Concepto").val(conc + data);
+                        pnlTablero.find("#FolioNC").html(data);
+                        pnlTablero.find("#ImporteNC").val('');
+                        pnlTablero.find("#Concepto").val('');
+                        pnlTablero.find("#Defecto")[0].selectize.clear(true);
+                        pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
+                        pnlTablero.find("#Tipo")[0].selectize.clear(true);
+                        pnlTablero.find("#Tipo")[0].selectize.focus();
+                        HoldOn.close();
+                        onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
+
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
                     });
                 }
             }
         });
+        btnCerrarNotaCredito.click(function () {
+            var cliente = pnlTablero.find("#Cliente").val();
+            if (cliente !== '' && notcred > 0) {
+                swal({
+                    buttons: ["Cancelar", "Aceptar"],
+                    title: 'Estás Seguro?',
+                    text: "Esta acción no se puede revertir",
+                    icon: "warning",
+                    closeOnEsc: false,
+                    closeOnClickOutside: false
+                }).then((action) => {
+                    if (action) {
+                        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                        $.post(master_url + 'onCerrarNC', {
+                            Tp: pnlTablero.find("#Tp").val(),
+                            Cliente: pnlTablero.find("#Cliente").val(),
+                            nc: notcred,
+                            total: parseFloat(totalFinal).toFixed(2),
+                            totalletra: NumeroALetras(parseFloat(totalFinal).toFixed(2)),
+                            agente: txtagente,
+                            fechacap: pnlTablero.find('#fechacap').val()
+                        }).done(function (data) {
+                            console.log(data);
 
+                            onNotifyOld('fa fa-check', 'NOTA DE CRÉDITO CERRADA', 'success');
+                            //init();
+
+                            if (data.length > 0) {
+                                $.fancybox.open({
+                                    src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                                    type: 'iframe',
+                                    opts: {
+                                        afterShow: function (instance, current) {
+                                            console.info('done!');
+                                        },
+                                        iframe: {
+                                            // Iframe template
+                                            tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                            preload: true,
+                                            // Custom CSS styling for iframe wrapping element
+                                            // You can use this to set custom iframe dimensions
+                                            css: {
+                                                width: "100%",
+                                                height: "100%"
+                                            },
+                                            // Iframe tag attributes
+                                            attr: {
+                                                scrolling: "auto"
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "NO EXISTEN REGISTROS",
+                                    icon: "error"
+                                });
+                            }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
+                        });
+                    }
+                });
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "NO HA CAPTURADO LA NOTA DE CRÉDITO",
+                    icon: "error",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    pnlTablero.find("#Cliente").focus().select();
+                });
+            }
+
+        });
+        btnImprimir.click(function () {
+            $('#mdlReimprimeNotaCredito').modal('show');
+        });
         pnlTablero.find("#btnVerMovimientos").click(function () {
             $.fancybox.open({
                 src: base_url + '/MovimientosCliente',
@@ -614,57 +722,36 @@
             tblDoctosCliente.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
-        tblDoctosCliente.find('tbody').on('dblclick', 'tr', function () {
-            var dtm = DoctosCliente.row(this).data();
-            /*Obtenemos el folio fiscal*/
-            $.getJSON(master_url + 'getFolioFiscal', {Factura: dtm.docto, Tp: dtm.tipo}).done(function (data) {
-                if (data.length > 0) {
-                    pnlTablero.find("#FolioDeposito").val(data[0].uuid);
-                } else {
-                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'error')
-                }
-            });
-            pnlTablero.find("#Tp").val(dtm.tipo);
-            pnlTablero.find("#Docto").val(dtm.docto);
-            pnlTablero.find("#FechaDocto").val(dtm.fecha);
-            pnlTablero.find("#ImporteDocto").val(parseFloat(dtm.importe).toFixed(2));
-            pnlTablero.find("#PagosDocto").val(parseFloat(dtm.pagos).toFixed(2));
-            pnlTablero.find("#SaldoDocto").val(parseFloat(dtm.saldo).toFixed(2));
-            pnlTablero.find("#ImporteAPagar").val(parseFloat(dtm.saldo).toFixed(2)).focus().select();
-
-            getPagosByClienteFactTp(dtm.cliente, dtm.docto, dtm.tipo);
-        });
     }
-    function getPagosByClienteFactTp(cliente, docfac, tp) {
+    function getDetalleNC(cliente, doc, tp) {
         $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblPagosDocto')) {
-            tblPagosDocto.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tblDetalleNC')) {
+            tblDetalleNC.DataTable().destroy();
         }
-
-        PagosDoctos = tblPagosDocto.DataTable({
+        DetalleNC = tblDetalleNC.DataTable({
             "dom": 'rt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
-                "url": master_url + 'getPagosByClienteFactTp',
+                "url": master_url + 'getDetalleNC',
                 "dataSrc": "",
-                "data": {Tp: tp, Cliente: cliente, Factura: docfac},
+                "data": {Tp: tp, Cliente: cliente, NC: doc},
                 "type": "GET"
             },
             "columns": [
+                {"data": "nc"},
                 {"data": "cliente"},
-                {"data": "docto"},
-                {"data": "tipo"},
-                {"data": "fechadep"},
-                {"data": "fechacap"},
-                {"data": "importe"},
-                {"data": "mov"},
-                {"data": "doctopa"}
+                {"data": "numfac"},
+                {"data": "orden"},
+                {"data": "fecha"},
+                {"data": "descripcion"},
+                {"data": "precio"},
+                {"data": "subtot"}
             ],
             "columnDefs": [
                 {
-                    "targets": [5],
+                    "targets": [6, 7],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
@@ -681,7 +768,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [3, 'desc']
+                [4, 'desc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -701,13 +788,13 @@
                             /*fecha conf*/
                             c.addClass('text-info text-strong');
                             break;
-                        case 5:
+                        case 6:
                             /*fecha conf*/
-                            c.addClass('text-success text-strong');
+                            c.addClass('text-strong');
                             break;
                         case 7:
                             /*FECHA ENTREGA*/
-                            c.addClass('text-strong');
+                            c.addClass('text-success text-strong');
                             break;
                     }
                 });
@@ -717,8 +804,8 @@
             }
         });
 
-        tblPagosDocto.find('tbody').on('click', 'tr', function () {
-            tblPagosDocto.find("tbody tr").removeClass("success");
+        tblDetalleNC.find('tbody').on('click', 'tr', function () {
+            tblDetalleNC.find("tbody tr").removeClass("success");
             $(this).addClass("success");
         });
     }

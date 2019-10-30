@@ -36,12 +36,12 @@
         $.fancybox.open({
             src: url,
             type: 'iframe',
-            opts: { 
+            opts: {
                 iframe: iframe_opts
             }
         });
     }
-    function onOpenWindowAFC(url,doafterClose) {
+    function onOpenWindowAFC(url, doafterClose) {
         onBeep(1);
         $.fancybox.open({
             src: url,
@@ -1149,19 +1149,19 @@
             enteros: Math.floor(num),
             centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
             letrasCentavos: "",
-            letrasMonedaPlural: " PESOS",
-            letrasMonedaSingular: " PESO"
+            letrasMonedaPlural: "PESOS ",
+            letrasMonedaSingular: "PESO "
         };
 
         if (data.centavos >= 0)
-            data.letrasCentavos = " " + data.centavos + "/100 MXN";
+            data.letrasCentavos = "" + data.centavos + "/100 MXN";
 
         if (data.enteros == 0)
-            return "CERO " + data.letrasMonedaPlural + " " + data.letrasCentavos;
+            return "CERO " + data.letrasMonedaPlural + "" + data.letrasCentavos;
         if (data.enteros == 1)
-            return Millones(data.enteros) + " " + data.letrasMonedaSingular + " " + data.letrasCentavos;
+            return Millones(data.enteros) + " " + data.letrasMonedaSingular + "" + data.letrasCentavos;
         else
-            return Millones(data.enteros) + " " + data.letrasMonedaPlural + " " + data.letrasCentavos;
+            return Millones(data.enteros) + " " + data.letrasMonedaPlural + "" + data.letrasCentavos;
     }
     /* 1 = OK, 2 = ERROR*/
     function onBeep(index) {

@@ -69,7 +69,7 @@
         mdlReimprimeNotaCredito.find("#Cliente").change(function () {
             if ($(this).val()) {
                 var tp = mdlReimprimeNotaCredito.find("#Tp").val();
-                $.getJSON(base_url + 'index.php/NotaCreditoClientes/getNotasByTpByCliente', {
+                $.getJSON(base_url + 'index.php/NotasCreditoClientes/getNotasByTpByCliente', {
                     Tp: tp,
                     Cliente: $(this).val()
                 }).done(function (data) {
@@ -116,7 +116,7 @@
 
     function onImprimirReporteNotaCredito(tp, folio, cte, reporte) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-        $.post(base_url + 'index.php/NotaCreditoClientes/' + reporte, {
+        $.post(base_url + 'index.php/NotasCreditoClientes/' + reporte, {
             Tp: tp,
             Folio: folio,
             Cliente: cte
