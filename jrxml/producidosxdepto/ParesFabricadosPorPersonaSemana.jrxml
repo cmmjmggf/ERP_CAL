@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorPersonaSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
 	<property name="ireport.zoom" value="2.0000000000000218"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="108"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.String"/>
 	<parameter name="ANO" class="java.lang.String"/>
@@ -10,15 +10,22 @@
 	<parameter name="DEPTO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="FECHA_INICIAL" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA_FINAL" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT SP.FechaIni AS JUEVES,
-date_format(DATE_ADD(str_to_date(SP.FechaIni, '%d/%m/%Y'), INTERVAL 1 DAY), '%d/%m/%Y') AS VIERNES,
-DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 2 DAY) AS SABADO,
-DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 3 DAY) AS DOMINGO,
-DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 4 DAY) AS LUNES,
-DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 5 DAY) AS MARTES,
-DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'), INTERVAL 6 DAY) AS MIERCOLES,
+		<![CDATA[SELECT $P{FECHA_INICIAL} AS JUEVES,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), INTERVAL 1 DAY), '%d/%m/%Y') AS VIERNES,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), INTERVAL 2 DAY),'%d/%m/%Y') AS SABADO,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), INTERVAL 3 DAY), '%d/%m/%Y') AS DOMINGO,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y') , INTERVAL 4 DAY), '%d/%m/%Y') AS LUNES,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), INTERVAL 5 DAY), '%d/%m/%Y') AS MARTES,
+date_format(DATE_ADD(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), INTERVAL 6 DAY), '%d/%m/%Y') AS MIERCOLES,
 E.Numero AS DEPTO,
+CONCAT(E.Numero," ",IFNULL(
 (CASE
 WHEN E.Numero = 1000 THEN "CELULA 1" WHEN E.Numero = 999 THEN "CELULA 2"
 WHEN E.Numero = 998 THEN "CELULA 3" WHEN E.Numero = 997 THEN "CELULA 4"
@@ -30,11 +37,11 @@ WHEN E.Numero = 901 THEN "MAQ-PESP 2" WHEN E.Numero = 902 THEN "MAQ-PESP 3"
 WHEN E.Numero = 903 THEN "MAQ-PESP 4" WHEN E.Numero = 904 THEN "MAQ-PESP 5"
 WHEN E.Numero = 905 THEN "MAQ-PESP 6" WHEN E.Numero = 906 THEN "MAQ-PESP 7"
 WHEN E.Numero = 907 THEN "MAQ-PESP 8" WHEN E.Numero = 908 THEN "MAQ-PESP 9"
-WHEN E.Numero = 992 THEN "Adorno A" WHEN E.Numero = 1005 THEN "Adorno B"
-WHEN E.Numero = 993 THEN "Montado A" WHEN E.Numero = 1005 THEN "Montado B"
+WHEN E.Numero = 992 THEN "ADORNO A" WHEN E.Numero = 1005 THEN "ADORNO B"
+WHEN E.Numero = 993 THEN "MONTADO A" WHEN E.Numero = 1005 THEN "MONTADO B"
 
-WHEN E.Numero = 991 THEN "Cel-montado B" WHEN E.Numero = 992 THEN "Cel-adorno A"
-WHEN E.Numero = 993 THEN "Cel-montado A" WHEN E.Numero = 30 THEN "JUAN ALEJANDRO CHAVEZ LOPEZ"
+WHEN E.Numero = 991 THEN "CEL-MONTADO B" WHEN E.Numero = 992 THEN "CEL-ADORNO A"
+WHEN E.Numero = 993 THEN "CEL-MONTADO A" WHEN E.Numero = 30 THEN "JUAN ALEJANDRO CHAVEZ LOPEZ"
 WHEN E.Numero = 31 THEN "PAULA LOPEZ PALMA" WHEN E.Numero = 97 THEN "ALBERTO MEDINA RAMIREZ"
 WHEN E.Numero = 284 THEN "PAULA LOPEZ PALMA" WHEN E.Numero = 285 THEN "ALBERTO MEDINA RAMIREZ"
 WHEN E.Numero = 286 THEN "FABIOLA HERNANDEZ HERNANDEZ" WHEN E.Numero = 287 THEN "MA EUGENIA ROJAS ARAUJO"
@@ -46,77 +53,85 @@ WHEN E.Numero = 2051 THEN "SANTIAGO ROCHA" WHEN E.Numero = 2179 THEN "DOMITILA N
 WHEN E.Numero = 2361 THEN "J  PATRICIO CHAVEZ CERVANTES" WHEN E.Numero = 2640 THEN "ANTONIO HERNANDEZ HERNANDEZ"
 WHEN E.Numero = 2641 THEN "ALMA DELIA GUERRERO ESPINOZA" WHEN E.Numero = 2716 THEN "CAROLINA  GALVAN FONSECA"
  WHEN E.Numero = 2748 THEN "MARIA GUADALUPE CASTILLO REYES"
-END) AS DEPARTAMENTO,
+END),"-")) AS DEPARTAMENTO,
 SUM(F.pares) AS TOTAL_PARES,
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.fecha = date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d')),0) AS TOTAL_PARES_JUEVES ,
+AND FF.fecha = date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d')),0) AS TOTAL_PARES_JUEVES ,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 1 DAY)),0)  AS TOTAL_PARES_VIERNES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 2 DAY)), 0)  AS TOTAL_PARES_SABADO,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 3 DAY)),0)  AS TOTAL_PARES_DOMINGO,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 4 DAY)),0)  AS TOTAL_PARES_LUNES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 5 DAY)),0) AS TOTAL_PARES_MARTES,
 
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
 LEFT JOIN empleados AS EE ON FF.numeroempleado = EE.Numero
 WHERE FF.semana = F.semana AND FF.depto = F.depto AND FF.anio = F.anio AND EE.Numero = E.Numero
-AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date(SP.FechaIni, '%d/%m/%Y'), '%Y-%m-%d'),
+AND FF.anio = F.anio AND FF.fecha = DATE_ADD(date_format(str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y'), '%Y-%m-%d'),
 INTERVAL 6 DAY)),0) AS TOTAL_PARES_MIERCOLES
 
-FROM semanasproduccion AS SP INNER JOIN fracpagnomina AS F
+FROM fracpagnomina AS F
 LEFT JOIN departamentos AS DEP ON F.depto = DEP.Clave LEFT JOIN empleados AS E ON F.numeroempleado = E.Numero
-WHERE SP.Ano = $P{ANO} AND SP.Sem = $P{SEMANA} AND SP.Sem = F.semana AND SP.Ano = F.anio AND DEP.Clave =$P{DEPTO} AND
-E.Numero IN( 1000,999,998,997,996, 995,994,899,1001,1002,
-1003,900,901,902,903, 904,905,906,907,908,
-992,1005,993,1005,991, 992,993,30,31,97,
-284,285,286,287,2645,288,613,1044,1132,2025,
-2051,2179,2361,2640,2641,2716,2748)
-GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
+WHERE F.anio = $P{ANO} AND F.semana = $P{SEMANA}   AND DEP.Clave = $P{DEPTO} AND F.fecha BETWEEN
+str_to_date($P{FECHA_INICIAL}, '%d/%m/%Y') AND str_to_date($P{FECHA_FINAL}, '%d/%m/%Y')  AND
+E.Numero IN( 1000,999,998,997,996, 995,994,899,1001,1002, 1003,900,901,902,903, 904,905,906,907,908,
+992,1005,993,1005,991, 992,993,30,31,97, 284,285,286,287,2645,288,613,1044,1132,2025,
+2051,2179,2361,2640,2641,2716,2748,2963) GROUP BY E.Numero  ORDER BY E.Numero DESC;]]>
 	</queryString>
-	<field name="JUEVES" class="java.lang.String"/>
-	<field name="VIERNES" class="java.lang.String"/>
-	<field name="SABADO" class="java.lang.String"/>
-	<field name="DOMINGO" class="java.lang.String"/>
+	<field name="JUEVES" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VIERNES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SABADO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DOMINGO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="LUNES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="MARTES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="MIERCOLES" class="java.lang.String"/>
+	<field name="MIERCOLES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="DEPTO" class="java.lang.Integer"/>
 	<field name="DEPARTAMENTO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -386,64 +401,80 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="146" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6a3c5450-ca95-46a9-8c5d-27763046652d"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="146" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6a3c5450-ca95-46a9-8c5d-27763046652d">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_JUEVES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_JUEVES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="195" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="84a4f703-ad26-46a1-afbe-b195877db2b2"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="195" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="84a4f703-ad26-46a1-afbe-b195877db2b2">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_VIERNES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_VIERNES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="245" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5dd28d01-bc20-40d8-8690-2aff2f567627"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="245" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5dd28d01-bc20-40d8-8690-2aff2f567627">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_SABADO}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_SABADO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="295" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="e85ede6c-c97b-4c46-abef-449ea97178a6"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="295" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="e85ede6c-c97b-4c46-abef-449ea97178a6">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_DOMINGO}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_DOMINGO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="346" y="0" width="48" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="10ede4ae-6e55-43b2-9176-d9862076a4f9"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="346" y="0" width="48" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="10ede4ae-6e55-43b2-9176-d9862076a4f9">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_LUNES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_LUNES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="395" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b36e63e8-b785-4bbf-84ec-6ae034f6736e"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="395" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b36e63e8-b785-4bbf-84ec-6ae034f6736e">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_MARTES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_MARTES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="444" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0c856409-c7ba-45ed-95a3-b554dda7de81"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="444" y="0" width="49" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0c856409-c7ba-45ed-95a3-b554dda7de81">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES_MIERCOLES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES_MIERCOLES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="493" y="0" width="62" height="15" uuid="e5bbaa18-983d-4d45-af4d-685a137103b1"/>
-				<textElement textAlignment="Center">
+				<reportElement x="493" y="0" width="62" height="15" uuid="e5bbaa18-983d-4d45-af4d-685a137103b1">
+					<printWhenExpression><![CDATA[$F{TOTAL_PARES}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL_PARES}]]></textFieldExpression>
@@ -497,14 +528,18 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<text><![CDATA[---- % ----]]></text>
 			</staticText>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="146" y="0" width="50" height="13" uuid="e2a56ae2-a713-468f-956b-520e80033431"/>
+				<reportElement x="146" y="0" width="50" height="13" uuid="e2a56ae2-a713-468f-956b-520e80033431">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_JUEVES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_JUEVES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="195" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="896f56c2-316c-4096-a1f5-6e61b7f69e94"/>
+				<reportElement mode="Transparent" x="195" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="896f56c2-316c-4096-a1f5-6e61b7f69e94">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_VIERNES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -512,7 +547,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_VIERNES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="245" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="e0deb488-723d-4cb2-83dd-a4f9a8aa8be6"/>
+				<reportElement mode="Transparent" x="245" y="1" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="e0deb488-723d-4cb2-83dd-a4f9a8aa8be6">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_SABADO_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -520,7 +557,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_SABADO_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="295" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="df01c06d-e9e9-4fa9-b6a8-12b39d97def1"/>
+				<reportElement mode="Transparent" x="295" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="df01c06d-e9e9-4fa9-b6a8-12b39d97def1">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_DOMINGO_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -528,7 +567,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_DOMINGO_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="345" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0416c84e-1d4b-43ec-89cf-e994ad646a38"/>
+				<reportElement mode="Transparent" x="345" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0416c84e-1d4b-43ec-89cf-e994ad646a38">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -536,7 +577,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_LUNES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="394" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="136e7787-ff87-4566-93fe-38c975c37f4b"/>
+				<reportElement mode="Transparent" x="394" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="136e7787-ff87-4566-93fe-38c975c37f4b">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -544,7 +587,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MARTES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="443" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="11406c29-b965-43cd-81f4-2e068a4f83fb"/>
+				<reportElement mode="Transparent" x="443" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="11406c29-b965-43cd-81f4-2e068a4f83fb">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_MIERCOLES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -552,7 +597,9 @@ GROUP BY E.Numero  ORDER BY E.Numero ASC;]]>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARES_MIERCOLES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="493" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5c29d6fd-c61a-4434-8108-4e9c6eae455c"/>
+				<reportElement mode="Transparent" x="493" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="5c29d6fd-c61a-4434-8108-4e9c6eae455c">
+					<printWhenExpression><![CDATA[$V{TOTAL_PARES_1}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

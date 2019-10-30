@@ -156,7 +156,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                     }
                 }
 //                exit(0);
-                $parametros["FECHA_INICIAL"] = intval($x->post('FECHA_INICIAL'));
+                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorDepartamentoSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));
@@ -165,6 +165,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
             case 1:
                 /* PESPUNTE */
                 $parametros["DEPTO"] = 110;
+                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
+                $parametros["FECHA_FINAL"] = ($x->post('FECHA_FINAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorPersonaSemanaPespunte' . Date('h_i_s'));
@@ -173,6 +175,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
             case 2:
                 /* MONTADO A */
                 $parametros["DEPTO"] = 180;
+                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
+                $parametros["FECHA_FINAL"] = ($x->post('FECHA_FINAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorPersonaSemanaMontado' . Date('h_i_s'));
@@ -181,6 +185,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
             case 3:
                 /* ADORNO A */
                 $parametros["DEPTO"] = 210;
+                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
+                $parametros["FECHA_FINAL"] = ($x->post('FECHA_FINAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorPersonaSemanaAdorno' . Date('h_i_s'));
@@ -189,6 +195,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
             case 4:
                 /* TEJIDO */
                 $parametros["DEPTO"] = 150;
+                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
+                $parametros["FECHA_FINAL"] = ($x->post('FECHA_FINAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorPersonaSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorPersonaSemanaTejido' . Date('h_i_s'));
