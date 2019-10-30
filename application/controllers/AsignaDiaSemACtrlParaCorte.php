@@ -130,6 +130,9 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where('PR.semana', $x['SEMANA']);
             }
+            if ($x['DIA'] !== '') {
+                $this->db->where('PR.diaprg', $x['DIA']);
+            }
             if ($x['CORTADOR'] !== '') {
                 $this->db->where('PR.numemp', $x['CORTADOR']);
             }

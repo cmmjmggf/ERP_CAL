@@ -157,7 +157,7 @@ class OrdenDeProduccion extends CI_Controller {
                                     . 'AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL '
                                     . 'AND CT.Control = P.Control', null, false)
                             ->get()->result();
-            $str = $this->db->last_query();
+//            $str = $this->db->last_query();
 //            PRINT $str;
 //            exit(0);
             foreach ($PEDIDO_DETALLE as $k => $v) {

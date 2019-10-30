@@ -511,6 +511,7 @@
                 "data": function (d) {
                     d.ANIO = Anio.val() ? Anio.val() : '';
                     d.SEMANA = Semana.val() ? Semana.val() : '';
+                    d.DIA = Dia.val() ? Dia.val() : '';
                     d.CORTADOR = CortadorADSCPC.val() ? CortadorADSCPC.val() : '';
                     d.CONTROL = Control.val() ? Control.val() : '';
                     d.ESTILO = Estilo.val() ? Estilo.val() : '';

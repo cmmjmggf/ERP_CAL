@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asidiacontmat" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="3.4150672768253925"/>
+	<property name="ireport.zoom" value="1.927716447147658"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
@@ -10,8 +10,8 @@
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="DIAT" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT
-     CONCAT(empleados.`PrimerNombre`," ",empleados.`SegundoNombre`) AS empleados_Nombre,
+		<![CDATA[SELECT SUM(ordendeproducciond.Cantidad) AS CANTIDAD ,ordendeproducciond.Articulo AS ARTICULOX, ordendeproducciond.ArticuloT AS ARTICULOTX,
+ CONCAT(empleados.`PrimerNombre`," ",(CASE WHEN empleados.`SegundoNombre` = "0" THEN "" ELSE empleados.`SegundoNombre` END)," ",empleados.`Paterno`," ",empleados.`Materno`) AS empleados_Nombre,
      empleados.`Numero` AS empleados_Numero,
      programacion.`frac` AS programacion_frac,
      programacion.`estilo` AS programacion_estilo,
@@ -22,17 +22,21 @@
      ordendeproducciond.`ArticuloT` AS ordendeproducciond_ArticuloT,
      ordendeproducciond.`UnidadMedida` AS ordendeproducciond_UnidadMedida,
      ordendeproducciond.`UnidadMedidaT` AS ordendeproducciond_UnidadMedidaT,
-       cast(ordendeproducciond.`Cantidad` as decimal(5,3)) AS ordendeproducciond_Cantidad
-FROM
-     `programacion` programacion INNER JOIN `empleados` empleados ON programacion.`numemp` = empleados.`Numero`,
-     `ordendeproduccion` ordendeproduccion INNER JOIN `ordendeproducciond` ordendeproducciond ON ordendeproduccion.`Clave` = ordendeproducciond.`OrdenDeProduccion`
-WHERE
-     programacion.diaprg = $P{DIA}
- AND programacion.semana = $P{SEMANA}
+       SUM(cast(ordendeproducciond.`Cantidad` as decimal(5,3))) AS ordendeproducciond_Cantidad
+
+FROM ordendeproduccion AS O INNER JOIN  ordendeproducciond AS ordendeproducciond ON O.ID = ordendeproducciond.OrdenDeProduccion
+INNER JOIN programacion AS programacion ON programacion.control = O.ControlT INNER JOIN empleados AS empleados ON programacion.numemp = empleados.Numero
+WHERE O.Semana = $P{SEMANA} AND programacion.semana = $P{SEMANA} AND ordendeproducciond.`Grupo` IN(1,12,15,16,17,18,2,30,31,34,40,41,50,9)
+ AND programacion.diaprg = $P{DIA}
  AND programacion.`frac` < 300
- AND ordendeproducciond.`Grupo` IN (1,12,15,16,17,18,2,30,31,34,40,41,50,9)
-ORDER BY empleados.`Numero` ASC]]>
+GROUP BY programacion.numemp,ordendeproducciond.Articulo
+ORDER BY ABS(programacion.numemp) ASC, ABS(ordendeproducciond.`Grupo`) ASC, ABS(ordendeproducciond.Articulo) ASC]]>
 	</queryString>
+	<field name="CANTIDAD" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ARTICULOX" class="java.lang.String"/>
+	<field name="ARTICULOTX" class="java.lang.String"/>
 	<field name="empleados_Nombre" class="java.lang.String"/>
 	<field name="empleados_Numero" class="java.lang.Integer"/>
 	<field name="programacion_frac" class="java.lang.Integer"/>
@@ -54,15 +58,12 @@ ORDER BY empleados.`Numero` ASC]]>
 	<variable name="ordendeproducciond_Cantidad_3" class="java.math.BigDecimal" resetType="Group" resetGroup="empleados_Numero" calculation="Sum">
 		<variableExpression><![CDATA[$F{ordendeproducciond_Cantidad}]]></variableExpression>
 	</variable>
-	<group name="programacion_estilo">
-		<groupExpression><![CDATA[$F{programacion_estilo}]]></groupExpression>
-	</group>
-	<group name="empleados_Numero">
+	<group name="empleados_Numero" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{empleados_Numero}]]></groupExpression>
 		<groupHeader>
 			<band height="12">
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="83" y="0" width="346" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="beac15af-1148-48f1-9842-2915cda27a57"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="83" y="0" width="346" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="beac15af-1148-48f1-9842-2915cda27a57"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -70,7 +71,7 @@ ORDER BY empleados.`Numero` ASC]]>
 					<textFieldExpression><![CDATA[$F{empleados_Nombre}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="60" y="0" width="24" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f2f51ada-12ab-4701-8418-87b9bc522355"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="60" y="0" width="24" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f2f51ada-12ab-4701-8418-87b9bc522355"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -81,7 +82,7 @@ ORDER BY empleados.`Numero` ASC]]>
 					<reportElement x="1" y="10" width="426" height="1" uuid="c0c25f74-7a46-4c95-b519-d07a62c433fd"/>
 				</line>
 				<staticText>
-					<reportElement x="0" y="0" width="60" height="11" forecolor="#000000" uuid="d7700815-3b31-485f-ac22-3e5f48a9f916"/>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="60" height="11" forecolor="#000000" uuid="d7700815-3b31-485f-ac22-3e5f48a9f916"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="7" isBold="true"/>
 					</textElement>
@@ -90,7 +91,7 @@ ORDER BY empleados.`Numero` ASC]]>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="11">
+			<band height="12">
 				<staticText>
 					<reportElement mode="Transparent" x="352" y="0" width="74" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="eb96ff76-ac90-4b9e-bf22-794eb0dcc2af"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -112,6 +113,9 @@ ORDER BY empleados.`Numero` ASC]]>
 	</group>
 	<group name="ordprod_grupo">
 		<groupExpression><![CDATA[$F{ordendeproducciond_Grupo}]]></groupExpression>
+		<groupFooter>
+			<band height="10"/>
+		</groupFooter>
 	</group>
 	<group name="articulo">
 		<groupExpression><![CDATA[$F{ordendeproducciond_Articulo}]]></groupExpression>
@@ -156,7 +160,7 @@ ORDER BY empleados.`Numero` ASC]]>
 		</groupHeader>
 	</group>
 	<columnHeader>
-		<band height="57" splitType="Stretch">
+		<band height="58" splitType="Stretch">
 			<staticText>
 				<reportElement x="369" y="45" width="59" height="11" forecolor="#000000" uuid="2eb3ba67-7b9c-4aa6-8ca5-77c14f923b78"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -195,7 +199,7 @@ ORDER BY empleados.`Numero` ASC]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="284" y="14" width="20" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="7d02a61d-582a-461f-b5bc-93328c404f06"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
