@@ -238,8 +238,8 @@ class AsignaPFTSACXC extends CI_Controller {
             $xx = $this->input->post();
             $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
-            var_dump($CONTROL);
-            exit(0);
+//            var_dump($CONTROL);
+//            exit(0);
             $CONTROL_SEMANA_MAQUILA = $CONTROL[0];
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
