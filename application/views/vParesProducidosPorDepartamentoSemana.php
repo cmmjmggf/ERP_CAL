@@ -85,24 +85,9 @@
 
         Semana.on('keydown', function (e) {
             if (e.keyCode === 13 && Semana.val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Espere...'
-                });
-                $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getFechasXSemana'); ?>', {
-                    SEMANA: Semana.val()
-                }).done(function (a, b, c) {
-                    console.log(a);
-                    var d = JSON.parse(a);
-                    if (d.length > 0) {
-                        Semana.val(d[0].SEMANA);
-                        FechaInicial.val(d[0].FEINI);
-                        FechaFinal.val(d[0].FEFIN);
-                    }
-                }).fail(function (x, y, z) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
+                onOpenOverlay('');
+                getFechasXSemana(function () {
+                    onCloseOverlay();
                 });
             }
         });
@@ -132,55 +117,57 @@
         });
 
         btnAceptar.click(function () {
-            btnAceptar.attr('disabled', true);
-            HoldOn.open({
-                theme: 'sk-cube',
-                message: 'Por favor espere...'
-            });
-            if (Anio.val() && Semana.val() && FechaInicial.val() && FechaFinal.val()) {
-                $.post('<?php print base_url('ParesProducidosPorDepartamentoSemana/getReporte'); ?>', {
-                    FECHA_INICIAL: FechaInicial.val() ? FechaInicial.val() : '',
-                    FECHA_FINAL: FechaFinal.val() ? FechaFinal.val() : '',
-                    ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
-                    SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
-                    TIPO: pnlTablero.find("#chkDetallePespunte")[0].checked ? 1 :
-                            pnlTablero.find("#chkDetalleMontado")[0].checked ? 2 :
-                            pnlTablero.find("#chkDetalleAdorno")[0].checked ? 3 :
-                            pnlTablero.find("#chkDetalleTejido")[0].checked ? 4 : 0
-                }).done(function (data, x, jq) {
-                    onBeep(1);
-                    onImprimirReporteFancy(data);
-                }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                }).always(function () {
-                    HoldOn.close();
-                    btnAceptar.attr('disabled', false);
+            getFechasXSemana(function () {
+                btnAceptar.attr('disabled', true);
+                HoldOn.open({
+                    theme: 'sk-cube',
+                    message: 'Por favor espere...'
                 });
-            } else {
-                if (!Anio.val()) {
-                    swal('ATENCIÓN', 'EL AÑO ES REQUERIDO', 'warning').then((value) => {
-                        if (value) {
-                            Anio.focus().select();
-                            btnAceptar.attr('disabled', false);
-                        }
-                    });
-                }
-                if (!Semana.val()) {
-                    swal('ATENCIÓN', 'LA SEMANA ES REQUERIDA', 'warning').then((value) => {
-                        if (value) {
-                            Semana.focus().select();
-                            btnAceptar.attr('disabled', false);
-                        }
-                    });
-                }
-                if (!FechaInicial.val() || !FechaFinal.val()) {
-                    swal('ATENCIÓN', 'LAS FECHAS SON REQUERIDAS', 'warning').then((value) => {
-                        FechaInicial.focus().select();
+                if (Anio.val() && Semana.val() && FechaInicial.val() && FechaFinal.val()) {
+                    $.post('<?php print base_url('ParesProducidosPorDepartamentoSemana/getReporte'); ?>', {
+                        FECHA_INICIAL: FechaInicial.val() ? FechaInicial.val() : '',
+                        FECHA_FINAL: FechaFinal.val() ? FechaFinal.val() : '',
+                        ANIO: Anio.val().trim() !== '' ? Anio.val() : '',
+                        SEMANA: Semana.val().trim() !== '' ? Semana.val() : '',
+                        TIPO: pnlTablero.find("#chkDetallePespunte")[0].checked ? 1 :
+                                pnlTablero.find("#chkDetalleMontado")[0].checked ? 2 :
+                                pnlTablero.find("#chkDetalleAdorno")[0].checked ? 3 :
+                                pnlTablero.find("#chkDetalleTejido")[0].checked ? 4 : 0
+                    }).done(function (data, x, jq) {
+                        onBeep(1);
+                        onImprimirReporteFancy(data);
+                    }).fail(function (x, y, z) {
+                        console.log(x.responseText);
+                        swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                    }).always(function () {
+                        HoldOn.close();
                         btnAceptar.attr('disabled', false);
                     });
+                } else {
+                    if (!Anio.val()) {
+                        swal('ATENCIÓN', 'EL AÑO ES REQUERIDO', 'warning').then((value) => {
+                            if (value) {
+                                Anio.focus().select();
+                                btnAceptar.attr('disabled', false);
+                            }
+                        });
+                    }
+                    if (!Semana.val()) {
+                        swal('ATENCIÓN', 'LA SEMANA ES REQUERIDA', 'warning').then((value) => {
+                            if (value) {
+                                Semana.focus().select();
+                                btnAceptar.attr('disabled', false);
+                            }
+                        });
+                    }
+                    if (!FechaInicial.val() || !FechaFinal.val()) {
+                        swal('ATENCIÓN', 'LAS FECHAS SON REQUERIDAS', 'warning').then((value) => {
+                            FechaInicial.focus().select();
+                            btnAceptar.attr('disabled', false);
+                        });
+                    }
                 }
-            }
+            });
         });
     });
 
@@ -203,6 +190,24 @@
             getError(x);
         }).always(function () {
             HoldOn.close();
+        });
+    }
+
+    function getFechasXSemana(f) {
+        $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getFechasXSemana'); ?>', {
+            SEMANA: Semana.val()
+        }).done(function (a, b, c) {
+            console.log(a);
+            var d = JSON.parse(a);
+            if (d.length > 0) {
+                Semana.val(d[0].SEMANA);
+                FechaInicial.val(d[0].FEINI);
+                FechaFinal.val(d[0].FEFIN);
+                f();
+            }
+        }).fail(function (x, y, z) {
+            getError(x);
+        }).always(function () {
         });
     }
 </script>
