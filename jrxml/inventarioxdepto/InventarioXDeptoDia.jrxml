@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventarioXDeptoDia" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
 	<property name="ireport.zoom" value="3.1384283767210515"/>
-	<property name="ireport.x" value="399"/>
+	<property name="ireport.x" value="999"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -379,7 +379,9 @@ ORDER BY IXD.SEMANA ASC,  ABS(ORDEN_ASC_X_AVANCE) ASC;]]>
 				<textFieldExpression><![CDATA[$F{DOMINGO_SABADO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="254" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0539a62d-52df-4785-a79d-fced1d800ac6"/>
+				<reportElement mode="Transparent" x="254" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0539a62d-52df-4785-a79d-fced1d800ac6">
+					<printWhenExpression><![CDATA[$F{JUEVES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -387,7 +389,9 @@ ORDER BY IXD.SEMANA ASC,  ABS(ORDEN_ASC_X_AVANCE) ASC;]]>
 				<textFieldExpression><![CDATA[$F{JUEVES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="071741c6-009d-4fe0-a1e8-4de8f9f9dd66"/>
+				<reportElement mode="Transparent" x="304" y="0" width="50" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="071741c6-009d-4fe0-a1e8-4de8f9f9dd66">
+					<printWhenExpression><![CDATA[$F{VIERNES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -395,7 +399,9 @@ ORDER BY IXD.SEMANA ASC,  ABS(ORDEN_ASC_X_AVANCE) ASC;]]>
 				<textFieldExpression><![CDATA[$F{VIERNES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="355" y="0" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e7c70e85-f0dd-47ef-b22a-6c7c5b4667c7"/>
+				<reportElement mode="Transparent" x="355" y="0" width="48" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e7c70e85-f0dd-47ef-b22a-6c7c5b4667c7">
+					<printWhenExpression><![CDATA[$F{LUNES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -403,7 +409,9 @@ ORDER BY IXD.SEMANA ASC,  ABS(ORDEN_ASC_X_AVANCE) ASC;]]>
 				<textFieldExpression><![CDATA[$F{LUNES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="404" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="170d8b2a-af46-427a-a06c-80fdfe212fbd"/>
+				<reportElement mode="Transparent" x="404" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="170d8b2a-af46-427a-a06c-80fdfe212fbd">
+					<printWhenExpression><![CDATA[$F{MARTES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -411,7 +419,9 @@ ORDER BY IXD.SEMANA ASC,  ABS(ORDEN_ASC_X_AVANCE) ASC;]]>
 				<textFieldExpression><![CDATA[$F{MARTES}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="454" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="af7498c3-0e8a-4683-88b8-95cc7ae47250"/>
+				<reportElement mode="Transparent" x="454" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="af7498c3-0e8a-4683-88b8-95cc7ae47250">
+					<printWhenExpression><![CDATA[$F{MIERCOLES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

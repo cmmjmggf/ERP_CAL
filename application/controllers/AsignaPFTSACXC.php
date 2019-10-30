@@ -72,7 +72,23 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getRegresos() {
         try {
-            print json_encode($this->apftsacxc->getRegresos());
+//            print json_encode($this->apftsacxc->getRegresos());
+            $x = $this->input->get();
+            $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
+                            . "A.Estilo, A.Color, A.Pares, A.Articulo, A.Descripcion AS ArticuloT, "
+                            . "A.Abono AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo")
+                    ->from("asignapftsacxc AS A")
+                    ->where_in('A.TipoMov', array(1, 2, 34, 40));
+            if ($x['CORTADOR'] !== '') {
+                $this->db->where('A.Empleado', $x['CORTADOR']);
+            }
+            if ($x['PIFO'] !== '') {
+                $this->db->where('A.Fraccion', $x['PIFO']);
+            }
+            if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
+                $this->db->limit(25);
+            }
+              print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

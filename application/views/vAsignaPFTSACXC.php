@@ -278,9 +278,9 @@
                         <label>Cortador</label>
                         <input type="text" id="CortadorClave" autofocus="" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
 
-                        <select id="Cortador" name="Cortador" class="form-control form-control-sm mt-4">
+                        <select id="Cortador" name="Cortador" class="form-control form-control-sm">
                             <option></option>
                         </select>
                     </div>
@@ -408,9 +408,12 @@
     var btnReload = $("#btnReload"), btnRetornaMaterial = $("#btnRetornaMaterial");
     var mdlRetornaMaterial = $("#mdlRetornaMaterial");
 
-    var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"), Regresos = $("#Regresos");
-    var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"), Regreso = mdlRetornaMaterial.find("#Regreso"),
+    var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"), 
+            Regresos = $("#Regresos");
+    var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"), 
+            Regreso = mdlRetornaMaterial.find("#Regreso"),
             MatMalo = mdlRetornaMaterial.find("#MatMalo"),
+            PielForro = mdlRetornaMaterial.find("#PielForro"),
             CortadorClave = mdlRetornaMaterial.find("#CortadorClave"),
             Cortador = mdlRetornaMaterial.find("#Cortador");
 
@@ -419,12 +422,14 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
+        Cortador[0].selectize.disable();
+
         btnEntregar.click(function () {
             onEntregarMaterial();
         });
 
         CortadorClave.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && CortadorClave.val()) {
                 Cortador[0].selectize.setValue(CortadorClave.val());
                 if (Cortador.val() === '') {
                     iMsg("DEBE DE ESPECIFICAR UN CORTADOR VALIDO", 'w', function () {
@@ -434,13 +439,15 @@
             }
 
         });
-
+        mdlRetornaMaterial.on('hidden.bs.modal', function () {
+            mdlRetornaMaterial.find("input").val("");
+            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
+                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
+            });
+        });
         mdlRetornaMaterial.on('shown.bs.modal', function () {
-//            mdlRetornaMaterial.find("input").val('');
-//            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
-//                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
-//            });
-            CortadorClave.focus().select();
+            console.log('okokokokokokook');
+            CortadorClave.focus();
         });
 
         mdlRetornaMaterial.find("#Control").focusout(function () {
@@ -500,10 +507,6 @@
         });
 
         btnRetornaMaterial.click(function () {
-            mdlRetornaMaterial.find("input").val("");
-            $.each(mdlRetornaMaterial.find("select"), function (k, v) {
-                mdlRetornaMaterial.find("select")[k].selectize.clear(true);
-            });
             mdlRetornaMaterial.modal('show');
         });
         Entregar.keydown(function (event) {
@@ -769,8 +772,12 @@
             "dom": 'frtip',
             buttons: buttons,
             "ajax": {
-                "url": master_url + 'getRegresos',
-                "dataSrc": ""
+                "url": '<?php print base_url('AsignaPFTSACXC/getRegresos'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CORTADOR = CortadorClave.val() ? CortadorClave.val() : '';
+                    d.PIFO = PielForro.val() ? PielForro.val() : '';
+                }
             },
             "columns": [
                 {"data": "ID"}/*0*/, {"data": "Cortador"}/*1*/, {"data": "Control"}/*2*/, {"data": "PiFoFraccion"},
@@ -1154,7 +1161,7 @@
             });
             $.post(master_url + 'onDevolverPielForro', {
                 ID: mdlRetornaMaterial.find("#IDA").val(),
-                EMPLEADO: mdlRetornaMaterial.find("#Cortador").val(),
+                EMPLEADO: mdlRetornaMaterial.find("#CortadorClave").val(),
                 ARTICULO: mdlRetornaMaterial.find("#Articulo").val(),
                 PIELFORRO: mdlRetornaMaterial.find("#PielForro").val(),
                 CONTROL: mdlRetornaMaterial.find("#Control").val(),
@@ -1168,8 +1175,8 @@
                 Regresos.ajax.reload();
                 ControlesAsignados.ajax.reload();
                 swal('ATENCIÓN', 'SE HA RETORNADO MATERIAL', 'success').then((value) => {
-                    mdlRetornaMaterial.find("#Cortador")[0].selectize.open();
-                    mdlRetornaMaterial.find("#Cortador")[0].selectize.focus();
+                    CortadorClave.val('');
+                    CortadorClave.focus().select();
                 });
             }).fail(function (x, y, z) {
                 console.log(x.responseText, y, z);
