@@ -88,7 +88,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
                 $this->db->limit(25);
             }
-              print json_encode($this->db->get()->result());
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -236,8 +236,10 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             $x = $this->input->post();
             $xx = $this->input->post();
-            $CONTROL = $this->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
+            $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+            var_dump($CONTROL);
+            exit(0);
             $CONTROL_SEMANA_MAQUILA = $CONTROL[0];
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
@@ -374,7 +376,7 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             /* AGREGAR MOVIMIENTO DE ARTICULO */
             $x = $this->input->post();
-            $CONTROL = $this->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
+            $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
 
             $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;

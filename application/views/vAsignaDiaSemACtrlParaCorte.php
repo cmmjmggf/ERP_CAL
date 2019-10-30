@@ -89,7 +89,7 @@
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Estilo</label>
-                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" maxlength="10">
+                <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <label>Color</label>
@@ -98,19 +98,19 @@
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Pares</label>
-                <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" maxlength="10">
+                <input type="text" id="Pares" name="Pares"  readonly="" class="form-control form-control-sm numbersOnly" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <label>TxPar</label>
-                <input type="text" id="TxPar" name="TxPar" class="form-control form-control-sm numbersOnly" maxlength="10">
+                <input type="text" id="TxPar" name="TxPar"  readonly="" class="form-control form-control-sm numbersOnly" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-1 col-xl-1">
                 <label>Precio</label>
-                <input type="text" id="Precio" name="Precio" class="form-control form-control-sm numbersOnly" maxlength="10">
+                <input type="text" id="Precio" name="Precio" readonly=""  class="form-control form-control-sm numbersOnly" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Tiempo</label>
-                <input type="text" id="Tiempo" name="Tiempo" class="form-control form-control-sm numbersOnly" maxlength="10">
+                <input type="text" id="Tiempo" name="Tiempo" readonly=""  class="form-control form-control-sm numbersOnly" maxlength="10">
             </div>
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 d-none">
                 <label>Articulo</label>
@@ -119,7 +119,7 @@
             </div> 
             <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
                 <label>Pesos</label>
-                <input type="text" id="Pesos" name="Pesos" class="form-control form-control-sm numbersOnly" maxlength="10">
+                <input type="text" id="Pesos" name="Pesos" readonly=""  class="form-control form-control-sm numbersOnly" maxlength="10">
             </div> 
             <button type="button" class="btn btn-info btn-lg btn-float animated tada" id="btnGuardar" name="btnGuardar"  data-toggle="tooltip" data-placement="left" title="Guardar">
                 <i class="fa fa-save"></i>

@@ -408,9 +408,9 @@
     var btnReload = $("#btnReload"), btnRetornaMaterial = $("#btnRetornaMaterial");
     var mdlRetornaMaterial = $("#mdlRetornaMaterial");
 
-    var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"), 
+    var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"),
             Regresos = $("#Regresos");
-    var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"), 
+    var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"),
             Regreso = mdlRetornaMaterial.find("#Regreso"),
             MatMalo = mdlRetornaMaterial.find("#MatMalo"),
             PielForro = mdlRetornaMaterial.find("#PielForro"),
@@ -823,7 +823,7 @@
     function getParesXControl(c) {
         if (c.val() !== '') {
             tblRegresos.DataTable().column(2).search(c.val()).draw();
-            $.getJSON(master_url + 'getParesXControl', {CONTROL: c.val()}).done(function (data) {
+            $.getJSON('<?php print base_url('AsignaPFTSACXC/getParesXControl'); ?>', {CONTROL: c.val()}).done(function (data) {
                 mdlRetornaMaterial.find("#Pares").val(data[0].PARES);
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
@@ -841,7 +841,7 @@
                 theme: 'sk-bounce',
                 message: 'Cargando...'
             });
-            $.getJSON(master_url + 'getExplosionXSemanaControlFraccionArticulo',
+            $.getJSON('<?php print base_url('AsignaPFTSACXC/getExplosionXSemanaControlFraccionArticulo'); ?>',
                     {SEMANA: S.val(), CONTROL: C.val(),
                         FRACCION: F.val(), ARTICULO: A,
                         GRUPO: G}).done(function (data) {
@@ -929,7 +929,7 @@
     }
 
     function onComprobarSemana(e) {
-        $.getJSON(master_url + 'onComprobarSemana', {SEMANA: $(e).val()}).done(function (data) {
+        $.getJSON('<?php print base_url('AsignaPFTSACXC/onComprobarSemana'); ?>', {SEMANA: $(e).val()}).done(function (data) {
             console.log(data);
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -944,7 +944,7 @@
             theme: 'sk-bounce',
             message: 'Obteniendo textiles...'
         });
-        $.getJSON(master_url + 'getTextiles', {SEMANA: (Semana.val() !== '') ? Semana.val() : '', CONTROL: (Control.val() !== '') ? Control.val() : ''})
+        $.getJSON('<?php print base_url('AsignaPFTSACXC/getTextiles'); ?>', {SEMANA: (Semana.val() !== '') ? Semana.val() : '', CONTROL: (Control.val() !== '') ? Control.val() : ''})
                 .done(function (data) {
                     var tt = 0.0;
                     $.each(data, function (k, v) {
@@ -965,7 +965,7 @@
             theme: 'sk-bounce',
             message: 'Obteniendo sinteticos...'
         });
-        $.getJSON(master_url + 'getSinteticos', {SEMANA: (Semana.val() !== '') ? Semana.val() : '', CONTROL: (Control.val() !== '') ? Control.val() : ''})
+        $.getJSON('<?php print base_url('AsignaPFTSACXC/getSinteticos'); ?>', {SEMANA: (Semana.val() !== '') ? Semana.val() : '', CONTROL: (Control.val() !== '') ? Control.val() : ''})
                 .done(function (data) {
                     $.each(data, function (k, v) {
                         Sinteticos.row.add([v.ID, v.CONTROL, v.ARTICULO_CLAVE, v.ARTICULO_DESCRIPCION, v.UM, v.PIEZA, v.PIEZA_DESCRIPCION, v.GRUPO, v.CANTIDAD, v.SEMANA, v.FRACCION, v.PARES]).draw();
@@ -982,7 +982,7 @@
     function onChecarSemanaValida(e) {
         var n = $(e);
         if (n.val() !== '') {
-            $.getJSON(master_url + 'onChecarSemanaValida', {ID: $(e).val()}).done(function (data) {
+            $.getJSON('<?php print base_url('AsignaPFTSACXC/onChecarSemanaValida'); ?>', {ID: $(e).val()}).done(function (data) {
                 if (parseInt(data[0].Semana) <= 0) {
                     var options = {
                         title: "INDIQUE UNA SEMANA DE PRODUCCIÓN VÁLIDA",
@@ -1038,13 +1038,12 @@
                         break;
                 }
             });
-        } else
-        {
+        } else {
             console.log('Entregar.val() > Explosion.val() ELSE');
         }
 
         if (seguro) {
-            $.post(master_url + 'onEntregarPielForroTextilSintetico', {
+            $.post('<?php print base_url('AsignaPFTSACXC/onEntregarPielForroTextilSintetico'); ?>', {
                 TIPO: tipo_consumo,
                 ORDENDEPRODUCCION: OrdenDeProduccion.val(),
                 PARES: Pares.val(),
@@ -1159,7 +1158,7 @@
                 theme: 'sk-bounce',
                 message: 'DEVOLVIENDO...'
             });
-            $.post(master_url + 'onDevolverPielForro', {
+            $.post('<?php print base_url('AsignaPFTSACXC/onDevolverPielForro'); ?>', {
                 ID: mdlRetornaMaterial.find("#IDA").val(),
                 EMPLEADO: mdlRetornaMaterial.find("#CortadorClave").val(),
                 ARTICULO: mdlRetornaMaterial.find("#Articulo").val(),

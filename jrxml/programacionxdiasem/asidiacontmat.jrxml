@@ -146,7 +146,7 @@ ORDER BY ABS(programacion.numemp) ASC, ABS(ordendeproducciond.`Grupo`) ASC, ABS(
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ordendeproducciond_UnidadMedida}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ordendeproducciond_UnidadMedidaT}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="articulo" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="426" y="1" width="50" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8d0472b3-97b9-42f0-a430-d742b9bfc583"/>
