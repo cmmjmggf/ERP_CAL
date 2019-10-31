@@ -225,12 +225,8 @@
 
                     <div class="col-6">
                         <label class="text-info">Pago de Nómina</label>
-
                         <div id="DiasPagoDeNomina" class="row"></div>
                         <div class="col-12" style="margin-top: 5em !important;"></div>
-
-
-
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                             <h4 class="text-danger">Estatus actual del avance</h4>
                             <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm ">

@@ -1,28 +1,33 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header">   
-        <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
-                <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nomina</h3>
-            </div> 
-        </div>
-    </div>
+<div class="card m-2 animated fadeIn" id="pnlTablero">
     <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <div class="row">
+            <div class="col-6">
+                <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
+            </div>
+            <div class="col-6" align="right">
+                <button type="button" class="btn btn-primary btn-sm mt-1" id="btnRastreo" name="btnRastreo">
+                    <span class="fa fa-search"></span> Rastreo
+                </button>
+                <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" placeholder="2805" style="height: 75px; font-weight: bold; font-size: 50px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm form-control-sm shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control" placeholder="-" disabled="" style="height: 75px; font-weight: bold; font-size: 50px; text-align: center;">
+                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm form-control-sm" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <div class="w-100 my-1"></div>
             <!--FIN BLOQUE 2 COL 6-->
-            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                 <div class="row justify-content-center" align="center">
-                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span> 
-                    <h4> Fracciones de este empleado</h4> 
+                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
+                    <h4> Fracciones de este empleado</h4>
                 </div>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
@@ -36,7 +41,7 @@
                             <th scope="col">Pares</th>
 
                             <th scope="col">Precio</th>
-                            <th scope="col">SubTotal</th> 
+                            <th scope="col">SubTotal</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -58,113 +63,113 @@
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <div class="row">  
-                    <div id="ManoDeObra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row" style="border-radius: 5px;">
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h4>Mano de obra</h4>  
-                        </div> 
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE CALIDAD" fraccion='60'>
-                                <label class="custom-control-label" for="chk60" >60 FOLEAR CORTE CALIDAD</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion='70'>
-                                <label class="custom-control-label" for="chk70">70 TROQUELAR PLANTILLA</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk71" description="TROQUELAR MUESTRA" fraccion='71'>
-                                <label class="custom-control-label" for="chk71">71 TROQUELAR MUESTRA</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk72" description="TROQUELAR NORMA" fraccion='72'>
-                                <label class="custom-control-label" for="chk72">72 TROQUELAR NORMA</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk75" description="TROQUELAR CORTE" fraccion='75'>
-                                <label class="custom-control-label" for="chk75">75 TROQUELAR CORTE</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk204" description="EMPALMAR PARA LASER" fraccion='204'>
-                                <label class="custom-control-label" for="chk204">204 EMPALMAR P' LASER</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk337" description="RECORTAR FORRO LASER" fraccion='337'>
-                                <label class="custom-control-label" for="chk337">337 RECORTAR FORRO LASER</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                    </div>
+                <div class="row">
+
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control numeric" maxlength="2" disabled="">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2" disabled="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control date notEnter" readonly="">
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" name="Departamento" class="form-control numeric" maxlength="3">
-                        <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
+                        <input type="text" id="Departamento" name="Departamento" class="form-control form-control-sm numeric" maxlength="3">
+                        <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control form-control-sm d-none" maxlength="3">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control" class="form-control form-control-sm numeric" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" class="form-control">
+                        <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" class="form-control numeric">
+                        <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" class="form-control numeric">
+                        <input type="text" id="Avance" name="Avance" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 row justify-content-center align-self-center">
-                        <button type="button" class="btn btn-primary mt-4 pt-2" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
+                        <button type="button" class="btn btn-primary btn-sm mt-3" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
                         <button type="button" class="btn btn-info m-1 d-none" id="btnAceptarPDF" name="btnAceptarPDF" data-toggle="tooltip" data-placement="top" title="PDF"><span class="fa fa-file-pdf"></span></button>
                         <button type="button" class="btn btn-success m-1 d-none" id="btnAceptarXLS" name="btnAceptarXLS" data-toggle="tooltip" data-placement="top" title="Excel"><span class="fa fa-file-excel"></span></button>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none"> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>ANIO</label>
-                        <input type="text" id="Anio" name="Anio" class="form-control numeric" readonly=""> 
+                        <input type="text" id="Anio" name="Anio" class="form-control form-control-sm numeric" readonly="">
                         <label>GENAVA</label>
-                        <input type="text" id="GeneraAvance" name="GeneraAvance" class="form-control" readonly=""> 
+                        <input type="text" id="GeneraAvance" name="GeneraAvance" class="form-control" readonly="">
                     </div>
+
+                    <div class="col-12">
+                        <hr>
+                    </div>
+
+                    <div id="ManoDeObra" class="col-6">
+
+                        <label class="text-danger">Seleccione Fracción</label>
+                        <div  class="row  bg-danger text-white" style="border-radius: 5px;" >
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE CALIDAD" fraccion='60'>
+                                    <label class="custom-control-label" for="chk60" >60 FOLEAR CORTE CALIDAD</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion='70'>
+                                    <label class="custom-control-label" for="chk70">70 TROQUELAR PLANTILLA</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk71" description="TROQUELAR MUESTRA" fraccion='71'>
+                                    <label class="custom-control-label" for="chk71">71 TROQUELAR MUESTRA</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk72" description="TROQUELAR NORMA" fraccion='72'>
+                                    <label class="custom-control-label" for="chk72">72 TROQUELAR NORMA</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk75" description="TROQUELAR CORTE" fraccion='75'>
+                                    <label class="custom-control-label" for="chk75">75 TROQUELAR CORTE</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk204" description="EMPALMAR PARA LASER" fraccion='204'>
+                                    <label class="custom-control-label" for="chk204">204 EMPALMAR P' LASER</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk337" description="RECORTAR FORRO LASER" fraccion='337'>
+                                    <label class="custom-control-label" for="chk337">337 RECORTAR FORRO LASER</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-info">Pago de Nómina</label>
+                        <div id="DiasPagoDeNomina" class="row"></div>
+                        <div class="col-12" style="margin-top: 5em !important;"></div>
+                    </div>
+
                     <div class="col-12 my-1">
                         <hr>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-primary" id="btnRastreo" name="btnRastreo">
-                            <span class="fa fa-search"></span>
-                            <br>Rastreo 
-                        </button>
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                        <h3>Pago de nomina</h3>
-                        <div id="DiasPagoDeNomina" class="row"></div>
-                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                        <h3>Estatus actual del avance</h3>
-                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control" style="text-align: center">
+                        <h4 class="text-danger">Estatus actual del avance</h4>
+                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm" style="text-align: center">
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
@@ -172,7 +177,7 @@
     </div>
 </div>
 
-<div class="modal" id="mdlRastreos" data-backdrop="false">
+<div class="modal" id="mdlRastreos" data-backdrop="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -182,26 +187,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row"> 
+                <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control">
+                        <input type="text" id="Control" name="Control" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Empleado</label>
-                        <select id="Empleado" name="Empleado" class="form-control"></select>
-                    </div> 
+                        <select id="Empleado" name="Empleado" class="form-control form-control-sm"></select>
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Desc.Fraccion</label>
-                        <input type="text" id="DescFraccion" name="DescFraccion" class="form-control">
+                        <input type="text" id="DescFraccion" name="DescFraccion" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Avance Actual</label>
-                        <input type="text" id="AvanceActual" name="AvanceActual" class="form-control">
+                        <input type="text" id="AvanceActual" name="AvanceActual" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="card-block mt-4">
@@ -221,7 +226,7 @@
                                     <th scope="col">Pares</th>
 
                                     <th scope="col">Precio</th>
-                                    <th scope="col">SubTotal</th> 
+                                    <th scope="col">SubTotal</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -246,7 +251,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -257,11 +262,11 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
@@ -287,8 +292,8 @@
     .highlight{
         border-radius: 4px;
         padding-left: 10px;
-        padding-right: 10px;    
-        background:#99cc00; 
+        padding-right: 10px;
+        background:#99cc00;
         font-weight: bold;
         color:#000;
         -webkit-transition: background-color 1s ease-out;
@@ -298,18 +303,18 @@
     }
 
     .btn-warning, .btn-warning:not(:disabled):not(.disabled):active {
-        color: #fff; 
+        color: #fff;
         /*BLUE:INFO*/
         border-color: #0099cc ;
-        background-image: linear-gradient(to bottom, #006699 0%, #006699 0% , #99ccff 100% ); 
+        background-image: linear-gradient(to bottom, #006699 0%, #006699 0% , #99ccff 100% );
         /*GREEN:SUCCESS*/
-        border-color: #669900 ; 
-        background-image: linear-gradient(to bottom, #669900 0%, #669900 0% , #ccff00 100% );  
+        border-color: #669900 ;
+        background-image: linear-gradient(to bottom, #669900 0%, #669900 0% , #ccff00 100% );
         /*RED:ERROR*/
-        border-color: #990000 ; 
-        background-image: linear-gradient(to bottom, #990000 0%, #990000 0% , #ff7070 100% );  
+        border-color: #990000 ;
+        background-image: linear-gradient(to bottom, #990000 0%, #990000 0% , #ff7070 100% );
         /*ORANGE:WARNING*/
-        border-color: #c79810 ; 
+        border-color: #c79810 ;
         background: #eab92d; /* Old browsers */
         background: -moz-linear-gradient(top, #eab92d 0%, #c79810 100%); /* FF3.6-15 */
         background: -webkit-linear-gradient(top, #eab92d 0%,#c79810 100%); /* Chrome10-25,Safari5.1-6 */
@@ -321,12 +326,24 @@
         /*BLUE:INFO*/
         border-color: #a1c4fd ;
         /*GREEN:SUCCESS*/
-        border-color: #669900 ; 
+        border-color: #669900 ;
         /*RED:ERROR*/
         border-color: #990000 ;
         /*ORANGE:WARNING*/
-        border-color: #ff9900 ; 
-    } 
+        border-color: #ff9900 ;
+    }
+    table tbody tr {
+        font-size: 0.75rem !important;
+    }
+
+    div.datatable-wide {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    label {
+        margin-top: 0.0rem;
+        margin-bottom: 0.0rem;
+    }
 </style>
 <script>
     var pnlTablero = $("#pnlTablero"), NumeroDeEmpleado = pnlTablero.find("#NumeroDeEmpleado"),
@@ -548,7 +565,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'rt',
             buttons: buttons,
             "columns": cols,
             "columnDefs": coldefs,
@@ -561,7 +578,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "500px",
+            "scrollY": "470px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
@@ -602,7 +619,7 @@
             }
         };
         xoptions.ajax = {
-            "url": '<?php print base_url('Avance7/getFraccionesPagoNomina'); ?>', 
+            "url": '<?php print base_url('Avance7/getFraccionesPagoNomina'); ?>',
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
@@ -705,14 +722,14 @@
                     '<label>' + i + '</label>' +
                     '</div>' +
                     '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;" readonly="">' +
+                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold;" readonly="">' +
                     '</div>';
         });
         fracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
                 '<label>TOTAL</label>' +
                 '</div>' +
                 '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;">' +
+                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold;">' +
                 '</div>';
         DiasPagoDeNomina.html(fracciones);
     }
