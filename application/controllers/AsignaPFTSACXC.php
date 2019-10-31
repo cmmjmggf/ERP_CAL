@@ -362,9 +362,12 @@ class AsignaPFTSACXC extends CI_Controller {
                         );
                         $this->db->insert('avance', $avance);
                         $this->db->set('EstatusProduccion', 'CORTE')
+                                ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('controles');
                         $this->db->set('stsavan', 10)
+                                ->set('EstatusProduccion', 'CORTE')
+                                ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('pedidox');
                         $this->db->set('fec2', Date('Y-m-d h:i:s'))
@@ -493,7 +496,7 @@ class AsignaPFTSACXC extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-            $x = $this->input->get(); 
+            $x = $this->input->get();
             print json_encode($this->db->query("SELECT  A.Devolucion AS DEVOLVIO_ANTES, A.Estilo AS ESTILO, A.Color AS COLOR, A.ID AS IDA, A.Articulo AS ARTICULO, A.Descripcion AS ARTICULO_DESCRIPCION, A.Abono AS ENTREGO "
                                     . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$x['PIFO']}")->result());
         } catch (Exception $exc) {
