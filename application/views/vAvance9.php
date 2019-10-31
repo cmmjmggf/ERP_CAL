@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control numeric" maxlength="3">
+                        <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control form-control-sm numeric" maxlength="3">
                         <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -117,10 +117,10 @@
                         <input type="text" id="Avance" name="Avance" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <button type="button" class="btn btn-info btn-sm mt-4" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
+                        <button type="button" class="btn btn-info btn-sm mt-4 d-none" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
                     </div>
 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-no-ne">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>MANODEOBRA</label>
                         <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control numeric" readonly="">
                         <label>ANIO</label>
@@ -139,7 +139,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <h4 class="text-info">Pago de nómina</h4>
                         <div id="DiasPagoDeNomina" class="row"></div>
                     </div>
@@ -257,14 +257,14 @@
                     '<label>' + i + '</label>' +
                     '</div>' +
                     '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; text-align: center;" readonly="">' +
+                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; " readonly="">' +
                     '</div>';
         });
         fracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
                 '<label>TOTAL</label>' +
                 '</div>' +
                 '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; text-align: center;">' +
+                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; ">' +
                 '</div>';
         DiasPagoDeNomina.html(fracciones);
 
