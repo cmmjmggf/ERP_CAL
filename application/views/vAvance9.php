@@ -1,28 +1,26 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header">   
+    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
-                <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nomina</h3>
-            </div> 
+                <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
+            </div>
         </div>
-    </div>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" placeholder="2805" style="height: 75px; font-weight: bold; font-size: 50px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control" placeholder="-" disabled="" style="height: 75px; font-weight: bold; font-size: 50px; text-align: center;">
+                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <div class="w-100 my-1"></div>
             <!--FIN BLOQUE 2 COL 6-->
-            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                 <div class="row justify-content-center" align="center">
-                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span> 
-                    <h4> Fracciones de este empleado</h4> 
+                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
+                    <h4> Fracciones de este empleado</h4>
                 </div>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
@@ -36,7 +34,7 @@
                             <th scope="col">Pares</th>
 
                             <th scope="col">Precio</th>
-                            <th scope="col">SubTotal</th> 
+                            <th scope="col">SubTotal</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -58,24 +56,24 @@
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <div class="row">  
+                <div class="row">
                     <div id="ManoDeObra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row" style="border-radius: 5px;">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h4>Mano de obra</h4>  
-                        </div> 
+                            <h4>Mano de obra</h4>
+                        </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="chk99" description="CORTE FORRO" fraccion='99'>
                                 <label class="custom-control-label" for="chk99" >99 Corte forro</label>
                             </div>
                         </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="chk100" description="CORTE PIEL" fraccion='100'>
                                 <label class="custom-control-label" for="chk100">100 Corte piel</label>
                             </div>
                         </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="chk96" description="CORTE MUESTRAS" fraccion='96'>
                                 <label class="custom-control-label" for="chk96">96 Corte muestras</label>
@@ -87,11 +85,11 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control numeric" maxlength="2" disabled="">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2" disabled="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control date notEnter">
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
@@ -100,29 +98,29 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control" class="form-control form-control-sm numeric" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" class="form-control">
+                        <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" class="form-control numeric">
+                        <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" class="form-control numeric">
+                        <input type="text" id="Avance" name="Avance" class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <button type="button" class="btn btn-info mt-4" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
-                    </div> 
+                        <button type="button" class="btn btn-info btn-sm mt-4" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
+                    </div>
 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>MANODEOBRA</label>
                         <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control numeric" readonly="">
                         <label>ANIO</label>
-                        <input type="text" id="Anio" name="Anio" class="form-control numeric" readonly=""> 
+                        <input type="text" id="Anio" name="Anio" class="form-control numeric" readonly="">
                         <label>GENAVA</label>
                         <input type="text" id="GeneraAvance" name="GeneraAvance" class="form-control" readonly="">
                         <label>FRAC</label>
@@ -138,12 +136,12 @@
 
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                        <h3>Pago de nomina</h3>
+                        <h4 class="text-info">Pago de nómina</h4>
                         <div id="DiasPagoDeNomina" class="row"></div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                        <h3>Estatus actual del avance</h3>
-                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control" style="text-align: center">
+                        <h4 class="text-danger">Estatus actual del avance</h4>
+                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm" style="text-align: center">
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
@@ -190,7 +188,7 @@
 
     // IIFE - Immediately Invoked Function Expression
     $(document).ready(function () {
-        handleEnter();
+        //handleEnter();
 
         btnAceptar.click(function () {
             if (NumeroDeEmpleado.val()) {
@@ -211,7 +209,7 @@
         Control.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
-                    console.log('avance 1')
+                    console.log('avance 1');
                     onAgregarAvance(true);
                 } else {
                     console.log('avance 2')
@@ -241,9 +239,11 @@
             if (e.keyCode === 13 && NumeroDeEmpleado.val()) {
                 btnAceptar.attr('disabled', false);
                 getInformacionEmpleado();
+                Control.focus().select();
             } else {
                 btnAceptar.attr('disabled', true);
             }
+
         });
 
         /*FRACCIONES*/
@@ -253,14 +253,14 @@
                     '<label>' + i + '</label>' +
                     '</div>' +
                     '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;" readonly="">' +
+                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; text-align: center;" readonly="">' +
                     '</div>';
         });
         fracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
                 '<label>TOTAL</label>' +
                 '</div>' +
                 '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;">' +
+                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; text-align: center;">' +
                 '</div>';
         DiasPagoDeNomina.html(fracciones);
 
@@ -288,7 +288,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'rt',
             buttons: buttons,
             "columns": cols,
             "columnDefs": coldefs,
@@ -301,7 +301,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "500px",
+            "scrollY": "470px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
@@ -601,8 +601,9 @@
                 } else {
                     onBeep(2);
                     Avance.ajax.reload();
-                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN O AUN NO SE HA REGISTRADO UN RETORNO DE MATERIAL AL ALMACEN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
+                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN O AÚN NO SE HA REGISTRADO UN RETORNO DE MATERIAL AL ALMACEN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
                         Control.focus().select();
+                        btnAceptar.attr('disabled', true)
                     });
                 }
             }
@@ -646,22 +647,22 @@
         transition: background-color 0.5s ease-out;
     }
 
-    .card-body .custom-control-label::after { 
+    .card-body .custom-control-label::after {
         background-color: #3F51B5;
     }
 
     .highlight{
         border-radius: 4px;
         padding-left: 10px;
-        padding-right: 10px;    
-        background:#99cc00; 
+        padding-right: 10px;
+        background:#99cc00;
         font-weight: bold;
         color:#000;
         -webkit-transition: background-color 1s ease-out;
         -moz-transition: background-color 1s ease-out;
         -o-transition: background-color 1s ease-out;
         transition: background-color 1s ease-out;
-    } 
+    }
 
     input[type='text']{
         color: #c1850c !important;
@@ -670,7 +671,7 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;
         /*top
         background-image: linear-gradient(to left, #0099cc,  #cc0000, #0099cc) ;
@@ -678,8 +679,17 @@
         background-position: 10% 0%, 0% 100%;
         background-repeat: no-repeat;  */
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
+    }
+
+    table tbody tr {
+        font-size: 0.75rem !important;
+    }
+
+    div.datatable-wide {
+        padding-left: 0;
+        padding-right: 0;
     }
 </style>

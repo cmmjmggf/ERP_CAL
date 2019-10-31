@@ -55,7 +55,6 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'DESTAJOS':
-                    $this->load->view('vMenuPrincipal');
                     switch ($this->session->USERNAME) {
                         case '777777':
                             /*
