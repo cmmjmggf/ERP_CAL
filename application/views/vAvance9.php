@@ -1,10 +1,14 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+<div class="card m-2 animated fadeIn" id="pnlTablero">
+    <div class="card-body" style="padding-top: 3px; padding-bottom: 3px;">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
+            <div class="col-6">
                 <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
             </div>
+            <div class="col-6" align="right">
+                <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+            </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
