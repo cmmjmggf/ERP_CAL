@@ -98,6 +98,7 @@
         });
 
         mdlExplosionSemanal.find('#btnImprimir').on("click", function () {
+            mdlExplosionSemanal.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
             var Tipo = parseInt(mdlExplosionSemanal.find('#Tipo').val());
@@ -130,6 +131,7 @@
                         opts: {
                             afterShow: function (instance, current) {
                                 console.info('done!');
+                                mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
                             },
                             iframe: {
                                 // Iframe template

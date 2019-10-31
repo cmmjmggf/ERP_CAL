@@ -61,6 +61,7 @@
             mdlKardexPorArticulo.find('#FechaIni').focus();
         });
         mdlKardexPorArticulo.find('#btnImprimir').on("click", function () {
+            mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', true);
             var Art = parseInt(mdlKardexPorArticulo.find('#Articulo').val());
 
             if (Art > 0) {
@@ -84,6 +85,7 @@
                             opts: {
                                 afterShow: function (instance, current) {
                                     console.info('done!');
+                                    mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                                 },
                                 iframe: {
                                     // Iframe template

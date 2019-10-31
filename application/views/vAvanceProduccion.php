@@ -80,7 +80,7 @@
             mdlAvanceProduccion.find('#Ano').focus();
         });
         mdlAvanceProduccion.find('#btnImprimir').on("click", function () {
-
+            mdlAvanceProduccion.find('#btnImprimir').attr('disabled', true);
             var TresDias = mdlAvanceProduccion.find("#TresDias")[0].checked ? true : false;
 
             if (TresDias) {
@@ -106,6 +106,7 @@
                                 opts: {
                                     afterShow: function (instance, current) {
                                         console.info('done!');
+                                        mdlAvanceProduccion.find('#btnImprimir').attr('disabled', false);
                                     },
                                     iframe: {
                                         // Iframe template
