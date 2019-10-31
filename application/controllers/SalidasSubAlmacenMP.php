@@ -97,6 +97,7 @@ class SalidasSubAlmacenMP extends CI_Controller {
 
             $maq = $x->post('Maq');
             $mov = $x->post('TipoMov');
+            $ano = $x->post('Ano');
             $datosSalidaMovArtFabrica = array(
                 'Articulo' => $x->post('Articulo'),
                 'PrecioMov' => $x->post('PrecioMov'),
@@ -107,6 +108,7 @@ class SalidasSubAlmacenMP extends CI_Controller {
                 'DocMov' => $x->post('DocMov'),
                 'Tp' => '',
                 'Maq' => '1',
+                'Ano' => $ano,
                 'Sem' => $x->post('Sem'),
                 'OrdenCompra' => '',
                 'Subtotal' => $x->post('Subtotal')
@@ -120,6 +122,7 @@ class SalidasSubAlmacenMP extends CI_Controller {
                 'TipoMov' => 'EDV',
                 'DocMov' => $x->post('DocMov'),
                 'Tp' => '',
+                'Ano' => $ano,
                 'Maq' => '97',
                 'Sem' => $x->post('Sem'),
                 'OrdenCompra' => '',

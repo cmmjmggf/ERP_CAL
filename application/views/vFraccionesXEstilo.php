@@ -50,6 +50,9 @@
                     <button type="button" class="btn btn-success btn-sm" id="btnFichaTecnica" >
                         <span class="fa fa-capsules" ></span> FICHAS TÉCNICAS
                     </button>
+                    <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar" >
+                        <span class="fa fa-trash" ></span> ELIMINAR
+                    </button>
                 </div>
             </div>
             <div class=" row">
@@ -273,6 +276,7 @@
     var btnFichaTecnica = $('#btnFichaTecnica');
     var btnFracciones = $('#btnFracciones');
     var btnEstilos = $('#btnEstilos');
+    var btnEliminar = $('#btnEliminar');
 
 
     var mdlAumentaPrecioFracciones = $('#mdlAumentaPrecioFracciones');
@@ -521,6 +525,40 @@
             pnlDetalle.addClass('d-none');
         });
 
+        btnEliminar.click(function () {
+            swal({
+                title: "¿Deseas eliminar el registro? ", text: "*El estilo " + pnlDatos.find("#Estilo").val() + " se eliminará de forma permanente*", icon: "warning", buttons: ["Cancelar", "Aceptar"]
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.post(master_url + 'onEliminarEstiloFraccion', {Estilo: pnlDatos.find("#Estilo").val()}).done(function (data) {
+                        $.notify({
+                            // options
+                            message: 'SE HA ELIMINADO EL REGISTRO'
+                        }, {
+                            // settings
+                            type: 'success',
+                            delay: 500,
+                            animate: {
+                                enter: 'animated flipInX',
+                                exit: 'animated flipOutX'
+                            },
+                            placement: {
+                                from: "top",
+                                align: "right"
+                            }
+                        });
+                        pnlTablero.removeClass("d-none");
+                        pnlDatos.addClass('d-none');
+                        pnlDetalle.addClass('d-none');
+                        FraccionesXEstilo.ajax.reload();
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    }).always(function () {
+                    });
+                }
+            });
+        });
+
         btnEditarRenglon.click(function () {
             isValid('mdlEditarRenglon');
             if (valido) {
@@ -736,8 +774,10 @@
     function onRevisarSeguridad() {
         if (seg === 0) {
             btnAumentaPrecioFracciones.addClass("d-none");
+            btnEliminar.addClass("d-none");
         } else {
             btnAumentaPrecioFracciones.removeClass("d-none");
+            btnEliminar.removeClass("d-none");
         }
     }
 
@@ -817,12 +857,14 @@
                 seguridad = data[0].Seguridad;
                 if (seguridad === '1') {
                     btnAgregar.addClass('d-none');
+                    btnEliminar.addClass("d-none");
                     getFraccionesXEstiloDetalleByID(Estilo);
                     swal('ESTILO BLOQUEADO', 'PARA MODIFICACIONES, CONSULTE AL ING. MARCOS O LA SRA. LAURA CUEVAS PARA DESBLOQUEARLO', 'warning').then((value) => {
                         //Acciones
                     });
                 } else {
                     btnAgregar.removeClass('d-none');
+                    btnEliminar.removeClass("d-none");
                     getFraccionesXEstiloDetalleByID(Estilo);
                 }
             }
