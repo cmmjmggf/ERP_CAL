@@ -115,13 +115,13 @@ class AvanceTejido extends CI_Controller {
         try {
 //            print json_encode($this->avtm->getControlesParaTejido());
             $this->db->select("C.ID, C.Control AS CONTROL, "
-            . "C.Estilo AS ESTILO, C.Color AS COLOR, C.Pares AS PARES, "
-            . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
-            ->from('controles AS C')
-            ->join('pedidox AS P', 'C.Control = P.Control')
-            ->join('controltej AS CT', 'CT.Control = C.Control', 'left')
-            ->where('CT.ID IS NULL', null, false)
-            ->where('C.EstatusProduccion', 'ALM-PESPUNTE'); 
+                            . "C.Estilo AS ESTILO, C.Color AS COLOR, C.Pares AS PARES, "
+                            . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
+                    ->from('controles AS C')
+                    ->join('pedidox AS P', 'C.Control = P.Control')
+                    ->join('controltej AS CT', 'CT.Control = C.Control', 'left')
+                    ->where('CT.ID IS NULL', null, false)
+                    ->where('C.DeptoProduccion', 130);
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -163,53 +163,42 @@ class AvanceTejido extends CI_Controller {
     public function onAvanzar() {
         try {
             $x = $this->input;
+            $xXx = $this->input->post();
 
             /* avance, avaprd */
             $this->db->insert('controltej', array(
-                'numcho' => $x->post('NUM_CHOFER'),
-                'nomcho' => $x->post('CHOFER'),
-                'numtej' => $x->post('NUM_TEJEDORA'),
-                'nomtej' => $x->post('TEJEDORA'),
-                'fechapre' => $x->post('FECHA'),
-                'control' => $x->post('CONTROL'),
-                'estilo' => $x->post('ESTILO'),
-                'color' => $x->post('COLOR'),
-                'nomcolo' => $x->post('COLORT'),
-                'docto' => $x->post('DOCUMENTO'),
-                'pares' => $x->post('PARES'),
+                'numcho' => $xXx['NUM_CHOFER'],
+                'nomcho' => $xXx['CHOFER'],
+                'numtej' => $xXx['NUM_TEJEDORA'],
+                'nomtej' => $xXx['TEJEDORA'],
+                'fechapre' => $xXx['FECHA'],
+                'control' => $xXx['CONTROL'],
+                'estilo' => $xXx['ESTILO'],
+                'color' => $xXx['COLOR'],
+                'nomcolo' => $xXx['COLORT'],
+                'docto' => $xXx['DOCUMENTO'],
+                'pares' => $xXx['PARES'],
                 'fechalle' => Date('d/m/Y h:i:s a'),
                 'tipo' => 0,
-                'fraccion' => $x->post('FRACCION')
+                'fraccion' => $xXx['FRACCION']
             ));
             $ID = $this->db->insert('avance', array(
-                'Control' => $x->post('CONTROL'),
-                'FechaAProduccion' => $x->post('FECHA'),
+                'Control' => $xXx['CONTROL'],
+                'FechaAProduccion' => $xXx['FECHA'],
                 'Departamento' => 150,
                 'DepartamentoT' => 'TEJIDO',
-                'FechaAvance' => $x->post('FECHA')/* FECHA AVANCE */,
+                'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
                 'Estatus' => 'A',
                 'Usuario' => $_SESSION["ID"],
                 'Fecha' => Date('d/m/Y'),
                 'Hora' => Date('h:i:s a'),
-                'Fraccion' => $x->post('FRACCION')
-            ));
-            /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
-            $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')
-                    ->where('Control', $x->post('CONTROL'))
-                    ->update('controles');
-            /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
-            $db->set('EstatusProduccion', 'ALMACEN TEJIDO')
-                    ->set('DeptoProduccion', 150)
-                    ->where('Control', $x->post('CONTROL'))->update('pedidox');
-            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-            $this->db->set('fec7', Date('Y-m-d h:i:s'))
-                    ->where('contped', $x->post('CONTROL'))
-                    ->update('avaprd');
+                'Fraccion' => $xXx['FRACCION']
+            )); 
 
             /* fracpagnomina */
             $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
-                            ->where('FXE.Estilo', $x->post('ESTILO'))
-                            ->where('FXE.Fraccion', $x->post('FRACCION'))
+                            ->where('FXE.Estilo', $xXx['ESTILO'])
+                            ->where('FXE.Fraccion', $xXx['FRACCION'])
                             ->get()->result();
             $fecha = $x->post('FECHA');
             $dia = substr($fecha, 0, 2);
@@ -217,9 +206,12 @@ class AvanceTejido extends CI_Controller {
             $anio = substr($fecha, 6, 4);
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
+            
+            $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
+            
             $this->db->insert('fracpagnomina', array(
                 'numeroempleado' => $x->post('NUM_TEJEDORA'),
-                'maquila' => intval(substr($x->post('CONTROL'), 4, 2)),
+                'maquila' => intval($MAQUILA_X_CONTROL[0]->MAQUILA),
                 'control' => $x->post('CONTROL'),
                 'estilo' => $x->post('ESTILO'),
                 'numfrac' => $x->post('FRACCION'),
@@ -235,6 +227,18 @@ class AvanceTejido extends CI_Controller {
                 'avance_id' => $ID,
                 'fraccion' => $x->post('FRACCIONT')
             ));
+            
+            /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+            $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 150)
+                    ->where('Control', $xXx['CONTROL'])
+                    ->update('controles');
+            /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+            $this->db->set('stsavan', 7)->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                    ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])
+                    ->update('pedidox');
+            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+            $this->db->set('fec7', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+                    ->update('avaprd');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

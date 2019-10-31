@@ -63,8 +63,22 @@ class AvancePespunteMaquila extends CI_Controller {
     }
 
     public function getControlesParaPespunte() {
-        try {
-            print json_encode($this->apm->getControlesParaPespunte($this->input->get('MAQUILA')));
+        try { 
+            $x = $this->input->get();
+            $this->db->select("C.ID, C.Control AS CONTROL, C.Estilo AS ESTILO, "
+                            . "C.Color AS COLOR, C.Pares AS PARES, "
+                            . "P.FechaEntrega AS ENTREGA, C.Maquila AS MAQUILA", false)
+                    ->from('controles AS C')
+                    ->join('pedidox AS P', 'C.Control = P.Control')
+                    ->join('controlpes AS CP', 'CP.Control = C.Control', 'left')
+                    ->where('CP.ID IS NULL', null, false);
+            if ($x['MAQUILA'] !== '') {
+                $this->db->where('C.Maquila', $x['MAQUILA']);
+            }
+            if ($x['MAQUILA'] === '') {
+                $this->db->limit(50);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -105,9 +119,10 @@ class AvancePespunteMaquila extends CI_Controller {
     public function onAvanzar() {
         try {
             $x = $this->input;
+            $xXx = $this->input->post();
             /* AVANCE A MAQUILA */
             $avance = array(
-                'Control' => $x->post('CONTROL'),
+                'Control' => $xXx['CONTROL'],
                 'FechaAProduccion' => Date('d/m/Y'),
                 'Departamento' => 100,
                 'DepartamentoT' => 'MAQUILA',
@@ -116,32 +131,51 @@ class AvancePespunteMaquila extends CI_Controller {
                 'Usuario' => $_SESSION["ID"],
                 'Fecha' => Date('d/m/Y'),
                 'Hora' => Date('h:i:s a'),
-                'Fraccion' => $x->post('FRACCION') /* INFORMATIVO */
+                'Fraccion' => $xXx['FRACCION'] /* INFORMATIVO */
             );
             $this->db->insert('avance', $avance);
 
             /* AVANCE A PESPUNTE */
             $avance["Departamento"] = 110;
             $avance["DepartamentoT"] = 'PESPUNTE';
-            $avance["Fraccion"] = $x->post('FRACCION');
+            $avance["Fraccion"] = $xXx['FRACCION'];
             $this->db->insert('avance', $avance);
 
+            /* ACTUALIZA A 130 ALM-PESPUNTE, stsavan 6 */
+            $this->db->set('EstatusProduccion', 'PESPUNTE')->set('DeptoProduccion', 110)
+                    ->where('Control', $xXx['CONTROL'])
+                    ->update('controles');
+            $this->db->set('stsavan', 5)->set('EstatusProduccion', 'PESPUNTE')
+                    ->set('DeptoProduccion', 110)->where('Control', $xXx['CONTROL'])
+                    ->update('pedidox');
+            $this->db->set('fec5', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+                    ->update('avaprd');
+
             $pes = array(
-                'numcho' => $x->post('MAQUILA'),
-                'nomcho' => $x->post('MAQUILAT'),
-                'fechapre' => $x->post('FECHA'),
-                'control' => $x->post('CONTROL'),
-                'estilo' => $x->post('ESTILO'),
-                'color' => $x->post('COLOR'),
-                'nomcolo' => $x->post('COLORT'),
-                'docto' => $x->post('DOCTO'),
-                'pares' => $x->post('PARES'),
-                'fraccion' => $x->post('FRACCION')
+                'numcho' => $xXx['MAQUILA'],
+                'nomcho' => $xXx['MAQUILAT'],
+                'fechapre' => $xXx['FECHA'],
+                'control' => $xXx['CONTROL'],
+                'estilo' => $xXx['ESTILO'],
+                'color' => $xXx['COLOR'],
+                'nomcolo' => $xXx['COLORT'],
+                'docto' => $xXx['DOCTO'],
+                'pares' => $xXx['PARES'],
+                'fraccion' => $xXx['FRACCION']
             );
             $this->db->insert('controlpes', $pes);
+
+
+            /* ACTUALIZA A 130 ALM-PESPUNTE, stsavan 6 */
             $this->db->set('EstatusProduccion', 'ALM-PESPUNTE')
-                    ->where('Control', $x->post('CONTROL'))
+                    ->set('DeptoProduccion', 130)
+                    ->where('Control', $xXx['CONTROL'])
                     ->update('controles');
+            $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALM-PESPUNTE')
+                    ->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])
+                    ->update('pedidox');
+            $this->db->set('fec6', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+                    ->update('avaprd');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

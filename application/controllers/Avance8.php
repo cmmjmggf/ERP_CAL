@@ -183,7 +183,8 @@ class Avance8 extends CI_Controller {
                     $this->db->set('fec40', Date('Y-m-d h:i:s'))
                             ->where('contped', $x['CONTROL'])
                             ->update('avaprd');
-
+                    
+                    /*SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO*/
                     $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
                                             . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
                                             . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
@@ -193,7 +194,7 @@ class Avance8 extends CI_Controller {
                             intval($check_maquila[0]->MP2) === 0 &&
                             intval($check_maquila[0]->MP3) === 0 &&
                             intval($check_maquila[0]->MP4) === 0) {
-                        /* ACTUALIZA A 105 ENTRETELADO, stsavan 44 */
+                        /* ACTUALIZA A 105 ALMACEN CORTE, stsavan 44 */
                         $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('controles');
@@ -216,6 +217,7 @@ class Avance8 extends CI_Controller {
                                 ->update('avaprd');
                     }
                 } else if (intval($x['NUMERO_FRACCION']) === 397) {
+                    /* AVANCE 397 ENSUELADO*/
                     $avance = array(
                         'Control' => $Control,
                         'FechaAProduccion' => Date('d/m/Y'),
@@ -241,6 +243,7 @@ class Avance8 extends CI_Controller {
                     $this->db->set('fec55', Date('Y-m-d h:i:s'))->where('contped', $x['CONTROL'])
                             ->update('avaprd');
                 } else {
+                    /*SI NO ES LA FRACCION 51 = ENTRETELADO, NI LA FRACCION 397 = ENSUELADO, REVISA QUE FRACCION LE PERTENECE CONFORME AL DEPARTAMENTO*/
                     $check_depto = $this->db->select('E.Numero AS EMPLEADO, E.DepartamentoFisico AS DEPTO, D.Descripcion AS DEPTODES', false)
                                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                                     ->where('E.Numero', $x['NUMERO_EMPLEADO'])
@@ -296,60 +299,53 @@ class Avance8 extends CI_Controller {
                             break;
                         case 50:
                             /* DOBLILLADO */
-                            $this->db->set('EstatusProduccion', 'DOBLILLADO')
-                                    ->where('Control', $Control)
-                                    ->update('controles');
-                            $this->db->set('EstatusProduccion', 'DOBLILLADO')
-                                    ->set('DeptoProduccion', 50)
-                                    ->where('Control', $Control)
-                                    ->update('controles');
+//                            $this->db->set('EstatusProduccion', 'DOBLILLADO')
+//                                    ->where('Control', $Control)
+//                                    ->update('controles');
+//                            $this->db->set('EstatusProduccion', 'DOBLILLADO')
+//                                    ->set('DeptoProduccion', 50)
+//                                    ->where('Control', $Control)
+//                                    ->update('controles');
                             break;
                         case 60:
                             /* LASER */
-                            $avance['Departamento'] = 60;
-                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
-                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* FOLEADO */;
-                            $this->db->insert('avance', $avance);
-                            $this->db->set('EstatusProduccion', 'LASER')
-                                    ->set('DeptoProduccion', 60)
-                                    ->where('Control', $Control)
-                                    ->update('controles');
-                            $id = $this->db->insert_id();
+//                            $avance['Departamento'] = 60;
+//                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
+//                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* FOLEADO */;
+//                            $this->db->insert('avance', $avance);
+//                            $id = $this->db->insert_id();
                             
-                            /* ACTUALIZA A 40 FOLEADO, stsavan 4 */
-                            $this->db->set('EstatusProduccion', 'LASER')->set('DeptoProduccion', 60)
-                                    ->where('Control', $x['CONTROL'])
-                                    ->update('controles');
-                            $this->db->set('stsavan', 4)->set('EstatusProduccion', 'LASER')
-                                    ->set('DeptoProduccion', 40)->where('Control', $x['CONTROL'])
-                                    ->update('pedidox');
-                            $this->db->set('fec4', Date('Y-m-d h:i:s'))
-                                    ->where('contped', $x['CONTROL'])
-                                    ->update('avaprd');
+                            /* ACTUALIZA A 60 LASER, stsavan ? */
+//                            $this->db->set('EstatusProduccion', 'LASER')->set('DeptoProduccion', 60)
+//                                    ->where('Control', $x['CONTROL'])
+//                                    ->update('controles');
+//                            $this->db->set('stsavan', ?)->set('EstatusProduccion', 'LASER')
+//                                    ->set('DeptoProduccion', 60)->where('Control', $x['CONTROL'])
+//                                    ->update('pedidox');
                             break;
                         case 70:
                             /* PREL-CORTE */
-                            $avance['Departamento'] = 70;
-                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
-                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* LASER */;
-                            $this->db->set('EstatusProduccion', 'LASER')
-                                    ->set('DeptoProduccion', 70)
-                                    ->where('Control', $Control)
-                                    ->update('controles');
-                            $this->db->insert('avance', $avance);
-                            $id = $this->db->insert_id();
+//                            $avance['Departamento'] = 70;
+//                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
+//                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* LASER */;
+//                            $this->db->set('EstatusProduccion', 'LASER')
+//                                    ->set('DeptoProduccion', 70)
+//                                    ->where('Control', $Control)
+//                                    ->update('controles');
+//                            $this->db->insert('avance', $avance);
+//                            $id = $this->db->insert_id();
                             break;
                         case 80:
                             /* RAYADO CONTADO */
-                            $avance['Departamento'] = 80;
-                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
-                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* RAYADO CONTADO */;
-                            $this->db->set('EstatusProduccion', 'RAYADO CONTADO')
-                                    ->set('DeptoProduccion', 80)
-                                    ->where('Control', $Control)
-                                    ->update('controles');
-                            $this->db->insert('avance', $avance);
-                            $id = $this->db->insert_id();
+//                            $avance['Departamento'] = 80;
+//                            $avance['Fraccion'] = $x['NUMERO_FRACCION'];
+//                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* RAYADO CONTADO */;
+//                            $this->db->set('EstatusProduccion', 'RAYADO CONTADO')
+//                                    ->set('DeptoProduccion', 80)
+//                                    ->where('Control', $Control)
+//                                    ->update('controles');
+//                            $this->db->insert('avance', $avance);
+//                            $id = $this->db->insert_id();
                             break;
                     }
                 }

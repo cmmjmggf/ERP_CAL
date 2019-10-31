@@ -267,7 +267,7 @@ class Avance9 extends CI_Controller {
                     }
                 } else {
                     /* RAYADO/RAYADO CONTADO => REBAJADO Y PERFORADO/REBAJADO */
-                    if (intval($xXx['DEPARTAMENTO']) === 20) {
+                    if (intval($xXx['DEPARTAMENTO']) === 80) {
                         $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')
                                         ->where('F.control', $xXx['CONTROL'])
