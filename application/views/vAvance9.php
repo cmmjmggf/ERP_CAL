@@ -120,7 +120,7 @@
                         <button type="button" class="btn btn-info btn-sm mt-4" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
                     </div>
 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-no-ne">
                         <label>MANODEOBRA</label>
                         <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control numeric" readonly="">
                         <label>ANIO</label>
@@ -489,7 +489,7 @@
             $.post('<?php print base_url('comprobar_numero_de_empleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
                 $.post('<?php print base_url('Avance9/onComprobarFraccionXEstilo') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
                     console.log(a);
-                    $.getJSON('<?php print base_url('obtener_estilo_pares_por_control_fraccion'); ?>', {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
+                    $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>', {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
                             .done(function (data) {
                                 console.log('obtener_estilo_pares_por_control_fraccion', data);
                                 if (data.length > 0) {

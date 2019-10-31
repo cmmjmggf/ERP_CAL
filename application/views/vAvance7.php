@@ -602,14 +602,13 @@
             }
         };
         xoptions.ajax = {
-            "url": '<?php print base_url('Avance7/getFraccionesPagoNomina'); ?>',
-            "type": "POST",
-            "contentType": "application/json",
+            "url": '<?php print base_url('Avance7/getFraccionesPagoNomina'); ?>', 
             "dataSrc": "",
             "data": function (d) {
-                d.EMPLEADO = NumeroDeEmpleado.val();
+                d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
             }
         };
+        $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
 
         pnlTablero.find("input[type='checkbox']").change(function () {
@@ -655,7 +654,7 @@
             console.log(data);
             var ext = getExt(data);
             if (data.length > 0) {
-                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") { 
+                if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
                     $.fancybox.open({
                         src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
                         type: 'iframe',

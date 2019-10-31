@@ -51,6 +51,18 @@
                                 <label class="custom-control-label" for="chk51">51 Entretelado</label>
                             </div>
                         </div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion="70">
+                                <label class="custom-control-label" for="chk70">70 Troquelar plantilla</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE Y CALIDAD" fraccion="60">
+                                <label class="custom-control-label" for="chk60">60 Folear corte y calidad</label>
+                            </div>
+                        </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="chk61" description="FOLEADO MUESTRA" fraccion="61">
@@ -179,6 +191,13 @@
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
                                 <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chk606" description="ARMAR PLANT AD MUEST" fraccion="606">
+                                <label class="custom-control-label" for="chk606">606 Armar plant.ad.muest</label>
                             </div>
                         </div>
                     </div>
@@ -446,21 +465,20 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "620px",
+            "scrollY": "500px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
             }
         };
         xoptions.ajax = {
-            "url": '<?php print base_url('obtener_avances_pago_nomina/2'); ?>',
-            "type": "POST",
-            "contentType": "application/json",
+            "url": '<?php print base_url('obtener_avances_pago_nomina/2'); ?>', 
             "dataSrc": "",
             "data": function (d) {
-                d.EMPLEADO = NumeroDeEmpleado.val();
+                d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
                 d.FRACCIONES = "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337";
             }
         };
+        $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
     });
 

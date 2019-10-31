@@ -34,12 +34,7 @@ class Avance9 extends CI_Controller {
                 $this->db->where("A.Control", $x['CR'])->limit(1);
                 print json_encode($this->db->get()->result());
             } else {
-                $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES", false)
-                        ->from('asignapftsacxc AS A')
-                        ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
-                        ->join('fracciones as F', 'FXE.Fraccion = F.Clave')
-                        ->where("A.Control", $x['CR'])->where("F.Departamento", $x['DEPTO'])->limit(1);
-                print json_encode($this->db->get()->result());
+                print json_encode($this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES FROM asignapftsacxc AS A  INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo INNER JOIN fracciones as F ON FXE.Fraccion = F.Clave WHERE A.Control = {$x['CR']} AND F.Departamento = {$x['DEPTO']} LIMIT 1")->result());
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -272,7 +267,7 @@ class Avance9 extends CI_Controller {
                     }
                 } else {
                     /* RAYADO/RAYADO CONTADO => REBAJADO Y PERFORADO/REBAJADO */
-                    if ($xXx['DEPARTAMENTO'] === 80) {
+                    if (intval($xXx['DEPARTAMENTO']) === 20) {
                         $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')
                                         ->where('F.control', $xXx['CONTROL'])
@@ -292,14 +287,25 @@ class Avance9 extends CI_Controller {
                                 'Hora' => Date('h:i:s a'),
                                 'Fraccion' => $xXx['NUMERO_FRACCION']
                             );
-                            $avance["Fraccion"] = 103;
                             $this->db->insert('avance', $avance);
                             $id = $this->db->insert_id();
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                             $this->db->insert('fracpagnomina', $data);
+
+                            /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
                             $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
-                                    ->where('Control', $xXx['CONTROL'])
+                                    ->set('DeptoProduccion', 30)
+                                    ->where('Control', $x['CONTROL'])
                                     ->update('controles');
+                            $this->db->set('stsavan', 33)
+                                    ->set('EstatusProduccion', 'CORTE')
+                                    ->set('DeptoProduccion', 30)
+                                    ->where('Control', $x['CONTROL'])
+                                    ->update('pedidox');
+                            $this->db->set('fec33', Date('Y-m-d h:i:s'))
+                                    ->where('contped', $x['CONTROL'])
+                                    ->update('avaprd');
+
                             $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
                             print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
                         }
