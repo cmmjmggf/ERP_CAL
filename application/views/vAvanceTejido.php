@@ -345,10 +345,9 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'ript',
             "ajax": {
-                "url": '<?php print base_url('AvanceTejido/getControlesParaTejido'); ?>',
-                "type": "POST",
+                "url": '<?php print base_url('AvanceTejido/getControlesParaTejido'); ?>', 
                 "contentType": "application/json",
                 "dataSrc": ""
             },
@@ -364,7 +363,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "250px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
             }
@@ -406,7 +405,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "250px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
             }

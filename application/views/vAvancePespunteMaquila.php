@@ -10,7 +10,19 @@
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Maquila</label>
-                <select id="Maquila" name="Maquila" class="form-control"></select>
+                <select id="Maquila" name="Maquila" class="form-control">
+                    <option></option>
+                    <?php 
+                    foreach ($this->db->select("CAST(M.Clave AS SIGNED) AS CLAVE, "
+                                    . "CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
+                            ->from('maquilas AS M')
+                            ->where('M.Estatus', 'ACTIVO')
+                            ->order_by('CLAVE', 'ASC')
+                            ->get()->result() as $k => $v) {
+                        print "<option value=\"{$v->CLAVE}\">{$v->MAQUILA}</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Documento</label>
@@ -49,8 +61,8 @@
                 <input id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
-                <button type="button" id="btnAgregar" name="btnAgregar" class="btn btn-primary mt-4">
-                    <span class="fa fa-check"></span>
+                <button type="button" id="btnAgregar" name="btnAgregar" class="btn btn-info mt-4">
+                    <span class="fa fa-check"></span> Acepta
                 </button>
             </div>
             <div class="w-100 my-3"></div>
@@ -111,7 +123,6 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         Maquila[0].selectize.focus();
-        getMaquilas();
 
         Maquila.on('change', function () {
             HoldOn.open({
@@ -237,7 +248,7 @@
         ];
 
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('AvancePespunteMaquila/getControlesParaPespunte'); ?>',
                 "contentType": "application/json",
@@ -253,12 +264,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 25,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "250px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
             }
@@ -281,7 +292,7 @@
             }
         ];
         var xxoptions = {
-            "dom": 'rit',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('AvancePespunteMaquila/getControlesEnPespunte'); ?>',
                 "type": "POST",
@@ -295,12 +306,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 25,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "250px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
                 console.log(row, data);
@@ -326,19 +337,7 @@
         }).always(function () {
             HoldOn.close();
         });
-    }
-
-    function getMaquilas() {
-        $.getJSON('<?php print base_url('avance_a_pespunte_x_maquila_maquilas'); ?>').done(function (x, y, z) {
-            x.forEach(function (i) {
-                Maquila[0].selectize.addOption({text: i.MAQUILA, value: i.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-
-        });
-    }
+    } 
 
     function onEliminarAvanceMaquila(id, ida) {
         swal({
