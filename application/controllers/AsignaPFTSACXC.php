@@ -361,11 +361,14 @@ class AsignaPFTSACXC extends CI_Controller {
                             'Hora' => Date('h:i:s a')
                         );
                         $this->db->insert('avance', $avance);
+                        
+                        
+                        /*ACTUALIZA A 10 CORTE, stsavan 2*/
                         $this->db->set('EstatusProduccion', 'CORTE')
                                 ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('controles');
-                        $this->db->set('stsavan', 10)
+                        $this->db->set('stsavan', 2)
                                 ->set('EstatusProduccion', 'CORTE')
                                 ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])
