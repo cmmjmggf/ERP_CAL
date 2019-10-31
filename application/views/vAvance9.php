@@ -95,7 +95,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" name="Departamento" class="form-control numeric" maxlength="3">
+                        <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control numeric" maxlength="3">
                         <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -115,7 +115,7 @@
                         <input type="text" id="Avance" name="Avance" class="form-control numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <button type="button" class="btn btn-success mt-4" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
+                        <button type="button" class="btn btn-info mt-4" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
                     </div> 
 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
@@ -193,10 +193,16 @@
         handleEnter();
 
         btnAceptar.click(function () {
-            if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
-                onAgregarAvance(true);
+            if (NumeroDeEmpleado.val()) {
+                if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
+                    onAgregarAvance(true);
+                } else {
+                    onAgregarAvanceSinFraccion();
+                }
             } else {
-                onAgregarAvanceSinFraccion();
+                iMsg('DEBE DE SELECCIONAR UN EMPLEADO', 'w', function () {
+                    NumeroDeEmpleado.focus().select();
+                });
             }
         });
 
@@ -232,8 +238,11 @@
         });
 
         NumeroDeEmpleado.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && NumeroDeEmpleado.val()) {
+                btnAceptar.attr('disabled', false);
                 getInformacionEmpleado();
+            } else {
+                btnAceptar.attr('disabled', true);
             }
         });
 
@@ -334,14 +343,13 @@
         };
         xoptions.ajax = {
             "url": '<?php print base_url('obtener_avances_pago_nomina/1'); ?>',
-            "type": "POST",
-            "contentType": "application/json",
             "dataSrc": "",
             "data": function (d) {
-                d.EMPLEADO = NumeroDeEmpleado.val();
+                d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
                 d.FRACCIONES = "96,99,100";
             }
         };
+        $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
     });
 
@@ -385,9 +393,9 @@
                         }).always(function () {
 
                         });
-                        swal('ATENCIÓN', 'SELECCIONE UNA FRACCIÓN', 'success').then((value) => {
-                            pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
-                        });
+//                        swal('ATENCIÓN', 'SELECCIONE UNA FRACCIÓN', 'success').then((value) => {
+//                            pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
+//                        });
                     } else {
                         NombreEmpleado.val('');
                         onBeep(2);

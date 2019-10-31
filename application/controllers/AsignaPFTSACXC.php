@@ -262,13 +262,12 @@ class AsignaPFTSACXC extends CI_Controller {
             $CONTROL_SEMANA_MAQUILA = $CONTROL[0];
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
-            $ESTATUS = $this->db->select('COUNT(PED.stsavan) AS AVANCECORTE', false)
-                            ->from('pedidox AS PED')->where('PED.Control', $x['CONTROL'])->where('PED.stsavan', 2)
-                            ->get()->result();
+            $ESTATUS = $this->db->query("SELECT PED.stsavan AS AVANCECORTE FROM pedidox AS PED WHERE PED.Control = {$x['CONTROL']} LIMIT 1")->result();
+            $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT A.* AS A FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = {$xx['ARTICULO']}' LIMIT 1")->result();
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
 //            exit(0);
-            if (intval($ESTATUS[0]->AVANCECORTE) > 0) {
+            if (intval($ESTATUS[0]->AVANCECORTE) >= 3) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])->update('asignapftsacxc');
             } else {
                 /**/
@@ -361,9 +360,9 @@ class AsignaPFTSACXC extends CI_Controller {
                             'Hora' => Date('h:i:s a')
                         );
                         $this->db->insert('avance', $avance);
-                        
-                        
-                        /*ACTUALIZA A 10 CORTE, stsavan 2*/
+
+
+                        /* ACTUALIZA A 10 CORTE, stsavan 2 */
                         $this->db->set('EstatusProduccion', 'CORTE')
                                 ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])

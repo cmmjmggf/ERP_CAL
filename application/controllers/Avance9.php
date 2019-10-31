@@ -118,9 +118,8 @@ class Avance9 extends CI_Controller {
 
     public function getFraccionesPagoNomina() {
         try {
-            header('Content-type: application/json');
             $url = $this->uri;
-            $x = $this->input->post();
+            $x = $this->input->get();
             $this->db->select("FACN.ID, FACN.numeroempleado, FACN.maquila, "
                             . "FACN.control AS CONTROL, FACN.estilo AS ESTILO, "
                             . "FACN.numfrac AS FRAC, FACN.preciofrac AS PRECIO, "
@@ -139,7 +138,13 @@ class Avance9 extends CI_Controller {
                     $this->db->where("FACN.numfrac IN(51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
                     break;
             }
-            print json_encode($this->db->where('FACN.numeroempleado', $x['EMPLEADO'])->get()->result());
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('FACN.numeroempleado', $x['EMPLEADO']);
+            }
+            if ($x['EMPLEADO'] === '') {
+                $this->db->limit(99);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -233,19 +238,19 @@ class Avance9 extends CI_Controller {
                         );
                         $this->db->insert('avance', $avance);
                         $id = $this->db->insert_id();
-                        
-                        /*ACTUALIZA A 20 RAYADO, stsavan 3*/
-                         $this->db->set('EstatusProduccion', 'RAYADO')
+
+                        /* ACTUALIZA A 20 RAYADO, stsavan 3 */
+                        $this->db->set('EstatusProduccion', 'RAYADO')
                                 ->set('DeptoProduccion', 20)
                                 ->where('Control', $xXx['CONTROL'])
                                 ->update('controles');
-                         
+
                         $this->db->set('stsavan', 3)
                                 ->set('EstatusProduccion', 'RAYADO')
                                 ->set('DeptoProduccion', 20)
                                 ->where('Control', $xXx['CONTROL'])
                                 ->update('pedidox');
-                        
+
                         $this->db->set('fec3', Date('Y-m-d h:i:s'))
                                 ->where('contped', $xXx['CONTROL'])
                                 ->update('avaprd');
