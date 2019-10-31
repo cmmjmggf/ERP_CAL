@@ -88,7 +88,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 $this->db->where('A.Fraccion', $x['PIFO']);
             }
             $this->db->order_by('A.ID', 'DESC');
-            $this->db->order_by('A.Semana', 'DESC'); 
+            $this->db->order_by('A.Semana', 'DESC');
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
                 $this->db->limit(25);
             }
@@ -386,7 +386,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'FechaMov' => Date('d/m/Y'),
                         'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
                         'TipoMov' => 'SPR', /* SXP = SALIDA A PRODUCCION */
-                        'DocMov' => $x['ORDENDEPRODUCCION'],
+                        'DocMov' => $x['CONTROL'],
                         'Tp' => '',
                         'Maq' => $CONTROL_SEMANA_MAQUILA->MAQUILA,
                         'Sem' => $x['SEMANA'],
@@ -427,7 +427,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 }
             } else {
                 $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
-                if ($x['REGRESO'] >= 0 && $x->post("MATERIALMALO") <= 0) {
+                if ($x['REGRESO'] >= 0 && $x["MATERIALMALO"] <= 0) {
                     $datos = array(
                         'Articulo' => $x['ARTICULO'],
                         'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
@@ -435,7 +435,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'FechaMov' => Date('d/m/Y'),
                         'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
                         'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
-                        'DocMov' => $x['ID'],
+                        'DocMov' => $x['CONTROL'],
                         'Tp' => ''/*                         * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
                         'Maq' => 1,
                         'Sem' => $CONTROL[0]->SEMANA,
@@ -459,7 +459,7 @@ class AsignaPFTSACXC extends CI_Controller {
                                 ->where('ID', $x['ID'])->update('asignapftsacxc');
                     }
                 } else {
-                    if ($x->post("MATERIALMALO") > 0) {
+                    if ($x["MATERIALMALO"] > 0) {
                         $datos = array(
                             'Articulo' => $x['ARTICULO'],
                             'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
@@ -467,7 +467,7 @@ class AsignaPFTSACXC extends CI_Controller {
                             'FechaMov' => Date('d/m/Y'),
                             'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
                             'TipoMov' => 'SPR', /* EXP = ENTRADA POR PRODUCCION */
-                            'DocMov' => $x['ID'],
+                            'DocMov' => $x['CONTROL'],
                             'Tp' => '',
                             'Maq' => 1,
                             'Sem' => $CONTROL[0]->SEMANA,
@@ -486,6 +486,16 @@ class AsignaPFTSACXC extends CI_Controller {
                     }
                 }
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControl() {
+        try {
+            $x = $this->input->get(); 
+            print json_encode($this->db->query("SELECT  A.Devolucion AS DEVOLVIO_ANTES, A.Estilo AS ESTILO, A.Color AS COLOR, A.ID AS IDA, A.Articulo AS ARTICULO, A.Descripcion AS ARTICULO_DESCRIPCION, A.Abono AS ENTREGO "
+                                    . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$x['PIFO']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

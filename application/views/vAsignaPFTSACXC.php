@@ -330,7 +330,7 @@
                                 <input type="text" id="Articulo" name="Articulo" class="form-control form-control-sm notEnter" readonly="">
                             </div>
                             <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <input type="text" id="ArticuloT" name="Articulo" class="form-control form-control-sm notEnter" readonly="">
+                                <input type="text" id="ArticuloT" name="ArticuloT" class="form-control form-control-sm notEnter" readonly="">
                                 <input type="text" id="Precio" name="Precio" class="form-control form-control-sm d-none" readonly="">
                             </div>
                         </div>
@@ -412,6 +412,10 @@
     var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"),
             Regresos = $("#Regresos");
     var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"),
+            ControlRetorna = mdlRetornaMaterial.find("#Control"),
+            ArticuloRetorna = mdlRetornaMaterial.find("#Articulo"),
+            ArticuloT = mdlRetornaMaterial.find("#ArticuloT"),
+            EntregoRetorno = mdlRetornaMaterial.find("#Entrego"),
             Regreso = mdlRetornaMaterial.find("#Regreso"),
             MatMalo = mdlRetornaMaterial.find("#MatMalo"),
             PielForro = mdlRetornaMaterial.find("#PielForro"),
@@ -430,6 +434,42 @@
             Sinteticos.ajax.reload();
             Textiles.ajax.reload();
             ControlesAsignados.ajax.reload();
+        });
+
+        ControlRetorna.on('keydown', function (e) {
+            if (ControlRetorna.val() && e.keyCode === 13) {
+                var xpifo = 100;
+                switch (parseInt(PielForro.val())) {
+                    case 1:
+                        xpifo = 100;
+                        break;
+                    case 2:
+                        xpifo = 99;
+                        break;
+                    case 34:
+                        xpifo = 34;
+                        break;
+                    case 40:
+                        xpifo = 40;
+                        break;
+                }
+                $.getJSON('<?php print base_url('AsignaPFTSACXC/getInfoXControl') ?>', {
+                    CONTROL: ControlRetorna.val(), PIFO: xpifo
+                }).done(function (a) {
+                    if (a.length > 0) {
+                        Regreso.focus().select();
+                        EntregoRetorno.val(a[0].ENTREGO);
+                        ArticuloRetorna.val(a[0].ARTICULO);
+                        ArticuloT.val(a[0].ARTICULO_DESCRIPCION);
+                        mdlRetornaMaterial.find("#IDA").val(a[0].IDA);
+                        mdlRetornaMaterial.find("#Estilo").val(a[0].ESTILO);
+                        mdlRetornaMaterial.find("#Color").val(a[0].COLOR);
+                        mdlRetornaMaterial.find("#AnteriormenteRetorno").val(a[0].DEVOLVIO_ANTES);
+                    }
+                }).fail(function (x) {
+                    getError(x)
+                });
+            }
         });
 
         btnEntregar.click(function () {
@@ -462,10 +502,10 @@
         mdlRetornaMaterial.find("#Control").focusout(function () {
             if (mdlRetornaMaterial.find("#Control").val()) {
 //                swal('SUCCESS', 'AHORA,DEBE DE SELECCIONAR UN REGISTRO DE LA TABLA CON EL CONTROL ESPECIFICADO', 'success').then((value) => {
-                    mdlRetornaMaterial.find("#tblRegresos tbody tr").addClass("highlight-rows");
-                    setTimeout(function () {
-                        mdlRetornaMaterial.find("#tblRegresos tbody tr").removeClass("highlight-rows");
-                    }, 2500);
+                mdlRetornaMaterial.find("#tblRegresos tbody tr").addClass("highlight-rows");
+                setTimeout(function () {
+                    mdlRetornaMaterial.find("#tblRegresos tbody tr").removeClass("highlight-rows");
+                }, 2500);
 //                });
             }
         });
