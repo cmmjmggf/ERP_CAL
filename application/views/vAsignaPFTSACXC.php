@@ -465,6 +465,7 @@
                         mdlRetornaMaterial.find("#Estilo").val(a[0].ESTILO);
                         mdlRetornaMaterial.find("#Color").val(a[0].COLOR);
                         mdlRetornaMaterial.find("#AnteriormenteRetorno").val(a[0].DEVOLVIO_ANTES);
+                        Regresos.ajax.reload();
                     }
                 }).fail(function (x) {
                     getError(x)

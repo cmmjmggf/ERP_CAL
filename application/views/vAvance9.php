@@ -487,55 +487,50 @@
         if (Control.val()) {
             /*COMPROBAR SI EL EMPLEADO ES DE RAYADO*/
             $.post('<?php print base_url('comprobar_numero_de_empleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
-                $.post('<?php print base_url('Avance9/onComprobarFraccionXEstilo') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
-                    console.log(a);
-                    $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>', {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
-                            .done(function (data) {
+                $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
+                        {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
+                        .done(function (data) {
+                            if (data.length > 0) {
+                                var r = data[0];
+                                Estilo.val(r.Estilo);
+                                Pares.val(r.Pares);
+                                ManoDeOB.val(r.CostoMO);
+                                Fraccion.val(r.Fraccion);
+                                FraccionDes.val(r.FRACCION_DES);
                                 console.log('obtener_estilo_pares_por_control_fraccion', data);
-                                if (data.length > 0) {
-                                    var r = data[0];
-                                    Estilo.val(r.Estilo);
-                                    Pares.val(r.Pares);
-                                    ManoDeOB.val(r.CostoMO);
-                                    Fraccion.val(r.Fraccion);
-                                    FraccionDes.val(r.FRACCION_DES)
-                                    $.getJSON('<?php print base_url('obtener_ultimo_avance_por_control'); ?>', {C: Control.val()}).done(function (data) {
-                                        if (data.length > 0) {
-                                            SigAvance.val(data[0].Departamento);
-                                            EstatusAvance.val(data[0].DepartamentoT);
-                                            var d = new Date();
-                                            var n = d.getDay();
-                                            var stf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
-                                            stf = stf.toString();
-                                            stf = stf.slice(0, (stf.indexOf(".")) + 3);
-                                            DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(stf);
-                                            var tt = 0;
-                                            ndias.forEach(function (i) {
-                                                tt += parseFloat(pnlTablero.find("#txt" + i).val());
-                                            });
-                                            var tf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
-                                            tf = tf.toString();
-                                            tf = tf.slice(0, (tf.indexOf(".")) + 3);
-                                            DiasPagoDeNomina.find("#txtTotal").val(tf);
-                                            onAvanzar();
-                                        }
-                                    }).fail(function (x, y, z) {
-                                        console.log(x.responseText);
-                                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-                                    }).always(function () {
-                                        HoldOn.close();
-                                    });
-                                }
-                            }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                        swal('ERROR', 'ALGO SALIO MAL, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-                    }).always(function () {
-                    });
-                }).fail(function (x, y, z) {
+                                $.getJSON('<?php print base_url('obtener_ultimo_avance_por_control'); ?>', {C: Control.val()}).done(function (data) {
+                                    if (data.length > 0) {
+                                        SigAvance.val(data[0].Departamento);
+                                        EstatusAvance.val(data[0].DepartamentoT);
+                                        var d = new Date();
+                                        var n = d.getDay();
+                                        var stf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
+                                        stf = stf.toString();
+                                        stf = stf.slice(0, (stf.indexOf(".")) + 3);
+                                        DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(stf);
+                                        var tt = 0;
+                                        ndias.forEach(function (i) {
+                                            tt += parseFloat(pnlTablero.find("#txt" + i).val());
+                                        });
+                                        var tf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
+                                        tf = tf.toString();
+                                        tf = tf.slice(0, (tf.indexOf(".")) + 3);
+                                        DiasPagoDeNomina.find("#txtTotal").val(tf);
+                                        onAvanzar();
+                                    }
+                                }).fail(function (x, y, z) {
+                                    console.log(x.responseText);
+                                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                                }).always(function () {
+                                    HoldOn.close();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
                     console.log(x, y, z);
                     swal('ERROR', 'ALGO SALIO MAL, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
                 }).always(function () {
                 });
+
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
                 swal('ERROR', 'ALGO SALIO MAL, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
@@ -578,12 +573,13 @@
 
     function onAvanzar() {
         console.log('avanzando...')
+        var frac = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('fraccion');
         var fs = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('description');
         AVANO.NUMERO_EMPLEADO = NumeroDeEmpleado.val();
         AVANO.CONTROL = Control.val();
         AVANO.ESTILO = Estilo.val();
-        AVANO.NUMERO_FRACCION = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('fraccion');
-        AVANO.FRACCION = fs ? fs : pnlTablero.find("#FraccionSeleccionada").val();
+        AVANO.NUMERO_FRACCION = (frac ? frac : Fraccion.val());
+        AVANO.FRACCION = (fs ? fs : pnlTablero.find("#FraccionDes").val());
         AVANO.PRECIO_FRACCION = ManoDeOB.val();
         AVANO.PARES = Pares.val();
         AVANO.FECHA = Fecha.val();
@@ -592,7 +588,7 @@
         AVANO.DEPARTAMENTO_DESCRIPCION = DepartamentoDes.val();
         AVANO.ANIO = pnlTablero.find("#Anio").val();
 
-        $.post('<?php print base_url('avance_add_avance_x_empleado_add_nomina') ?>', AVANO).done(function (data) {
+        $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
             var dt = JSON.parse(data);
             if (data !== undefined && data.length > 0) {

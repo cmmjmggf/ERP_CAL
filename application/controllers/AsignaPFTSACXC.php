@@ -82,20 +82,38 @@ class AsignaPFTSACXC extends CI_Controller {
             $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
                             . "A.Estilo, A.Color, A.Pares, A.Articulo, A.Descripcion AS ArticuloT, "
                             . "A.Abono AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
-                    ->from("asignapftsacxc AS A")
-                    ->where_in('A.TipoMov', array(1, 2, 34, 40));
-            if ($x['CORTADOR'] !== '') {
-                $this->db->where('A.Empleado', $x['CORTADOR']);
-            }
+                    ->from("asignapftsacxc AS A");
             if ($x['PIFO'] !== '') {
-                $this->db->where('A.Fraccion', $x['PIFO']);
+                $PIFO = intval($x['PIFO']);
+                $FRACCION = 100;
+                switch ($PIFO) {
+                    case 1:
+                        $FRACCION = 100;
+                        $PIFO = 1;
+                        break;
+                    case 2:
+                        $FRACCION = 99;
+                        $PIFO = 2;
+                        break;
+                    case 34:
+                        $FRACCION = 99;
+                        $PIFO = 34;
+                        break;
+                    case 40:
+                        $FRACCION = 99;
+                        $PIFO = 40;
+                        break;
+                }
+                $this->db->where('A.Fraccion', $FRACCION);
+                $this->db->where('A.TipoMov', $PIFO);
             }
-            $this->db->order_by('A.ID', 'DESC');
-            $this->db->order_by('A.Semana', 'DESC');
+            $this->db->order_by('A.ID', 'DESC')->order_by('A.Semana', 'DESC');
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
                 $this->db->limit(25);
             }
-            print json_encode($this->db->get()->result());
+            $dtm = $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -266,7 +284,7 @@ class AsignaPFTSACXC extends CI_Controller {
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
             $ESTATUS = $this->db->query("SELECT PED.stsavan AS AVANCECORTE FROM pedidox AS PED WHERE PED.Control = {$x['CONTROL']} LIMIT 1")->result();
-            $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT COUNT(*) AS PIOCHERO FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = {$xx['ARTICULO']}' AND A.Semana = {$xx['SEMANA']} AND A.Fraccion = {$xx['FRACCION']} LIMIT 1")->result();
+            $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT COUNT(*) AS PIOCHERO FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = '{$xx['ARTICULO']}' AND A.Semana = {$xx['SEMANA']} AND A.Fraccion = {$xx['FRACCION']} LIMIT 1")->result();
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
 //            exit(0);
@@ -413,6 +431,7 @@ class AsignaPFTSACXC extends CI_Controller {
     public function onDevolverPielForro() {
         try {
             /* AGREGAR MOVIMIENTO DE ARTICULO */
+//            exit(0);
             $x = $this->input->post();
             $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
@@ -433,66 +452,65 @@ class AsignaPFTSACXC extends CI_Controller {
                             ->set('MaterialMalo', 0)
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
-            } else {
-                $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
-                if ($x['REGRESO'] >= 0 && $x["MATERIALMALO"] <= 0) {
-                    $datos = array(
-                        'Articulo' => $x['ARTICULO'],
-                        'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                        'CantidadMov' => $x['REGRESO'],
-                        'FechaMov' => Date('d/m/Y'),
-                        'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
-                        'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
-                        'DocMov' => $x['CONTROL'],
-                        'Tp' => ''/*                         * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
-                        'Maq' => 1,
-                        'Sem' => $CONTROL[0]->SEMANA,
-                        'Ano' => $Ano,
-                        'OrdenCompra' => NULL,
-                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
-                    );
-                    $this->db->insert("movarticulos_fabrica", $datos);
+            }
+            $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
+            if ($x['REGRESO'] > 0) {
+                $datos = array(
+                    'Articulo' => $x['ARTICULO'],
+                    'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                    'CantidadMov' => $x['REGRESO'],
+                    'FechaMov' => Date('d/m/Y'),
+                    'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
+                    'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
+                    'DocMov' => $x['CONTROL'],
+                    'Tp' => ''/*                     * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
+                    'Maq' => 1,
+                    'Sem' => $CONTROL[0]->SEMANA,
+                    'Ano' => $Ano,
+                    'OrdenCompra' => NULL,
+                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
+                );
+                $this->db->insert("movarticulos_fabrica", $datos);
 
-                    /* OBTENER ULTIMO REGRESO */
-                    $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
-                    if (isset($REGRESO[0]->REGRESO)) {
-                        $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
-                                ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
-                                ->set('MaterialMalo', 0)
-                                ->where('ID', $x['ID'])->update('asignapftsacxc');
-                    } else {
-                        $this->db->set('Empleado', $x['EMPLEADO'])
-                                ->set('Devolucion', $x['REGRESO'])
-                                ->set('MaterialMalo', 0)
-                                ->where('ID', $x['ID'])->update('asignapftsacxc');
-                    }
+                /* OBTENER ULTIMO REGRESO */
+                $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
+                if (isset($REGRESO[0]->REGRESO)) {
+                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
+                            ->set('MaterialMalo', 0)
+                            ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
-                    if ($x["MATERIALMALO"] > 0) {
-                        $datos = array(
-                            'Articulo' => $x['ARTICULO'],
-                            'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
-                            'CantidadMov' => $x['REGRESO'],
-                            'FechaMov' => Date('d/m/Y'),
-                            'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
-                            'TipoMov' => 'SPR', /* EXP = ENTRADA POR PRODUCCION */
-                            'DocMov' => $x['CONTROL'],
-                            'Tp' => '',
-                            'Maq' => 1,
-                            'Sem' => $CONTROL[0]->SEMANA,
-                            'Ano' => $Ano,
-                            'OrdenCompra' => 'BASURA',
-                            'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
-                        );
-                        $this->db->insert("movarticulos_fabrica", $datos);
-                        /**/
-                        $this->db->set('Empleado', $x['EMPLEADO'])
-                                ->set('Basura', $x['REGRESO'])
-                                ->set('MaterialMalo', 1)
-                                ->where('ID', $x['ID'])->update('asignapftsacxc');
-                    } else {
-                        print "LA CANTIDAD DEVUELTA ESTA DEFECTUOSA HA SIDO ZERO 0";
-                    }
+                    $this->db->set('Empleado', $x['EMPLEADO'])
+                            ->set('Devolucion', $x['REGRESO'])
+                            ->set('MaterialMalo', 0)
+                            ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
+            }//END REGRESO
+            if ($x["MATERIALMALO"] > 0) {
+                $datos = array(
+                    'Articulo' => $x['ARTICULO'],
+                    'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                    'CantidadMov' => $x['MATERIALMALO'],
+                    'FechaMov' => Date('d/m/Y'),
+                    'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
+                    'TipoMov' => 'SPR', /* EXP = ENTRADA POR PRODUCCION */
+                    'DocMov' => $x['CONTROL'],
+                    'Tp' => '',
+                    'Maq' => 1,
+                    'Sem' => $CONTROL[0]->SEMANA,
+                    'Ano' => $Ano,
+                    'OrdenCompra' => 'BASURA',
+                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['MATERIALMALO']
+                );
+                $this->db->insert("movarticulos_fabrica", $datos);
+                /**/
+                $this->db->set('Empleado', $x['EMPLEADO'])
+                        ->set('Devolucion', $x['REGRESO'])
+                        ->set('Basura', $x['MATERIALMALO'])
+                        ->set('MaterialMalo', 1)
+                        ->where('ID', $x['ID'])->update('asignapftsacxc');
+            } else {
+                print "LA CANTIDAD DEVUELTA ESTA DEFECTUOSA HA SIDO ZERO 0";
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -502,8 +520,28 @@ class AsignaPFTSACXC extends CI_Controller {
     public function getInfoXControl() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT  A.Devolucion AS DEVOLVIO_ANTES, A.Estilo AS ESTILO, A.Color AS COLOR, A.ID AS IDA, A.Articulo AS ARTICULO, A.Descripcion AS ARTICULO_DESCRIPCION, A.Abono AS ENTREGO "
-                                    . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$x['PIFO']}")->result());
+            $PIFO = 100;
+            $FRACCION = 100;
+            switch ($PIFO) {
+                case 100:
+                    $FRACCION = 100;
+                    $PIFO = 1;
+                    break;
+                case 99:
+                    $FRACCION = 99;
+                    $PIFO = 2;
+                    break;
+                case 34:
+                    $FRACCION = 99;
+                    $PIFO = 34;
+                    break;
+                case 40:
+                    $FRACCION = 99;
+                    $PIFO = 40;
+                    break;
+            }
+            print json_encode($this->db->query("SELECT A.Devolucion AS DEVOLVIO_ANTES, A.Estilo AS ESTILO, A.Color AS COLOR, A.ID AS IDA, A.Articulo AS ARTICULO, A.Descripcion AS ARTICULO_DESCRIPCION, A.Abono AS ENTREGO "
+                                    . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$FRACCION} AND A.TipoMov = {$PIFO}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

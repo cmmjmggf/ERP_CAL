@@ -34,7 +34,42 @@ class Avance9 extends CI_Controller {
                 $this->db->where("A.Control", $x['CR'])->limit(1);
                 print json_encode($this->db->get()->result());
             } else {
-                print json_encode($this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES FROM asignapftsacxc AS A  INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo INNER JOIN fracciones as F ON FXE.Fraccion = F.Clave WHERE A.Control = {$x['CR']} AND F.Departamento = {$x['DEPTO']} LIMIT 1")->result());
+//                $this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, "
+//                                . "FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, "
+//                                . "F.Clave AS FCLAVE, F.Descripcion AS FRACCIONDES, "
+//                                . "F.Departamento AS FRACCIONDEPTO", false)
+//                        ->from('fraccionesxestilo AS FE')->join('fracciones AS F', 'F.Clave = FE.Fraccion');
+                $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, "
+                                . "FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES ", false)
+                        ->from("asignapftsacxc AS A")
+                        ->join("fraccionesxestilo AS FXE", "A.Estilo = FXE.Estilo")->join("fracciones AS F", "FXE.Fraccion = F.Clave");
+                $this->db->where('A.Control', $x['CR']);
+                switch (intval($x['DEPTO'])) {
+                    case 80:
+                        /* RAYADO CONTADO : FRACCION 102 */
+                        $this->db->where('F.Clave', 102);
+                        break;
+                    case 30:
+                        /* REBAJADO Y PERFORADO : FRACCION 103 */
+                        $this->db->where('F.Clave', 103);
+                        break;
+                    case 50:
+                        /* DOBLILLADO : FRACCION 300 */
+                        $this->db->where('F.Clave', 300);
+                        break;
+                    case 60:
+                        /* LASER : FRACCION 300 */
+                        $this->db->where('F.Clave', 300);
+                        break;
+                }
+                print json_encode($this->db->get()->result());
+//                print json_encode($this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, "
+//                                        . "FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES "
+//                                        . "FROM asignapftsacxc AS A  "
+//                                        . "INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo "
+//                                        . "INNER JOIN fracciones as F ON FXE.Fraccion = F.Clave "
+//                                        . "WHERE A.Control = {$x['CR']} 
+//                                        AND F.Departamento = {$x['DEPTO']} LIMIT 1")->result());
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -98,14 +133,31 @@ class Avance9 extends CI_Controller {
         try {
 //            print json_encode($this->axepn->onComprobarFraccionXEstilo($this->input->post('ESTILO'), $this->input->post('FRACCION')));
             $x = $this->input->post();
-            print json_encode($this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, "
-                                            . "FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, "
-                                            . "F.Clave AS FCLAVE, F.Descripcion AS FRACCIONDES, "
-                                            . "F.Departamento AS FRACCIONDEPTO", false)
-                                    ->from('fraccionesxestilo AS FE')->join('fracciones AS F', 'F.Clave = FE.Fraccion')
-                                    ->where('FE.Estilo', $x['ESTILO'])
-                                    ->where('FE.Fraccion', $x['FRACCION'])
-                                    ->get()->result());
+            $this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, "
+                            . "FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, "
+                            . "F.Clave AS FCLAVE, F.Descripcion AS FRACCIONDES, "
+                            . "F.Departamento AS FRACCIONDEPTO", false)
+                    ->from('fraccionesxestilo AS FE')->join('fracciones AS F', 'F.Clave = FE.Fraccion')
+                    ->where('FE.Estilo', $x['ESTILO']);
+            switch (intval($x['DEPTO'])) {
+                case 80:
+                    /* RAYADO CONTADO : FRACCION 102 */
+                    $this->db->where('FE.Clave', 102);
+                    break;
+                case 30:
+                    /* REBAJADO Y PERFORADO : FRACCION 103 */
+                    $this->db->where('FE.Clave', 103);
+                    break;
+                case 50:
+                    /* DOBLILLADO : FRACCION 300 */
+                    $this->db->where('FE.Clave', 300);
+                    break;
+                case 60:
+                    /* LASER : FRACCION 300 */
+                    $this->db->where('FE.Clave', 300);
+                    break;
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -196,13 +248,15 @@ class Avance9 extends CI_Controller {
 //                    $xXx['CONTROL'], $xXx['NUMERO_FRACCION'], $xXx['NUMERO_EMPLEADO']);
             $retorno_material = $this->db->select("COUNT(*) AS EXISTE", false)
                             ->from('asignapftsacxc AS A')
-                            ->like("A.Control", $xXx['CONTROL'])
-                            ->like("A.Fraccion", $xXx['NUMERO_FRACCION'])
-                            ->like("A.Empleado", $xXx['NUMERO_EMPLEADO'])
+                            ->where("A.Control", $xXx['CONTROL'])
+                            ->where("A.Empleado<>", 0)
                             ->order_by('A.ID', 'DESC')
                             ->limit(1)->get()->result();
             /* SI EL CONTROL, LA FRACCION Y EL EMPLEADO HA REGRESADO ESTE MATERIAL SE OBTIENE UN "1" DE LO CONTRARIO SI EL NO REGRESO EL MATERIAL SE DEVUELVE "0" */
-            if (intval($retorno_material[0]->EXISTE) === 1) {
+//            var_dump($retorno_material);
+//            print $this->db->last_query();
+//            exit(0);
+            if (intval($retorno_material[0]->EXISTE) >= 1) {
                 /* PASO 1 : AGREGAR AVANCE (DEBE DE ESTAR EN CORTE EL CONTROL, ADEMÁS DEBE DE ) */
                 /* AVANCE DE (10) CORTE A (20) RAYADO */
                 /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE (20 - RAYADO) PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
