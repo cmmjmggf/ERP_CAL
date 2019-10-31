@@ -1,21 +1,23 @@
-<div class="card m-3" id="pnlTablero">
-    <div class="card-header">   
-        <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
-                <h3 class="font-weight-bold">Avance por empleado y pago de nomina</h3>
-            </div> 
-        </div>
-    </div>
+<div class="card m-2" id="pnlTablero">
     <div class="card-body" style="padding-top: 10px;    padding-bottom: 10px;">
+        <div class="row">
+            <div class="col-6">
+                <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
+            </div>
+            <div class="col-6" align="right">
+                <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control numeric " maxlength="8" placeholder="2805" style="height: 75px; font-weight: bold; font-size: 50px;" autofocus="">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control" readonly="" placeholder="-" style="height: 75px; font-weight: bold; font-size: 50px; text-align: center;">
+                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
@@ -41,227 +43,219 @@
             <!--INICIO BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
-                    <div id="ManoDeObra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row" style="border-radius: 5px;">
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <label>Mano de obra</label>  
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk51" description="ENTRETELADO" fraccion="51">
-                                <label class="custom-control-label" for="chk51">51 Entretelado</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion="70">
-                                <label class="custom-control-label" for="chk70">70 Troquelar plantilla</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE Y CALIDAD" fraccion="60">
-                                <label class="custom-control-label" for="chk60">60 Folear corte y calidad</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk61" description="FOLEADO MUESTRA" fraccion="61">
-                                <label class="custom-control-label" for="chk61">61 Foleado muestra</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk62" description="SERIGRAFIA FORRO" fraccion="62">
-                                <label class="custom-control-label" for="chk62">62 Serigrafia forro</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk24" description="DOMAR" fraccion="24">
-                                <label class="custom-control-label" for="chk24">24 Domar</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk78" description="LIMPIA LASER" fraccion="78">
-                                <label class="custom-control-label" for="chk78">78 Limpia laser</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk204" description="EMPALMAR PARA LASER" fraccion="204">
-                                <label class="custom-control-label" for="chk204">204 Empalmar p/laser</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk205" description="APLICA PEGA PARA LASER" fraccion="205">
-                                <label class="custom-control-label" for="chk205">205 Aplica pega.p/laser</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk198" description="LOTEAR PARA LASER" fraccion="198">
-                                <label class="custom-control-label" for="chk198">198 Lotear p/laser</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk127" description="ENTRETELAR MUESTRA" fraccion="127">
-                                <label class="custom-control-label" for="chk127">127 Entretelar muestra</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk80" description="CONTAR TAREA" fraccion="80">
-                                <label class="custom-control-label" for="chk80">80 Contar tarea</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk397" description="JUNTAR SUELA A CORTE" fraccion="397">
-                                <label class="custom-control-label" for="chk397">397 Juntar suela a corte</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
-                                <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk106" description="DOBLILLADO" fraccion="106">
-                                <label class="custom-control-label" for="chk106">106 Doblillado</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk306" description="FORRAR PLATAFORMA" fraccion="306">
-                                <label class="custom-control-label" for="chk306">306 Forrar plataforma</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk337" description="RECORTAR FORRO LASER" fraccion="337">
-                                <label class="custom-control-label" for="chk337">337 Recortar forro laser</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">  
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk333" description="PONER CASCO PESPUNTE" fraccion="333">
-                                <label class="custom-control-label" for="chk333">333 Poner casco pespunte</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk502" description="PEGADO DE SUELA" fraccion="502">
-                                <label class="custom-control-label" for="chk502">502 Pegado de suela</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk72" description="TROQUELAR NORMA" fraccion="72">
-                                <label class="custom-control-label" for="chk72">72 Troquelar norma</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk607" description="ARMAR PLANTILLA ADORNO" fraccion="607">
-                                <label class="custom-control-label" for="chk607">607 Armar plantilla adorno</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
-                                <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"> 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chk606" description="ARMAR PLANT AD MUEST" fraccion="606">
-                                <label class="custom-control-label" for="chk606">606 Armar plant.ad.muest</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="w-100"></div>                    
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 d-none">
-                        <div class="row">
-                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="GeneraAvance" name="GeneraAvance" class="form-control"> 
-                            </div>
-                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"> 
-                                <input type="text" id="Depto" name="Depto" class="form-control">
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control  numeric" maxlength="2" disabled="">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numeric" maxlength="2" disabled="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control  ">
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm  ">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" name="Departamento" class="form-control numeric " maxlength="3">
+                        <input type="text" id="Departamento" name="Departamento" class="form-control form-control-sm numeric " maxlength="3">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control  numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control" class="form-control form-control-sm  numeric" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" class="form-control ">
+                        <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm ">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" class="form-control  numeric">
+                        <input type="text" id="Pares" name="Pares" class="form-control form-control-sm  numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" class="form-control  numeric">
+                        <input type="text" id="Avance" name="Avance" class="form-control form-control-sm  numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <button type="button" class="btn btn-success mt-4" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
-                    </div> 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
-                        <label>MO</label>
-                        <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control numeric" readonly="">
-                        <label>AN</label>
-                        <input type="text" id="Anio" name="Anio" class="form-control numeric" readonly="">
-                    </div> 
-                    <div class="col-12 my-1">
+                        <button type="button" class="btn btn-success mt-3" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
+                    </div>
+                    <div class="col-12">
                         <hr>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                        <h3>Pago de nomina</h3>
-                        <div id="DiasPagoDeNomina" class="row"></div>
+                    <div id="ManoDeObra" class="col-6">
+
+                        <label class="text-danger">Seleccione Fracción</label>
+                        <div  class="row  bg-danger text-white" style="border-radius: 5px; height: 435px; overflow-y: auto;" >
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk51" description="ENTRETELADO" fraccion="51">
+                                    <label class="custom-control-label" for="chk51">51 Entretelado</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion="70">
+                                    <label class="custom-control-label" for="chk70">70 Troquelar plantilla</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE Y CALIDAD" fraccion="60">
+                                    <label class="custom-control-label" for="chk60">60 Folear corte y calidad</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk61" description="FOLEADO MUESTRA" fraccion="61">
+                                    <label class="custom-control-label" for="chk61">61 Foleado muestra</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk62" description="SERIGRAFIA FORRO" fraccion="62">
+                                    <label class="custom-control-label" for="chk62">62 Serigrafia forro</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk24" description="DOMAR" fraccion="24">
+                                    <label class="custom-control-label" for="chk24">24 Domar</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk78" description="LIMPIA LASER" fraccion="78">
+                                    <label class="custom-control-label" for="chk78">78 Limpia laser</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk204" description="EMPALMAR PARA LASER" fraccion="204">
+                                    <label class="custom-control-label" for="chk204">204 Empalmar p/laser</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk205" description="APLICA PEGA PARA LASER" fraccion="205">
+                                    <label class="custom-control-label" for="chk205">205 Aplica pega.p/laser</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk198" description="LOTEAR PARA LASER" fraccion="198">
+                                    <label class="custom-control-label" for="chk198">198 Lotear p/laser</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk127" description="ENTRETELAR MUESTRA" fraccion="127">
+                                    <label class="custom-control-label" for="chk127">127 Entretelar muestra</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk80" description="CONTAR TAREA" fraccion="80">
+                                    <label class="custom-control-label" for="chk80">80 Contar tarea</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk397" description="JUNTAR SUELA A CORTE" fraccion="397">
+                                    <label class="custom-control-label" for="chk397">397 Juntar suela a corte</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
+                                    <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk106" description="DOBLILLADO" fraccion="106">
+                                    <label class="custom-control-label" for="chk106">106 Doblillado</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk306" description="FORRAR PLATAFORMA" fraccion="306">
+                                    <label class="custom-control-label" for="chk306">306 Forrar plataforma</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk337" description="RECORTAR FORRO LASER" fraccion="337">
+                                    <label class="custom-control-label" for="chk337">337 Recortar forro laser</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk333" description="PONER CASCO PESPUNTE" fraccion="333">
+                                    <label class="custom-control-label" for="chk333">333 Poner casco pespunte</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk502" description="PEGADO DE SUELA" fraccion="502">
+                                    <label class="custom-control-label" for="chk502">502 Pegado de suela</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk72" description="TROQUELAR NORMA" fraccion="72">
+                                    <label class="custom-control-label" for="chk72">72 Troquelar norma</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk607" description="ARMAR PLANTILLA ADORNO" fraccion="607">
+                                    <label class="custom-control-label" for="chk607">607 Armar plantilla adorno</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
+                                    <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk606" description="ARMAR PLANT AD MUEST" fraccion="606">
+                                    <label class="custom-control-label" for="chk606">606 Armar plant.ad.muest</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                        <h3>Estatus actual del avance</h3>
-                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control ">
+
+                    <div class="col-6">
+                        <label class="text-info">Pago de Nómina</label>
+
+                        <div id="DiasPagoDeNomina" class="row"></div>
+                        <div class="col-12" style="margin-top: 5em !important;"></div>
+
+
+
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
+                            <h4 class="text-danger">Estatus actual del avance</h4>
+                            <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm ">
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 d-none">
+                        <div class="row">
+                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="GeneraAvance" name="GeneraAvance" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="Depto" name="Depto" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
+                        <label>MO</label>
+                        <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control form-control-sm  numeric" readonly="">
+                        <label>AN</label>
+                        <input type="text" id="Anio" name="Anio" class="form-control form-control-sm  numeric" readonly="">
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
@@ -416,14 +410,14 @@
                     '<label>' + i + '</label>' +
                     '</div>' +
                     '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;" readonly="">' +
+                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; readonly="">' +
                     '</div>';
         });
         chksfracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
                 '<label>TOTAL</label>' +
                 '</div>' +
                 '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control" placeholder="0"  style="font-weight: bold; text-align: center;">' +
+                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold;">' +
                 '</div>';
         DiasPagoDeNomina.html(chksfracciones);
 
@@ -452,7 +446,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'rt',
             buttons: buttons,
             "columns": cols,
             "columnDefs": coldefs,
@@ -465,13 +459,13 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "500px",
+            "scrollY": "490px",
             "scrollX": true,
             createdRow: function (row, data, dataIndex) {
             }
         };
         xoptions.ajax = {
-            "url": '<?php print base_url('obtener_avances_pago_nomina/2'); ?>', 
+            "url": '<?php print base_url('obtener_avances_pago_nomina/2'); ?>',
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
@@ -638,23 +632,23 @@
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
         user-select: none; /* Non-prefixed version, currently
-                              supported by Chrome and Opera */ 
+                              supported by Chrome and Opera */
         -webkit-transition: background-color 0.5s ease-out;
         -moz-transition: background-color 0.5s ease-out;
         -o-transition: background-color 0.5s ease-out;
         transition: background-color 0.5s ease-out;
     }
 
-    .card-body .custom-control-label::after { 
+    .card-body .custom-control-label::after {
         background-color: #3F51B5;
     }
 
     .highlight{
         border-radius: 4px;
         padding-left: 10px;
-        padding-right: 10px;    
-        background:#99cc00; 
-        background:#4CAF50; 
+        padding-right: 10px;
+        background:#99cc00;
+        background:#4CAF50;
         font-weight: bold;
         color:#fff;
         -webkit-transition: background-color .1s ease-out;
@@ -666,8 +660,8 @@
     .custom-control-label:hover{
         border-radius: 4px;
         padding-left: 10px;
-        padding-right: 10px;    
-        background:#03a9f4; 
+        padding-right: 10px;
+        background:#03a9f4;
         font-weight: bold;
         color:#fff;
         -webkit-transition: background-color .1s ease-out;
@@ -684,7 +678,7 @@
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
         /*top
         background-image: linear-gradient(to left, #0099cc,  #cc0000, #0099cc) ;
@@ -692,8 +686,21 @@
         background-position: 10% 0%, 0% 100%;
         background-repeat: no-repeat;  */
     }
-    .card-header{ 
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
+    table tbody tr {
+        font-size: 0.75rem !important;
+    }
+
+    div.datatable-wide {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    label {
+        margin-top: 0.0rem;
+        margin-bottom: 0.0rem;
+    }
+
 </style>
