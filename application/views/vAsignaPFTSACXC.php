@@ -1,22 +1,22 @@
 <div class="card m-3" id="pnlTablero">
     <div class="card-header">
         <div class="row">
-            <div class="w-100 my-1"></div>
-            <div class="col-12 col-sm-12 col-md-2"></div>
-            <div class="col-12 col-sm-12 col-md-2 d-none">
+            <div class="w-100 my-1"></div> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-none">
                 <button type="button" class="btn btn-default text-muted" id="btnReload"><span class="fa fa-retweet"></span></button>
-            </div>
-            <div class="col-12 col-sm-12 col-md-8 text-center">
-                <h4 class="font-weight-bold">
+            </div> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+                <h4 class="font-weight-bold pr-2 mr-2">
                     Asigna Piel, Forro, Textiles y Sintéticos a corte por control
-                </h4>
+                </h4> 
             </div>
-            <div class="col-12 col-sm-12 col-md-2" align="right">
-                <button type="button" class="btn btn-info" id="btnRetornaMaterial"><span class="fa fa-retweet"></span> Retornar material</button>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4" align="right">
+                <button type="button" class="btn btn-info" id="btnRetornaMaterial">
+                    <span class="fa fa-retweet"></span> Retornar material</button>
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="padding-top: 5px">
         <div class="row" style="padding-left: 15px">
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1" align="left">
                 <strong>Semana</strong>
@@ -53,13 +53,13 @@
                     <label class="custom-control-label text-danger labelCheck" for="MaterialExtra" style="cursor: pointer !important;">Material Extra</label>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1" align="left">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1 mt-2" align="left">
                 <button type="button" id="btnEntregar" class="btn btn-success" style="color: #fff; background-color: #8BC34A; border-color: #8BC34A;" data-toggle="tooltip" data-placement="bottom" title="Presiona Enter para aceptar"><span class="fa fa-check"></span> Acepta</button>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center" data-toggle="tooltip" data-placement="right" title="Selecciona un articulo a entregar de la tabla de Pieles">
-                        <h4>Pieles</h4>
+                        <h5>PIELES</h5>
                         <table id="tblPieles" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -103,7 +103,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h4>Forros</h4>
+                        <h5>FORROS</h5>
                         <table id="tblForros" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -147,7 +147,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h4>Textiles</h4>
+                        <h5>TEXTILES</h5>
                         <table id="tblTextiles" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -188,7 +188,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h4>Sintéticos</h4>
+                        <h5>SINTÉTICOS</h5>
                         <table id="tblSinteticos" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -233,7 +233,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                <h4>Controles asignados</h4>
+                <h5>CONTROLES ASIGNADOS</h5>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <table id="tblControlesAsignados" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
@@ -765,6 +765,7 @@
                 Forros.ajax.reload();
                 Sinteticos.ajax.reload();
                 Textiles.ajax.reload();
+                ControlesAsignados.ajax.reload();
             }
         });
         $.fn.dataTable.ext.errMode = 'throw';
@@ -772,7 +773,7 @@
             tblControlesAsignados.DataTable().destroy();
         }
         ControlesAsignados = tblControlesAsignados.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'frtip',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('AsignaPFTSACXC/getControlesAsignados'); ?>',

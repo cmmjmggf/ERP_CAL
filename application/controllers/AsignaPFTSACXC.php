@@ -62,9 +62,12 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where("A.Semana", $x['SEMANA']);
             }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where("A.Control", $x['CONTROL']);
+            }
             $this->db->order_by('A.Fecha', 'DESC');
-            if ($x['SEMANA'] === '') {
-                $this->db->limit(99);
+            if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -263,11 +266,11 @@ class AsignaPFTSACXC extends CI_Controller {
             /* CAMBIOS DE MAYO 2019 */
             /* COMPROBAR QUE EL ESTATUS DEL CONTROL SEA MENOR O IGUAL A 10 (CORTE), SI ESTA POR ENCIMA DEL 10 OSEA MAYOR A 10, EL TRATAMIENTO DEBE DE SER COMO PIOCHA */
             $ESTATUS = $this->db->query("SELECT PED.stsavan AS AVANCECORTE FROM pedidox AS PED WHERE PED.Control = {$x['CONTROL']} LIMIT 1")->result();
-            $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT A.* AS A FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = {$xx['ARTICULO']}' LIMIT 1")->result();
+            $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT COUNT(*) AS PIOCHERO FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = {$xx['ARTICULO']}' AND A.Semana = {$xx['SEMANA']} AND A.Fraccion = {$xx['FRACCION']} LIMIT 1")->result();
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
 //            exit(0);
-            if (intval($ESTATUS[0]->AVANCECORTE) >= 3) {
+            if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])->update('asignapftsacxc');
             } else {
                 /**/
