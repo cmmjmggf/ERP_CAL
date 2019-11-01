@@ -224,6 +224,9 @@ class Avance9 extends CI_Controller {
             $xXx = $this->input->post();
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
 //            var_dump($FRACCIONES);
+//            foreach ($FRACCIONES as $key => $value) {
+//                print $value->NUMERO_FRACCION . "\n";
+//            }
 //            exit(0);
 
             $fecha = $xXx['FECHA'];
@@ -246,10 +249,10 @@ class Avance9 extends CI_Controller {
                 "anio" => $xXx['ANIO']);
 
             foreach ($FRACCIONES as $k => $v) {
-//                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION}<br>";
+//                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
+//exit(0);
 
-
-                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = {$v->NUMERO_FRACCION} AND FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$x['CONTROL']}")->limit(1);
+                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = {$v->NUMERO_FRACCION} AND FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();
                 $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                 $data = array(
                     "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
@@ -403,8 +406,8 @@ class Avance9 extends CI_Controller {
                                 ->get()->result();
                 $data["fraccion"] = 103;
                 $data["numfrac"] = 103;
-                /*FILTRADO POR FRACCION 103 REBAJAR PIEL Y EL CONTROL */
-                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = 103 AND FXE.Fraccion = 103 AND A.Control = {$x['CONTROL']}")->limit(1);
+                /* FILTRADO POR FRACCION 103 REBAJAR PIEL Y EL CONTROL */
+                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = 103 AND FXE.Fraccion = 103 AND A.Control = {$xXx['CONTROL']}")->result();
                 $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                 $data["preciofrac"] = $PXFC;
                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
