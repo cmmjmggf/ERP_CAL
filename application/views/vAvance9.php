@@ -88,12 +88,22 @@
                         <hr>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <?php
+                        $F = Date('d/m/Y');
+                        $YYYY = Date('Y');
+                        $SP = $this->db->select('SP.Sem AS Semana, SP.FechaIni AS FEINI, SP.FechaFin AS FEFI', false)
+                                        ->from('semanasproduccion AS SP')
+                                        ->where("STR_TO_DATE('{$F}', \"%d/%m/%Y\") "
+                                                . "BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") "
+                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") AND SP.Ano = {$YYYY}")
+                                        ->get()->result();
+                        ?>
                         <label>Semana</label>
                         <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2" disabled="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter">
+                        <input type="text" id="Fecha" name="Fecha" readonly="" class="form-control form-control-sm date notEnter">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
@@ -194,6 +204,8 @@
     $(document).ready(function () {
         //handleEnter();
 
+        Semana.val('<?php print $SP[0]->Semana; ?>');
+        Fecha.val('<?php print $F; ?>');
         btnAceptar.click(function () {
             if (NumeroDeEmpleado.val()) {
                 if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
@@ -223,19 +235,24 @@
         });
 
         pnlTablero.find("input[type='checkbox']").change(function () {
-            onCheckFraccion(this);
-            if ($(this)[0].checked) {
-                onBeep(3);
+//            onCheckFraccion(this);
+//            if ($(this)[0].checked) {
+//                onBeep(3);
+//                Control.focus().select();
+//                pnlTablero.find("#ManoDeObra input[type='checkbox']:not(:checked)").parent().find("label.custom-control-label").removeClass("highlight");
+//                pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").parent().find("label.custom-control-label").addClass("highlight");
+//            } else {
+//                onBeep(1);
+//                if (pnlTablero.find("input[type='checkbox']:checked").length <= 0) {
+//                    pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
+//                } else {
+//                    pnlTablero.find("#ManoDeObra label.custom-control-label").removeClass("highlight");
+//                }
+//            }
+            if (NumeroDeEmpleado.val()) {
                 Control.focus().select();
-                pnlTablero.find("#ManoDeObra input[type='checkbox']:not(:checked)").parent().find("label.custom-control-label").removeClass("highlight");
-                pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").parent().find("label.custom-control-label").addClass("highlight");
             } else {
-                onBeep(1);
-                if (pnlTablero.find("input[type='checkbox']:checked").length <= 0) {
-                    pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
-                } else {
-                    pnlTablero.find("#ManoDeObra label.custom-control-label").removeClass("highlight");
-                }
+                NumeroDeEmpleado.focus().select();
             }
         });
 
@@ -363,7 +380,7 @@
             theme: 'sk-rect',
             message: 'Comprobando...'
         });
-        $.post('<?php print base_url('comprobar_numero_de_empleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()})
+        $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()})
                 .done(function (data) {
                     var dt = JSON.parse(data);
                     if (dt.length > 0) {
@@ -371,10 +388,10 @@
                         Departamento.val(dt[0].DEPTO);
                         DepartamentoDes.val(dt[0].DEPTO_DES);
                         GeneraAvance.val(dt[0].GENERA_AVANCE);
-                        $.getJSON('<?php print base_url('obtener_semana_fecha'); ?>').done(function (data) {
+                        $.getJSON('<?php print base_url('Avance9/getSemanaByFecha'); ?>').done(function (data) {
                             Semana.val((data.length > 0) ? data[0].Sem : '');
                             Fecha.val((data.length > 0) ? data[0].Fecha : '');
-                            $.getJSON('<?php print base_url('obtener_pagos_de_nomina_x_empleado'); ?>',
+                            $.getJSON('<?php print base_url('Avance9/getPagosXEmpleadoXSemana'); ?>',
                                     {EMPLEADO: NumeroDeEmpleado.val(), SEMANA: Semana.val(), FRACCIONES: "96, 99, 100"}).done(function (a) {
                                 if (a.length > 0) {
                                     var b = a[0];
@@ -427,13 +444,13 @@
             });
             var fra = pnlTablero.find("#chk99")[0].checked ? 99 : (pnlTablero.find("#chk100")[0].checked ? 100 : (pnlTablero.find("#chk96")[0] ? 96 : ''));
             /*COMPROBAR EL RETORNO DE MATERIAL*/
-            $.getJSON('<?php print base_url('obtener_estilo_pares_por_control_fraccion'); ?>', {CR: Control.val(), FR: fra, DEPTO: Departamento.val()}).done(function (data) {
+            $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>', {CR: Control.val(), FR: fra, DEPTO: Departamento.val()}).done(function (data) {
                 if (data.length > 0) {
                     var r = data[0];
                     Estilo.val(r.Estilo);
                     Pares.val(r.Pares);
                     ManoDeOB.val(r.CostoMO);
-                    $.getJSON('<?php print base_url('obtener_ultimo_avance_por_control'); ?>', {C: Control.val()}).done(function (data) {
+                    $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                         if (data.length > 0) {
                             SigAvance.val(data[0].Departamento);
                             EstatusAvance.val(data[0].DepartamentoT);
@@ -486,7 +503,7 @@
     function onAgregarAvanceSinFraccion() {
         if (Control.val()) {
             /*COMPROBAR SI EL EMPLEADO ES DE RAYADO*/
-            $.post('<?php print base_url('comprobar_numero_de_empleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
+            $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
                 $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
                         {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
                         .done(function (data) {
@@ -497,8 +514,8 @@
                                 ManoDeOB.val(r.CostoMO);
                                 Fraccion.val(r.Fraccion);
                                 FraccionDes.val(r.FRACCION_DES);
-                                console.log('obtener_estilo_pares_por_control_fraccion', data);
-                                $.getJSON('<?php print base_url('obtener_ultimo_avance_por_control'); ?>', {C: Control.val()}).done(function (data) {
+                                console.log('Avance9/getUltimoAvanceXControl', data);
+                                $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                                     if (data.length > 0) {
                                         SigAvance.val(data[0].Departamento);
                                         EstatusAvance.val(data[0].DepartamentoT);
@@ -556,11 +573,6 @@
         Estilo.val('');
         Pares.val('');
         SigAvance.val('');
-        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
-            $(v)[0].checked = false;
-        });
-        Semana.val('');
-        Fecha.val('');
         pnlTablero.find("#txtTotal").val('');
     }
 
@@ -588,6 +600,17 @@
         AVANO.DEPARTAMENTO_DESCRIPCION = DepartamentoDes.val();
         AVANO.ANIO = pnlTablero.find("#Anio").val();
 
+        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+            console.log(k, v);
+        });
+        var fracciones = [];
+        $.each(pnlTablero.find("input[type='checkbox']:checked"), function (k, v) {
+            fracciones.push({
+                NUMERO_FRACCION: $(v).attr('fraccion'),
+                DESCRIPCION: $(v).attr('description')
+            });
+        });
+        AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
             var dt = JSON.parse(data);

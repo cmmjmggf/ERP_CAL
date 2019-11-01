@@ -222,154 +222,164 @@ class Avance9 extends CI_Controller {
         try {
             $x = $this->input;
             $xXx = $this->input->post();
-            $fecha = $xXx['FECHA'];
-            $dia = substr($fecha, 0, 2);
-            $mes = substr($fecha, 3, 2);
-            $anio = substr($fecha, 6, 4);
+            $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
+//            var_dump($FRACCIONES);
+//            exit(0);
+            foreach ($FRACCIONES as $k => $v) {
+                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION}<br>";
+                $fecha = $xXx['FECHA'];
+                $dia = substr($fecha, 0, 2);
+                $mes = substr($fecha, 3, 2);
+                $anio = substr($fecha, 6, 4);
 
-            $nueva_fecha = new DateTime();
-            $nueva_fecha->setDate($anio, $mes, $dia);
+                $nueva_fecha = new DateTime();
+                $nueva_fecha->setDate($anio, $mes, $dia);
 
-            $data = array(
-                "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
-                "maquila" => intval(substr($xXx['CONTROL'], 4, 2)),
-                "control" => $xXx['CONTROL'],
-                "estilo" => $xXx['ESTILO'],
-                "numfrac" => $xXx['NUMERO_FRACCION'],
-                "preciofrac" => $xXx['PRECIO_FRACCION'],
-                "pares" => $xXx['PARES'],
-                "subtot" => (floatval($xXx['PARES']) * floatval($xXx['PRECIO_FRACCION'])),
-                "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
-                "semana" => $xXx['SEMANA'],
-                "depto" => $xXx['DEPARTAMENTO'],
-                "anio" => $xXx['ANIO']);
+                $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+
+                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = {$v->NUMERO_FRACCION} AND FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$x['CONTROL']}")->limit(1);
+                $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                $data = array(
+                    "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
+                    "maquila" => intval($CONTROL[0]->MAQUILA),
+                    "control" => $xXx['CONTROL'],
+                    "estilo" => $xXx['ESTILO'],
+                    "numfrac" => $v->NUMERO_FRACCION,
+                    "preciofrac" => $PXFC,
+                    "pares" => $xXx['PARES'],
+                    "subtot" => (floatval($xXx['PARES']) * floatval($PXFC)),
+                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "semana" => $xXx['SEMANA'],
+                    "depto" => $xXx['DEPARTAMENTO'],
+                    "anio" => $xXx['ANIO']);
 
 //            $retorno_material = $this->axepn->onComprobarRetornoDeMaterial(
-//                    $xXx['CONTROL'], $xXx['NUMERO_FRACCION'], $xXx['NUMERO_EMPLEADO']);
-            $retorno_material = $this->db->select("COUNT(*) AS EXISTE", false)
-                            ->from('asignapftsacxc AS A')
-                            ->where("A.Control", $xXx['CONTROL'])
-                            ->where("A.Empleado<>", 0)
-                            ->order_by('A.ID', 'DESC')
-                            ->limit(1)->get()->result();
-            /* SI EL CONTROL, LA FRACCION Y EL EMPLEADO HA REGRESADO ESTE MATERIAL SE OBTIENE UN "1" DE LO CONTRARIO SI EL NO REGRESO EL MATERIAL SE DEVUELVE "0" */
+//                    $xXx['CONTROL'], $v->NUMERO_FRACCION, $xXx['NUMERO_EMPLEADO']);
+                $retorno_material = $this->db->select("COUNT(*) AS EXISTE", false)
+                                ->from('asignapftsacxc AS A')
+                                ->where("A.Control", $xXx['CONTROL'])
+                                ->where("A.Empleado<>", 0)
+                                ->order_by('A.ID', 'DESC')
+                                ->limit(1)->get()->result();
+                /* SI EL CONTROL, LA FRACCION Y EL EMPLEADO HA REGRESADO ESTE MATERIAL SE OBTIENE UN "1" DE LO CONTRARIO SI EL NO REGRESO EL MATERIAL SE DEVUELVE "0" */
 //            var_dump($retorno_material);
 //            print $this->db->last_query();
 //            exit(0);
-            if (intval($retorno_material[0]->EXISTE) >= 1) {
-                /* PASO 1 : AGREGAR AVANCE (DEBE DE ESTAR EN CORTE EL CONTROL, ADEMÁS DEBE DE ) */
-                /* AVANCE DE (10) CORTE A (20) RAYADO */
-                /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE (20 - RAYADO) PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
-                $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)
-                                ->from('avance AS A')
-                                ->where('A.Control', $xXx['CONTROL'])
-                                ->where('A.Departamento', 20)
-                                ->where('A.Fraccion', $xXx['NUMERO_FRACCION'])
-                                ->where_not_in('A.Emp')
-                                ->get()->result();
-
-                /* SOLO SE GENERA EL AVANCE EN LA FRACCIÓN 100 QUE ES LA PIEL */
-                /* CORTE = > RAYADO */
-                if ($check_avance[0]->EXISTE <= 0) {
-                    $id = 0;
-                    if (intval($xXx['NUMERO_FRACCION']) === 100) {
-                        $avance = array(
-                            'Control' => $xXx['CONTROL'],
-                            'FechaAProduccion' => Date('d/m/Y'),
-                            'Departamento' => 20,
-                            'DepartamentoT' => 'RAYADO',
-                            'FechaAvance' => Date('d/m/Y'),
-                            'Estatus' => 'A',
-                            'Usuario' => $_SESSION["ID"],
-                            'Fecha' => Date('d/m/Y'),
-                            'Hora' => Date('h:i:s a'),
-                            'Fraccion' => $xXx['NUMERO_FRACCION']
-                        );
-                        $this->db->insert('avance', $avance);
-                        $id = $this->db->insert_id();
-
-                        /* ACTUALIZA A 20 RAYADO, stsavan 3 */
-                        $this->db->set('EstatusProduccion', 'RAYADO')
-                                ->set('DeptoProduccion', 20)
-                                ->where('Control', $xXx['CONTROL'])
-                                ->update('controles');
-
-                        $this->db->set('stsavan', 3)
-                                ->set('EstatusProduccion', 'RAYADO')
-                                ->set('DeptoProduccion', 20)
-                                ->where('Control', $xXx['CONTROL'])
-                                ->update('pedidox');
-
-                        $this->db->set('fec3', Date('Y-m-d h:i:s'))
-                                ->where('contped', $xXx['CONTROL'])
-                                ->update('avaprd');
-                    }
-                    /* PASO 2 : AGREGAR FRACCION PAGADA */
-                    $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
-                                    ->from('fracpagnomina AS F')
-                                    ->where('F.control', $xXx['CONTROL'])
-                                    ->where('F.numfrac', $xXx['NUMERO_FRACCION'])
+                if (intval($retorno_material[0]->EXISTE) >= 1) {
+                    /* PASO 1 : AGREGAR AVANCE (DEBE DE ESTAR EN CORTE EL CONTROL, ADEMÁS DEBE DE ) */
+                    /* AVANCE DE (10) CORTE A (20) RAYADO */
+                    /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE (20 - RAYADO) PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
+                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)
+                                    ->from('avance AS A')
+                                    ->where('A.Control', $xXx['CONTROL'])
+                                    ->where('A.Departamento', 20)
+                                    ->where('A.Fraccion', $v->NUMERO_FRACCION)
+                                    ->where_not_in('A.Emp')
                                     ->get()->result();
-                    $data["fraccion"] = $xXx['FRACCION'];
-                    if ($check_fraccion[0]->EXISTE <= 0) {
-                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-                        $this->db->insert('fracpagnomina', $data);
-                        print '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO"}';
-                    } else {
-                        $this->db->insert('fracpagnomina', $data);
-                        print '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE"}';
-                    }
-                } else {
-                    /* RAYADO/RAYADO CONTADO => REBAJADO Y PERFORADO/REBAJADO */
-                    if (intval($xXx['DEPARTAMENTO']) === 80) {
-                        $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
-                                        ->from('fracpagnomina AS F')
-                                        ->where('F.control', $xXx['CONTROL'])
-                                        ->where('F.numfrac', 103)
-                                        ->get()->result();
-                        $data["fraccion"] = $xXx['FRACCION'];
-                        if ($check_fraccion[0]->EXISTE <= 0) {
+
+                    /* SOLO SE GENERA EL AVANCE EN LA FRACCIÓN 100 QUE ES LA PIEL */
+                    /* CORTE = > RAYADO */
+                    if ($check_avance[0]->EXISTE <= 0) {
+                        $id = 0;
+                        if (intval($v->NUMERO_FRACCION) === 100) {
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
                                 'FechaAProduccion' => Date('d/m/Y'),
-                                'Departamento' => 30,
-                                'DepartamentoT' => 'REBAJADO Y PERFORADO',
+                                'Departamento' => 20,
+                                'DepartamentoT' => 'RAYADO',
                                 'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
                                 'Hora' => Date('h:i:s a'),
-                                'Fraccion' => $xXx['NUMERO_FRACCION']
+                                'Fraccion' => $v->NUMERO_FRACCION
                             );
                             $this->db->insert('avance', $avance);
                             $id = $this->db->insert_id();
+
+                            /* ACTUALIZA A 20 RAYADO, stsavan 3 */
+                            $this->db->set('EstatusProduccion', 'RAYADO')
+                                    ->set('DeptoProduccion', 20)
+                                    ->where('Control', $xXx['CONTROL'])
+                                    ->update('controles');
+
+                            $this->db->set('stsavan', 3)
+                                    ->set('EstatusProduccion', 'RAYADO')
+                                    ->set('DeptoProduccion', 20)
+                                    ->where('Control', $xXx['CONTROL'])
+                                    ->update('pedidox');
+
+                            $this->db->set('fec3', Date('Y-m-d h:i:s'))
+                                    ->where('contped', $xXx['CONTROL'])
+                                    ->update('avaprd');
+                        }
+                        /* PASO 2 : AGREGAR FRACCION PAGADA */
+                        $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
+                                        ->from('fracpagnomina AS F')
+                                        ->where('F.control', $xXx['CONTROL'])
+                                        ->where('F.numfrac', $v->NUMERO_FRACCION)
+                                        ->get()->result();
+                        $data["fraccion"] = $v->NUMERO_FRACCION;
+                        if ($check_fraccion[0]->EXISTE <= 0) {
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                             $this->db->insert('fracpagnomina', $data);
-
-                            /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
-                            $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
-                                    ->set('DeptoProduccion', 30)
-                                    ->where('Control', $x['CONTROL'])
-                                    ->update('controles');
-                            $this->db->set('stsavan', 33)
-                                    ->set('EstatusProduccion', 'CORTE')
-                                    ->set('DeptoProduccion', 30)
-                                    ->where('Control', $x['CONTROL'])
-                                    ->update('pedidox');
-                            $this->db->set('fec33', Date('Y-m-d h:i:s'))
-                                    ->where('contped', $x['CONTROL'])
-                                    ->update('avaprd');
-
-                            $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
+                            print '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO"}';
+                        } else {
+                            $this->db->insert('fracpagnomina', $data);
+                            print '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE"}';
                         }
                     } else {
-                        print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE"}';
+                        /* RAYADO/RAYADO CONTADO => REBAJADO Y PERFORADO/REBAJADO */
+                        if (intval($xXx['DEPARTAMENTO']) === 80) {
+                            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
+                                            ->from('fracpagnomina AS F')
+                                            ->where('F.control', $xXx['CONTROL'])
+                                            ->where('F.numfrac', 103)
+                                            ->get()->result();
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            if ($check_fraccion[0]->EXISTE <= 0) {
+                                $avance = array(
+                                    'Control' => $xXx['CONTROL'],
+                                    'FechaAProduccion' => Date('d/m/Y'),
+                                    'Departamento' => 30,
+                                    'DepartamentoT' => 'REBAJADO Y PERFORADO',
+                                    'FechaAvance' => Date('d/m/Y'),
+                                    'Estatus' => 'A',
+                                    'Usuario' => $_SESSION["ID"],
+                                    'Fecha' => Date('d/m/Y'),
+                                    'Hora' => Date('h:i:s a'),
+                                    'Fraccion' => $v->NUMERO_FRACCION
+                                );
+                                $this->db->insert('avance', $avance);
+                                $id = $this->db->insert_id();
+                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                $this->db->insert('fracpagnomina', $data);
+
+                                /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
+                                $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
+                                        ->set('DeptoProduccion', 30)
+                                        ->where('Control', $x['CONTROL'])
+                                        ->update('controles');
+                                $this->db->set('stsavan', 33)
+                                        ->set('EstatusProduccion', 'CORTE')
+                                        ->set('DeptoProduccion', 30)
+                                        ->where('Control', $x['CONTROL'])
+                                        ->update('pedidox');
+                                $this->db->set('fec33', Date('Y-m-d h:i:s'))
+                                        ->where('contped', $x['CONTROL'])
+                                        ->update('avaprd');
+
+                                $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
+                            }
+                        } else {
+                            print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE"}';
+                        }
                     }
+                } else {
+                    /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
+                    print '{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS"}';
                 }
-            } else {
-                /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
-                print '{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS"}';
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
