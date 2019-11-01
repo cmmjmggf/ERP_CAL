@@ -48,7 +48,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
 
     function getCortadoresXMaquilaSemanaArticulo($ARTICULO, $MAQUILA, $SEMANAINICIAL, $SEMANAFINAL, $ANO, $CORTADOR, $TIPO) {
         try {
-            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA, 
+            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA,
                                    IFNULL(E.Numero,0) AS NUMERO, CONCAT(IFNULL(E.PrimerNombre,\"\"), \" \", IFNULL(E.SegundoNombre,\"\"), \" \", IFNULL(E.Paterno,\"\"), \" \", IFNULL(E.Materno,\"\")) AS CORTADOR", false)
                     ->from("asignapftsacxc AS A")
                     ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
@@ -106,11 +106,11 @@ class ConsumoPielForroXCortador_model extends CI_Model {
     function getConsumosPielForroXMaquilaSemanaAnioCortadorArticuloFechaInicialFechaFinal($MAQUILA, $SEMANAINICIAL, $SEMANAFINAL, $ANO, $CORTADOR, $ARTICULO, $FECHAINICIAL, $FECHAFINAL, $EMPLEADO, $ESTILO, $TIPO) {
         try {
             $this->db->select("OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT, "
-                            . "A.PrecioActual AS Precio, OP.Pares, SUM(OPD.Consumo) AS Consumo, SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
+                            . "A.PrecioActual AS Precio, OP.Pares, (SUM(OPD.Cantidad)/OP.Pares) AS Consumo, SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
                             . "A.Devolucion, A.Basura, (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)) AS Diferencia,"
                             . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,(A.PrecioActual * A.Abono) AS RealPesos, "
                             . "((A.PrecioActual * SUM(OPD.Cantidad)) - (A.PrecioActual * A.Abono)) AS DifPesos,"
-                            . "(A.Abono/OP.Pares) AS DCM2, SUM(OPD.Consumo)/(A.Abono/OP.Pares) AS PORCENTAJE", false)
+                            . "(A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE", false)
                     ->from("ordendeproduccion AS OP")
                     ->join("ordendeproducciond AS OPD", "OP.ID = OPD.OrdenDeProduccion")
                     ->join("asignapftsacxc AS A", "OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo");
@@ -139,7 +139,8 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             if ($ESTILO !== '') {
                 $this->db->where("A.Estilo LIKE '$ESTILO'", null, false);
             }
-            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->group_by('OP.ControlT');
+            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->group_by('OP.ControlT')
+                    ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
             return $this->db->get()->result();
         } catch (Exception $exc) {
