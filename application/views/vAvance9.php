@@ -496,9 +496,8 @@
                 HoldOn.close();
             });
         } else {
-            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
-                Control.focus().select();
-            });
+            onNotifyOld('<span class="fa fa-check"></span>', 'DEBE DE ESPECIFICAR UN CONTROL', 'danger');
+            Control.focus().select();
         }
     }
 
@@ -516,7 +515,7 @@
                                 ManoDeOB.val(r.CostoMO);
                                 Fraccion.val(r.Fraccion);
                                 FraccionDes.val(r.FRACCION_DES);
-                                console.log('Avance9/getUltimoAvanceXControl', data);
+//                                console.log('Avance9/getUltimoAvanceXControl', data);
                                 $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                                     if (data.length > 0) {
                                         SigAvance.val(data[0].Departamento);
@@ -557,9 +556,8 @@
             }).always(function () {
             });
         } else {
-            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
-                Control.focus().select();
-            });
+            onNotifyOld('<span class="fa fa-check"></span>', 'DEBE DE ESPECIFICAR UN CONTROL', 'danger');
+            Control.focus().select();
         }
     }
 
@@ -627,7 +625,7 @@
                 } else {
                     onBeep(2);
                     Avance.ajax.reload();
-                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN O AÚN NO SE HA REGISTRADO UN RETORNO DE MATERIAL AL ALMACEN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
+                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
                         Control.focus().select();
                         btnAceptar.attr('disabled', true)
                     });
