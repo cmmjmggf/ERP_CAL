@@ -452,8 +452,12 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 if (isset($CORTADORES[$k + 1])) {
                     $pdf->AddPage();
                     $pdf->SetAutoPageBreak(true, 6);
+
+                    $anchos = array(35, 40, 8, 10, 10, 35, 40, 8, 10, 10);
+                    $aligns = array('L', 'L', 'L', 'L', 'L');
                     $pdf->SetTextColor(0, 0, 0);
                     $pdf->SetFont('Calibri', 'B', 10);
+
                     $base = 6;
                     $alto_celda = 4;
                     /* ANCHO DESPUÉS DE LOS MARGENES = 259, ES DE 215, PERO SON 10 DE MARGEN IZQ Y 10 DE MARGEN DER */
@@ -486,17 +490,19 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pdf->SetX(200);
                     $pdf->Cell(69, $alto_celda, utf8_decode("Página " . $pdf->PageNo()), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
-                    $pdf->SetX(40);
-                    $pdf->Cell(90, $alto_celda, utf8_decode("Cons ord.produ"), $bordes/* BORDE */, 0/* SALTO */, 'R');
-                    $pdf->SetX(130);
-                    $pdf->Cell(45, $alto_celda, utf8_decode("Consumo"), $bordes/* BORDE */, 0/* SALTO */, 'R');
-                    $pdf->SetX(175);
-                    $pdf->Cell(30, $alto_celda, utf8_decode("Consumo real"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                    $pdf->SetFont('Calibri', 'B', 8);
+                    $pdf->SetY(18);
+                    $pdf->SetX(120);
+                    $pdf->Cell(25, $alto_celda, utf8_decode("Cons ord.prod"), 1/* BORDE */, 0/* SALTO */, 'C');
+                    $pdf->SetX(145);
+                    $pdf->Cell(60, $alto_celda, utf8_decode("Consumo"), 1/* BORDE */, 0/* SALTO */, 'C');
                     $pdf->SetX(205);
-                    $pdf->Cell(64, $alto_celda, utf8_decode("Pesos"), $bordes/* BORDE */, 1/* SALTO */, 'C');
+                    $pdf->Cell(22, $alto_celda, utf8_decode("Consumo real"), 1/* BORDE */, 0/* SALTO */, 'C');
+                    $pdf->SetX(227);
+                    $pdf->Cell(42, $alto_celda, utf8_decode("Pesos $"), 1/* BORDE */, 1/* SALTO */, 'C');
                     $bordes = 1;
                     $pdf->SetFont('Calibri', 'B', 8);
-                    $pdf->SetY($pdf->GetY() + .5);
+                    $pdf->SetY($pdf->GetY());
                     $base = 10;
                     $pdf->SetX($base);
                     $pdf->Cell(15, $alto_celda, utf8_decode("Control"), $bordes/* BORDE */, 0/* SALTO */, 'C');
