@@ -24,7 +24,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                 <div class="row justify-content-center" align="center">
                     <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
-                    <h4> Fracciones de este empleado</h4>
+                    <h5> FRACCIONES DE ESTE EMPLEADO</h5>
                 </div>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div id="ManoDeObra" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row" style="border-radius: 5px;">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h4>Mano de obra</h4>
+                            <h5>MANO DE OBRA</h5>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="custom-control custom-checkbox">
@@ -99,7 +99,7 @@
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2" disabled="">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Fecha</label>
@@ -110,6 +110,7 @@
                         <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control form-control-sm numeric" maxlength="3">
                         <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
                     </div>
+                    <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Control</label>
                         <input type="text" id="Control" name="Control" class="form-control form-control-sm numeric" maxlength="10">
@@ -146,17 +147,16 @@
                     <div class="col-12 my-1">
                         <hr>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                        <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
+                        <div class="w-100"></div>
+                        <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                        <input type="text" id="EstatusAvance" name="EstatusAvance" readonly="" class="form-control form-control-sm d-none" style="text-align: center">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <h4 class="text-info">Pago de nómina</h4>
+                        <p class="text-info font-weight-bold" style="color : #3F51B5 !important;">PAGO DE NÓMINA</p>
                         <div id="DiasPagoDeNomina" class="row"></div>
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                        <h4 class="text-danger">Estatus actual del avance</h4>
-                        <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm" style="text-align: center">
-                    </div>
+                    </div> 
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
         </div>
@@ -179,6 +179,7 @@
             Pares = pnlTablero.find("#Pares"),
             SigAvance = pnlTablero.find("#Avance"),
             EstatusAvance = pnlTablero.find("#EstatusAvance"),
+            estatus_de_avance = pnlTablero.find("span.estatus_de_avance"),
             ManoDeOB = pnlTablero.find("#ManoDeOB"),
             Fraccion = pnlTablero.find("#Fraccion"),
             FraccionDes = pnlTablero.find("#FraccionDes"),
@@ -454,6 +455,7 @@
                         if (data.length > 0) {
                             SigAvance.val(data[0].Departamento);
                             EstatusAvance.val(data[0].DepartamentoT);
+                            estatus_de_avance.text(data[0].DepartamentoT);
                             var d = new Date();
                             var n = d.getDay();
                             var stf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
@@ -519,6 +521,7 @@
                                     if (data.length > 0) {
                                         SigAvance.val(data[0].Departamento);
                                         EstatusAvance.val(data[0].DepartamentoT);
+                                        estatus_de_avance.text(data[0].DepartamentoT);
                                         var d = new Date();
                                         var n = d.getDay();
                                         var stf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
@@ -612,7 +615,7 @@
         });
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
-            console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
+//            console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
             var dt = JSON.parse(data);
             if (data !== undefined && data.length > 0) {
                 if (dt.AVANZO > 0) {
