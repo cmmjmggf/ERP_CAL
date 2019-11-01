@@ -149,7 +149,7 @@ class OrdenDeProduccion extends CI_Controller {
                             ->join('series AS S', 'P.Serie = S.Clave', 'left')
                             ->join('lineas AS L', 'E.Linea = L.Clave', 'left')
                             ->join('controles AS CT', 'CT.PedidoDetalle = P.Clave', 'left')
-                            ->join('ordendeproduccion AS OP', 'OP.Pedido = P.Clave  AND OP.PedidoDetalle = P.Clave', 'left')
+                            ->join('ordendeproduccion AS OP', 'ON OP.ControlT = P.Control ', 'left')
                             ->where('P.Maquila', $x['MAQUILA'])
                             ->where('P.Semana', $x['SEMANA'])
                             ->where('P.Ano', $x['ANO'])
@@ -324,7 +324,7 @@ class OrdenDeProduccion extends CI_Controller {
                 /* MOVER ESTATUS EN CASO DE MAQUILAS 2,3,4,5...99 */
                 if (intval($v->Maquila) > 1) {
                     /*
-                     * CUANDO LOS TRAEN DE UNA MAQUILA QUE NO ES LA 1 (UNO): SE DEBEN DE PROCESAR A ENSUELADO 
+                     * CUANDO LOS TRAEN DE UNA MAQUILA QUE NO ES LA 1 (UNO): SE DEBEN DE PROCESAR A ENSUELADO
                      * 140 = ENSUELADO
                      */
 
@@ -387,10 +387,8 @@ class OrdenDeProduccion extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("IFNULL(SUM(PD.Pares),0) AS PARES", false)->from('pedidox AS PD')
-                    ->join('clientes AS CL', 'CL.Clave = PD.Cliente', 'left')
-                    ->join('series AS S', 'PD.Serie = S.Clave')
                     ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
-                    ->join('ordendeproduccion AS OP', 'OP.Pedido = PD.Clave  AND OP.PedidoDetalle = PD.Clave', 'left')
+                    ->join('ordendeproduccion AS OP', 'ON OP.ControlT = PD.Control', 'left')
                     ->where('PD.Control <> 0 AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
                     ->where('CT.Estatus', 'A');
             if ($x["ANIO"] !== '') {
@@ -405,7 +403,7 @@ class OrdenDeProduccion extends CI_Controller {
                 $this->db->where('PD.Semana', $x["SEMANA"]);
             }
             $sql = $this->db->get();
-//                PRINT $this->db->last_query();
+            //PRINT $this->db->last_query();
             print json_encode($sql->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
