@@ -201,6 +201,7 @@ class CerrarProg extends CI_Controller {
                             ));
                             $Control = $Y . $S . $M . $C;
                             $this->db->set('Control', $Control)
+                                    ->set('stsavan', 1) 
                                     ->set('FechaProduccion', Date('Y-m-d h:i:s'))
                                     ->set('FechaProg', Date('Y-m-d h:i:s'))
                                     ->where('Estilo', $v->Estilo)

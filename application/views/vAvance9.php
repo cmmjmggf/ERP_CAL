@@ -570,7 +570,7 @@
     }
 
     function onClearMO() {
-        Control.val('');
+        Control.val("");
         Estilo.val('');
         Pares.val('');
         SigAvance.val('');
@@ -614,7 +614,7 @@
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
 //            console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
-            var dt = JSON.parse(data);
+            var dt = JSON.parse(data); 
             if (data !== undefined && data.length > 0) {
                 if (dt.AVANZO > 0) {
                     Avance.ajax.reload();

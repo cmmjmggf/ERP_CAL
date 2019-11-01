@@ -247,7 +247,8 @@ class Avance9 extends CI_Controller {
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPARTAMENTO'],
                 "anio" => $xXx['ANIO']);
-
+            $msj = "";
+            $pifo_contador = 0;
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
 //exit(0);
@@ -337,14 +338,26 @@ class Avance9 extends CI_Controller {
                                         ->get()->result();
                         $data["fraccion"] = $v->NUMERO_FRACCION;
                         if ($check_fraccion[0]->EXISTE <= 0) {
-                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-                            $this->db->insert('fracpagnomina', $data);
+                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
+
                             if (intval($v->NUMERO_FRACCION) === 100) {
-                                print '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO"}';
+                                $this->db->insert('fracpagnomina', $data);
+                                $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
+                            }
+                            if ($pifo_contador === 0 && count($FRACCIONES) == 2) {
+                                $msj .= ",";
+                                $pifo_contador = 1;
+                            }
+                            if ($pifo_contador >= 1 && count($FRACCIONES) >= 3) {
+                                $msj .= ",";
+                            }
+                            if (intval($v->NUMERO_FRACCION) === 99) {
+                                $data["avance_id"] = NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
                             }
                         } else {
-                            $this->db->insert('fracpagnomina', $data);
-                            print '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE"}';
+                            
                         }
                     } else {
                         /* RAYADO/RAYADO CONTADO => REBAJADO Y PERFORADO/REBAJADO */
@@ -370,7 +383,7 @@ class Avance9 extends CI_Controller {
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
-                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 8081;
                                 $this->db->insert('fracpagnomina', $data);
 
                                 /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
@@ -388,15 +401,15 @@ class Avance9 extends CI_Controller {
                                         ->update('avaprd');
 
                                 $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
+                                print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO  - LOOP FOREACH"}';
                             }
                         } else {
-                            print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE"}';
+                            print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE  - LOOP FOREACH"}';
                         }
                     }
                 } else {
                     /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
-                    print '{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS"}';
+                    print '{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}';
                 }
             }
             /* SI NO ESPECIFICO FRACCIONES ES PARA REBAJADO Y PERFORADO */
@@ -429,7 +442,7 @@ class Avance9 extends CI_Controller {
                         );
                         $this->db->insert('avance', $avance);
                         $id = $this->db->insert_id();
-                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 8080;
                         $this->db->insert('fracpagnomina', $data);
 
                         /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
@@ -447,11 +460,13 @@ class Avance9 extends CI_Controller {
                                 ->update('avaprd');
 
                         $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                        print '{"AVANZO":"1","FR":"103","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO"}';
+                        print '{"AVANZO":"1","FR":"103","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO - IF 80"}';
                     }
                 } else {
-                    print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE O EL EMPLEADO NO PERTENECE AL DEPTO 80 RAYADO"}';
+                    print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE O EL EMPLEADO NO PERTENECE AL DEPTO 80 RAYADO - IF 80"}';
                 }
+            } else {
+                print $msj;
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
