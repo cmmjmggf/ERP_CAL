@@ -29,9 +29,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-7">
-                            <label>Empleado</label>
-                            <select id="EmpleadoComida" name="EmpleadoComida" class="form-control form-control-sm required">
+                        <div class="col-2" >
+                            <label for="" >Empleado</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="EmpleadoComida" name="EmpleadoComida"   >
+                        </div>
+                        <div class="col-6">
+                            <label>-</label>
+                            <select id="sEmpleadoComida" name="sEmpleadoComida" class="form-control form-control-sm  ">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -124,6 +128,33 @@
                 onComprobarSemanasNomina($(this), ano.val());
             }
         });
+        mdlCapturaComidaEmpleados.find('#EmpleadoComida').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+                    $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarEmpleadoComidas', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlCapturaComidaEmpleados.find("#sEmpleadoComida")[0].selectize.addItem(txtempl, true);
+                            mdlCapturaComidaEmpleados.find('#NoComidas').focus().select();
+                        } else {
+                            swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                mdlCapturaComidaEmpleados.find('#EmpleadoComida').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlCapturaComidaEmpleados.find("#sEmpleadoComida").change(function () {
+            if ($(this).val()) {
+                mdlCapturaComidaEmpleados.find('#EmpleadoComida').val($(this).val());
+                mdlCapturaComidaEmpleados.find('#NoComidas').focus().select();
+            }
+        });
+
         mdlCapturaComidaEmpleados.find("#NoComidas").keydown(function (e) {
 
             if ($(this).val()) {
@@ -137,8 +168,11 @@
                 }
             }
         });
-
         mdlCapturaComidaEmpleados.on('shown.bs.modal', function () {
+            mdlCapturaComidaEmpleados.find("select").selectize({
+                hideSelected: false,
+                openOnFocus: false
+            });
             handleEnterDiv(mdlCapturaComidaEmpleados);
             validacionSelectPorContenedor(mdlCapturaComidaEmpleados);
             mdlCapturaComidaEmpleados.find("input").not('#SemComida').val("");
@@ -151,10 +185,7 @@
             mdlCapturaComidaEmpleados.find("#AnoComida").val(new Date().getFullYear());
             mdlCapturaComidaEmpleados.find('#PrecioComida').focus();
         });
-
         mdlCapturaComidaEmpleados.find('#btnEliminaComidaAnterior').on("click", function () {
-
-
             swal({
                 title: "ATENCIÓN",
                 text: "ESTÁS SEGURO?",
@@ -178,11 +209,7 @@
                         HoldOn.close();
                     });
                 }
-
             });
-
-
-
         });
 
         mdlCapturaComidaEmpleados.find('#btnAceptarComida').on("click", function () {
@@ -201,9 +228,10 @@
                 }).done(function (data, x, jq) {
                     EmpleadosConComidas.ajax.reload();
                     mdlCapturaComidaEmpleados.find("#NoComidas").val('');
-                    mdlCapturaComidaEmpleados.find("#EmpleadoComida")[0].selectize.clear(true);
+                    mdlCapturaComidaEmpleados.find("#EmpleadoComida").val('');
+                    mdlCapturaComidaEmpleados.find("#sEmpleadoComida")[0].selectize.clear(true);
                     HoldOn.close();
-                    mdlCapturaComidaEmpleados.find('#EmpleadoComida')[0].selectize.focus();
+                    mdlCapturaComidaEmpleados.find('#EmpleadoComida').val('').focus();
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x, y, z);
@@ -249,6 +277,14 @@
                 {"data": "Clave"},
                 {"data": "Nombre"},
                 {"data": "Comida"}
+            ],
+            "columnDefs": [
+                {
+                    "targets": [2],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
             ],
             language: lang,
             "autoWidth": true,
@@ -318,7 +354,7 @@
     function getEmpleadosComidasSelect() {
         $.getJSON(base_url + 'index.php/Empleados/getEmpleadosComidasSelect', ).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                mdlCapturaComidaEmpleados.find("#EmpleadoComida")[0].selectize.addOption({text: v.Clave + ' ' + v.Nombre, value: v.Clave});
+                mdlCapturaComidaEmpleados.find("#sEmpleadoComida")[0].selectize.addOption({text: v.Nombre, value: v.Clave});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);

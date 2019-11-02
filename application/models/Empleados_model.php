@@ -58,7 +58,7 @@ class Empleados_model extends CI_Model {
     public function getEmpleadosComidasSelect() {
         try {
             return $this->db->select("E.Numero AS Clave, "
-                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre "
                                     . " "
                                     . "  ", false)
                             ->from('empleados AS E')->where('E.altabaja', 1)->where('E.Comedor', 1)->order_by('Clave', 'ASC')->get()->result();

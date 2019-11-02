@@ -23,10 +23,20 @@
                     <label>Sem.</label>
                     <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" required="">
                 </div>
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                    <label for="" >-</label>
+                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize" >
                         <option value=""></option>
+                        <?php
+                        foreach ($this->db->select("CAST(E.numero AS SIGNED ) AS Clave, CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ", false)
+                                ->from('empleados AS E')->where_in('E.altabaja', '1')->order_by('Clave', 'ASC')->get()->result() as $k => $v) {
+                            print "<option value='{$v->Clave}'>{$v->Empleado}</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="col-6 col-xs-4 col-sm-2 col-lg-2 col-xl-2">
@@ -80,8 +90,30 @@
                 onComprobarSemanasNomina($(this), ano.val());
             }
         });
-        pnlTablero.find("#Empleado").change(function () {
+        pnlTablero.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+
+                    $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            pnlTablero.find('#NumAsistencias').focus().select();
+                        } else {
+                            swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
+                pnlTablero.find("#Empleado").val($(this).val());
                 pnlTablero.find("#NumAsistencias").focus();
             }
         });
@@ -191,7 +223,7 @@
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
                 //Valida que no esté cerrada la semana en nomina
-                pnlTablero.find("#Empleado")[0].selectize.focus();
+                pnlTablero.find("#Empleado").focus().select();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -229,29 +261,20 @@
             data: frm
         }).done(function (data) {
             pnlTablero.find("#NumAsistencias").val("");
-            pnlTablero.find("#Empleado")[0].selectize.clear(true);
-            pnlTablero.find("#Empleado")[0].selectize.focus();
+            pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+            pnlTablero.find("#Empleado").focus().val('');
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
 
     }
     function init() {
-        nuevo = true;
-        getEmpleados();
-        pnlTablero.find("#Ano").val(new Date().getFullYear()).focus().select();
-    }
-    function getEmpleados() {
-        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-        pnlTablero.find("#Empleado")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getEmpleados').done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
         });
+        nuevo = true;
+        pnlTablero.find("#Ano").val(new Date().getFullYear()).focus().select();
     }
 </script>
 <style>
@@ -266,7 +289,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

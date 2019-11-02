@@ -14,9 +14,7 @@
 
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <hr>
         <form id="frmCaptura">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-1 col-xl-1">
@@ -27,16 +25,38 @@
                     <label>Sem.</label>
                     <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" required="">
                 </div>
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
-                        <option value=""></option>
-                    </select>
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
-                    <label for="" >Concepto</label>
-                    <select id="Concepto" name="Concepto" class="form-control form-control-sm required">
+                    <label for="" >-</label>
+                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize" >
                         <option value=""></option>
+                        <?php
+                        foreach ($this->db->select("CAST(E.numero AS SIGNED ) AS Clave, CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ", false)
+                                ->from('empleados AS E')->where_in('E.altabaja', '1')->order_by('Clave', 'ASC')->get()->result() as $k => $v) {
+                            print "<option value='{$v->Clave}'>{$v->Empleado}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
+                    <label for="" >Concepto</label>
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="3" required=""  id="Concepto" name="Concepto"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                    <label for="" >-</label>
+                    <select id="sConcepto" name="sConcepto" class="form-control form-control-sm required NotSelectize">
+                        <option value=""></option>
+                        <?php
+                        foreach ($this->db->select("CAST(E.Clave AS SIGNED ) AS Clave, CONCAT(E.Descripcion) AS Concepto ", false)
+                                ->from('conceptosnomina AS E')
+                                ->where_in('E.Estatus', 'ACTIVO')->where_not_in('E.Clave', array('65', '70'))
+                                ->order_by('Clave', 'ASC')->get()->result() as $k => $v) {
+                            print "<option value='{$v->Clave}'>{$v->Concepto}</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
@@ -51,10 +71,7 @@
             </div>
         </form>
         <div class="w-100 my-2"></div>
-
-
         <legend >Detalle de conceptos variables</legend>
-
         <table id="tblConceptosVariables" class="table table-sm display" style="width:  100%;">
             <thead>
                 <tr>
@@ -93,7 +110,6 @@
     var tpConcepto = 0;
     var DeptoEmp = 0;
     $(document).ready(function () {
-        //validacionSelectPorContenedor(pnlTablero);
         init();
         pnlTablero.find("#Ano").keydown(function (e) {
             if (e.keyCode === 13)
@@ -111,7 +127,7 @@
                         pnlTablero.find("#Ano").focus();
                     });
                 } else {
-                    pnlTablero.find("#Sem").focus();
+                    pnlTablero.find("#Sem").focus().select();
                     // getRecords($(this).val(), pnlTablero.find("#Sem").val());
                 }
         });
@@ -121,13 +137,50 @@
                 onComprobarSemanasNomina($(this), ano.val());
             }
         });
-        pnlTablero.find("#Empleado").change(function () {
+        pnlTablero.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                var Ano = pnlTablero.find("#Ano").val();
+                var Sem = pnlTablero.find("#Sem").val();
+                if (txtempl) {
+
+                    $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            getRecords(txtempl, Ano, Sem);
+                            //Traemos la asistencia de ese empleado
+                            $.getJSON(master_url + 'getDiasAsistenciaXEmpleadoSem', {Empleado: txtempl, Ano: Ano, Sem: Sem}).done(function (data) {
+                                if (data.length > 0) {
+                                    diasAsistencia = data[0].numasistencias;
+                                } else {
+                                    diasAsistencia = 0;
+                                }
+                            }).fail(function (x) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                            getDepartamentoByEmpleado(txtempl);
+                            pnlTablero.find('#Concepto').focus().select();
+                        } else {
+                            swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sEmpleado").change(function () {
             var Ano = pnlTablero.find("#Ano").val();
             var Sem = pnlTablero.find("#Sem").val();
-            var Empleado = pnlTablero.find("#Empleado").val();
+            var Empleado = pnlTablero.find("#sEmpleado").val();
             if ($(this).val()) {
-                pnlTablero.find("#Concepto")[0].selectize.focus();
+                pnlTablero.find('#Concepto').focus().select();
                 getRecords(Empleado, Ano, Sem);
+                pnlTablero.find('#Empleado').val($(this).val());
                 $.getJSON(master_url + 'getDiasAsistenciaXEmpleadoSem', {Empleado: Empleado, Ano: Ano, Sem: Sem}).done(function (data) {
                     if (data.length > 0) {
                         diasAsistencia = data[0].numasistencias;
@@ -141,40 +194,39 @@
                 getDepartamentoByEmpleado($(this).val());
             }
         });
-        pnlTablero.find("#Concepto").change(function () {
-            var Concepto = pnlTablero.find("#Concepto").val();
+        pnlTablero.find('#Concepto').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtconc = $(this).val();
+                var Ano = pnlTablero.find("#Ano").val();
+                var Sem = pnlTablero.find("#Sem").val();
+                var Empleado = pnlTablero.find("#Empleado").val();
+                if (txtconc) {
+                    $.getJSON(master_url + 'onVerificarConcepto', {Concepto: txtconc}).done(function (data) {
+                        if (data.length > 0) {
+                            onVerificaConceptoCapturado(Empleado, Ano, Sem, txtconc)
+                            pnlTablero.find("#sConcepto")[0].selectize.addItem(txtconc, true);
+                            pnlTablero.find('#Concepto').focus().select();
+                            pnlTablero.find("#Importe").focus().select();
+                        } else {
+                            swal('ERROR', 'CONCEPTO NO VÁLIDO', 'warning').then((value) => {
+                                pnlTablero.find('#Concepto').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sConcepto").change(function () {
+            var Concepto = pnlTablero.find("#sConcepto").val();
             var Ano = pnlTablero.find("#Ano").val();
             var Sem = pnlTablero.find("#Sem").val();
             var Empleado = pnlTablero.find("#Empleado").val();
             if ($(this).val()) {
-                $.getJSON(master_url + 'onVerificarConceptoCapturado', {Concepto: Concepto, Ano: Ano, Sem: Sem, Empleado: Empleado}).done(function (data) {
-                    if (data.length > 0) {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "ESTE --> CONCEPTO <-- YA HA SIDO CAPTURADO",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            if (action) {
-                                pnlTablero.find("#Concepto")[0].selectize.clear(true);
-                                pnlTablero.find("#Concepto")[0].selectize.focus();
-                            }
-                        });
-                    } else {
-                        pnlTablero.find("#Importe").focus();
-                        //Obtener el tipo de concepto
-                        $.getJSON(master_url + 'getTipoConcepto', {Concepto: Concepto}).done(function (data) {
-                            tpConcepto = data[0].Tipo;
-                        }).fail(function (x) {
-                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                            console.log(x.responseText);
-                        });
-                    }
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                pnlTablero.find('#Concepto').val($(this).val());
+                onVerificaConceptoCapturado(Empleado, Ano, Sem, Concepto);
             }
         });
         pnlTablero.find("#Importe").keypress(function (e) {
@@ -283,6 +335,38 @@
         });
     });
 
+    function onVerificaConceptoCapturado(Empleado, Ano, Sem, Concepto) {
+        $.getJSON(master_url + 'onVerificarConceptoCapturado', {Concepto: Concepto, Ano: Ano, Sem: Sem, Empleado: Empleado}).done(function (data) {
+            if (data.length > 0) {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "ESTE --> CONCEPTO <-- YA HA SIDO CAPTURADO",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    if (action) {
+                        pnlTablero.find("#sConcepto")[0].selectize.clear(true);
+                        pnlTablero.find("#Concepto").val('').focus();
+                    }
+                });
+            } else {
+
+                pnlTablero.find("#Importe").focus().select();
+                //Obtener el tipo de concepto
+                $.getJSON(master_url + 'getTipoConcepto', {Concepto: Concepto}).done(function (data) {
+                    tpConcepto = data[0].Tipo;
+                }).fail(function (x) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+
     function onComprobarSemanasNomina(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
@@ -312,11 +396,11 @@
                             });
                         } else {//Sí está pero esta en estatus 1
                             //getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
-                            pnlTablero.find("#Empleado")[0].selectize.focus();
+                            pnlTablero.find("#Empleado").focus().select();
                         }
                     } else {//Aún no existe la nomina, podemos continuar
                         //getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
-                        pnlTablero.find("#Empleado")[0].selectize.focus();
+                        pnlTablero.find("#Empleado").focus().select();
                     }
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -369,9 +453,11 @@
             tpConcepto = 0;
             DeptoEmp = 0;
             pnlTablero.find("#Importe").val("");
-            pnlTablero.find("#Concepto")[0].selectize.clear(true);
-            pnlTablero.find("#Empleado")[0].selectize.clear(true);
-            pnlTablero.find("#Empleado")[0].selectize.focus();
+            pnlTablero.find("#sConcepto")[0].selectize.clear(true);
+            pnlTablero.find("#Concepto").val('');
+            pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+            pnlTablero.find("#Empleado").val('');
+            pnlTablero.find("#Empleado").focus().select();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
@@ -512,40 +598,16 @@
     }
 
     function init() {
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         nuevo = true;
         diasAsistencia = 0;
         tpConcepto = 0;
         DeptoEmp = 0;
-        getEmpleados();
-        getConceptos();
         pnlTablero.find("#Ano").val(new Date().getFullYear()).focus().select();
         getRecords('', '', '');
-    }
-
-    function getEmpleados() {
-        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-        pnlTablero.find("#Empleado")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getEmpleados').done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
-
-    function getConceptos() {
-        pnlTablero.find("#Concepto")[0].selectize.clear(true);
-        pnlTablero.find("#Concepto")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getConceptosNomina').done(function (data) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Concepto")[0].selectize.addOption({text: v.Concepto, value: v.Clave});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
     }
 
     function onEliminarDetalleByID(numemp, ano, sem, numcon) {

@@ -100,15 +100,17 @@
         });
 
         mdlCapturaCajaAhorroDirecta.find("#Empleado").change(function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
-            $.getJSON(base_url + 'index.php/Empleados/getEmpleadoByNumeroExt', {Numero: $(this).val()}).done(function (data) {
-                mdlCapturaCajaAhorroDirecta.find("#Importe").val(data[0].Ahorro);
-                HoldOn.close();
-            }).fail(function (x) {
-                HoldOn.close();
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            });
+            if ($(this).val()) {
+                HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+                $.getJSON(base_url + 'index.php/Empleados/getEmpleadoByNumeroExt', {Numero: $(this).val()}).done(function (data) {
+                    mdlCapturaCajaAhorroDirecta.find("#Importe").val(data[0].Ahorro).focus().select();
+                    HoldOn.close();
+                }).fail(function (x) {
+                    HoldOn.close();
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+            }
         });
 
         mdlCapturaCajaAhorroDirecta.find('#btnImprimir').on("click", function () {

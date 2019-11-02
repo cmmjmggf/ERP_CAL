@@ -44,6 +44,33 @@ class ConceptosVariablesNomina extends CI_Controller {
         }
     }
 
+    public function onVerificarEmpleadoComidas() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and comedor = 1 and altabaja = 1 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarEmpleado() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarConcepto() {
+        try {
+            $clave = $this->input->get('Concepto');
+            print json_encode($this->db->query("select clave from conceptosnomina where clave = $clave and estatus = 'ACTIVO' and clave not in ('65','70') ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarSemanaNominaCerrada() {
         try {
             print json_encode($this->ConceptosVariablesNomina_model->onVerificarSemanaNominaCerrada(
