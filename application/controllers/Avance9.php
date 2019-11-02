@@ -247,7 +247,7 @@ class Avance9 extends CI_Controller {
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPARTAMENTO'],
                 "anio" => $xXx['ANIO']);
-            $msj = "";
+            $msj = "[";
             $pifo_contador = 0;
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
@@ -342,19 +342,22 @@ class Avance9 extends CI_Controller {
 
                             if (intval($v->NUMERO_FRACCION) === 100) {
                                 $this->db->insert('fracpagnomina', $data);
+                                $l = new Logs("AVANCE 9 - FRACCION 100", "LE PAGO LA FRACCION 100 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
                                 $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
-                            }
-                            if ($pifo_contador === 0 && count($FRACCIONES) == 2) {
-                                $msj .= ",";
-                                $pifo_contador = 1;
-                            }
-                            if ($pifo_contador >= 1 && count($FRACCIONES) >= 3) {
-                                $msj .= ",";
                             }
                             if (intval($v->NUMERO_FRACCION) === 99) {
                                 $data["avance_id"] = NULL;
                                 $this->db->insert('fracpagnomina', $data);
+                                $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
                                 $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                            }
+                            if ($pifo_contador >= 1 && count($FRACCIONES) === 3) {
+                                $msj .= ",";
+                                $pifo_contador += 1;
+                            }
+                            if ($pifo_contador === 0 && count($FRACCIONES) <= 2) {
+                                $msj .= ",";
+                                $pifo_contador += 1;
                             }
                         } else {
                             
@@ -385,31 +388,33 @@ class Avance9 extends CI_Controller {
                                 $id = $this->db->insert_id();
                                 $data["avance_id"] = intval($id) >= 0 ? intval($id) : 8081;
                                 $this->db->insert('fracpagnomina', $data);
+                                $l = new Logs("AVANCE 9 - FRACCION 103", "LE PAGO LA FRACCION 103 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']} PARA RAYADO DEPTO 80.", $this->session);
 
                                 /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
                                 $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
                                         ->set('DeptoProduccion', 30)
-                                        ->where('Control', $x['CONTROL'])
+                                        ->where('Control', $xXx['CONTROL'])
                                         ->update('controles');
                                 $this->db->set('stsavan', 33)
                                         ->set('EstatusProduccion', 'CORTE')
                                         ->set('DeptoProduccion', 30)
-                                        ->where('Control', $x['CONTROL'])
+                                        ->where('Control', $xXx['CONTROL'])
                                         ->update('pedidox');
                                 $this->db->set('fec33', Date('Y-m-d h:i:s'))
                                         ->where('contped', $x['CONTROL'])
                                         ->update('avaprd');
 
                                 $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO  - LOOP FOREACH"}';
+                                print '[{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO Y PERFORADO  - LOOP FOREACH"}]';
                             }
                         } else {
-                            print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE  - LOOP FOREACH"}';
+                            print '[{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE  - LOOP FOREACH"}]';
+                            exit(0);
                         }
                     }
                 } else {
                     /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
-                    print '{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}';
+                    print '[{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}]';
                 }
             }
             /* SI NO ESPECIFICO FRACCIONES ES PARA REBAJADO Y PERFORADO */
@@ -423,7 +428,7 @@ class Avance9 extends CI_Controller {
                     $data["fraccion"] = 103;
                     $data["numfrac"] = 103;
                     /* FILTRADO POR FRACCION 103 REBAJAR PIEL Y EL CONTROL */
-                    $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = 103 AND FXE.Fraccion = 103 AND A.Control = {$xXx['CONTROL']}")->result();
+                    $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = 103  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
                     $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                     $data["preciofrac"] = $PXFC;
                     $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
@@ -448,15 +453,15 @@ class Avance9 extends CI_Controller {
                         /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */
                         $this->db->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
                                 ->set('DeptoProduccion', 30)
-                                ->where('Control', $x['CONTROL'])
+                                ->where('Control', $xXx['CONTROL'])
                                 ->update('controles');
                         $this->db->set('stsavan', 33)
-                                ->set('EstatusProduccion', 'CORTE')
+                                ->set('EstatusProduccion', 'REBAJADO Y PERFORADO')
                                 ->set('DeptoProduccion', 30)
-                                ->where('Control', $x['CONTROL'])
+                                ->where('Control', $xXx['CONTROL'])
                                 ->update('pedidox');
                         $this->db->set('fec33', Date('Y-m-d h:i:s'))
-                                ->where('contped', $x['CONTROL'])
+                                ->where('contped', $xXx['CONTROL'])
                                 ->update('avaprd');
 
                         $this->db->set('stsavan', 33)->where('Control', $xXx['CONTROL'])->update('pedidox');
@@ -464,8 +469,12 @@ class Avance9 extends CI_Controller {
                     }
                 } else {
                     print '{"AVANZO":"0","FR":"???","RETORNO":"SI", "MESSAGE":"FRACCION ???, NO GENERA AVANCE O EL EMPLEADO NO PERTENECE AL DEPTO 80 RAYADO - IF 80"}';
+                    exit(0);
                 }
             } else {
+                if (count($FRACCIONES) > 1) {
+                    $msj .= "]";
+                }
                 print $msj;
             }
         } catch (Exception $exc) {
