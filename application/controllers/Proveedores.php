@@ -70,6 +70,15 @@ class Proveedores extends CI_Controller {
         }
     }
 
+    public function getProveedorByClave() {
+        try {
+            $clave = $this->input->post('ID');
+            print json_encode($this->db->query("select * from proveedores where clave = '$clave' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getProveedorByID() {
         try {
             print json_encode($this->Proveedores_model->getProveedorByID($this->input->post('ID')));

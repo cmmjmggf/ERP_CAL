@@ -324,6 +324,7 @@
                 }
             }
         });
+
         /*CALLS*/
         getRecords();
         handleEnter();
@@ -402,6 +403,7 @@
                                 pnlDatos.find("[name='NombreF']").addClass("disabledForms");
                                 pnlDatos.find("[name='RFC']").addClass("disabledForms");
                             }
+
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         }).always(function () {
@@ -411,7 +413,58 @@
                         onNotify('<span class="fa fa-exclamation fa-lg"></span>', 'DEBE DE ELEGIR UN REGISTRO', 'danger');
                     }
                 });
+
+                pnlTablero.find("#tblProveedores_filter").find('input[type="search"]').on('keydown', function (e) {
+                    var input = $(this);
+                    if (input.val() && e.keyCode === 13) {
+
+                        HoldOn.open({
+                            theme: "sk-bounce",
+                            message: "CARGANDO DATOS..."
+                        });
+                        $.ajax({
+                            url: master_url + 'getProveedorByClave',
+                            type: "POST",
+                            dataType: "JSON",
+                            data: {
+                                ID: input.val()
+                            }
+                        }).done(function (data, x, jq) {
+                            if (data.length > 0) {
+                                pnlDatos.find("input").val("");
+                                $.each(pnlDatos.find("select"), function (k, v) {
+                                    pnlDatos.find("select")[k].selectize.clear(true);
+                                });
+                                $.each(data[0], function (k, v) {
+                                    pnlDatos.find("[name='" + k + "']").val(v);
+                                    if (pnlDatos.find("[name='" + k + "']").is('select')) {
+                                        pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
+                                    }
+                                });
+                                pnlTablero.addClass("d-none");
+                                pnlDatos.removeClass('d-none');
+                                pnlDatos.find("[name='Direccion']").focus().select();
+                                if (seg === 0) {
+                                    pnlDatos.find("[name='Clave']").addClass("disabledForms");
+                                    pnlDatos.find("[name='NombreI']").addClass("disabledForms");
+                                    pnlDatos.find("[name='NombreF']").addClass("disabledForms");
+                                    pnlDatos.find("[name='RFC']").addClass("disabledForms");
+                                }
+                            } else {
+                                swal('Atención', 'El registro no existe', 'warning').then((action) => {
+                                    input.val('').focus();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                    }
+                });
+
             }
+
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
