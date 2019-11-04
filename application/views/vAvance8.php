@@ -72,15 +72,15 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm ">
+                        <input type="text" id="Estilo" name="Estilo" readonly=""  class="form-control form-control-sm ">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" class="form-control form-control-sm  numeric">
+                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm  numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" class="form-control form-control-sm  numeric">
+                        <input type="text" id="Avance" name="Avance" readonly=""  class="form-control form-control-sm  numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
                         <button type="button" class="btn btn-success mt-3" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>

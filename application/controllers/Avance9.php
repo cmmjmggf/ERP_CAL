@@ -309,7 +309,7 @@ class Avance9 extends CI_Controller {
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
                                 'Hora' => Date('h:i:s a'),
-                                'Fraccion' => $v->NUMERO_FRACCION
+                                'Fraccion' => 102
                             );
                             $this->db->insert('avance', $avance);
                             $id = $this->db->insert_id();
@@ -368,7 +368,7 @@ class Avance9 extends CI_Controller {
                             $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                             ->from('fracpagnomina AS F')
                                             ->where('F.control', $xXx['CONTROL'])
-                                            ->where('F.numfrac', 103)
+                                            ->where('F.numfrac', 102)
                                             ->get()->result();
                             $data["fraccion"] = $v->NUMERO_FRACCION;
                             if ($check_fraccion[0]->EXISTE <= 0) {
@@ -382,7 +382,7 @@ class Avance9 extends CI_Controller {
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => $v->NUMERO_FRACCION
+                                    'Fraccion' => 103
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
@@ -417,22 +417,24 @@ class Avance9 extends CI_Controller {
                     print '[{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}]';
                 }
             }
-            /* SI NO ESPECIFICO FRACCIONES ES PARA REBAJADO Y PERFORADO */
+            /* SI NO ESPECIFICO FRACCIONES ES PARA RAYADO => REBAJADO Y PERFORADO */
             if (count($FRACCIONES) <= 0) {
                 if (intval($xXx['DEPARTAMENTO']) === 80) {
+                    /*REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO*/
                     $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                     ->from('fracpagnomina AS F')
                                     ->where('F.control', $xXx['CONTROL'])
-                                    ->where('F.numfrac', 103)
+                                    ->where('F.numfrac', 102)
                                     ->get()->result();
-                    $data["fraccion"] = 103;
-                    $data["numfrac"] = 103;
-                    /* FILTRADO POR FRACCION 103 REBAJAR PIEL Y EL CONTROL */
-                    $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = 103  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                    $data["fraccion"] = 102;
+                    $data["numfrac"] = 102;
+                    /* FILTRADO POR FRACCION 102 RAYADO */
+                    $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = 102  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
                     $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                     $data["preciofrac"] = $PXFC;
                     $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                     if ($check_fraccion[0]->EXISTE <= 0) {
+                        /*GENERAR UN AVANCE A REBAJADO Y PERFORADO*/
                         $avance = array(
                             'Control' => $xXx['CONTROL'],
                             'FechaAProduccion' => Date('d/m/Y'),
@@ -448,6 +450,7 @@ class Avance9 extends CI_Controller {
                         $this->db->insert('avance', $avance);
                         $id = $this->db->insert_id();
                         $data["avance_id"] = intval($id) >= 0 ? intval($id) : 8080;
+                        /*PAGAR LA FRACCION 102 AL EMPLEADO*/
                         $this->db->insert('fracpagnomina', $data);
 
                         /* ACTUALIZA A 30 REBAJADO Y PERFORADO, stsavan 33 */

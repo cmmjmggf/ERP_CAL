@@ -117,15 +117,15 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
+                        <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numeric">
+                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" class="form-control form-control-sm numeric">
+                        <input type="text" id="Avance" name="Avance"  readonly=""  class="form-control form-control-sm numeric">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
                         <button type="button" class="btn btn-info btn-sm mt-4 d-none" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
@@ -556,7 +556,7 @@
     }
 
     function onAvanzar() {
-        console.log('avanzando...')
+        console.log('avanzando...');
         var frac = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('fraccion');
         var fs = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('description');
         AVANO.NUMERO_EMPLEADO = NumeroDeEmpleado.val();
@@ -598,6 +598,7 @@
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
             var dt = JSON.parse(data), avanzo = 0;
+            console.log("# de objetos  = > ", dt);
             $.each(dt, function (k, v) {
                 console.log(k, v);
                 if (parseInt(v.AVANZO) === 1) {
@@ -622,6 +623,16 @@
                         }
                     }
                     return false;
+                }
+                if ($.isNumeric(v)) {
+                    if (parseInt(v) === 1) {
+                        Avance.ajax.reload();
+                        onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
+//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
+                        onClearMO();
+                        Control.focus().select();
+                        onBeep(5);
+                    }
                 }
             });
         }).fail(function (x, y, z) {

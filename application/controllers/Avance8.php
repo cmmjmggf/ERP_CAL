@@ -79,14 +79,14 @@ class Avance8 extends CI_Controller {
             $url = $this->uri;
             $x = $this->input->get();
             $this->db->select("F.ID, F.numeroempleado, F.maquila, "
-            . "F.control AS CONTROL, F.estilo AS ESTILO, "
-            . "F.numfrac AS FRAC, F.preciofrac AS PRECIO, "
-            . "F.pares AS PARES, CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL, "
-            . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
-            . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
-            . "F.registro, F.anio, F.avance_id", false)
-            ->from('fracpagnomina AS F')
-            ->where("F.numfrac IN(51, 70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606)", null, false);
+                            . "F.control AS CONTROL, F.estilo AS ESTILO, "
+                            . "F.numfrac AS FRAC, F.preciofrac AS PRECIO, "
+                            . "F.pares AS PARES, CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL, "
+                            . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
+                            . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
+                            . "F.registro, F.anio, F.avance_id", false)
+                    ->from('fracpagnomina AS F')
+                    ->where("F.numfrac IN(51, 70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606)", null, false);
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }
@@ -114,11 +114,18 @@ class Avance8 extends CI_Controller {
     public function onAgregarAvanceXEmpleadoYPagoDeNomina() {
         try {
             $x = $this->input->post();
+            $xXx = $this->input->post();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
             $mes = substr($fecha, 3, 2);
             $anio = substr($fecha, 6, 4);
 
+            $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
+            var_dump($FRACCIONES);
+            foreach ($FRACCIONES as $key => $value) {
+                print $value->NUMERO_FRACCION . "\n";
+            }
+            exit(0);
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
 
