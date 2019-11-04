@@ -163,6 +163,7 @@
                             pnlTablero.find('#Concepto').focus().select();
                         } else {
                             swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
                                 pnlTablero.find('#Empleado').focus().val('');
                             });
                         }
@@ -209,6 +210,7 @@
                             pnlTablero.find("#Importe").focus().select();
                         } else {
                             swal('ERROR', 'CONCEPTO NO VÁLIDO', 'warning').then((value) => {
+                                pnlTablero.find('#sConcepto')[0].selectize.clear(true);
                                 pnlTablero.find('#Concepto').focus().val('');
                             });
                         }

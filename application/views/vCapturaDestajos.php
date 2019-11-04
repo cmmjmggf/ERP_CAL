@@ -29,14 +29,16 @@
 
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <hr>
         <form id="frmCapturaDestajo">
             <div class="row">
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                    <label for="" >-</label>
+                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize" >
                         <option value=""></option>
                     </select>
                 </div>
@@ -59,7 +61,7 @@
                     <label>Control  <span class="badge badge-danger" style="font-size: 14px;" id="EstatusProduccion"></span></label>
                     <input type="text" id="Control" name="Control" maxlength="10" class="form-control form-control-sm numeric" required="">
                 </div>
-                <div class="col-6 col-xs-6 col-sm-2 col-lg-2 col-xl-2">
+                <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
                     <label>Estilo</label>
                     <input type="text" id="Estilo" name="Estilo"readonly="" class="form-control form-control-sm">
                 </div>
@@ -72,18 +74,22 @@
                     <input type="text" id="Pares" maxlength="4" name="Pares" class="form-control form-control-sm numeric required" required="">
                 </div>
 
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Fracción</label>
-                    <select id="Fraccion" name="Fraccion" class="form-control form-control-sm required">
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Fraccion" name="Fraccion"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+                    <label for="" >-</label>
+                    <select id="sFraccion" name="sFraccion" class="form-control form-control-sm required NotSelectize">
                         <option value=""></option>
                     </select>
                 </div>
 
-                <div class="col-6 col-xs-6 col-sm-3 col-lg-2 col-xl-1">
+                <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
                     <label>Precio</label>
                     <input type="text" id="Precio" name="Precio" maxlength="7" readonly="" class="form-control form-control-sm numbersOnly">
                 </div>
-                <div class="col-6 col-xs-6 col-sm-3 col-lg-2 col-xl-1">
+                <div class="col-6 col-xs-6 col-sm-2 col-lg-1 col-xl-1">
                     <label>Subtotal</label>
                     <input type="text" id="Subtotal" name="Subtotal" readonly="" class="form-control form-control-sm numbersOnly">
                 </div>
@@ -147,70 +153,128 @@
 
 
     $(document).ready(function () {
-        //validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToInputOnChange('#Empleado', '#Ano', pnlTablero);
-        setFocusSelectToInputOnChange('#Fraccion', '#btnAceptar', pnlTablero);
+        setFocusSelectToInputOnChange('#sEmpleado', '#Ano', pnlTablero);
+        setFocusSelectToInputOnChange('#sFraccion', '#btnAceptar', pnlTablero);
         init();
-        handleEnter();
-        pnlTablero.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Ano").val("");
-                    pnlTablero.find("#Ano").focus();
-                });
-            } else {
-                getRecords($(this).val(), pnlTablero.find("#Sem").val());
-            }
-        });
-        pnlTablero.find("#Sem").keydown(function (e) {
+        pnlTablero.find("#Ano").keypress(function (e) {
             if (e.keyCode === 13) {
-                var ano = pnlTablero.find("#Ano");
-                onComprobarSemanasNomina($(this), ano.val());
+                var empleado = pnlTablero.find('#Empleado').val();
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: false,
+                        timer: 1000
+                    }).then((action) => {
+                        pnlTablero.find("#Ano").val("");
+                        pnlTablero.find("#Ano").focus();
+                    });
+                } else {
+                    getRecords($(this).val(), pnlTablero.find("#Sem").val(), empleado);
+                    pnlTablero.find("#Sem").focus().select();
+                }
             }
         });
-        pnlTablero.find("#Empleado").change(function () {
+        pnlTablero.find("#Sem").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var ano = pnlTablero.find("#Ano");
+                    onComprobarSemanasNominaNormal($(this), ano.val());
+                }
+            }
+        });
+        pnlTablero.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+
+                    $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            getDepartamentoByEmpleado(txtempl);
+                            pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                            pnlTablero.find("#Fraccion").val('');
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            pnlTablero.find('#Ano').focus().select();
+
+                        } else {
+                            swal('ERROR', 'EMPLEADO INEXISTENTE, DADO DE BAJA O NO ES DESTAJISTA', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
+                pnlTablero.find('#Empleado').val($(this).val());
                 getDepartamentoByEmpleado($(this).val());
                 pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                FraccionesNomina.column(1).search('^' + $(this).val() + '$', true, false).draw();
+                pnlTablero.find("#Fraccion").val('');
+                //FraccionesNomina.column(1).search('^' + $(this).val() + '$', true, false).draw();
+                pnlTablero.find('#Ano').focus().select();
             }
         });
-        pnlTablero.find("#Fraccion").change(function () {
-            var Fraccion = pnlTablero.find("#Fraccion").val();
-            var Control = pnlTablero.find("#Control").val();
+        pnlTablero.find("#Fecha").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    getSemanaByFecha($(this).val());
+                    Control.focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#Fraccion').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtfrac = $(this).val();
+                var estilo = pnlTablero.find("#Estilo").val();
+                if (txtfrac) {
+                    $.getJSON(master_url + 'onVerificarFraccion', {Fraccion: txtfrac, Estilo: estilo}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sFraccion")[0].selectize.addItem(txtfrac, true);
+                            var Empleado = pnlTablero.find("#Empleado").val();
+                            if (Empleado !== '') {
+
+                                getPrecioFraccion(txtfrac, estilo);
+                            } else {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "DEBES DE SELECCIONAR UN EMPLEADO",
+                                    icon: "warning",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                }).then((action) => {
+                                    if (action) {
+                                        pnlTablero.find("#Empleado").focus().select();
+                                    }
+                                });
+                            }
+                        } else {
+                            swal('ERROR', 'LA FRACCIÓN NO ES VÁLIDA PARA ESTE ESTILO', 'warning').then((value) => {
+                                pnlTablero.find('#sFraccion')[0].selectize.clear(true);
+                                pnlTablero.find('#Fraccion').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sFraccion").change(function () {
             var Empleado = pnlTablero.find("#Empleado").val();
             if (Empleado !== '') {
-                $.getJSON(master_url + 'onVerificarFraccionCapturada', {Fraccion: Fraccion, Control: Control, Empleado: Empleado}).done(function (data) {
-
-                    if (data.length > 0) {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "EL --> CONTROL/FRACCIÓN/EMPLEADO <-- YA HA SIDO CAPTURADO",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            if (action) {
-                                pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                                pnlTablero.find("#Fraccion")[0].selectize.focus();
-                            }
-                        });
-                    } else {
-                        var estilo = pnlTablero.find("#Estilo").val();
-                        getPrecioFraccion(pnlTablero.find("#Fraccion").val(), estilo);
-                    }
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                pnlTablero.find('#Fraccion').val($(this).val());
+                var estilo = pnlTablero.find("#Estilo").val();
+                getPrecioFraccion(pnlTablero.find("#sFraccion").val(), estilo);
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -220,25 +284,42 @@
                     closeOnEsc: false
                 }).then((action) => {
                     if (action) {
-                        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-                        pnlTablero.find("#Empleado")[0].selectize.focus();
+                        pnlTablero.find("#Empleado").focus().select();
                     }
                 });
             }
         });
-        pnlTablero.find("#Fecha").change(function () {
-            getSemanaByFecha($(this).val());
-        });
-        Control.change(function () {
-            if ($(this).val()) {
-                $.getJSON(master_url + 'getControl', {
-                    Control: $(this).val()
-                }).done(function (data) {
-                    if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-                        if (data[0].Depto === '270' && data[0].Depto !== '') {
+        Control.keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    $.getJSON(master_url + 'getControl', {
+                        Control: $(this).val()
+                    }).done(function (data) {
+                        if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
+                            if (data[0].Depto === '270' && data[0].Depto !== '') {
+                                swal({
+                                    title: "CONTROL CANCELADO POR EL CLIENTE",
+                                    text: "****MOTIVO EXTEMPORANEO****",
+                                    icon: "warning",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                }).then((action) => {
+                                    if (action) {
+                                        Control.val('').focus();
+                                    }
+                                });
+                            } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
+                                ParesPed = data[0].Pares;
+                                pnlTablero.find("#EstatusProduccion").html(data[0].Depto + '  ' + data[0].DeptoT);
+                                pnlTablero.find("#Estilo").val(data[0].Estilo);
+                                pnlTablero.find("#Color").val(data[0].Color);
+                                pnlTablero.find("#Pares").val(data[0].Pares).focus().select();
+                                getFraccionesByEstilo(data[0].Estilo);
+                            }
+                        } else { //Si el control no existe
                             swal({
-                                title: "CONTROL CANCELADO POR EL CLIENTE",
-                                text: "****MOTIVO EXTEMPORANEO****",
+                                title: "ATENCIÓN",
+                                text: "EL CONTROL NO EXISTE EN PRODUCCIÓN ",
                                 icon: "warning",
                                 closeOnClickOutside: false,
                                 closeOnEsc: false
@@ -247,43 +328,24 @@
                                     Control.val('').focus();
                                 }
                             });
-                        } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
-                            ParesPed = data[0].Pares;
-                            pnlTablero.find("#EstatusProduccion").html(data[0].Depto + '  ' + data[0].DeptoT);
-                            pnlTablero.find("#Estilo").val(data[0].Estilo);
-                            pnlTablero.find("#Color").val(data[0].Color);
-                            pnlTablero.find("#Pares").val(data[0].Pares).focus().select();
-                            getFraccionesByEstilo(data[0].Estilo);
                         }
-                    } else { //Si el control no existe
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "EL CONTROL NO EXISTE EN PRODUCCIÓN ",
-                            icon: "warning",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            if (action) {
-                                Control.val('').focus();
-                            }
-                        });
-                    }
-                });
-            } else {//Valida que no esté en blanco el campo
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES DE CAPTURAR UN # DE CONTROL ",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false
-                }).then((action) => {
-                    if (action) {
-                        Control.val('').focus();
-                    }
-                });
+                    });
+                } else {//Valida que no esté en blanco el campo
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBES DE CAPTURAR UN # DE CONTROL ",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        if (action) {
+                            Control.val('').focus();
+                        }
+                    });
+                }
             }
         });
-        pnlTablero.find("#Pares").keydown(function (e) {
+        pnlTablero.find("#Pares").keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) > parseInt(ParesPed)) {
 
@@ -299,7 +361,7 @@
                         }
                     });
                 } else {
-                    pnlTablero.find("#Fraccion")[0].selectize.focus();
+                    pnlTablero.find("#Fraccion").focus().select();
                 }
             }
         });
@@ -368,8 +430,7 @@
                             closeOnEsc: false
                         }).then((action) => {
                             if (action) {
-                                pnlTablero.find("#Empleado")[0].selectize.clear(true);
-                                pnlTablero.find("#Empleado")[0].selectize.focus();
+                                pnlTablero.find("#Empleado").focus();
                             }
                         });
                     }
@@ -549,10 +610,11 @@
         });
     }
 
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaNormal(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
+                var empleado = pnlTablero.find('#Empleado').val();
                 //Valida que no esté cerrada la semana en nomina
                 $.getJSON(master_url + 'onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
                     if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
@@ -577,10 +639,12 @@
                                 }
                             });
                         } else {//Sí está pero esta en estatus 1
-                            getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
+                            getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val(), empleado);
+                            pnlTablero.find("#Fecha").focus();
                         }
                     } else {//Aún no existe la nomina, podemos continuar
-                        getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
+                        getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val(), empleado);
+                        pnlTablero.find("#Fecha").focus();
                     }
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -651,7 +715,8 @@
             pnlTablero.find("#Pares").val("");
             pnlTablero.find("#Precio").val("");
             pnlTablero.find("#Subtotal").val("");
-            pnlTablero.find("#Fraccion")[0].selectize.clear(true);
+            pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+            pnlTablero.find("#Fraccion").val('');
             pnlTablero.find("#EstatusProduccion").html('');
             pnlTablero.find("#Control").val('').focus();
 
@@ -661,8 +726,8 @@
 
     }
 
-    function getRecords(ano, sem) {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+    function getRecords(ano, sem, empleado) {
+        //HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblFraccionesNomina')) {
@@ -675,7 +740,7 @@
                 "url": master_url + 'getRecords',
                 "dataType": "json",
                 "type": 'GET',
-                "data": {Ano: ano, Sem: sem},
+                "data": {Ano: ano, Sem: sem, Empleado: empleado},
                 "dataSrc": ""
             },
             "columns": [
@@ -747,6 +812,10 @@
     }
 
     function init() {
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         nuevo = true;
         pCelula = 0;
         DeptoEmp = 0;
@@ -756,16 +825,15 @@
         pnlTablero.find("#Fecha").val(getToday());
         getSemanaByFecha(pnlTablero.find("#Fecha").val());
         pnlTablero.find("#Ano").val(new Date().getFullYear());
-
-        pnlTablero.find("#Empleado")[0].selectize.focus();
+        pnlTablero.find("#Empleado").focus();
     }
 
     function getEmpleados() {
-        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-        pnlTablero.find("#Empleado")[0].selectize.clearOptions();
+        pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+        pnlTablero.find("#sEmpleado")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getEmpleados').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
+                pnlTablero.find("#sEmpleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -774,11 +842,11 @@
     }
 
     function getFraccionesByEstilo(Estilo) {
-        pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-        pnlTablero.find("#Fraccion")[0].selectize.clearOptions();
+        pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+        pnlTablero.find("#sFraccion")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getFraccionesByEstilo', {Estilo: Estilo}).done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Fraccion")[0].selectize.addOption({text: v.Fraccion, value: v.Clave});
+                pnlTablero.find("#sFraccion")[0].selectize.addOption({text: v.Fraccion, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -791,9 +859,11 @@
             if (data.length > 0) {
                 pnlTablero.find("#Precio").val(data[0].Precio);
                 if (parseFloat(pCelula) > 0) {
-                    pnlTablero.find("#Subtotal").val((pCelula * data[0].Precio) * pnlTablero.find("#Pares").val());
+                    var subtot = (pCelula * data[0].Precio) * pnlTablero.find("#Pares").val();
+                    pnlTablero.find("#Subtotal").val(parseFloat(subtot).toFixed(2));
                 } else {
-                    pnlTablero.find("#Subtotal").val(data[0].Precio * pnlTablero.find("#Pares").val());
+                    var subtot = data[0].Precio * pnlTablero.find("#Pares").val();
+                    pnlTablero.find("#Subtotal").val(parseFloat(subtot).toFixed(2));
                 }
                 btnAceptar.focus();
             } else {
@@ -805,8 +875,8 @@
                     closeOnEsc: false
                 }).then((action) => {
                     if (action) {
-                        pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                        pnlTablero.find("#Fraccion")[0].selectize.focus();
+                        pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                        pnlTablero.find("#Fraccion").val('').focus();
                     }
                 });
             }
@@ -817,14 +887,17 @@
     }
 
     function getSemanaByFecha(fecha) {
+        var empleado = pnlTablero.find("#Empleado").val();
         $.getJSON(master_url + 'getSemanaByFecha', {Fecha: fecha}).done(function (data) {
             if (data.length > 0) {
                 pnlTablero.find("#Sem").val(data[0].sem);
                 $('#mdlRastreoControlNomina').find("#SemRastreo").val(data[0].sem);
                 sem_ini = data[0].sem;
-                getRecords(new Date().getFullYear(), data[0].sem);
+                getRecords(new Date().getFullYear(), data[0].sem, empleado);
             } else {
-                swal('ERROR', 'NO EXISTE SEMANA', 'info');
+                swal('ERROR', 'NO EXISTE SEMANA', 'info').then((action) => {
+                    pnlTablero.find("#Fecha").focus().val('');
+                });
             }
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

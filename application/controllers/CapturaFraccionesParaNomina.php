@@ -94,6 +94,25 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onVerificarFraccion() {
+        try {
+            $estilo = $this->input->get('Estilo');
+            $numfrac = $this->input->get('Fraccion');
+            print json_encode($this->db->query("select fraccion from fraccionesxestilo where fraccion = $numfrac and estilo = '$estilo' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarEmpleado() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarSemanaNominaCerrada() {
         try {
             print json_encode($this->CapturaFraccionesParaNomina_model->onVerificarSemanaNominaCerrada(
@@ -206,7 +225,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->CapturaFraccionesParaNomina_model->getRecords($this->input->get('Ano'), $this->input->get('Sem')));
+            print json_encode($this->CapturaFraccionesParaNomina_model->getRecords($this->input->get('Ano'), $this->input->get('Sem'), $this->input->get('Empleado')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

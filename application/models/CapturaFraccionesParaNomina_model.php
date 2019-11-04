@@ -80,7 +80,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
         }
     }
 
-    public function getRecords($Ano, $Sem) {
+    public function getRecords($Ano, $Sem, $Empl) {
         try {
             $this->db->select("ID, numeroempleado, semana, date_format(fecha,'%d/%m/%Y') as fecha, control, estilo ,numfrac, pares, "
                             . 'CONCAT(\'<span class="fa fa-times fa-lg" '
@@ -88,7 +88,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
                             . 'AS Eliminar'
                             . "")
                     ->from("fracpagnomina")
-                    ->where("anio", $Ano)->where("semana", $Sem);
+                    ->where("anio", $Ano)->where("semana", $Sem)->where("numeroempleado", $Empl);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -191,9 +191,9 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
 
     public function getFraccionesByEstilo($Estilo) {
         try {
-            return $this->db->select("CAST(P.Fraccion AS SIGNED ) AS Clave, CONCAT(P.Fraccion,' - ',IFNULL(F.Descripcion,'')) AS Fraccion ", false)
+            return $this->db->select("CAST(P.Fraccion AS SIGNED ) AS Clave, CONCAT(IFNULL(F.Descripcion,'')) AS Fraccion ", false)
                             ->from('fraccionesxestilo AS P')->join('fracciones F', 'ON F.Clave = P.Fraccion')
-                            ->where("P.Estilo", $Estilo)->where_in('P.Estatus', 'ACTIVO')->order_by('Clave', 'ASC')
+                            ->where("P.Estilo", $Estilo)->where_in('P.Estatus', 'ACTIVO')->order_by('Fraccion', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -203,8 +203,8 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
     public function getEmpleados() {
         try {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
-                                    . "CONCAT(E.numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
-                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Clave', 'ASC')
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
+                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

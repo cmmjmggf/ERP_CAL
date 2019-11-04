@@ -9,9 +9,7 @@
 
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <hr>
         <form id="frmCaptura">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-1 col-xl-1">
@@ -26,15 +24,23 @@
                     <label>Sem Nom</label>
                     <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" required="">
                 </div>
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                    <label for="" >-</label>
+                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize" >
                         <option value=""></option>
                     </select>
                 </div>
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Fracción</label>
-                    <select id="Fraccion" name="Fraccion" class="form-control form-control-sm required">
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Fraccion" name="Fraccion"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
+                    <label for="" >-</label>
+                    <select id="sFraccion" name="sFraccion" class="form-control form-control-sm required NotSelectize">
                         <option value=""></option>
                     </select>
                 </div>
@@ -60,8 +66,8 @@
     var DeptoEmp = 0;
     $(document).ready(function () {
         init();
-        setFocusSelectToInputOnChange('#Fraccion', '#btnAceptar', pnlTablero);
-        setFocusSelectToSelectOnChange('#Empleado', '#Fraccion', pnlTablero);
+        setFocusSelectToInputOnChange('#sFraccion', '#btnAceptar', pnlTablero);
+        setFocusSelectToInputOnChange('#sEmpleado', '#Fraccion', pnlTablero);
         pnlTablero.find("#Ano").keydown(function (e) {
             if (e.keyCode === 13)
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -99,10 +105,61 @@
                 }
             }
         });
-        pnlTablero.find("#Empleado").change(function () {
+        pnlTablero.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+
+                    $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            getDepartamentoByEmpleado(txtempl);
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            pnlTablero.find("#Fraccion").focus().select();
+
+                        } else {
+                            swal('ERROR', 'EMPLEADO INEXISTENTE, DADO DE BAJA O NO ES DESTAJISTA', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
-                pnlTablero.find("#Fraccion")[0].selectize.focus();
+                pnlTablero.find('#Empleado').val($(this).val());
+                pnlTablero.find("#Fraccion").focus().select();
                 getDepartamentoByEmpleado($(this).val());
+            }
+        });
+        pnlTablero.find('#Fraccion').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtfrac = $(this).val();
+                if (txtfrac) {
+                    $.getJSON(master_url + 'onVerificarFraccion', {Fraccion: txtfrac}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sFraccion")[0].selectize.addItem(txtfrac, true);
+                            btnAceptar.focus();
+                        } else {
+                            swal('ERROR', 'LA FRACCIÓN NO ES VÁLIDA', 'warning').then((value) => {
+                                pnlTablero.find('#sFraccion')[0].selectize.clear(true);
+                                pnlTablero.find('#Fraccion').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sFraccion").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Fraccion').val($(this).val());
             }
         });
         btnAceptar.click(function () {
@@ -201,11 +258,11 @@
                             });
                         } else {//Sí está pero esta en estatus 1
                             //getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
-                            pnlTablero.find("#Empleado")[0].selectize.focus();
+                            pnlTablero.find("#Empleado").focus().select();
                         }
                     } else {//Aún no existe la nomina, podemos continuar
                         //getRecords(pnlTablero.find("#Ano").val(), pnlTablero.find("#Sem").val());
-                        pnlTablero.find("#Empleado")[0].selectize.focus();
+                        pnlTablero.find("#Empleado").focus().select();
                     }
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -284,9 +341,9 @@
                         },
                         afterClose: function () {
                             DeptoEmp = 0;
-                            pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                            pnlTablero.find("#Empleado")[0].selectize.clear(true);
-                            pnlTablero.find("#Empleado")[0].selectize.focus();
+                            pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                            pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+                            pnlTablero.find("#Empleado").val('').focus();
                         },
                         iframe: {
                             // Iframe template
@@ -316,6 +373,10 @@
     }
 
     function init() {
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         nuevo = true;
         DeptoEmp = 0;
         getEmpleados();
@@ -325,11 +386,11 @@
     }
 
     function getEmpleados() {
-        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-        pnlTablero.find("#Empleado")[0].selectize.clearOptions();
+        pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+        pnlTablero.find("#sEmpleado")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getEmpleados').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
+                pnlTablero.find("#sEmpleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -338,11 +399,11 @@
     }
 
     function getFracciones() {
-        pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-        pnlTablero.find("#Fraccion")[0].selectize.clearOptions();
+        pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+        pnlTablero.find("#sFraccion")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getFracciones').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Fraccion")[0].selectize.addOption({text: v.Fraccion, value: v.Clave});
+                pnlTablero.find("#sFraccion")[0].selectize.addOption({text: v.Fraccion, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -384,8 +445,10 @@
                         Fraccion: numfrac
                     }
                 }).done(function (data, x, jq) {
-                    pnlTablero.find("#Fraccion")[0].selectize.clear(true);
-                    pnlTablero.find("#Empleado")[0].selectize.clear(true);
+                    pnlTablero.find("#Empleado").val('');
+                    pnlTablero.find("#Fraccion").val('');
+                    pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                    pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
                     swal('ATENCIÓN', 'REGISTRO ELIMINADO', 'success');
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
@@ -424,7 +487,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

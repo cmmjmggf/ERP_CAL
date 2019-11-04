@@ -5,11 +5,12 @@
                 <legend class="float-left">Consulta de Entradas/Salidas por Año-Semana-Empleado</legend>
             </div>
             <div class="col-sm-4" align="right">
-                <button type="button" class="btn btn-warning" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
+                <button type="button" class="btn btn-warning btn-sm" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
                     <i class="fa fa-trash"></i> BUSCAR OTRO EMPLEADO
                 </button>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
                 <label>Empleado</label>
@@ -86,20 +87,28 @@
             }
         });
 
-        pnlTablero.find("#Sem").keyup(function (e) {
-            if ($(this).val()) {
-                Registros.column(6).search('^' + $(this).val() + '$', true, false).draw();
+        pnlTablero.find("#Sem").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    Registros.column(6).search('^' + $(this).val() + '$', true, false).draw();
+                } else {
+                    Registros.search('').columns().search('').draw();
+                }
             }
         });
 
-        pnlTablero.find("#Ano").keyup(function (e) {
-            if ($(this).val() && $(this).val().length > 3) {
-                Registros.column(7).search('^' + $(this).val() + '$', true, false).draw();
+        pnlTablero.find("#Ano").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    Registros.column(7).search('^' + $(this).val() + '$', true, false).draw();
+                } else {
+                    Registros.search('').columns().search('').draw();
+                }
             }
         });
 
         pnlTablero.find("#Sem").change(function () {
-            if (parseInt($(this).val()) < 1 || parseInt($(this).val()) > 52 || $(this).val() === '') {
+            if (parseInt($(this).val()) < 1 || parseInt($(this).val()) > 53 || $(this).val() === '') {
                 swal({
                     title: "ATENCIÓN",
                     text: "SEMANA INCORRECTA",
@@ -266,7 +275,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

@@ -44,6 +44,24 @@ class CapturaNominaFraccionesSemanal extends CI_Controller {
         }
     }
 
+    public function onVerificarFraccion() {
+        try {
+            $numfrac = $this->input->get('Fraccion');
+            print json_encode($this->db->query("select clave from fracciones where clave = $numfrac and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarEmpleado() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarSemanaNominaCerrada() {
         try {
             print json_encode($this->CapturaNominaFraccionesSemanal_model->onVerificarSemanaNominaCerrada(

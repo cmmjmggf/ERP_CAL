@@ -39,7 +39,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="col-6 col-xs-4 col-sm-2 col-lg-2 col-xl-2">
+                <div class="col-6 col-xs-4 col-sm-2 col-lg-1 col-xl-1">
                     <label>No. Asistencias</label>
                     <input type="text" id="NumAsistencias" name="NumAsistencias" maxlength="1" class="form-control form-control-sm numbersOnly" required="">
                 </div>
@@ -101,6 +101,7 @@
                             pnlTablero.find('#NumAsistencias').focus().select();
                         } else {
                             swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
                                 pnlTablero.find('#Empleado').focus().val('');
                             });
                         }

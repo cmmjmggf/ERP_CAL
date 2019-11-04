@@ -44,6 +44,15 @@ class CapturaOtrosParaBanco extends CI_Controller {
         }
     }
 
+    public function onVerificarEmpleado() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEmpleados() {
         try {
             print json_encode($this->CapturaOtrosParaBanco_model->getEmpleadosGeneral());

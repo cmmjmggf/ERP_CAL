@@ -10,22 +10,24 @@
                 </button>
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <hr>
         <form id="frmCaptura">
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                     <label>Año</label>
                     <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" required="">
                 </div>
-                <div class="col-12 col-sm-6 col-md-4 col-xl-4">
-                    <label>Sem.<span class="badge badge-info">97-Caja ahorro// 98-Aguinaldos //99-Vacaciones</span></label>
+                <div class="col-12 col-sm-6 col-md-4 col-xl-1">
+                    <label>Sem</label>
                     <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" required="">
                 </div>
-                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm required" >
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
+                    <label for="" >-</label>
+                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize" >
                         <option value=""></option>
                     </select>
                 </div>
@@ -41,6 +43,13 @@
                     <button type="button" id="btnAceptar" class="btn btn-primary btn-sm">
                         <span class="fa fa-check"></span> ACEPTAR
                     </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-1 col-xl-1">
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-xl-4">
+                    <label><span class="badge badge-info">97-Caja ahorro// 98-Aguinaldos //99-Vacaciones</span></label>
                 </div>
             </div>
         </form>
@@ -108,7 +117,7 @@
                 if (e.keyCode === 13) {
                     if (parseInt($(this).val()) > 96 && parseInt($(this).val()) < 100) {
                         //obtener getRecors de la semana, año
-                        pnlTablero.find("#Empleado")[0].selectize.focus();
+                        pnlTablero.find("#Empleado").focus().select();
                         getRecords(pnlTablero.find("#Ano").val(), $(this).val());
                     } else {
                         swal({
@@ -125,8 +134,32 @@
                     }
                 }
         });
-        pnlTablero.find("#Empleado").change(function () {
+        pnlTablero.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+
+                    $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            pnlTablero.find("#ImporteD").focus().select();
+
+                        } else {
+                            swal('ERROR', 'EMPLEADO INEXISTENTE', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
+                pnlTablero.find('#Empleado').val($(this).val());
                 pnlTablero.find("#ImporteD").focus();
             }
         });
@@ -181,8 +214,8 @@
             DetalleOtrosBanco.ajax.reload();
             pnlTablero.find("#ImporteD").val("");
             pnlTablero.find("#ImporteF").val("");
-            pnlTablero.find("#Empleado")[0].selectize.clear(true);
-            pnlTablero.find("#Empleado")[0].selectize.focus();
+            pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+            pnlTablero.find("#Empleado").val('').focus();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
@@ -304,6 +337,10 @@
     }
 
     function init() {
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         nuevo = true;
         getEmpleados();
         pnlTablero.find("#Ano").val(new Date().getFullYear()).focus().select();
@@ -311,11 +348,11 @@
     }
 
     function getEmpleados() {
-        pnlTablero.find("#Empleado")[0].selectize.clear(true);
-        pnlTablero.find("#Empleado")[0].selectize.clearOptions();
+        pnlTablero.find("#sEmpleado")[0].selectize.clear(true);
+        pnlTablero.find("#sEmpleado")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getEmpleados').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
+                pnlTablero.find("#sEmpleado")[0].selectize.addOption({text: v.Empleado, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

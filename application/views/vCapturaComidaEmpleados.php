@@ -138,6 +138,7 @@
                             mdlCapturaComidaEmpleados.find('#NoComidas').focus().select();
                         } else {
                             swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                mdlCapturaComidaEmpleados.find('#sEmpleadoComida')[0].selectize.clear(true);
                                 mdlCapturaComidaEmpleados.find('#EmpleadoComida').focus().val('');
                             });
                         }

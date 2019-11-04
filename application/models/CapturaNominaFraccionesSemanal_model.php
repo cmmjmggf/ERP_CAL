@@ -72,8 +72,8 @@ class CapturaNominaFraccionesSemanal_model extends CI_Model {
     public function getEmpleados() {
         try {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
-                                    . "CONCAT(E.numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
-                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Clave', 'ASC')
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
+                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -83,8 +83,8 @@ class CapturaNominaFraccionesSemanal_model extends CI_Model {
     public function getFracciones() {
         try {
             return $this->db->select("CAST(E.Clave AS SIGNED ) AS Clave, "
-                                    . "CONCAT(E.Clave,' ',E.Descripcion) AS Fraccion ")
-                            ->from("fracciones AS E")->where("E.Estatus", "ACTIVO")->order_by('Clave', 'ASC')
+                                    . "CONCAT(E.Descripcion) AS Fraccion ")
+                            ->from("fracciones AS E")->where("E.Estatus", "ACTIVO")->order_by('Fraccion', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -66,8 +66,8 @@ class CapturaOtrosParaBanco_model extends CI_Model {
     public function getEmpleadosGeneral() {
         try {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
-                                    . "CONCAT(E.numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
-                            ->from("empleados AS E")->where("E.altabaja", "1")->order_by('Clave', 'ASC')
+                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
+                            ->from("empleados AS E")->where("E.altabaja", "1")->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
