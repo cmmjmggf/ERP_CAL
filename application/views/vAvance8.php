@@ -56,7 +56,7 @@
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numeric" maxlength="2">
+                        <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm  numeric" maxlength="2">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <label>Fecha</label>
@@ -310,8 +310,14 @@
         Anio.val(new Date().getFullYear());
 
         Control.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && Control.val()) {
                 onAgregarAvance();
+            } else {
+                Estilo.val('');
+                Pares.val('');
+                SigAvance.val('');
+                DiasPagoDeNomina.find("input").val(0);
+                DiasPagoDeNomina.find("#txtTotal").val(0);
             }
         });
 
@@ -706,7 +712,7 @@
         SigAvance.val('');
         $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
             $(v)[0].checked = false;
-        });    
+        });
     }
 
     function onAvanzar() {

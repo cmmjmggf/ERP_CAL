@@ -178,7 +178,7 @@ class Avance9 extends CI_Controller {
             switch ($url->segment(2)) {
                 case 1:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "96,99,100"));
-                    $this->db->where("FACN.numfrac IN(96,99,100) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    $this->db->where("FACN.numfrac IN(96,99,100,102) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
                     break;
                 case 2:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"));

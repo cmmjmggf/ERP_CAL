@@ -99,7 +99,7 @@
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numeric" maxlength="2">
+                        <input type="text" id="Semana" name="Semana"  readonly=""  class="form-control form-control-sm numeric" maxlength="2">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Fecha</label>
@@ -224,7 +224,7 @@
         Anio.val(new Date().getFullYear());
 
         Control.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && Control.val()) {
                 if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
                     console.log('avance 1');
                     onAgregarAvance(true);
@@ -232,6 +232,12 @@
                     console.log('avance 2');
                     onAgregarAvanceSinFraccion();
                 }
+            } else {
+                Estilo.val('');
+                Pares.val('');
+                SigAvance.val('');
+                DiasPagoDeNomina.find("input").val(0);
+                DiasPagoDeNomina.find("#txtTotal").val(0);
             }
         });
 
@@ -354,7 +360,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
-                d.FRACCIONES = "96,99,100";
+                d.FRACCIONES = "96,99,100,102";
             }
         };
         $.fn.dataTable.ext.errMode = 'throw';
