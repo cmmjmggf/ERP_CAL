@@ -425,7 +425,15 @@
         getRecords(1);
         getEstados();
         getDepartamentos();
+
+
         pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').addClass('selectNotEnter');
+
+        pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').on('keydown', function (e) {
+            if ($(this).val() && e.keyCode === 13) {
+                onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
+            }
+        });
         NumeroEmpleado.unbind();
         NumeroEmpleado.on('keydown keyup', function (e) {
             onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
@@ -922,7 +930,11 @@
                 });
                 getEmpleadoByID(EX);
             } else {
-                input.focus().select();
+                onBeep(2);
+                HoldOn.close();
+                iMsg('EMPLEADO NO ENCONTRADO O ESTA DADO DE BAJA. HAGA CLIC EN "VER TODOS" Y REALICE LA BUSQUEDA NUEVAMENTE.', 'w', function () {
+                    input.focus().select();
+                });
             }
         } else {
             if (input.val().length <= 0) {

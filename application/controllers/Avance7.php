@@ -10,6 +10,40 @@ class Avance7 extends CI_Controller {
         $this->load->library('session')->model('Avance7_model', 'avm')->helper('jaspercommand_helper');
     }
 
+    public function index() {
+        if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->load->view('vEncabezado');
+            switch ($this->session->userdata["TipoAcceso"]) {
+                case 'SUPER ADMINISTRADOR':
+                    $this->load->view('vEncabezado')->view('vAvance7')->view('vFooter');
+                    break;
+                case 'DESTAJOS':
+                    switch ($this->session->USERNAME) {
+                        case '777777':
+                            /*
+                             *
+                             * 60 FOLEAR CORTE CALIDAD
+                             * 70 TROQUELAR PLANTILLA
+                             * 71 TROQUELAR MUESTRA
+                             * 72 TROQUELAR NORMA
+                             * 75 TROQUELAR CORTE
+                             * 204 EMPALMAR P'LASER
+                             * 337 RECORTAR FORRO LASER
+                             *
+                             * */
+                            $this->load->view('vEncabezado')->view('vAvance7')->view('vFooter');
+                            break;
+                    }
+                    break;
+                default :
+                    $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+                    break;
+            }
+        } else {
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
     public function getXLS() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -208,4 +242,5 @@ class Avance7 extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
 }

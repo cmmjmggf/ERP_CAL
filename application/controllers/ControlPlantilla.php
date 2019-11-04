@@ -18,26 +18,27 @@ class ControlPlantilla extends CI_Controller {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'VENTAS':
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vMenuClientes')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'FACTURACION':
-                    $this->load->view('vMenuFacturacion');
+                    $this->load->view('vMenuFacturacion')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
+                    break;
+                default :
+                    $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
                     break;
             }
-
-            $this->load->view('vFondo')->view('vControlPlantilla')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

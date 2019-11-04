@@ -11,6 +11,52 @@ class Avance8 extends CI_Controller {
         $this->load->library('session')->model('Avance8_model', 'axepn');
     }
 
+    public function index() {
+        if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->load->view('vEncabezado');
+            switch ($this->session->userdata["TipoAcceso"]) {
+                case 'SUPER ADMINISTRADOR':
+                    $this->load->view('vEncabezado')->view('vAvance8')->view('vFooter');
+                    break;
+                case 'DESTAJOS':
+                    switch ($this->session->USERNAME) {
+                        case '888888':
+                            /*
+                             *
+                             * 51 ENTRETELADO
+                             * 70 TROQUELAR PLANTILLA
+                             * 60 FOLEAR CORTE Y CALIDAD
+                             * 62 FOLEADO MUESTRA
+                             * 24 DOMAR
+                             * 78 LIMPIAR LASER
+                             * 204 EMPALMAR P/LASER
+                             * 205 APLICA PEGA.P/LASER
+                             * 198 LOTEAR P/LASER
+                             * 127 ENTRETELAR MUESTRA
+                             * 80 CONTAR TAREA
+                             * 397 JUNTAR SUELA A CORTE
+                             * 34 PEGAR TRANSFER
+                             * 106 DOBLILLADO
+                             * 306 FORRAR PLATAFORMA
+                             * 337 RECORTAR FORRO LASER
+                             * 333 PONER CASCO PESPUNTE
+                             * 502 PEGADO DE SUELA
+                             * 72 TROQUELAR NORMA
+                             *
+                             * */
+                            $this->load->view('vEncabezado')->view('vAvance8')->view('vFooter');
+                            break;
+                    }
+                    break;
+                default :
+                    $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+                    break;
+            }
+        } else {
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
     public function getSemanaByFecha() {
         try {
             print json_encode($this->axepn->getSemanaByFecha(Date('d/m/Y')));

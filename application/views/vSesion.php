@@ -120,6 +120,8 @@
             console.log(e.keyCode);
             if (e.keyCode === 13) {
                 btnIngresar.trigger('click');
+                btnIngresar.attr('disabled', true);
+                btnOlvidasteContrasena.attr('disabled', true);
             }
         });
         btnIngresar.keypress(function (e) {
@@ -133,9 +135,14 @@
         });
 
         Usuario.on('keydown keyup', function (e) {
-            if (parseInt(Usuario.val()) === 999999 || parseInt(Usuario.val()) === 888888 || parseInt(Usuario.val()) === 777777) {
-                Contrasena.val(Usuario.val());
-                btnIngresar.trigger('click');
+            if ($.isNumeric(Usuario.val())) {
+                var usr = parseInt(Usuario.val());
+                if (usr === 999999 || usr === 888888 || usr === 777777) {
+                    Contrasena.val(Usuario.val());
+                    btnIngresar.trigger('click');
+                    btnIngresar.attr('disabled', true);
+                    btnOlvidasteContrasena.attr('disabled', true);
+                }
             }
         });
 
