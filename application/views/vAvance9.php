@@ -229,7 +229,7 @@
                     console.log('avance 1');
                     onAgregarAvance(true);
                 } else {
-                    console.log('avance 2')
+                    console.log('avance 2');
                     onAgregarAvanceSinFraccion();
                 }
             }
@@ -602,27 +602,28 @@
                 console.log(k, v);
                 if (parseInt(v.AVANZO) === 1) {
                     avanzo = 1;
+
+                    if (data !== undefined && data.length > 0) {
+                        if (avanzo > 0) {
+                            Avance.ajax.reload();
+                            onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
+//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
+                            onClearMO();
+                            Control.focus().select();
+                            onBeep(5);
+//                    });
+                        } else {
+                            onBeep(2);
+                            Avance.ajax.reload();
+                            swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true)
+                            });
+                        }
+                    }
                     return false;
                 }
             });
-            if (data !== undefined && data.length > 0) {
-                if (avanzo > 0) {
-                    Avance.ajax.reload();
-                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
-//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
-                    onClearMO();
-                    Control.focus().select();
-                    onBeep(5);
-//                    });
-                } else {
-                    onBeep(2);
-                    Avance.ajax.reload();
-                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', true)
-                    });
-                }
-            }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
         }).always(function () {

@@ -55,8 +55,20 @@ class Avance8 extends CI_Controller {
              * 
              * DE LO CONTRARIO ARROJAR UN MENSAJE
              */
-            $EMPLEADO_VALIDO = $this->axepn->onComprobarDeptoXEmpleado($this->input->post('EMPLEADO'));
-            print json_encode($EMPLEADO_VALIDO);
+//            $EMPLEADO_VALIDO = $this->axepn->onComprobarDeptoXEmpleado($this->input->post('EMPLEADO'));
+//            print json_encode($EMPLEADO_VALIDO);
+            $x = $this->input->post();
+            print json_encode($this->db->select("CONCAT(E.PrimerNombre,' ',"
+                                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
+                                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
+                                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
+                                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
+                                    ->from('empleados AS E')->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
+                                    ->where('E.Numero', $x['EMPLEADO'])
+                                    ->where_in('E.AltaBaja', array(1))
+                                    ->where_in('E.FijoDestajoAmbos', array(2, 3))
+                                    ->where_in('E.DepartamentoFisico', array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */))
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -64,18 +76,26 @@ class Avance8 extends CI_Controller {
 
     public function getFraccionesPagoNomina() {
         try {
-            header('Content-type: application/json');
             $url = $this->uri;
-            $x = $this->input;
-            $xXx = $this->input->get();
-            switch ($url->segment(2)) {
-                case 1:
-                    print json_encode($this->axepn->getFraccionesPagoNomina($xXx['EMPLEADO'], "96,99,100"));
-                    break;
-                case 2:
-                    print json_encode($this->axepn->getFraccionesPagoNomina($xXx['EMPLEADO'], "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"));
-                    break;
+            $x = $this->input->get();
+            $this->db->select("F.ID, F.numeroempleado, F.maquila, "
+            . "F.control AS CONTROL, F.estilo AS ESTILO, "
+            . "F.numfrac AS FRAC, F.preciofrac AS PRECIO, "
+            . "F.pares AS PARES, CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL, "
+            . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
+            . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
+            . "F.registro, F.anio, F.avance_id", false)
+            ->from('fracpagnomina AS F')
+            ->where("F.numfrac IN(51, 70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606)", null, false);
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }
+            if ($x['EMPLEADO'] === '') {
+                $this->db->limit(25);
+            }
+            $dtm = $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -183,8 +203,8 @@ class Avance8 extends CI_Controller {
                     $this->db->set('fec40', Date('Y-m-d h:i:s'))
                             ->where('contped', $x['CONTROL'])
                             ->update('avaprd');
-                    
-                    /*SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO*/
+
+                    /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
                     $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
                                             . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
                                             . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
@@ -217,7 +237,7 @@ class Avance8 extends CI_Controller {
                                 ->update('avaprd');
                     }
                 } else if (intval($x['NUMERO_FRACCION']) === 397) {
-                    /* AVANCE 397 ENSUELADO*/
+                    /* AVANCE 397 ENSUELADO */
                     $avance = array(
                         'Control' => $Control,
                         'FechaAProduccion' => Date('d/m/Y'),
@@ -243,7 +263,7 @@ class Avance8 extends CI_Controller {
                     $this->db->set('fec55', Date('Y-m-d h:i:s'))->where('contped', $x['CONTROL'])
                             ->update('avaprd');
                 } else {
-                    /*SI NO ES LA FRACCION 51 = ENTRETELADO, NI LA FRACCION 397 = ENSUELADO, REVISA QUE FRACCION LE PERTENECE CONFORME AL DEPARTAMENTO*/
+                    /* SI NO ES LA FRACCION 51 = ENTRETELADO, NI LA FRACCION 397 = ENSUELADO, REVISA QUE FRACCION LE PERTENECE CONFORME AL DEPARTAMENTO */
                     $check_depto = $this->db->select('E.Numero AS EMPLEADO, E.DepartamentoFisico AS DEPTO, D.Descripcion AS DEPTODES', false)
                                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                                     ->where('E.Numero', $x['NUMERO_EMPLEADO'])
@@ -314,7 +334,7 @@ class Avance8 extends CI_Controller {
 //                            $avance['DepartamentoT'] = $check_depto[0]->DEPTODES/* FOLEADO */;
 //                            $this->db->insert('avance', $avance);
 //                            $id = $this->db->insert_id();
-                            
+
                             /* ACTUALIZA A 60 LASER, stsavan ? */
 //                            $this->db->set('EstatusProduccion', 'LASER')->set('DeptoProduccion', 60)
 //                                    ->where('Control', $x['CONTROL'])

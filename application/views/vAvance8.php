@@ -21,7 +21,7 @@
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                <h4>Fracciones de este empleado</h4>
+                <h4>FRACCIONES DE ESTE EMPLEADO</h4>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -45,16 +45,26 @@
                 <div class="row">
 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
+                        <?php
+                        $F = Date('d/m/Y');
+                        $YYYY = Date('Y');
+                        $SP = $this->db->select('SP.Sem AS Semana, SP.FechaIni AS FEINI, SP.FechaFin AS FEFI', false)
+                                        ->from('semanasproduccion AS SP')
+                                        ->where("STR_TO_DATE('{$F}', \"%d/%m/%Y\") "
+                                                . "BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") "
+                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") AND SP.Ano = {$YYYY}")
+                                        ->get()->result();
+                        ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numeric" maxlength="2" disabled="">
+                        <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numeric" maxlength="2">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm  ">
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm  " readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" name="Departamento" class="form-control form-control-sm numeric " maxlength="3">
+                        <input type="text" id="Departamento" name="Departamento" readonly="" class="form-control form-control-sm numeric " maxlength="3">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
@@ -207,13 +217,7 @@
                                     <input type="checkbox" class="custom-control-input" id="chk607" description="ARMAR PLANTILLA ADORNO" fraccion="607">
                                     <label class="custom-control-label" for="chk607">607 Armar plantilla adorno</label>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
-                                    <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
-                                </div>
-                            </div>
+                            </div> 
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk606" description="ARMAR PLANT AD MUEST" fraccion="606">
@@ -295,6 +299,8 @@
     // IIFE - Immediately Invoked Function Expression
     $(document).ready(function () {
 
+        Semana.val('<?php print $SP[0]->Semana; ?>');
+        Fecha.val('<?php print $F; ?>');
         handleEnter();
 
         btnAceptar.click(function () {
@@ -343,7 +349,7 @@
                     message: 'Revisando si el empleado cumple con los requisitos...'
                 });
                 Avance.ajax.reload();
-                $.post('<?php print base_url('comprobar_numero_de_empleado_ocho') ?>', {EMPLEADO: NumeroDeEmpleado.val()})
+                $.post('<?php print base_url('Avance8/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()})
                         .done(function (data) {
                             var dt = JSON.parse(data);
                             if (dt.length > 0) {
@@ -352,11 +358,11 @@
                                 Depto.val(r.DEPTO);
                                 NombreEmpleado.val(r.NOMBRE_COMPLETO);
                                 Departamento.val(r.DEPTOCTO);
-                                $.getJSON('<?php print base_url('obtener_semana_fecha_ocho'); ?>').done(function (data) {
+                                $.getJSON('<?php print base_url('Avance8/getSemanaByFecha'); ?>').done(function (data) {
                                     var rr = data[0];
                                     Semana.val((data.length > 0) ? rr.Sem : '');
                                     Fecha.val((data.length > 0) ? rr.Fecha : '');
-                                    $.getJSON('<?php print base_url('obtener_pagos_de_nomina_x_empleado_ocho'); ?>',
+                                    $.getJSON('<?php print base_url('Avance8/getPagosXEmpleadoXSemana'); ?>',
                                             {EMPLEADO: NumeroDeEmpleado.val(), SEMANA: Semana.val(), FRACCIONES: "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"}).done(function (a) {
                                         if (a.length > 0) {
                                             var b = a[0];
@@ -461,7 +467,7 @@
             }
         };
         xoptions.ajax = {
-            "url": '<?php print base_url('obtener_avances_pago_nomina/2'); ?>',
+            "url": '<?php print base_url('Avance8/getFraccionesPagoNomina'); ?>',
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
@@ -476,72 +482,221 @@
         var cks = pnlTablero.find("input[type='checkbox']:checked");
         var fra = cks.attr('fraccion');
         console.log("FRACCION * ", fra);
-        if (cks.length > 0) {
-            if (Control.val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Espere...'
-                });
-                $.getJSON('<?php print base_url('obtener_estilo_pares_por_control_fraccion_ocho'); ?>', {CR: Control.val(), FR: fra}).done(function (a) {
-                    if (a.length > 0) {
-                        var r = a[0];
-                        Estilo.val(r.Estilo);
-                        Pares.val(r.Pares);
-                        ManoDeOB.val(r.CostoMO);
-                        $.getJSON('<?php print base_url('obtener_ultimo_avance_por_control_ocho'); ?>', {C: Control.val()}).done(function (b) {
-                            if (b.length > 0) {
-                                SigAvance.val(b[0].Departamento);
-                                EstatusAvance.val(b[0].DepartamentoT);
-                                var d = new Date();
-                                var n = d.getDay();
-                                DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
-                                var tt = 0;
-                                ndias.forEach(function (i) {
-                                    tt += parseFloat(pnlTablero.find("#txt" + i).val());
-                                });
-                                DiasPagoDeNomina.find("#txtTotal").val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
-                                onAvanzar();
-                            }
-                        }).fail(function (x, y, z) {
-                            console.log(x.responseText);
-                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-                        }).always(function () {
-                            HoldOn.close();
-                        });
-                    } else {
-                        swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN SELECCIONADA', 'error').then((value) => {
-                            Control.focus().select();
-                            Estilo.val('');
-                            Pares.val('');
-                            SigAvance.val('');
-                        });
-                    }
-                }).fail(function (x, y, z) {
-                    console.log(x.responseText);
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-                }).always(function () {
-                    HoldOn.close();
-                });
-            } else {
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
-                    Control.focus().select();
+
+
+        var fracciones = [], xfracciones = [];
+        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+            if ($(v)[0].checked) {
+                xfracciones.push({
+                    NUMERO_FRACCION: parseInt($(v).attr('fraccion')),
+                    DESCRIPCION: $(v).attr('description')
                 });
             }
-        } else {
-            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FRACCIÓN', 'error').then((value) => {
-                Control.focus().select();
+        });
+
+        if (pnlTablero.find("#chk606")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 606,
+                DESCRIPCION: "ARMAR PLANT AD MUESTRA"
             });
         }
+        if (pnlTablero.find("#chk34")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 34,
+                DESCRIPCION: "PEGAR TRANSFER"
+            });
+        }
+        if (pnlTablero.find("#chk607")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 607,
+                DESCRIPCION: "ARMAR PLANTILLA ADORNO"
+            });
+        }
+        if (pnlTablero.find("#chk72")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 72,
+                DESCRIPCION: "TROQUELAR NORMA"
+            });
+        }
+        if (pnlTablero.find("#chk502")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 502,
+                DESCRIPCION: "PEGADO DE SUELA"
+            });
+        }
+        if (pnlTablero.find("#chk333")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 333,
+                DESCRIPCION: "PONER CASCO A PESPUNTE"
+            });
+        }
+        if (pnlTablero.find("#chk337")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 337,
+                DESCRIPCION: "RECORTAR FORRO LASER"
+            });
+        }
+
+        if (pnlTablero.find("#chk306")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 306,
+                DESCRIPCION: "FORRAR PLATAFORMA"
+            });
+        }
+        if (pnlTablero.find("#chk106")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 106,
+                DESCRIPCION: "DOBLILLADO"
+            });
+        }
+        /*AVANZA EL CONTROL A ENSUELADO*/
+        if (pnlTablero.find("#chk397")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 397,
+                DESCRIPCION: "JUNTAR SUELA A CORTE"
+            });
+        }
+        if (pnlTablero.find("#chk80")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 80,
+                DESCRIPCION: "CONTAR TAREA"
+            });
+        }
+        if (pnlTablero.find("#chk127")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 127,
+                DESCRIPCION: "ENTRETELAR MUESTRA"
+            });
+        }
+        if (pnlTablero.find("#chk198")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 198,
+                DESCRIPCION: "LOTEAR PARA LASER"
+            });
+        }
+        if (pnlTablero.find("#chk205")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 205,
+                DESCRIPCION: "APLICA PEGA PARA LASER"
+            });
+        }
+        if (pnlTablero.find("#chk204")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 204,
+                DESCRIPCION: "EMPALMAR PARA LASER"
+            });
+        }
+        if (pnlTablero.find("#chk78")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 78,
+                DESCRIPCION: "LIMPIA LASER"
+            });
+        }
+        if (pnlTablero.find("#chk24")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 24,
+                DESCRIPCION: "DOMAR"
+            });
+        }
+        if (pnlTablero.find("#chk62")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 62,
+                DESCRIPCION: "SERIGRAFIA FORRO"
+            });
+        }
+        if (pnlTablero.find("#chk61")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 61,
+                DESCRIPCION: "FOLEADO MUESTRA"
+            });
+        }
+        if (pnlTablero.find("#chk60")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 60,
+                DESCRIPCION: "FOLEAR CORTE Y CALIDAD"
+            });
+        }
+        if (pnlTablero.find("#chk70")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 70,
+                DESCRIPCION: "TROQUELAR PLANTILLA"
+            });
+        }
+        /*AVANZA EL CONTROL A ENTRETELADO A ALMACEN DE CORTE*/
+        if (pnlTablero.find("#chk51")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 51,
+                DESCRIPCION: "ENTRETELADO"
+            });
+        }
+
+        console.log(fracciones, xfracciones);
+//        if (cks.length > 0) {
+//            if (Control.val()) {
+//                HoldOn.open({
+//                    theme: 'sk-rect',
+//                    message: 'Espere...'
+//                });
+//                $.getJSON('<?php print base_url('Avance8/onComprobarFraccionXEstilo'); ?>', {CR: Control.val(), FR: fra}).done(function (a) {
+//                    if (a.length > 0) {
+//                        var r = a[0];
+//                        Estilo.val(r.Estilo);
+//                        Pares.val(r.Pares);
+//                        ManoDeOB.val(r.CostoMO);
+//                        $.getJSON('<?php print base_url('Avance8/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (b) {
+//                            if (b.length > 0) {
+//                                SigAvance.val(b[0].Departamento);
+//                                EstatusAvance.val(b[0].DepartamentoT);
+//                                var d = new Date();
+//                                var n = d.getDay();
+//                                DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
+//                                var tt = 0;
+//                                ndias.forEach(function (i) {
+//                                    tt += parseFloat(pnlTablero.find("#txt" + i).val());
+//                                });
+//                                DiasPagoDeNomina.find("#txtTotal").val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
+//                                onAvanzar();
+//                            }
+//                        }).fail(function (x, y, z) {
+//                            console.log(x.responseText);
+//                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+//                        }).always(function () {
+//                            HoldOn.close();
+//                        });
+//                    } else {
+//                        swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN SELECCIONADA', 'error').then((value) => {
+//                            Control.focus().select();
+//                            Estilo.val('');
+//                            Pares.val('');
+//                            SigAvance.val('');
+//                        });
+//                    }
+//                }).fail(function (x, y, z) {
+//                    console.log(x.responseText);
+//                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+//                }).always(function () {
+//                    HoldOn.close();
+//                });
+//            } else {
+//                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
+//                    Control.focus().select();
+//                });
+//            }
+//        } else {
+//            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FRACCIÓN', 'error').then((value) => {
+//                Control.focus().select();
+//            });
+//        }
     }
 
     var fracciones = [51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337];
 
     function onCheckFraccion(e) {
-        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
-            if ($(e)[0].id !== $(v)[0].id) {
-                $(v)[0].checked = false;
-            }
-        });
+//        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+//            if ($(e)[0].id !== $(v)[0].id) {
+//                $(v)[0].checked = false;
+//            }
+//        });
     }
 
     function onClearMO() {
@@ -551,14 +706,7 @@
         SigAvance.val('');
         $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
             $(v)[0].checked = false;
-        });
-        Semana.val('');
-        Fecha.val('');
-        Departamento.val('');
-        ndias.forEach(function (i) {
-            pnlTablero.find("#txt" + i).val('');
-        });
-        pnlTablero.find("#txtTotal").val('');
+        });    
     }
 
     function onAvanzar() {
@@ -575,7 +723,7 @@
         AVANO.DEPARTAMENTO = Departamento.val();
         AVANO.ANIO = pnlTablero.find("#Anio").val();
 
-        $.post('<?php print base_url('avance_add_avance_x_empleado_add_nomina_ocho') ?>', AVANO).done(function (c) {
+        $.post('<?php print base_url('Avance8/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (c) {
             var dt = JSON.parse(c);
             if (c !== undefined && c.length > 0) {
                 if (dt.AVANZO > 0) {
