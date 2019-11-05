@@ -63,6 +63,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnExcel"><span class="fa fa-file-excel"> </span> EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -78,6 +79,38 @@
                 mdlAvanceProduccion.find("select")[k].selectize.clear(true);
             });
             mdlAvanceProduccion.find('#Ano').focus();
+        });
+        mdlAvanceProduccion.find('#btnExcel').on("click", function () {
+
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlAvanceProduccion.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesProduccionJasper/onReporteAvanceNormalExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    window.open(data, '_blank');
+                    onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlAvanceProduccion.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+
         });
         mdlAvanceProduccion.find('#btnImprimir').on("click", function () {
             mdlAvanceProduccion.find('#btnImprimir').attr('disabled', true);

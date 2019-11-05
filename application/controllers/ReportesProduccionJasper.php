@@ -466,6 +466,26 @@ class ReportesProduccionJasper extends CI_Controller {
         print json_encode($reports);
     }
 
+    public function onReporteAvanceNormalExcel() {
+
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["asem"] = $this->input->post('aSem');
+        $parametros["amaq"] = $this->input->post('aMaq');
+        $parametros["maq"] = $this->input->post('Maq');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\excel\avancePorDeptoExcel.jasper');
+        $jc->setFilename('REPORTE_AVANCE_DEPTO_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteAvanceNormalDepto() {
 
 
