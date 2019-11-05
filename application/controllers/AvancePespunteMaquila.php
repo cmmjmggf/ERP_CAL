@@ -48,7 +48,13 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function getMaquilas() {
         try {
-            print json_encode($this->apm->getMaquilas());
+//            print json_encode($this->apm->getMaquilas());
+            print json_encode($this->db->select("CAST(M.Clave AS SIGNED) AS CLAVE, "
+                                            . "CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
+                                    ->from('maquilas AS M')
+                                    ->where('M.Estatus', 'ACTIVO')
+                                    ->order_by('CLAVE', 'ASC')
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -56,14 +62,20 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function getEmpleados() {
         try {
-            print json_encode($this->apm->getEmpleados());
+//            print json_encode($this->apm->getEmpleados());
+            print json_encode($this->db->select("E.Numero AS CLAVE, "
+                                            . "CONCAT(E.Numero,' ',E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ',E.Materno) AS EMPLEADO", false)
+                                    ->from('empleados AS E')
+                                    ->where_in('E.Puesto', array('PESPUNTE', 'PESPUNTADOR', 'PRELIMINAR'))
+                                    ->where('E.AltaBaja', 1)
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
     public function getControlesParaPespunte() {
-        try { 
+        try {
             $x = $this->input->get();
             $this->db->select("C.ID, C.Control AS CONTROL, C.Estilo AS ESTILO, "
                             . "C.Color AS COLOR, C.Pares AS PARES, "
@@ -86,7 +98,16 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function getControlesEnPespunte() {
         try {
-            print json_encode($this->apm->getControlesEnPespunte());
+//            print json_encode($this->apm->getControlesEnPespunte());
+            print json_encode($this->db->select('CPS.ID, CPS.numcho AS MAQUILA, CPS.nomcho AS MAQUILAT, CPS.numtej, '
+                                            . 'CPS.nomtej, CPS.fechapre AS FECHA, CPS.control AS CONTROL, '
+                                            . 'CPS.estilo AS ESTILO, CPS.color AS COLOR, CPS.nomcolo AS COLORT, '
+                                            . 'CPS.docto AS DOCTO, CPS.pares AS PARES, AV.ID AS IDA', false)
+                                    ->from('controles AS C')
+                                    ->join('controlpes AS CPS', 'CPS.Control = C.Control', 'left')
+                                    ->join('avance AS AV', 'AV.Control = C.Control')
+                                    ->where('CPS.ID IS NOT NULL', null, false)->limit(999)
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -94,7 +115,20 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function getColoresXEstilo() {
         try {
-            print json_encode($this->apm->getColoresXEstilo($this->input->get('ESTILO')));
+//            print json_encode($this->apm->getColoresXEstilo($this->input->get('ESTILO')));
+            $x = $this->input->get();
+            $this->db->select("CAST(C.Clave AS SIGNED ) AS CLAVE, CONCAT(C.Clave,'-', C.Descripcion) AS COLOR ", false)
+                    ->from('colores AS C');
+            if ($x['ESTILO'] !== '') {
+                $this->db->where('C.Estilo', $x['ESTILO']);
+            }
+            $this->db->where('C.Estatus', 'ACTIVO')
+                    ->order_by('ID', 'ASC');
+            if ($x['ESTILO'] === '') {
+                $this->db->limit(99);
+            }
+            $this->db->get()->result();
+            print json_encode();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -102,7 +136,19 @@ class AvancePespunteMaquila extends CI_Controller {
 
     public function onVerificarAvance() {
         try {
-            print json_encode($this->apm->onVerificarAvance($this->input->get('CONTROL')));
+//            print json_encode($this->apm->onVerificarAvance($this->input->get('CONTROL')));
+//            print json_encode($this->apm->onVerificarAvance($this->input->get('CONTROL')));
+            $x = $this->input->get();
+            $this->db->select("COUNT(A.ID) AS EXISTE", false)
+                    ->from('avance AS A')
+                    ->where('A.Departamento', 100);
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('A.Control', $x['CONTROL']);
+            }
+            if ($x['CONTROL'] === '') {
+                $this->db->limit(99);
+            }
+            $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -124,8 +170,8 @@ class AvancePespunteMaquila extends CI_Controller {
             $avance = array(
                 'Control' => $xXx['CONTROL'],
                 'FechaAProduccion' => Date('d/m/Y'),
-                'Departamento' => 100,
-                'DepartamentoT' => 'MAQUILA',
+                'Departamento' => 110,
+                'DepartamentoT' => 'PESPUNTE',
                 'FechaAvance' => Date('d/m/Y'),
                 'Estatus' => 'A',
                 'Usuario' => $_SESSION["ID"],
@@ -142,14 +188,14 @@ class AvancePespunteMaquila extends CI_Controller {
             $this->db->insert('avance', $avance);
 
             /* ACTUALIZA A 130 ALM-PESPUNTE, stsavan 6 */
-            $this->db->set('EstatusProduccion', 'PESPUNTE')->set('DeptoProduccion', 110)
-                    ->where('Control', $xXx['CONTROL'])
-                    ->update('controles');
-            $this->db->set('stsavan', 5)->set('EstatusProduccion', 'PESPUNTE')
-                    ->set('DeptoProduccion', 110)->where('Control', $xXx['CONTROL'])
-                    ->update('pedidox');
-            $this->db->set('fec5', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
-                    ->update('avaprd');
+//            $this->db->set('EstatusProduccion', 'PESPUNTE')->set('DeptoProduccion', 110)
+//                    ->where('Control', $xXx['CONTROL'])
+//                    ->update('controles');
+//            $this->db->set('stsavan', 5)->set('EstatusProduccion', 'PESPUNTE')
+//                    ->set('DeptoProduccion', 110)->where('Control', $xXx['CONTROL'])
+//                    ->update('pedidox');
+//            $this->db->set('fec5', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+//                    ->update('avaprd');
 
             $pes = array(
                 'numcho' => $xXx['MAQUILA'],

@@ -184,9 +184,12 @@ class Avance extends CI_Controller {
     public function getDeptoActual() {
         try {
 //            print json_encode($this->avm->getDeptoActual($this->input->post('CONTROL')));
-            print json_encode($this->db->select("A.Departamento AS DEPTO, C.Estilo AS ESTILO, C.Pares AS PARES", false)
+            print json_encode($this->db->select("A.Departamento AS DEPTO, C.Estilo AS ESTILO, "
+                                            . "C.Pares AS PARES, E.Foto AS FOTO", false)
                                     ->from('avance AS A')
                                     ->join('controles AS C', 'A.Control = C.Control')
+                                    ->join('fichatecnica AS F', 'F.Estilo = C.Estilo AND F.Color = C.Color')
+                                    ->join('estilos AS E', 'E.Clave = F.Estilo')
                                     ->like("A.Control", $this->input->post('CONTROL'))
                                     ->order_by("A.ID", "DESC")
                                     ->limit(1)->get()->result());
@@ -331,6 +334,7 @@ class Avance extends CI_Controller {
             /* AVANCE A "MONTADO A" O "MONTADO B" */
             if ($frac === 500 && $depto === 180 ||
                     $frac === 503 && $depto === 190) {
+                
                 $db->insert('avance', array(
                     'Control' => $x->post('CONTROL'),
                     'FechaAProduccion' => $x->post('FECHA'),

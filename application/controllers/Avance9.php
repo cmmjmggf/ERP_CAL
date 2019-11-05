@@ -145,18 +145,25 @@ class Avance9 extends CI_Controller {
 //            print json_encode($EMPLEADO_VALIDO);
 
             $DEPTOS_FISICOS = array(10/* CORTE */, 70, 20/* RAYADO */, 80/* RAYADO CONTADO */,
-                30/* REBAJADO Y PERFORADO */, 190/* MONTADO B */);
-            print json_encode($this->db->select("CONCAT(E.PrimerNombre,' ',"
-                                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
-                                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
-                                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
-                                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES", false)
-                                    ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
-                                    ->where('E.Numero', $this->input->post('EMPLEADO'))
-                                    ->where_in('E.AltaBaja', array(1))
-                                    ->where_in('E.FijoDestajoAmbos', array(2, 3))
-                                    ->where_in('E.DepartamentoFisico', $DEPTOS_FISICOS)
-                                    ->get()->result());
+                30/* REBAJADO Y PERFORADO */, 190/* MONTADO B */, 300 /* SUPERVISORES */);
+            $xXx = $this->input->post();
+            $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
+
+            $this->db->select("CONCAT(E.PrimerNombre,' ',"
+                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
+                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
+                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
+                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES", false)
+                    ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
+                    ->where('E.Numero', $this->input->post('EMPLEADO'))
+                    ->where_in('E.AltaBaja', array(1));
+            if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
+                $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
+            } else {
+                $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
+            }
+            $this->db->where_in('E.DepartamentoFisico', $DEPTOS_FISICOS);
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -211,7 +218,7 @@ class Avance9 extends CI_Controller {
             switch ($url->segment(2)) {
                 case 1:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "96,99,100"));
-                    $this->db->where("FACN.numfrac IN(96,99,100,102,60,103) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    $this->db->where("FACN.numfrac IN(96,99,100,102,60,103,299,300) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
                     break;
                 case 2:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"));
@@ -256,6 +263,10 @@ class Avance9 extends CI_Controller {
             $x = $this->input;
             $xXx = $this->input->post();
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
+            $MAQUILA = ($this->getMaquilaXControl($xXx['CONTROL']));
+            $MAQUILA_MUESTRA = intval($MAQUILA->MAQUILA) === 98 ? 98 : intval($MAQUILA->MAQUILA);
+//            print "\n MAQUILA DEL CONTROL {$xXx['CONTROL']} ES: " . intval($MAQUILA->MAQUILA);
+//            exit(0);
 //            var_dump($FRACCIONES);
 //            foreach ($FRACCIONES as $key => $value) {
 //                print $value->NUMERO_FRACCION . "\n";
@@ -385,7 +396,7 @@ class Avance9 extends CI_Controller {
                     /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
                     print '[{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}]';
                 }
-            }
+            }// *** FIN FOREACH DE FRACCIONES JSON ***
             /* SI NO ESPECIFICO FRACCIONES ES PARA RAYADO => REBAJADO */
             if (count($FRACCIONES) <= 0) {
                 switch (intval($xXx['DEPARTAMENTO'])) {
@@ -451,8 +462,12 @@ class Avance9 extends CI_Controller {
 //                        var_dump($check_fraccion);
                         if (intval($check_fraccion[0]->EXISTE) >= 1) {
                             /* 40 FOLEADO => 30 REBAJADO */
-                            $this->onAvanzarARebajado($data, $xXx);
-                            print '{"AVANZO":"1","FR":"103","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO - SWITCH 40"}';
+                            if (intval($xXx['NUMERO_EMPLEADO']) === 3050) {
+                                $this->onAvanzarARebajado($data, $xXx);
+                                print '{"AVANZO":"1","FR":"103","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A REBAJADO - SWITCH 40"}';
+                                exit(0);
+                            }
+                            print '{"AVANZO":"0","FR":"103","RETORNO":"SI","MESSAGE":"EL CONTROL YA HA SIDO AVANZADO A FOLEADO - SWITCH 80 FRACCION 102"}';
                             exit(0);
                         }
                         $data["fraccion"] = $FRACCION;
@@ -499,7 +514,7 @@ class Avance9 extends CI_Controller {
                                             ->where('F.numfrac', $FRACCION)
                                             ->get()->result();
 //                        var_dump($check_fraccion);
-                            if (intval($check_fraccion[0]->EXISTE) >= 1) { 
+                            if (intval($check_fraccion[0]->EXISTE) >= 1) {
                                 print '{"AVANZO":"0","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL YA HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
                                 exit(0);
                             }
@@ -524,7 +539,7 @@ class Avance9 extends CI_Controller {
                             ));
                             $id = $this->db->insert_id();
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-                            /* PAGAR LA FRACCION 103 AL EMPLEADO 49*/
+                            /* PAGAR LA FRACCION 103 AL EMPLEADO 49 */
                             $this->db->insert('fracpagnomina', $data);
                             $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40);
                             print '{"AVANZO":"1","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
@@ -532,6 +547,16 @@ class Avance9 extends CI_Controller {
                             print "\n 105 ALMACEN DE CORTE";
                             exit(0);
                         }
+                        break;
+                    case 300:
+                        /* SOLO SUPERVISION */
+                        /* PESPUNTE */
+                        $FRACCION = 300; //PESPUNTE GENERAL
+                        $MAQUILA = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx["CONTROL"]} LIMIT 1")->result();
+                        if (intval($MAQUILA[0]->MAQUILA) === 98) {
+                            $FRACCION = 299; //PESPUNTE MUESTRA
+                        }
+                        $this->onAvanzarXControl($xXx['CONTROL'], 'PESPUNTE', 110, 5);
                         break;
                 }
             } else {
@@ -677,6 +702,17 @@ class Avance9 extends CI_Controller {
             } else {
                 $this->db->trans_commit();
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getMaquilaXControl($CONTROL) {
+        try {
+
+            $MAQUILA = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$CONTROL} LIMIT 1")->result();
+
+            return $MAQUILA[0];
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
