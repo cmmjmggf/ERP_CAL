@@ -231,31 +231,31 @@ class Avance8 extends CI_Controller {
 
                 if (intval($x['NUMERO_FRACCION']) === 51) {
                     /* 51 = ENTRETELADO */
-                    $avance = array(
-                        'Control' => $Control,
-                        'FechaAProduccion' => Date('d/m/Y'),
-                        'Departamento' => 90,
-                        'DepartamentoT' => 'ENTRETELADO',
-                        'FechaAvance' => Date('d/m/Y'),
-                        'Estatus' => 'A',
-                        'Usuario' => $_SESSION["ID"],
-                        'Fecha' => Date('d/m/Y'),
-                        'Hora' => Date('h:i:s a'),
-                        'Fraccion' => $x['NUMERO_FRACCION']
-                    );
-                    $this->db->insert('avance', $avance);
-                    $id = $this->db->insert_id();
+//                    $avance = array(
+//                        'Control' => $Control,
+//                        'FechaAProduccion' => Date('d/m/Y'),
+//                        'Departamento' => 90,
+//                        'DepartamentoT' => 'ENTRETELADO',
+//                        'FechaAvance' => Date('d/m/Y'),
+//                        'Estatus' => 'A',
+//                        'Usuario' => $_SESSION["ID"],
+//                        'Fecha' => Date('d/m/Y'),
+//                        'Hora' => Date('h:i:s a'),
+//                        'Fraccion' => $x['NUMERO_FRACCION']
+//                    );
+//                    $this->db->insert('avance', $avance);
+//                    $id = $this->db->insert_id();
 
                     /* ACTUALIZA A 90 ENTRETELADO, stsavan 4 */
-                    $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
-                            ->where('Control', $x['CONTROL'])
-                            ->update('controles');
-                    $this->db->set('stsavan', 4)->set('EstatusProduccion', 'ENTRETELADO')
-                            ->set('DeptoProduccion', 90)->where('Control', $x['CONTROL'])
-                            ->update('pedidox');
-                    $this->db->set('fec40', Date('Y-m-d h:i:s'))
-                            ->where('contped', $x['CONTROL'])
-                            ->update('avaprd');
+//                    $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
+//                            ->where('Control', $x['CONTROL'])
+//                            ->update('controles');
+//                    $this->db->set('stsavan', 4)->set('EstatusProduccion', 'ENTRETELADO')
+//                            ->set('DeptoProduccion', 90)->where('Control', $x['CONTROL'])
+//                            ->update('pedidox');
+//                    $this->db->set('fec40', Date('Y-m-d h:i:s'))
+//                            ->where('contped', $x['CONTROL'])
+//                            ->update('avaprd');
 
                     /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
                     $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
@@ -263,11 +263,27 @@ class Avance8 extends CI_Controller {
                                             . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
                                             . '(CASE WHEN E.MaqPlant4 IS NULL THEN 0 ELSE E.MaqPlant4 END) AS MP4', false)
                                     ->from('estilos AS E')->like('E.Clave', $x['ESTILO'])->get()->result();
+
                     if (intval($check_maquila[0]->MP1) === 0 &&
                             intval($check_maquila[0]->MP2) === 0 &&
                             intval($check_maquila[0]->MP3) === 0 &&
                             intval($check_maquila[0]->MP4) === 0) {
                         /* ACTUALIZA A 105 ALMACEN CORTE, stsavan 44 */
+
+                        $avance = array(
+                            'Control' => $x['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 105,
+                            'DepartamentoT' => 'ALMACEN CORTE',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => NULL
+                        );
+                        $this->db->insert('avance', $avance);
+                        $id = $this->db->insert_id();
                         $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('controles');
@@ -278,6 +294,20 @@ class Avance8 extends CI_Controller {
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
                     } else {
+                        $avance = array(
+                            'Control' => $x['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 100,
+                            'DepartamentoT' => 'MAQUILA',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => NULL
+                        );
+                        $this->db->insert('avance', $avance);
+                        $id = $this->db->insert_id();
                         /* ACTUALIZA A 100 MAQUILA, stsavan 42 */
                         $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
                                 ->where('Control', $x['CONTROL'])

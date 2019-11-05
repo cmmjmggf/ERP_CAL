@@ -629,6 +629,13 @@
                         }
                     }
                     return false;
+                } else {
+                    onBeep(2);
+                    Avance.ajax.reload();
+                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE.', 'warning').then((value) => {
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', true)
+                    });
                 }
                 if ($.isNumeric(v)) {
                     if (parseInt(v) === 1) {
