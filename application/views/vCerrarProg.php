@@ -544,6 +544,7 @@
                 [0, 'desc']/*ID*/
             ],
             "createdRow": function (row, data, dataIndex, cells) {
+                console.log(data);
                 $.each($(row), function (k, v) {
                     if (data["Marca"] === '0' && data["Control"] !== null) {
                         $(v).addClass('HasMca');
@@ -744,7 +745,7 @@
     tr:hover td{
         background-color: #1b4f72;
         color: #fff;
-    } 
+    }
 
     td:hover {
         position: relative;
@@ -754,14 +755,14 @@
         color:  #fff;
     }
     td:hover span.text-info{
-        position: relative; 
+        position: relative;
         font-weight: bold;
         font-size: 14px;
         color:  #ffeb3b !important;
     }
 
     td:hover span.text-danger{
-        position: relative; 
+        position: relative;
         font-weight: bold;
         font-size: 14px;
         color:  #fff !important;

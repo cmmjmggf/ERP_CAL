@@ -300,7 +300,66 @@
         </form>
     </div>
 </div>
-
+<div class="dropdown-menu" style="font-size: 12px;" id='menu'>
+    <a class="dropdown-item text-primary" href="#" onclick="onModificarRenglonPedido()"><i class="fa fa-pencil-alt"></i> Modificar</a>
+</div>
+<div class="modal " id="mdlEditarRenglonPedido"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica Pedido (NO modifica FACTURADO/TERMINADO)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCaptura">
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="Clave" >Pedido</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="12" id="Pedido" name="Pedido">
+                        </div>
+                        <div class="col-4">
+                            <label for="Clave" >Fec-Ent</label>
+                            <input type="text" class="form-control form-control-sm date notEnter"  id="FecEnt" name="FecEnt">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <label for="Clave" >Año</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" id="Ano" name="Ano">
+                        </div>
+                        <div class="col-2">
+                            <label for="Clave" >Sem</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Sem" name="Sem">
+                        </div>
+                        <div class="col-2">
+                            <label for="Clave" >Maq</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Maq" name="Maq">
+                        </div>
+                        <div class="col-2">
+                            <label for="Clave" >Estilo</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="6"  id="Estilo" name="Estilo">
+                        </div>
+                        <div class="col-2">
+                            <label for="Clave" >Color</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2"  id="Color" name="Color">
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-4">
+                            <label class="badge badge-danger" style="font-size: 14px;">Nota: Sólo capture los campos que se van a modificar</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var master_url = base_url + 'index.php/CalculaMinutajeMaqSem/';
     var pnlTablero = $("#pnlTablero");
@@ -309,39 +368,92 @@
     var asc = true;
     var asc2 = true;
     var asc3 = true;
-
-    function ordenaPorFechaEntrega() {
-        if (asc3) {
-            Registros.order([16, 'asc']).draw();
-            asc3 = false;
+    function onModificarRenglonPedido() {
+        var renglones_seleccionados = Registros.rows('.selected').data().length;
+        if (renglones_seleccionados > 0) {
+            $('#mdlEditarRenglonPedido').modal('show');
         } else {
-            Registros.order([16, 'desc']).draw();
-            asc3 = true;
+            swal('ATENCIÓN', 'NO HA SELECCIONADO NINGÚN REGISTRO', 'warning');
         }
     }
 
-    function ordenaPorPedido() {
-        if (asc) {
-            Registros.order([14, 'asc']).draw();
-            asc = false;
-        } else {
-            Registros.order([14, 'desc']).draw();
-            asc = true;
-        }
-    }
-
-    function ordenaPorEstiloColor() {
-        if (asc2) {
-            Registros.order([15, 'asc']).draw();
-            asc2 = false;
-        } else {
-            Registros.order([15, 'desc']).draw();
-            asc2 = true;
-        }
-    }
     $(document).ready(function () {
         init();
         handleEnterDiv(pnlTablero);
+
+        /*Funciones modal*/
+        $('#mdlEditarRenglonPedido').on('shown.bs.modal', function () {
+            handleEnterDiv($('#mdlEditarRenglonPedido'));
+            $('#mdlEditarRenglonPedido').find("input").val("");
+            $('#mdlEditarRenglonPedido').find('#Pedido').focus();
+        });
+
+        $('#mdlEditarRenglonPedido').find("#btnAceptar").click(function () {
+
+            swal({
+                buttons: ["Cancelar", "Aceptar"],
+                title: 'Estás Seguro?',
+                text: "Esta acción no se puede revertir",
+                icon: "warning",
+                closeOnEsc: false,
+                closeOnClickOutside: false
+            }).then((action) => {
+                if (action) {
+                    var ids_renglones = [];
+                    $.each(tblRegistros.find("tbody tr.selected"), function (k, v) {
+                        var r = Registros.row($(this)).data();
+                        ids_renglones.push({
+                            ID: r.ID
+                        });
+                    });
+                    var f = new FormData();
+                    f.append('pedido', $('#mdlEditarRenglonPedido').find("#Pedido").val());
+                    f.append('fecent', $('#mdlEditarRenglonPedido').find("#FecEnt").val());
+                    f.append('ano', $('#mdlEditarRenglonPedido').find("#Ano").val());
+                    f.append('sem', $('#mdlEditarRenglonPedido').find("#Sem").val());
+                    f.append('maq', $('#mdlEditarRenglonPedido').find("#Maq").val());
+                    f.append('estilo', $('#mdlEditarRenglonPedido').find("#Estilo").val());
+                    f.append('color', $('#mdlEditarRenglonPedido').find("#Color").val());
+                    f.append('renglones', JSON.stringify(ids_renglones));
+                    $.ajax({
+                        url: '<?php print base_url('CalculaMinutajeMaqSem/onModificarEnMasa'); ?>',
+                        type: "POST",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: f
+                    }).done(function (data, x, jq) {
+                        console.log(data);
+                        swal({
+                            title: 'INFO',
+                            text: 'SE HAN MODIFICADO LOS DATOS CORRECTAMENTE',
+                            icon: 'success'
+                        }).then((action) => {
+                            Registros.ajax.reload();
+                            $('#mdlEditarRenglonPedido').modal('hide');
+                        });
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            });
+
+        });
+
+        pnlTablero.find('#Registros').on("contextmenu", function (e) {
+            e.preventDefault();
+            var top = e.pageY - 40;
+            var left = e.pageX;
+            $("#menu").css({
+                display: "block",
+                top: top,
+                left: left
+            });
+            return false; //blocks default Webbrowser right click menu
+        });
+        $(document).click(function () {
+            $("#menu").hide();
+        });
         pnlTablero.find("#btnTiemposXEstilo").click(function () {
             $.fancybox.open({
                 src: base_url + '/TiemposXEstilo.shoes/?origen=PRODUCCION',
@@ -692,6 +804,36 @@
 
         });
     });
+
+    function ordenaPorFechaEntrega() {
+        if (asc3) {
+            Registros.order([16, 'asc']).draw();
+            asc3 = false;
+        } else {
+            Registros.order([16, 'desc']).draw();
+            asc3 = true;
+        }
+    }
+
+    function ordenaPorPedido() {
+        if (asc) {
+            Registros.order([14, 'asc']).draw();
+            asc = false;
+        } else {
+            Registros.order([14, 'desc']).draw();
+            asc = true;
+        }
+    }
+
+    function ordenaPorEstiloColor() {
+        if (asc2) {
+            Registros.order([15, 'asc']).draw();
+            asc2 = false;
+        } else {
+            Registros.order([15, 'desc']).draw();
+            asc2 = true;
+        }
+    }
     function getRegistrosPorCliente(cte, pedido) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblRegistros')) {
@@ -763,10 +905,12 @@
                     }
                 });
             },
+            select: true,
+            keys: true,
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 150,
+            "displayLength": 450,
             "scrollX": true,
             "scrollY": 400,
             "bLengthChange": false,
@@ -852,10 +996,12 @@
                     }
                 });
             },
+            select: true,
+            keys: true,
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 150,
+            "displayLength": 450,
             "scrollX": true,
             "scrollY": 300,
             "bLengthChange": false,
@@ -1079,5 +1225,15 @@
     .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
         padding-right: 10px;
         padding-left: 10px;
+    }
+
+    tr {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                              supported by Chrome, Opera and Firefox */
     }
 </style>
