@@ -488,7 +488,7 @@
                     }).done(function (data) {
                         notcred = data;
                         totalFinal += parseFloat(importenc);
-                        if (nuevo) {
+                        if (nuevo === 1) {
                             getDetalleNC(pnlTablero.find("#Cliente").val(), notcred, pnlTablero.find("#Tp").val());
                         } else {
                             DetalleNC.ajax.reload();
