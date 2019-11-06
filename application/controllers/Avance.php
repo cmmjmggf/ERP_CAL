@@ -215,7 +215,7 @@ class Avance extends CI_Controller {
     public function getMaquilasPlantillas() {
         try {
 //            print json_encode($this->avm->getMaquilasPlantillas());
-            print json_encode($this->db->select("CAST(MP.Clave AS SIGNED ) AS Clave, MP.Descripcion AS MaquilasPlantillas")
+            print json_encode($this->db->select("CAST(MP.Clave AS SIGNED ) AS Clave, CONCAT(MP.Clave,\" \",MP.Descripcion) AS MaquilasPlantillas")
                                     ->from("maquilasplantillas AS MP")
                                     ->order_by('MP.Clave', 'ASC')
                                     ->get()->result());

@@ -230,10 +230,17 @@
                     <div class="col-6">
                         <label class="text-info">Pago de Nómina</label>
                         <div id="DiasPagoDeNomina" class="row"></div>
+
                         <div class="col-12" style="margin-top: 5em !important;"></div>
-                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" align="center">
                             <h4 class="text-danger">Estatus actual del avance</h4>
                             <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm ">
+                        </div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                            <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
+                            <div class="w-100"></div>
+                            <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                            <input type="text" id="EstatusAvance" name="EstatusAvance" readonly="" class="form-control form-control-sm d-none" style="text-align: center">
                         </div>
                     </div>
 
@@ -477,6 +484,7 @@
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
+                d.SEMANA = Semana.val() ? Semana.val() : '';
                 d.FRACCIONES = "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337";
             }
         };
@@ -637,6 +645,8 @@
         }
 
         console.log(fracciones, xfracciones);
+        
+        
 //        if (cks.length > 0) {
 //            if (Control.val()) {
 //                HoldOn.open({

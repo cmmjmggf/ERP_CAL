@@ -2,7 +2,7 @@
     <div class="card-body" style="padding-top: 3px; padding-bottom: 3px;">
         <div class="row">
             <div class="col-6">
-                <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
+                <legend class="font-weight-bold" style="margin-bottom: 0px;">AVANCE POR EMPLEADO Y PAGO DE NÓMINA</legend>
             </div>
             <div class="col-6" align="right">
                 <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
@@ -13,11 +13,12 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2  text-center">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 45px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
+                <h1 style="color: #c1850c !important;" class="nombre_empleado">-</h1>
+                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <div class="w-100 my-1"></div>
             <!--FIN BLOQUE 2 COL 6-->
@@ -111,21 +112,24 @@
                         <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
                     </div>
                     <div class="w-100"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control form-control-sm numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control"  style="height: 50px; font-weight: bold; font-size: 45px;" class="form-control form-control-sm numeric" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm">
+                        <h1 style="color: #c1850c !important;" class="estilo_control">-</h1>
+                        <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm numeric">
+                        <h1 style="color: #c1850c !important;"  class="pares_control">-</h1>
+                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm numeric d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance"  readonly=""  class="form-control form-control-sm numeric">
+                        <h1 style="color: #c1850c !important;"  class="avance_control">-</h1>
+                        <input type="text" id="Avance" name="Avance"  readonly=""  class="form-control form-control-sm numeric d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
                         <button type="button" class="btn btn-info btn-sm mt-4 d-none" disabled="" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span> Acepta</button>
@@ -236,8 +240,9 @@
                 Estilo.val('');
                 Pares.val('');
                 SigAvance.val('');
-                DiasPagoDeNomina.find("input").val(0);
-                DiasPagoDeNomina.find("#txtTotal").val(0);
+                pnlTablero.find(".estilo_control").text('-');
+                pnlTablero.find(".pares_control").text('-');
+                pnlTablero.find(".avance_control").text('-');
             }
         });
 
@@ -254,7 +259,12 @@
                 btnAceptar.attr('disabled', false);
                 getInformacionEmpleado();
                 Control.focus().select();
+                onBeep(1);
             } else {
+                onClearMO();
+                DiasPagoDeNomina.find("input").val(0);
+                DiasPagoDeNomina.find("#txtTotal").val(0);
+                pnlTablero.find(".nombre_empleado").text('-');
                 btnAceptar.attr('disabled', true);
             }
 
@@ -378,6 +388,7 @@
                     var dt = JSON.parse(data);
                     if (dt.length > 0) {
                         NombreEmpleado.val(dt[0].NOMBRE_COMPLETO);
+                        pnlTablero.find(".nombre_empleado").text(dt[0].NOMBRE_COMPLETO);
                         Departamento.val(dt[0].DEPTO);
                         DepartamentoDes.val(dt[0].DEPTO_DES);
                         GeneraAvance.val(dt[0].GENERA_AVANCE);
@@ -396,6 +407,7 @@
 //                        });
                     } else {
                         NombreEmpleado.val('');
+                        pnlTablero.find(".nombre_empleado").text('-');
                         onBeep(2);
                         swal('ATENCIÓN', 'ESTE EMPLEADO NO ES APTO PARA DAR AVANCES O ESTA DADO DE BAJA', 'warning').then((value) => {
                             NumeroDeEmpleado.focus().select();
@@ -403,6 +415,8 @@
                             Fecha.val('');
                             Departamento.val('');
                             Control.val('');
+                            DiasPagoDeNomina.find("input").val(0);
+                            DiasPagoDeNomina.find("#txtTotal").val(0);
                         });
                     }
                 }).fail(function (x, y, z) {
@@ -427,11 +441,14 @@
                     Estilo.val(r.Estilo);
                     Pares.val(r.Pares);
                     ManoDeOB.val(r.CostoMO);
+                    pnlTablero.find(".estilo_control").text(r.Estilo);
+                    pnlTablero.find(".pares_control").text(r.Pares);
                     $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                         if (data.length > 0) {
                             SigAvance.val(data[0].Departamento);
                             EstatusAvance.val(data[0].DepartamentoT);
                             estatus_de_avance.text(data[0].DepartamentoT);
+                            pnlTablero.find(".avance_control").text(data[0].Departamento);
                             var d = new Date();
                             var n = d.getDay();
                             var stf = parseFloat(r.Pares) * parseFloat(r.CostoMO);
@@ -463,6 +480,9 @@
                         Estilo.val('');
                         Pares.val('');
                         SigAvance.val('');
+                        pnlTablero.find(".estilo_control").text('-');
+                        pnlTablero.find(".pares_control").text('-');
+                        pnlTablero.find(".avance_control").text('-');
                     });
                 }
             }).fail(function (x, y, z) {
@@ -492,10 +512,13 @@
                             ManoDeOB.val(r.CostoMO);
                             Fraccion.val(r.Fraccion);
                             FraccionDes.val(r.FRACCION_DES);
+                            pnlTablero.find(".estilo_control").text(r.Estilo);
+                            pnlTablero.find(".pares_control").text(r.Pares);
 //                                console.log('Avance9/getUltimoAvanceXControl', data);
                             $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                                 if (data.length > 0) {
                                     SigAvance.val(data[0].Departamento);
+                                    pnlTablero.find(".avance_control").text(data[0].Departamento);
                                     EstatusAvance.val(data[0].DepartamentoT);
                                     estatus_de_avance.text(data[0].DepartamentoT);
                                     var d = new Date();
@@ -551,7 +574,9 @@
         Estilo.val('');
         Pares.val('');
         SigAvance.val('');
-        pnlTablero.find("#txtTotal").val('');
+        pnlTablero.find(".estilo_control").text('-');
+        pnlTablero.find(".pares_control").text('-');
+        pnlTablero.find(".avance_control").text('-');
     }
 
     function onActualizarAvances() {
@@ -602,9 +627,9 @@
         }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
-            console.log("\n * AVANCE NOMINA * \n", data );
-            var dt = JSON.parse(data), avanzo = 0; 
-          
+            console.log("\n * AVANCE NOMINA * \n", data);
+            var dt = JSON.parse(data), avanzo = 0;
+
             if (fracciones.length >= 1) {
                 $.each(dt, function (k, v) {
                     console.log(k, v);
@@ -647,6 +672,10 @@
                     onClearMO();
                     Control.focus().select();
                     onBeep(5);
+                } else {
+                    onBeep(5);
+                    onNotifyOldPC('<span class="fa fa-check"></span>', 'ESTE CONTROL ESTA FUERA DE AVANCE, SOLO SE MUESTRA INFORMACIÓN SOBRE DONDE SE ENCUENTRA', 'warning', {from: "bottom", align: "center"});
+                    Control.focus().select();
                 }
             }
         }).fail(function (x, y, z) {
@@ -754,5 +783,20 @@
     div.datatable-wide {
         padding-left: 0;
         padding-right: 0;
+    }
+    .alert-warning{
+        background: rgba(28,167,236,1);
+        background: -moz-linear-gradient(top, rgba(28,167,236,1) 0%, rgba(31,47,152,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(28,167,236,1)), color-stop(100%, rgba(31,47,152,1)));
+        background: -webkit-linear-gradient(top, rgba(28,167,236,1) 0%, rgba(31,47,152,1) 100%);
+        background: -o-linear-gradient(top, rgba(28,167,236,1) 0%, rgba(31,47,152,1) 100%);
+        background: -ms-linear-gradient(top, rgba(28,167,236,1) 0%, rgba(31,47,152,1) 100%);
+        background: linear-gradient(to bottom, rgba(28,167,236,1) 0%, rgba(31,47,152,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ca7ec', endColorstr='#1f2f98', GradientType=0 ); 
+    }
+    div[data-notify="container"]{
+        font-weight: bold !important;
+        border: solid 1px #1f2f98 !important;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 </style>

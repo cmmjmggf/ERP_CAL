@@ -79,10 +79,13 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
                     <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm"></select> 
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                </div>  
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Fracción</label>
-                    <select id="Fraccion" name="Fraccion" class="form-control form-control-sm"></select>
+                    <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm"> 
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
+                    <select id="FraccionS" name="FraccionS" class="form-control form-control-sm"></select>
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -160,7 +163,9 @@
             </div>
             <!--SECCION TRES-->
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
+                <a href="<?php print base_url('img/LS.png'); ?>" data-fancybox="images">
+                    <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
+                </a>
             </div>
         </div>
     </div>
@@ -278,12 +283,14 @@
             Semana = pnlTablero.find("#Semana"), tblAvance = pnlTablero.find("#tblAvance"),
             Control = pnlTablero.find("#Control"), Avances,
             btnBuscarControl = pnlTablero.find("#btnBuscarControl"),
-            Estilo = pnlTablero.find("#Estilo"), Fraccion = pnlTablero.find("#Fraccion"),
+            Estilo = pnlTablero.find("#Estilo"),
+            Fraccion = pnlTablero.find("#Fraccion"),
+            FraccionS = pnlTablero.find("#FraccionS"),
             DeptoActual = pnlTablero.find("#DeptoActual"),
             Pares = pnlTablero.find("#Pares"),
             btnAceptar = pnlTablero.find("#btnAceptar"), btnBorrar = pnlTablero.find("#btnBorrar"),
-            ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"), 
-            ProcesoMaquilaS = pnlTablero.find("#ProcesoMaquilaS"), 
+            ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"),
+            ProcesoMaquilaS = pnlTablero.find("#ProcesoMaquilaS"),
             Empleado = pnlTablero.find("#Empleado"),
             EmpleadoS = pnlTablero.find("#EmpleadoS"),
             PrecioFraccion = pnlTablero.find("#PrecioFraccion"), DeptoDes = pnlTablero.find("#DeptoDes"),
@@ -435,7 +442,7 @@
                 f.append('PARES', Pares.val());
                 f.append('PRECIO_FRACCION', PrecioFraccion.val());
                 $.ajax({
-                    url: master_url + 'onAvanzar',
+                    url: '<?php print base_url('Avance/onAvanzar'); ?>',
                     type: "POST",
                     cache: false,
                     contentType: false,
@@ -459,7 +466,9 @@
         });
 
         Fraccion.on('change keydown keypress', function () {
-            getPrecioFraccionXEstiloFraccion();
+            if (Fraccion.val()) {
+                getPrecioFraccionXEstiloFraccion();
+            }
         });
 
         btnBuscarControl.click(function () {
@@ -476,7 +485,7 @@
 
         $.getJSON('<?php print base_url('Avance/getMaquilasPlantillas'); ?>').done(function (d) {
             d.forEach(function (v) {
-                ProcesoMaquila[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
+                ProcesoMaquilaS[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -484,7 +493,7 @@
 
         $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
             d.forEach(function (v) {
-                Empleado[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                EmpleadoS[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
                 EmpleadoRXC[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
                 EmpleadoRXCTROL[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
             });
@@ -493,9 +502,8 @@
         });
 
         $.getJSON('<?php print base_url('Avance/getFracciones'); ?>').done(function (d) {
-            var Fraccion = pnlTablero.find("#Fraccion");
             d.forEach(function (v) {
-                Fraccion[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
+                FraccionS[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -505,7 +513,7 @@
             if (e.keyCode === 13) {
                 getDeptosXControl($(this));
                 getDeptoActualXControl();
-                $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val()}).done(function (a, b, c) {
+                $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
                     console.log("CONTROL", a);
                 }).fail(function (x, y, z) {
                     getError(x);
@@ -664,7 +672,7 @@
         console.log(Fraccion.val());
         if (Fraccion.val() && Estilo.val()) {
             $.getJSON('<?php print base_url('Avance/getPrecioFraccionXEstiloFraccion') ?>', {
-                ESTILO: Estilo.val(), FRACCION: Fraccion.val()
+                ESTILO: Estilo.val() ? Estilo.val() : '', FRACCION: Fraccion.val() ? Fraccion.val() : ''
             }).done(function (a) {
                 if (a.length > 0) {
                     console.log(a);
@@ -699,7 +707,9 @@
                     Estilo.val(rr.ESTILO);
                     DeptoActual.val(rr.DEPTO);
                     Pares.val(rr.PARES);
-                    FotoEstilo[0].src = '<?php print base_url(); ?>' + rr.FOTO;
+                    var rta = '<?php print base_url(); ?>' + rr.FOTO;
+                    FotoEstilo[0].src = rta;
+                    FotoEstilo.parent()[0].href = rta;
                 }
             }).fail(function (x, y, z) {
                 getError(x);
@@ -731,7 +741,7 @@
             } else if (c === deptos.length) {
                 onBeep(5);
                 //                swal('ATENCIÓN', 'EL CONTROL CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS, SELECCIONE EL SIGUIENTE DEPARTAMENTO', 'success').then((value) => {
-                ctrl.focus().select();
+                ProcesoMaquila.focus().select();
                 //                });
             }
             /*

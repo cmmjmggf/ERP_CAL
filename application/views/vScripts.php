@@ -359,6 +359,23 @@
             }
         });
     }
+    function onNotifyOldPC(icon, message, type, placement_config) {
+        $.notify({
+            icon: icon,
+            message: message
+        }, {
+            type: type,
+            z_index: 3031,
+            delay: 15000,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: placement_config,
+            animate: {
+                enter: 'animated bounceIn',
+                exit: 'animated fadeOutUp'
+            }
+        });
+    }
     function isValid(p) {
         var inputs = $('#' + p).find("input.form-control:required").length;
         var inputs_textarea = $('#' + p).find("textarea.form-control:required").length;

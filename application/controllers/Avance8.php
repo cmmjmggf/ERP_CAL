@@ -115,15 +115,15 @@ class Avance8 extends CI_Controller {
 //                                    ->where_in('E.FijoDestajoAmbos', array(2, 3))
 //                                    ->where_in('E.DepartamentoFisico', array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */))
 //                                    ->get()->result());
-            
+
             $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
             $this->db->select("CONCAT(E.PrimerNombre,' ',"
-                                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
-                                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
-                                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
-                                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
+                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
+                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
+                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
+                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
                     ->where_in('E.AltaBaja', array(1));
@@ -155,6 +155,10 @@ class Avance8 extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('F.semana', $x['SEMANA']);
+            }
+            $this->db->order_by('ABS(F.semana)', 'DESC');
             if ($x['EMPLEADO'] === '') {
                 $this->db->limit(25);
             }
@@ -339,7 +343,7 @@ class Avance8 extends CI_Controller {
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
                     }
-                } else 
+                } else
                 if (intval($x['NUMERO_FRACCION']) === 397) {
                     /* AVANCE 397 ENSUELADO */
                     $avance = array(

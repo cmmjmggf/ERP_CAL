@@ -157,8 +157,10 @@ class Avance9 extends CI_Controller {
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
                     ->where_in('E.AltaBaja', array(1));
-            if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
-                $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
+            if (count($ES_SUPERVISOR) > 0) {
+                if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
+                    $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
+                }
             } else {
                 $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
             }
