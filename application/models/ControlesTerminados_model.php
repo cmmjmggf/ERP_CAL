@@ -169,8 +169,8 @@ class ControlesTerminados_model extends CI_Model {
 
     public function onModificarControlRechazado($Control, $Maq) {
         try {
-            $Depto = ($Maq === '1') ? 'ALMACEN ADORNO' : 'PESPUNTE';
-            $NumDepto = ($Maq === '1') ? '230' : '110';
+            $Depto = ($Maq === '1') ? 'ALMACEN ADORNO' : 'ENSUELADO';
+            $NumDepto = ($Maq === '1') ? '230' : '140';
             $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -179,8 +179,13 @@ class ControlesTerminados_model extends CI_Model {
 
     public function onModificarControlPedidos($Control, $Maq) {
         try {
-            $Depto = ($Maq === '1') ? '11' : '5';
+            $Depto = ($Maq === '1') ? '11' : '55';
+            $newDepto = ($Maq === '1') ? '240' : '140';
+            $newNomDepto = ($Maq === '1') ? 'ALMACEN ADORNO' : 'ENSUELADO';
             $this->db->set('stsavan', $Depto)->where('Control', $Control)->update("pedidox");
+
+            $this->db->set('DeptoProduccion', $newDepto)->set('EstatusProduccion', $newNomDepto)->set('stsavan', $Depto)->where('Control', $Control)->update("pedidox");
+            $this->db->set('fec12', NULL)->set('status', $Depto)->where('contped', $Control)->update("avaprd");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -241,8 +246,7 @@ class ControlesTerminados_model extends CI_Model {
 
             $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->where('Control', $Control)->update("controles");
             $this->db->set('DeptoProduccion', $NumDepto)->set('EstatusProduccion', $Depto)->set('stsavan', $stsavan)->set('Estatus', $st_ped)->where('Control', $Control)->update("pedidox");
-
-            //Actualizar avaprd también
+            $this->db->set('fec12', Date('Y-m-d'))->set('status', $stsavan)->where('contped', $Control)->update("avaprd");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

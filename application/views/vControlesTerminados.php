@@ -57,15 +57,13 @@
                 </div>
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
+        <hr>
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-1">
                 <label>Maquila</label>
-                <select id="Maquila" name="Maquila" class="form-control form-control-sm required"></select>
+                <input type="text" id="Maquila" name="Maquila" maxlength="2" class="form-control form-control-sm numeric" required="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-2">
                 <label>Reproceso</label>
                 <select id="Reproceso" name="Reproceso" class="form-control form-control-sm required">
                     <option value=""></option>
@@ -73,23 +71,23 @@
                     <option value="2">2 REPROCESO</option>
                 </select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-2">
                 <label>Control</label>
                 <input type="text" id="Control" name="Control" maxlength="10" class="form-control form-control-sm numeric" required="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-1">
                 <label>Precio</label>
                 <input type="text" id="Precio" name="Precio" maxlength="7" readonly="" class="form-control form-control-sm numbersOnly">
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-1">
                 <label>Docto</label>
-                <input type="text" id="Docto" name="Docto" readonly="" class="form-control form-control-sm numeric">
+                <input type="text" id="Docto" name="Docto" class="form-control form-control-sm numeric">
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-1">
                 <label>Estilo</label>
                 <input type="text" id="Estilo" name="Estilo"readonly="" class="form-control form-control-sm">
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-2">
                 <label>Color</label>
                 <input type="text" id="Color" name="Color"readonly="" class="form-control form-control-sm">
             </div>
@@ -101,9 +99,6 @@
                 <label>Pares</label>
                 <input type="text" id="Pares" maxlength="4" name="Pares" readonly="" class="form-control form-control-sm numeric">
             </div>
-
-        </div>
-        <div class="row">
             <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
                 <label for="" >Defecto</label>
                 <select id="Defecto" name="Defecto" class="form-control form-control-sm " >
@@ -125,9 +120,7 @@
                 </button>
             </div>
         </div>
-
-        <div class="w-100 my-2"></div>
-        <div class="row">
+        <div class="row mt-2">
 
             <div class="col-12 col-sm-12 col-md-7">
                 <h4>Controles terminados</h4>
@@ -229,7 +222,7 @@
     var btnBuscarControl = pnlTablero.find('#btnBuscarControl');
 
     var nuevo = true;
-    var Estilo = '', Color = '';
+    var Estilo = '', Color = '', Linea = '';
 
     /*Busqueda*/
     var btnBuscar = $('#btnBuscar');
@@ -243,7 +236,7 @@
 
     $(document).ready(function () {
         //validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Maquila', '#Reproceso', pnlTablero);
+        //setFocusSelectToSelectOnChange('#Maquila', '#Reproceso', pnlTablero);
         setFocusSelectToInputOnChange('#Reproceso', '#Control', pnlTablero);
         setFocusSelectToSelectOnChange('#Defecto', '#DetalleDefecto', pnlTablero);
         setFocusSelectToInputOnChange('#DetalleDefecto', '#btnAceptar', pnlTablero);
@@ -259,7 +252,6 @@
                 $.getJSON(master_url + 'getDocMaqByControlTerm', {
                     Control: value
                 }).done(function (data) {
-                    console.log(data[0].Maquila, data[0].docto);
                     getControlesRechazados(data[0].docto, data[0].Maquila);
                     getControlesTerminados(data[0].docto, data[0].Maquila);
                 }).fail(function (x, y, z) {
@@ -372,6 +364,17 @@
                 }
             });
         });
+
+        Maquila.keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    Control.val('');
+                    onComprobarMaquilas($(this));
+                } else {
+                    $(this).focus()
+                }
+            }
+        });
         Control.change(function () {
             if (Maquila.val()) {
                 if ($(this).val()) {
@@ -422,7 +425,7 @@
 
                                     //Validación sólo para maquilas dif a 98
                                     if (Maquila.val() !== '98') {
-                                        if (data[0].Depto !== '230') {
+                                        if (Maquila.val() === '1' && data[0].Depto !== '230') {
                                             swal({
                                                 title: "ATENCIÓN",
                                                 text: "EL CONTROL NO CONCUERDA CON EL AVANCE REQUERIDO",
@@ -442,13 +445,17 @@
                                                 });
                                                 //Si es nuevo crea el folio
                                                 if (nuevo) {
-                                                    getFolio();
+                                                    //getFolio();
+                                                    pnlTablero.find('#Docto').focus().select();
+                                                } else {
+                                                    pnlTablero.find('#Defecto')[0].selectize.focus();
                                                 }
 
 
                                                 Estilo = data[0].ClaveEstilo;
                                                 Color = data[0].ClaveColor;
-                                                pnlTablero.find('#Defecto')[0].selectize.focus();
+                                                Linea = data[0].Linea;
+
                                             } else {
                                                 swal({
                                                     title: "ATENCIÓN",
@@ -467,8 +474,14 @@
                                         $.each(data[0], function (k, v) {
                                             pnlTablero.find("#" + k).val(v);
                                         });
-                                        getFolio();
-                                        pnlTablero.find('#Defecto')[0].selectize.focus();
+                                        //getFolio();
+                                        //Si es nuevo crea el folio
+                                        if (nuevo) {
+                                            //getFolio();
+                                            pnlTablero.find('#Docto').focus().select();
+                                        } else {
+                                            pnlTablero.find('#Defecto')[0].selectize.focus();
+                                        }
                                     }
                                 }
                             }
@@ -512,9 +525,6 @@
                     }
                 });
             }
-        });
-        Maquila.change(function () {
-            Control.val('');
         });
         btnAceptar.click(function () {
             var precio = pnlTablero.find('#Precio').val();
@@ -581,7 +591,7 @@
             pnlTablero.find('#Busqueda').find('input').val('');
             getControlesTerminados('', '');
             getControlesRechazados('', '');
-            Maquila[0].selectize.focus();
+            Maquila.focus();
         });
 
         btnAceptarBusqueda.click(function () {
@@ -598,14 +608,15 @@
                 nuevo = true;
                 Estilo = '';
                 Color = '';
+                Linea = '';
                 pnlTablero.find("input").val('');
                 pnlTablero.find("#Defecto")[0].selectize.clear(true);
                 pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
-                pnlTablero.find("#Maquila")[0].selectize.clear(true);
+                pnlTablero.find("#Maquila").val('');
                 pnlTablero.find("#Reproceso")[0].selectize.clear(true);
                 getControlesTerminados('', '');
                 getControlesRechazados('', '');
-                pnlTablero.find("#Maquila")[0].selectize.focus();
+                pnlTablero.find("#Maquila").focus();
             }
         });
 
@@ -698,11 +709,11 @@
                     sem: Semana.val(),
                     estilo: Estilo,
                     color: Color,
+                    linea: Linea,
                     prevta: Precio.val(),
-                    pares: Pares.val()
+                    pares: Pares.val(),
+                    status: Reproceso.val()
                 }).done(function (data) {
-
-
                     /*Valida para maq 98 y seguridad*/
                     if (seg === 1 && Maquila.val() === '98') { //Control de muestras
                         depto_destino = '260';
@@ -742,7 +753,7 @@
                                     ControlesTerminados.ajax.reload();
                                     ControlesRechazados.ajax.reload();
                                 }
-
+                                pnlTablero.find('#Docto').attr('readonly', true);
                                 pnlTablero.find("input:not(#Docto)").val('');
                                 pnlTablero.find("#Defecto")[0].selectize.clear(true);
                                 pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
@@ -754,14 +765,6 @@
                             getError(x);
                         });
                     }
-
-
-
-
-
-
-
-
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 });
@@ -831,7 +834,7 @@
             tblControlesTerminados.DataTable().destroy();
         }
         ControlesTerminados = tblControlesTerminados.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getControlesTerminados',
@@ -887,11 +890,12 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 500,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "scrollX": false,
+            "scrollY": '350',
             keys: true,
             "bSort": true,
             "aaSorting": [
@@ -916,7 +920,7 @@
             tblControlesRechazados.DataTable().destroy();
         }
         ControlesRechazados = tblControlesRechazados.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getControlesRechazados',
@@ -961,12 +965,13 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 500,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             keys: true,
             "scrollX": false,
+            "scrollY": '350',
             "bSort": true,
             "aaSorting": [
                 [1, 'asc']/*ID*/
@@ -986,25 +991,12 @@
         nuevo = true;
         Estilo = '';
         Color = '';
-        getMaquilas();
+        Linea = '';
         getDefectos();
         getDetallesDefectos();
         getControlesTerminados('', '');
         getControlesRechazados('', '');
-        pnlTablero.find("#Maquila")[0].selectize.focus();
-    }
-
-    function getMaquilas() {
-        $.getJSON('<?php print base_url('avance_a_pespunte_x_maquila_maquilas'); ?>').done(function (x, y, z) {
-            x.forEach(function (i) {
-                Maquila[0].selectize.addOption({text: i.MAQUILA, value: i.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x.responseText);
-            swal('OPS!', 'ALGO SALIO MAL, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-        }).always(function () {
-
-        });
+        pnlTablero.find("#Maquila").focus();
     }
 
     function getDefectos() {
@@ -1111,6 +1103,36 @@
             });
         }
 
+    }
+
+    function onComprobarMaquilas(v) {
+        $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
+            if (data.length > 0) {
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "LA MAQUILA " + $(v).val() + " NO ES VALIDA",
+                    icon: "warning",
+                    buttons: {
+                        eliminar: {
+                            text: "Aceptar",
+                            value: "aceptar"
+                        }
+                    }
+                }).then((value) => {
+                    switch (value) {
+                        case "aceptar":
+                            swal.close();
+                            $(v).val('');
+                            $(v).focus();
+                            break;
+                    }
+                });
+            }
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
     }
 </script>
 <style>

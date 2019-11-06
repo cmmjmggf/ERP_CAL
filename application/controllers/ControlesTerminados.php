@@ -127,9 +127,11 @@ class ControlesTerminados extends CI_Controller {
                 'control' => ($x->post('control') !== NULL) ? $x->post('control') : NULL,
                 'fecha' => Date('Y-m-d'),
                 'hora' => Date('H:i:s'),
+                'status' => ($x->post('status') !== NULL) ? $x->post('status') : NULL,
                 'docto' => ($x->post('docto') !== NULL) ? $x->post('docto') : NULL,
                 'maq' => ($x->post('maq') !== NULL) ? $x->post('maq') : NULL,
                 'sem' => ($x->post('sem') !== NULL) ? $x->post('sem') : NULL,
+                'linea' => ($x->post('linea') !== NULL) ? $x->post('linea') : NULL,
                 'estilo' => ($x->post('estilo') !== NULL) ? $x->post('estilo') : NULL,
                 'color' => ($x->post('color') !== NULL) ? $x->post('color') : NULL,
                 'prevta' => ($x->post('prevta') !== NULL) ? $x->post('prevta') : NULL,
@@ -165,10 +167,10 @@ class ControlesTerminados extends CI_Controller {
 
             if (intval($control[0]->Depto) < 260) { //Si el estatus esta antes de facturado
 
-                /* Cambia de estatus prod el control */
+                /* Cambia de estatus prod el control en Controles */
                 $this->ctm->onModificarControlRechazado($this->input->post('Control'), $this->input->post('Maq'));
 
-                /* Cambia de estatus control en pedidox */
+                /* Cambia de estatus control en pedidox Y avaprd */
                 $this->ctm->onModificarControlPedidos($this->input->post('Control'), $this->input->post('Maq'));
 
                 /* Eliminamos registro de controlTerm */
