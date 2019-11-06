@@ -41,6 +41,9 @@ class PagosProveedores extends CI_Controller {
                 case 'PROVEEDORES':
                     $this->load->view('vMenuProveedores');
                     break;
+                case 'PRODUCCION':
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
+                    break;
             }
 
             $this->load->view('vFondo');

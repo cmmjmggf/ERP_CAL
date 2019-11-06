@@ -34,10 +34,13 @@ class Bancos extends CI_Controller {
                     break;
 
                 case 'PROVEEDORES':
-                    $this->load->view('vMenuProveedores');
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
                 case 'CONTABILIDAD':
-                    $this->load->view('vMenuContabilidad');
+                    $this->load->view('vNavGeneral')->view('vMenuContabilidad');
+                    break;
+                case 'PRODUCCION':
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
             }
 

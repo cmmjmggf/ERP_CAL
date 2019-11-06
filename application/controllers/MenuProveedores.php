@@ -19,7 +19,10 @@ class MenuProveedores extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
                 case 'CONTABILIDAD':
-                    $this->load->view('vMenuProveedores');
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
+                    break;
+                case 'PRODUCCION':
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);

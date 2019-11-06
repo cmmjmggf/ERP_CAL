@@ -52,7 +52,7 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/ReportesProveedores/';
+    var master_url_repantigue = base_url + 'index.php/ReportesProveedores/';
     var mdlAntiguedadSaldosProveedores = $('#mdlAntiguedadSaldosProveedores');
 
     $(document).ready(function () {
@@ -72,7 +72,7 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlAntiguedadSaldosProveedores.find("#frmEdoCta")[0]);
             $.ajax({
-                url: master_url + 'onReporteAntiguedadSaldos',
+                url: master_url_repantigue + 'onReporteAntiguedadSaldos',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -132,7 +132,7 @@
         mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.clear(true);
         mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.clearOptions();
 
-        $.getJSON(master_url + 'getProveedores').done(function (data) {
+        $.getJSON(master_url_repantigue + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
                 mdlAntiguedadSaldosProveedores.find("#Proveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
                 mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});

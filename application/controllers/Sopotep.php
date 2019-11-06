@@ -19,13 +19,16 @@ class Sopotep extends CI_Controller {
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral');
+                    $this->load->view('vMenuFichasTecnicas');
             }
             $this->load->view('vSopotep');
             $this->load->view('vFooter');
