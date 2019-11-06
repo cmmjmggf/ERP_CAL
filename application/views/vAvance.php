@@ -27,40 +27,58 @@
                     <input type="text" id="usuario" name="usuario" class="form-control form-control-sm">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <label>Control</label>
-                    <div class="input-group mb-3">
-                        <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
-                        <div class="input-group-append">
-                            <button type="button" id="btnBuscarControl" name="btnBuscarControl" class="btn btn-info"><span class="fa fa-search"></span></button>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Fecha</label>
-                    <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" >
+                    <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" readonly="">
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <label>Departamento</label>
-                    <select type="text" id="Departamento" name="Departamento" class="form-control form-control-sm"></select>
-                </div>
+                    <input type="text" id="Departamento" name="Departamento" class="form-control form-control-sm numbersOnly" autofocus="">
+                </div> 
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Semana</label>
-                    <input type="text" id="Semana" name="Semana" class="form-control form-control-sm numbersOnly" maxlength="2">
+                    <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm numbersOnly" maxlength="2">
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <ul id="deptos" class="list-group my-2">
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="REBAJADO Y PERFORADO">30</span>30 - REBAJADO Y PERFORADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="FOLEADO">40</span>40 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ENTRETELADO">90</span>90 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="MAQUILA">100</span>100 - MAQUILA<span class="deptodes d-none">MAQUILA</span><span class="deptoclave d-none">100</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ALMACEN CORTE">105</span>105 - ALMACEN CORTE<span class="deptodes d-none">ALMACEN CORTE</span><span class="deptoclave d-none">105</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="PESPUNTE">110</span>110 - PESPUNTE<span class="deptodes d-none">PESPUNTE</span><span class="deptoclave d-none">110</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ENSUELADO">140</span>140 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="TEJIDO">150</span>150 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="MONTADO " a ""="">180</span>180 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ADORNO " a ""="">210</span>210 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill">!</span></li>
                     </ul>
                 </div>
-                <div class="w-100"></div>
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <label>Proceso maquila</label>
-                    <select id="ProcesoMaquila" name="ProcesoMaquila" class="form-control form-control-sm"></select>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <label>Control</label>
+                    <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
+                    <!--                    <div class="input-group ">
+                                            <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
+                                            <div class="input-group-append">
+                                                <button type="button" id="btnBuscarControl" name="btnBuscarControl" class="btn btn-info"><span class="fa fa-search"></span></button>
+                                            </div>
+                                        </div>-->
                 </div>
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="w-100"></div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <label>Proceso maquila</label>
+                    <input type="text" id="ProcesoMaquila" name="ProcesoMaquila" class="form-control form-control-sm"> 
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
+                    <select id="ProcesoMaquilaS" name="ProcesoMaquilaS" class="form-control form-control-sm selectNotEnter"></select>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control form-control-sm"></select>
+                    <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm"> 
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
+                    <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm"></select> 
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <label>Fracción</label>
@@ -81,7 +99,7 @@
                 </div>
                 <div class="col-12 col-sm-12 col-sm-1 col-lg-1 col-xl-1">
                     <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-info mt-4"  data-toggle="tooltip" data-placement="right" title="Aceptar">
-                        <span class="fa fa-check"></span>
+                        <span class="fa fa-check"></span> ACEPTA
                     </button>
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" aling="center">
@@ -110,37 +128,39 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h4>Fracciones pagadas en nomina de este control</h4>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 d-none">
                         <button type="button" id="btnBorrar" name="btnBorrar" class="btn btn-danger">
                             <span class="fa fa-trash"></span>
                         </button>
                     </div>
-                    <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Emp</th>
-                                <th scope="col">Semana</th>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width:100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Emp</th>
+                                    <th scope="col">Semana</th>
 
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Maq</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Maq</th>
 
-                                <th scope="col">Estilo</th>
-                                <th scope="col">Frac</th>
-                                <th scope="col">Precio</th>
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Frac</th>
+                                    <th scope="col">Precio</th>
 
-                                <th scope="col">Pares</th>
-                                <th scope="col">SubTotal</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                                    <th scope="col">Pares</th>
+                                    <th scope="col">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!--SECCION TRES-->
-            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
-                <img src="<?= base_url('img/LS.png'); ?>" class="img-responsive">
+            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
             </div>
         </div>
     </div>
@@ -262,7 +282,10 @@
             DeptoActual = pnlTablero.find("#DeptoActual"),
             Pares = pnlTablero.find("#Pares"),
             btnAceptar = pnlTablero.find("#btnAceptar"), btnBorrar = pnlTablero.find("#btnBorrar"),
-            ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"), Empleado = pnlTablero.find("#Empleado"),
+            ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"), 
+            ProcesoMaquilaS = pnlTablero.find("#ProcesoMaquilaS"), 
+            Empleado = pnlTablero.find("#Empleado"),
+            EmpleadoS = pnlTablero.find("#EmpleadoS"),
             PrecioFraccion = pnlTablero.find("#PrecioFraccion"), DeptoDes = pnlTablero.find("#DeptoDes"),
             DeptoAva = pnlTablero.find("#DeptoAva"), DescripcionFraccion = pnlTablero.find("#DescripcionFraccion"),
             btnRastreoXConcepto = pnlTablero.find("#btnRastreoXConcepto"),
@@ -276,7 +299,8 @@
             SemanaRXCTROL = mdlRastreoXControl.find("#SemanaRXCTROL"),
             EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL"),
             FraccionRXCTROL = mdlRastreoXControl.find("#FraccionRXCTROL"),
-            btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras");
+            btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras"),
+            FotoEstilo = pnlTablero.find("#FotoEstilo");
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
@@ -450,7 +474,7 @@
 
         $("#usuario").val('<?php print $_SESSION['USERNAME']; ?>').prop('disabled', true);
 
-        $.getJSON('<?php print base_url('avance_maqplant'); ?>').done(function (d) {
+        $.getJSON('<?php print base_url('Avance/getMaquilasPlantillas'); ?>').done(function (d) {
             d.forEach(function (v) {
                 ProcesoMaquila[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
             });
@@ -458,7 +482,7 @@
             console.log(x, y, z);
         });
 
-        $.getJSON('<?php print base_url('avance_empleados'); ?>').done(function (d) {
+        $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
             d.forEach(function (v) {
                 Empleado[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
                 EmpleadoRXC[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
@@ -468,7 +492,7 @@
             console.log(x, y, z);
         });
 
-        $.getJSON('<?php print base_url('avance_fracciones'); ?>').done(function (d) {
+        $.getJSON('<?php print base_url('Avance/getFracciones'); ?>').done(function (d) {
             var Fraccion = pnlTablero.find("#Fraccion");
             d.forEach(function (v) {
                 Fraccion[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
@@ -497,7 +521,6 @@
         $.post('<?php print base_url('Avance/getSemanaNomina'); ?>', {
             FECHA: Fecha.val()
         }).done(function (d) {
-            console.log(d);
             var s = JSON.parse(d);
             if (s.length > 0) {
                 Semana.val(s[0].SEMANA);
@@ -667,20 +690,23 @@
     }
 
     function getDeptoActualXControl() {
-        $.post('<?php print base_url('Avance/getDeptoActual'); ?>',
-                {CONTROL: Control.val()}).done(function (d) {
-            var r = JSON.parse(d);
-            if (r.length > 0) {
-                var rr = r[0];
-                Estilo.val(rr.ESTILO);
-                DeptoActual.val(rr.DEPTO);
-                Pares.val(rr.PARES);
-            }
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-        });
+        if (Control.val()) {
+            $.post('<?php print base_url('Avance/getDeptoActual'); ?>',
+                    {CONTROL: Control.val()}).done(function (d) {
+                var r = JSON.parse(d);
+                if (r.length > 0) {
+                    var rr = r[0];
+                    Estilo.val(rr.ESTILO);
+                    DeptoActual.val(rr.DEPTO);
+                    Pares.val(rr.PARES);
+                    FotoEstilo[0].src = '<?php print base_url(); ?>' + rr.FOTO;
+                }
+            }).fail(function (x, y, z) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
+        }
     }
 
     function getDeptosXControl(ctrl) {
@@ -699,7 +725,7 @@
             });
             if (c < deptos.length) {
                 onBeep(2);
-                swal('ATENCIÓN', 'EL CONTROL NO CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS', 'warning').then((value) => {
+                swal('ATENCIÓN', 'EL CONTROL NO CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS 10 CORTE, 20 RAYADO', 'warning').then((value) => {
                     ctrl.focus().select();
                 });
             } else if (c === deptos.length) {
@@ -735,7 +761,7 @@
 
     function getConceptosNomina() {
         $.getJSON('<?php print base_url('Avance/getConceptosNomina'); ?>').done(function (a) {
-            console.log(a);
+//            console.log(a);
             a.forEach(function (e) {
                 ConceptoRXC[0].selectize.addOption({text: e.CLAVE + ' ' + e.CONCEPTO, value: e.CLAVE});
             });
@@ -747,47 +773,33 @@
     }
 
     function getDepartamentos() {
-        $.getJSON('<?php print base_url('Avance/getDepartamentos'); ?>').done(function (data) {
-            var ul = $("#deptos"), ul_list = '';
-            data.forEach(function (v) {
-                Departamento[0].selectize.addOption({text: v.Departamento, value: v.Clave});
-                ul_list += '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                ul_list += '<span class="d-none" des="' + v.DesDepto + '">' + v.Clave + '</span>' + v.Departamento;
-                ul_list += '<span class="deptodes d-none">' + v.DesDepto + '</span>';
-                ul_list += '<span class="deptoclave d-none">' + v.Clave + '</span>';
-                ul_list += '<span class="badge badge-primary badge-pill">!</span>';
-                ul_list += '</li>';
-            });
-            ul.html(ul_list);
-            ul.find("li").click(function () {
-                ul.find("li").removeClass('li-selected');
-                var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
-                var depto = parseInt(clave);
-                if (depto >= 180 || depto === 30 || depto === 40 ||
-                        depto === 90 || depto === 100 || depto === 105 ||
-                        depto === 110 || depto === 140 || depto === 150) {
-                    if (Control.val()) {
-                        li.addClass('li-selected');
-                        Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
-                        Semana.focus().select();
-                        getDeptoActualXControl();
-                        DeptoDes.val(deptodes);
-                        DeptoAva.val(clave);
-                        onBeep(3);
-                    } else {
-                        swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
-                            Control.focus().select();
-                        });
-                    }
-                } else {
-                    swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
-                        ul.find("li").removeClass('li-selected');
-                    });
-                }
-            });
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
+        var ul = $("#deptos");
+        ul.find("li").click(function () {
+            ul.find("li").removeClass('li-selected');
+            var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
+            var depto = parseInt(clave);
+            if (depto >= 180 || depto === 30 || depto === 40 ||
+                    depto === 90 || depto === 100 || depto === 105 ||
+                    depto === 110 || depto === 140 || depto === 150) {
+//                if (Control.val()) {
+                li.addClass('li-selected');
+                Departamento.val(parseInt(li.find("span").first().text()));
+//                    Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
+                Control.focus().select();
+                getDeptoActualXControl();
+                DeptoDes.val(deptodes);
+                DeptoAva.val(clave);
+                onBeep(3);
+//                } else {
+//                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+//                        Control.focus().select();
+//                    });
+//                }
+            } else {
+                swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
+                    ul.find("li").removeClass('li-selected');
+                });
+            }
         });
     }
 
@@ -803,6 +815,17 @@
 </script>
 <style>
 
+    .card{
+        background-color: #f9f9f9;
+        border-width: 1px 2px 2px;
+        border-style: solid;
+        border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;
+        /*top
+        background-image: linear-gradient(to left, #0099cc,  #cc0000, #0099cc) ;
+        background-size: 100% 1px;
+        background-position: 10% 0%, 0% 100%;
+        background-repeat: no-repeat;  */
+    }
     li.list-group-item {
         padding-top: 3px;
         padding-bottom: 3px;

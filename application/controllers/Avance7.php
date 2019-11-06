@@ -105,7 +105,25 @@ class Avance7 extends CI_Controller {
 
     public function onComprobarDeptoXEmpleado() {
         try {
-            print json_encode($this->avm->onComprobarDeptoXEmpleado($this->input->get('EMPLEADO')));
+//            print json_encode($this->avm->onComprobarDeptoXEmpleado($this->input->get('EMPLEADO')));
+            $xXx = $this->input->get();
+            $DEPTOS_FISICOS = array(20/* RAYADO */, 30/* REBAJADO */, 40/* FOLEADO */);
+            $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
+
+            $this->db->select("CONCAT(E.PrimerNombre,' ',"
+                            . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
+                            . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
+                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
+                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE", false)
+                    ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
+                    ->where('E.Numero', $xXx["EMPLEADO"])->where_in('E.AltaBaja', array(1));
+            if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
+                $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
+            } else {
+                $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
+            }
+            $this->db->where_in('E.DepartamentoFisico', $DEPTOS_FISICOS);
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

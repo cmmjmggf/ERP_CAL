@@ -602,52 +602,53 @@
         }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
-            console.log("\n", "* AVANCE NOMINA *", "\n", data, JSON.parse(data));
-            var dt = JSON.parse(data), avanzo = 0;
-            console.log("# de objetos  = > ", dt);
-            $.each(dt, function (k, v) {
-                console.log(k, v);
-                if (parseInt(v.AVANZO) === 1) {
-                    avanzo = 1;
-
-                    if (data !== undefined && data.length > 0) {
-                        if (avanzo > 0) {
-                            Avance.ajax.reload();
-                            onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
+            console.log("\n * AVANCE NOMINA * \n", data );
+            var dt = JSON.parse(data), avanzo = 0; 
+          
+            if (fracciones.length >= 1) {
+                $.each(dt, function (k, v) {
+                    console.log(k, v);
+                    if (parseInt(v.AVANZO) === 1) {
+                        avanzo = 1;
+                        if (data !== undefined && data.length > 0) {
+                            if (avanzo > 0) {
+                                Avance.ajax.reload();
+                                onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
 //                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
-                            onClearMO();
-                            Control.focus().select();
-                            onBeep(5);
-//                    });
-                        } else {
-                            onBeep(2);
-                            Avance.ajax.reload();
-                            swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
+                                onClearMO();
                                 Control.focus().select();
-                                btnAceptar.attr('disabled', true)
-                            });
+                                onBeep(5);
+//                    });
+                            } else {
+                                onBeep(2);
+                                Avance.ajax.reload();
+                                swal('ATENCIÓN', '1 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
+                                    Control.focus().select();
+                                    btnAceptar.attr('disabled', true)
+                                });
+                            }
                         }
-                    }
-                    return false;
-                } else {
-                    onBeep(2);
-                    Avance.ajax.reload();
-                    swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE.', 'warning').then((value) => {
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', true)
-                    });
-                }
-                if ($.isNumeric(v)) {
-                    if (parseInt(v) === 1) {
+                        return false;
+                    } else {
+                        onBeep(2);
                         Avance.ajax.reload();
-                        onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
-//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
-                        onClearMO();
-                        Control.focus().select();
-                        onBeep(5);
+                        swal('ATENCIÓN', '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE.', 'warning').then((value) => {
+                            Control.focus().select();
+                            btnAceptar.attr('disabled', true)
+                        });
                     }
+                });
+            }
+            if ($.isNumeric(dt.AVANZO)) {
+                if (parseInt(dt.AVANZO) === 1) {
+                    Avance.ajax.reload();
+                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
+//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
+                    onClearMO();
+                    Control.focus().select();
+                    onBeep(5);
                 }
-            });
+            }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
         }).always(function () {

@@ -60,7 +60,7 @@
             <input type="password" id="Contrasena" name="Contrasena" class="form-control mt-3" placeholder="Contraseña" required>
             <button class="btn btn-primary btn-block mt-3 animated bounceIn" id="btnIngresar" type="button">Ingresar</button>
             <button class="btn btn-warning btn-block mt-2 animated bounceIn" id="btnOlvidasteContrasena" type="button">Olvidaste tu contraseña?</button>
-            <h6 class="mt-3 mb-3 text-primary">&copy; <?php echo date("Y") . ' All Rights Reserved for <br> CALZADO LOBO SA de CV'; ?></h6>
+            <h6 class="mt-3 mb-3 text-primary">&copy; <?php print 'CALZADO LOBO SA de CV ' . Date('Y'); ?></h6>
         </form>
     </div>
 </div>
