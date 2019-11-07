@@ -47,6 +47,7 @@ class Avance extends CI_Controller {
     public function getAvancesNomina() {
         try {
 //            print json_encode($this->avm->getAvancesNomina($this->input->post('CONTROL')));
+            $x = $this->input->get();
             $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, F.numfrac AS NUM_FRACCION, "
                             . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
@@ -54,10 +55,16 @@ class Avance extends CI_Controller {
                             . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
                     ->from("fracpagnomina AS F");
 
-            if ($this->input->get('CONTROL') !== '') {
-                $this->db->like('F.control', $this->input->get('CONTROL'));
-            } else {
-                $this->db->limit(509);
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('F.control', $x['CONTROL']);
+            }
+
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('F.numeroempleado', $x['EMPLEADO']);
+            }
+            $this->db->order_by('F.fecha', 'DESC');
+            if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '') {
+                $this->db->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -135,7 +142,7 @@ class Avance extends CI_Controller {
 
     public function getEmpleados() {
         try {
-            print json_encode($this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+            print json_encode($this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', (CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) AS EMPLEADO")
                                     ->from("empleados AS E")->where_in('E.FijoDestajoAmbos', array(2, 3))->where('E.AltaBaja', 1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -200,7 +207,7 @@ class Avance extends CI_Controller {
 
     public function getPrecioFraccionXEstiloFraccion() {
         try {
-//            $x = $this->input->get();
+            $x = $this->input->get();
 //            print json_encode($this->avm->getPrecioFraccionXEstiloFraccion($x->get('ESTILO'), $x->get('FRACCION')));
             print json_encode($this->db->select("FXE.ID, FXE.Estilo AS ESTILO, FXE.FechaAlta AS FECHA_ALTA, "
                                             . "FXE.Fraccion AS FRACCION, FXE.CostoMO AS COSTO_MO", false)
@@ -315,10 +322,19 @@ class Avance extends CI_Controller {
 
     public function getInformacionXControl() {
         try {
-            $Control = $this->input->get('CONTROL');
-            $control_informacion = $this->db->select('C.Estilo AS ESTILO, C.Pares AS PARES, C.DeptoProduccion AS DEPTOPROD')
-                            ->from('controles AS C')->where("C.Control LIKE '$Control'", null, false)->get()->result();
-            print json_encode($control_informacion);
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT C.Estilo AS ESTILO, C.Pares AS PARES, C.DeptoProduccion AS DEPTOPROD, "
+                    . "E.MaqPlant1 AS MAQUILA_UNO, E.MaqPlant2 AS MAQUILA_DOS, E.MaqPlant3 AS MAQUILA_TRES,"
+                    . "(CASE "
+                    . "WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN "
+                    . "(CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN "
+                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN  "
+                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" "
+                    . "ELSE E.MaqPlant4 END) "
+                    . "ELSE E.MaqPlant3 END)"
+                    . "ELSE E.MaqPlant2 END)  "
+                    . "ELSE E.MaqPlant1 END) AS MAQUILADO "
+                    . "FROM controles AS C INNER JOIN estilos AS E ON C.Estilo = E.Clave WHERE C.Control = {$x['CONTROL']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -334,7 +350,7 @@ class Avance extends CI_Controller {
             /* AVANCE A "MONTADO A" O "MONTADO B" */
             if ($frac === 500 && $depto === 180 ||
                     $frac === 503 && $depto === 190) {
-                
+
                 $db->insert('avance', array(
                     'Control' => $x->post('CONTROL'),
                     'FechaAProduccion' => $x->post('FECHA'),
@@ -534,6 +550,14 @@ class Avance extends CI_Controller {
             $this->db->set('fec42', Date('Y-m-d h:i:s'))
                     ->where('contped', $Control)
                     ->update('avaprd');
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onComprobarRetornoDeMaterialXControl() {
+        try {
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

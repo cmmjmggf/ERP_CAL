@@ -13,11 +13,12 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label>Empleado</label>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                <input type="text"  style="height: 50px; font-weight: bold; font-size: 45px;"  id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
+                <h1 style="color: #c1850c !important;" class="nombre_empleado">-</h1>
+                <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
@@ -68,21 +69,24 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control" class="form-control form-control-sm  numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control" style="height: 50px; font-weight: bold; font-size: 45px;" class="form-control form-control-sm  numeric" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Estilo</label>
-                        <input type="text" id="Estilo" name="Estilo" readonly=""  class="form-control form-control-sm ">
+                        <h1 style="color: #c1850c !important;" class="estilo_control">-</h1>
+                        <input type="text" id="Estilo" name="Estilo" readonly=""  class="form-control form-control-sm d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm  numeric">
+                        <h1 style="color: #c1850c !important;"  class="pares_control">-</h1>
+                        <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm  numeric  d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance</label>
-                        <input type="text" id="Avance" name="Avance" readonly=""  class="form-control form-control-sm  numeric">
+                        <h1 style="color: #c1850c !important;"  class="avance_control">-</h1>
+                        <input type="text" id="Avance" name="Avance" readonly=""  class="form-control form-control-sm  numeric d-none">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mx-auto d-none">
                         <button type="button" class="btn btn-success mt-3" id="btnAceptar" name="btnAceptar" data-toggle="tooltip" data-placement="top" title="Aceptar"><span class="fa fa-check"></span></button>
                     </div>
                     <div class="col-12">
@@ -229,9 +233,60 @@
 
                     <div class="col-6">
                         <label class="text-info">Pago de Nómina</label>
-                        <div id="DiasPagoDeNomina" class="row"></div>
-
-                        <div class="col-12" style="margin-top: 5em !important;"></div>
+                        <div id="DiasPagoDeNomina" class="row">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>JUEVES</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtJUEVES" name="txtJUEVES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>VIERNES</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtVIERNES" name="txtVIERNES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>SABADO</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtSABADO" name="txtSABADO" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>DOMINGO</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtDOMINGO" name="txtDOMINGO" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>LUNES</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtLUNES" name="txtLUNES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>MARTES</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtMARTES" name="txtMARTES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                <label>MIERCOLES</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtMIERCOLES" name="txtMIERCOLES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;" readonly="">
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <label>TOTAL</label>
+                            </div>
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            </div>
+                        </div>
+                        <div class="w-100 my-2"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" align="center">
                             <h4 class="text-danger">Estatus actual del avance</h4>
                             <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm ">
@@ -240,12 +295,8 @@
                             <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
                             <div class="w-100"></div>
                             <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
-                            <input type="text" id="EstatusAvance" name="EstatusAvance" readonly="" class="form-control form-control-sm d-none" style="text-align: center">
-                        </div>
-                    </div>
-
-
-
+                         </div>
+                    </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 d-none">
                         <div class="row">
                             <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -255,9 +306,7 @@
                                 <input type="text" id="Depto" name="Depto" class="form-control form-control-sm">
                             </div>
                         </div>
-                    </div>
-
-
+                    </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>MO</label>
                         <input type="text" id="ManoDeOB" name="ManoDeOB" class="form-control form-control-sm  numeric" readonly="">
@@ -288,6 +337,7 @@
             SigAvance = pnlTablero.find("#Avance"),
             EstatusAvance = pnlTablero.find("#EstatusAvance"),
             ManoDeOB = pnlTablero.find("#ManoDeOB"),
+            estatus_de_avance = pnlTablero.find("span.estatus_de_avance"),
             Anio = pnlTablero.find("#Anio"), btnAceptar = pnlTablero.find("#btnAceptar");
 
     var AVANO = {
@@ -305,7 +355,11 @@
     };
     // IIFE - Immediately Invoked Function Expression
     $(document).ready(function () {
-
+        var fff = "";
+        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+            fff += $(v).attr('fraccion') + ",";
+        });
+        console.log(fff);
         Semana.val('<?php print $SP[0]->Semana; ?>');
         Fecha.val('<?php print $F; ?>');
         handleEnter();
@@ -318,7 +372,8 @@
 
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
-                onAgregarAvance();
+
+                getInfoXControl(onAgregarAvance);
             } else {
                 Estilo.val('');
                 Pares.val('');
@@ -353,6 +408,7 @@
                     });
                 });
             }
+            Control.focus().select();
         });
 
         NumeroDeEmpleado.on('keydown', function (e) {
@@ -370,29 +426,13 @@
                                 GeneraAvance.val(r.GENERA_AVANCE);
                                 Depto.val(r.DEPTO);
                                 NombreEmpleado.val(r.NOMBRE_COMPLETO);
+                                pnlTablero.find(".nombre_empleado").text(dt[0].NOMBRE_COMPLETO);
                                 Departamento.val(r.DEPTOCTO);
                                 $.getJSON('<?php print base_url('Avance8/getSemanaByFecha'); ?>').done(function (data) {
                                     var rr = data[0];
                                     Semana.val((data.length > 0) ? rr.Sem : '');
                                     Fecha.val((data.length > 0) ? rr.Fecha : '');
-                                    $.getJSON('<?php print base_url('Avance8/getPagosXEmpleadoXSemana'); ?>',
-                                            {EMPLEADO: NumeroDeEmpleado.val(), SEMANA: Semana.val(), FRACCIONES: "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"}).done(function (a) {
-                                        if (a.length > 0) {
-                                            var b = a[0];
-                                            var tt = 0;
-                                            ndias.forEach(function (i) {
-                                                pnlTablero.find("#txt" + i).val(b[i]);
-                                                tt += $.isNumeric(b[i]) ? parseFloat(b[i]) : 0;
-                                            });
-                                            pnlTablero.find("#txtTotal").val(tt);
-                                        }
-                                    }).fail(function (x, y, z) {
-                                        console.log(x.responseText);
-                                        onBeep(3);
-                                        swal('ERROR', ' ERROR AL OBTENER LO PAGADO AL EMPLEADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-                                    }).always(function () {
-
-                                    });
+                                    getPagosXEmpleadoXSemana();
                                 }).fail(function (x, y, z) {
                                     console.log(x.responseText);
                                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
@@ -404,6 +444,7 @@
 //                                });
                             } else {
                                 NombreEmpleado.val('');
+                                pnlTablero.find(".nombre_empleado").text('');
                                 onBeep(2);
                                 swal('ATENCIÓN', 'ESTE EMPLEADO NO ES APTO PARA DAR AVANCES O ESTA DADO DE BAJA', 'warning').then((value) => {
                                     NumeroDeEmpleado.focus().select();
@@ -418,23 +459,6 @@
             }
         });
 
-        /*FRACCIONES*/
-        var chksfracciones = '';
-        dias.forEach(function (i) {
-            chksfracciones += '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">' +
-                    '<label>' + i + '</label>' +
-                    '</div>' +
-                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; readonly="">' +
-                    '</div>';
-        });
-        chksfracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<label>TOTAL</label>' +
-                '</div>' +
-                '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold;">' +
-                '</div>';
-        DiasPagoDeNomina.html(chksfracciones);
 
         /*AVOID C&P*/
 //        var _0x6b99 = ["\x63\x75\x74\x20\x63\x6F\x70\x79\x20\x70\x61\x73\x74\x65",
@@ -485,7 +509,7 @@
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
                 d.SEMANA = Semana.val() ? Semana.val() : '';
-                d.FRACCIONES = "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337";
+                d.FRACCIONES = "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606";
             }
         };
         $.fn.dataTable.ext.errMode = 'throw';
@@ -497,6 +521,132 @@
         var fra = cks.attr('fraccion');
         console.log("FRACCION * ", fra);
 
+
+
+
+        var fracciones = [];
+        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+            if ($(this)[0].checked) {
+                fracciones.push({
+                    NUMERO_FRACCION: $(v).attr('fraccion'),
+                    DESCRIPCION: $(v).attr('description')
+                });
+            }
+        });
+//        console.log(fracciones, JSON.stringify(fracciones));
+
+
+        if (cks.length > 0) {
+            if (Control.val()) {
+                $.getJSON('<?php print base_url('Avance8/onComprobarFraccionXEstilo'); ?>',
+                        {CONTROL: Control.val(), FRACCIONES: JSON.stringify(fracciones)}).done(function (a) {
+                    console.log(a, a.FRACCIONES_VALIDAS, fracciones.length);
+                    if (parseInt(a.FRACCIONES_VALIDAS) < fracciones.length) {
+                        iMsg(a.FALTAN + ' DE LAS FRACCIONES SELECCIONADAS NO CORRESPONDEN A ESTE ESTILO', 'w', function () {
+                            Control.focus().select();
+                        });
+                    } else {
+                        Estilo.val(a.ESTILO);
+                        Pares.val(a.PARES);
+                        pnlTablero.find(".estilo_control").text(a.ESTILO);
+                        pnlTablero.find(".pares_control").text(a.PARES);
+                        $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>',
+                                {C: Control.val()}).done(function (data) {
+                            var x = data[0];
+                            if (data.length > 0) {
+                                SigAvance.val(x.Departamento);
+                                EstatusAvance.val(x.DepartamentoT);
+                                estatus_de_avance.text(x.DepartamentoT);
+                                pnlTablero.find(".avance_control").text(x.Departamento);
+                                onAvanzar();
+                            }
+                        });
+
+                    }
+//                    if (a.length > 0) {
+//                        var r = a[0];
+//                        Estilo.val(r.Estilo);
+//                        Pares.val(r.Pares);
+//                        ManoDeOB.val(r.CostoMO);
+//                        $.getJSON('<?php print base_url('Avance8/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (b) {
+//                            if (b.length > 0) {
+//                                SigAvance.val(b[0].Departamento);
+//                                EstatusAvance.val(b[0].DepartamentoT);
+//                                var d = new Date();
+//                                var n = d.getDay();
+//                                DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
+//                                var tt = 0;
+//                                ndias.forEach(function (i) {
+//                                    tt += parseFloat(pnlTablero.find("#txt" + i).val());
+//                                });
+//                                DiasPagoDeNomina.find("#txtTotal").val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
+//                                onAvanzar();
+//                            }
+//                        }).fail(function (x, y, z) {
+//                            console.log(x.responseText);
+//                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+//                        }).always(function () {
+//                            HoldOn.close();
+//                        });
+//                    } else {
+//                        swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN SELECCIONADA', 'error').then((value) => {
+//                            Control.focus().select();
+//                            Estilo.val('');
+//                            Pares.val('');
+//                            SigAvance.val('');
+//                        });
+                    //                    }
+                }).fail(function (x, y, z) {
+                    console.log(x.responseText);
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
+                    Control.focus().select();
+                });
+            }
+        } else {
+            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FRACCIÓN', 'error').then((value) => {
+                Control.focus().select();
+            });
+        }
+    }
+
+    var fracciones = [51, 70, 60, 61, 62, 24, 78, 204, 205, 198, 127, 80, 397, 34, 106, 306, 337, 333, 502, 72, 607, 606];
+
+    function onCheckFraccion(e) {
+//        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+//            if ($(e)[0].id !== $(v)[0].id) {
+//                $(v)[0].checked = false;
+//            }
+        //        });
+    }
+
+    function onClearMO() {
+        Control.focus().select();
+        Estilo.val('');
+        Pares.val('');
+        SigAvance.val('');
+//        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
+//            $(v)[0].checked = false;
+//        });
+    }
+
+    function onAvanzar() {
+
+        AVANO.NUMERO_EMPLEADO = NumeroDeEmpleado.val();
+        AVANO.CONTROL = Control.val();
+        AVANO.ESTILO = Estilo.val();
+        AVANO.NUMERO_FRACCION = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('fraccion');
+        AVANO.FRACCION = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('description');
+        AVANO.PRECIO_FRACCION = ManoDeOB.val();
+        AVANO.PARES = Pares.val();
+        AVANO.FECHA = Fecha.val();
+        AVANO.SEMANA = Semana.val();
+        AVANO.DEPARTAMENTO = Departamento.val();
+        AVANO.ANIO = pnlTablero.find("#Anio").val();
 
         var fracciones = [], xfracciones = [];
         $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
@@ -561,13 +711,6 @@
             fracciones.push({
                 NUMERO_FRACCION: 106,
                 DESCRIPCION: "DOBLILLADO"
-            });
-        }
-        /*AVANZA EL CONTROL A ENSUELADO*/
-        if (pnlTablero.find("#chk397")[0].checked) {
-            fracciones.push({
-                NUMERO_FRACCION: 397,
-                DESCRIPCION: "JUNTAR SUELA A CORTE"
             });
         }
         if (pnlTablero.find("#chk80")[0].checked) {
@@ -643,123 +786,77 @@
                 DESCRIPCION: "ENTRETELADO"
             });
         }
-
-        console.log(fracciones, xfracciones);
-        
-        
-//        if (cks.length > 0) {
-//            if (Control.val()) {
-//                HoldOn.open({
-//                    theme: 'sk-rect',
-//                    message: 'Espere...'
-//                });
-//                $.getJSON('<?php print base_url('Avance8/onComprobarFraccionXEstilo'); ?>', {CR: Control.val(), FR: fra}).done(function (a) {
-//                    if (a.length > 0) {
-//                        var r = a[0];
-//                        Estilo.val(r.Estilo);
-//                        Pares.val(r.Pares);
-//                        ManoDeOB.val(r.CostoMO);
-//                        $.getJSON('<?php print base_url('Avance8/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (b) {
-//                            if (b.length > 0) {
-//                                SigAvance.val(b[0].Departamento);
-//                                EstatusAvance.val(b[0].DepartamentoT);
-//                                var d = new Date();
-//                                var n = d.getDay();
-//                                DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
-//                                var tt = 0;
-//                                ndias.forEach(function (i) {
-//                                    tt += parseFloat(pnlTablero.find("#txt" + i).val());
-//                                });
-//                                DiasPagoDeNomina.find("#txtTotal").val(parseFloat(r.Pares) * parseFloat(r.CostoMO));
-//                                onAvanzar();
-//                            }
-//                        }).fail(function (x, y, z) {
-//                            console.log(x.responseText);
-//                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-//                        }).always(function () {
-//                            HoldOn.close();
-//                        });
-//                    } else {
-//                        swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN SELECCIONADA', 'error').then((value) => {
-//                            Control.focus().select();
-//                            Estilo.val('');
-//                            Pares.val('');
-//                            SigAvance.val('');
-//                        });
-//                    }
-//                }).fail(function (x, y, z) {
-//                    console.log(x.responseText);
-//                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
-//                }).always(function () {
-//                    HoldOn.close();
-//                });
-//            } else {
-//                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'error').then((value) => {
-//                    Control.focus().select();
-//                });
-//            }
-//        } else {
-//            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FRACCIÓN', 'error').then((value) => {
-//                Control.focus().select();
-//            });
-//        }
-    }
-
-    var fracciones = [51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337];
-
-    function onCheckFraccion(e) {
-//        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
-//            if ($(e)[0].id !== $(v)[0].id) {
-//                $(v)[0].checked = false;
-//            }
-//        });
-    }
-
-    function onClearMO() {
-        Control.focus().select();
-        Estilo.val('');
-        Pares.val('');
-        SigAvance.val('');
-        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
-            $(v)[0].checked = false;
-        });
-    }
-
-    function onAvanzar() {
-
-        AVANO.NUMERO_EMPLEADO = NumeroDeEmpleado.val();
-        AVANO.CONTROL = Control.val();
-        AVANO.ESTILO = Estilo.val();
-        AVANO.NUMERO_FRACCION = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('fraccion');
-        AVANO.FRACCION = pnlTablero.find("#ManoDeObra input[type='checkbox']:checked").attr('description');
-        AVANO.PRECIO_FRACCION = ManoDeOB.val();
-        AVANO.PARES = Pares.val();
-        AVANO.FECHA = Fecha.val();
-        AVANO.SEMANA = Semana.val();
-        AVANO.DEPARTAMENTO = Departamento.val();
-        AVANO.ANIO = pnlTablero.find("#Anio").val();
+        /*AVANZA EL CONTROL A ENSUELADO*/
+        if (pnlTablero.find("#chk397")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 397,
+                DESCRIPCION: "JUNTAR SUELA A CORTE"
+            });
+        }
+        AVANO.FRACCIONES = JSON.stringify(fracciones);
 
         $.post('<?php print base_url('Avance8/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (c) {
             var dt = JSON.parse(c);
             if (c !== undefined && c.length > 0) {
                 if (dt.AVANZO > 0) {
-                    Avance.ajax.reload();
-                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
-                        onClearMO();
-                        NumeroDeEmpleado.focus().select();
-                    });
+                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
+                    onClearMO();
+                    Control.focus().select();
+                    onBeep(5);
                 } else {
                     onBeep(2);
                     Avance.ajax.reload();
                     swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
                         onClearMO();
                         Control.val('');
-                        NumeroDeEmpleado.focus().select();
+                        Control.focus().select();
                     });
                 }
             }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
+        }).always(function () {
+            Avance.ajax.reload();
+            getPagosXEmpleadoXSemana();
+        });
+    }
+    function getInfoXControl(f) {
+        $.getJSON('<?php print base_url('Avance8/getInfoXControl'); ?>', {
+            CONTROL: Control.val()
+        }).done(function (a) {
+            console.log(a, a.length)
+            var r = a[0];
+            Estilo.val(r.ESTILO);
+            Pares.val(r.PARES);
+            SigAvance.val(r.DEPTOAVANCE);
+            pnlTablero.find(".estilo_control").text(r.ESTILO);
+            pnlTablero.find(".pares_control").text(r.PARES);
+            pnlTablero.find(".avance_control").text(r.DEPTOAVANCE); 
+            estatus_de_avance.text(r.ESTATUS_PRODUCCION);
+            f();
+        });
+    }
+    function getTotalPagado() {
+        ndias.forEach(function (e) {
+            console.log(e);
+        });
+    }
+    function getPagosXEmpleadoXSemana() {
+        $.getJSON('<?php print base_url('Avance8/getPagosXEmpleadoXSemana'); ?>',
+                {EMPLEADO: NumeroDeEmpleado.val(), SEMANA: Semana.val(), FRACCIONES: "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606"}).done(function (a) {
+            if (a.length > 0) {
+                var b = a[0];
+                var tt = 0;
+                ndias.forEach(function (i) {
+                    pnlTablero.find("#txt" + i).val(b[i]);
+                    tt += $.isNumeric(b[i]) ? parseFloat(b[i]) : 0;
+                });
+                pnlTablero.find("#txtTotal").val(tt);
+            }
+        }).fail(function (x, y, z) {
+            console.log(x.responseText);
+            onBeep(3);
+            swal('ERROR', ' ERROR AL OBTENER LO PAGADO AL EMPLEADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
         }).always(function () {
         });
     }
@@ -863,4 +960,14 @@
         margin-bottom: 0.0rem;
     }
 
+    .alert-success{
+        background: rgba(148,180,71,1);
+        background: -moz-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(148,180,71,1)), color-stop(100%, rgba(93,110,30,1)));
+        background: -webkit-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -o-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -ms-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: linear-gradient(to bottom, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94b447', endColorstr='#5d6e1e', GradientType=0 );
+    }
 </style>

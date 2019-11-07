@@ -1346,7 +1346,7 @@
                                                     }/*END SWITCH*/
                                                 }
                                                 nav_subitems = 1;
-                                            });
+                                            });//each subitems
                                             if (nav_subitems === 1) {
                                                 opcion += '</ul>';
                                             }
@@ -1387,6 +1387,7 @@
             opcion += '<a class="dropdown-item" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';
             opcion += '</div>';
             opcion += '</li>';
+            console.log(opcion);
             $("#navbarSupportedContent").find("ul.navbar-nav").html(opcion);
             /*AQUI ES DONDE ME CONSAGRO*/
             $("#navbarSupportedContent").find("ul.navbar-nav").find('.dropdown-menu a.dropdown-toggle').on('click', function (e) {

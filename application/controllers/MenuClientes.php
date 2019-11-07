@@ -30,9 +30,12 @@ class MenuClientes extends CI_Controller {
                 case 'CONTABILIDAD':
                     $this->load->view('vMenuClientes');
                     break;
+                case 'PRODUCCION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
             }
 
-            $this->load->view('vFooter')->view('vWatermark', $dt);
+            $this->load->view('vFooter')->view('vWatermark', $dt); 
         } else {
             $this->load->view('vEncabezado');
             $this->load->view('vSesion');

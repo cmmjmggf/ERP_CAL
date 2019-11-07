@@ -14,7 +14,7 @@
                 <label>Empleado</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2  text-center">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="4" style="height: 50px; font-weight: bold; font-size: 45px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 45px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
                 <h1 style="color: #c1850c !important;" class="nombre_empleado">-</h1>
@@ -783,6 +783,16 @@
     div.datatable-wide {
         padding-left: 0;
         padding-right: 0;
+    }
+    .alert-success{
+        background: rgba(148,180,71,1);
+        background: -moz-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(148,180,71,1)), color-stop(100%, rgba(93,110,30,1)));
+        background: -webkit-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -o-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -ms-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: linear-gradient(to bottom, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94b447', endColorstr='#5d6e1e', GradientType=0 );
     }
     .alert-warning{
         background: rgba(28,167,236,1);
