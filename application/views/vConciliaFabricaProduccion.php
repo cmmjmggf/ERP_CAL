@@ -78,7 +78,7 @@
                             return;
                         });
                     } else {//Si no, esta libre
-                        //INTENTAR CABIANDO DE METODO SIN FRM SIN AJAX NI CONTENTYPE
+//INTENTAR CABIANDO DE METODO SIN FRM SIN AJAX NI CONTENTYPE
                         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                         $.get(base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion', {
                             Precio: t_precio,

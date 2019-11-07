@@ -15,7 +15,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
 
     public function verificaUsoReporte() {
         $VerificaEnUso = $this->db->query("select concilias from modulos_en_uso ")->result();
-        print $VerificaEnUso[0]->concilias . ' asas';
+        //print $VerificaEnUso[0]->concilias . ' asas';
         if ($VerificaEnUso[0]->concilias === '1') {//Hay alguien haciendo la concilia y detenemos el proceso
             print 1;
             exit();
