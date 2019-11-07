@@ -324,7 +324,7 @@ class Avance extends CI_Controller {
         try {
             $x = $this->input->get();
             print json_encode($this->db->query("SELECT C.Estilo AS ESTILO, C.Pares AS PARES, C.DeptoProduccion AS DEPTOPROD, "
-                    . "E.MaqPlant1 AS MAQUILA_UNO, E.MaqPlant2 AS MAQUILA_DOS, E.MaqPlant3 AS MAQUILA_TRES,"
+                    . "E.MaqPlant1 AS MAQUILA_UNO, E.MaqPlant2 AS MAQUILA_DOS, E.MaqPlant3 AS MAQUILA_TRES, "
                     . "(CASE "
                     . "WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN "
                     . "(CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN "

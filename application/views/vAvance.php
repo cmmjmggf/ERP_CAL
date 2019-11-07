@@ -569,7 +569,7 @@
                     console.log("CONTROL", a);
                     if (a.length > 0) {
                         var r = a[0];
-                        ProcesoMaquila.val(r.MAQUILA_UNO);
+                        ProcesoMaquila.val(r.MAQUILADO);
                         ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
                         if (ProcesoMaquilaS.val()) {
                             ProcesoMaquilaS[0].selectize.disable();
