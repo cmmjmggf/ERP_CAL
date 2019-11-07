@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-3">
                             <label>Estilo</label>
-                            <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloGenCos" name="EstiloGenCos" required="">
+                            <input type="text" maxlength="7" class="form-control form-control-sm" id="EstiloGenCos" name="EstiloGenCos" required="">
                         </div>
                         <div class="col-2" >
                             <label for="" >Color</label>

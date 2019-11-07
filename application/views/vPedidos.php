@@ -139,7 +139,7 @@
                     <div class="row">
                         <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
                             <label for="Estilo" >Estilo*</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="6" id="Estilo" name="Estilo" required="" placeholder="">
+                            <input type="text" class="form-control form-control-sm" maxlength="7" id="Estilo" name="Estilo" required="" placeholder="">
                         </div>
                         <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
                             <label for="Estilo" >Color*</label>

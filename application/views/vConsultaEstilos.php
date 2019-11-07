@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-3">
                         <label>Estilo</label>
-                        <input type="text" maxlength="6" class="form-control form-control-sm" id="EstiloConsultaGenCos" name="EstiloConsultaGenCos" required="">
+                        <input type="text" maxlength="7" class="form-control form-control-sm" id="EstiloConsultaGenCos" name="EstiloConsultaGenCos" required="">
                     </div>
                     <div class="col-sm-12 mt-3">
                         <div class="table-responsive" id="EstiloLineaLista">

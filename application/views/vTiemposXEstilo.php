@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-1">
                             <label class="">Estilo</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="6" id="Estilo" name="estilo"   >
+                            <input type="text" class="form-control form-control-sm" maxlength="7" id="Estilo" name="estilo"   >
                         </div>
                     </div>
                 </div>

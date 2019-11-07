@@ -64,7 +64,7 @@
                 <input type="text" id="Maquila" name="Maquila" maxlength="2" class="form-control form-control-sm numeric" required="">
             </div>
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-2">
-                <label>Reproceso</label>
+                <label>1=Producción / 2=Reproceso</label>
                 <select id="Reproceso" name="Reproceso" class="form-control form-control-sm required">
                     <option value=""></option>
                     <option value="1">1 PRODUCCIÓN</option>
@@ -422,7 +422,7 @@
                                         }
                                     });
                                 } else { //Si el control no está recibido en controlterm
-
+                                    var currentdate = new Date();
                                     //Validación sólo para maquilas dif a 98
                                     if (Maquila.val() !== '98') {
                                         if (Maquila.val() === '1' && data[0].Depto !== '230') {
@@ -446,7 +446,16 @@
                                                 //Si es nuevo crea el folio
                                                 if (nuevo) {
                                                     //getFolio();
-                                                    pnlTablero.find('#Docto').focus().select();
+                                                    if (Maquila.val() === '1') {
+                                                        var folio = currentdate.getFullYear().toString().substr(-2)
+                                                                + ('0' + (currentdate.getMonth() + 1)).slice(-2)
+                                                                + ('0' + currentdate.getDate()).slice(-2);
+                                                        pnlTablero.find('#Docto').val(folio).focus();
+                                                    } else {
+                                                        pnlTablero.find('#Docto').val(currentdate.getFullYear().toString().substr(-1)).focus();
+                                                    }
+
+
                                                 } else {
                                                     pnlTablero.find('#Defecto')[0].selectize.focus();
                                                 }
@@ -474,11 +483,10 @@
                                         $.each(data[0], function (k, v) {
                                             pnlTablero.find("#" + k).val(v);
                                         });
-                                        //getFolio();
                                         //Si es nuevo crea el folio
                                         if (nuevo) {
                                             //getFolio();
-                                            pnlTablero.find('#Docto').focus().select();
+                                            pnlTablero.find('#Docto').focus();
                                         } else {
                                             pnlTablero.find('#Defecto')[0].selectize.focus();
                                         }
@@ -754,7 +762,7 @@
                                     ControlesRechazados.ajax.reload();
                                 }
                                 pnlTablero.find('#Docto').attr('readonly', true);
-                                pnlTablero.find("input:not(#Docto)").val('');
+                                pnlTablero.find("input:not(#Docto):not(#Maquila)").val('');
                                 pnlTablero.find("#Defecto")[0].selectize.clear(true);
                                 pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
                                 pnlTablero.find('#Control').focus();
@@ -861,6 +869,12 @@
                     "targets": [0],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [7],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
                 }
             ],
             "createdRow": function (row, data, index) {

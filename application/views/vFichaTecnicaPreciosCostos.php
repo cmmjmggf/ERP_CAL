@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-3" >
                             <label for="" >Estilo</label>
-                            <input type="text" class="form-control form-control-sm " maxlength="6"  id="Estilo" name="Estilo"   >
+                            <input type="text" class="form-control form-control-sm " maxlength="7"  id="Estilo" name="Estilo"   >
                         </div>
                         <div class="col-2">
                             <label>Piezas</label>
