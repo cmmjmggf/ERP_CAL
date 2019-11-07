@@ -13,13 +13,24 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 ->helper('file');
     }
 
-    public function onReporteConciliaFabricaProduccion() {
+    public function verificaUsoReporte() {
+        $VerificaEnUso = $this->db->query("select concilias from modulos_en_uso ")->result();
+        print $VerificaEnUso[0]->concilias . ' asas';
+        if ($VerificaEnUso[0]->concilias === '1') {//Hay alguien haciendo la concilia y detenemos el proceso
+            print 1;
+            exit();
+        } else {
+            exit();
+        }
+    }
 
+    public function onReporteConciliaFabricaProduccion() {
+        $this->db->query("update modulos_en_uso set concilias = 1 ");
         $cm = $this->ReporteConciliaFabricaProduccion_model;
-        $T_Precio = $this->input->post('Precio');
-        $Maq = $this->input->post('Maq');
-        $Sem = $this->input->post('Sem');
-        $Ano = $this->input->post('Ano');
+        $T_Precio = $this->input->get('Precio');
+        $Maq = $this->input->get('Maq');
+        $Sem = $this->input->get('Sem');
+        $Ano = $this->input->get('Ano');
 
 
         $this->db->query("TRUNCATE TABLE concilias_temp ");
@@ -129,6 +140,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 }
             }
         }
+        $this->db->query("update modulos_en_uso set concilias = 0 ");
         // **************Reporte*************** */
         $Grupos = $cm->getGruposReporte();
         $Articulos = $cm->getDetalleReporte();

@@ -61,38 +61,43 @@
         });
 
         mdlConciliaFabricaProduccion.find('#btnImprimir').on("click", function () {
-            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', true);
+            //mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', true);
             var t_precio = mdlConciliaFabricaProduccion.find('#Precio').val();
             if (t_precio !== '') {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData(mdlConciliaFabricaProduccion.find("#frmCaptura")[0]);
-                $.ajax({
-                    url: base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
+                //Verificamos que nadie ma esté sacando el reporte al mismo tiempo
+                $.get(base_url + 'index.php/ConciliaFabricaProduccion/verificaUsoReporte').done(function (data) {
                     console.log(data);
-                    if (data.length > 0) {
-
-                        onImprimirReporteFancyAFC(data, function (a, b) {
-                            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
-                        });
-                    } else {
+                    if (data === '1') {//Si trae 1 es porque esta en uso
                         swal({
                             title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                            text: "HAY OTRO USUARIO GENERANDO LA CONCILIA, POR FAVOR INTÉNTALO EN 10 SEGUNDOS",
                             icon: "error"
                         }).then((action) => {
-                            mdlConciliaFabricaProduccion.find('#Ano').focus();
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
+                            return;
+                        });
+                    } else {//Si no, esta libre
+                        //INTENTAR CABIANDO DE METODO SIN FRM SIN AJAX NI CONTENTYPE
+                        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                        $.get(base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion', {
+                            Precio: t_precio,
+                            Maq: mdlConciliaFabricaProduccion.find('#Maq').val(),
+                            Sem: mdlConciliaFabricaProduccion.find('#Sem').val(),
+                            Ano: mdlConciliaFabricaProduccion.find('#Ano').val()
+                        }).done(function (data, x, jq) {
+                            onImprimirReporteFancyAFC(data, function (a, b) {
+                                mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
+                            });
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
                         });
                     }
-                    HoldOn.close();
                 }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
                 });
             } else {
                 swal({
@@ -124,14 +129,7 @@
         mdlConciliaFabricaProduccion.find("#Maq").change(function () {
             onComprobarMaquilas($(this));
         });
-        mdlConciliaFabricaProduccion.find("#aMaq").change(function () {
-            onComprobarMaquilas($(this));
-        });
         mdlConciliaFabricaProduccion.find("#Sem").change(function () {
-            var ano = mdlConciliaFabricaProduccion.find("#Ano");
-            onComprobarSemanasProduccion($(this), ano.val());
-        });
-        mdlConciliaFabricaProduccion.find("#aSem").change(function () {
             var ano = mdlConciliaFabricaProduccion.find("#Ano");
             onComprobarSemanasProduccion($(this), ano.val());
         });
