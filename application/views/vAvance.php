@@ -30,16 +30,39 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <ul id="deptos" class="list-group my-2">
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="REBAJADO Y PERFORADO">30</span>30 - REBAJADO Y PERFORADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="FOLEADO">40</span>40 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ENTRETELADO">90</span>90 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="MAQUILA">100</span>100 - MAQUILA<span class="deptodes d-none">MAQUILA</span><span class="deptoclave d-none">100</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ALMACEN CORTE">105</span>105 - ALMACEN CORTE<span class="deptodes d-none">ALMACEN CORTE</span><span class="deptoclave d-none">105</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="PESPUNTE">110</span>110 - PESPUNTE<span class="deptodes d-none">PESPUNTE</span><span class="deptoclave d-none">110</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ENSUELADO">140</span>140 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="TEJIDO">150</span>150 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="MONTADO " a ""="">180</span>180 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"><span class="d-none" des="ADORNO " a ""="">210</span>210 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="FOLEADO">4</span><span class="d-none" des="FOLEADO">40</span>4 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ENTRETELADO">40</span><span class="d-none" des="ENTRETELADO">90</span>40 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="MAQUILA">42</span><span class="d-none" des="MAQUILA">100</span>42 - MAQUILA<span class="deptodes d-none">MAQUILA</span><span class="deptoclave d-none">100</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ALMACEN CORTE">44</span> <span class="d-none" des="ALMACEN CORTE">105</span>44 - ALMACEN CORTE<span class="deptodes d-none">ALMACEN CORTE</span><span class="deptoclave d-none">105</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="PESPUNTE">5</span> <span class="d-none" des="PESPUNTE">110</span>5 - PESPUNTE<span class="deptodes d-none">PESPUNTE</span><span class="deptoclave d-none">110</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ENSUELADO">55</span> <span class="d-none" des="ENSUELADO">140</span>55 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ALMACEN PESPUNTE">6</span> <span class="d-none" des="ALMACEN PESPUNTE">130</span>6 - ALMACEN PESPUNTE<span class="deptodes d-none">ALMACEN PESPUNTE</span><span class="deptoclave d-none">130</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="TEJIDO">7</span><span class="d-none" des="TEJIDO">150</span>7 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ALMACEN TEJIDO">8</span><span class="d-none" des="ALMACEN TEJIDO">160</span>8 - ALMACEN TEJIDO<span class="deptodes d-none">ALMACEN TEJIDO</span><span class="deptoclave d-none">160</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="MONTADO">9</span><span class="d-none" des="MONTADO ">180</span>9 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ADORNO ">10</span>10 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -323,7 +346,59 @@
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
+        
+        Departamento.on('keydown', function (e) {
+            if (e.keyCode === 13 && Departamento.val()) {
+                var fraccion_x_depto = {
+                    "33": 102, "4": 103, "40": 60,
+                    "42": 51, "5": "", "55": 300,
+                    "6": "", "7": "", "8": "",
+                    "9": "", "10": 500, "11": 600
+                };
+                Fraccion.val(fraccion_x_depto[Departamento.val()]);
+                FraccionS[0].selectize.setValue(Fraccion.val());
+                getPrecioFraccionXEstiloFraccion();
+                var dptos = pnlTablero.find("ul#deptos li"), depto = 0, clve = 0, deptodes = "";
+                pnlTablero.find("ul#deptos li").removeClass("li-selected");
+                $.each(dptos, function (k, v) {
+                    console.log(k, v);
+                    var spn = $(v).find("span.stsavan").text();
+                    clve = $.isNumeric(spn) ? parseInt(spn) : 0;
+                    var cu_clve = parseInt(Departamento.val());
+                    if (clve === cu_clve) {
+                        $(v).addClass("li-selected");
+                        depto = parseInt($(v).find("span.deptoclave").text());
+                        deptodes = $(v).find("span.deptodes").text();
+                        return false;
+                    }
+                });
+                if (depto >= 180 || depto === 30 || depto === 40 ||
+                        depto === 90 || depto === 100 || depto === 105 ||
+                        depto === 110 || depto === 130 || depto === 140 || depto === 150 || depto === 160) {
+//                    Departamento.val(parseInt(li.find("span").first().text())); 
+                    Control.focus().select();
+                    getDeptoActualXControl();
+                    DeptoDes.val(deptodes);
+                    DeptoAva.val(clve);
+                    onBeep(3);
+                } else {
+                    swal('ATENCIÓN', 'DEPARTAMENTO ' + Departamento.val() + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
+                        Departamento.focus().select();
+                    });
+                }
+            } else {
 
+            }
+        });
+        
+        FraccionS.change(function () {
+            if (FraccionS.val()) {
+                FraccionS[0].selectize.disable();
+            } else {
+                FraccionS[0].selectize.enable();
+            }
+        });
+        
         Fraccion.on('keydown', function (e) {
             if (e.keyCode === 13 && Fraccion.val()) {
                 FraccionS[0].selectize.setValue(Fraccion.val());
@@ -331,7 +406,7 @@
                 }
             }
         });
-
+        
         ProcesoMaquila.on('keydown', function (e) {
             if (e.keyCode === 13 && ProcesoMaquila.val()) {
                 ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
@@ -346,7 +421,7 @@
                 ProcesoMaquilaS[0].selectize.clear();
             }
         });
-
+        
         Empleado.on('keydown', function (e) {
             if (e.keyCode === 13 && Empleado.val()) {
                 EmpleadoS[0].selectize.setValue(Empleado.val());
@@ -362,15 +437,13 @@
             }
             Avances.ajax.reload();
         });
-
+        
         mdlRastreoXControl.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
-
         mdlRastreoXConcepto.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
-
         mdlRastreoXControl.on('shown.bs.modal', function () {
             mdlRastreoXControl.find("input").val('');
             $.each(mdlRastreoXControl.find("select"), function (k, v) {
@@ -378,7 +451,6 @@
             });
             ControlRXCTROL.focus();
         });
-
         mdlRastreoXConcepto.on('shown.bs.modal', function () {
             mdlRastreoXConcepto.find("input").val('');
             $.each(mdlRastreoXConcepto.find("select"), function (k, v) {
@@ -387,43 +459,36 @@
             EmpleadoRXC[0].selectize.focus();
             EmpleadoRXC[0].selectize.open();
         });
-
         FraccionRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
                 RastreoXControl.ajax.reload();
             }
         });
-
         EmpleadoRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
                 RastreoXControl.ajax.reload();
             }
         });
-
         SemanaRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
                 RastreoXControl.ajax.reload();
             }
         });
-
         ControlRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
                 RastreoXControl.ajax.reload();
             }
         });
-
         ConceptoRXC.on('change', function () {
             if ($(this).val()) {
                 RastreoXConcepto.ajax.reload();
             }
         });
-
         EmpleadoRXC.on('change', function () {
             if ($(this).val()) {
                 RastreoXConcepto.ajax.reload();
             }
         });
-
         btnDesarrolloDeMuestras.click(function () {
             $.fancybox.open({
                 src: '<?php print base_url('DesarrolloMuestras/?origen=PRODUCCION'); ?>',
@@ -446,15 +511,12 @@
                 }
             });
         });
-
         btnRastreoXControl.click(function () {
             mdlRastreoXControl.modal('show');
         });
-
         btnRastreoXConcepto.click(function () {
             mdlRastreoXConcepto.modal('show');
         });
-
         btnBorrar.click(function () {
             var row = Avances.rows({selected: true}).data();
             if (parseInt(row.ID) > 0) {
@@ -473,7 +535,6 @@
                 swal('ATENCIÓN', 'ES NECESARIO SELECCIONAR UN REGISTRO A ELIMINAR', 'warning');
             }
         });
-
         btnAceptar.click(function () {
             if (PrecioFraccion.val() && DeptoActual.val()) {
                 var f = new FormData();
@@ -511,17 +572,14 @@
                 swal('ATENCIÓN', 'ES NECESARIO QUE LA FRACCION TENGA UN PRECIO', 'warning');
             }
         });
-
         Estilo.on('change keydown keypress', function () {
             getPrecioFraccionXEstiloFraccion();
         });
-
         Fraccion.on('change keydown keypress', function () {
             if (Fraccion.val()) {
                 getPrecioFraccionXEstiloFraccion();
             }
         });
-
         btnBuscarControl.click(function () {
             if (Fecha.val() && Departamento.val() && Semana.val()) {
                 getDeptosXControl($(this).parent().find("#Control"));
@@ -529,12 +587,9 @@
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FECHA', 'warning');
             }
         });
-
         getDepartamentos();
-
         $("#usuario").val('<?php print $_SESSION['USERNAME']; ?>').prop('disabled', true);
         $(".usuario_logued").text('<?php print $_SESSION['USERNAME']; ?>');
-
         $.getJSON('<?php print base_url('Avance/getMaquilasPlantillas'); ?>').done(function (d) {
             d.forEach(function (v) {
                 ProcesoMaquilaS[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
@@ -542,7 +597,6 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
-
         $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
             d.forEach(function (v) {
                 EmpleadoS[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
@@ -552,7 +606,6 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
-
         $.getJSON('<?php print base_url('Avance/getFracciones'); ?>').done(function (d) {
             d.forEach(function (v) {
                 FraccionS[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
@@ -560,7 +613,6 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
-
         Control.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 getDeptosXControl($(this));
@@ -587,9 +639,7 @@
                 Avances.ajax.reload();
             }
         });
-
         Fecha.val(getActualDate());
-
         $.post('<?php print base_url('Avance/getSemanaNomina'); ?>', {
             FECHA: Fecha.val()
         }).done(function (d) {
@@ -600,7 +650,6 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
-
         var cols = [
             {"data": "ID"}/*0*/,
             {"data": "EMPLEADO"}/*1*/,
@@ -652,13 +701,11 @@
                 var api = this.api();
                 var r = 0, prs = 0;
                 $.each(api.rows().data(), function (k, v) {
-                    console.log(k, v);
                     prs += parseInt(v.PARES);
                     r += parseFloat(v.SUBTOTAL);
                 });
                 pnlTablero.find(".total_pares").text(prs);
                 pnlTablero.find(".total_fracciones").text("$ " + r.toFixed(3));
-
             }
         };
         Avances = tblAvance.DataTable(xoptions);
@@ -700,7 +747,6 @@
                 [0, 'desc']
             ]
         });
-
         RastreoXControl = tblRastreoXControl.DataTable({
             "dom": 'ritp',
             "ajax": {
@@ -744,7 +790,6 @@
         });
         getConceptosNomina();
     });
-
     function getPrecioFraccionXEstiloFraccion() {
         console.log(Fraccion.val());
         if (Fraccion.val() && Estilo.val()) {

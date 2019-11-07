@@ -332,7 +332,7 @@ class Avance8 extends CI_Controller {
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => $v->NUMERO_FRACCION
+                                    'Fraccion' => 0
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
@@ -358,7 +358,7 @@ class Avance8 extends CI_Controller {
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => $v->NUMERO_FRACCION
+                                    'Fraccion' => 0
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();

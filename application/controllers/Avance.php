@@ -143,7 +143,8 @@ class Avance extends CI_Controller {
     public function getEmpleados() {
         try {
             print json_encode($this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', (CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) AS EMPLEADO")
-                                    ->from("empleados AS E")->where_in('E.FijoDestajoAmbos', array(2, 3))->where('E.AltaBaja', 1)->get()->result());
+                                    ->from("empleados AS E")->where_in('E.FijoDestajoAmbos', array(2, 3))
+                                    ->where('E.AltaBaja', 1)->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -324,17 +325,17 @@ class Avance extends CI_Controller {
         try {
             $x = $this->input->get();
             print json_encode($this->db->query("SELECT C.Estilo AS ESTILO, C.Pares AS PARES, C.DeptoProduccion AS DEPTOPROD, "
-                    . "E.MaqPlant1 AS MAQUILA_UNO, E.MaqPlant2 AS MAQUILA_DOS, E.MaqPlant3 AS MAQUILA_TRES, "
-                    . "(CASE "
-                    . "WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN "
-                    . "(CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN "
-                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN  "
-                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" "
-                    . "ELSE E.MaqPlant4 END) "
-                    . "ELSE E.MaqPlant3 END)"
-                    . "ELSE E.MaqPlant2 END)  "
-                    . "ELSE E.MaqPlant1 END) AS MAQUILADO "
-                    . "FROM controles AS C INNER JOIN estilos AS E ON C.Estilo = E.Clave WHERE C.Control = {$x['CONTROL']}")->result());
+                                    . "E.MaqPlant1 AS MAQUILA_UNO, E.MaqPlant2 AS MAQUILA_DOS, E.MaqPlant3 AS MAQUILA_TRES, "
+                                    . "(CASE "
+                                    . "WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN "
+                                    . "(CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN "
+                                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN  "
+                                    . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" "
+                                    . "ELSE E.MaqPlant4 END) "
+                                    . "ELSE E.MaqPlant3 END)"
+                                    . "ELSE E.MaqPlant2 END)  "
+                                    . "ELSE E.MaqPlant1 END) AS MAQUILADO "
+                                    . "FROM controles AS C INNER JOIN estilos AS E ON C.Estilo = E.Clave WHERE C.Control = {$x['CONTROL']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -344,87 +345,17 @@ class Avance extends CI_Controller {
         try {
             $db = $this->db;
             $x = $this->input;
+            $xXx = $this->input->post();
             $id = 0;
-            $frac = intval($x->post('FRACCION'));
+            $frac = 0;
+            if ($frac !== '') {
+                $frac = intval($x->post('FRACCION'));
+            }
             $depto = intval($x->post('DEPTO'));
-            /* AVANCE A "MONTADO A" O "MONTADO B" */
-            if ($frac === 500 && $depto === 180 ||
-                    $frac === 503 && $depto === 190) {
 
-                $db->insert('avance', array(
-                    'Control' => $x->post('CONTROL'),
-                    'FechaAProduccion' => $x->post('FECHA'),
-                    'Departamento' => $x->post('DEPTO'),
-                    'DepartamentoT' => $x->post('DEPTOT'),
-                    'FechaAvance' => $x->post('FECHA'),
-                    'Estatus' => 'A',
-                    'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('d/m/Y'),
-                    'Hora' => Date('h:i:s a'),
-                    'Fraccion' => $x->post('FRACCION')
-                ));
-                $id = $this->db->insert_id();
-                if ($depto === 180) {
-                    $this->db->set('EstatusProduccion', "MONTADO A")
-                            ->set('DeptoProduccion', $x->post('DEPTO'))
-                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
-                } else if ($depto === 190) {
-                    $this->db->set('EstatusProduccion', "MONTADO B")
-                            ->set('DeptoProduccion', $x->post('DEPTO'))
-                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
-                }
-            }
-            /* AVANCE A "ADORNO A" O "ADORNO B" */
-            if ($frac === 600 && $depto === 210 ||
-                    $frac === 600 && $depto === 220) {
-                $db->insert('avance', array(
-                    'Control' => $x->post('CONTROL'),
-                    'FechaAProduccion' => $x->post('FECHA'),
-                    'Departamento' => $x->post('DEPTO'),
-                    'DepartamentoT' => $x->post('CONTROL'),
-                    'FechaAvance' => $x->post('FECHA'),
-                    'Estatus' => 'A',
-                    'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('d/m/Y'),
-                    'Hora' => Date('h:i:s a'),
-                    'Fraccion' => $x->post('FRACCION')
-                ));
-                $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
-                /* DE ADORNO B PASA A ALMACEN DE ADORNO */
-                if ($depto === 220) {
-                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
-                            ->set('DeptoProduccion', $x->post('DEPTO'))
-                            ->where('Control', $x->post('CONTROL'))->update('controles');
-                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
-                            ->set('DeptoProduccion', $x->post('DEPTO'))
-                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
-                    $this->db->set('stsavan', 11)->where('Control', $x->post('CONTROL'))->update('pedidox');
-                }
-                $id = $db->insert_id();
-            }
-
-            $fecha = $x->post('FECHA');
-            $dia = substr($fecha, 0, 2);
-            $mes = substr($fecha, 3, 2);
-            $anio = substr($fecha, 6, 4);
-
-            $nueva_fecha = new DateTime();
-            $nueva_fecha->setDate($anio, $mes, $dia);
-
-            $db->set('EstatusProduccion', $x->post('DEPTOT'))
-                    ->set('DeptoProduccion', $x->post('DEPTO'))
-                    ->where('Control', $x->post('CONTROL'))->update('controles');
-            $db->set('EstatusProduccion', $x->post('DEPTOT'))
-                    ->set('DeptoProduccion', $x->post('DEPTO'))
-                    ->where('Control', $x->post('CONTROL'))->update('pedidox');
-
-            //SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
-            if ($depto !== 220) {
-                if ($depto === 30 && $frac === 103) {
+            if ($depto !== 10) {
+                if ($depto === 33 && $frac === 102) {
                     /* REBAJADO Y PERFORADO */
-                    $db->set('fec33', Date('Y-m-d h:i:s'))
-                            ->where('contped', $x->post('CONTROL'))
-                            ->update('avaprd');
                     $db->insert('avance', array(
                         'Control' => $x->post('CONTROL'),
                         'FechaAProduccion' => $x->post('FECHA'),
@@ -435,11 +366,49 @@ class Avance extends CI_Controller {
                         'Usuario' => $_SESSION["ID"],
                         'Fecha' => Date('d/m/Y'),
                         'Hora' => Date('h:i:s a'),
-                        'Fraccion' => $x->post('FRACCION')
+                        'Fraccion' => 103
                     ));
-                }
+                    /* ACTUALIZA A 140 ENSUELADO, stsavan 55 */
+                    $this->db->set('EstatusProduccion', 'REBAJADO')->set('DeptoProduccion', 30)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 33)->set('EstatusProduccion', 'REBAJADO')
+                            ->set('DeptoProduccion', 30)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec33', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+                            ->update('avaprd');
 
-                if ($depto === 40 && $frac === 60) {
+                    $xfraccion = 60;
+                    $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
+                                    ->from('fracpagnomina AS F')
+                                    ->where('F.control', $xXx['CONTROL'])
+                                    ->where('F.numfrac', $xfraccion)
+                                    ->get()->result();
+                    if (intval($check_fraccion[0]->EXISTE) >= 1) {
+                        exit(0);
+                    }
+                    $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                    $data = array(
+                        "numeroempleado" => $xXx['EMPLEADO'],
+                        "maquila" => intval($CONTROL[0]->MAQUILA),
+                        "control" => $xXx['CONTROL'],
+                        "estilo" => $xXx['ESTILO'],
+                        "pares" => $xXx['PARES'],
+                        "fecha" => Date('Y-m-d h:i:s'),
+                        "semana" => $xXx['SEMANA'],
+                        "depto" => $xXx['DEPTO'],
+                        "anio" => Date('Y'));
+                    $data["fraccion"] = $xfraccion;
+                    $data["numfrac"] = $xfraccion;
+                    $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                    $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                    $data["preciofrac"] = $PXFC;
+                    $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
+                    $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                    $this->db->insert('fracpagnomina', $data);
+
+                    exit(0);
+                } else if ($depto === 4 && $frac === 103) {
                     /* FOLEADO */
                     $db->set('fec4', Date('Y-m-d h:i:s'))
                             ->where('contped', $x->post('CONTROL'))
@@ -454,10 +423,12 @@ class Avance extends CI_Controller {
                         'Usuario' => $_SESSION["ID"],
                         'Fecha' => Date('d/m/Y'),
                         'Hora' => Date('h:i:s a'),
-                        'Fraccion' => $x->post('FRACCION')
+                        'Fraccion' => 60
                     ));
+                    exit(0);
                 }
-                if ($depto === 90 && $frac === 51) {
+//                if ($depto === 90 && $frac === 51) {
+                else if ($depto === 42 && $frac === 51) {
                     /* ENTRETELADO */
                     $db->insert('avance', array(
                         'Control' => $x->post('CONTROL'),
@@ -469,54 +440,189 @@ class Avance extends CI_Controller {
                         'Usuario' => $_SESSION["ID"],
                         'Fecha' => Date('d/m/Y'),
                         'Hora' => Date('h:i:s a'),
-                        'Fraccion' => $x->post('FRACCION')
+                        'Fraccion' => 51
                     ));
-                    $db->set('fec40', Date('Y-m-d h:i:s'))
-                            ->where('contped', $x->post('CONTROL'))
-                            ->update('avaprd');
                     $check_maquila = $db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
                                             . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
                                             . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
                                             . '(CASE WHEN E.MaqPlant4 IS NULL THEN 0 ELSE E.MaqPlant4 END) AS MP4', false)
                                     ->from('estilos AS E')->like('E.Clave', $x->post('ESTILO'))->get()->result();
-                    if (intval($check_maquila[0]->MP1) >= 0 &&
-                            intval($check_maquila[0]->MP2) >= 0 &&
-                            intval($check_maquila[0]->MP3) >= 0 &&
+                    if (intval($check_maquila[0]->MP1) >= 0 ||
+                            intval($check_maquila[0]->MP2) >= 0 ||
+                            intval($check_maquila[0]->MP3) >= 0 ||
                             intval($check_maquila[0]->MP4) >= 0) {
+                        $avance = array(
+                            'Control' => $xXx['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 100,
+                            'DepartamentoT' => 'MAQUILA',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => 0
+                        );
+                        $this->db->insert('avance', $avance);
+                        $id = $this->db->insert_id();
+                        /* ACTUALIZA A 100 MAQUILA, stsavan 42 */
+                        $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
+                                ->where('Control', $xXx['CONTROL'])
+                                ->update('controles');
+                        $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
+                                ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
+                                ->update('pedidox');
                         $this->db->set('fec42', Date('Y-m-d h:i:s'))
-                                ->where('contped', $x->post('CONTROL'))
+                                ->where('contped', $xXx['CONTROL'])
                                 ->update('avaprd');
-                        $this->db->set('EstatusProduccion', 'ALMACEN CORTE')
-                                ->set('DeptoProduccion', 105)
-                                ->where('Control', $x->post('CONTROL'))
-                                ->update('controles');
                     } else {
-                        $this->db->set('EstatusProduccion', 'MAQUILA')
-                                ->set('DeptoProduccion', 100)
-                                ->where('Control', $x->post('CONTROL'))
+                        $this->db->insert('avance', array(
+                            'Control' => $xXx['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 105,
+                            'DepartamentoT' => 'ALMACEN CORTE',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => 0
+                        ));
+                        $id = $this->db->insert_id();
+
+                        $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                                ->where('Control', $xXx['CONTROL'])
                                 ->update('controles');
+                        $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
+                                ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                                ->update('pedidox');
+                        $this->db->set('fec44', Date('Y-m-d h:i:s'))
+                                ->where('contped', $xXx['CONTROL'])
+                                ->update('avaprd');
                     }
+                    exit(0);
                 }
             }
-            $id = $db->insert_id();
-            $db->insert('fracpagnomina', array(
-                'numeroempleado' => $x->post('EMPLEADO'),
-                'maquila' => substr($x->post('CONTROL'), 4, 2),
-                'control' => $x->post('CONTROL'),
-                'estilo' => $x->post('ESTILO'),
-                'numfrac' => $x->post('FRACCION'),
-                'preciofrac' => $x->post('PRECIO_FRACCION'),
-                'pares' => $x->post('PARES'),
-                'subtot' => floatval($x->post('PARES')) * floatval($x->post('PRECIO_FRACCION')),
-                'status' => 0,
-                'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
-                'semana' => $x->post('SEMANA'),
-                'depto' => $x->post('DEPTO'),
-                'registro' => 0,
-                'anio' => Date('Y'),
-                'avance_id' => $id,
-                'fraccion' => $x->post('FRACCIONT'))
-            );
+
+
+
+            /* AVANCE A "MONTADO A" O "MONTADO B" */
+//            if ($frac === 500 && $depto === 180 ||
+//                    $frac === 503 && $depto === 190) {
+            if ($frac === 500 && $depto === 10 ||
+                    $frac === 503 && $depto === 10) {
+
+                $db->insert('avance', array(
+                    'Control' => $x->post('CONTROL'),
+                    'FechaAProduccion' => $x->post('FECHA'),
+                    'Departamento' => $x->post('DEPTO'),
+                    'DepartamentoT' => $x->post('DEPTOT'),
+                    'FechaAvance' => $x->post('FECHA'),
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => $x->post('FRACCION')
+                ));
+                $id = $this->db->insert_id();
+//                if ($depto === 180) {
+                if ($depto === 10) {
+                    $this->db->set('EstatusProduccion', 'MONTADO A')->set('DeptoProduccion', 180)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 10)->set('EstatusProduccion', 'MAQUILA')
+                            ->set('DeptoProduccion', 180)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec9', Date('Y-m-d h:i:s'))
+                            ->where('contped', $xXx['CONTROL'])
+                            ->update('avaprd');
+                } else if ($depto === 190) {
+                    $this->db->set('EstatusProduccion', "MONTADO B")
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
+                }
+            }
+            /* AVANCE A "ADORNO A" O "ADORNO B" */
+//            if ($frac === 600 && $depto === 210 ||
+//                    $frac === 600 && $depto === 220) {
+            if ($frac === 600 && $depto === 11 ||
+                    $frac === 600 && $depto === 11) {
+                $db->insert('avance', array(
+                    'Control' => $x->post('CONTROL'),
+                    'FechaAProduccion' => $x->post('FECHA'),
+                    'Departamento' => $x->post('DEPTO'),
+                    'DepartamentoT' => $x->post('CONTROL'),
+                    'FechaAvance' => $x->post('FECHA'),
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => $x->post('FRACCION')
+                ));
+                $this->db->set('stsavan', 10)->where('Control', $x->post('CONTROL'))->update('pedidox');
+                /* DE ADORNO B PASA A ALMACEN DE ADORNO */
+                if ($depto === 10) {
+                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('controles');
+                    $db->set('EstatusProduccion', 'ALMACEN ADORNO')
+                            ->set('stsavan', 11)
+                            ->set('DeptoProduccion', $x->post('DEPTO'))
+                            ->where('Control', $x->post('CONTROL'))->update('pedidox');
+
+
+                    $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 210)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 10)->set('EstatusProduccion', 'MAQUILA')
+                            ->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec10', Date('Y-m-d h:i:s'))
+                            ->where('contped', $xXx['CONTROL'])
+                            ->update('avaprd');
+                }
+                $id = $db->insert_id();
+            }
+
+            $fecha = $x->post('FECHA');
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+//
+//            $db->set('EstatusProduccion', $x->post('DEPTOT'))
+//                    ->set('DeptoProduccion', $x->post('DEPTO'))
+//                    ->where('Control', $x->post('CONTROL'))->update('controles');
+//            $db->set('EstatusProduccion', $x->post('DEPTOT'))
+//                    ->set('DeptoProduccion', $x->post('DEPTO'))
+//                    ->where('Control', $x->post('CONTROL'))->update('pedidox');
+            //SOLO SI NO HA LLEGADO A ADORNO B SE COLOCA OTRO ESTATUS
+//            if ($depto !== 220) {
+//                if ($depto === 30 && $frac === 103) {
+
+            if ($frac > 0) {
+                $id = $db->insert_id();
+                $db->insert('fracpagnomina', array(
+                    'numeroempleado' => $x->post('EMPLEADO'),
+                    'maquila' => substr($x->post('CONTROL'), 4, 2),
+                    'control' => $x->post('CONTROL'),
+                    'estilo' => $x->post('ESTILO'),
+                    'numfrac' => $x->post('FRACCION'),
+                    'preciofrac' => $x->post('PRECIO_FRACCION'),
+                    'pares' => $x->post('PARES'),
+                    'subtot' => floatval($x->post('PARES')) * floatval($x->post('PRECIO_FRACCION')),
+                    'status' => 0,
+                    'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
+                    'semana' => $x->post('SEMANA'),
+                    'depto' => $x->post('DEPTO'),
+                    'registro' => 0,
+                    'anio' => Date('Y'),
+                    'avance_id' => intval($id) >= 0 ? intval($id) : 0,
+                    'fraccion' => $x->post('FRACCIONT'))
+                );
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
