@@ -55,6 +55,26 @@ class ParesAsignados extends CI_Controller {
         }
     }
 
+    public function getParesPreAsignados() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $x = $this->input;
+        $parametros["MAQUILAINICIO"] = intval($x->post('MAQUILA_INICIAL'));
+        $parametros["MAQUILAFIN"] = intval($x->post('MAQUILA_FINAL'));
+        $parametros["SEMANAINICIO"] = intval($x->post('SEMANA_INICIAL'));
+        $parametros["SEMANAFIN"] = intval($x->post('SEMANA_FINAL'));
+        $parametros["ANO"] = intval($x->post('ANIO'));
+        $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/asignados/';
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\asignados\ParesPreAsignadosXLinea.jasper');
+        $jc->setFilename('ParesPreAsignadosXLinea_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        print $jc->getReport();
+    }
+
     public function getParesAsignados() {
         try {
             $x = $this->input;

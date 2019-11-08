@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
                 <div class="form-group">
                     <div class="custom-control custom-radio">
                         <input type="radio" id="rEstiloColor" name="rCheck" class="custom-control-input">
@@ -50,17 +50,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
                 <div class="custom-control custom-radio">
                     <input type="radio" id="rFechaEntregaCliente" name="rCheck" class="custom-control-input">
                     <label class="custom-control-label" for="rFechaEntregaCliente">Fecha entrega cte</label>
                 </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
+
             </div>
         </div>
     </div>
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
             <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
+            <button type="button" class="btn btn-success" id="btnPorLineaMatriz">X Linea/Matriz</button>
         </div>
     </div>
 </div>
@@ -90,6 +94,28 @@
             ParesMaquilaInicial.focus();
             ParesAnio.val(new Date().getFullYear());
         });
+
+        mdlParesAsignados.find("#btnPorLineaMatriz").click(function () {
+            HoldOn.open({
+                theme: 'sk-cube',
+                message: 'Por favor espere...'
+            });
+            $.post(master_url_pares_asignados + 'getParesPreAsignados', {
+                MAQUILA_INICIAL: ParesMaquilaInicial.val().trim() !== '' ? ParesMaquilaInicial.val() : '',
+                MAQUILA_FINAL: ParesMaquilaFinal.val().trim() !== '' ? ParesMaquilaFinal.val() : '',
+                SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',
+                SEMANA_FINAL: ParesSemanaFinal.val().trim() !== '' ? ParesSemanaFinal.val() : '',
+                ANIO: ParesAnio.val().trim() !== '' ? ParesAnio.val() : ''
+            }).done(function (data, x, jq) {
+                onImprimirReporteFancy(data);
+            }).fail(function (x, y, z) {
+                console.log(x.responseText);
+                swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+            }).always(function () {
+                HoldOn.close();
+            });
+        });
+
 
         mdlParesAsignados.find("#btnAceptar").click(function () {
             HoldOn.open({

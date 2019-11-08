@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXLinea" language="groovy" pageWidth="595" pageHeight="842" columnWidth="571" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="30078ee2-aa69-41c3-b089-7774d6afb523">
-	<property name="ireport.zoom" value="4.8400000000000425"/>
+	<property name="ireport.zoom" value="1.54217315771814"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="64"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -32,7 +32,7 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN lineas AS L ON E.Linea = L.Clave
 WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND
-P.Estatus NOT IN ('C')  AND P.control <> 0 AND P.control IS NOT NULL
+P.Estatus NOT IN ('C')  AND P.control = 0 AND P.stsavan = 0
 GROUP BY L.Clave
 ORDER BY L.Clave ASC]]>
 	</queryString>
@@ -59,11 +59,11 @@ ORDER BY L.Clave ASC]]>
 				<reportElement x="0" y="58" width="570" height="1" uuid="e2c8fdc6-9445-4252-ae72-a96a58bcf55e"/>
 			</line>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="79" y="16" width="134" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
+				<reportElement isPrintRepeatedValues="false" x="79" y="16" width="152" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pares asignados a maquila]]></text>
+				<text><![CDATA[Pares pre-asignados a maquila]]></text>
 			</staticText>
 			<textField>
 				<reportElement isPrintRepeatedValues="false" x="79" y="0" width="225" height="16" isPrintInFirstWholeBand="true" uuid="acf1674d-8383-4182-83a8-ad3cf9bb07b9"/>
@@ -116,31 +116,31 @@ ORDER BY L.Clave ASC]]>
 				<text><![CDATA[TOTAL X LINEA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="213" y="16" width="25" height="14" uuid="7662b134-d229-4ec0-8421-aa5fd8587030"/>
+				<reportElement x="231" y="16" width="25" height="14" uuid="7662b134-d229-4ec0-8421-aa5fd8587030"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MAQUILAINICIO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="238" y="16" width="49" height="14" isPrintInFirstWholeBand="true" uuid="74909832-5f71-4511-bc92-64cb3493ac9f"/>
+				<reportElement isPrintRepeatedValues="false" x="256" y="16" width="49" height="14" isPrintInFirstWholeBand="true" uuid="74909832-5f71-4511-bc92-64cb3493ac9f"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[De la sem]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="312" y="16" width="51" height="14" isPrintInFirstWholeBand="true" uuid="bd23c34f-1047-4c6f-85af-45eaed7f2fc8"/>
+				<reportElement isPrintRepeatedValues="false" x="330" y="16" width="51" height="14" isPrintInFirstWholeBand="true" uuid="bd23c34f-1047-4c6f-85af-45eaed7f2fc8"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[a la sem]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="287" y="16" width="25" height="14" uuid="38a1f993-7185-4927-a392-c647847eceab"/>
+				<reportElement x="305" y="16" width="25" height="14" uuid="38a1f993-7185-4927-a392-c647847eceab"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{SEMANAINICIO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="363" y="16" width="25" height="14" uuid="694bb96a-606e-4323-aa94-4cf858dfa41f"/>
+				<reportElement x="381" y="16" width="25" height="14" uuid="694bb96a-606e-4323-aa94-4cf858dfa41f"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{SEMANAFIN}]]></textFieldExpression>
 			</textField>
@@ -154,26 +154,26 @@ ORDER BY L.Clave ASC]]>
 			</textField>
 			<subreport>
 				<reportElement x="101" y="0" width="424" height="18" uuid="6db63eab-d3db-444b-9f1e-15ef3e9da140"/>
-				<subreportParameter name="MAQUILAINICIO">
-					<subreportParameterExpression><![CDATA[$P{MAQUILAINICIO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="MAQUILAFIN">
-					<subreportParameterExpression><![CDATA[$P{MAQUILAFIN}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="ANO">
-					<subreportParameterExpression><![CDATA[$P{ANO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="SEMANAINICIO">
-					<subreportParameterExpression><![CDATA[$P{SEMANAINICIO}]]></subreportParameterExpression>
+				<subreportParameter name="LINEA">
+					<subreportParameterExpression><![CDATA[$F{Linea}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="SEMANAFIN">
 					<subreportParameterExpression><![CDATA[$P{SEMANAFIN}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="LINEA">
-					<subreportParameterExpression><![CDATA[$F{Linea}]]></subreportParameterExpression>
+				<subreportParameter name="ANO">
+					<subreportParameterExpression><![CDATA[$P{ANO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MAQUILAFIN">
+					<subreportParameterExpression><![CDATA[$P{MAQUILAFIN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MAQUILAINICIO">
+					<subreportParameterExpression><![CDATA[$P{MAQUILAINICIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SEMANAINICIO">
+					<subreportParameterExpression><![CDATA[$P{SEMANAINICIO}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Horizontal.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Horizontal2.jasper"]]></subreportExpression>
 			</subreport>
 			<textField>
 				<reportElement x="525" y="0" width="47" height="18" uuid="b72cff25-3f60-4c2c-a577-cc8bc517d268"/>

@@ -30,12 +30,6 @@
 	<subDataset name="Table Dataset 1" uuid="3c871842-0faa-4096-b4d6-f103ccdea395"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
-	<parameter name="maq" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="ano" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<parameter name="depto" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -46,22 +40,20 @@ when  (D.Clave = '150') then
 ifnull((
 select EM.Busqueda from fracpagnomina FPN
 left JOIN empleados EM on EM.Numero = FPN.numeroempleado
-where FPN.depto = 150 and FPN.numfrac = 401 and FPN.control = C.Control
+where FPN.depto = 150 and FPN.numfrac = 401 and FPN.control = PE.Control
 limit 1 ),'')
 
 when  (D.Clave = '110') then
 ifnull((
-SELECT E.Busqueda
-FROM fracpagnomina fpn
-left join empleados E on E.Numero = fpn.numeroempleado
-where fpn.numfrac = 300 and fpn.depto = 110 and fpn.control = C.Control
+SELECT  case when av.pespunte <> 5 then E.Busqueda else '' end as empleado
+FROM avaprd av
+join empleados E on E.Numero = av.pespunte
+where av.contped = PE.Control
 limit 1 ),'')
 
 else ''
 end as Empleado,
-
-
-C.Pedido, C.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
+PE.Clave as Pedido, PE.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
 cast(ifnull(D.Clave,'1') as signed) as ClaveDepto,
 ifnull(D.Descripcion,'PROGRAMADO') as nombreDepto,
 case
@@ -89,32 +81,21 @@ cast(ifnull(PE.ParesFacturados,0) as decimal(5,2)) as ParesFacturados,
 cast(ifnull(PE.Pares,0) as signed) - cast(ifnull(PE.ParesFacturados,0) as signed) as Saldo,
 E.GdoDif,
 PE.Estilo
-FROM controles C
-left join pedidox PE on PE.Control =  C.control
-left join departamentos D on D.Descripcion  = C. EstatusProduccion
-left join avaprd A on A.contped = C.control
-left join estilos E on E.Clave = PE.Estilo
-left join programacion PR on PR.control = C.control
-where
-(D.Clave not in ('260','270') or D.Clave is null)
-and
-(
-cast(PE.maquila as signed) = $P{maq}
-and PE.ano = $P{ano}
-and D.Clave = $P{depto}
-)
-order by Empleado,C.control ASC]]>
+FROM pedidox PE
+join departamentos D on D.Clave  = PE.DeptoProduccion
+join avaprd A on A.contped = PE.Control
+join estilos E on E.Clave = PE.Estilo
+where D.Clave = $P{depto} and PE.Maquila = 1
+order by Empleado,PE.control ASC]]>
 	</queryString>
 	<field name="Empleado" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Pedido" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="Pedido" class="java.lang.String"/>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FechaProgramacion" class="java.sql.Timestamp">
+	<field name="FechaProgramacion" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ClaveDepto" class="java.lang.Long"/>
@@ -131,7 +112,9 @@ order by Empleado,C.control ASC]]>
 	<field name="ParesFacturados" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Saldo" class="java.lang.Long"/>
+	<field name="Saldo" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="GdoDif" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -343,42 +326,14 @@ order by Empleado,C.control ASC]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Avance por depto. de la maquila]]></text>
+				<text><![CDATA[Avance por depto]]></text>
 			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="77" y="24" width="25" height="12" forecolor="#000000" uuid="241f50af-a10a-45b4-aaec-9ba6f37d9786"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Año:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="231" y="10" width="27" height="14" uuid="af01c898-11bc-4d2f-b001-c13e4e5f8653"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{maq}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="102" y="24" width="41" height="12" uuid="48c2220c-099e-4592-b439-0bcd31c060ce"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{ano}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement style="Column header" x="376" y="45" width="24" height="11" forecolor="#000000" uuid="c25ad366-8e31-41c4-a4f6-f527ee775656"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="260" y="10" width="66" height="14" forecolor="#000000" uuid="3f9ddac3-82b2-4199-b80a-a08e5f323591"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[departamento:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="51" y="45" width="55" height="11" forecolor="#000000" uuid="cd9504ed-8147-475a-8250-f5df7516c586"/>
@@ -423,7 +378,7 @@ order by Empleado,C.control ASC]]>
 				<text><![CDATA[Dif.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="333" y="10" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ed26f891-f895-4be9-8cd1-a3e60cafb721"/>
+				<reportElement mode="Transparent" x="231" y="10" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ed26f891-f895-4be9-8cd1-a3e60cafb721"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
