@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-12 float-left">
-                <legend >Tiempos por estilo departamento</legend>
+                <legend >Personal por departamentos de maquilas</legend>
             </div>
         </div>
         <hr>
@@ -11,96 +11,82 @@
                 <div class="col-11">
                     <div class="row">
                         <div class="col-1">
-                            <label class="">Linea</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="5" id="Linea" name="linea"   >
+                            <label class="">Maquila</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="5" id="Maq" name="Maq"   >
                         </div>
                         <div class="col-3" >
                             <label for="" >-</label>
-                            <select id="sLinea" class="form-control form-control-sm  NotSelectize" >
+                            <select id="sMaquila" class="form-control form-control-sm  NotSelectize" >
                                 <option value=""></option>
                                 <?php
-                                foreach ($this->db->select("C.Clave AS CLAVE, C.Descripcion AS LINEA, C.Tipo ", false)
-                                        ->from('lineas AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('LINEA', 'ASC')->get()->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}'>{$v->LINEA}</option>";
+                                foreach ($this->db->select("C.Clave AS CLAVE, C.Nombre AS MAQUILA ", false)
+                                        ->from('maquilas AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('MAQUILA', 'ASC')->get()->result() as $k => $v) {
+                                    print "<option value='{$v->CLAVE}'>{$v->MAQUILA}</option>";
                                 }
                                 ?>
                             </select>
                         </div>
-                        <div class="col-1">
-                            <label class="">Estilo</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="7" id="Estilo" name="estilo"   >
-                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row" id="DatosMinutos">
+            <div class="row" id="DatosEmpleados">
                 <div class="col-11">
                     <div class="row">
                         <div class="col-1">
-                            <label class="">Cte-Piel</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="cortep" name="cortep"   >
-                        </div>
-                        <div class="col-1">
-                            <label class="">Cte-Forro</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="cortef" name="cortef"   >
+                            <label class="">Corte</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="cortep" name="dep10"   >
                         </div>
                         <div class="col-1">
                             <label class="">Rayado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="rayado" name="rayado"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="rayado" name="dep15"   >
                         </div>
                         <div class="col-1">
                             <label class="">Rebajado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="rebaja" name="rebaja"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="rebaja" name="dep20"   >
                         </div>
                         <div class="col-1">
                             <label class="">Foleado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="folead" name="folead"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="folead" name="dep24"   >
                         </div>
                         <div class="col-1">
                             <label class="">Entretelado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="entrete" name="entrete"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="entrete" name="dep35"   >
                         </div>
                         <div class="col-1">
                             <label class="">Pespunte</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="pespu" name="pespu"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="pespu" name="dep40"   >
                         </div>
                         <div class="col-1">
                             <label class="">Ensuelado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="ensuel" name="ensuel"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="ensuel" name="dep45"   >
                         </div>
                         <div class="col-1">
                             <label class="">Prel-Pes</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="prepes" name="prepes"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="prepes" name="dep46"   >
                         </div>
                         <div class="col-1">
-                            <label class="">Laser</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="tejido" name="tejido"   >
+                            <label class="">Tejido</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="tejido" name="dep60"   >
                         </div>
                         <div class="col-1">
                             <label class="">Montado</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="montado" name="montado"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="montado" name="dep80"   >
                         </div>
                         <div class="col-1">
                             <label class="">Adorno</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="adorno" name="adorno"   >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="adorno" name="dep90"   >
+                        </div>
+                        <div class="col-1">
+                            <label class="">Total</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly azul notSum" readonly=""  id="total"   >
                         </div>
                     </div>
                 </div>
                 <div class="col-1">
-                    <div class="col-12">
-                        <label class="">Total</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly azul notSum" readonly=""  id="total"   >
-                    </div>
+                    <button type="button" class="btn btn-primary btn-sm mt-4" id="btnAceptar"><i class="fa fa-check"></i> ACEPTAR</button>
                 </div>
             </div>
         </form>
-        <div class="row mt-2">
-            <div class="col-11">
-            </div>
-            <div class="col-1 " align="right">
-                <button type="button" class="btn btn-primary btn-sm mr-2" id="btnAceptar"><i class="fa fa-check"></i> ACEPTAR</button>
-            </div>
-        </div>
         <hr>
         <!--                Tabla-->
         <!--Primer tabla-->
@@ -108,11 +94,8 @@
             <table id="tblRegistros" class="table table-sm display " style="width:100%">
                 <thead>
                     <tr>
-                        <th class="d-none">Linea</th>
-                        <th>Linea</th>
-                        <th>Estilo</th>
-                        <th>C-Piel</th>
-                        <th>C-Forro</th>
+                        <th>Maq</th>
+                        <th>Corte</th>
                         <th>Rayado</th>
                         <th>Rebajado</th>
                         <th>Foleado</th>
@@ -123,6 +106,7 @@
                         <th>Laser</th>
                         <th>Montado</th>
                         <th>Adorno</th>
+                        <th>Fecha</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
@@ -133,79 +117,57 @@
 </div>
 
 <script>
-    var master_url = base_url + 'index.php/TiemposXEstilo/';
+    var master_url = base_url + 'index.php/PersonalMaquilasMinutaje/';
     var pnlTablero = $("#pnlTablero");
     var esNuevo = true;
     var tblRegistros = $('#tblRegistros');
     var Registros;
     $(document).ready(function () {
         init();
-        pnlTablero.find('#Linea').change(function () {
-            var txtlinea = $(this).val();
-            if (txtlinea) {
-                $.getJSON(base_url + 'index.php/GeneraCostosVenta/onVerificarLinea', {Linea: txtlinea}).done(function (data) {
+        pnlTablero.find('#Maq').change(function () {
+            var txtmaq = $(this).val();
+            if (txtmaq && txtmaq !== '1') {
+                $.getJSON(base_url + 'index.php/PersonalMaquilasMinutaje/onVerificarMaquila', {Maq: txtmaq}).done(function (data) {
                     if (data.length > 0) {
-                        var linea = txtlinea;
-                        pnlTablero.find("#sLinea")[0].selectize.addItem(txtlinea, true);
-                        getRegistros(linea);
-                        pnlTablero.find('#Estilo').focus().select();
-                    } else {
-                        swal('ERROR', 'LA LINEA CAPTURADA NO EXISTE', 'warning').then((value) => {
-                            pnlTablero.find('#Linea').focus().val('');
-                        });
-                    }
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
-            }
-
-        });
-        pnlTablero.find('#sLinea').change(function () {
-            if ($(this).val()) {
-                var linea = $(this).val();
-                pnlTablero.find('#Linea').val(linea);
-                getRegistros(linea);
-                pnlTablero.find('#Estilo').focus().select();
-            }
-        });
-        pnlTablero.find('#Estilo').change(function () {
-            var txtestilo = $(this).val();
-            if (txtestilo) {
-                $.getJSON(base_url + 'index.php/TiemposXEstilo/onVerificarEstilo', {Estilo: txtestilo}).done(function (dataUno) {
-                    if (dataUno.length > 0) {
-                        $.getJSON(base_url + 'index.php/TiemposXEstilo/onVerificarTiemposEstilo', {Estilo: txtestilo}).done(function (data) {
-                            pnlTablero.find("#DatosMinutos").find('input').val("");
+                        $.getJSON(base_url + 'index.php/PersonalMaquilasMinutaje/onVerificarExisteDeptosMaq', {Maq: txtmaq}).done(function (data) {
+                            pnlTablero.find("#DatosEmpleados").find('input').val("");
                             if (data.length > 0) {//Existe y traemos los tiempos
                                 esNuevo = false;
-                                $.each(data[0], function (k, v) {
-                                    pnlTablero.find("[name='" + k + "']").val(v);
-                                });
                             } else {
                                 esNuevo = true;
-
                             }
-                            getRegistros(dataUno[0].linea);
-                            pnlTablero.find('#Linea').val(dataUno[0].linea);
-                            pnlTablero.find("#sLinea")[0].selectize.addItem(dataUno[0].linea, true);
+                            pnlTablero.find("#sMaquila")[0].selectize.addItem(txtmaq, true);
                             pnlTablero.find('#cortep').focus().select();
                         }).fail(function (x) {
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);
                         });
-
                     } else {
-                        swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
-                            pnlTablero.find('#Estilo').focus().val('');
+                        swal('ERROR', 'LA MAQUILA CAPTURADA NO EXISTE', 'warning').then((value) => {
+                            pnlTablero.find('#sMaquila')[0].selectize.clear(true);
+                            pnlTablero.find('#Maq').focus().val('');
                         });
                     }
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
+            } else {
+                swal('ERROR', 'MAQUILA INVÁLIDA', 'warning').then((value) => {
+                    pnlTablero.find('#sMaquila')[0].selectize.clear(true);
+                    pnlTablero.find('#Maq').focus().val('');
+                });
+            }
+
+        });
+        pnlTablero.find('#sMaquila').change(function () {
+            if ($(this).val()) {
+                var maq = $(this).val();
+                pnlTablero.find('#Maq').val(maq);
+                pnlTablero.find('#cortep').focus().select();
             }
         });
-        pnlTablero.find("#DatosMinutos").find('input').blur(function () {
+        pnlTablero.find("#DatosEmpleados").find('input').blur(function () {
             suma();
         });
         pnlTablero.find("#btnAceptar").click(function () {
@@ -221,8 +183,11 @@
             }).done(function (data) {
                 onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                 Registros.ajax.reload();
-                pnlTablero.find("#DatosMinutos").find('input').val("");
-                pnlTablero.find('#Estilo').val('').focus();
+                pnlTablero.find("input").val("");
+                $.each(pnlTablero.find("select"), function (k, v) {
+                    pnlTablero.find("select")[k].selectize.clear(true);
+                });
+                pnlTablero.find('#Maq').focus();
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             });
@@ -231,7 +196,7 @@
 
     function suma() {
         var total = 0;
-        pnlTablero.find("#DatosMinutos").find('input:not(.notSum)').each(function () {
+        pnlTablero.find("#DatosEmpleados").find('input:not(.notSum)').each(function () {
             total = total + parseFloat(($(this).val() === '') ? 0 : $(this).val());
         });
         pnlTablero.find('#total').val(parseFloat(total).toFixed(2));
@@ -239,16 +204,16 @@
 
     function init() {
         handleEnterDiv(pnlTablero);
-        pnlTablero.find('#sLinea').selectize();
-        getRegistros(0);
+        pnlTablero.find('#sMaquila').selectize();
+        getRegistros();
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
-        pnlTablero.find('#Linea').focus();
+        pnlTablero.find('#Maq').focus();
     }
 
-    function getRegistros(linea) {
+    function getRegistros() {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblRegistros')) {
             tblRegistros.DataTable().destroy();
@@ -260,39 +225,23 @@
             "ajax": {
                 "url": master_url + 'getRegistros',
                 "dataSrc": "",
-                "data": {Linea: linea},
                 "type": "GET"
             },
             "columns": [
-                {"data": "ID"},
-                {"data": "linea"},
-                {"data": "estilo"},
-                {"data": "cortep"},
-                {"data": "cortef"},
-                {"data": "rayado"},
-                {"data": "rebaja"},
-                {"data": "folead"},
-                {"data": "entrete"},
-                {"data": "pespu"},
-                {"data": "ensuel"},
-                {"data": "prepes"},
-                {"data": "tejido"},
-                {"data": "montado"},
-                {"data": "adorno"},
+                {"data": "numcia"},
+                {"data": "dep10"},
+                {"data": "dep15"},
+                {"data": "dep20"},
+                {"data": "dep24"},
+                {"data": "dep35"},
+                {"data": "dep40"},
+                {"data": "dep45"},
+                {"data": "dep46"},
+                {"data": "dep60"},
+                {"data": "dep80"},
+                {"data": "dep90"},
+                {"data": "fecha"},
                 {"data": "eliminar"}
-            ],
-            "columnDefs": [
-                {
-                    "targets": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-                    "render": function (data, type, row) {
-                        return  $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
-                }
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -300,12 +249,9 @@
                     var index = parseInt(k);
                     switch (index) {
                         case 0:
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
                             c.addClass('text-info text-strong');
                             break;
-                        case 14:
+                        case 13:
                             /*UNIDAD*/
                             c.addClass('text-danger text-success');
                             break;
@@ -323,7 +269,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [1, 'asc'], [2, 'asc']
+                [0, 'asc']
             ],
             "initComplete": function (x, y) {
 
@@ -337,7 +283,7 @@
             title: "¿Deseas eliminar el registro? ", text: "*El registro se eliminará de forma permanente*", icon: "warning", buttons: ["Cancelar", "Aceptar"]
         }).then((willDelete) => {
             if (willDelete) {
-                $.post(master_url + 'onEliminar', {ID: IDX}).done(function () {
+                $.post(master_url + 'onEliminar', {Maq: IDX}).done(function () {
                     $.notify({
                         // options
                         message: 'SE HA ELIMINADO EL REGISTRO'
@@ -354,8 +300,8 @@
                             align: "right"
                         }
                     });
-                    pnlTablero.find("#DatosMinutos").find('input').val("");
-                    pnlTablero.find('#Estilo').val('').focus();
+                    pnlTablero.find("#DatosEmpleados").find('input').val("");
+                    pnlTablero.find('#Maq').val('').focus();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -392,13 +338,6 @@
         margin-bottom: 0.0rem;
     }
 
-    .form-control-sm,  .form-control {
-        padding: 0.15rem 0.5rem;
-        margin-top:  0.08rem;
-        margin-bottom: 0.08rem;
-        font-weight: bold;
-        font-size: 0.85rem !important;
-    }
 
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7,
     .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto,
