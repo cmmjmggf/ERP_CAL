@@ -31,13 +31,17 @@
                 <label class="">Pares</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" readonly="" maxlength="4" id="Pares" name="Pares"   >
             </div>
+            <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
+                <label for="Cliente" >Cliente</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cliente" name="Cliente" required="" placeholder="">
+            </div>
             <div class="col-3" >
-                <label for="" >Cliente</label>
-                <select id="Cliente" name="Cliente" class="form-control form-control-sm  NotSelectize" >
+                <label for="" >-</label>
+                <select id="sCliente" name="sCliente" class="form-control form-control-sm  NotSelectize notEnter selectNotEnter" >
                     <option value=""></option>
                     <?php
-                    foreach ($this->db->select("C.Clave AS CLAVE, concat(C.Clave,'-',C.RazonS) AS CLIENTE ", false)
-                            ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('abs(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                    foreach ($this->db->select("C.Clave AS CLAVE, concat(C.RazonS) AS CLIENTE ", false)
+                            ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('CLIENTE', 'ASC')->get()->result() as $k => $v) {
                         print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
                     }
                     ?>
@@ -69,6 +73,9 @@
                 <button type="button" class="btn btn-info btn-sm" id="btnOrdenaXEstiloColor" onclick="ordenaPorEstiloColor()"><i class="fa fa-shoe-prints"></i> Estilo-Color</button>
             </div>
             <div class="col-1 ">
+                <button type="button" class="btn btn-info btn-sm" id="btnOrdenCliente" onclick="ordenaCliente()"><i class="fa fa-user"></i> Cliente</button>
+            </div>
+            <div class="col-1 ">
                 <button type="button" class="btn btn-info btn-sm" id="btnOrdenaXFecEnt" onclick="ordenaPorFechaEntrega()"><i class="fa fa-calendar-alt"></i> Fecha Entrega</button>
             </div>
         </div>
@@ -94,6 +101,7 @@
                         <th class="d-none">bPedido</th>
                         <th class="d-none">besticolor</th>
                         <th class="d-none">bfecha</th>
+                        <th class="d-none">bcliente</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -368,6 +376,7 @@
     var asc = true;
     var asc2 = true;
     var asc3 = true;
+    var asc4 = true;
     function onModificarRenglonPedido() {
         var renglones_seleccionados = Registros.rows('.selected').data().length;
         if (renglones_seleccionados > 0) {
@@ -509,18 +518,44 @@
             }
 
         });
-        pnlTablero.find("#Cliente").change(function () {
-            pnlTablero.find("#Pedido").focus().select();
-        });
-        pnlTablero.find("#Pedido").keydown(function (e) {
-            //Registros.column(0).search('^' + $(this).val() + '$', true, false).draw();
+
+        pnlTablero.find('#Cliente').keydown(function (e) {
             if (e.keyCode === 13) {
-                var cte = pnlTablero.find("#Cliente").val();
-                if ($(this).val()) {
-                    getRegistrosPorCliente(cte, $(this).val());
+                var txtCliente = $(this).val();
+                if (txtCliente) {
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtCliente}).done(function (data) {
+                        if (data.length > 0) {
+                            getRegistrosPorCliente(txtCliente);
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtCliente, true);
+                            pnlTablero.find('#Pedido').focus().select();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE CAPTURADO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
                 }
             }
-
+        });
+        pnlTablero.find("#sCliente").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Cliente').val($(this).val());
+                getRegistrosPorCliente($(this).val());
+                pnlTablero.find("#Pedido").focus().select();
+            }
+        });
+        pnlTablero.find("#Pedido").keydown(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    Registros.column(14).search('^' + $(this).val() + '$', true, false).draw();
+                } else {
+                    Registros.column(14).search('', true, false).draw();
+                }
+            }
         });
         pnlTablero.find("#btnCalculaMinutaje").click(function () {
             isValid('pnlValidacion');
@@ -804,7 +839,15 @@
 
         });
     });
-
+    function ordenaCliente() {
+        if (asc4) {
+            Registros.order([17, 'asc']).draw();
+            asc4 = false;
+        } else {
+            Registros.order([17, 'desc']).draw();
+            asc4 = true;
+        }
+    }
     function ordenaPorFechaEntrega() {
         if (asc3) {
             Registros.order([16, 'asc']).draw();
@@ -814,7 +857,6 @@
             asc3 = true;
         }
     }
-
     function ordenaPorPedido() {
         if (asc) {
             Registros.order([14, 'asc']).draw();
@@ -824,7 +866,6 @@
             asc = true;
         }
     }
-
     function ordenaPorEstiloColor() {
         if (asc2) {
             Registros.order([15, 'asc']).draw();
@@ -834,7 +875,7 @@
             asc2 = true;
         }
     }
-    function getRegistrosPorCliente(cte, pedido) {
+    function getRegistrosPorCliente(cte) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblRegistros')) {
             tblRegistros.DataTable().destroy();
@@ -846,7 +887,7 @@
             "ajax": {
                 "url": master_url + 'getRegistrosPorCliente',
                 "dataSrc": "",
-                "data": {Cliente: cte, Pedido: pedido},
+                "data": {Cliente: cte},
                 "type": "GET"
             },
             "columns": [
@@ -866,7 +907,8 @@
                 {"data": "ObservacionDetalle"},
                 {"data": "bpedido"},
                 {"data": "besticolor"},
-                {"data": "bfechaentrega"}
+                {"data": "bfechaentrega"},
+                {"data": "bcliente"}
             ],
             "columnDefs": [
                 {
@@ -887,6 +929,11 @@
                 },
                 {
                     "targets": [16],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [17],
                     "visible": false,
                     "searchable": true
                 }
@@ -957,7 +1004,8 @@
                 {"data": "ObservacionDetalle"},
                 {"data": "bpedido"},
                 {"data": "besticolor"},
-                {"data": "bfechaentrega"}
+                {"data": "bfechaentrega"},
+                {"data": "bcliente"}
             ],
             "columnDefs": [
                 {
@@ -978,6 +1026,11 @@
                 },
                 {
                     "targets": [16],
+                    "visible": false,
+                    "searchable": true
+                },
+                {
+                    "targets": [17],
                     "visible": false,
                     "searchable": true
                 }
@@ -1017,8 +1070,8 @@
         });
     }
     function init() {
-        pnlTablero.find('#Cliente').selectize({
-            openOnFocus: false,
+        pnlTablero.find('select').selectize({
+            openOnFocus: false
         });
         getRegistros(0, 0, 0);
         pnlTablero.find("input").val("");
@@ -1158,13 +1211,11 @@
             console.log(x, y, z);
         });
     }
-
     function validate(event, val) {
         if (((event.which !== 46 || (event.which === 46 && val === '')) || val.indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
             event.preventDefault();
         }
     }
-
 </script>
 <style>
     .text-strong {
@@ -1188,12 +1239,12 @@
         background-color: #FFBEAC !important;
 
     }
-    label {
+    label{
         margin-top: 0.12rem;
         margin-bottom: 0.0rem;
     }
 
-    .form-control-sm,  .form-control {
+    #frmCaptura input.form-control-sm,  #frmCaptura input.form-control {
         padding: 0.15rem 0.5rem;
         margin-top:  0.04rem;
         margin-bottom: 0.04rem;

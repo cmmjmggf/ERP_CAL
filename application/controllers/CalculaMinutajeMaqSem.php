@@ -36,6 +36,15 @@ class CalculaMinutajeMaqSem extends CI_Controller {
         }
     }
 
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select * from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onModificarEnMasa() {
         try {
             $x = $this->input->post();
@@ -224,7 +233,6 @@ class CalculaMinutajeMaqSem extends CI_Controller {
     public function getRegistrosPorCliente() {
         try {
             $Cliente = $this->input->get('Cliente');
-            $Pedido = $this->input->get('Pedido');
             print json_encode($this->db->query("select "
                                     . "case when stsavan not in ('12','13','14') then "
                                     . "CONCAT('<input type=''text'' value=''', clave ,''' onchange=''onModificarPedido(this.value,',ID ,')'' onkeypress=''validate(event, this.value);'' class=''form-control form-control-sm slim'' onpaste= ''return false;''  />')"
@@ -273,9 +281,13 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                                     . "else Observacion "
                                     . "end as Observacion, "
                                     . ""
-                                    . "ObservacionDetalle, clave as bpedido, concat(estilo,color) as besticolor, str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega,
+                                    . "ObservacionDetalle,
+                                        clave as bpedido,
+                                        concat(estilo,color) as besticolor,
+                                        str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega,
+                                        cliente as bcliente,
                                         ID
-                                    from pedidox where cliente = $Cliente and clave = $Pedido and estatus <> 'C'
+                                    from pedidox where cliente = $Cliente and estatus <> 'C' and stsavan = 0 and control = 0
   ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -335,7 +347,11 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                                     . "else Observacion "
                                     . "end as Observacion, "
                                     . ""
-                                    . "ObservacionDetalle, clave as bpedido, concat(estilo,color) as besticolor, str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega,
+                                    . "ObservacionDetalle,
+                                        clave as bpedido,
+                                        concat(estilo,color) as besticolor,
+                                        str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega,
+                                        cliente as bcliente,
                                         ID
                                     from pedidox where ano =$Ano and maquila = $Maq and semana = $Sem and estatus <> 'C'
   ")->result());

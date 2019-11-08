@@ -241,6 +241,7 @@
                             pnlTablero.find('#Tp').focus().select();
                         } else {
                             swal('ERROR', 'EL CLIENTE CAPTURADO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#sCliente')[0].selectize.clear(true);
                                 pnlTablero.find('#Cliente').focus().val('');
                             });
                         }
