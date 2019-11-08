@@ -3,10 +3,22 @@
         <div class="row" >
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <h3 class="font-weight-bold ">Avance</h3>
-            </div>
-
-        </div>
-        <hr>
+            </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
+                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info">
+                    <span class="fa fa-bullseye"></span>
+                    Rastreo X Concepto
+                </button>
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info" >
+                    <span class="fa fa-globe"></span>
+                    Rastreo X Control
+                </button>
+                <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-info" >
+                    <span class="fa fa-paint-brush"></span>
+                    Desarrollo de muestras
+                </button>
+            </div> 
+        </div> 
         <div class="row">
             <!--SECCION UNO-->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
@@ -105,7 +117,8 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <label>Depto.Actual</label>
-                    <input type="text" id="DeptoActual" name="DeptoActual" class="form-control form-control-sm numbersOnly"  readonly="" maxlength="2">
+                    <input type="text" id="DeptoActual" name="DeptoActual" class="form-control form-control-sm numbersOnly d-none"  readonly="" maxlength="2">
+                    <input type="text" id="AvanceDeptoActual" name="AvanceDeptoActual" class="form-control form-control-sm numbersOnly"  readonly="" maxlength="2">
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Pares</label>
@@ -184,22 +197,7 @@
                     <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
                 </a>
             </div>
-            <div class="w-100">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
-                    <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info">
-                        <span class="fa fa-bullseye"></span>
-                        Rastreo X Concepto
-                    </button>
-                    <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info" >
-                        <span class="fa fa-globe"></span>
-                        Rastreo X Control
-                    </button>
-                    <button type="button" id="btnDesarrolloDeMuestras" name="btnDesarrolloDeMuestras" class="btn  btn-sm btn-info" >
-                        <span class="fa fa-paint-brush"></span>
-                        Desarrollo de muestras
-                    </button>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>
@@ -320,6 +318,7 @@
             Fraccion = pnlTablero.find("#Fraccion"),
             FraccionS = pnlTablero.find("#FraccionS"),
             DeptoActual = pnlTablero.find("#DeptoActual"),
+            AvanceDeptoActual = pnlTablero.find("#AvanceDeptoActual"),
             Pares = pnlTablero.find("#Pares"),
             btnAceptar = pnlTablero.find("#btnAceptar"), btnBorrar = pnlTablero.find("#btnBorrar"),
             ProcesoMaquila = pnlTablero.find("#ProcesoMaquila"),
@@ -346,12 +345,12 @@
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
-        
+
         Departamento.on('keydown', function (e) {
             if (e.keyCode === 13 && Departamento.val()) {
                 var fraccion_x_depto = {
                     "33": 102, "4": 103, "40": 60,
-                    "42": 51, "5": "", "55": 300,
+                    "42": 51, "44": 51, "5": "", "55": 300,
                     "6": "", "7": "", "8": "",
                     "9": "", "10": 500, "11": 600
                 };
@@ -377,7 +376,6 @@
                         depto === 110 || depto === 130 || depto === 140 || depto === 150 || depto === 160) {
 //                    Departamento.val(parseInt(li.find("span").first().text())); 
                     Control.focus().select();
-                    getDeptoActualXControl();
                     DeptoDes.val(deptodes);
                     DeptoAva.val(clve);
                     onBeep(3);
@@ -390,7 +388,7 @@
 
             }
         });
-        
+
         FraccionS.change(function () {
             if (FraccionS.val()) {
                 FraccionS[0].selectize.disable();
@@ -398,15 +396,23 @@
                 FraccionS[0].selectize.enable();
             }
         });
-        
+
         Fraccion.on('keydown', function (e) {
             if (e.keyCode === 13 && Fraccion.val()) {
                 FraccionS[0].selectize.setValue(Fraccion.val());
                 if (FraccionS.val()) {
+                    FraccionS[0].selectize.disable();
+                    Fraccion.focus().select();
+                } else {
+                    FraccionS[0].selectize.enable();
+                    FraccionS[0].selectize.clear();
                 }
+            } else {
+                FraccionS[0].selectize.enable();
+                FraccionS[0].selectize.clear();
             }
         });
-        
+
         ProcesoMaquila.on('keydown', function (e) {
             if (e.keyCode === 13 && ProcesoMaquila.val()) {
                 ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
@@ -421,7 +427,7 @@
                 ProcesoMaquilaS[0].selectize.clear();
             }
         });
-        
+
         Empleado.on('keydown', function (e) {
             if (e.keyCode === 13 && Empleado.val()) {
                 EmpleadoS[0].selectize.setValue(Empleado.val());
@@ -437,7 +443,7 @@
             }
             Avances.ajax.reload();
         });
-        
+
         mdlRastreoXControl.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
@@ -536,13 +542,13 @@
             }
         });
         btnAceptar.click(function () {
-            if (PrecioFraccion.val() && DeptoActual.val()) {
+            if (Departamento.val() && Control.val()) {
                 var f = new FormData();
                 f.append('CONTROL', Control.val());
                 f.append('FECHA', Fecha.val());
                 f.append('DEPTO', Departamento.val());
                 f.append('SEMANA', Semana.val());
-                f.append('PROCESO_MAQUILA', ProcesoMaquila.val());
+                f.append('PROCESO_MAQUILA', ProcesoMaquila.val() ? ProcesoMaquila.val() : 0);
                 f.append('EMPLEADO', Empleado.val());
                 f.append('FRACCION', Fraccion.val());
                 var frt = Fraccion.find("option:selected").text();
@@ -550,9 +556,10 @@
                 f.append('FRACCIONT', frt);
                 f.append('ESTILO', Estilo.val());
                 f.append('DEPTOACTUAL', DeptoActual.val());
+                f.append('AVANCEDEPTOACTUAL', AvanceDeptoActual.val());
                 f.append('DEPTOT', DeptoDes.val());
                 f.append('PARES', Pares.val());
-                f.append('PRECIO_FRACCION', PrecioFraccion.val());
+                f.append('PRECIO_FRACCION', (PrecioFraccion.val() ? PrecioFraccion.val() : ''));
                 $.ajax({
                     url: '<?php print base_url('Avance/onAvanzar'); ?>',
                     type: "POST",
@@ -562,14 +569,35 @@
                     data: f
                 }).done(function (a, b, c) {
                     console.log(a);
-                    swal('ATENCIÓN', 'SE HA GENERADO UN AVANCE', 'success').then((value) => {
-                        Avances.ajax.reload();
-                    });
+                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA AVANZADO EL CONTROL ' + Control.val(), 'success');
+                    Fraccion.val('');
+                    FraccionS[0].selectize.clear();
+                    Empleado.val('');
+                    EmpleadoS[0].selectize.clear();
+                    Estilo.val('');
+                    DeptoActual.val('');
+                    AvanceDeptoActual.val('');
+                    Pares.val('');
+                    Departamento.focus().select();
+                    btnAceptar.attr('disabled', true);
+                    Departamento.focus().select();
                 }).fail(function (x, y, z) {
                     getError(x);
                 });
             } else {
-                swal('ATENCIÓN', 'ES NECESARIO QUE LA FRACCION TENGA UN PRECIO', 'warning');
+                if (Departamento.val()) {
+                    if (Control.val()) {
+
+                    } else {
+                        iMsg('DEBE DE ESPECIFICAR UN CONTROL', 'w', function () {
+                            Control.focus().select();
+                        });
+                    }
+                } else {
+                    iMsg('DEBE DE ESPECIFICAR UN DEPARTAMENTO', 'w', function () {
+                        Departamento.focus().select();
+                    });
+                }
             }
         });
         Estilo.on('change keydown keypress', function () {
@@ -580,13 +608,13 @@
                 getPrecioFraccionXEstiloFraccion();
             }
         });
-        btnBuscarControl.click(function () {
-            if (Fecha.val() && Departamento.val() && Semana.val()) {
-                getDeptosXControl($(this).parent().find("#Control"));
-            } else {
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FECHA', 'warning');
-            }
-        });
+//        btnBuscarControl.click(function () {
+//            if (Fecha.val() && Departamento.val() && Semana.val()) {
+//                getDeptosXControl($(this).parent().find("#Control"));
+//            } else {
+//                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FECHA', 'warning');
+//            }
+//        });
         getDepartamentos();
         $("#usuario").val('<?php print $_SESSION['USERNAME']; ?>').prop('disabled', true);
         $(".usuario_logued").text('<?php print $_SESSION['USERNAME']; ?>');
@@ -614,29 +642,52 @@
             console.log(x, y, z);
         });
         Control.on('keydown', function (e) {
-            if (e.keyCode === 13) {
-                getDeptosXControl($(this));
-                getDeptoActualXControl();
+            if (e.keyCode === 13 && Control.val()) {
+//                getDeptosXControl($(this));
+//                getDeptoActualXControl();
                 $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
                     console.log("CONTROL", a);
                     if (a.length > 0) {
-                        var r = a[0];
-                        ProcesoMaquila.val(r.MAQUILADO);
-                        ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
-                        if (ProcesoMaquilaS.val()) {
-                            ProcesoMaquilaS[0].selectize.disable();
-                            Empleado.focus().select();
-                        } else {
-                            ProcesoMaquila.focus().select();
-                            ProcesoMaquilaS[0].selectize.enable();
+                        var rr = a[0];
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 13) {
+                            iMsg('ESTE CONTROL YA ESTA FACTURADO', 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                            });
+                        }
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 14) {
+                            iMsg('ESTE CONTROL ESTA CANCELADO', 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                            });
+                        }
+                        if (parseInt(rr.ESTATUS_PRODUCCION) !== 13 && parseInt(rr.ESTATUS_PRODUCCION) !== 14) {
+                            ProcesoMaquila.val(rr.MAQUILADO);
+                            ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
+                            Estilo.val(rr.ESTILO);
+                            DeptoActual.val(rr.DEPTO);
+                            AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
+                            Pares.val(rr.PARES);
+                            var rta = '<?php print base_url(); ?>' + rr.FOTO;
+                            FotoEstilo[0].src = rta;
+                            FotoEstilo.parent()[0].href = rta;
+                            if (ProcesoMaquilaS.val()) {
+                                ProcesoMaquilaS[0].selectize.disable();
+                                Empleado.focus().select();
+                                btnAceptar.attr('disabled', false);
+                            } else {
+                                ProcesoMaquila.focus().select();
+                                ProcesoMaquilaS[0].selectize.enable();
+                                btnAceptar.attr('disabled', true);
+                                btnAceptar.focus();
+                            }
                         }
                     }
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
-
+                    Avances.ajax.reload();
                 });
-                Avances.ajax.reload();
             }
         });
         Fecha.val(getActualDate());
@@ -804,12 +855,12 @@
                     DescripcionFraccion.val(frt);
                     btnAceptar.attr('disabled', false);
                 } else {
-                    onBeep(5);
-                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA LA FRACCION SELECCIONADA', 'warning').then((value) => {
-                        PrecioFraccion.val('');
-                        Fraccion[0].selectize.open();
-                        btnAceptar.attr('disabled', true);
-                    });
+//                    onBeep(5);
+//                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA LA FRACCION SELECCIONADA', 'warning').then((value) => {
+//                        PrecioFraccion.val('');
+//                        Fraccion[0].selectize.open();
+                    btnAceptar.attr('disabled', false);
+//                    });
                 }
             }).fail(function (x, y, z) {
                 getError(x);
@@ -828,6 +879,7 @@
                     var rr = r[0];
                     Estilo.val(rr.ESTILO);
                     DeptoActual.val(rr.DEPTO);
+                    AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
                     Pares.val(rr.PARES);
                     var rta = '<?php print base_url(); ?>' + rr.FOTO;
                     FotoEstilo[0].src = rta;
@@ -863,7 +915,7 @@
             } else if (c === deptos.length) {
                 onBeep(5);
                 //                swal('ATENCIÓN', 'EL CONTROL CUMPLE CON LOS DEPARTAMENTOS REQUERIDOS, SELECCIONE EL SIGUIENTE DEPARTAMENTO', 'success').then((value) => {
-                ProcesoMaquila.focus().select();
+
                 //                });
             }
             /*
