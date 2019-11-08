@@ -617,8 +617,6 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["ano"] = $this->input->post('Ano');
-        $parametros["maq"] = $this->input->post('Maq');
         $parametros["depto"] = $this->input->post('Depto');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\avancePorDeptoEspecifico.jasper');
