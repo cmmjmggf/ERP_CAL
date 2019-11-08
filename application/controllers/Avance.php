@@ -349,7 +349,7 @@ class Avance extends CI_Controller {
                                             . "ELSE E.MaqPlant3 END)"
                                             . "ELSE E.MaqPlant2 END)  "
                                             . "ELSE E.MaqPlant1 END) AS MAQUILADO, "
-                                            . "C.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION", false)
+                                            . "C.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION, P.Maquila AS MAQUILA", false)
                                     ->from('avance AS A')
                                     ->join('controles AS C', 'A.Control = C.Control')
                                     ->join('pedidox AS P', 'A.Control = P.Control')
@@ -554,6 +554,39 @@ class Avance extends CI_Controller {
                     // 300 PESPUNTE GENERAL
                     $this->onPagarFraccion($xXx, 300, 130, 'ALMACEN PESPUNTE');
 
+                    exit(0);
+                }
+                if ($depto === 7 && $depto_actual === 6 && $frac === 401 ||
+                        $depto === 8 && $depto_actual === 7 && $frac === 401) {
+                    /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
+                    $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
+                            ->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
+                            ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set("status", 7)->set("fec7", Date('Y-m-d h:i:s'))
+                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    $ID = $this->db->insert('avance', array(
+                        'Control' => $xXx['CONTROL'],
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'Departamento' => 150,
+                        'DepartamentoT' => 'TEJIDO',
+                        'FechaAvance' => Date('d/m/Y')/* FECHA AVANCE */,
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => 401
+                    ));
+                    exit(0);
+                }
+                if ($depto === 8 && $depto_actual === 7) {
+                    /* 7 TEJIDO "A" 8 ALMACEN DE TEJIDO */
+                    $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)
+                            ->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                            ->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set("status", 8)->set("fec8", Date('Y-m-d h:i:s'))
+                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
                     exit(0);
                 }
             }
