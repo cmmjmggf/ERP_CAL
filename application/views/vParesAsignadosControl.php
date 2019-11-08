@@ -27,30 +27,45 @@
 
             <div class="w-100 my-3"></div>
 
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" align="center">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-indigo">
-                        <input type= "radio" name="btnControl" id="btnControl" autocomplete="off"> CONTROL
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnEsponjasYLatex" id="btnEsponjasYLatex" autocomplete="off"> ESPONJAS Y LATEX
-                    </label>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
+            <div class="w-100"></div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3" align="center">
                 <div class="form-group">
                     <span class="switch switch-lg">
-                        <input id="rConNumeracion" name="rConNumeracion"  type="checkbox" class="switch" id="rConNumeracion">
+                        <input id="btnControl" name="btnControl"  type="checkbox" class="switch">
+                        <label for="btnControl">Control</label>
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3" align="center">
+                <div class="form-group">
+                    <span class="switch switch-lg">
+                        <input id="btnEsponjasYLatex" name="btnEsponjasYLatex"  type="checkbox" class="switch">
+                        <label for="btnEsponjasYLatex">Esponjas y latex</label>
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3" align="center">
+                <div class="form-group">
+                    <span class="switch switch-lg">
+                        <input id="rConNumeracion" name="rConNumeracion"  type="checkbox" class="switch">
                         <label for="rConNumeracion">Con numeración</label>
                     </span>
                 </div>
             </div>
-
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                <div class="form-group">
+                    <span class="switch switch-lg">
+                        <input id="ExportaAXLS" name="ExportaAXLS"  type="checkbox" class="switch" >
+                        <label for="ExportaAXLS">Exportar a EXCEL</label>
+                    </span>
+                </div>
+            </div> 
         </div>
     </div>
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
+            <button type="button" class="btn btn-info" id="btnAceptar">
+                <span class="fa fa-print"></span> Aceptar</button>
         </div>
     </div>
 </div>
@@ -63,11 +78,29 @@
             ParesMaquilaInicial = pnlTablero.find("#ParesMaquilaInicial"),
             ParesMaquilaFinal = pnlTablero.find("#ParesMaquilaFinal"),
             ParesSemanaInicial = pnlTablero.find("#ParesSemanaInicial"),
-            ParesSemanaFinal = pnlTablero.find("#ParesSemanaFinal");
+            ParesSemanaFinal = pnlTablero.find("#ParesSemanaFinal"),
+            btnControl = pnlTablero.find("#btnControl"),
+            btnEsponjasYLatex = pnlTablero.find("#btnEsponjasYLatex");
 
     $(document).ready(function () {
         ParesAnio.val(new Date().getFullYear());
         handleEnterDiv(pnlTablero);
+
+        btnEsponjasYLatex.change(function () {
+            if (btnEsponjasYLatex[0].checked) {
+                btnControl[0].checked = false;
+            } else {
+                btnEsponjasYLatex[0].checked = false;
+            }
+        });
+
+        btnControl.change(function () {
+            if (btnControl[0].checked) {
+                btnEsponjasYLatex[0].checked = false;
+            } else {
+                btnControl[0].checked = false;
+            }
+        });
 
         btnAceptar.click(function () {
             if (ParesMaquilaInicial.val() && ParesMaquilaFinal.val()
