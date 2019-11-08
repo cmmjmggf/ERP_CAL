@@ -572,12 +572,15 @@
                     onNotifyOld('<span class="fa fa-check"></span>', 'SE HA AVANZADO EL CONTROL ' + Control.val(), 'success');
                     Fraccion.val('');
                     FraccionS[0].selectize.clear();
+                    Empleado.val('');
+                    EmpleadoS[0].selectize.clear();
                     Estilo.val('');
                     DeptoActual.val('');
                     AvanceDeptoActual.val('');
                     Pares.val('');
                     Departamento.focus().select();
                     btnAceptar.attr('disabled', true);
+                    Departamento.focus().select();
                 }).fail(function (x, y, z) {
                     getError(x);
                 });
