@@ -128,7 +128,7 @@ class ControlPlantilla extends CI_Controller {
 
     public function getUltimoDocumento() {
         try {
-            print json_encode($this->cpm->getUltimoDocumento(Date('Y'), Date('m'), Date('d')));
+            print json_encode($this->db->query("SELECT max(ifnull(Documento,0))+1 as docto FROM controlpla  WHERE Documento <> 0; ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -161,6 +161,14 @@ class ControlPlantilla extends CI_Controller {
     public function getPrecioXFraccionXEstilo() {
         try {
             print json_encode($this->cpm->getPrecioXFraccionXEstilo($this->input->get('FRACCION'), $this->input->get('ESTILO')));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificaControlFraccion() {
+        try {
+            print json_encode($this->db->query("SELECT * from controlpla where control = {$this->input->get('CONTROL')} and fraccion = {$this->input->get('FRACCION')}  ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -1,76 +1,76 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-6 float-left">
+            <div class="col-sm-5 float-left">
                 <legend class="float-left">Captura plantillas para maquila</legend>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
-                <button type="button" id="btnRetorna" name="btnRetorna" class="btn btn-indigo" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+            <div class="col-sm-1">
+                <label class="text-danger font-weight-bold">Re-Imprime</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm numbersOnly" maxlength="6">
+            </div>
+            <div class="col-4" align="right">
+                <button type="button" id="btnRetorna" name="btnRetorna" class="btn btn-indigo btn-sm" >
                     <span class="fa fa-retweet"></span>
                     Retorno plantilla
                 </button>
-                <button type="button" id="btnConceptosPlantilla" name="btnConceptosPlantilla" class="btn btn-green  mx-2" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnConceptosPlantilla" name="btnConceptosPlantilla" class="btn btn-green btn-sm mx-2" >
                     <span class="fa fa-bullseye"></span>
                     Conceptos plantilla
                 </button>
-                <button type="button" id="btnReportePago" name="btnReportePago" class="btn btn-red" style="box-shadow: 0 0 0 0.2rem #CDDC39 !important;">
+                <button type="button" id="btnReportePago" name="btnReportePago" class="btn btn-red btn-sm">
                     <span class="fa fa-exclamation"></span>
                     Reporte pago
                 </button>
             </div>
-            <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-3">
                 <label>Proveedor</label>
-                <select id="Proveedor" name="Proveedor" class="form-control"></select>
+                <select id="Proveedor" name="Proveedor" class="form-control form-control-sm required" ></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-2">
                 <label>Tipo Maquila</label>
-                <select id="TipoMaquila" name="TipoMaquila" class="form-control"></select>
+                <select id="TipoMaquila" name="TipoMaquila" class="form-control form-control-sm required"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Documento</label>
-                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm">
+                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm" readonly="" required="">
             </div>
-            <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly" required="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Estilo</label>
-                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
+                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" readonly="" required="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
                 <label>Color</label>
-                <select  id="Color" name="Color" class="form-control"></select>
+                <input type="text" id="Color" name="Color" class="form-control form-control-sm" readonly="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Pares</label>
-                <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" readonly="">
             </div>
             <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-3">
                 <label>Fracción</label>
-                <select  id="Fraccion" name="Fraccion" class="form-control"></select>
+                <select  id="Fraccion" name="Fraccion" class="form-control form-control-sm required"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Precio</label>
-                <input type="text" id="Precio" name="Precio" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="Precio" name="Precio" class="form-control form-control-sm numbersOnly" required="">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Fecha</label>
-                <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
+                <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter" readonly="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                <label>Reimprime</label>
-                <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm">
-            </div>
+
             <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
-            </div>
-            <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-                <button type="button" class="btn btn-warning" onclick="ControlPlantilla.ajax.reload()"><span class="fa fa-sync"></span> REFRESCAR</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card-block mt-4">
@@ -87,7 +87,7 @@
                                     <th>Pares</th>
                                     <th>Fracc</th>
                                     <th>Precio</th>
-                                    <th>-</th>
+                                    <th class="d-none">-</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -111,35 +111,33 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Documento</label>
-                        <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" class="form-control">
+                        <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" class="form-control form-control-sm">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Fecha vale</label>
-                        <input type="text" id="FechaVale" name="FechaVale" class="form-control">
+                        <input type="text" id="FechaVale" name="FechaVale" class="form-control form-control-sm">
                     </div>
                 </div>
                 <br>
                 <div class="w-100"></div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table class="table table-hover table-sm" id="tblRetornaDocumento">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">TP</th>
-                                <th scope="col">Docto</th>
-                                <th scope="col">Proveedor</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Llegada</th>
-                                <th scope="col">Control</th>
-                                <th scope="col">Estilo</th>
-                                <th scope="col">-</th>
-                                <th scope="col">Pares</th>
-                                <th scope="col">-</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <table class="table table-hover table-sm" id="tblRetornaDocumento"  style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">TP</th>
+                            <th scope="col">Docto</th>
+                            <th scope="col">Proveedor</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Llegada</th>
+                            <th scope="col">Control</th>
+                            <th scope="col">Estilo</th>
+                            <th scope="col">-</th>
+                            <th scope="col">Pares</th>
+                            <th scope="col">-</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-print"></span> Acepta</button>
@@ -212,6 +210,7 @@
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlReportePago);
         handleEnterDiv(mdlRetorno);
+        Proveedor[0].selectize.focus();
         getProveedores();
         getMaquilasPlantillas();
         getRecords();
@@ -338,7 +337,7 @@
                     }
                 ];
                 var xoptions = {
-                    "dom": 'rit',
+                    "dom": 'rt',
                     "ajax": {
                         "url": '<?php print base_url('ControlPlantilla/getEntregados'); ?>',
                         "dataSrc": "",
@@ -378,35 +377,40 @@
         });
 
         btnAcepta.click(function () {
-            getUltimoDocumento();
-            $.post('<?php print base_url('ControlPlantilla/onGuardar'); ?>', {
-                PROVEEDOR: Proveedor.val(),
-                PROVEEDORT: Proveedor.find("option:selected").text(),
-                TIPO: TipoMaquila.val(),
-                DOCUMENTO: Documento.val(),
-                CONTROL: Control.val(),
-                ESTILO: Estilo.val(),
-                COLOR: Color.val(),
-                COLORT: Color.find("option:selected").text(),
-                PARES: Pares.val(),
-                FRACCION: Fraccion.val(),
-                FRACCIONT: Fraccion.find("option:selected").text(),
-                PRECIO: Precio.val(),
-                FECHA: Fecha.val()
-            }).done(function () {
-                swsd('SE HAN GUARDANDO LOS CAMBIOS', function () {
+            isValid('pnlTablero');
+            if (valido) {
+                $.post('<?php print base_url('ControlPlantilla/onGuardar'); ?>', {
+                    PROVEEDOR: Proveedor.val(),
+                    PROVEEDORT: Proveedor.find("option:selected").text(),
+                    TIPO: TipoMaquila.val(),
+                    DOCUMENTO: Documento.val(),
+                    CONTROL: Control.val(),
+                    ESTILO: Estilo.val(),
+                    COLOR: color,
+                    COLORT: nomcolor,
+                    PARES: Pares.val(),
+                    FRACCION: Fraccion.val(),
+                    FRACCIONT: Fraccion.find("option:selected").text(),
+                    PRECIO: Precio.val(),
+                    FECHA: Fecha.val()
+                }).done(function () {
                     ControlPlantilla.ajax.reload();
-                    getUltimoDocumento();
-                    pnlTablero.find("input").val('');
-                    $.each(pnlTablero.find("select"), function (k, v) {
-                        pnlTablero.find("select")[k].selectize.clear(true);
-                    });
+                    Fraccion[0].selectize.clear(true);
+                    Fraccion[0].selectize.clearOptions();
+                    Precio.val('');
+                    Estilo.val('');
+                    Color.val('');
+                    Pares.val('');
+                    color = 0;
+                    nomcolor = 0;
+                    btnAcepta.attr('disabled', true);
+                    Control.val('').focus();
+                }).fail(function (x) {
+                    getError(x);
                 });
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-                Fecha.val(FechaActual);
-            });
+            } else {
+                onNotify('<span class="fa fa-times fa-lg"></span>', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'danger');
+            }
         });
 
         Fecha.val('<?php print Date('d/m/Y') ?>');
@@ -414,22 +418,47 @@
         Control.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 getInfoXControl();
-                getUltimoDocumento();
             }
         });
 
         Fraccion.change(function () {
-            $.getJSON('<?php print base_url('ControlPlantilla/getPrecioXFraccionXEstilo') ?>', {
-                FRACCION: Fraccion.val(),
-                ESTILO: Estilo.val()
-            }).done(function (a) {
-                Precio.val((a.length > 0) ? a[0].PRECIO_COSTOMO : '');
-                Fecha.val(FechaActual);
-            }).fail(function (x, y, z) {
-                getError(x);
-            }).always(function () {
-                getUltimoDocumento();
-            });
+            if ($(this).val()) {
+                $.getJSON('<?php print base_url('ControlPlantilla/onVerificaControlFraccion') ?>', {
+                    FRACCION: Fraccion.val(),
+                    CONTROL: Control.val()
+                }).done(function (a) {
+                    if (a.length > 0) {
+                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO', 'warning').then((value) => {
+                            Fraccion[0].selectize.clear(true);
+                            Fraccion[0].selectize.clearOptions();
+                            Precio.val('');
+                            Estilo.val('');
+                            Color.val('');
+                            Pares.val('');
+                            btnAcepta.attr('disabled', true);
+                            Control.val('').focus();
+                            return;
+                        });
+                    } else {
+                        $.getJSON('<?php print base_url('ControlPlantilla/getPrecioXFraccionXEstilo') ?>', {
+                            FRACCION: Fraccion.val(),
+                            ESTILO: Estilo.val()
+                        }).done(function (a) {
+                            Precio.val((a.length > 0) ? a[0].PRECIO_COSTOMO : '');
+                            Fecha.val(FechaActual);
+                            btnAcepta.attr('disabled', false);
+                            btnAcepta.focus();
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        }).always(function () {
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    getError(x);
+                }).always(function () {
+                });
+
+            }
         });
     });
 
@@ -514,17 +543,22 @@
             {"data": "PARES"}/*9*/,
             {"data": "FRACCION"}/*7*/,
             {"data": "PRECIO"}/*8*/,
-            {"data": "BTN"}/*8*/
+            {"data": "BTN"}/*9*/
         ];
         var coldefs = [
             {
                 "targets": [0],
                 "visible": false,
                 "searchable": false
+            },
+            {
+                "targets": [9],
+                "visible": false,
+                "searchable": false
             }
         ];
         var xoptions = {
-            "dom": 'rit',
+            "dom": 'rt',
             "ajax": {
                 "url": '<?php print base_url('ControlPlantilla/getRecords'); ?>',
                 "dataSrc": "",
@@ -545,7 +579,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "498px",
+            "scrollY": "400px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
@@ -580,18 +614,49 @@
 
         });
     }
-
+    var color, nomcolor;
     function getInfoXControl() {
         $.getJSON('<?php print base_url('ControlPlantilla/getInfoXControl'); ?>', {
             CONTROL: Control.val()
         }).done(function (a) {
             if (a.length > 0) {
                 var r = a[0];
+                if (parseInt(r.stsavan) === 12) {
+                    swal('ERROR', 'EL CONTROL YA ESTÁ EN TERMINADO', 'warning').then((value) => {
+                        Estilo.val('');
+                        Color.val('');
+                        Pares.val('');
+                        btnAcepta.attr('disabled', true);
+                        Control.val('').focus();
+                        return;
+                    });
+                }
+                if (parseInt(r.stsavan) === 13) {
+                    swal('ERROR', 'EL CONTROL YA ESTÁ FACTURADO', 'warning').then((value) => {
+                        Estilo.val('');
+                        Color.val('');
+                        Pares.val('');
+                        btnAcepta.attr('disabled', true);
+                        Control.val('').focus();
+                        return;
+                    });
+                }
+                if (parseInt(r.stsavan) === 14) {
+                    swal('ERROR', 'EL CONTROL HA SIDO CANCELADO', 'warning').then((value) => {
+                        Estilo.val('');
+                        Color.val('');
+                        Pares.val('');
+                        btnAcepta.attr('disabled', true);
+                        Control.val('').focus();
+                        return;
+                    });
+                }
                 Estilo.val(r.ESTILO);
-                getColoresXEstilo(r);
                 getFraccionesXEstilo(r);
                 Pares.val(r.PARES);
-                btnAcepta.attr('disabled', false);
+                Color.val(r.COLOR + '-' + r.NOMCOLOR);
+                color = r.COLOR;
+                nomcolor = r.NOMCOLOR;
             } else {
                 swwt('ES NECESARIO QUE ESPECIFIQUE UN CONTROL VÁLIDO', function () {
                     Control.focus().select();
@@ -607,22 +672,6 @@
         });
     }
 
-    function getColoresXEstilo(r) {
-        Color[0].selectize.clear(true);
-        Color[0].selectize.clearOptions();
-        $.when($.getJSON('<?php print base_url('ControlPlantilla/getColoresXEstilo'); ?>', {
-            ESTILO: r.ESTILO
-        }).done(function (a) {
-            a.forEach(function (e) {
-                Color[0].selectize.addOption({text: e.COLOR, value: e.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-        })).done(function () {
-            Color[0].selectize.setValue(r.COLOR);
-        });
-    }
 
     function getFraccionesXEstilo(r) {
         Fraccion[0].selectize.clear(true);
@@ -650,7 +699,7 @@
             /*19(ANO) 03(MES) 07(DIA) 001(CONSECUTIVO) = 190307001*/
             if (a.length > 0) {
                 var udoc = a[0];
-                documento = udoc.ANO + "" + udoc.MES + "" + udoc.DIA + "" + (udoc.CONSECUTIVO);
+                documento = udoc.docto;
                 Documento.val(documento);
             } else {
                 swal('ERROR', 'NO FUE POSIBLE OBTENER EL ULTIMO DOCUMENTO, REVISE LA CONSOLA PARA MAS DETALLE', 'error');
@@ -711,15 +760,9 @@
     }
 </script>
 <style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid;
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+
+    table tbody tr {
+        font-size: 0.75rem !important;
     }
-    .card-header{
-        background-color: transparent;
-        border-bottom: 0px;
-    }
+
 </style>

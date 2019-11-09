@@ -31,7 +31,7 @@ class ControlPlantilla_model extends CI_Model {
                                         CP.`Fecha` AS FECHA,
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
-                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash fa-sm\"></span></button>") AS BTN
 ', false)->from('controlpla AS CP')->where_in('CP.Estatus', array(1, 2))->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -55,7 +55,7 @@ class ControlPlantilla_model extends CI_Model {
                                         CP.`Precio` AS PRECIO,
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
-                                        CONCAT("<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN
+                                        CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash fa-sm\"></span></button>") AS BTN
 ', false)->from('controlpla AS CP')->where_in('CP.Estatus', array(2))->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -82,8 +82,10 @@ class ControlPlantilla_model extends CI_Model {
 
     public function getInfoXControl($CONTROL) {
         try {
-            return $this->db->select("C.Estilo AS ESTILO, C.Color AS COLOR, C.Pares AS PARES", false)
-                            ->from('controles as C')
+            return $this->db->select("C.Estilo AS ESTILO, C.stsavan, "
+                                    . "C.Color AS COLOR, C.ColorT as NOMCOLOR, "
+                                    . "C.Pares AS PARES", false)
+                            ->from('pedidox as C')
                             ->where("C.Control", $CONTROL)
                             ->limit(1)->get()->result();
         } catch (Exception $exc) {
@@ -114,10 +116,10 @@ class ControlPlantilla_model extends CI_Model {
                             ->order_by('CP.Documento', 'DESC')
                             ->limit(1)
                             ->get()->result();
-            $preselect = "CP.Documento AS DOCTO_ANTERIOR, 
-                CASE WHEN CP.Documento IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CP.Documento,1,2) END AS ANO, 
-                CASE WHEN CP.Documento IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CP.Documento,3,2) END AS MES, 
-                CASE WHEN CP.Documento IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CP.Documento,5,2) END AS DIA,  
+            $preselect = "CP.Documento AS DOCTO_ANTERIOR,
+                CASE WHEN CP.Documento IS NULL THEN SUBSTRING(YEAR(NOW()),3,2) ELSE SUBSTRING(CP.Documento,1,2) END AS ANO,
+                CASE WHEN CP.Documento IS NULL THEN LPAD(MONTH(NOW()),2,0) ELSE SUBSTRING(CP.Documento,3,2) END AS MES,
+                CASE WHEN CP.Documento IS NULL THEN LPAD(DAY(NOW()),2,0) ELSE SUBSTRING(CP.Documento,5,2) END AS DIA,
                 CASE WHEN CP.Documento IS NULL THEN LPAD(1,3,0) ELSE LPAD(SUBSTRING(CP.Documento+1,7,3),3,0) END AS CONSECUTIVO";
             if (intval($EXISTE[0]->VALIDO) > 0) {
                 $this->db->select($preselect, false);
