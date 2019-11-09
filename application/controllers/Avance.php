@@ -5,7 +5,7 @@ class Avance extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('Avance_model', 'avm');
+        $this->load->library('session')->model('Avance_model', 'avm')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -758,6 +758,28 @@ class Avance extends CI_Controller {
     public function onComprobarRetornoDeMaterialXControl() {
         try {
             
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function ImprimePagosCelulas() {
+        try {
+            $x = $this->input->post();
+            $FECHA = explode('/', $x['FECHA']); 
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["EMPLEADO"] = $x['EMPLEADO'];
+            $parametros["SEMANA"] = $x['SEMANA'];
+            $parametros["ANIO"] = intval($FECHA[2]);
+            $jc->setJasperurl("jrxml\avance\pagonomina.jasper");
+            $jc->setParametros($parametros);
+            $jc->setFilename('PAGONOMINA_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

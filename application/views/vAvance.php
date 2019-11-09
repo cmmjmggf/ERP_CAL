@@ -343,12 +343,33 @@
             EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL"),
             FraccionRXCTROL = mdlRastreoXControl.find("#FraccionRXCTROL"),
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras"),
+            btnImprimePagosCelulas = pnlTablero.find("#btnImprimePagosCelulas"),
             FotoEstilo = pnlTablero.find("#FotoEstilo");
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
+
+        btnImprimePagosCelulas.click(function () {
+            onOpenOverlay('');
+            btnImprimePagosCelulas.attr('disabled', true);
+            $.post('<?php print base_url('Avance/ImprimePagosCelulas'); ?>', {
+                EMPLEADO: Empleado.val() ? Empleado.val() : '',
+                SEMANA: Semana.val() ? Semana.val() : '',
+                FECHA: Fecha.val() ? Fecha.val() : ''
+            }).done(function (a) {
+                if (a.length > 0) {
+                    onImprimirReporteFancyAFC(a, function (a, b) {
+                        btnImprimePagosCelulas.attr('disabled', false);
+                    });
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
+        });
 
         Departamento.on('keydown', function (e) {
             if (e.keyCode === 13 && Departamento.val()) {
