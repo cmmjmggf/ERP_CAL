@@ -148,7 +148,10 @@ class Avance extends CI_Controller {
     public function getEmpleados() {
         try {
             print json_encode($this->db->query("SELECT E.Numero AS CLAVE, "
-                                    . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', (CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) AS EMPLEADO "
+                                    . "(CASE "
+                                    . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
+                                    . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', (CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
+                                    . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) END) AS EMPLEADO "
                                     . "FROM empleados AS E WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 OR E.AltaBaja = 2 AND E.Celula NOT IN(0)")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -766,7 +769,7 @@ class Avance extends CI_Controller {
     public function ImprimePagosCelulas() {
         try {
             $x = $this->input->post();
-            $FECHA = explode('/', $x['FECHA']); 
+            $FECHA = explode('/', $x['FECHA']);
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $parametros = array();
@@ -780,6 +783,15 @@ class Avance extends CI_Controller {
             $jc->setFilename('PAGONOMINA_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControlParaRastreo() {
+        try {
+            $x = $this->input->post();
+            print json_encode($this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL, (SELECT F.Descripcion FROM fracciones as F WHERE F.Clave = {$x['FRACCION']} LIMIT 1) AS FRACCION_DES FROM pedidox AS P WHERE P.Control =  {$x['CONTROL']} LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

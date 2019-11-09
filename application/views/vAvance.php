@@ -5,11 +5,11 @@
                 <h3 class="font-weight-bold ">Avance</h3>
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info">
+                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
                 </button>
-                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info" >
+                <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info"   data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un control">
                     <span class="fa fa-globe"></span>
                     Rastreo X Control
                 </button>
@@ -17,7 +17,7 @@
                     <span class="fa fa-paint-brush"></span>
                     Desarrollo de muestras
                 </button>
-                <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas" class="btn  btn-sm btn-info" >
+                <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Imprime por semana o por semana empleado">
                     <span class="fa fa-print"></span>
                     Imprime
                 </button>
@@ -278,7 +278,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <label>Desc.fraccion</label>
-                        <select id="FraccionRXCTROL" name="FraccionRXCTROL" class="form-control"></select>
+                        <input id="FraccionRXCTROL" name="FraccionRXCTROL" class="form-control"> 
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Avance actual</label>
@@ -302,6 +302,9 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
+                        <p class="font-weight-bold total_pesos" style="color: #cc0033 !important;" >$0.0</p>
                     </div>
                 </div>
             </div>
@@ -342,9 +345,11 @@
             SemanaRXCTROL = mdlRastreoXControl.find("#SemanaRXCTROL"),
             EmpleadoRXCTROL = mdlRastreoXControl.find("#EmpleadoRXCTROL"),
             FraccionRXCTROL = mdlRastreoXControl.find("#FraccionRXCTROL"),
+            AvanceActual = mdlRastreoXControl.find("#AvanceActual"),
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras"),
             btnImprimePagosCelulas = pnlTablero.find("#btnImprimePagosCelulas"),
-            FotoEstilo = pnlTablero.find("#FotoEstilo");
+            FotoEstilo = pnlTablero.find("#FotoEstilo"),
+            mono = '<?php print $_SESSION['USERNAME']; ?>';
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
@@ -376,7 +381,7 @@
                 var fraccion_x_depto = {
                     "33": 102, "4": 103, "40": 60,
                     "42": 51, "44": 51, "5": "", "55": 300,
-                    "6": "", "7": "", "8": ""/*ALM-TEJIDO*/,
+                    "6": 397, "7": "", "8": ""/*ALM-TEJIDO*/,
                     "9": "", "10": 500, "11": 600
                 };
                 Fraccion.val(fraccion_x_depto[Departamento.val()]);
@@ -454,6 +459,14 @@
         });
 
         Empleado.on('keydown', function (e) {
+            if (e.keyCode === 13)
+            {
+                Avances.ajax.reload();
+            }
+            if (!Empleado.val())
+            {
+                Avances.ajax.reload();
+            }
             if (e.keyCode === 13 && Empleado.val()) {
                 EmpleadoS[0].selectize.setValue(Empleado.val());
                 if (EmpleadoS.val()) {
@@ -466,7 +479,6 @@
                 EmpleadoS[0].selectize.enable();
                 EmpleadoS[0].selectize.clear();
             }
-            Avances.ajax.reload();
         });
 
         mdlRastreoXControl.on('hidden.bs.modal', function () {
@@ -495,18 +507,18 @@
                 RastreoXControl.ajax.reload();
             }
         });
-        EmpleadoRXCTROL.on('keyup change', function () {
-            if ($(this).val()) {
+        EmpleadoRXCTROL.on('keydown', function (e) {
+            if (e.keyCode === 13) {
                 RastreoXControl.ajax.reload();
             }
         });
-        SemanaRXCTROL.on('keyup change', function () {
-            if ($(this).val()) {
+        SemanaRXCTROL.on('keydown', function (e) {
+            if (e.keyCode === 13) {
                 RastreoXControl.ajax.reload();
             }
         });
-        ControlRXCTROL.on('keyup change', function () {
-            if ($(this).val()) {
+        ControlRXCTROL.on('keydown', function (e) {
+            if (e.keyCode === 13) {
                 RastreoXControl.ajax.reload();
             }
         });
@@ -753,7 +765,16 @@
                                 }
                             }
                             if (xDepartamento === 6 && stsavan === 55) {
-                                Empleado.focus().select();
+                                switch (mono) {
+                                    case "JUAN":
+                                        Empleado.val(1003);
+                                        EmpleadoS[0].selectize.setValue(1003);
+                                        EmpleadoS[0].selectize.disable();
+                                        break;
+                                    default :
+                                        Empleado.focus().select();
+                                        break;
+                                }
                             }
                             if (xDepartamento === 7 && stsavan === 6) {
                                 Fraccion.val(401);
@@ -932,7 +953,35 @@
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
-            ]
+            ],
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var r = 0, prs = 0;
+                $.each(api.rows().data(), function (k, v) {
+                    r += parseFloat(v.SUBTOTAL);
+                });
+                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+            }
+        });
+        tblRastreoXControl.find('tbody').on('click', 'tr', function () {
+            var row = RastreoXControl.row(this).data();
+            console.log(row);
+            SemanaRXCTROL.val(row.SEMANA);
+            EmpleadoRXCTROL[0].selectize.setValue(row.EMPLEADO);
+            $.post('<?php print base_url('Avance/getInfoXControlParaRastreo'); ?>', {
+                CONTROL: row.CONTROL,
+                FRACCION: row.NUM_FRACCION
+            }).done(function (a) {
+                console.log(a, a.length);
+                if (a.length > 0) {
+                    var r = JSON.parse(a);
+                    console.log(r);
+                    FraccionRXCTROL.val(r[0].FRACCION_DES);
+                    AvanceActual.val(r[0].AVANCE_ACTUAL);
+                }
+            }).fail(function (x) {
+                getError(x);
+            });
         });
         getConceptosNomina();
     });

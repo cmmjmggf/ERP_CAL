@@ -128,7 +128,7 @@ WHERE FPN.semana =  $P{SEMANA} AND FPN.anio = $P{ANIO} AND (CASE WHEN $P{EMPLEAD
 					<textFieldExpression><![CDATA[$V{pares_2}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="399" y="0" width="111" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="399" y="0" width="126" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
