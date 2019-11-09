@@ -1,16 +1,20 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-5 float-left">
+            <div class="col-sm-4 float-left">
                 <legend class="float-left">Captura plantillas para maquila</legend>
             </div>
             <div class="col-sm-1">
                 <label class="text-danger font-weight-bold">Re-Imprime</label>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-1">
                 <input type="text" id="Reimprime" name="Reimprime" class="form-control form-control-sm numbersOnly" maxlength="6">
             </div>
-            <div class="col-4" align="right">
+            <div class="col-6" align="right">
+                <button type="button" id="btnAvance" name="btnAvance" class="btn btn-warning btn-sm" >
+                    <span class="fa fa-arrow-right"></span>
+                    Avance
+                </button>
                 <button type="button" id="btnRetorna" name="btnRetorna" class="btn btn-indigo btn-sm" >
                     <span class="fa fa-retweet"></span>
                     Retorno plantilla
@@ -69,8 +73,9 @@
                 <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date notEnter" readonly="">
             </div>
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-4">
                 <button type="button" class="btn btn-primary btn-sm" id="btnAcepta" disabled=""><span class="fa fa-check"></span> ACEPTA </button>
+                <button type="button" class="btn btn-success btn-sm" id="btnImprime" disabled=""><span class="fa fa-print"></span> IMPRIMIR </button>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card-block mt-4">
@@ -228,6 +233,8 @@
             mdlReportePago.find("input").val('');
             mdlReportePago.find("#chkSinRecibir")[0].checked = false;
             mdlReportePago.find("#chkRecibido")[0].checked = false;
+            mdlReportePago.find("#DeLaFecha").val(getToday());
+            mdlReportePago.find("#ALaFecha").val(getToday());
             mdlReportePago.find("#DeLaFecha").focus();
         });
 
