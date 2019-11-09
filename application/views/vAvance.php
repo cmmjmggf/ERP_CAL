@@ -351,7 +351,7 @@
                 var fraccion_x_depto = {
                     "33": 102, "4": 103, "40": 60,
                     "42": 51, "44": 51, "5": "", "55": 300,
-                    "6": "", "7": "", "8": "",
+                    "6": "", "7": "", "8": ""/*ALM-TEJIDO*/,
                     "9": "", "10": 500, "11": 600
                 };
                 Fraccion.val(fraccion_x_depto[Departamento.val()]);
@@ -360,7 +360,7 @@
                 var dptos = pnlTablero.find("ul#deptos li"), depto = 0, clve = 0, deptodes = "";
                 pnlTablero.find("ul#deptos li").removeClass("li-selected");
                 $.each(dptos, function (k, v) {
-                    console.log(k, v);
+//                    console.log(k, v);
                     var spn = $(v).find("span.stsavan").text();
                     clve = $.isNumeric(spn) ? parseInt(spn) : 0;
                     var cu_clve = parseInt(Departamento.val());
@@ -667,10 +667,7 @@
                             Estilo.val(rr.ESTILO);
                             DeptoActual.val(rr.DEPTO);
                             AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
-                            Pares.val(rr.PARES);
-                            var rta = '<?php print base_url(); ?>' + rr.FOTO;
-                            FotoEstilo[0].src = rta;
-                            FotoEstilo.parent()[0].href = rta;
+
                             if (ProcesoMaquilaS.val()) {
                                 ProcesoMaquilaS[0].selectize.disable();
                                 Empleado.focus().select();
@@ -680,6 +677,80 @@
                                 ProcesoMaquilaS[0].selectize.enable();
                                 btnAceptar.attr('disabled', true);
                                 btnAceptar.focus();
+                            }
+
+                            Pares.val(rr.PARES);
+                            var rta = '<?php print base_url(); ?>' + rr.FOTO;
+                            FotoEstilo[0].src = rta;
+                            FotoEstilo.parent()[0].href = rta;
+
+                            var Departamento = Departamento.val() ? parseInt(Departamento.val()) : 0;
+                            var stsavan = parseInt(rr.ESTATUS_PRODUCCION);
+
+                            if (Departamento === 33 && stsavan === 3) {
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(113);
+                                    FraccionS[0].selectize.setValue(113);
+                                } else {
+                                    Empleado.focus().select();
+                                }
+                            }
+                            if (Departamento === 4 && stsavan === 33) {
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(114);
+                                    FraccionS[0].selectize.setValue(114);
+                                } else {
+                                    Fraccion.val(103);
+                                    FraccionS[0].selectize.setValue(103);
+                                }
+                            }
+                            if (Departamento === 40 && stsavan === 4) {
+                                Fraccion.val(60);
+                                FraccionS[0].selectize.setValue(60);
+                            }
+                            if (Departamento === 44 && stsavan === 40) {
+                                Fraccion.val(60);
+                                FraccionS[0].selectize.setValue(60);
+                            }
+                            if (Departamento === 42 && stsavan === 40) {
+                                Fraccion.val(60);
+                                FraccionS[0].selectize.setValue(60);
+                            }
+                            if (Departamento === 5 && stsavan === 44) {
+                                Empleado.focus().select();
+                            }
+                            if (Departamento === 55 && stsavan === 5) {
+                                Empleado.focus().select();
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(299);
+                                    FraccionS[0].selectize.setValue(299);
+                                }
+                            }
+                            if (Departamento === 6 && stsavan === 55) {
+                                Empleado.focus().select();
+                            }
+                            if (Departamento === 7 && stsavan === 6) {
+                                Fraccion.val(401);
+                                FraccionS[0].selectize.setValue(401);
+                            }
+                            if (Departamento === 8 && stsavan === 7) {
+                                Fraccion.val(401);
+                                FraccionS[0].selectize.setValue(401);
+                                Empleado.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                btnAceptar.focus();
+                            }
+                            if (Departamento === 9 && stsavan === 8) {
+                                btnAceptar.attr('disabled', false);
+                                btnAceptar.focus();
+                            } else {
+                                btnAceptar.attr('disabled', true);
+                            }
+                            if (Departamento === 10 && stsavan === 9) {
+                                Empleado.focus().select();
+                            }
+                            if (Departamento === 11 && stsavan === 10) {
+                                Empleado.focus().select();
                             }
                         }
                     }
