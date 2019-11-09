@@ -8,12 +8,18 @@
     </div>
     <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Chofer</label>
+                <input id="xChofer" name="xChofer" class="form-control form-control-sm  numbersOnly"> 
+            </div>
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3 mt-4">
                 <select id="Chofer" name="Chofer" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Tejedora</label>
+                <input id="xTejedora" name="xTejedora" class="form-control form-control-sm numbersOnly"> 
+            </div>
+            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3 mt-4">
                 <select id="Tejedora" name="Tejedora" class="form-control form-control-sm"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
@@ -113,7 +119,9 @@
 </div>
 <script>
     var pnlTablero = $("#pnlTablero");
-    var Chofer = pnlTablero.find("#Chofer"), Tejedora = pnlTablero.find("#Tejedora"),
+    var xChofer = pnlTablero.find("#xChofer"), Chofer = pnlTablero.find("#Chofer"), 
+            xTejedora = pnlTablero.find("#xTejedora"),
+            Tejedora = pnlTablero.find("#Tejedora"),
             Estilo = pnlTablero.find("#Estilo"), Control = pnlTablero.find("#Control");
     var ControlesListosParaTejido, tblControlesListosParaTejido = pnlTablero.find("#tblControlesListosParaTejido"),
             ControlesEntregados, tblControlesEntregados = pnlTablero.find("#tblControlesEntregados"),
@@ -126,7 +134,23 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-        Chofer[0].selectize.focus();
+        xChofer.focus();
+        xTejedora.on('keydown', function (e) {
+            if (e.keyCode === 13 && xTejedora.val()) {
+                Tejedora[0].selectize.setValue(parseInt(xTejedora.val()));
+                Tejedora[0].selectize.disable();
+            }else{
+                Tejedora[0].selectize.enable();
+            }
+        });
+        xChofer.on('keydown', function (e) {
+            if (e.keyCode === 13 && xChofer.val()) {
+                Chofer[0].selectize.setValue(parseInt(xChofer.val()));
+                Chofer[0].selectize.disable();
+            }else{
+                Chofer[0].selectize.enable();
+            }
+        });
         Chofer.change(function () {
             ControlesEntregados.ajax.reload();
         });
@@ -347,7 +371,7 @@
         var xoptions = {
             "dom": 'ript',
             "ajax": {
-                "url": '<?php print base_url('AvanceTejido/getControlesParaTejido'); ?>', 
+                "url": '<?php print base_url('AvanceTejido/getControlesParaTejido'); ?>',
                 "contentType": "application/json",
                 "dataSrc": ""
             },

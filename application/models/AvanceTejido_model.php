@@ -28,7 +28,7 @@ class AvanceTejido_model extends CI_Model {
 
     public function getChoferes() {
         try {
-            return $this->db->select("E.ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+            return $this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
                             ->from('empleados AS E')
                             ->where('E.AltaBaja', 1)->where('E.DepartamentoFisico', 170)
                             ->get()->result();
@@ -71,7 +71,7 @@ class AvanceTejido_model extends CI_Model {
 
     public function getTejedoras() {
         try {
-            return $this->db->select("E.ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+            return $this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
                             ->from('empleados AS E')
                             ->where('E.AltaBaja', 1)->where('E.Puesto', 'TEJEDORA')
                             ->get()->result();
