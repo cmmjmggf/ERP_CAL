@@ -384,6 +384,172 @@
                     "6": 397, "7": "", "8": ""/*ALM-TEJIDO*/,
                     "9": "", "10": 500, "11": 600
                 };
+                switch (mono) {
+                    case "GUSTAVO":
+                        switch (parseInt(Departamento.val())) {
+                            case 40:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 42:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 44:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 5:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 55:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    case "JUAN":
+                        switch (parseInt(Departamento.val())) {
+                            case 6:
+                                Empleado.val(1003);
+                                EmpleadoS[0].selectize.setValue(1003);
+                                EmpleadoS[0].selectize.disable();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    case "JOSE":
+                        /*JOSE PINA */
+                        switch (parseInt(Departamento.val())) {
+                            case 33:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 4:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 40:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 42:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 44:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break; 
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    case "CHEOK":
+                        switch (parseInt(Departamento.val())) {
+                            case 44:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 5:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 55:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 6:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 7:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 8:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 9:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    case "ALICIA":
+                        switch (parseInt(Departamento.val())) {
+                            case 7:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    case "MARTIN":
+                        switch (parseInt(Departamento.val())) {
+                            case 9:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 10:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            case 11:
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', false);
+                                break;
+                            default :
+                                btnAceptar.attr('disabled', true);
+                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                                    Departamento.focus().select();
+                                });
+                                return;
+                                break;
+                        }
+                        break;
+                    default:
+                        btnAceptar.attr('disabled', true);
+                        iMsg('EL USUARIO NO CONCUERDA CON EL AVANCE', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
                 Fraccion.val(fraccion_x_depto[Departamento.val()]);
                 FraccionS[0].selectize.setValue(Fraccion.val());
                 getPrecioFraccionXEstiloFraccion();
@@ -417,7 +583,8 @@
             } else {
 
             }
-        });
+        }
+        );
 
         FraccionS.change(function () {
             if (FraccionS.val()) {

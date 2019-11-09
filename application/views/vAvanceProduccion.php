@@ -1,8 +1,8 @@
 <div class="modal " id="mdlAvanceProduccion"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reporte Avance</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Reporte Avance</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -70,7 +70,8 @@
     </div>
 </div>
 <script>
-    var mdlAvanceProduccion = $('#mdlAvanceProduccion');
+    var mdlAvanceProduccion = $('#mdlAvanceProduccion'),
+            anio_actual = <?php print Date('Y'); ?>;
     $(document).ready(function () {
         mdlAvanceProduccion.on('shown.bs.modal', function () {
             handleEnterDiv(mdlAvanceProduccion);
@@ -78,7 +79,9 @@
             $.each(mdlAvanceProduccion.find("select"), function (k, v) {
                 mdlAvanceProduccion.find("select")[k].selectize.clear(true);
             });
-            mdlAvanceProduccion.find('#Ano').focus();
+            mdlAvanceProduccion.find('#Ano').val(anio_actual);
+            mdlAvanceProduccion.find('#Ano').focus().select();
+            
         });
         mdlAvanceProduccion.find('#btnExcel').on("click", function () {
 
