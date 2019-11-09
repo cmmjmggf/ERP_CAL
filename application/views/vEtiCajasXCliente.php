@@ -111,7 +111,7 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-                    //location.href = base_url + 'index.php/ReportesEstiquetasProduccion/' + csv;
+                    location.href = base_url + 'index.php/ReportesEstiquetasProduccion/' + csv;
                     HoldOn.close();
                 } else {
                     HoldOn.close();
