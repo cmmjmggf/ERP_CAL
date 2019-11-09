@@ -168,7 +168,7 @@ class ControlPlantilla_model extends CI_Model {
         try {
             return $this->db->select("CP.ID AS IDDOCTO,COUNT(CP.ID) AS VALIDO", false)
                             ->from('controlpla AS CP')
-                            ->where("CP.Documento LIKE '{$DOCTO}' AND CP.Estatus IN(1)", null, false)
+                            ->where("CP.Documento = {$DOCTO} AND CP.Estatus = 1 ", null, false)
                             ->limit(1)
                             ->get()->result();
         } catch (Exception $exc) {

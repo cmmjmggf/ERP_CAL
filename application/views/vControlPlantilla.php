@@ -98,7 +98,7 @@
         </div>
     </div>
 </div>
-<div class="modal animated zoomIn" id="mdlRetorno">
+<div class="modal" id="mdlRetorno">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content  modal-lg">
             <div class="modal-header">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Fecha vale</label>
-                        <input type="text" id="FechaVale" name="FechaVale" class="form-control form-control-sm">
+                        <input type="text" id="FechaVale" name="FechaVale" class="form-control form-control-sm" readonly="">
                     </div>
                 </div>
                 <br>
@@ -133,7 +133,7 @@
                             <th scope="col">Estilo</th>
                             <th scope="col">-</th>
                             <th scope="col">Pares</th>
-                            <th scope="col">-</th>
+                            <th scope="col" class="d-none">-</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -243,6 +243,14 @@
             mdlReportePago.modal('show');
         });
 
+        DocumentoRetorno.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    getDocsRetorno();
+                }
+            }
+        });
+
         btnAceptaRetorno.click(function () {
             if (DocumentoRetorno.val()) {
                 /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
@@ -254,7 +262,7 @@
                         var r = a[0];
                         if (parseInt(r.VALIDO) > 0) {
                             $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>',
-                                    {ID: r.IDDOCTO, FECHA: FechaVale.val()}).done(function (a) {
+                                    {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val()}).done(function (a) {
                                 swsd('SE HA RETORNADO EL DOCUMENTO', function () {
                                     DocumentoRetorno.val('').focus().select();
                                     RetornaDocumento.ajax.reload();
@@ -315,59 +323,9 @@
         });
 
         mdlRetorno.on('shown.bs.modal', function () {
-            if (!$.fn.DataTable.isDataTable('#tblRetornaDocumento')) {
-                var cols = [
-                    {"data": "ID"}/*0*/,
-                    {"data": "ESTATUS"}/*1*/,
-                    {"data": "DOCUMENTO"}/*2*/,
-                    {"data": "PROVEEDOR"}/*2*/,
-                    {"data": "FECHA"}/*3*/,
-                    {"data": "FECHA_RETORNA"}/*3*/,
-                    {"data": "CONTROL"}/*4*/,
-                    {"data": "ESTILO"}/*6*/,
-                    {"data": "COLOR"}/*7*/,
-                    {"data": "PARES"}/*9*/,
-                    {"data": "BTN"}/*8*/
-                ];
-                var coldefs = [
-                    {
-                        "targets": [0],
-                        "visible": false,
-                        "searchable": false
-                    }
-                ];
-                var xoptions = {
-                    "dom": 'rt',
-                    "ajax": {
-                        "url": '<?php print base_url('ControlPlantilla/getEntregados'); ?>',
-                        "dataSrc": "",
-                        "data": function (d) {
-                            d.DOCUMENTO = DocumentoRetorno.val() ? DocumentoRetorno.val() : '';
-                        }
-                    },
-                    buttons: buttons,
-                    "columns": cols,
-                    "columnDefs": coldefs,
-                    language: lang,
-                    select: true,
-                    "autoWidth": true,
-                    "colReorder": true,
-                    "displayLength": 99999999,
-                    "bLengthChange": false,
-                    "deferRender": true,
-                    "scrollCollapse": false,
-                    "bSort": true,
-                    "scrollY": "300px",
-                    "scrollX": true,
-                    "aaSorting": [
-                        [0, 'desc']
-                    ]
-                };
-                RetornaDocumento = tblRetornaDocumento.DataTable(xoptions);
-            } else {
-                RetornaDocumento.ajax.reload();
-                RetornaDocumento.columns.adjust().draw();
-            }
+            DocumentoRetorno.val('');
+            getDocsRetorno();
+            DocumentoRetorno.focus();
         });
 
         btnRetorna.click(function () {
@@ -461,6 +419,68 @@
             }
         });
     });
+
+
+    function getDocsRetorno() {
+        if (!$.fn.DataTable.isDataTable('#tblRetornaDocumento')) {
+            var cols = [
+                {"data": "ID"}/*0*/,
+                {"data": "ESTATUS"}/*1*/,
+                {"data": "DOCUMENTO"}/*2*/,
+                {"data": "PROVEEDOR"}/*2*/,
+                {"data": "FECHA"}/*3*/,
+                {"data": "FECHA_RETORNA"}/*3*/,
+                {"data": "CONTROL"}/*4*/,
+                {"data": "ESTILO"}/*6*/,
+                {"data": "COLOR"}/*7*/,
+                {"data": "PARES"}/*9*/,
+                {"data": "BTN"}/*9*/
+            ];
+            var coldefs = [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [10],
+                    "visible": false,
+                    "searchable": false
+                }
+            ];
+            var xoptions = {
+                "dom": 'rt',
+                "ajax": {
+                    "url": '<?php print base_url('ControlPlantilla/getEntregados'); ?>',
+                    "dataSrc": "",
+                    "data": function (d) {
+                        d.DOCUMENTO = DocumentoRetorno.val() ? DocumentoRetorno.val() : '';
+                    }
+                },
+                buttons: buttons,
+                "columns": cols,
+                "columnDefs": coldefs,
+                language: lang,
+                select: true,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 99999999,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                "scrollY": "300px",
+                "scrollX": true,
+                "aaSorting": [
+                    [0, 'desc']
+                ]
+            };
+            RetornaDocumento = tblRetornaDocumento.DataTable(xoptions);
+        } else {
+            RetornaDocumento.ajax.reload();
+            RetornaDocumento.columns.adjust().draw();
+        }
+    }
 
     function getReport(pdfxls) {
 

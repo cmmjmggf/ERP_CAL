@@ -96,14 +96,15 @@ class ControlPlantilla extends CI_Controller {
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
                                         CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
-                    ->from('controlpla AS CP')->where_in('CP.Estatus', array(2));
+                    ->from('controlpla AS CP')->where('CP.Estatus', 1);
             $x = $this->input->get();
-            if ($x['DOCUMENTO'] !== '') {
-                $this->db->where('CP.Documento', $x['DOCUMENTO']);
-            }
-            if ($x['DOCUMENTO'] === '') {
-                $this->db->limit(25);
-            }
+            $this->db->where('CP.Documento', $x['DOCUMENTO']);
+//            if ($x['DOCUMENTO'] !== '') {
+//                $this->db->where('CP.Documento', $x['DOCUMENTO']);
+//            }
+//            if ($x['DOCUMENTO'] === '') {
+//                $this->db->limit(25);
+//            }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -222,7 +223,7 @@ class ControlPlantilla extends CI_Controller {
 
     public function onRetornaDocumento() {
         try {
-            $this->db->set('Estatus', 2)->set('FechaRetorna', $this->input->post('FECHA'))->where('ID', $this->input->post('ID'))->update('controlpla');
+            $this->db->set('Estatus', 2)->set('FechaRetorna', $this->input->post('FECHA'))->where('Documento', $this->input->post('Docto'))->update('controlpla');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
