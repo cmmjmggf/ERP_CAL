@@ -17,6 +17,10 @@
                     <span class="fa fa-paint-brush"></span>
                     Desarrollo de muestras
                 </button>
+                <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas" class="btn  btn-sm btn-info" >
+                    <span class="fa fa-print"></span>
+                    Imprime
+                </button>
             </div> 
         </div> 
         <div class="row">
@@ -581,6 +585,7 @@
                     Departamento.focus().select();
                     btnAceptar.attr('disabled', true);
                     Departamento.focus().select();
+                    Control.val('');
                 }).fail(function (x, y, z) {
                     getError(x);
                 });
@@ -743,8 +748,6 @@
                             if (xDepartamento === 9 && stsavan === 8) {
                                 btnAceptar.attr('disabled', false);
                                 btnAceptar.focus();
-                            } else {
-                                btnAceptar.attr('disabled', true);
                             }
                             if (xDepartamento === 10 && stsavan === 9) {
                                 Empleado.focus().select();
