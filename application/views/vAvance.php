@@ -684,10 +684,10 @@
                             FotoEstilo[0].src = rta;
                             FotoEstilo.parent()[0].href = rta;
 
-                            var Departamento = Departamento.val() ? parseInt(Departamento.val()) : 0;
+                            var xDepartamento = Departamento.val() ? parseInt(Departamento.val()) : 0;
                             var stsavan = parseInt(rr.ESTATUS_PRODUCCION);
 
-                            if (Departamento === 33 && stsavan === 3) {
+                            if (xDepartamento === 33 && stsavan === 3) {
                                 if (parseInt(rr.MAQUILA) === 98) {
                                     Fraccion.val(113);
                                     FraccionS[0].selectize.setValue(113);
@@ -695,7 +695,7 @@
                                     Empleado.focus().select();
                                 }
                             }
-                            if (Departamento === 4 && stsavan === 33) {
+                            if (xDepartamento === 4 && stsavan === 33) {
                                 if (parseInt(rr.MAQUILA) === 98) {
                                     Fraccion.val(114);
                                     FraccionS[0].selectize.setValue(114);
@@ -704,52 +704,52 @@
                                     FraccionS[0].selectize.setValue(103);
                                 }
                             }
-                            if (Departamento === 40 && stsavan === 4) {
+                            if (xDepartamento === 40 && stsavan === 4) {
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
                             }
-                            if (Departamento === 44 && stsavan === 40) {
+                            if (xDepartamento === 44 && stsavan === 40) {
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
                             }
-                            if (Departamento === 42 && stsavan === 40) {
+                            if (xDepartamento === 42 && stsavan === 40) {
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
                             }
-                            if (Departamento === 5 && stsavan === 44) {
+                            if (xDepartamento === 5 && stsavan === 44) {
                                 Empleado.focus().select();
                             }
-                            if (Departamento === 55 && stsavan === 5) {
+                            if (xDepartamento === 55 && stsavan === 5) {
                                 Empleado.focus().select();
                                 if (parseInt(rr.MAQUILA) === 98) {
                                     Fraccion.val(299);
                                     FraccionS[0].selectize.setValue(299);
                                 }
                             }
-                            if (Departamento === 6 && stsavan === 55) {
+                            if (xDepartamento === 6 && stsavan === 55) {
                                 Empleado.focus().select();
                             }
-                            if (Departamento === 7 && stsavan === 6) {
+                            if (xDepartamento === 7 && stsavan === 6) {
                                 Fraccion.val(401);
                                 FraccionS[0].selectize.setValue(401);
                             }
-                            if (Departamento === 8 && stsavan === 7) {
+                            if (xDepartamento === 8 && stsavan === 7) {
                                 Fraccion.val(401);
                                 FraccionS[0].selectize.setValue(401);
                                 Empleado.focus().select();
                                 btnAceptar.attr('disabled', false);
                                 btnAceptar.focus();
                             }
-                            if (Departamento === 9 && stsavan === 8) {
+                            if (xDepartamento === 9 && stsavan === 8) {
                                 btnAceptar.attr('disabled', false);
                                 btnAceptar.focus();
                             } else {
                                 btnAceptar.attr('disabled', true);
                             }
-                            if (Departamento === 10 && stsavan === 9) {
+                            if (xDepartamento === 10 && stsavan === 9) {
                                 Empleado.focus().select();
                             }
-                            if (Departamento === 11 && stsavan === 10) {
+                            if (xDepartamento === 11 && stsavan === 10) {
                                 Empleado.focus().select();
                             }
                         }
