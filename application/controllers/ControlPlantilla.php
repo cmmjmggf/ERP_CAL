@@ -44,6 +44,34 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    public function onVerificarFraccion() {
+        try {
+            $est = $this->input->get('Estilo');
+            $fracc = $this->input->get('Fraccion');
+            print json_encode($this->db->query("select * from fraccionesxestilo where estilo = '$est' and fraccion = $fracc ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarPlantilla() {
+        try {
+            $Maquila = $this->input->get('Maquila');
+            print json_encode($this->db->query("select Clave from maquilasplantillas where Clave = '$Maquila' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select numprv from provmaqui where numprv = '$Proveedor' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
 //            print json_encode($this->cpm->getRecords());
@@ -65,11 +93,11 @@ class ControlPlantilla extends CI_Controller {
                     ->from('controlpla AS CP')->where_in('CP.Estatus', array(1, 2));
 
             $x = $this->input->get();
-            if ($x['PROVEEDOR'] !== '') {
-                $this->db->where('CP.Proveedor', $x['PROVEEDOR']);
+            if ($x['DOCUMENTO'] !== '') {
+                $this->db->where('CP.Documento', $x['DOCUMENTO']);
             }
-            if ($x['PROVEEDOR'] === '') {
-                $this->db->limit(25);
+            if ($x['DOCUMENTO'] === '') {
+                $this->db->where('CP.Documento', 0);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -235,6 +263,21 @@ class ControlPlantilla extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function onImprimir() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["docto"] = 9950;
+        $parametros["maq"] = 3;
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\plantilla\reporteDoctoPlantilla.jasper');
+        $jc->setFilename('IMPRIME_DOCTO_PLANTILLA_MAQUILA_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
     }
 
     public function getReporteDePago() {

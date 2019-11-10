@@ -65,7 +65,7 @@ class ControlPlantilla_model extends CI_Model {
     public function getProveedoresMaquilas() {
         try {
             return $this->db->select('PRM.numprv AS ID, PRM.nomprv AS PROVEEDOR', false)
-                            ->from('provmaqui AS PRM')->get()->result();
+                            ->from('provmaqui AS PRM')->order_by('PROVEEDOR', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -74,7 +74,7 @@ class ControlPlantilla_model extends CI_Model {
     public function getMaquilasPlantillas() {
         try {
             return $this->db->select('MP.Clave AS ID, MP.Descripcion AS MAQPLA', false)
-                            ->from('maquilasplantillas AS MP')->get()->result();
+                            ->from('maquilasplantillas AS MP')->order_by('MAQPLA', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -140,12 +140,12 @@ class ControlPlantilla_model extends CI_Model {
 
     public function getFraccionesXEstilo($ESTILO) {
         try {
-            return $this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
+            return $this->db->select("F.Clave AS CLAVE, F.Descripcion AS FRACCION", false)
                             ->from('fracciones AS F')
                             ->join('fraccionesxestilo AS FXE', 'F.Clave = FXE.Fraccion')
-                            ->where("FXE.Estilo LIKE '{$ESTILO}'", null, false)
+                            ->where("FXE.Estilo = '{$ESTILO}'", null, false)
                             ->group_by('F.Clave')
-                            ->order_by('ABS(F.Clave)', 'ASC')
+                            ->order_by('FRACCION', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
