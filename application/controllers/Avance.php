@@ -558,22 +558,22 @@ class Avance extends CI_Controller {
             }
             /* 55 ENSUELADO */
             /* 55 ENSUELADO Y STSAVAN 5 PESPUNTE */
-            if ($depto === 55 && $depto_actual === 5 && $frac === 300 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 303 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 298 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 290 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 295 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 299 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 90 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 300 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 302 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 301 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 304 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 322 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 324 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 199 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 317 || 
-                    $depto === 55 && $depto_actual === 5 && $frac === 349 || 
+            if ($depto === 55 && $depto_actual === 5 && $frac === 300 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 303 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 298 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 290 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 295 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 299 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 90 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 300 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 302 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 301 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 304 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 322 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 324 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 199 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 317 ||
+                    $depto === 55 && $depto_actual === 5 && $frac === 349 ||
                     $depto === 55 && $depto_actual === 5 && $frac === 333) {
                 /* 5 PESPUNTE A 55 ENSUELADO, CON PAGO DE FRACCION DE 300 PESPUNTE GENERAL */
 //                303	PIOCHA DE PESPUNTE +
@@ -620,7 +620,7 @@ class Avance extends CI_Controller {
                 exit(0);
             }
             /* 6 ALMACEN - PESPUNTE Y STSAVAN 55 ENSUELADO */
-            /*55 ENSUELADO (FRACCIONES)*/
+            /* 55 ENSUELADO (FRACCIONES) */
             if ($depto === 6 && $depto_actual === 55 && $frac === 306 ||
                     $depto === 6 && $depto_actual === 55 && $frac === 502 ||
                     $depto === 6 && $depto_actual === 55 && $frac === 397) {
@@ -651,7 +651,7 @@ class Avance extends CI_Controller {
                 exit(0);
             }
 
-            /*7 TEJIDO*/
+            /* 7 TEJIDO */
             if ($depto === 7 && $depto_actual === 6) {
 
                 /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
@@ -678,7 +678,12 @@ class Avance extends CI_Controller {
                 exit(0);
             }
             /* AVANCE A ALMACEN DE TEJIDO , PAGA NOMINA DE TEJIDO */
-            if ($depto === 8 && $depto_actual === 7 && $frac === 401 || $depto === 8 && $depto_actual === 7 && $frac === 402 || $depto === 8 && $depto_actual === 7 && $frac === 403 || $depto === 8 && $depto_actual === 7 && $frac === 89 || $depto === 8 && $depto_actual === 7 && $frac === 320 || $depto === 8 && $depto_actual === 7 && $frac === 404) {
+            if ($depto === 8 && $depto_actual === 7 && $frac === 401 ||
+                    $depto === 8 && $depto_actual === 7 && $frac === 402 ||
+                    $depto === 8 && $depto_actual === 7 && $frac === 403 ||
+                    $depto === 8 && $depto_actual === 7 && $frac === 89 ||
+                    $depto === 8 && $depto_actual === 7 && $frac === 320 ||
+                    $depto === 8 && $depto_actual === 7 && $frac === 404) {
                 /* 7 TEJIDO "A" 8 ALMACEN DE TEJIDO */
 //                    404	TEJIDA MAQUINA  2 +
 //                    89	TEJIDA PROTOTIPO +
@@ -688,37 +693,40 @@ class Avance extends CI_Controller {
 //                    403	TEJIDA MAQUINA 1 
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                if (intval($check_fraccion[0]->EXISTE) === 0) {
-                    switch (intval($frac)) {
-                        case 401:
-                            /* YA NO SE PAGA FRACCION PORQUE ESTE TIENE UN MODULO DEDICADO DONDE SE PAGA DIRECTO,SOLO MUEVE EL CONTROL A ALMACEN TEJIDO 
-                             * VER AVANCE TEJIDO (vAvanceTejido, AvanceTejido) */
-                            $this->db->insert('avance', array(
-                                'Control' => $xXx['CONTROL'],
-                                'FechaAProduccion' => Date('d/m/Y'),
-                                'Departamento' => 160,
-                                'DepartamentoT' => 'ALMACEN TEJIDO',
-                                'FechaAvance' => Date('d/m/Y'),
-                                'Estatus' => 'A',
-                                'Usuario' => $_SESSION["ID"],
-                                'Fecha' => Date('d/m/Y'),
-                                'Hora' => Date('h:i:s a'),
-                                'Fraccion' => NULL
-                            ));
-                            $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)
-                                    ->where('Control', $xXx['CONTROL'])->update('controles');
-                            $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')
-                                    ->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 8)->set("fec8", Date('Y-m-d h:i:s'))
-                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                            $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO.", $this->session);
-                            exit(0);
-                            break;
-                        default:
+
+//                var_dump($check_fraccion);
+//                exit(0);
+                switch (intval($frac)) {
+                    case 401:
+                        /* YA NO SE PAGA FRACCION PORQUE ESTE TIENE UN MODULO DEDICADO DONDE SE PAGA DIRECTO,SOLO MUEVE EL CONTROL A ALMACEN TEJIDO 
+                         * VER AVANCE TEJIDO (vAvanceTejido, AvanceTejido) */
+                        $this->db->insert('avance', array(
+                            'Control' => $xXx['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 160,
+                            'DepartamentoT' => 'ALMACEN TEJIDO',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => NULL
+                        ));
+                        $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)
+                                ->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                                ->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                        $this->db->set("status", 8)->set("fec8", Date('Y-m-d h:i:s'))
+                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                        $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO.", $this->session);
+                        exit(0);
+                        break;
+                    default:
+                        if (intval($check_fraccion[0]->EXISTE) === 0) {
                             $this->onPagarFraccionSinAvance($xXx, $frac);
-                            exit(0);
-                            break;
-                    }
+                        }
+                        exit(0);
+                        break;
                 }
                 exit(0);
             }
@@ -914,6 +922,7 @@ class Avance extends CI_Controller {
             $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
             $data["avance_id"] = NULL;
             $this->db->insert('fracpagnomina', $data);
+            $l = new Logs("Captura de Avance de produccion", "HA COBRADO O PAGADO LA FRACCION {$xfraccion} PARA EL CONTROL {$xXx['CONTROL']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
