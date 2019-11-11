@@ -34,7 +34,16 @@
                 </div>
                 <div class="col-3">
                     <label for="">Cliente</label>
-                    <select id="ClienteMEPCC" name="ClienteMEPCC" class="form-control form-control-sm"></select>
+                    <select id="ClienteMEPCC" name="ClienteMEPCC" class="form-control form-control-sm">
+                        <option></option>
+                        <?php 
+                        foreach ($this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
+                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')
+                                    ->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                            print "<option value='{$v->Clave}'>{$v->Cliente}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="col-3">
 
@@ -251,8 +260,7 @@
                     HoldOn.close();
                 });
             }
-        });
-        getClientes();
+        }); 
     });
 
     function onCalcularPares(e) {
@@ -260,26 +268,12 @@
         var total = 0;
         $.each(pnlTablero.find("#tblTallas").find("input[name^='C']"), function (k, v) {
             if ($(v).val()) {
-                total += parseInt($(v).val());
-                console.log(k)
+                total += parseInt($(v).val()); 
             }
         });
         TPares.val(total);
     }
-
-    function getClientes() {
-        $.getJSON('<?php print base_url('ModificaEliminaPedidoConControl/getClientes'); ?>')
-                .done(function (a) {
-                    $.each(a, function (k, v) {
-                        ClienteMEPCC[0].selectize.addOption({text: v.Cliente, value: v.Clave});
-                    });
-                }).fail(function (x) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-            ControlMEPCC.focus().select();
-        });
-    }
+ 
 
     function getSerie(s) {
         $.getJSON('<?php print base_url('ModificaEliminaPedidoConControl/getSerieXControl'); ?>', {
@@ -302,8 +296,7 @@
         });
         temp = 0;
         opciones_detalle.ajax = {
-            "url": '<?php print base_url('ModificaEliminaPedidoConControl/getPedidoByID') ?>',
-            "contentType": "application/json",
+            "url": '<?php print base_url('ModificaEliminaPedidoConControl/getPedidoByID') ?>', 
             "dataSrc": "",
             "data": function (d) {
                 d.CONTROL = ControlMEPCC.val();
@@ -346,6 +339,19 @@
                             .done(function (a) {
                                 onBeep(1);
                                 console.log(a);
+                                if (a.length > 0) {
+                                    var r = a[0];
+                                    switch (parseInt(r.DELETED)) {
+                                        case 0:
+                                            iMsg('NO SE HA ELIMINADO EL CONTROL PORQUE YA HA SIDO PROCESADO POR DEPARTAMENTO DE CORTE', 'w', function () {
+                                                ControlMEPCC.focus().select();
+                                            });
+                                            break;
+                                        case 1:
+                                            onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA ELIMINADO EL CONTROL ' + r.CONTROL, 'success', {from: "bottom", align: "center"});
+                                            break;
+                                    }
+                                }
                             }).fail(function (x) {
                         getError(x);
                     }).always(function () {

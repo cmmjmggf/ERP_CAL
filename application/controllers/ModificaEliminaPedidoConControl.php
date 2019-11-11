@@ -70,7 +70,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
 
                                     'A' AS EstatusDetalle, P.Recibido,
                                     S.Clave AS Serie, P.Pares, 'A' AS EstatusD, (P.Pares * P.Precio) AS STT,
-                                    CONCAT('{$ini}',(CASE WHEN S.T1 = 0 THEN '-' ELSE S.T1 END),'{$mid}',CASE WHEN P.C1 = 0 THEN '-' ELSE P.C1 END,'{$end}') AS T1,
+                                    CONCAT('{$ini}',IF(S.T1 = 0, '-', S.T1),'{$mid}',CASE WHEN P.C1 = 0 THEN '-' ELSE P.C1 END,'{$end}') AS T1,
                                     CONCAT('{$ini}',(CASE WHEN S.T2 = 0 THEN '-' ELSE S.T2 END),'{$mid}',CASE WHEN P.C2 = 0 THEN '-' ELSE P.C2 END,'{$end}') AS T2,
                                     CONCAT('{$ini}',(CASE WHEN S.T3 = 0 THEN '-' ELSE S.T3 END),'{$mid}',CASE WHEN P.C3 = 0 THEN '-' ELSE P.C3 END,'{$end}') AS T3,
                                     CONCAT('{$ini}',(CASE WHEN S.T4 = 0 THEN '-' ELSE S.T4 END),'{$mid}',CASE WHEN P.C4 = 0 THEN '-' ELSE P.C4 END,'{$end}') AS T4,
@@ -99,10 +99,13 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->where("P.Control", $CONTROL);
             } else if ($CLIENTE !== '' && $CLIENTE !== "") {
                 $this->db->where("P.Cliente", $CLIENTE);
-            } else {
-                $this->db->order_by("P.Ano", "DESC")->order_by("P.Clave", "DESC")->limit(25);
             }
-            print json_encode($this->db->get()->result());
+            $this->db->order_by("P.Ano", "DESC")->order_by("P.Clave", "DESC");
+            if ($CONTROL === '' && $CLIENTE === '') {
+                $this->db->limit(10);
+            }
+            $dtm = $this->db->get()->result();
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -131,20 +134,21 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
             $CONTROLTEJ = $this->db->query("{$sql} AS TOTAL FROM controltej AS CTEJ WHERE CTEJ.Control LIKE '{$C}'")->result();
             $CONTROLTERM = $this->db->query("{$sql} AS TOTAL FROM controlterm AS CTERM WHERE CTERM.Control LIKE '{$C}'")->result();
 
-//            $PEDIDOX = $this->db->query("SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS TIENE_PEDIDO FROM historialcontroles AS PE WHERE PE.Control LIKE '{$this->input->post('CONTROL')}'")->result();
-
-
-            $X = intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) 
-                    + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) 
-                    + intval($CONTROLTERM[0]->TOTAL);
+            $X = intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) + intval($CONTROLTERM[0]->TOTAL);
+//            print "NUMERO DE AVANCES : {$X}";
+//            exit(0);
             if ($X > 0) {
                 print json_encode(array("DELETED" => 0, "CONTROL" => $C, "MATCHES" => $X));
+                $l = new Logs("Modifica y elimina pedido con control", "INTENTO CANCELAR EL CONTROL {$C}.", $this->session);
+                exit(0);
             } else {
                 print json_encode(array("DELETED" => 1, "CONTROL" => $C, "MATCHES" => $X));
                 $this->db->set('stsavan', 14)->where('ID', $this->input->post('ID'))
                         ->where('Clave', $this->input->post('CLAVE'))
                         ->where('Control', $this->input->post('CONTROL'))
                         ->update('pedidox');
+                $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
+                exit(0);
             }
 //            var_dump($PEDIDOX, $CONTROLES, $AVAPRD, $AVANCE, $ASIGNAPFTSACXC, $CONTROLPES, $CONTROLPLA, $CONTROLTEJ, $CONTROLTERM);
         } catch (Exception $exc) {
