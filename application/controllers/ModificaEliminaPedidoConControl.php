@@ -125,11 +125,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
             $X = 0;
             $C = $this->input->get('CONTROL');
             $sql = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END";
-            $PEDIDOX = $this->db->query("{$sql} AS TOTAL FROM pedidox AS PE WHERE PE.Control LIKE '{$C}'")->result();
-            $CONTROLES = $this->db->query("{$sql} AS TOTAL FROM controles AS C WHERE C.Control LIKE '{$C}'")->result();
-            $AVAPRD = $this->db->query("{$sql} AS TOTAL FROM avaprd AS AV WHERE AV.contped LIKE '{$C}'")->result();
-            $AVANCE = $this->db->query("{$sql} AS TOTAL FROM avance AS AVC WHERE AVC.Control LIKE '{$C}'")->result();
-            $ASIGNAPFTSACXC = $this->db->query("{$sql} AS TOTAL FROM asignapftsacxc AS ASPFST WHERE ASPFST.Control LIKE '{$C}'")->result();
+            $ASIGNAPFTSACXC = $this->db->query("{$sql} AS TOTAL FROM asignapftsacxc AS ASPFST WHERE ASPFST.Control = '{$C}'")->result();
             $CONTROLPES = $this->db->query("{$sql} AS TOTAL FROM controlpes AS CPS WHERE CPS.Control LIKE '{$C}'")->result();
             $CONTROLPLA = $this->db->query("{$sql} AS TOTAL FROM controlpla AS CPL WHERE CPL.Control LIKE '{$C}'")->result();
             $CONTROLTEJ = $this->db->query("{$sql} AS TOTAL FROM controltej AS CTEJ WHERE CTEJ.Control LIKE '{$C}'")->result();
@@ -138,8 +134,9 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
 //            $PEDIDOX = $this->db->query("SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS TIENE_PEDIDO FROM historialcontroles AS PE WHERE PE.Control LIKE '{$this->input->post('CONTROL')}'")->result();
 
 
-            $X = intval($PEDIDOX[0]->TOTAL) + intval($CONTROLES[0]->TOTAL) +
-                    intval($AVAPRD[0]->TOTAL) + intval($AVANCE[0]->TOTAL) + intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) + intval($CONTROLTERM[0]->TOTAL);
+            $X = intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) 
+                    + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) 
+                    + intval($CONTROLTERM[0]->TOTAL);
             if ($X > 0) {
                 print json_encode(array("DELETED" => 0, "CONTROL" => $C, "MATCHES" => $X));
             } else {

@@ -320,6 +320,7 @@
 
     function onEliminar(e, id) {
         var p = PedidoDetalle.row($(e).parents('tr')).data();
+        console.log(p);
         swal({
             title: "ATENCIÓN",
             text: "VA ELIMINAR EL CONTROL " + p.Control + ", DE ESTE PEDIDO (" + p.Pedido + "), ¿ESTA SEGURO?",

@@ -1285,8 +1285,8 @@
                                         if (n === 0) {
                                             opcion += '<li class="dropdown-submenu">';
                                             opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vv.Item + '</a>';
-                                            var nav_subitems = 0, nav_subsubitems = 0;
-                                            if (nav_subitems === 0) {
+                                            var nav_subitems = vv.ItemDropdown, nav_subsubitems = 0;
+                                            if (nav_subitems === 1) {
                                                 opcion += '<ul class="dropdown-menu  animate slideIn">';
                                             }
                                             /*NIVEL 2*/
@@ -1321,6 +1321,7 @@
                                                                 opcion += '<li class="dropdown-submenu">';
                                                                 opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vvv.SubItem + '</a>';
                                                                 /*NIVEL 3*/
+                                                                nav_subsubitems = vvv.SubItemDropdown;
                                                                 if (nav_subsubitems === 0) {
                                                                     opcion += '<ul class="dropdown-menu  animate slideIn">';
                                                                 }
@@ -1338,7 +1339,7 @@
                                                                         nav_subsubitems = 1;
                                                                     }
                                                                 });
-                                                                if (nav_subsubitems === 1) {
+                                                                if (nav_subsubitems === 1 && parseInt(vvv.SubItemDropdown) === 0) {
                                                                     opcion += '</ul>';
                                                                 }
                                                             }
@@ -1347,6 +1348,7 @@
                                                 }
                                                 nav_subitems = 1;
                                             });//each subitems
+
                                             if (nav_subitems === 1) {
                                                 opcion += '</ul>';
                                             }
@@ -1375,7 +1377,7 @@
         }, "json").fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
-            opcion += '<li class="nav-item dropdown ml-auto">';
+            opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';
             opcion += '<a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
             opcion += ' <img src="<?php print "https://bootdey.com/img/Content/avatar/avatar" . rand(1, 8) . ".png"; ?>" class="rounded-circle" width="24">';
             opcion += ' <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?> ';
@@ -1387,7 +1389,9 @@
             opcion += '<a class="dropdown-item" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';
             opcion += '</div>';
             opcion += '</li>';
+//            console.log(opcion)
             $("#navbarSupportedContent").find("ul.navbar-nav").html(opcion);
+
             /*AQUI ES DONDE ME CONSAGRO*/
             $("#navbarSupportedContent").find("ul.navbar-nav").find('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
                 var $el = $(this);
