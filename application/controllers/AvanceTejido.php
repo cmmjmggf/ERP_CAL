@@ -51,7 +51,19 @@ class AvanceTejido extends CI_Controller {
 
     public function getColoresXEstilo() {
         try {
-            print json_encode($this->avtm->getColoresXEstilo($this->input->get('ESTILO')));
+//            print json_encode($this->apm->getColoresXEstilo($this->input->get('ESTILO')));
+            $x = $this->input->get();
+            $this->db->select("CAST(C.Clave AS SIGNED ) AS CLAVE, CONCAT(C.Clave,'-', C.Descripcion) AS COLOR ", false)
+                    ->from('colores AS C');
+            if ($x['ESTILO'] !== '') {
+                $this->db->where('C.Estilo', $x['ESTILO']);
+            }
+            $this->db->where('C.Estatus', 'ACTIVO')
+                    ->order_by('ID', 'ASC');
+            if ($x['ESTILO'] === '') {
+                $this->db->limit(99);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -105,7 +117,9 @@ class AvanceTejido extends CI_Controller {
 
     public function getUltimoAvanceXControl() {
         try {
-            print json_encode($this->avtm->getUltimoAvanceXControl($this->input->get('CONTROL')));
+//            print json_encode($this->avtm->getUltimoAvanceXControl($this->input->get('CONTROL')));
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT P.stsavan AS AVANCE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -142,6 +156,12 @@ class AvanceTejido extends CI_Controller {
             if ($x['CHOFER'] !== '') {
                 $this->db->where('C.numcho', $x['CHOFER']);
             }
+            if ($x['TEJEDORA'] !== '') {
+                $this->db->where('C.numtej', $x['TEJEDORA']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('C.control', $x['CONTROL']);
+            }
             $this->db->order_by('C.fechapre', 'DESC');
             if ($x['CHOFER'] === '') {
                 $this->db->limit(99);
@@ -160,84 +180,102 @@ class AvanceTejido extends CI_Controller {
         }
     }
 
+    public function getxSemanaNomina() {
+        try {
+//            print json_encode($this->avm->getSemanaNomina($this->input->post('FECHA')));
+
+            $fechin = $this->input->post('FECHA');
+            print json_encode($this->db->select("S.Sem AS SEMANA", false)
+                                    ->from('semanasnomina AS S')
+                                    ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAvanzar() {
         try {
             $x = $this->input;
             $xXx = $this->input->post();
+            $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx['CONTROL']} AND F.numfrac = {$xXx['FRACCION']} LIMIT 1")->result();
+            $existe = count($check_fraccion[0]->EXISTE) > 0 ? intval($check_fraccion[0]->EXISTE) : 0;
 
-            /* avance, avaprd */
-            $this->db->insert('controltej', array(
-                'numcho' => $xXx['NUM_CHOFER'],
-                'nomcho' => $xXx['CHOFER'],
-                'numtej' => $xXx['NUM_TEJEDORA'],
-                'nomtej' => $xXx['TEJEDORA'],
-                'fechapre' => $xXx['FECHA'],
-                'control' => $xXx['CONTROL'],
-                'estilo' => $xXx['ESTILO'],
-                'color' => $xXx['COLOR'],
-                'nomcolo' => $xXx['COLORT'],
-                'docto' => $xXx['DOCUMENTO'],
-                'pares' => $xXx['PARES'],
-                'fechalle' => Date('d/m/Y h:i:s a'),
-                'tipo' => 0,
-                'fraccion' => $xXx['FRACCION']
-            ));
+            if ($existe === 0) {
+                $fecha = $x->post('FECHA');
+                $dia = substr($fecha, 0, 2);
+                $mes = substr($fecha, 3, 2);
+                $anio = substr($fecha, 6, 4);
+                $nueva_fecha = new DateTime();
+                $nueva_fecha->setDate($anio, $mes, $dia);
+                /* avance, avaprd */
+                $this->db->insert('controltej', array(
+                    'numcho' => $xXx['NUM_CHOFER'],
+                    'nomcho' => $xXx['CHOFER'],
+                    'numtej' => $xXx['NUM_TEJEDORA'],
+                    'nomtej' => $xXx['TEJEDORA'],
+                    'fechapre' => $nueva_fecha->format('Y-m-d h:i:s'),
+                    'control' => $xXx['CONTROL'],
+                    'estilo' => $xXx['ESTILO'],
+                    'color' => $xXx['COLOR'],
+                    'nomcolo' => $xXx['COLORT'],
+                    'docto' => $xXx['DOCUMENTO'],
+                    'pares' => $xXx['PARES'],
+                    'fechalle' => NULL,
+                    'tipo' => 0,
+                    'fraccion' => $xXx['FRACCION']
+                ));
 
-            /* fracpagnomina */
-            $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
-                            ->where('FXE.Estilo', $xXx['ESTILO'])
-                            ->where('FXE.Fraccion', $xXx['FRACCION'])
-                            ->get()->result();
-            $fecha = $x->post('FECHA');
-            $dia = substr($fecha, 0, 2);
-            $mes = substr($fecha, 3, 2);
-            $anio = substr($fecha, 6, 4);
-            $nueva_fecha = new DateTime();
-            $nueva_fecha->setDate($anio, $mes, $dia);
+                /* fracpagnomina */
+                $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
+                                ->where('FXE.Estilo', $xXx['ESTILO'])
+                                ->where('FXE.Fraccion', $xXx['FRACCION'])
+                                ->get()->result();
 
-            $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
+                $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
 
+                $ID = $this->db->insert('avance', array(
+                    'Control' => $xXx['CONTROL'],
+                    'FechaAProduccion' => $xXx['FECHA'],
+                    'Departamento' => 150,
+                    'DepartamentoT' => 'TEJIDO',
+                    'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => $xXx['FRACCION']
+                ));
+                $ID = $this->db->insert_id();
+                $this->db->insert('fracpagnomina', array(
+                    'numeroempleado' => $x->post('NUM_TEJEDORA'),
+                    'maquila' => intval($MAQUILA_X_CONTROL[0]->MAQUILA),
+                    'control' => $x->post('CONTROL'),
+                    'estilo' => $x->post('ESTILO'),
+                    'numfrac' => $x->post('FRACCION'),
+                    'preciofrac' => $FXE[0]->PRECIO,
+                    'pares' => $x->post('PARES'),
+                    'subtot' => (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO)),
+                    'status' => 0,
+                    'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
+                    'semana' => $x->post('SEMANA'),
+                    'depto' => 150,
+                    'registro' => 0,
+                    'anio' => Date('Y'),
+                    'avance_id' => $ID,
+                    'fraccion' => $xXx['FRACCION']
+                ));
 
-            $ID = $this->db->insert('avance', array(
-                'Control' => $xXx['CONTROL'],
-                'FechaAProduccion' => $xXx['FECHA'],
-                'Departamento' => 150,
-                'DepartamentoT' => 'TEJIDO',
-                'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
-                'Estatus' => 'A',
-                'Usuario' => $_SESSION["ID"],
-                'Fecha' => Date('d/m/Y'),
-                'Hora' => Date('h:i:s a'),
-                'Fraccion' => $xXx['FRACCION']
-            ));
-            $this->db->insert('fracpagnomina', array(
-                'numeroempleado' => $x->post('NUM_TEJEDORA'),
-                'maquila' => intval($MAQUILA_X_CONTROL[0]->MAQUILA),
-                'control' => $x->post('CONTROL'),
-                'estilo' => $x->post('ESTILO'),
-                'numfrac' => $x->post('FRACCION'),
-                'preciofrac' => $FXE[0]->PRECIO,
-                'pares' => $x->post('PARES'),
-                'subtot' => (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO)),
-                'status' => 0,
-                'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
-                'semana' => $x->post('SEMANA'),
-                'depto' => 150,
-                'registro' => 0,
-                'anio' => Date('Y'),
-                'avance_id' => $ID,
-                'fraccion' => $x->post('FRACCIONT')
-            ));
-
-            /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
-            $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
-                    ->where('Control', $xXx['CONTROL'])->update('controles');
-            /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
-            $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
-                    ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])
-                    ->update('pedidox');
-            /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-            $this->db->set('fec7', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])->update('avaprd');
+                /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+                $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
+                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
+                        ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+                $this->db->set('fec7', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])->update('avaprd');
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

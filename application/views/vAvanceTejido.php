@@ -24,7 +24,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
                 <label>Documento</label>
-                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm">
+                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm notEnter selectNotEnter">
             </div>
             <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
                 <label>Control</label>
@@ -39,30 +39,32 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
                 <label>Estilo</label>
-                <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
+                <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm">
             </div>
             <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
                 <label>Color</label>
-                <select id="Color" name="Color" class="form-control form-control-sm"></select>
+                <select id="Color" name="Color" disabled="" class="form-control form-control-sm"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Pares</label>
                 <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
-                <label>Ava</label>
-                <input id="Ava" name="Ava" class="form-control form-control-sm">
+                <label>Avace</label>
+                <input id="Ava" name="Ava" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Sem</label>
-                <input id="Sem" name="Sem" class="form-control form-control-sm">
+                <input id="Sem" name="Sem" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Fecha</label>
                 <input id="Fecha" name="Fecha" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1 mt-4">
-                <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-primary"><span class="fa fa-check"></span></button>
+                <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-primary" disabled="">
+                    <span class="fa fa-check"></span> Aceptar
+                </button>
             </div>
             <div class="w-100 my-3"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -86,12 +88,16 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="row">
-                    <div class="col-10">
+                    <div class="col-8">
                         <h4>Controles entregados</h4>
                     </div>
-                    <div class="col-2">
-                        <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Imprimir vale"><span class="fa fa-print"></span></button>
-                        <button type="button" id="btnImprimirValeAyuda" name="btnImprimirValeAyuda" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="Como se usa?"><span class="fa fa-question-circle"></span></button>
+                    <div class="col-4" align="right">
+                        <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-warning" 
+                                data-toggle="tooltip" data-placement="top" title="Imprimir vale" disabled="">
+                            <span class="fa fa-print"></span> Imprimir vale</button>
+                        <button type="button" id="btnImprimirValeAyuda" name="btnImprimirValeAyuda" class="btn btn-info d-none"  data-toggle="tooltip" data-placement="top" title="Como se usa?">
+                            <span class="fa fa-question-circle"></span> 
+                        </button>
                     </div>
                 </div>
                 <table id="tblControlesEntregados" class="table table-hover table-sm table-bordered  compact nowrap" style="width:  100%;">
@@ -119,7 +125,7 @@
 </div>
 <script>
     var pnlTablero = $("#pnlTablero");
-    var xChofer = pnlTablero.find("#xChofer"), Chofer = pnlTablero.find("#Chofer"), 
+    var xChofer = pnlTablero.find("#xChofer"), Chofer = pnlTablero.find("#Chofer"),
             xTejedora = pnlTablero.find("#xTejedora"),
             Tejedora = pnlTablero.find("#Tejedora"),
             Estilo = pnlTablero.find("#Estilo"), Control = pnlTablero.find("#Control");
@@ -133,13 +139,33 @@
             btnImprimirVale = pnlTablero.find("#btnImprimirVale"), btnImprimirValeAyuda = pnlTablero.find("#btnImprimirValeAyuda");
 
     $(document).ready(function () {
+
+        Fecha.val('<?php print Date('d/m/Y'); ?>');
+        $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
+            FECHA: Fecha.val()
+        }).done(function (d) {
+            var s = JSON.parse(d);
+            if (s.length > 0) {
+                Semana.val(s[0].SEMANA);
+            }
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        });
         handleEnterDiv(pnlTablero);
         xChofer.focus();
         xTejedora.on('keydown', function (e) {
             if (e.keyCode === 13 && xTejedora.val()) {
                 Tejedora[0].selectize.setValue(parseInt(xTejedora.val()));
-                Tejedora[0].selectize.disable();
-            }else{
+                if (Tejedora.val()) {
+                    Tejedora[0].selectize.disable();
+                    onHabilita();
+                } else {
+                    Tejedora[0].selectize.clear();
+                    iMsg('ESTA TEJEDORA NO EXISTE, ESCRIBA OTRO', 'w', function () {
+                        xTejedora.focus().select();
+                    });
+                }
+            } else {
                 Tejedora[0].selectize.enable();
             }
         });
@@ -147,16 +173,30 @@
             if (e.keyCode === 13 && xChofer.val()) {
                 Chofer[0].selectize.setValue(parseInt(xChofer.val()));
                 Chofer[0].selectize.disable();
-            }else{
+                if (Chofer.val()) {
+                    Chofer[0].selectize.disable();
+                    onHabilita();
+                } else {
+                    Chofer[0].selectize.clear();
+                    iMsg('ESTE CHOFER NO EXISTE, ESCRIBA OTRO', 'w', function () {
+                        xChofer.focus().select();
+                    });
+                }
+            } else {
                 Chofer[0].selectize.enable();
             }
         });
         Chofer.change(function () {
+            xChofer.val(Chofer.val());
+            if (Chofer.val()) {
+                xTejedora.focus().select();
+            } else {
+                xChofer.focus().select();
+            }
             ControlesEntregados.ajax.reload();
         });
         btnImprimirValeAyuda.click(function () {
         });
-
         btnImprimirVale.click(function () {
             if (Documento.val()) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -224,68 +264,80 @@
                 });
             }
         });
-
         Fecha.val('<?php print Date("d/m/Y"); ?>');
         getChoferes();
-
         getTejedoras();
-
         Tejedora.change(function () {
             getUltimoDocumento();
-            Documento.focus();
-        });
-
-        btnAceptar.click(function () {
-            if (Chofer.val() && Tejedora.val() && Documento.val() &&
-                    Control.val() && Frac.val() && Estilo.val() &&
-                    Color.val() && Pares.val() && Semana.val()
-                    && Fecha.val()) {
-
-                /*1.- REVISAR SI YA TIENE UN AVANCE, DE LO CONTRARIO ARROJAR UN MENSAJE SOBRE ELLO*/
-                $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
-                        {CONTROL: Control.val()}).done(function (a) {
-                    console.log(a)
-                    if (parseInt(a[0].EXISTE) > 0) {
-                        swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
-                            Control.focus().select();
-                        });
-                    } else {
-                        getUltimoDocumento();
-                        /*2.-  */
-                        var nomchofer = Chofer.find("option:selected").text(), nomteje = Tejedora.find("option:selected").text();
-
-                        $.post('<?php print base_url('AvanceTejido/onAvanzar') ?>', {
-                            NUM_CHOFER: Chofer.val(),
-                            CHOFER: getNombre(nomchofer),
-                            NUM_TEJEDORA: Tejedora.val(),
-                            TEJEDORA: getNombre(nomteje),
-                            FECHA: Fecha.val(),
-                            CONTROL: Control.val(),
-                            ESTILO: Estilo.val(),
-                            COLOR: Color.val(),
-                            COLORT: Color.find("option:selected").text(),
-                            DOCUMENTO: Documento.val(),
-                            PARES: Pares.val(),
-                            FRACCION: Frac.val(),
-                            SEMANA: Semana.val()
-                        }).done(function (a) {
-                            console.log(a);
-                            swal('ATENCIÓN', 'SE HA GENERADO UN AVANCE A TEJIDO EN EL CONTROL ' + Control.val(), 'success').then((value) => {
-                                onClearFields(pnlTablero);
-                            });
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
-                            HoldOn.close();
-                        });
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
+            xTejedora.val(Tejedora.val());
+            if (Tejedora.val()) {
+                Documento.focus().select();
             } else {
-                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning');
+                xTejedora.focus().select();
+            }
+        });
+        btnAceptar.click(function () {
+            if (Control.val()) {
+                if (Chofer.val() && Tejedora.val() && Documento.val() &&
+                        Control.val() && Frac.val() && Estilo.val() &&
+                        Color.val() && Pares.val() && Semana.val()
+                        && Fecha.val()) {
+
+                    /*1.- REVISAR SI YA TIENE UN AVANCE, DE LO CONTRARIO ARROJAR UN MENSAJE SOBRE ELLO*/
+                    $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
+                            {CONTROL: Control.val()}).done(function (a) {
+                        console.log(a)
+                        if (parseInt(a[0].EXISTE) > 0) {
+                            swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
+                                Control.focus().select();
+                            });
+                        } else {
+                            getUltimoDocumento();
+                            /*2.-  */
+                            var nomchofer = Chofer.find("option:selected").text(), nomteje = Tejedora.find("option:selected").text();
+                            $.post('<?php print base_url('AvanceTejido/onAvanzar') ?>', {
+                                NUM_CHOFER: Chofer.val(),
+                                CHOFER: getNombre(nomchofer),
+                                NUM_TEJEDORA: Tejedora.val(),
+                                TEJEDORA: getNombre(nomteje),
+                                FECHA: Fecha.val(),
+                                CONTROL: Control.val(),
+                                ESTILO: Estilo.val(),
+                                COLOR: Color.val(),
+                                COLORT: Color.find("option:selected").text(),
+                                DOCUMENTO: Documento.val(),
+                                PARES: Pares.val(),
+                                FRACCION: Frac.val(),
+                                SEMANA: Semana.val()
+                            }).done(function (a) {
+                                console.log(a);
+                                onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA GENERADO UN AVANCE', 'success', {from: "bottom", align: "center"});
+                                Control.val('');
+                                Estilo[0].selectize.clear(true);
+                                Color[0].selectize.clear(true);
+                                Pares.val('');
+                                pnlTablero.find("#Ava").val('');
+                                Control.focus().select();
+                                btnImprimirVale.attr('disabled', false);
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                                HoldOn.close();
+                            });
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
+                } else {
+                    swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning');
+                }
+            } else {
+                onBeep(2);
+                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+                    Control.focus().select();
+                });
             }
         });
 
@@ -295,10 +347,9 @@
                 getUltimoDocumento();
             }
         });
-
         Estilo.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                $.getJSON("<?php print base_url('colores_x_estilo') ?>").done(function (x, y, z) {
+                $.getJSON("<?php print base_url('AvanceTejido/getColoresXEstilo') ?>").done(function (x, y, z) {
                     getUltimoDocumento();
                 }).fail(function (x, y, z) {
                     getError(x);
@@ -307,15 +358,13 @@
                 });
             }
         });
-
         Control.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && Control.val()) {
                 $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
                         {CONTROL: Control.val()}).done(function (ax) {
                     if (parseInt(ax[0].EXISTE) > 0) {
                         swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
                             Control.focus().select();
-                            onClearFields(pnlTablero);
                         });
                     } else {
                         if (Control.val() && e.keyCode === 13) {
@@ -326,7 +375,7 @@
                                 console.log(a);
                                 if (a.length > 0) {
                                     var rq = a[0];
-
+                                    onHabilita();
                                     Estilo.val(rq.Estilo);
                                     getColoresXEstilo(rq.Estilo, rq);
                                     Pares.val(rq.Pares);
@@ -353,9 +402,22 @@
                         }
                     }
                 });
+            } else {
+                if (!Chofer.val()) {
+                    xChofer.focus().select();
+                    return;
+                } else if (!Tejedora.val()) {
+                    xTejedora.focus().select();
+                    return;
+                } else if (!Documento.val()) {
+                    Documento.focus().select();
+                    return;
+                } else if (!Control.val()) {
+                    Control.focus().select();
+                    return;
+                }
             }
         });
-
         var cols = [
             {"data": "ID"}/*0*/, {"data": "CONTROL"}/*1*/,
             {"data": "ESTILO"}/*2*/, {"data": "COLOR"},
@@ -392,7 +454,6 @@
             createdRow: function (row, data, dataIndex) {
             }
         };
-
         ControlesListosParaTejido = tblControlesListosParaTejido.DataTable(xoptions);
         cols = [
             {"data": "ID"}/*0*/, {"data": "CHOFER"}/*1*/,
@@ -415,6 +476,8 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CHOFER = (Chofer.val() ? Chofer.val() : '');
+                    d.TEJEDORA = (Tejedora.val() ? Tejedora.val() : '');
+                    d.CONTROL = (Control.val() ? Control.val() : '');
                 }
             },
             buttons: buttons,
@@ -434,15 +497,13 @@
             createdRow: function (row, data, dataIndex) {
             }
         };
-
         ControlesEntregados = tblControlesEntregados.DataTable(xoptions);
     });
-
     function getChoferes() {
         HoldOn.open({
             theme: 'sk-rect'
         });
-        $.getJSON('<?php print base_url('choferes'); ?>').done(function (x, y, z) {
+        $.getJSON('<?php print base_url('AvanceTejido/getChoferes'); ?>').done(function (x, y, z) {
             x.forEach(function (e) {
                 Chofer[0].selectize.addOption({text: e.Empleado, value: e.ID});
             });
@@ -457,7 +518,7 @@
         HoldOn.open({
             theme: 'sk-rect'
         });
-        $.getJSON('<?php print base_url('tejedoras'); ?>').done(function (x, y, z) {
+        $.getJSON('<?php print base_url('AvanceTejido/getTejedoras'); ?>').done(function (x, y, z) {
             x.forEach(function (e) {
                 Tejedora[0].selectize.addOption({text: e.Empleado, value: e.ID});
             });
@@ -468,7 +529,7 @@
         });
     }
     function getColoresXEstilo(e, rq) {
-        $.getJSON("<?php print base_url('avance_a_pespunte_x_maquila_colores_x_estilo') ?>", {ESTILO: e}).done(function (x, y, z) {
+        $.getJSON("<?php print base_url('AvanceTejido/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
             x.forEach(function (i) {
                 Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
             });
@@ -549,6 +610,9 @@
         $.getJSON('<?php print base_url('AvanceTejido/getUltimoAvanceXControl'); ?>',
                 {CONTROL: Control.val()}).done(function (a) {
             console.log(a);
+            if (a.length > 0) {
+                pnlTablero.find("#Ava").val(a[0].AVANCE);
+            }
         }).fail(function (x) {
             getError(x);
         }).always(function () {
@@ -572,6 +636,14 @@
 
     function getNombre(e) {
         return e.replace((e.split(" "))[0], '').replace("0", '');
+    }
+
+    function onHabilita() {
+        if (Chofer.val() && Tejedora.val() && Control.val()) {
+            btnAceptar.attr("disabled", false);
+        } else {
+            btnAceptar.attr("disabled", true);
+        }
     }
 </script>
 <style>

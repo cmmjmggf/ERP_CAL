@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="712" pageHeight="792" columnWidth="339" columnSpacing="10" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.4019755979255695"/>
+	<property name="ireport.zoom" value="1.8660295208389335"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -17,7 +17,15 @@
 		<![CDATA[SELECT
 C.docto AS DOCTO,
 C.numcho AS CHOFER,
-(SELECT CONCAT(E.PrimerNombre," ", E.SegundoNombre," ",E.Paterno," ",E.Materno) AS NOMBRRE  FROM erp_cal.empleados AS E WHERE E.Numero = C.numcho) AS CHOFERT,
+(SELECT CONCAT(
+(CASE WHEN E.PrimerNombre = "0" THEN "" ELSE E.PrimerNombre END)
+," ",
+(CASE WHEN E.SegundoNombre = "0" THEN "" ELSE E.SegundoNombre END)
+," ",
+(CASE WHEN E.Paterno = "0" THEN "" ELSE E.Paterno END)
+," ",
+(CASE WHEN E.Materno = "0" THEN "" ELSE E.Materno END)
+) AS NOMBRRE  FROM erp_cal.empleados AS E WHERE E.Numero = C.numcho) AS CHOFERT,
 C.numtej AS TEJEDORA,
 C.nomtej AS TEJEDORAT,
 C.Control AS CONTROL,
@@ -176,7 +184,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 					<bottomPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Semana nomina]]></text>
 			</staticText>
@@ -392,7 +400,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[RECIBIO YA TEJIDA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="20" y="73" width="120" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
+				<reportElement x="5" y="73" width="150" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
