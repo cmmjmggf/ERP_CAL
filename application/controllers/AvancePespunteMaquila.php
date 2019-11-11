@@ -126,9 +126,8 @@ class AvancePespunteMaquila extends CI_Controller {
                     ->order_by('ID', 'ASC');
             if ($x['ESTILO'] === '') {
                 $this->db->limit(99);
-            }
-            $this->db->get()->result();
-            print json_encode();
+            } 
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
