@@ -37,7 +37,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-3">
                 <label>-</label>
-                <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required" ></select>
+                <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" ></select>
             </div>
             <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                 <label for="" >Tipo Maq</label>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-3">
                 <label>-</label>
-                <select id="sTipoMaquila" name="sTipoMaquila" class="form-control form-control-sm required"></select>
+                <select id="sTipoMaquila" name="sTipoMaquila" class="form-control form-control-sm required NotSelectize"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Documento</label>
@@ -75,7 +75,7 @@
             <div class="w-100"></div>
             <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                 <label for="" >Fracción</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Fraccion" name="Fraccion"   >
+                <input type="text" class="form-control form-control-sm numbersOnly NotSelectize" maxlength="4" required=""  id="Fraccion" name="Fraccion"   >
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-3">
                 <label>-</label>
@@ -237,6 +237,9 @@
         handleEnterDiv(pnlCaptura);
         handleEnterDiv(mdlReportePago);
         handleEnterDiv(mdlRetorno);
+        pnlTablero.find('select').selectize({
+            openOnFocus: false
+        });
         Proveedor.focus();
         getProveedores();
         getMaquilasPlantillas();
@@ -514,7 +517,7 @@
                     Reimprime.off("keypress");
                     HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                     $.post('<?php print base_url('ControlPlantilla/onImprimir'); ?>', {
-                        DOCUMENTO: Documento.val()
+                        DOCUMENTO: Reimprime.val()
                     }).done(function (data) {
                         if (data.length > 0) {
                             onImprimirReporteFancyAFC(data, function (a, b) {

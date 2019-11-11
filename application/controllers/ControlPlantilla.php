@@ -271,8 +271,7 @@ class ControlPlantilla extends CI_Controller {
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["docto"] = 9950;
-        $parametros["maq"] = 3;
+        $parametros["docto"] = $this->input->post('DOCUMENTO');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\plantilla\reporteDoctoPlantilla.jasper');
         $jc->setFilename('IMPRIME_DOCTO_PLANTILLA_MAQUILA_' . Date('h_i_s'));
