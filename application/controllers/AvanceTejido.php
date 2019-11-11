@@ -275,6 +275,7 @@ class AvanceTejido extends CI_Controller {
                         ->update('pedidox');
                 /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                 $this->db->set('fec7', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])->update('avaprd');
+                $l = new Logs("Avance tejido", "HA AVANZO EL CONTROL {$xXx['CONTROL']} A TEJIDO CON LA FRACCION {$xXx['FRACCION']}.", $this->session);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

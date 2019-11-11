@@ -33,7 +33,7 @@ C.estilo AS ESTILO,
 C.color AS COLOR,
 C.nomcolo AS COLORT,
 C.pares AS PARES,
-C.fechapre AS FECHA,
+DATE_FORMAT(C.fechapre,"%d/%m/%Y") AS FECHA,
 C.docto AS DOCUMENTO,
 (SELECT S.Sem FROM semanasnomina as S
 WHERE C.fechapre BETWEEN STR_TO_DATE(FechaIni, "%d/%m/%Y") AND STR_TO_DATE(FechaFin, "%d/%m/%Y") ) as SEMANA_NOMINA
@@ -60,7 +60,9 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 	<field name="PARES" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FECHA" class="java.lang.String"/>
+	<field name="FECHA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="DOCUMENTO" class="java.lang.Integer"/>
 	<field name="SEMANA_NOMINA" class="java.lang.Integer"/>
 	<variable name="PARES_1" class="java.lang.Integer" calculation="Sum">
@@ -100,7 +102,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="246" y="53" width="50" height="11" forecolor="#000000" uuid="047457e9-d28c-4676-a2a1-6e5409b83134"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pares]]></text>
@@ -129,9 +131,11 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="537" y="3" width="66" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="0ba7c7a6-febc-4bad-9b25-6ee3773d98f3"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
+					<pen lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
@@ -322,7 +326,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 			</textField>
 			<textField>
 				<reportElement x="246" y="0" width="50" height="11" uuid="91b6e700-38e6-4d94-a764-149d829f5534"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
@@ -354,7 +358,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 			</staticText>
 			<textField>
 				<reportElement x="245" y="0" width="55" height="12" uuid="5c92cdd2-5256-4a21-a2bb-bd8360c7f7ee"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PARES_1}]]></textFieldExpression>
@@ -429,7 +433,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 			</staticText>
 			<textField>
 				<reportElement x="245" y="12" width="55" height="12" uuid="64520921-72bb-466d-97df-9d83836e9f7b"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PARES_2}]]></textFieldExpression>

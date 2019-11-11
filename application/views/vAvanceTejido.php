@@ -1,32 +1,39 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 text-center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center"> 
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center">
                 <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance a tejido</h3>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4" align="right">
+                <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-sm m-2 btn-info" 
+                        data-toggle="tooltip" data-placement="top" title="Imprimir vale x documento" >
+                    <span class="fa fa-print"></span> Imprimir vale</button>
             </div>
         </div>
     </div>
     <div class="card-body" style="padding-top: 0px; padding-bottom: 10px;">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-1">
                 <label>Chofer</label>
                 <input id="xChofer" name="xChofer" class="form-control form-control-sm  numbersOnly"> 
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3 mt-4">
+            <div class="col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-4 mt-4">
                 <select id="Chofer" name="Chofer" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-4 col-xs-4 col-sm-4 col-lg-1 col-xl-1">
                 <label>Tejedora</label>
                 <input id="xTejedora" name="xTejedora" class="form-control form-control-sm numbersOnly"> 
             </div>
-            <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3 mt-4">
+            <div class="col-8 col-xs-8 col-sm-8 col-lg-3 col-xl-4 mt-4">
                 <select id="Tejedora" name="Tejedora" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-4 col-lg-4 col-xl-4">
+            <div class="col-6 col-xs-6 col-sm-12 col-lg-2 col-xl-2">
                 <label>Documento</label>
                 <input type="text" id="Documento" name="Documento" class="form-control form-control-sm notEnter selectNotEnter">
             </div>
-            <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
+            <div class="col-6 col-xs-6 col-sm-2 col-lg-2 col-xl-2">
                 <label>Control</label>
                 <input type="text" id="Control" name="Control" class="form-control form-control-sm">
             </div>
@@ -37,36 +44,36 @@
                        404	TEJIDA MAQUINA  2 |
                        405	TEJIDO DE FLORETA">
             </div>
-            <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
+            <div class="col-4 col-xs-4 col-sm-2 col-lg-2 col-xl-2">
                 <label>Estilo</label>
                 <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm">
             </div>
-            <div class="col-12 col-xs-12 col-sm-2 col-lg-2 col-xl-2">
+            <div class="col-8 col-xs-8 col-sm-2 col-lg-2 col-xl-2">
                 <label>Color</label>
                 <select id="Color" name="Color" disabled="" class="form-control form-control-sm"></select>
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Pares</label>
                 <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Avace</label>
                 <input id="Ava" name="Ava" class="form-control form-control-sm" readonly="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Sem</label>
                 <input id="Sem" name="Sem" class="form-control form-control-sm" readonly="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Fecha</label>
                 <input id="Fecha" name="Fecha" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1 mt-4">
-                <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-primary" disabled="">
+                <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-info btn-sm" disabled="">
                     <span class="fa fa-check"></span> Aceptar
                 </button>
             </div>
-            <div class="w-100 my-3"></div>
+            <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <h4>Controles listos para tejido</h4>
                 <table id="tblControlesListosParaTejido" class="table  table-sm table-bordered" style="width:  100%;">
@@ -92,9 +99,7 @@
                         <h4>Controles entregados</h4>
                     </div>
                     <div class="col-4" align="right">
-                        <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-warning" 
-                                data-toggle="tooltip" data-placement="top" title="Imprimir vale" disabled="">
-                            <span class="fa fa-print"></span> Imprimir vale</button>
+
                         <button type="button" id="btnImprimirValeAyuda" name="btnImprimirValeAyuda" class="btn btn-info d-none"  data-toggle="tooltip" data-placement="top" title="Como se usa?">
                             <span class="fa fa-question-circle"></span> 
                         </button>
@@ -197,9 +202,17 @@
         });
         btnImprimirValeAyuda.click(function () {
         });
+        Documento.on('keydown', function (e) {
+            if (e.keyCode === 13 && Documento.val()) {
+                btnImprimirVale.trigger('click');
+            }
+        });
+
         btnImprimirVale.click(function () {
             if (Documento.val()) {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                onBeep(1);
+                btnImprimirVale.attr('disabled', true);
+                onOpenOverlay('Generando vale...');
                 var f = new FormData();
                 f.append('DOCUMENTO', Documento.val());
                 $.ajax({
@@ -211,54 +224,17 @@
                     data: f
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    var ext = getExt(data);
-                    if (data.length > 0) {
-                        if (ext === "pdf" || ext === "PDF" || ext === "Pdf") {
-                            $.fancybox.defaults.animationDuration = 366;
-                            $.fancybox.open({
-                                src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                                type: 'iframe',
-                                opts: {
-                                    afterShow: function (instance, current) {
-                                        console.info('done!');
-                                    },
-                                    iframe: {
-                                        // Iframe template
-                                        tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                        preload: true,
-                                        // Custom CSS styling for iframe wrapping element
-                                        // You can use this to set custom iframe dimensions
-                                        css: {
-                                            width: "95%",
-                                            height: "95%"
-                                        },
-                                        // Iframe tag attributes
-                                        attr: {
-                                            scrolling: "auto"
-                                        }
-                                    }
-                                }
-                            });
-                        } else if (ext === "xls" || ext === "XLS" || ext === "Xls") {
-                            window.open(data, '_blank');
-                        }
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DOCUMENTOS PARA ESTE PROVEEDOR",
-                            icon: "error"
-                        }).then((action) => {
-
-                        });
-                    }
-                    HoldOn.close();
+                    onImprimirReporteFancyAFC(data, function (a, b) {
+                        btnImprimirVale.attr('disabled', false);
+                        Documento.focus().select();
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
-                    HoldOn.close();
                 }).always(function () {
-                    HoldOn.close();
+                    onCloseOverlay();
                 });
             } else {
+                onBeep(2);
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN DOCUMENTO', 'warning').then((value) => {
                     Documento.focus().select();
                 });
@@ -271,7 +247,13 @@
             getUltimoDocumento();
             xTejedora.val(Tejedora.val());
             if (Tejedora.val()) {
-                Documento.focus().select();
+                if (Chofer.val()) {
+                    Documento.focus().select();
+                } else {
+                    onBeep(2);
+                    onNotifyOldPC('<span class="fa fa-check"></span>', 'SELECCIONE UN CHOFER', 'success', {from: "top", align: "center"});
+                    xChofer.focus().select();
+                }
             } else {
                 xTejedora.focus().select();
             }
@@ -318,7 +300,6 @@
                                 Pares.val('');
                                 pnlTablero.find("#Ava").val('');
                                 Control.focus().select();
-                                btnImprimirVale.attr('disabled', false);
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
@@ -451,8 +432,9 @@
             "bSort": true,
             "scrollY": "250px",
             "scrollX": true,
-            createdRow: function (row, data, dataIndex) {
-            }
+            "aaSorting": [
+                [0, 'desc']
+            ]
         };
         ControlesListosParaTejido = tblControlesListosParaTejido.DataTable(xoptions);
         cols = [
@@ -494,8 +476,10 @@
             "bSort": true,
             "scrollY": "250px",
             "scrollX": true,
-            createdRow: function (row, data, dataIndex) {
-            }
+            "aaSorting": [
+                [0, 'desc']
+            ]
+
         };
         ControlesEntregados = tblControlesEntregados.DataTable(xoptions);
     });
@@ -584,9 +568,6 @@
     }
 
     function getUltimoDocumento() {
-        HoldOn.open({
-            theme: 'sk-rect'
-        });
         var documento = "";
         $.getJSON('<?php print base_url('AvanceTejido/getUltimoDocumento'); ?>').done(function (a) {
             console.log(a);
@@ -602,7 +583,6 @@
         }).fail(function (x) {
             getError(x);
         }).always(function () {
-            HoldOn.close();
         });
     }
 
@@ -658,5 +638,15 @@
     .card-header{
         background-color: transparent;
         border-bottom: 0px;
+    }
+    .alert-success{
+        background: rgba(148,180,71,1);
+        background: -moz-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(148,180,71,1)), color-stop(100%, rgba(93,110,30,1)));
+        background: -webkit-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -o-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: -ms-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        background: linear-gradient(to bottom, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94b447', endColorstr='#5d6e1e', GradientType=0 );
     }
 </style>
