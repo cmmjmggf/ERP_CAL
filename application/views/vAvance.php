@@ -719,8 +719,11 @@
                     EmpleadoS[0].selectize.enable();
                 }
             } else {
-                EmpleadoS[0].selectize.enable();
-                EmpleadoS[0].selectize.clear();
+                console.log('KEYCODE=>', e.keyCode)
+                if (e.keyCode === 13) {
+                    EmpleadoS[0].selectize.enable();
+                    EmpleadoS[0].selectize.clear();
+                }
             }
         });
 
@@ -878,7 +881,7 @@
                     DeptoActual.val('');
                     AvanceDeptoActual.val('');
                     pnlTablero.find(".estatus_de_avance").text('');
-                    Pares.val(''); 
+                    Pares.val('');
                     btnAceptar.attr('disabled', true);
                     Control.focus().select();
                 }).fail(function (x, y, z) {
@@ -966,11 +969,11 @@
                         Empleado.attr('disabled', false);
                         EmpleadoS[0].selectize.enable();
                         btnAceptar.attr('disabled', false);
-                        
+
 
                         var rr = a[0];
                         if (parseInt(Departamento.val()) === parseInt(rr.ESTATUS_PRODUCCION)) {
-                            iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE','w',function(){
+                            iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE', 'w', function () {
                                 Control.focus().select();
                             });
                             return;
