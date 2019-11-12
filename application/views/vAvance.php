@@ -119,7 +119,7 @@
                     <label>Estilo</label>
                     <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm numbersOnly" maxlength="2"  readonly="">
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
                     <label>Depto.Actual</label>
                     <input type="text" id="DeptoActual" name="DeptoActual" class="form-control form-control-sm numbersOnly d-none"  readonly="" maxlength="2">
                     <input type="text" id="AvanceDeptoActual" name="AvanceDeptoActual" class="form-control form-control-sm numbersOnly"  readonly="" maxlength="2">
@@ -129,13 +129,10 @@
                     <input type="text" id="Pares" name="Pares" class="form-control form-control-sm numbersOnly" readonly="" maxlength="5">
                 </div>
                 <div class="col-12 col-sm-12 col-sm-1 col-lg-1 col-xl-1">
-                    <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-info mt-4"  data-toggle="tooltip" data-placement="right" title="Aceptar">
+                    <button type="button" id="btnAceptar" name="btnAceptar" disabled="" class="btn btn-sm btn-info mt-3"  data-toggle="tooltip" data-placement="right" title="Aceptar">
                         <span class="fa fa-check"></span> ACEPTA
                     </button>
-                </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" aling="center">
-                    <hr>
-                </div>
+                </div> 
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 d-none">
                     <label>Depto des</label>
                     <input type="text" id="DeptoDes" name="DeptoDes" class="form-control" readonly="">
@@ -193,10 +190,16 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="right">
                         <p class="font-weight-bold total_fracciones" style="color: #cc0033 !important;" >$0.0</p>
                     </div>
+                    <div class="w-100 mt-2"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                        <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
+                        <div class="w-100"></div>
+                        <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                    </div>
                 </div>
             </div>
             <!--SECCION TRES-->
-            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">
                 <a href="<?php print base_url('img/LS.png'); ?>" data-fancybox="images">
                     <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
                 </a>
@@ -409,6 +412,16 @@
                                 break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -426,6 +439,16 @@
                                 break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -455,9 +478,19 @@
                             case 44:
                                 Control.focus().select();
                                 btnAceptar.attr('disabled', false);
-                                break; 
+                                break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -497,6 +530,16 @@
                                 break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -512,6 +555,16 @@
                                 break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -535,6 +588,16 @@
                                 break;
                             default :
                                 btnAceptar.attr('disabled', true);
+                                Control.val('');
+                                ProcesoMaquila.val('');
+                                ProcesoMaquilaS[0].selectize.clear(true);
+                                Empleado.val('');
+                                EmpleadoS[0].selectize.clear(true);
+                                Fraccion.val('');
+                                FraccionS[0].selectize.clear(true);
+                                Estilo.val('');
+                                AvanceDeptoActual.val('');
+                                Pares.val('');
                                 iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
                                     Departamento.focus().select();
                                 });
@@ -544,6 +607,16 @@
                         break;
                     default:
                         btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
                         iMsg('EL USUARIO NO CONCUERDA CON EL AVANCE', 'w', function () {
                             Departamento.focus().select();
                         });
@@ -608,6 +681,9 @@
                 FraccionS[0].selectize.enable();
                 FraccionS[0].selectize.clear();
             }
+            if (Fraccion.val() && EmpleadoS.val()) {
+                btnAceptar.attr('disabled', false);
+            }
         });
 
         ProcesoMaquila.on('keydown', function (e) {
@@ -651,9 +727,11 @@
         mdlRastreoXControl.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
+
         mdlRastreoXConcepto.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
+
         mdlRastreoXControl.on('shown.bs.modal', function () {
             mdlRastreoXControl.find("input").val('');
             $.each(mdlRastreoXControl.find("select"), function (k, v) {
@@ -661,6 +739,7 @@
             });
             ControlRXCTROL.focus();
         });
+
         mdlRastreoXConcepto.on('shown.bs.modal', function () {
             mdlRastreoXConcepto.find("input").val('');
             $.each(mdlRastreoXConcepto.find("select"), function (k, v) {
@@ -669,6 +748,7 @@
             EmpleadoRXC[0].selectize.focus();
             EmpleadoRXC[0].selectize.open();
         });
+
         FraccionRXCTROL.on('keyup change', function () {
             if ($(this).val()) {
                 RastreoXControl.ajax.reload();
@@ -684,21 +764,25 @@
                 RastreoXControl.ajax.reload();
             }
         });
+
         ControlRXCTROL.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 RastreoXControl.ajax.reload();
             }
         });
+
         ConceptoRXC.on('change', function () {
             if ($(this).val()) {
                 RastreoXConcepto.ajax.reload();
             }
         });
+
         EmpleadoRXC.on('change', function () {
             if ($(this).val()) {
                 RastreoXConcepto.ajax.reload();
             }
         });
+
         btnDesarrolloDeMuestras.click(function () {
             $.fancybox.open({
                 src: '<?php print base_url('DesarrolloMuestras/?origen=PRODUCCION'); ?>',
@@ -721,12 +805,15 @@
                 }
             });
         });
+
         btnRastreoXControl.click(function () {
             mdlRastreoXControl.modal('show');
         });
+
         btnRastreoXConcepto.click(function () {
             mdlRastreoXConcepto.modal('show');
         });
+
         btnBorrar.click(function () {
             var row = Avances.rows({selected: true}).data();
             if (parseInt(row.ID) > 0) {
@@ -745,7 +832,16 @@
                 swal('ATENCIÓN', 'ES NECESARIO SELECCIONAR UN REGISTRO A ELIMINAR', 'warning');
             }
         });
+
         btnAceptar.click(function () {
+//            var dpto = AvanceDeptoActual.val() ? parseInt(AvanceDeptoActual.val()) : 0,
+//                    depto_avance = Departamento.val() ? parseInt(Departamento.val()) : 0;
+//            if (dpto > 0) {
+//
+//            } else {
+//
+//            }
+
             if (Departamento.val() && Control.val()) {
                 var f = new FormData();
                 f.append('CONTROL', Control.val());
@@ -781,6 +877,7 @@
                     Estilo.val('');
                     DeptoActual.val('');
                     AvanceDeptoActual.val('');
+                    pnlTablero.find(".estatus_de_avance").text('');
                     Pares.val('');
                     Departamento.focus().select();
                     btnAceptar.attr('disabled', true);
@@ -805,14 +902,15 @@
                 }
             }
         });
-        Estilo.on('change keydown keypress', function () {
-            getPrecioFraccionXEstiloFraccion();
-        });
-        Fraccion.on('change keydown keypress', function () {
-            if (Fraccion.val()) {
-                getPrecioFraccionXEstiloFraccion();
-            }
-        });
+
+//        Estilo.on('change keydown keypress', function () {
+//            getPrecioFraccionXEstiloFraccion();
+//        });
+//        Fraccion.on('change keydown keypress', function () {
+//            if (Fraccion.val()) {
+//                getPrecioFraccionXEstiloFraccion();
+//            }
+//        });
 //        btnBuscarControl.click(function () {
 //            if (Fecha.val() && Departamento.val() && Semana.val()) {
 //                getDeptosXControl($(this).parent().find("#Control"));
@@ -848,30 +946,37 @@
         });
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
+                onOpenOverlay('Espere...');
+                ProcesoMaquila.attr('disabled', true);
+                ProcesoMaquilaS[0].selectize.disable();
+                Fraccion.attr('disabled', true);
+                FraccionS[0].selectize.disable();
+                Empleado.attr('disabled', true);
+                EmpleadoS[0].selectize.disable();
+                btnAceptar.attr('disabled', true);
+
 //                getDeptosXControl($(this));
 //                getDeptoActualXControl();
                 $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
                     console.log("CONTROL", a);
                     if (a.length > 0) {
+
+                        ProcesoMaquila.attr('disabled', false);
+                        ProcesoMaquilaS[0].selectize.enable();
+                        Fraccion.attr('disabled', false);
+                        FraccionS[0].selectize.enable();
+                        Empleado.attr('disabled', false);
+                        EmpleadoS[0].selectize.enable();
+                        btnAceptar.attr('disabled', false);
+                        
                         var rr = a[0];
-                        if (parseInt(rr.ESTATUS_PRODUCCION) === 13) {
-                            iMsg('ESTE CONTROL YA ESTA FACTURADO', 'w', function () {
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', true);
-                            });
-                        }
-                        if (parseInt(rr.ESTATUS_PRODUCCION) === 14) {
-                            iMsg('ESTE CONTROL ESTA CANCELADO', 'w', function () {
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', true);
-                            });
-                        }
                         if (parseInt(rr.ESTATUS_PRODUCCION) !== 13 && parseInt(rr.ESTATUS_PRODUCCION) !== 14) {
                             ProcesoMaquila.val(rr.MAQUILADO);
                             ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());
                             Estilo.val(rr.ESTILO);
                             DeptoActual.val(rr.DEPTO);
                             AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
+                            pnlTablero.find(".estatus_de_avance").text(rr.ESTATUS_PRODUCCION_TEXT);
 
                             if (ProcesoMaquilaS.val()) {
                                 ProcesoMaquilaS[0].selectize.disable();
@@ -965,10 +1070,38 @@
                                 Empleado.focus().select();
                             }
                         }
+
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 11) {
+                            Control.focus().select();
+                            btnAceptar.attr('disabled', true);
+                            return;
+                        }
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 12) {
+                            iMsg('ESTE CONTROL YA ESTA FACTURADO', 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                            });
+                            return;
+                        }
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 13) {
+                            iMsg('ESTE CONTROL YA ESTA FACTURADO', 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                                return;
+                            });
+                        }
+                        if (parseInt(rr.ESTATUS_PRODUCCION) === 14) {
+                            iMsg('ESTE CONTROL ESTA CANCELADO', 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                                return;
+                            });
+                        }
                     }
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
+                    onCloseOverlay();
                     Avances.ajax.reload();
                 });
             }
@@ -1191,6 +1324,8 @@
                     Estilo.val(rr.ESTILO);
                     DeptoActual.val(rr.DEPTO);
                     AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
+                    pnlTablero.find(".estatus_de_avance").text(rr.ESTATUS_PRODUCCION_TEXT);
+
                     Pares.val(rr.PARES);
                     var rta = '<?php print base_url(); ?>' + rr.FOTO;
                     FotoEstilo[0].src = rta;

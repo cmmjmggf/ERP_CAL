@@ -212,7 +212,7 @@ class Avance extends CI_Controller {
                                             . "ELSE E.MaqPlant3 END)"
                                             . "ELSE E.MaqPlant2 END)  "
                                             . "ELSE E.MaqPlant1 END) AS MAQUILADO, "
-                                            . "C.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION", false)
+                                            . "C.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION, P.EstatusProduccion AS ESTATUS_PRODUCCION_TEXT ", false)
                                     ->from('avance AS A')
                                     ->join('controles AS C', 'A.Control = C.Control')
                                     ->join('pedidox AS P', 'A.Control = P.Control')
@@ -344,24 +344,11 @@ class Avance extends CI_Controller {
     public function getInformacionXControl() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->select("A.Departamento AS DEPTO, C.Estilo AS ESTILO,  C.DeptoProduccion AS DEPTOPROD, "
-                                            . "(CASE "
-                                            . "WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN "
-                                            . "(CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN "
-                                            . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN  "
-                                            . "(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" "
-                                            . "ELSE E.MaqPlant4 END) "
-                                            . "ELSE E.MaqPlant3 END)"
-                                            . "ELSE E.MaqPlant2 END)  "
-                                            . "ELSE E.MaqPlant1 END) AS MAQUILADO, "
-                                            . "C.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION, P.Maquila AS MAQUILA", false)
-                                    ->from('avance AS A')
-                                    ->join('controles AS C', 'A.Control = C.Control')
-                                    ->join('pedidox AS P', 'A.Control = P.Control')
-                                    ->join('estilos AS E', 'E.Clave = P.Estilo')
-                                    ->where("A.Control", $x['CONTROL'])
-                                    ->order_by("A.ID", "DESC")
-                                    ->limit(1)->get()->result());
+            print json_encode($this->db->query("SELECT P.DeptoProduccion AS DEPTO, E.Clave AS ESTILO, P.DeptoProduccion AS DEPTOPROD, (CASE WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN (CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN 
+(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN (CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" ELSE E.MaqPlant4 END) 
+ELSE E.MaqPlant3 END)ELSE E.MaqPlant2 END) ELSE E.MaqPlant1 END) AS MAQUILADO, P.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION, P.EstatusProduccion AS ESTATUS_PRODUCCION_TEXT,
+P.Maquila AS MAQUILA 
+ FROM pedidox AS P INNER JOIN estilos AS E ON P.Estilo = E.Clave WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

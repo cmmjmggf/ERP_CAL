@@ -258,6 +258,7 @@
                 xTejedora.focus().select();
             }
         });
+        
         btnAceptar.click(function () {
             if (Control.val()) {
                 if (Chofer.val() && Tejedora.val() && Documento.val() &&
@@ -268,13 +269,13 @@
                     /*1.- REVISAR SI YA TIENE UN AVANCE, DE LO CONTRARIO ARROJAR UN MENSAJE SOBRE ELLO*/
                     $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
                             {CONTROL: Control.val()}).done(function (a) {
-                        console.log(a)
+//                        console.log(a);
                         if (parseInt(a[0].EXISTE) > 0) {
                             swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
                                 Control.focus().select();
                             });
                         } else {
-                            getUltimoDocumento();
+//                            getUltimoDocumento();
                             /*2.-  */
                             var nomchofer = Chofer.find("option:selected").text(), nomteje = Tejedora.find("option:selected").text();
                             $.post('<?php print base_url('AvanceTejido/onAvanzar') ?>', {
