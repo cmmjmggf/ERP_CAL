@@ -36,14 +36,14 @@
 	<queryString>
 		<![CDATA[SELECT
 case
-when  (D.Clave = '150') then
+when  (PE.stsavan = 7) then
 ifnull((
 select EM.Busqueda from fracpagnomina FPN
-left JOIN empleados EM on EM.Numero = FPN.numeroempleado
+JOIN empleados EM on EM.Numero = FPN.numeroempleado
 where FPN.depto = 150 and FPN.numfrac = 401 and FPN.control = PE.Control
 limit 1 ),'')
 
-when  (D.Clave = '110') then
+when  (PE.stsavan = 5) then
 ifnull((
 SELECT  case when av.pespunte <> 5 then E.Busqueda else '' end as empleado
 FROM avaprd av
@@ -53,28 +53,47 @@ limit 1 ),'')
 
 else ''
 end as Empleado,
+
 PE.Clave as Pedido, PE.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
-cast(ifnull(D.Clave,'1') as signed) as ClaveDepto,
-ifnull(D.Descripcion,'PROGRAMADO') as nombreDepto,
+PE.stsavan as ClaveDepto,
 case
-when (D.Clave is null) then str_to_date(PE.FechaProg,'%Y-%m-%d')
-when (D.Clave = '10') then A.fec2
-when (D.Clave = '20') then A.fec3
-when (D.Clave = '30') then A.fec33
-when (D.Clave = '40') then A.fec4
-when (D.Clave = '90') then A.fec40
-when (D.Clave = '100') then A.fec42
-when (D.Clave = '105') then A.fec44
-when (D.Clave = '110') then A.fec5
-when (D.Clave = '140') then A.fec55
-when (D.Clave = '130') then A.fec6
-when (D.Clave = '150') then A.fec7
-when (D.Clave = '160') then A.fec8
-when (D.Clave = '180') then A.fec9
-when (D.Clave = '210') then A.fec10
-when (D.Clave = '230') then A.fec11
-when (D.Clave = '240') then A.fec12
+when (PE.stsavan  = 1) then str_to_date(PE.FechaProg,'%Y-%m-%d')
+when (PE.stsavan = 2) then A.fec2
+when (PE.stsavan = 3) then A.fec3
+when (PE.stsavan = 33) then A.fec33
+when (PE.stsavan = 4) then A.fec4
+when (PE.stsavan = 40) then A.fec40
+when (PE.stsavan = 42) then A.fec42
+when (PE.stsavan = 44) then A.fec44
+when (PE.stsavan = 5) then A.fec5
+when (PE.stsavan = 55) then A.fec55
+when (PE.stsavan = 6) then A.fec6
+when (PE.stsavan = 7) then A.fec7
+when (PE.stsavan = 8) then A.fec8
+when (PE.stsavan = 9) then A.fec9
+when (PE.stsavan = 10) then A.fec10
+when (PE.stsavan = 11) then A.fec11
+when (PE.stsavan = 12) then A.fec12
 end as fecha,
+case
+when (PE.stsavan  = 1) then 'Programado'
+when (PE.stsavan = 2) then 'Corte'
+when (PE.stsavan = 3) then 'Rayado'
+when (PE.stsavan = 33) then 'Rebajado'
+when (PE.stsavan = 4) then 'Foleado'
+when (PE.stsavan = 40) then 'Entretelado'
+when (PE.stsavan = 42) then 'Proceso Maq'
+when (PE.stsavan = 44) then 'Alm-Corte'
+when (PE.stsavan = 5) then 'Pespunte'
+when (PE.stsavan = 55) then 'Ensuelado'
+when (PE.stsavan = 6) then 'Alm-Pespu'
+when (PE.stsavan = 7) then 'Tejido'
+when (PE.stsavan = 8) then 'Alm-Tejido'
+when (PE.stsavan = 9) then 'Montado'
+when (PE.stsavan = 10) then 'Adorno'
+when (PE.stsavan = 11) then 'Alm-Adorno'
+when (PE.stsavan = 12) then 'Prd-Termi'
+end as nombreDepto,
 now() as fecActual,
 cast(PE.Pares as decimal(5,2)) as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(5,2)) as ParesFacturados,
@@ -82,10 +101,9 @@ cast(ifnull(PE.Pares,0) as signed) - cast(ifnull(PE.ParesFacturados,0) as signed
 E.GdoDif,
 PE.Estilo
 FROM pedidox PE
-join departamentos D on D.Clave  = PE.DeptoProduccion
 join avaprd A on A.contped = PE.Control
 join estilos E on E.Clave = PE.Estilo
-where D.Clave = $P{depto} and PE.Maquila = 1
+where PE.stsavan = $P{depto} and PE.Maquila = 1
 order by Empleado,PE.control ASC]]>
 	</queryString>
 	<field name="Empleado" class="java.lang.String">
@@ -98,11 +116,11 @@ order by Empleado,PE.control ASC]]>
 	<field name="FechaProgramacion" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ClaveDepto" class="java.lang.Long"/>
-	<field name="nombreDepto" class="java.lang.String">
+	<field name="ClaveDepto" class="java.lang.Integer"/>
+	<field name="fecha" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="fecha" class="java.sql.Timestamp">
+	<field name="nombreDepto" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecActual" class="java.sql.Timestamp"/>

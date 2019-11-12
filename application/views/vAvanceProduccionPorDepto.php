@@ -14,8 +14,8 @@
                             <label>Departamento</label>
                             <select class="form-control form-control-sm required selectize" id="Depto" name="Depto" >
                                 <option value=""></option>
-                                <option value="110">5-Pespunte </option>
-                                <option value="150">7-Tejido</option>
+                                <option value="5">5-Pespunte </option>
+                                <option value="7">7-Tejido</option>
                             </select>
                         </div>
                     </div>
