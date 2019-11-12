@@ -621,7 +621,6 @@ P.Maquila AS MAQUILA
             /* 6 ALMACEN - PESPUNTE Y STSAVAN 55 ENSUELADO */
             /* 55 ENSUELADO (FRACCIONES) */
             if ($depto === 6 && $depto_actual === 55 && $frac === 306 ||
-                    $depto === 6 && $depto_actual === 55 && $frac === 502 ||
                     $depto === 6 && $depto_actual === 55 && $frac === 397) {
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
