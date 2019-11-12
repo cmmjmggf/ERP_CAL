@@ -54,9 +54,18 @@ class RastreoControlesEmpleado extends CI_Controller {
         }
     }
 
+    public function onVerificarEmpleado() {
+        try {
+            $clave = $this->input->get('Empleado');
+            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) or numero between 899 and 1003 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
-            print json_encode($this->RastreoControlesEmpleado_model->getRecords($this->input->get('EMPLEADO'),$this->input->get('ANIO'),$this->input->get('SEMANA')));
+            print json_encode($this->RastreoControlesEmpleado_model->getRecords($this->input->get('EMPLEADO'), $this->input->get('ANIO'), $this->input->get('SEMANA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

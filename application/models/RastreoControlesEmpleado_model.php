@@ -46,13 +46,11 @@ class RastreoControlesEmpleado_model extends CI_Model {
 
     public function getEmpleados() {
         try {
-            return $this->db->select("CAST(D.Numero AS SIGNED ) AS ID,CONCAT(D.Numero,'-',D.Busqueda) AS Empleado")
-                            ->from("empleados AS D")
-                            ->join("fracpagnomina AS FPN", "D.Numero = FPN.numeroempleado")
-                            ->where("D.Estatus", "ACTIVO")
-                            ->where("D.AltaBaja", "1")
-                            ->group_by('D.Numero')
-                            ->order_by('ID', 'ASC')
+            return $this->db->select("CAST(E.numero AS SIGNED ) AS ID, "
+                                    . " CONCAT(E.Busqueda) AS Empleado ")
+                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")
+                            ->or_where("E.Numero between 899 and 1003", null, false)
+                            ->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
