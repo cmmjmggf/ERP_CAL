@@ -28,8 +28,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-7">
-                            <label>Empleado</label>
+                        <div class="col-2" >
+                            <label for="" >Empleado</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="iEmpleadoRastreo" name="iEmpleadoRastreo"   >
+                        </div>
+                        <div class="col-5">
+                            <label>-</label>
                             <select id="EmpleadoRastreo" name="EmpleadoRastreo" class="form-control form-control-sm required">
                                 <option value=""></option>
                             </select>
@@ -119,14 +123,42 @@
 
             }
         });
+        mdlRastreoControlNomina.find('#iEmpleadoRastreo').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+
+                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val();
+                            var contRastreo = mdlRastreoControlNomina.find("#ControlRastreo").val();
+                            var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
+                            mdlRastreoControlNomina.find("#EmpleadoRastreo")[0].selectize.addItem(txtempl, true);
+                            getControlesNominaRastreo(contRastreo, anoRastreo, semRastreo, txtempl);
+                            mdlRastreoControlNomina.find('#iEmpleadoRastreo').focus().val('');
+
+                        } else {
+                            swal('ERROR', 'EMPLEADO INEXISTENTE, DADO DE BAJA O NO ES DESTAJISTA', 'warning').then((value) => {
+                                mdlRastreoControlNomina.find('#EmpleadoRastreo')[0].selectize.clear(true);
+                                mdlRastreoControlNomina.find('#iEmpleadoRastreo').focus().select();
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
         mdlRastreoControlNomina.find("#EmpleadoRastreo").change(function () {
 
             var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val();
             var contRastreo = mdlRastreoControlNomina.find("#ControlRastreo").val();
             var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
             var empRastreo = $(this).val();
+            mdlRastreoControlNomina.find('#iEmpleadoRastreo').val(empRastreo);
             getControlesNominaRastreo(contRastreo, anoRastreo, semRastreo, empRastreo);
-
+            mdlRastreoControlNomina.find('#iEmpleadoRastreo').focus().select();
         });
         mdlRastreoControlNomina.find("#ControlRastreo").keydown(function (e) {
             if (e.keyCode === 13) {

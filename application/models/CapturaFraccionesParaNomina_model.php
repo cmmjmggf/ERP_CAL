@@ -153,7 +153,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
                             C.Pares "
                             . "")
                     ->from("controles C")
-                    ->join("departamentos D", 'ON D.Descripcion = C.EstatusProduccion')
+                    ->join("departamentos D", '`D`.`Clave` = `C`.`DeptoProduccion`')
                     ->where("C.Control", $Control);
             $query = $this->db->get();
             /*
@@ -203,8 +203,10 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
     public function getEmpleados() {
         try {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
-                                    . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ")
-                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")->order_by('Empleado', 'ASC')
+                                    . " CONCAT(E.Busqueda) AS Empleado ")
+                            ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")
+                            ->or_where("E.Numero between 899 and 1003", null, false)
+                            ->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
