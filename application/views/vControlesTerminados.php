@@ -624,6 +624,7 @@
                 pnlTablero.find("#Reproceso")[0].selectize.clear(true);
                 getControlesTerminados('', '');
                 getControlesRechazados('', '');
+                pnlTablero.find('#Docto').attr('readonly', false);
                 pnlTablero.find("#Maquila").focus();
             }
         });
