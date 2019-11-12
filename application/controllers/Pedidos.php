@@ -15,9 +15,9 @@ class Pedidos extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
                     if ($Origen === 'PRODUCCION') {
@@ -839,7 +839,7 @@ class Pedidos extends CI_Controller {
             $url = $path . '/' . $file_name . '.pdf';
             /* Borramos el archivo anterior */
 
-            $pdf->Output($url); 
+            $pdf->Output($url);
             $l = new Logs("PEDIDOS", "GENERO UN REPORTE DEL PEDIDO CON LA CLAVE $IDX.", $this->session);
             print base_url() . $url;
         } catch (Exception $exc) {

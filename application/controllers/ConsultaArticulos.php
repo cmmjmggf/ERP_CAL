@@ -33,9 +33,11 @@ class ConsultaArticulos extends CI_Controller {
                     }
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
             }

@@ -22,9 +22,11 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'FACTURACION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
             }
@@ -84,12 +86,12 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             if ($x['CLIENTE'] === '') {
                 $limite = "LIMIT 10";
             }
-            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE, 
-                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES, 
-                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,  
-                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, 
-                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG 
-                FROM devolucionnp AS D 
+            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE,
+                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES,
+                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
+                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
+                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
+                FROM devolucionnp AS D
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
                                     . "AND D.staapl = 0  ORDER BY D.fecha DESC {$limite};")->result());
         } catch (Exception $exc) {
@@ -100,12 +102,12 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function getControlesPorAplicarDeEsteClienteXDocumento() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE, 
-                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES, 
-                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,  
-                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, 
-                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG 
-                FROM devolucionnp AS D 
+            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE,
+                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES,
+                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
+                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
+                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
+                FROM devolucionnp AS D
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
                                     . "AND D.staapl = 0  "
                                     . "AND D.docto = {$x["DOCUMENTO"]} "
@@ -119,9 +121,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
 
-            $this->db->select("D.ID AS ID, D.cliente AS CLIENTE, D.docto AS DOCUMENTO, 
-                D.aplica AS APLICA, D.nc AS NC, D.control AS CONTROL, D.paredev AS PARES, 
-                D.defecto AS DEFECTOS, D.detalle AS DETALLES, D.clasif AS CLASIFICACION, D.cargoa AS CARGO, 
+            $this->db->select("D.ID AS ID, D.cliente AS CLIENTE, D.docto AS DOCUMENTO,
+                D.aplica AS APLICA, D.nc AS NC, D.control AS CONTROL, D.paredev AS PARES,
+                D.defecto AS DEFECTOS, D.detalle AS DETALLES, D.clasif AS CLASIFICACION, D.cargoa AS CARGO,
                 DATE_FORMAT(D.fecha,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, D.conce AS CONCEPTO", false)
                     ->from("devctes AS D");
 
@@ -236,7 +238,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $this->db->insert('devctes', $ncc);
                 /*
                  * COLOCA LA DEVOLUCION COMO APLICADA, SE ASIGNA LA NOTA DE CREDITO A LA DEVOLUCION
-                 *  
+                 *
                  */
                 $this->db->set('staapl', 1)->set('nc', $x["NC"])
                         ->where('control', $x['CONTROL'])
@@ -296,7 +298,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $this->db->insert('notcred', $notcred);
                 /* SI EL TP ES 1, SE AÑADE A LA NOTADE CREDITO UN */
                 if (intval($x["TP"]) === 1) {
-                    
+
                 }
             }/* END FOR */
 
@@ -358,7 +360,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     }
 
     /*
-     * 
+     *
 
 
       Private Sub CmdCierra_Click()
@@ -499,9 +501,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
       CmdAcepta.Enabled = False: CmdCierra.Enabled = False: CmdSalir.Enabled = True: Frame1.Enabled = True: txtcliente.SetFocus
       End Sub
 
-     *  
-     * 
-     * 
-     * 
+     *
+     *
+     *
+     *
      */
 }

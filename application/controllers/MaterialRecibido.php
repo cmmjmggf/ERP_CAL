@@ -24,6 +24,7 @@ class MaterialRecibido extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuMateriales');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
             }

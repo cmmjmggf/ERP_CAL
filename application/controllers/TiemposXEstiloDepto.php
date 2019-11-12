@@ -18,9 +18,9 @@ class TiemposXEstiloDepto extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
                     if ($Origen === 'PRODUCCION') {
@@ -88,7 +88,7 @@ class TiemposXEstiloDepto extends CI_Controller {
 
     public function getTiemposXEstiloDepto() {
         try {
-            print json_encode($this->txed->getTiemposXEstiloDepto($this->input->get('ESTILO'),$this->input->get('LINEA')));
+            print json_encode($this->txed->getTiemposXEstiloDepto($this->input->get('ESTILO'), $this->input->get('LINEA')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

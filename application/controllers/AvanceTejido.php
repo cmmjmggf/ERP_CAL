@@ -22,10 +22,12 @@ class AvanceTejido extends CI_Controller {
                         $is_valid = true;
                         break;
                     case 'ADMINISTRACION':
+                        $this->load->view('vNavGeneral');
                         $this->load->view('vMenuAdministracion');
                         $is_valid = true;
                         break;
                     case 'PRODUCCION':
+                        $this->load->view('vNavGeneral');
                         $this->load->view('vMenuProduccion');
                         $is_valid = true;
                         break;

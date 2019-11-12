@@ -17,9 +17,9 @@ class HojasDeEstudioTiempos extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
                     if ($Origen === 'PRODUCCION') {
@@ -88,9 +88,9 @@ class HojasDeEstudioTiempos extends CI_Controller {
     public function onGuardarTiempos() {
         try {
             $x = $this->input;
-            $TIEMPOS = json_decode($x->post('TIEMPOS')); 
+            $TIEMPOS = json_decode($x->post('TIEMPOS'));
             switch ($x->post('N')) {
-                case 0: 
+                case 0:
                     $this->db->trans_start();
                     $this->db->insert('tiemposxestilodepto', array('Linea' => $x->post('LINEA'), 'Estilo' => $x->post('ESTILO')));
                     $row = $this->db->query('SELECT LAST_INSERT_ID()')->row_array();
@@ -98,13 +98,13 @@ class HojasDeEstudioTiempos extends CI_Controller {
                     $this->db->trans_complete();
                     $TOTAL = 0;
                     foreach ($TIEMPOS as $k => $v) {
-                        $this->db->insert('tiemposxestilodepto_has_deptos', 
+                        $this->db->insert('tiemposxestilodepto_has_deptos',
                                 array('TiempoXEstiloDepto' => $ID, 'Departamento' => $v->DEPTO, 'Tiempo' => $v->DEPTOTIME, 'Fecha' => Date('d/m/Y h:i:s a')));
                         $TOTAL += $v->DEPTOTIME;
                     }
                     $this->db->set('Total', $TOTAL)->where('ID', $ID)->update('tiemposxestilodepto');
                     break;
-                case 1: 
+                case 1:
                     $TOTAL = 0;
                     foreach ($TIEMPOS as $k => $v) {
                         $EX = $this->hdetm->onComprobarDeptoXEstilo($x->post('ESTILO'), $v->DEPTO)[0]->EXISTE;

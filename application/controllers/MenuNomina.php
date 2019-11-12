@@ -19,12 +19,15 @@ class MenuNomina extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuNominas');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     break;
                 case 'PRODUCCION':

@@ -17,9 +17,10 @@ class InventarioProcesoXDepto extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
@@ -60,7 +61,7 @@ class InventarioProcesoXDepto extends CI_Controller {
         $jc->setParametros($parametros);
 
         $avances = array(0, 1, 2, 3, 33, 4, 40, 42, 44, 5, 55, 6, 7, 8, 9, 10, 11, 12);
-        $avances_txt = array(0 => "EN-PEDIDO", 1 => "PROGRAMADO", 2 => "CORTE", 3 => "RAYADO",33 => "REBAJADO",
+        $avances_txt = array(0 => "EN-PEDIDO", 1 => "PROGRAMADO", 2 => "CORTE", 3 => "RAYADO", 33 => "REBAJADO",
             4 => "FOLEADO", 40 => "ENTRETELADO", 42 => "MAQUILA", 44 => "ALM-CORTE",
             5 => "PESPUNTE", 55 => "ENSUELADO", 6 => "ALM-PESPUNTE", 7 => "TEJIDO",
             8 => "ALM-TEJIDO", 9 => "MONTADO", 10 => "ADORNO", 11 => "ALM-ADORNO", 12 => "TERMINADO");

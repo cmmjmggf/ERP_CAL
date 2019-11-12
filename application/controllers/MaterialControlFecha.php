@@ -38,9 +38,11 @@ class MaterialControlFecha extends CI_Controller {
                     break;
 
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
             }

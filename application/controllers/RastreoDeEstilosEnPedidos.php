@@ -21,6 +21,7 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
             }
@@ -33,20 +34,20 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
     public function getPedidos() {
         try {
             $x = $this->input->get();
-            $this->db->select("P.ID AS ID, P.Cliente AS CLIENTE, P.Estilo AS ESTILO, 
-                P.Color AS COLOR, P.Pares AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA, 
-                P.Semana AS SEMANA, P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
+            $this->db->select("P.ID AS ID, P.Cliente AS CLIENTE, P.Estilo AS ESTILO,
+                P.Color AS COLOR, P.Pares AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA,
+                P.Semana AS SEMANA, P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                 P.FechaEntrega AS FECHA_VENTA, P.Precio AS PRECIO, P.stsavan AS AVANCE", false)
-                    ->from('pedidox AS P'); 
+                    ->from('pedidox AS P');
             if ($x['ESTILO'] !== '') {
-                $this->db->where('P.Estilo', $x['ESTILO']);  
+                $this->db->where('P.Estilo', $x['ESTILO']);
             }
             if ($x['COLOR'] !== '') {
-                $this->db->where('P.Color', $x['COLOR']); 
+                $this->db->where('P.Color', $x['COLOR']);
             }
             if ($x['CLIENTE'] !== '') {
-                $this->db->where('P.Cliente', $x['CLIENTE']); 
-            } 
+                $this->db->where('P.Cliente', $x['CLIENTE']);
+            }
             if ($x['ESTILO'] === '' || $x['COLOR'] === '' || $x['CLIENTE'] === '') {
                 $this->db->order_by('P.FechaPedido', 'DESC')->limit(99);
             } else {

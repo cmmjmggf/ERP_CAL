@@ -32,9 +32,11 @@ class Maquilas extends CI_Controller {
                     }
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'PROVEEDORES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProveedores');
                     break;
             }

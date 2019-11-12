@@ -19,6 +19,7 @@ class ParesAsignadosControl extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }
@@ -29,11 +30,11 @@ class ParesAsignadosControl extends CI_Controller {
     }
 
     public function getParesAsignadosControl() {
-        
+
         /*
-         * MFA.TpoSuPlEn = 1 
-         * 1 = SUELA 
-         * 2 = PLANTA 
+         * MFA.TpoSuPlEn = 1
+         * 1 = SUELA
+         * 2 = PLANTA
          * 3 = ENTRESUELA
          */
         $jc = new JasperCommand();
@@ -81,7 +82,7 @@ class ParesAsignadosControl extends CI_Controller {
                 $reports['PARESASIGNADOSAMAQUILAESPONJALATEX'] = $jc->getReport();
                 break;
         }
-       
+
         /* 2 PARES ASIGNADOS X LINEA */
         $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/asignados/';
         $jc->setParametros($parametros);

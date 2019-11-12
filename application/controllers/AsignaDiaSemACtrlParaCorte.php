@@ -19,7 +19,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     $is_valid = true;
                     break;
                 case 'DISEÑO Y DESARROLLO':
@@ -248,7 +248,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                 $tipo .= $FRACCIONES[$index]->FRACCIONES;
             }
 //            PRINT "TIPO : {$tipo}";
-//            exit(0); 
+//            exit(0);
             switch (intval($tipo)) {
                 case 99:
 //                    print $tipo . "\n";
@@ -296,38 +296,38 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     break;
                 case 99100:
 //                    print $tipo . "\n";
-                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
-JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE`
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
 WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
-UNION 
-(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS 
-FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` 
-JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` 
-JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+UNION
+(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS
+FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo`
+JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
+JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
  WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
                     break;
                 case 10099:
 //                    print $tipo . "\n";
-                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
-JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo` 
+                    $DTM = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE`
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
 WHERE FR.Departamento = 10 AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
-UNION 
-(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS 
-FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` 
-JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` 
-JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo` 
+UNION
+(SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS
+FROM `pedidox` AS `PE` JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo`
+JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
+JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
  WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
                     break;
             }
@@ -353,19 +353,19 @@ JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
                 $TIEMPO_PRECIO_ARTICULO_X_FRACCION = 0;
                 switch (intval($FRACCION)) {
                     case 99:
-                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
-JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE`
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
 WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) GROUP BY `A`.`Descripcion`)")->result();
                         break;
                     case 100:
-                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO, 
-FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE` 
-JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color` 
-JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave` 
-JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`  
+                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortep AS TIEMPO, (TXE.cortep) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE`
+JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
+JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
+JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
 WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)")->result();
                         break;
                 }
@@ -512,9 +512,9 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                         $ENCONTRADOS += intval($PIEL[0]->EXISTE_EN_PIEL);
                         break;
                 }
-            } 
+            }
             $EXISTE = '[{"ENCONTRADOS":"' . $ENCONTRADOS . '"}]';
-            print $EXISTE; 
+            print $EXISTE;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

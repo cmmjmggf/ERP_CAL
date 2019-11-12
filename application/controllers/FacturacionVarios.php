@@ -24,6 +24,7 @@ class FacturacionVarios extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
             }
@@ -282,7 +283,7 @@ class FacturacionVarios extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("CC.ID, CC.cliente AS CLIENTE, CC.remicion AS DOCTO, "
-                    . "date_format(CC.fecha,\"%d/%m/%Y\") AS FECHA, CC.tipo AS TP, CC.importe AS IMPORTE,  CC.pagos AS PAGOS, (CC.importe - CC.pagos) AS SALDO ", false)
+                            . "date_format(CC.fecha,\"%d/%m/%Y\") AS FECHA, CC.tipo AS TP, CC.importe AS IMPORTE,  CC.pagos AS PAGOS, (CC.importe - CC.pagos) AS SALDO ", false)
                     ->from("cartcliente as CC");
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('CC.cliente', $x["CLIENTE"]);

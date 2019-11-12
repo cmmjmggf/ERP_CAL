@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * ControlesADiasDeVencimientoXMaqSem
  */
 /* NO TOCAR */
@@ -23,9 +23,11 @@ class ControlesADiasDeVencimientoXMaqSem extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }
@@ -58,4 +60,5 @@ class ControlesADiasDeVencimientoXMaqSem extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
 }

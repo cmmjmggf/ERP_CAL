@@ -15,11 +15,12 @@ class DesarrolloMuestras extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
             if ($Origen === '') {
                 switch ($this->session->userdata["TipoAcceso"]) {
                     case 'SUPER ADMINISTRADOR':
-                        $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                        $this->load->view('vMenuProduccion');
                         break;
                     case 'VENTAS':
                         $this->load->view('vMenuClientes');
@@ -47,7 +48,7 @@ class DesarrolloMuestras extends CI_Controller {
     public function getRecords() {
         try {
             $x = $this->input->get();
-//            print json_encode($this->dmm->getRecords($this->input->get('ESTILO'), 
+//            print json_encode($this->dmm->getRecords($this->input->get('ESTILO'),
 //            $this->input->get('COLOR')));
 
             $this->db->select('FT.ID, E.Clave AS Estilo, FT.Color, FT.Pieza AS Pza, '

@@ -14,7 +14,7 @@ class MaqPlantillas extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
-            if (!(NULL !==$this->input->get('TIPO'))) {
+            if (!(NULL !== $this->input->get('TIPO'))) {
                 switch ($this->session->userdata["TipoAcceso"]) {
                     case 'SUPER ADMINISTRADOR':
                         $this->load->view('vNavGeneral');
@@ -30,6 +30,7 @@ class MaqPlantillas extends CI_Controller {
                         }
                         break;
                     case 'DISEÑO Y DESARROLLO':
+                        $this->load->view('vNavGeneral');
                         $this->load->view('vMenuFichasTecnicas');
                         break;
                 }

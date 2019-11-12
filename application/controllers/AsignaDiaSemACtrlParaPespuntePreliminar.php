@@ -26,7 +26,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion'); 
+                    $this->load->view('vMenuProduccion');
                     break;
             }
             $this->load->view('vAsignaDiaSemACtrlParaPespuntePreliminar')->view('vFooter');
@@ -38,14 +38,14 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
     public function getRecords() {
         try {
             print json_encode($this->db->select("P.ID, CONCAT('<span class=\"badge badge-info\" style=\"font-size: 100%;\">',P.Control,'</span>') AS Control, P.Cliente, "
-                                    . "P.Estilo, P.Color, P.Pares, "
-                                    . "P.Semana AS Semana", false)
-                            ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
-                            ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
-                            ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
-                            ->where('PR.Control IS NULL', null, false)
-                            ->where_not_in('P.Control', array(0))
-                            ->get()->result());
+                                            . "P.Estilo, P.Color, P.Pares, "
+                                            . "P.Semana AS Semana", false)
+                                    ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
+                                    ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
+                                    ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
+                                    ->where('PR.Control IS NULL', null, false)
+                                    ->where_not_in('P.Control', array(0))
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -54,8 +54,8 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
     public function getCortadores() {
         try {
             print json_encode($this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero ,' ',E.PrimerNombre, ' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS EMPLEADO", false)
-                            ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
-                            ->where('D.Descripcion LIKE \'CORTE\'', null, false)->where('E.AltaBaja', 1)->order_by('ABS(E.Numero)', 'ASC')->get()->result());
+                                    ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
+                                    ->where('D.Descripcion LIKE \'CORTE\'', null, false)->where('E.AltaBaja', 1)->order_by('ABS(E.Numero)', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -68,7 +68,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function getProgramacion() {
         try {
             print json_encode($this->adscppp->getProgramacion());

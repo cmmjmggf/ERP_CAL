@@ -18,24 +18,31 @@ class ControlPiochas extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'ADMINISTRACION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuAdministracion');
                     break;
                 case 'CONTABILIDAD':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuContabilidad');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNomina');
                     break;
                 case 'INGENIERIA':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuIngenieria');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuDisDes');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuAlmacen');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }

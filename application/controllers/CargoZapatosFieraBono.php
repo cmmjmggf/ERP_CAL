@@ -20,6 +20,7 @@ class CargoZapatosFieraBono extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }
@@ -47,7 +48,7 @@ class CargoZapatosFieraBono extends CI_Controller {
 
     public function onComprobarDeudaXEmpleado() {
         try {
-            
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -101,7 +102,7 @@ class CargoZapatosFieraBono extends CI_Controller {
                             'Importe' => $IMPORTE,
                             'Abonos' => $PAGOS,
                             'Registro' => Date('d/m/Y h:i:s a')));
-            } 
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

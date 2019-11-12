@@ -13,10 +13,9 @@ class Empresas extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
-
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuParametros');
                     break;
                 case 'ADMINISTRACION':

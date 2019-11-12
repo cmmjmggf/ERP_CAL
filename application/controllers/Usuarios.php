@@ -13,10 +13,10 @@ class Usuarios extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
-
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuParametros');
+                    $this->load->view('vMenuParametros');
                     break;
                 case 'ADMINISTRACION':
                     $this->load->view('vMenuAdministracion');
@@ -71,6 +71,7 @@ class Usuarios extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
     public function onVerClave() {
         try {
             print json_encode($this->Usuario_model->onVerClave($this->input->get('ID')));

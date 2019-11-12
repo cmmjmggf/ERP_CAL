@@ -19,6 +19,7 @@ class MenuMateriales extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuMateriales');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
@@ -26,9 +27,11 @@ class MenuMateriales extends CI_Controller {
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'CONTABILIDAD':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'ALMACEN':

@@ -18,7 +18,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
-                case 'SUPER ADMINISTRADOR': 
+                case 'SUPER ADMINISTRADOR':
                     switch ($indice['ORIGEN']) {
                         case 'A':
                             $this->load->view('vNavGeneral')->view('vMenuProduccion');
@@ -30,16 +30,19 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                             $this->load->view('vNavGeneral')->view('vMenuProduccion');
                             break;
                     }
-                    break; 
+                    break;
                 case 'CLIENTES':
                     switch ($indice['ORIGEN']) {
                         case 'A':
+                            $this->load->view('vNavGeneral');
                             $this->load->view('vMenuProduccion');
                             break;
                         case 'B':
+                            $this->load->view('vNavGeneral');
                             $this->load->view('vMenuClientes');
                             break;
                         default :
+                            $this->load->view('vNavGeneral');
                             $this->load->view('vMenuProduccion');
                             break;
                     }
@@ -89,10 +92,10 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
     public function getFechasDeAvance() {
         try {
             $x = $this->input->get();
-            $this->db->select("A.ID, A.contped AS CONTROL, A.status, A.fec1 AS PREPROGRAMADO, date_format(A.fec2,'%d/%m/%Y') AS CORTE, 
-                date_format(A.fec3,'%d/%m/%Y') AS RAYADO, date_format(A.fec33,'%d/%m/%Y') AS REBAJADO, date_format(A.fec4,'%d/%m/%Y') AS FOLEADO, date_format(A.fec40,'%d/%m/%Y') AS ENTRETELADO, date_format(A.fec42,'%d/%m/%Y') AS  MAQUILA, 
-                date_format(A.fec44,'%d/%m/%Y') AS \"ALM-CORTE\", date_format(A.fec5,'%d/%m/%Y') AS PESPUNTE, date_format(A.fec55,'%d/%m/%Y') AS \"ALM-PESP\", date_format(A.fec6,'%d/%m/%Y') AS TEJIDO, 
-                date_format(A.fec7,'%d/%m/%Y') AS \"ALM-TEJIDO\", date_format(A.fec8,'%d/%m/%Y') AS MONTADO, date_format(A.fec9,'%d/%m/%Y') AS  ADORNO, date_format(A.fec10,'%d/%m/%Y') AS \"ALM-ADORNO\", 
+            $this->db->select("A.ID, A.contped AS CONTROL, A.status, A.fec1 AS PREPROGRAMADO, date_format(A.fec2,'%d/%m/%Y') AS CORTE,
+                date_format(A.fec3,'%d/%m/%Y') AS RAYADO, date_format(A.fec33,'%d/%m/%Y') AS REBAJADO, date_format(A.fec4,'%d/%m/%Y') AS FOLEADO, date_format(A.fec40,'%d/%m/%Y') AS ENTRETELADO, date_format(A.fec42,'%d/%m/%Y') AS  MAQUILA,
+                date_format(A.fec44,'%d/%m/%Y') AS \"ALM-CORTE\", date_format(A.fec5,'%d/%m/%Y') AS PESPUNTE, date_format(A.fec55,'%d/%m/%Y') AS \"ALM-PESP\", date_format(A.fec6,'%d/%m/%Y') AS TEJIDO,
+                date_format(A.fec7,'%d/%m/%Y') AS \"ALM-TEJIDO\", date_format(A.fec8,'%d/%m/%Y') AS MONTADO, date_format(A.fec9,'%d/%m/%Y') AS  ADORNO, date_format(A.fec10,'%d/%m/%Y') AS \"ALM-ADORNO\",
                 date_format(A.fec11,'%d/%m/%Y') AS \"TERMINADO\", date_format(A.fec12,'%d/%m/%Y'), A.programado, A.corte, A.rayado, A.rebajado, A.foleado, A.pespunte, A.ensuelado, A.almpesp, A.tejido, A.almtejido, A.montado, A.adorno, A.almadorno, A.terminado, A.fec13, A.fec14, A.fec15, A.fec16, A.fec17, A.fec18", false)
                     ->from("avaprd AS A");
             if ($x['CONTROL'] !== '') {
@@ -110,9 +113,9 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         try {
             $x = $this->input->get();
 
-            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
-                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA, 
-                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
+            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO,
+                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA,
+                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION,
                 FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
                     ->from('fracpagnomina AS FPN');
             if ($x['CONTROL'] !== '') {

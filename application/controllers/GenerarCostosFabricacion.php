@@ -35,15 +35,19 @@ class GenerarCostosFabricacion extends CI_Controller {
 
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
             }

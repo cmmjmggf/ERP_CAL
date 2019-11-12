@@ -17,9 +17,10 @@ class Sesion extends CI_Controller {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $dt["TYPE"] = 1;
             $this->load->view('vEncabezado')->view('vFondo');
+            $this->load->view('vNavGeneral');
             switch ($this->session->TipoAcceso) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')->view('vQuickMenu');
+                    $this->load->view('vMenuPrincipal')->view('vQuickMenu');
                     $is_valid = true;
                     break;
                 case 'VENTAS':
@@ -39,7 +40,7 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vNavGeneral')->view('vMenuPrincipal')->view('vQuickMenu');
+                    $this->load->view('vMenuPrincipal')->view('vQuickMenu');
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':

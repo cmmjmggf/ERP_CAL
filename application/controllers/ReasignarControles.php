@@ -13,9 +13,10 @@ class ReasignarControles extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
                 case 'ADMINISTRACION':
                     $this->load->view('vMenuAdministracion');
@@ -161,9 +162,9 @@ class ReasignarControles extends CI_Controller {
             $Y = substr(Date('Y'), 2);
 
             $this->db->trans_begin();
-            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD 
-                INNER JOIN OrdenDeProduccion AS OP 
-                ON OPD.OrdenDeProduccion = OP.ID 
+            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
+                INNER JOIN OrdenDeProduccion AS OP
+                ON OPD.OrdenDeProduccion = OP.ID
                 WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
             $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
             $this->db->query("DELETE FROM controles WHERE ID > 0 AND Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
@@ -176,7 +177,7 @@ class ReasignarControles extends CI_Controller {
                 $this->db->trans_commit();
             }
 
-            /* AQUI SE OBTIENEN LOS PEDIDOS CON LA SEMANA ACTUAL, MAQUILA ACTUAL 
+            /* AQUI SE OBTIENEN LOS PEDIDOS CON LA SEMANA ACTUAL, MAQUILA ACTUAL
              * ENTRE EL RANGO DE CONTROLES ESPECIFICADOS */
             $controles = $this->db->select("PD.*", false)->from('pedidox AS PD')
                             ->where('PD.Ano', Date('Y'))->where('PD.Maquila', $MAQUILA_ASIGNADA)
@@ -222,7 +223,7 @@ class ReasignarControles extends CI_Controller {
                 print $this->db->last_query() . "\n";
 
 
-                  print "\n 5. Se crea una copia del control a reasignar \n";
+                print "\n 5. Se crea una copia del control a reasignar \n";
 
                 $this->db->query("INSERT INTO `pedidox`
 (`Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Estilo`,`Color`,`FechaEntrega`,`Maquila`,
@@ -230,7 +231,7 @@ class ReasignarControles extends CI_Controller {
 `C3`,`C4`,`C5`,`C6`,`C7`,`C8`,`C9`,`C10`,`C11`,`C12`,`C13`,
 `C14`,`C15`,`C16`,`C17`,`C18`,`C19`,`C20`,`C21`,`C22`,`Estatus`,
 `Registro`,`Recibido`,`Pares`,`ParesFacturados`,`EstiloT`,`ColorT`,`DiaProg`,`SemProg`,`AnioProg`,`FechaProg`,`HoraProg`,
-`Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion`) 
+`Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion`)
 SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Estilo`,`Color`,`FechaEntrega`,{$MAQUILA_A_ASIGNAR},
 {$SEMANA_A_ASIGNAR},`Ano`,`Recio`,`Precio`,`Observacion`,`ObservacionDetalle`,`Serie`,{$Control},`C1`,`C2`,
 `C3`,`C4`,`C5`,`C6`,`C7`,`C8`,`C9`,`C10`,`C11`,`C12`,`C13`,
@@ -250,7 +251,7 @@ SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Esti
 //                        ->where('Semana', $v->Semana)->where('Ano', $v->Ano)
 //                        ->where('Clave', $v->Clave)->where('ID', $v->ID)
 //                        ->update('pedidox');
-                  print "\n 5.1 Se cancela el control y se deja la copia \n";
+                print "\n 5.1 Se cancela el control y se deja la copia \n";
                 $this->db->set('Estatus', 'I')->set('EstatusProduccion', 'CANCELADO')->set('DeptoProduccion', 270)->set('stsavan', 14)
                         ->set('Observacion', $OBSERVACIONES)
                         ->set('ObservacionDetalle', $OBSERVACIONES_ADICIONALES)

@@ -20,6 +20,7 @@ class FichaTecnicaFija extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }

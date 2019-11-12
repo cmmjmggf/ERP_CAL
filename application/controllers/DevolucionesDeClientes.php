@@ -19,6 +19,7 @@ class DevolucionesDeClientes extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
             }
@@ -199,7 +200,7 @@ class DevolucionesDeClientes extends CI_Controller {
     }
 
     public function onImprimirReportePorCliente() {
-        try { 
+        try {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $x = $this->input->post();
@@ -221,7 +222,7 @@ class DevolucionesDeClientes extends CI_Controller {
     }
 
     public function onImprimirReportePorMaquila() {
-        try { 
+        try {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $x = $this->input->post();
@@ -243,7 +244,7 @@ class DevolucionesDeClientes extends CI_Controller {
     }
 
     public function onImprimirReportePorDefectoDetalle() {
-        try { 
+        try {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $x = $this->input->post();
@@ -265,7 +266,7 @@ class DevolucionesDeClientes extends CI_Controller {
     }
 
     public function onImprimirReportePorAgenteClienteDepartamentoDefectoDetalle() {
-        try { 
+        try {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $x = $this->input->post();

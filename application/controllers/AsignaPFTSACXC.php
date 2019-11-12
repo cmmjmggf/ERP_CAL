@@ -22,7 +22,7 @@ class AsignaPFTSACXC extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     $is_valid = true;
                     break;
                 case 'PRODUCCION':

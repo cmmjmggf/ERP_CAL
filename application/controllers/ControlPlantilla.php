@@ -16,9 +16,10 @@ class ControlPlantilla extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
+                    $this->load->view('vMenuProduccion')->view('vControlPlantilla')->view('vFooter');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes')->view('vControlPlantilla')->view('vFooter');

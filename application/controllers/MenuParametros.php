@@ -19,9 +19,11 @@ class MenuParametros extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuParametros');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }

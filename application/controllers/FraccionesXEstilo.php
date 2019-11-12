@@ -53,14 +53,17 @@ class FraccionesXEstilo extends CI_Controller {
 
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     $this->load->view('vFraccionesXEstiloConsulta');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     $this->load->view('vFraccionesXEstiloConsulta');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     if ($Seguridad === '1') {
                         $this->load->view('vFraccionesXEstilo');
@@ -69,6 +72,7 @@ class FraccionesXEstilo extends CI_Controller {
                     }
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     $this->load->view('vFraccionesXEstiloConsulta');
                     break;

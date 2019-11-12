@@ -20,12 +20,15 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNomina');
                     break;
                 case 'INGENIERIA':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuIngenieria');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }

@@ -24,6 +24,7 @@ class CerrarSemanasProd extends CI_Controller {
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }

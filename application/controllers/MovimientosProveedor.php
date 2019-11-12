@@ -32,12 +32,15 @@ class MovimientosProveedor extends CI_Controller {
 
                     break;
                 case 'PROVEEDORES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProveedores');
                     break;
                 case 'CONTABILIDAD':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuContabilidad');
                     break;
                 case 'MATERIALES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':

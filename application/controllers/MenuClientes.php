@@ -19,15 +19,19 @@ class MenuClientes extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'CONTABILIDAD':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'PRODUCCION':
@@ -35,7 +39,7 @@ class MenuClientes extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFooter')->view('vWatermark', $dt); 
+            $this->load->view('vFooter')->view('vWatermark', $dt);
         } else {
             $this->load->view('vEncabezado');
             $this->load->view('vSesion');

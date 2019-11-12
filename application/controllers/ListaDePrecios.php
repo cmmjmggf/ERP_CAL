@@ -31,12 +31,15 @@ class ListaDePrecios extends CI_Controller {
                     break;
 
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'FACTURACION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFacturacion');
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
             }

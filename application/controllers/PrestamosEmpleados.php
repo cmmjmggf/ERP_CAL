@@ -20,6 +20,7 @@ class PrestamosEmpleados extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuNominas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     break;
             }
@@ -126,13 +127,13 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
                             ->where('E.Numero', $x->post('EMPLEADO'))->get()->result();
-            
+
             $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))
                     ->set('AbonoPres', $x->post('ABONO'))
                     ->set('SaldoPres', $x->post('SALDO'))
                     ->where('Numero', $x->post('EMPLEADO'))
                     ->update('empleados');
-            
+
             /* PAGARE */
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -185,7 +186,7 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
-            
+
             /* EMPLEADOS : PressAcum, AbonoPres y SaldoPres */
 
             $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))

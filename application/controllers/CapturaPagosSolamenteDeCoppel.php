@@ -20,9 +20,11 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'FACTURACION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFacturacion');
                     break;
             }
@@ -36,8 +38,8 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("CC.ID AS ID, CC.cliente AS CLIENTE, CC.remicion AS DOCUMENTO,
-                CC.tipo AS TP, date_format(CC.fecha,'%d/%m/%Y')  AS FECHA_DEPOSITO,  
-                FORMAT(CC.importe,2) AS IMPORTE, FORMAT(CC.pagos,2) AS PAGOS, FORMAT(CC.saldo,2) AS SALDO, 
+                CC.tipo AS TP, date_format(CC.fecha,'%d/%m/%Y')  AS FECHA_DEPOSITO,
+                FORMAT(CC.importe,2) AS IMPORTE, FORMAT(CC.pagos,2) AS PAGOS, FORMAT(CC.saldo,2) AS SALDO,
                 CC.status AS ST, DATEDIFF(NOW(),fecha) AS DIAS, CC.saldo AS SALDOX", false)
                     ->from("cartcliente AS CC")
                     ->where('CC.cliente', 2121)->where('CC.saldo > ', 2);
@@ -52,9 +54,9 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
     public function getPagosXDocumentos() {
         try {
-            $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO, 
-                CCP.tipo AS TP, date_format(CCP.fecha,'%d/%m/%Y')  AS FECHA_DEPOSITO, CCP.fechacap AS FECHA_CAPTURA, 
-                FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA, 
+            $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO,
+                CCP.tipo AS TP, date_format(CCP.fecha,'%d/%m/%Y')  AS FECHA_DEPOSITO, CCP.fechacap AS FECHA_CAPTURA,
+                FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA,
                 CCP.numfol AS DIAS ", false)
                     ->from("cartctepagos AS CCP");
             if ($this->input->get('DOCUMENTO') !== '') {
@@ -273,7 +275,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
                                 . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
                         ->result();
             }
-            if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) { 
+            if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) {
                 $this->db->query("UPDATE depoctes SET status = 2, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
                                 . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
                         ->result();

@@ -27,10 +27,12 @@ class AvancePespunteMaquila extends CI_Controller {
                         $is_valid = true;
                         break;
                     case 'ADMINISTRACION':
+                        $this->load->view('vNavGeneral');
                         $this->load->view('vMenuAdministracion');
                         $is_valid = true;
                         break;
                     case 'PRODUCCION':
+                        $this->load->view('vNavGeneral');
                         $this->load->view('vMenuProduccion');
                         $is_valid = true;
                         break;
@@ -126,7 +128,7 @@ class AvancePespunteMaquila extends CI_Controller {
                     ->order_by('ID', 'ASC');
             if ($x['ESTILO'] === '') {
                 $this->db->limit(99);
-            } 
+            }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

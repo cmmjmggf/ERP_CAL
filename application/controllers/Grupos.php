@@ -32,12 +32,14 @@ class Grupos extends CI_Controller {
 
                     break;
                 case 'DISEÑO Y DESARROLLO':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFichasTecnicas');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
-            } 
+            }
             $this->load->view('vFondo');
             $this->load->view('vGrupos');
             $this->load->view('vWatermark', $dt)->view('vFooter');

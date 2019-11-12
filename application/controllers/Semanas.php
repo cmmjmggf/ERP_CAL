@@ -19,6 +19,7 @@ class Semanas extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuNominas');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     break;
             }

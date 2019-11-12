@@ -17,9 +17,10 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    $this->load->view('vMenuProduccion');
                     break;
                 case 'VENTAS':
                     $this->load->view('vMenuClientes');
@@ -91,7 +92,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                 /* 100 ADORNO */
                 $this->db->set('status', 100)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(600))->update('fracpagnomina');
 
-            
+
                 $DEPTOS = array(22/* CORTE */,
                     33/* RAYADO */,
                     34/* REBAJADO */,
@@ -133,7 +134,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                                 $PARES_LUNES[0]->PARES + $PARES_MARTES[0]->PARES + $PARES_MIERCOLES[0]->PARES),
                                 "SEM" => $xxx['SEMANA'],
                                 "ANIO" => $xxx['ANIO']
-                    )); 
+                    ));
                 }
 //                exit(0);
                 $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));

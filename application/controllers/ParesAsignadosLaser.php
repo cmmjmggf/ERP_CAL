@@ -19,6 +19,7 @@ class ParesAsignadosLaser extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }
@@ -48,4 +49,5 @@ class ParesAsignadosLaser extends CI_Controller {
         $jc->setDocumentformat('pdf');
         print $jc->getReport();
     }
+
 }

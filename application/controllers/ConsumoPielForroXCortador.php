@@ -21,18 +21,23 @@ class ConsumoPielForroXCortador extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
                 case 'FACTURACION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuFacturacion');
                     break;
                 case 'PRODUCCION':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
             }
@@ -100,7 +105,7 @@ class ConsumoPielForroXCortador extends CI_Controller {
             $pdf->SetTextColor(0, 0, 0);
             $pdf->SetFont('Calibri', 'B', 10);
 //            $CORTADORES = $this->cpfxc->getCortadoresXMaquilaSemanaArticulo($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $TIPO);
-            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA, 
+            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA,
                                    IFNULL(E.Numero,0) AS NUMERO, CONCAT(IFNULL(E.PrimerNombre,\"\"), \" \", IFNULL(E.SegundoNombre,\"\"), \" \", IFNULL(E.Paterno,\"\"), \" \", IFNULL(E.Materno,\"\")) AS CORTADOR", false)
                     ->from("asignapftsacxc AS A")
                     ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
@@ -121,7 +126,7 @@ class ConsumoPielForroXCortador extends CI_Controller {
                 $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANIO'", null, false);
             }
             $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->where('E.AltaBaja', 1);
-            $CORTADORES =  $this->db->get()->result();
+            $CORTADORES = $this->db->get()->result();
 
             $base = 6;
             $alto_celda = 4;

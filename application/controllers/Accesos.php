@@ -18,25 +18,9 @@ class Accesos extends CI_Controller {
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuParametros');
-                    break;
-                case 'VENTAS':
-                    $this->load->view('vMenuClientes');
-                    break;
-                case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'RECURSOS HUMANOS':
-                    $this->load->view('vMenuProduccion');
-                    break;
-                case 'FACTURACION':
-                    $this->load->view('vMenuFacturacion');
-                    break;
-                case 'PRODUCCION':
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vFondo')->view('vAccesos')->view('vFooter');
                     break;
             }
-
-            $this->load->view('vFondo')->view('vAccesos')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

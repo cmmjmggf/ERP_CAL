@@ -17,9 +17,9 @@ class ParesPreProgramados extends CI_Controller {
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
+            $this->load->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral');
                     //Validamos que no venga vacia y asignamos un valor por defecto
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
@@ -178,11 +178,11 @@ class ParesPreProgramados extends CI_Controller {
             $YF = 0;
 
             foreach ($CLIENTES as $k => $v) {
-                $this->db->select('C.Clave AS CLAVE_CLIENTE, 
-                    C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE, 
-                    A.Nombre AS AGENTE, ES.Descripcion AS ESTADO,P.Clave AS PEDIDO, 
-                    E.Linea AS CLAVE_LINEA, L.Descripcion AS LINEA, P.Estilo AS CLAVE_ESTILO, 
-                    CO.Descripcion AS COLOR,P.FechaEntrega AS FECHA_ENTREGA, 
+                $this->db->select('C.Clave AS CLAVE_CLIENTE,
+                    C.RazonS AS  CLIENTE, A.Clave AS CLAVE_AGENTE,
+                    A.Nombre AS AGENTE, ES.Descripcion AS ESTADO,P.Clave AS PEDIDO,
+                    E.Linea AS CLAVE_LINEA, L.Descripcion AS LINEA, P.Estilo AS CLAVE_ESTILO,
+                    CO.Descripcion AS COLOR,P.FechaEntrega AS FECHA_ENTREGA,
                     P.Pares AS PARES, P.Maquila AS MAQUILA, P.Semana AS SEMANA, C.Pais AS PAIS', false)
                         ->from('pedidox AS P')
                         ->join('clientes AS C', 'P.Cliente = C.Clave')

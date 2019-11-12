@@ -33,9 +33,11 @@ class DocDirecSinAfectacion extends CI_Controller {
 
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PROVEEDORES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProveedores');
                     break;
                 case 'PRODUCCION':

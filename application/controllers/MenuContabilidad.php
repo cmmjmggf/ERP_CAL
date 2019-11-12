@@ -19,6 +19,7 @@ class MenuContabilidad extends CI_Controller {
                     $this->load->view('vMenuContabilidad');
                     break;
                 case 'CONTABILIDAD':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuContabilidad');
                     break;
             }

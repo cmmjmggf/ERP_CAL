@@ -33,12 +33,15 @@ class GeneraPoliza extends CI_Controller {
 
                     break;
                 case 'CLIENTES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
                 case 'ALMACEN':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
                 case 'PROVEEDORES':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProveedores');
                     break;
             }

@@ -21,6 +21,7 @@ class Clientes extends CI_Controller {
                     $this->load->view('vMenuClientes');
                     break;
                 case 'VENTAS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
             }

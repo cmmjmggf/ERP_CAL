@@ -33,6 +33,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'RECURSOS HUMANOS':
+                    $this->load->view('vNavGeneral');
                     $this->load->view('vMenuNominas');
                     $is_valid = true;
                     break;
