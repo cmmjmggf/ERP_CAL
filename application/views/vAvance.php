@@ -1,10 +1,10 @@
 <div class="card m-3 " id="pnlTablero">
-    <div class="card-body">
+    <div class="card-body" style="padding-top: 5px;">
         <div class="row" >
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <h3 class="font-weight-bold ">Avance</h3>
             </div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="right">
                 <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
@@ -27,7 +27,9 @@
             <!--SECCION UNO-->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                    <h1 style="color: #c1850c !important;" class="usuario_logued"><?php print $_SESSION['USERNAME']; ?></h1>
+                     <h4 style="color: #c1850c !important;" class="usuario_logued font-weight-bold">
+                         <?php print $_SESSION['USERNAME']; ?>
+                     </h4>
                     <input type="text" id="usuario" name="usuario" class="form-control form-control-sm d-none">
                 </div>
                 <div class="w-100"></div>
@@ -44,7 +46,8 @@
                     <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm numbersOnly" maxlength="2">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <ul id="deptos" class="list-group my-2">
                         <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                             <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
@@ -81,6 +84,9 @@
                             <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                     </ul>
                 </div>
+                
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <label>Control</label>
                     <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
@@ -355,6 +361,7 @@
             mono = '<?php print $_SESSION['USERNAME']; ?>';
 
     $(document).ready(function () {
+        pnlTablero.find("input").addClass("font-weight-bold");
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
@@ -381,283 +388,11 @@
 
         Departamento.on('keydown', function (e) {
             if (e.keyCode === 13 && Departamento.val()) {
-                var fraccion_x_depto = {
-                    "33": 102, "4": 103, "40": 60,
-                    "42": 51, "44": 51, "5": "", "55": 300,
-                    "6": 397, "7": "", "8": 401/*ALM-TEJIDO*/,
-                    "9": "", "10": 500, "11": 600
-                };
-                switch (mono) {
-                    case "GUSTAVO":
-                        switch (parseInt(Departamento.val())) {
-                            case 40:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 42:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 44:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 5:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 55:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    case "JUAN":
-                        switch (parseInt(Departamento.val())) {
-                            case 6:
-                                Empleado.val(1003);
-                                EmpleadoS[0].selectize.setValue(1003);
-                                EmpleadoS[0].selectize.disable();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    case "JOSE":
-                        /*JOSE PINA */
-                        switch (parseInt(Departamento.val())) {
-                            case 33:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 4:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 40:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 42:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 44:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    case "CHEOK":
-                        switch (parseInt(Departamento.val())) {
-                            case 44:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 5:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 55:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 6:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 7:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 8:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 9:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    case "ALICIA":
-                        switch (parseInt(Departamento.val())) {
-                            case 7:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    case "MARTIN":
-                        switch (parseInt(Departamento.val())) {
-                            case 9:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 10:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            case 11:
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', false);
-                                break;
-                            default :
-                                btnAceptar.attr('disabled', true);
-                                Control.val('');
-                                ProcesoMaquila.val('');
-                                ProcesoMaquilaS[0].selectize.clear(true);
-                                Empleado.val('');
-                                EmpleadoS[0].selectize.clear(true);
-                                Fraccion.val('');
-                                FraccionS[0].selectize.clear(true);
-                                Estilo.val('');
-                                AvanceDeptoActual.val('');
-                                Pares.val('');
-                                iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
-                                    Departamento.focus().select();
-                                });
-                                return;
-                                break;
-                        }
-                        break;
-                    default:
-                        btnAceptar.attr('disabled', true);
-                        Control.val('');
-                        ProcesoMaquila.val('');
-                        ProcesoMaquilaS[0].selectize.clear(true);
-                        Empleado.val('');
-                        EmpleadoS[0].selectize.clear(true);
-                        Fraccion.val('');
-                        FraccionS[0].selectize.clear(true);
-                        Estilo.val('');
-                        AvanceDeptoActual.val('');
-                        Pares.val('');
-                        iMsg('EL USUARIO NO CONCUERDA CON EL AVANCE', 'w', function () {
-                            Departamento.focus().select();
-                        });
-                        return;
-                        break;
-                }
-                Fraccion.val(fraccion_x_depto[Departamento.val()]);
-                FraccionS[0].selectize.setValue(Fraccion.val());
-                getPrecioFraccionXEstiloFraccion();
-                var dptos = pnlTablero.find("ul#deptos li"), depto = 0, clve = 0, deptodes = "";
-                pnlTablero.find("ul#deptos li").removeClass("li-selected");
-                $.each(dptos, function (k, v) {
-//                    console.log(k, v);
-                    var spn = $(v).find("span.stsavan").text();
-                    clve = $.isNumeric(spn) ? parseInt(spn) : 0;
-                    var cu_clve = parseInt(Departamento.val());
-                    if (clve === cu_clve) {
-                        $(v).addClass("li-selected");
-                        depto = parseInt($(v).find("span.deptoclave").text());
-                        deptodes = $(v).find("span.deptodes").text();
-                        return false;
-                    }
-                });
-                if (depto >= 180 || depto === 30 || depto === 40 ||
-                        depto === 90 || depto === 100 || depto === 105 ||
-                        depto === 110 || depto === 130 || depto === 140 || depto === 150 || depto === 160) {
-//                    Departamento.val(parseInt(li.find("span").first().text())); 
-                    Control.focus().select();
-                    DeptoDes.val(deptodes);
-                    DeptoAva.val(clve);
-                    onBeep(3);
-                } else {
-                    swal('ATENCIÓN', 'DEPARTAMENTO ' + Departamento.val() + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
-                        Departamento.focus().select();
-                    });
-                }
+                onValidarDepto();
             } else {
 
             }
-        }
-        );
+        });
 
         FraccionS.change(function () {
             if (FraccionS.val()) {
@@ -919,9 +654,11 @@
 //                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FECHA', 'warning');
 //            }
 //        });
+
         getDepartamentos();
         $("#usuario").val('<?php print $_SESSION['USERNAME']; ?>').prop('disabled', true);
         $(".usuario_logued").text('<?php print $_SESSION['USERNAME']; ?>');
+
         $.getJSON('<?php print base_url('Avance/getMaquilasPlantillas'); ?>').done(function (d) {
             d.forEach(function (v) {
                 ProcesoMaquilaS[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
@@ -929,6 +666,7 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
+
         $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
             d.forEach(function (v) {
                 EmpleadoS[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
@@ -938,6 +676,7 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
+
         $.getJSON('<?php print base_url('Avance/getFracciones'); ?>').done(function (d) {
             d.forEach(function (v) {
                 FraccionS[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
@@ -945,6 +684,7 @@
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
+
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
                 onOpenOverlay('Espere...');
@@ -1440,6 +1180,7 @@
                     ul.find("li").removeClass('li-selected');
                 });
             }
+            onValidarDepto();
         });
     }
 
@@ -1451,6 +1192,282 @@
         }).always(function () {
 
         });
+    }
+
+    function onValidarDepto() {
+        var fraccion_x_depto = {
+            "33": 102, "4": 103, "40": 60,
+            "42": 51, "44": 51, "5": "", "55": 300,
+            "6": 397, "7": "", "8": 401/*ALM-TEJIDO*/,
+            "9": "", "10": 500, "11": 600
+        };
+        switch (mono) {
+            case "GUSTAVO":
+                switch (parseInt(Departamento.val())) {
+                    case 40:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 42:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 44:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 5:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 55:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            case "JUAN":
+                switch (parseInt(Departamento.val())) {
+                    case 6:
+                        Empleado.val(1003);
+                        EmpleadoS[0].selectize.setValue(1003);
+                        EmpleadoS[0].selectize.disable();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            case "JOSE":
+                /*JOSE PINA */
+                switch (parseInt(Departamento.val())) {
+                    case 33:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 4:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 40:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 42:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 44:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            case "CHEOK":
+                switch (parseInt(Departamento.val())) {
+                    case 44:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 5:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 55:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 6:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 7:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 8:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 9:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            case "ALICIA":
+                switch (parseInt(Departamento.val())) {
+                    case 7:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            case "MARTIN":
+                switch (parseInt(Departamento.val())) {
+                    case 9:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 10:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    case 11:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
+                    default :
+                        btnAceptar.attr('disabled', true);
+                        Control.val('');
+                        ProcesoMaquila.val('');
+                        ProcesoMaquilaS[0].selectize.clear(true);
+                        Empleado.val('');
+                        EmpleadoS[0].selectize.clear(true);
+                        Fraccion.val('');
+                        FraccionS[0].selectize.clear(true);
+                        Estilo.val('');
+                        AvanceDeptoActual.val('');
+                        Pares.val('');
+                        iMsg('EL DEPARTAMENTO NO CONCUERDA CON EL AVANCE DEL USUARIO.', 'w', function () {
+                            Departamento.focus().select();
+                        });
+                        return;
+                        break;
+                }
+                break;
+            default:
+                btnAceptar.attr('disabled', true);
+                Control.val('');
+                ProcesoMaquila.val('');
+                ProcesoMaquilaS[0].selectize.clear(true);
+                Empleado.val('');
+                EmpleadoS[0].selectize.clear(true);
+                Fraccion.val('');
+                FraccionS[0].selectize.clear(true);
+                Estilo.val('');
+                AvanceDeptoActual.val('');
+                Pares.val('');
+                iMsg('EL USUARIO NO CONCUERDA CON EL AVANCE', 'w', function () {
+                    Departamento.focus().select();
+                });
+                return;
+                break;
+        }
+        Fraccion.val(fraccion_x_depto[Departamento.val()]);
+        FraccionS[0].selectize.setValue(Fraccion.val());
+        getPrecioFraccionXEstiloFraccion();
+        var dptos = pnlTablero.find("ul#deptos li"), depto = 0, clve = 0, deptodes = "";
+        pnlTablero.find("ul#deptos li").removeClass("li-selected");
+        $.each(dptos, function (k, v) {
+//                    console.log(k, v);
+            var spn = $(v).find("span.stsavan").text();
+            clve = $.isNumeric(spn) ? parseInt(spn) : 0;
+            var cu_clve = parseInt(Departamento.val());
+            if (clve === cu_clve) {
+                $(v).addClass("li-selected");
+                depto = parseInt($(v).find("span.deptoclave").text());
+                deptodes = $(v).find("span.deptodes").text();
+                return false;
+            }
+        });
+        if (depto >= 180 || depto === 30 || depto === 40 ||
+                depto === 90 || depto === 100 || depto === 105 ||
+                depto === 110 || depto === 130 || depto === 140 || depto === 150 || depto === 160) {
+//                    Departamento.val(parseInt(li.find("span").first().text())); 
+            Control.focus().select();
+            DeptoDes.val(deptodes);
+            DeptoAva.val(clve);
+            onBeep(3);
+        } else {
+            swal('ATENCIÓN', 'DEPARTAMENTO ' + Departamento.val() + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
+                Departamento.focus().select();
+            });
+        }
+
     }
 </script>
 <style>
@@ -1520,7 +1537,9 @@
     .box-info{
         box-shadow: 0 0 0 0.2rem #33C2E1 !important;
     }
-
+    ul li{
+        font-size: 13px !important;
+    }
     @-moz-keyframes myfirst /* Firefox */
     {
         0%   {    border: 1px solid #2196F3}
