@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.2655516614681677"/>
-	<property name="ireport.x" value="744"/>
+	<property name="ireport.zoom" value="2.2304157239725204"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -13,6 +13,7 @@
 	<queryString>
 		<![CDATA[select
 FPN.depto,
+(select descripcion from departamentos where clave = FPN.depto) as nomdepto,
 FPN.control,
 FPN.estilo,
 FPN.numfrac,
@@ -30,6 +31,9 @@ where FPN.control = $P{control}
 order by FPN.depto ASC,FPN.numfrac ASC]]>
 	</queryString>
 	<field name="depto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomdepto" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="control" class="java.lang.Integer">
@@ -67,12 +71,12 @@ order by FPN.depto ASC,FPN.numfrac ASC]]>
 		<groupFooter>
 			<band height="12">
 				<textField>
-					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="388" y="0" width="115" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="344" y="0" width="171" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Total por depto "+$F{depto}+":"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Total por depto "+$F{nomdepto}+":"]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="515" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5630594b-fafb-472d-895d-9bbcc967eab4"/>
@@ -174,7 +178,7 @@ order by FPN.depto ASC,FPN.numfrac ASC]]>
 				<text><![CDATA[Sem]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="230" y="44" width="40" height="11" forecolor="#000000" uuid="6f568741-320a-4d3f-84d2-0d07c66488a4"/>
+				<reportElement style="Column header" x="228" y="44" width="44" height="11" forecolor="#000000" uuid="6f568741-320a-4d3f-84d2-0d07c66488a4"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -247,7 +251,7 @@ order by FPN.depto ASC,FPN.numfrac ASC]]>
 				<textFieldExpression><![CDATA[$F{depto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement x="230" y="0" width="40" height="11" uuid="610e2b0e-7369-4274-837d-9340c36953c5"/>
+				<reportElement x="228" y="0" width="44" height="11" uuid="610e2b0e-7369-4274-837d-9340c36953c5"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -300,14 +304,14 @@ order by FPN.depto ASC,FPN.numfrac ASC]]>
 	<summary>
 		<band height="14" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="388" y="1" width="115" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+				<reportElement style="Column header" x="344" y="1" width="159" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total general:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="388" y="0" width="171" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
+				<reportElement x="344" y="0" width="215" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
 			</line>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="515" y="1" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="806dc6e2-2f3e-4b06-986b-a84680b43c8f"/>

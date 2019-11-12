@@ -11,17 +11,21 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
+                <label for="" >Empleado</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="Empleado" name="Empleado"   >
+            </div>
             <div class="col-12 col-xs-12 col-sm-4 col-lg-3 col-xl-3">
-                <label>Empleado</label>
-                <select id="Empleado" name="Empleado" class="form-control form-control-sm required">
+                <label>-</label>
+                <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required">
                     <option value=""></option>
                 </select>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <label>Año</label>
                 <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <label>Sem</label>
                 <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
             </div>
@@ -77,15 +81,48 @@
             $(':input:text:enabled:visible:first').focus();
         });
 
+        pnlTablero.find('#Empleado').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
 
-        pnlTablero.find("#Empleado").change(function () {
+                    $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            HoldOn.open({
+                                theme: 'sk-rect',
+                                message: 'Cargando...'
+                            });
+                            pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            Registros.ajax.reload(function () {
+                                HoldOn.close();
+                                pnlTablero.find("#Sem").focus().select();
+                            });
+
+                        } else {
+                            swal('ERROR', 'EMPLEADO INEXISTENTE, DADO DE BAJA O NO ES DESTAJISTA', 'warning').then((value) => {
+                                pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
+                                pnlTablero.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+
+        pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
                 HoldOn.open({
                     theme: 'sk-rect',
                     message: 'Cargando...'
                 });
+                pnlTablero.find('#Empleado').val($(this).val());
                 Registros.ajax.reload(function () {
                     HoldOn.close();
+                    pnlTablero.find("#Sem").focus().select();
                 });
             }
         });
@@ -243,7 +280,7 @@
     function getEmpleados() {
         $.getJSON(master_url + 'getEmpleados').done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.ID});
+                pnlTablero.find("#sEmpleado")[0].selectize.addOption({text: v.Empleado, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);

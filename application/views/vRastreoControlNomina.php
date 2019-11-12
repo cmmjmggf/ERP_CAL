@@ -346,6 +346,7 @@
             var dtm = ControlesNominaRastreo.row(this).data();
             mdlRastreoControlNomina.find("#FraccionRastreo").val(dtm.nomfrac);
             mdlRastreoControlNomina.find("#EmpleadoRastreo")[0].selectize.addItem(dtm.numeroempleado, true);
+            mdlRastreoControlNomina.find("#iEmpleadoRastreo").val(dtm.numeroempleado);
             mdlRastreoControlNomina.find("#ControlRastreo").val(dtm.control);
             mdlRastreoControlNomina.find("#SemRastreo").val(dtm.semana);
         });

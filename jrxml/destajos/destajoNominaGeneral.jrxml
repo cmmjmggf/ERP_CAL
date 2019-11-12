@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.0276506581568348"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.2655516614681654"/>
+	<property name="ireport.x" value="171"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -14,7 +14,8 @@
 	<parameter name="ano" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
-FPN.depto,
+FPN.depto as numdepto,
+(select descripcion from departamentos where clave = FPN.depto) as nomdepto,
 FPN.numeroempleado as numemp,
 E.Busqueda AS nomemp,
 sum(FPN.subtot) as subtot
@@ -22,9 +23,10 @@ from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 where FPN.semana = $P{sem} and FPN.anio =  $P{ano}
 group by FPN.depto, FPN.numeroempleado
-order by FPN.depto ASC,FPN.numeroempleado asc]]>
+order by numdepto ASC,FPN.numeroempleado asc]]>
 	</queryString>
-	<field name="depto" class="java.lang.Integer">
+	<field name="numdepto" class="java.lang.Integer"/>
+	<field name="nomdepto" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="numemp" class="java.lang.Integer"/>
@@ -39,16 +41,16 @@ order by FPN.depto ASC,FPN.numeroempleado asc]]>
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
 	<group name="Depto">
-		<groupExpression><![CDATA[$F{depto}]]></groupExpression>
+		<groupExpression><![CDATA[$F{numdepto}]]></groupExpression>
 		<groupFooter>
 			<band height="12">
 				<textField>
-					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="158" y="0" width="115" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="111" y="0" width="171" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="afb435eb-d0ce-4e17-85d6-7c790e8cf529"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Total por depto "+$F{depto}+":"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Total de "+$F{nomdepto}+":"]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="282" y="0" width="47" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5630594b-fafb-472d-895d-9bbcc967eab4"/>
@@ -199,21 +201,14 @@ order by FPN.depto ASC,FPN.numeroempleado asc]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{depto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numdepto}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="14" splitType="Stretch">
-			<staticText>
-				<reportElement style="Column header" x="158" y="1" width="115" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total general:]]></text>
-			</staticText>
 			<line>
-				<reportElement x="158" y="0" width="171" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
+				<reportElement x="111" y="0" width="218" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
 			</line>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="282" y="1" width="47" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="806dc6e2-2f3e-4b06-986b-a84680b43c8f"/>
@@ -223,6 +218,13 @@ order by FPN.depto ASC,FPN.numeroempleado asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{subtot_3}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Column header" x="111" y="0" width="139" height="13" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total general:]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
