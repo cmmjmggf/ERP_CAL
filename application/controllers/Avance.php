@@ -765,6 +765,7 @@ P.Maquila AS MAQUILA
                 if ($frac === 88 && $depto_actual === 9 ||
                         $frac === 499 && $depto_actual === 9 ||
                         $frac === 500 && $depto_actual === 9 ||
+                        $frac === 502 && $depto_actual === 9 ||
                         $frac === 503 && $depto_actual === 9) {
                     //88	MONTADO PROTOTIPO
                     //499	MONTADO MUESTRA

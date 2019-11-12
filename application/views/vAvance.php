@@ -719,7 +719,7 @@
                     EmpleadoS[0].selectize.enable();
                 }
             } else {
-                console.log('KEYCODE=>', e.keyCode)
+                console.log('KEYCODE=>', e.keyCode);
                 if (e.keyCode === 13) {
                     EmpleadoS[0].selectize.enable();
                     EmpleadoS[0].selectize.clear();
@@ -972,6 +972,8 @@
 
 
                         var rr = a[0];
+                        AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
+                        pnlTablero.find(".estatus_de_avance").text(rr.ESTATUS_PRODUCCION_TEXT);
                         if (parseInt(Departamento.val()) === parseInt(rr.ESTATUS_PRODUCCION)) {
                             iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE', 'w', function () {
                                 Control.focus().select();
