@@ -152,7 +152,9 @@ class Avance extends CI_Controller {
                                     . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
                                     . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', (CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
                                     . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) END) AS EMPLEADO "
-                                    . "FROM empleados AS E WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 OR E.AltaBaja = 2 AND E.Celula NOT IN(0)")->result());
+                                    . "FROM empleados AS E "
+                                    . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
+                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0)")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
