@@ -878,11 +878,9 @@
                     DeptoActual.val('');
                     AvanceDeptoActual.val('');
                     pnlTablero.find(".estatus_de_avance").text('');
-                    Pares.val('');
-                    Departamento.focus().select();
+                    Pares.val(''); 
                     btnAceptar.attr('disabled', true);
-                    Departamento.focus().select();
-                    Control.val('');
+                    Control.focus().select();
                 }).fail(function (x, y, z) {
                     getError(x);
                 });
@@ -969,7 +967,14 @@
                         EmpleadoS[0].selectize.enable();
                         btnAceptar.attr('disabled', false);
                         
+
                         var rr = a[0];
+                        if (parseInt(Departamento.val()) === parseInt(rr.ESTATUS_PRODUCCION)) {
+                            iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE','w',function(){
+                                Control.focus().select();
+                            });
+                            return;
+                        }
                         if (parseInt(rr.ESTATUS_PRODUCCION) !== 13 && parseInt(rr.ESTATUS_PRODUCCION) !== 14) {
                             ProcesoMaquila.val(rr.MAQUILADO);
                             ProcesoMaquilaS[0].selectize.setValue(ProcesoMaquila.val());

@@ -145,15 +145,16 @@ class Avance9 extends CI_Controller {
 //            print json_encode($EMPLEADO_VALIDO);
 
             $DEPTOS_FISICOS = array(10/* CORTE */, 70, 20/* RAYADO */, 80/* RAYADO CONTADO */,
-                30/* REBAJADO Y PERFORADO */, 190/* MONTADO B */, 300 /* SUPERVISORES */);
+                30/* REBAJADO Y PERFORADO */, 180, 190/* MONTADO B */, 200, 210, 220, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
 
-            $this->db->select("CONCAT(E.PrimerNombre,' ',"
+            $this->db->select("(CASE WHEN E.PrimerNombre = '0' AND E.SegundoNombre = '0' THEN E.Busqueda ELSE "
+                            . "CONCAT(E.PrimerNombre,' ',"
                             . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
                             . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
-                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE_COMPLETO, "
-                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES", false)
+                            . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) END) AS NOMBRE_COMPLETO, "
+                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES, E.Busqueda AS CELULAS ", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
                     ->where_in('E.AltaBaja', array(1));
@@ -165,6 +166,14 @@ class Avance9 extends CI_Controller {
                 $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
             }
             $this->db->where_in('E.DepartamentoFisico', $DEPTOS_FISICOS);
+
+//            991	CELULA  MONTADO "B"
+//            992	CELULA  ADORNO "A"
+//            993	CELULA  MONTADO "A"
+//            1005 CELULA  ADORNO "B"
+//            1006 PEGADO
+            $this->db->or_where_in('E.Numero', $this->input->post('EMPLEADO'));
+            $this->db->where_in('E.DepartamentoFisico', array(180, 190/* MONTADO B */, 200, 210, 220));
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

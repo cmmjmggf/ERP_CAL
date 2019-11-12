@@ -147,6 +147,11 @@ class Avance extends CI_Controller {
 
     public function getEmpleados() {
         try {
+//            991	CELULA  MONTADO "B"
+//            992	CELULA  ADORNO "A"
+//            993	CELULA  MONTADO "A"
+//            1005 CELULA  ADORNO "B"
+//            1006 PEGADO
             print json_encode($this->db->query("SELECT E.Numero AS CLAVE, "
                                     . "(CASE "
                                     . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
@@ -154,7 +159,7 @@ class Avance extends CI_Controller {
                                     . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) END) AS EMPLEADO "
                                     . "FROM empleados AS E "
                                     . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
-                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0)")->result());
+                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

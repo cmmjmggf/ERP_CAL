@@ -942,8 +942,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->trans_start();
             $this->db->query("DELETE FROM prenomina WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
             $this->db->query("UPDATE prenominal SET precaha = 0 WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
-            $this->db->query("DELETE FROM fracpagnominatmp WHERE semana = {$SEM} AND año = {$AÑO}")->result();
-            $this->db->query("DELETE FROM fracpagnomina WHERE semana = {$SEM} AND año = {$AÑO}")->result();
+            $this->db->query("DELETE FROM fracpagnominatmp WHERE semana = {$SEM} AND año = {$AÑO}")->result(); 
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
