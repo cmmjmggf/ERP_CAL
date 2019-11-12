@@ -417,7 +417,7 @@ P.Maquila AS MAQUILA
                             "pares" => $xXx['PARES'],
                             "fecha" => Date('Y-m-d h:i:s'),
                             "semana" => $xXx['SEMANA'],
-                            "depto" => $xXx['DEPTO'],
+                            "depto" => $xXx['DEPTOACTUAL'],
                             "anio" => Date('Y'));
                         $data["fraccion"] = $xfraccion;
                         $data["numfrac"] = $xfraccion;
@@ -865,7 +865,7 @@ P.Maquila AS MAQUILA
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d h:i:s'),
                 "semana" => $xXx['SEMANA'],
-                "depto" => $xXx['DEPTO'],
+                "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
             $data["fraccion"] = $xfraccion;
             $data["numfrac"] = $xfraccion;
@@ -901,7 +901,7 @@ P.Maquila AS MAQUILA
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d h:i:s'),
                 "semana" => $xXx['SEMANA'],
-                "depto" => $xXx['DEPTO'],
+                "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
             $data["fraccion"] = $xfraccion;
             $data["numfrac"] = $xfraccion;
