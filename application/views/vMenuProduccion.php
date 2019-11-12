@@ -36,7 +36,7 @@ $vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalA
     'vReporteMatrizFraccionesEstiloLinea', 'vFraccionesCapturadasNominaSem',
     'vLotificacionSuelasPlantas', 'vEstiloFraccionNomina', 'vMaterialSemanaProduccionEstilo',
     'vConciliaFabricaProduccion', 'vConRelControlesXMaquila', 'vManoObraDirecta',
-    'vParesAsignadosMaqSemGen', 'vAvanceProduccion', 'vAvanceProduccionSemDia',
+    'vParesAsignadosMaqSemGen', 'vAvanceProduccion',
     'vAvanceProduccionSemDia', 'vAvanceProduccionPorLinea', 'vAvanceProduccionPorDepto',
     'vDiasPromedioEntregaPorCliente', 'vParesEntregadosCalidadXMaq', 'vCostoInventariosProceso',
     'vEtiTrazabilidad', 'vEtiCajasXCliente', 'vEtiZapica', 'vEstatusPedidoXGrupoAgente',

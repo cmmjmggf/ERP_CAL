@@ -81,7 +81,7 @@
             });
             mdlAvanceProduccion.find('#Ano').val(anio_actual);
             mdlAvanceProduccion.find('#Ano').focus().select();
-            
+
         });
         mdlAvanceProduccion.find('#btnExcel').on("click", function () {
 
@@ -134,9 +134,7 @@
                         data: frm
                     }).done(function (data, x, jq) {
                         console.log(data);
-
                         if (data.length > 0) {
-
                             onImprimirReporteFancyAFC(data, function (a, b) {
                                 mdlAvanceProduccion.find('#btnImprimir').attr('disabled', false);
                             });

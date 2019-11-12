@@ -460,19 +460,19 @@
         });
 
         btnAvance.click(function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            btnAvance.attr('disabled', true);
-            $.post('<?php print base_url('ControlPlantilla/onImprimirAvance'); ?>', {
-                DOCUMENTO: Documento.val()
-            }).done(function (data) {
-                if (data.length > 0) {
-                    onImprimirReporteFancyAFC(data, function (a, b) {
-                        btnAvance.attr('disabled', true);
-                    });
-                }
-            }).fail(function (x) {
-                getError(x);
-            });
+//            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+//            btnAvance.attr('disabled', true);
+//            $.post('<?php print base_url('ControlPlantilla/onImprimirAvance'); ?>', {
+//                DOCUMENTO: Documento.val()
+//            }).done(function (data) {
+//                if (data.length > 0) {
+//                    onImprimirReporteFancyAFC(data, function (a, b) {
+//                        btnAvance.attr('disabled', true);
+//                    });
+//                }
+//            }).fail(function (x) {
+//                getError(x);
+//            });
         });
 
         btnImprime.click(function () {

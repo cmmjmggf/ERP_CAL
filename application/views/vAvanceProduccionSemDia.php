@@ -33,7 +33,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-primary" id="btnImprimirSemDia">ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -50,7 +50,8 @@
             });
             mdlAvanceProduccionSemanaDia.find('#Ano').focus();
         });
-        mdlAvanceProduccionSemanaDia.find('#btnImprimir').on("click", function () {
+        mdlAvanceProduccionSemanaDia.find('#btnImprimirSemDia').on("click", function () {
+            mdlAvanceProduccionSemanaDia.find('#btnImprimirSemDia').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlAvanceProduccionSemanaDia.find("#frmCaptura")[0]);
             $.ajax({
@@ -64,29 +65,8 @@
                 console.log(data);
                 if (data.length > 0) {
 
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function (a, b) {
+                        mdlAvanceProduccionSemanaDia.find('#btnImprimirSemDia').attr('disabled', false);
                     });
                 } else {
                     swal({
