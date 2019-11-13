@@ -21,6 +21,12 @@
             <div class="col-12 col-sm-4 col-md-4 col-lg-3">
                 <label for="Estilo">Estilo*</label>
                 <select class="form-control form-control-sm required " id="Estilo" name="Estilo" required>
+                    <option></option>
+                    <?php
+                    foreach ($this->db->query("SELECT A.Clave, CONCAT(A.Clave, \" - \", A.Descripcion) AS Estilo FROM estilos AS A where estatus = 'ACTIVO' order by A.Clave ASC ")->result() as $k => $v) {
+                        print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-4 col-md-4 col-lg-3">
@@ -38,7 +44,7 @@
             </div>
 
             <div class="col-6 col-sm-3 col-md-2 col-lg-1 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary captura" id="btnGuardar">
+                <button type="button" class="btn btn-primary btn-sm captura" id="btnGuardar">
                     <i class="fa fa-save"></i> ACEPTAR
                 </button>
             </div>
@@ -89,7 +95,6 @@
         pnlTablero.find("#Maq").focus();
         getLineasPM();
         getRecords();
-
         tblListasPrecioMaquilas.find('tbody').on('click', 'tr', function () {
             tblListasPrecioMaquilas.find("tbody tr").removeClass("success");
             $(this).addClass("success");
@@ -111,7 +116,7 @@
         });
         pnlTablero.find("#Linea").change(function () {
             if ($(this).val()) {
-                getEstilosByLinea($(this).val());
+
                 ListasPrecioMaquilas.column(2).search('^' + $(this).val() + '$', true, false).draw();
             } else {
                 ListasPrecioMaquilas.column(2).search('').draw();
@@ -198,17 +203,7 @@
         });
     }
 
-    function getEstilosByLinea(linea) {
-        pnlTablero.find("[name='Estilo']")[0].selectize.clear(true);
-        pnlTablero.find("[name='Estilo']")[0].selectize.clearOptions();
-        $.getJSON(base_url + 'index.php/FichaTecnica/getEstilosByLinea', {Linea: linea}).done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                pnlTablero.find("#Estilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-    }
+
 
     function getColoresByEstilo(estilo) {
         pnlTablero.find("[name='Color']")[0].selectize.clear(true);
@@ -349,7 +344,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;
