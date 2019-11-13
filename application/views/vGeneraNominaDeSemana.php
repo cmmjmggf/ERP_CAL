@@ -203,6 +203,7 @@
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
+                                btnGeneraGNS.attr('disabled', false);
                                 HoldOn.close();
                             });
                         } else {
@@ -228,6 +229,7 @@
                             getError(x);
                         }).always(function () {
                             HoldOn.close();
+                            btnGeneraGNS.attr('disabled', false);
                         });
                         break;
                 }
@@ -254,6 +256,7 @@
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
+                        btnGeneraGNS.attr('disabled', false);
                         HoldOn.close();
                     });
                 } else {
@@ -283,6 +286,7 @@
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
+                        btnGeneraGNS.attr('disabled', false);
                         HoldOn.close();
                     });
                 }

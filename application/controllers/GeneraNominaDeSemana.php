@@ -36,21 +36,18 @@ class GeneraNominaDeSemana extends CI_Controller {
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
-            
+            $DF = "DELETE FROM ";
             /* ELIMINAR EN PRENOMINA */
-            $this->db->where('numsem', $x['SEMANA'])
-                    ->where('año', $x['ANIO'])
-                    ->where_not_in('registro', 999)
-                    ->delete('prenomina');
+//            $pn = $this->db->query("SELECT * FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
+//            print_r($pn);
+            $this->db->query("$DF prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro  <> 999");
             /* ELIMINAR EN PRENOMINAL */
-            $this->db->where('numsem', $x['SEMANA'])
-                    ->where('año', $x['ANIO'])
-                    ->where_not_in('registro', 999)
-                    ->delete('prenominal');
-            /* ELIMINAR EN PRESTAMOSPAG */
-            $this->db->where('sem', $x['SEMANA'])
-                    ->where('año', $x['ANIO'])
-                    ->delete('prestamospag');
+//            $pnl = $this->db->query("SELECT * FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
+//            print_r($pnl);
+            $this->db->query("$DF prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999");
+            
+            /* ELIMINAR EN PRESTAMOSPAG */  
+            $this->db->query("$DF prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}"); 
 
             foreach ($empleados as $k => $v) {
 
@@ -83,7 +80,9 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 1.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
-                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero); 
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
@@ -129,7 +128,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 2.5 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
-                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL_DESTAJO)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
@@ -161,7 +161,9 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 3.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
-                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero); 
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
@@ -218,7 +220,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
-                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL_DESTAJO)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
@@ -253,11 +256,11 @@ class GeneraNominaDeSemana extends CI_Controller {
                 /* CALCULAR SI TIENE O NO ISR */
                 $this->onISR($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
             }
-            /*ELMINA AL TERMINAR*/
-            
+            /* ELMINA AL TERMINAR */
+
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
-            
+
             /* OBTENER REPORTES */
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -532,7 +535,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $reports = array();
 
             /* 1. REPORTE DE PRENOMINA COMPLETO */
-                $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
+            $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
             $jc->setFilename('GenNomDeSem_' . Date('his'));
             $jc->setDocumentformat('pdf');
             $reports['1UNO'] = $jc->getReport();
@@ -965,7 +968,7 @@ class GeneraNominaDeSemana extends CI_Controller {
     }
 
     public function onNominaPreliminaresPespunte($ANIO, $SEM) {
-        try { 
+        try {
             $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
             $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
             $query .= "AND FPN.numfrac BETWEEN 299 AND 300 ";
@@ -1021,7 +1024,6 @@ class GeneraNominaDeSemana extends CI_Controller {
         }
     }
 
-
     public function onNominaMontadoABAdornoAB($ANIO, $SEM) {
         try {
             $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
@@ -1031,7 +1033,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
             $fracciones = $this->db->query($query)->result();
             $celulas = array(
-                991 => 107, 992 => 101, 993 => 101, 1005 => 101, 1006 => 101 
+                991 => 107, 992 => 101, 993 => 101, 1005 => 101, 1006 => 101
             );
             foreach ($fracciones as $k => $v) {
                 if (array_key_exists(intval($v->numeroempleado), $celulas)) {
@@ -1077,4 +1079,5 @@ class GeneraNominaDeSemana extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
 }
