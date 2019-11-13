@@ -429,7 +429,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onISR($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
-            if (floatval($v->Fonacot) > 0) {
+            if (floatval($v->ISR) > 0) {
                 $this->db->insert('prenomina', array(
                     "numsem" => $SEM, "año" => $ANIO,
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,

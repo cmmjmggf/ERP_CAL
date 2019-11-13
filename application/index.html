@@ -11,19 +11,18 @@
 </html>
 
  
- 
+
 ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) - 
-IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)  -  IFNULL(PNL.fierabono),0)AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
 ( CASE
 WHEN E.SueldoFijo > ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) - 
-IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0))  THEN 0 ELSE E.SueldoFijo END ) AS ABONO_FIS,
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)  -  IFNULL(PNL.fierabono),0) THEN 0 ELSE E.SueldoFijo END) AS ABONO_FIS,
 ( CASE
 WHEN ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) - 
-IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)) > E.SueldoFijo THEN
-( ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0))  -  E.SueldoFijo )
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)  -  IFNULL(PNL.fierabono,0)) > E.SueldoFijo THEN
+( ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0))  -  E.SueldoFijo)
 ELSE
-( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0))
-END ) AS ABONO_NOMINA
-
+( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)  -  PNL.fierabono)
+END) AS ABONO_NOMINA
 
 
