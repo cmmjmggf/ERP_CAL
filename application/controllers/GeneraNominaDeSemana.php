@@ -29,10 +29,14 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
+            $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
+            $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
+            $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
+            
             /* ELIMINAR EN PRENOMINA */
             $this->db->where('numsem', $x['SEMANA'])
                     ->where('año', $x['ANIO'])
@@ -57,7 +61,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 if (empty($ASISTENCIAS_SIETE)) {
                     $ASISTENCIAS = 0;
                 } else {
-                    $ASISTENCIAS = $ASISTENCIAS_SIETE[0]->ASISTENCIAS;
+                    $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
+                    $ASISTENCIAS = intval($dias[$ASISTENCIAS_SIETE[0]->ASISTENCIAS]);
                 }
                 /* SALARIOS : FIJO, DESTAJO, DESTAJO (CELULA), FIJO Y DESTAJO */
                 if ($FijoDestajoAmbos === 1 && intval($ASISTENCIAS) > 0) {
@@ -248,6 +253,11 @@ class GeneraNominaDeSemana extends CI_Controller {
                 /* CALCULAR SI TIENE O NO ISR */
                 $this->onISR($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
             }
+            /*ELMINA AL TERMINAR*/
+            
+            $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
+            $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
+            
             /* OBTENER REPORTES */
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -522,7 +532,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $reports = array();
 
             /* 1. REPORTE DE PRENOMINA COMPLETO */
-            $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
+                $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
             $jc->setFilename('GenNomDeSem_' . Date('his'));
             $jc->setDocumentformat('pdf');
             $reports['1UNO'] = $jc->getReport();
@@ -942,7 +952,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->trans_start();
             $this->db->query("DELETE FROM prenomina WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
             $this->db->query("UPDATE prenominal SET precaha = 0 WHERE semana = {$SEM} AND año = {$AÑO} AND tpomov = 0")->result();
-            $this->db->query("DELETE FROM fracpagnominatmp WHERE semana = {$SEM} AND año = {$AÑO}")->result(); 
+            $this->db->query("DELETE FROM fracpagnominatmp WHERE semana = {$SEM} AND año = {$AÑO}")->result();
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
@@ -955,13 +965,11 @@ class GeneraNominaDeSemana extends CI_Controller {
     }
 
     public function onNominaPreliminaresPespunte($ANIO, $SEM) {
-        try {
-            $this->db->where('semana', $SEM)->where('anio', $ANIO)->delete('fracpagnomina');
-            $this->db->where('semana', $SEM)->where('año', $ANIO)->delete('fracpagnominatmp');
+        try { 
             $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
             $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
             $query .= "AND FPN.numfrac BETWEEN 299 AND 300 ";
-            $query .= "AND FPN.numeroempleado BETWEEN 994 AND 1002";
+            $query .= "AND FPN.numeroempleado BETWEEN 899 AND 1003";
             $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
             $fracciones = $this->db->query($query)->result();
             $celulas = array(
@@ -971,7 +979,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             foreach ($fracciones as $k => $v) {
                 if (array_key_exists(intval($v->numeroempleado), $celulas)) {
                     $CEL = $celulas[$v->numeroempleado];
-                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM erp_cal.fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}");
+                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM erp_cal.fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
                     $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
 
                     $this->db->insert('fracpagnominatmp', array(
@@ -991,6 +999,47 @@ class GeneraNominaDeSemana extends CI_Controller {
                     ));
 
                     $this->db->insert('fracpagnomina', array(
+                        "numeroempleado" => 0,
+                        "maquila" => $CEL,
+                        "control" => $v->control,
+                        "estilo" => $v->estilo,
+                        "numfrac" => $fraccion /* 304 */,
+                        "preciofrac" => $precio_fraccion[0]->CostoMO,
+                        "pares" => $v->pares,
+                        "subtot" => $subtotal,
+                        "fecha" => $v->fecha,
+                        "semana" => $v->semana,
+                        "depto" => 120/* 120 = PREL-PESPUNTE */,
+                        "registro" => 0,
+                        "anio" => $v->anio,
+                        "fraccion" => 304
+                    ));
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+
+    public function onNominaMontadoABAdornoAB($ANIO, $SEM) {
+        try {
+            $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
+            $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
+            $query .= "AND FPN.numfrac IN(500,502,600,605,608) ";
+            $query .= "AND FPN.numeroempleado IN(991,992,993,1005,1006)";
+            $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
+            $fracciones = $this->db->query($query)->result();
+            $celulas = array(
+                991 => 107, 992 => 101, 993 => 101, 1005 => 101, 1006 => 101 
+            );
+            foreach ($fracciones as $k => $v) {
+                if (array_key_exists(intval($v->numeroempleado), $celulas)) {
+                    $CEL = $celulas[$v->numeroempleado];
+                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
+                    $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
+
+                    $this->db->insert('fracpagnominatmp', array(
                         "numemp" => 0,
                         "nummaq" => $CEL,
                         "numcont" => $v->control,
@@ -1005,11 +1054,27 @@ class GeneraNominaDeSemana extends CI_Controller {
                         "registro" => 0,
                         "año" => $v->anio
                     ));
+
+                    $this->db->insert('fracpagnomina', array(
+                        "numeroempleado" => 0,
+                        "maquila" => $CEL,
+                        "control" => $v->control,
+                        "estilo" => $v->estilo,
+                        "numfrac" => $fraccion /* 304 */,
+                        "preciofrac" => $precio_fraccion[0]->CostoMO,
+                        "pares" => $v->pares,
+                        "subtot" => $subtotal,
+                        "fecha" => $v->fecha,
+                        "semana" => $v->semana,
+                        "depto" => 120/* 120 = PREL-PESPUNTE */,
+                        "registro" => 0,
+                        "anio" => $v->anio,
+                        "fraccion" => 304
+                    ));
                 }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
-
 }

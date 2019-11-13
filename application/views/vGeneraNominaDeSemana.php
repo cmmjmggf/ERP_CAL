@@ -185,6 +185,7 @@
                 FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
             console.log(parms);
             console.log(parms);
+            btnGeneraGNS.attr('disabled', true);
             if (SemanaGNS.val() && AnioGNS.val()) {
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
@@ -273,7 +274,9 @@
                             }).done(function (a) {
                         console.log(a);
                         if (a.length > 0) {
-                            onImprimirReporteFancyArray(JSON.parse(a));
+                            onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                btnGeneraGNS.attr('disabled', false);
+                            });
                         } else {
                             swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
                         }

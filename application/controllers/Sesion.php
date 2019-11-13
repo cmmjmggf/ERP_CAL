@@ -36,7 +36,7 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'FACTURACION':
-                    $this->load->view('vMenuFacturacion');
+                    $this->load->view('vMenuClientes');
                     $is_valid = true;
                     break;
                 case 'ALMACEN':

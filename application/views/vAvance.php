@@ -888,7 +888,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'ritp',
+            "dom": 'rtp',
             "ajax": {
                 "url": '<?php print base_url('Avance/getAvancesNomina'); ?>',
                 "dataSrc": "",
