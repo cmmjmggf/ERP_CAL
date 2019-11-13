@@ -144,7 +144,7 @@ class Empleados_model extends CI_Model {
                                     . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, E.DepartamentoFisico, E.DepartamentoCostos, "
                                     . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
                                     . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
-                                    . "E.Sueldo, E.IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
+                                    . "E.Sueldo, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
                                     . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
                                     . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
                                     . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado, E.FechaIncapacidad, E.FechaIncapacidadFin, E.MotivoBaja ", false)

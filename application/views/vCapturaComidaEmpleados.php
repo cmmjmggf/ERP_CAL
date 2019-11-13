@@ -64,7 +64,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary selectNotEnter" id="btnAceptarComida">ACEPTAR</button>
+                <button type="button" class="btn btn-primary selectNotEnter" disabled="" id="btnAceptarComida">ACEPTAR</button>
                 <button type="button" class="btn btn-info selectNotEnter" id="btnVerEmpleadosComidas">EMPLEADOS</button>
                 <button type="button" class="btn btn-secondary selectNotEnter" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
@@ -104,31 +104,40 @@
                 }
             });
         });
-        mdlCapturaComidaEmpleados.find("#AnoComida").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    mdlCapturaComidaEmpleados.find("#AnoComida").val("");
-                    mdlCapturaComidaEmpleados.find("#AnoComida").focus();
-                });
-            } else {
-
-            }
-        });
-        mdlCapturaComidaEmpleados.find("#SemComida").keydown(function (e) {
+        mdlCapturaComidaEmpleados.find("#AnoComida").keypress(function (e) {
             if (e.keyCode === 13) {
-                var ano = mdlCapturaComidaEmpleados.find("#AnoComida");
-                onComprobarSemanasNomina($(this), ano.val());
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        mdlCapturaComidaEmpleados.find("#AnoComida").val("");
+                        mdlCapturaComidaEmpleados.find("#AnoComida").focus();
+                    });
+                } else {
+                    mdlCapturaComidaEmpleados.find("#SemComida").focus().select();
+                }
             }
         });
-        mdlCapturaComidaEmpleados.find('#EmpleadoComida').keydown(function (e) {
+        mdlCapturaComidaEmpleados.find("#SemComida").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var ano = mdlCapturaComidaEmpleados.find("#AnoComida");
+                    onComprobarSemanasNominaComidas($(this), ano.val());
+                }
+            }
+        });
+        mdlCapturaComidaEmpleados.find("#PrecioComida").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    mdlCapturaComidaEmpleados.find('#EmpleadoComida').focus().select();
+                }
+            }
+        });
+        mdlCapturaComidaEmpleados.find('#EmpleadoComida').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtempl = $(this).val();
                 if (txtempl) {
@@ -156,11 +165,12 @@
             }
         });
 
-        mdlCapturaComidaEmpleados.find("#NoComidas").keydown(function (e) {
+        mdlCapturaComidaEmpleados.find("#NoComidas").keypress(function (e) {
 
             if ($(this).val()) {
                 if (e.keyCode === 13) {
                     if (parseInt($(this).val()) > 0 && parseInt($(this).val()) < 6) {
+                        mdlCapturaComidaEmpleados.find('#btnAceptarComida').attr('disabled', false);
                         mdlCapturaComidaEmpleados.find("#btnAceptarComida").focus();
                     } else {
                         mdlCapturaComidaEmpleados.find("#NoComidas").val("");
@@ -174,7 +184,7 @@
                 hideSelected: false,
                 openOnFocus: false
             });
-            handleEnterDiv(mdlCapturaComidaEmpleados);
+            //handleEnterDiv(mdlCapturaComidaEmpleados);
             validacionSelectPorContenedor(mdlCapturaComidaEmpleados);
             mdlCapturaComidaEmpleados.find("input").not('#SemComida').val("");
             $.each(mdlCapturaComidaEmpleados.find("select"), function (k, v) {
@@ -214,6 +224,7 @@
         });
 
         mdlCapturaComidaEmpleados.find('#btnAceptarComida').on("click", function () {
+            mdlCapturaComidaEmpleados.find('#btnAceptarComida').attr('disabled', true);
             isValid('mdlCapturaComidaEmpleados');
             if (valido) {
                 var empleado = mdlCapturaComidaEmpleados.find("#EmpleadoComida").val();
@@ -364,12 +375,12 @@
         });
     }
 
-    function onComprobarSemanasNomina(v, ano) {
+    function onComprobarSemanasNominaComidas(v, ano) {
         //Valida que esté creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
                 //Valida que no esté cerrada la semana en nomina
-
+                mdlCapturaComidaEmpleados.find("#PrecioComida").focus().select();
             } else {
                 swal({
                     title: "ATENCIÓN",

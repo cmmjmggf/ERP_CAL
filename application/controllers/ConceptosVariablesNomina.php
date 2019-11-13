@@ -172,6 +172,7 @@ class ConceptosVariablesNomina extends CI_Controller {
             if (!empty($PN)) {
                 $this->db->where('numemp', $x->post('Empleado'))->where('numsem', $x->post('Sem'))->where('año', $x->post('Ano')->where('numcon', $x->post('Concepto')));
                 $this->db->update("prenomina", array(
+                    'registro' => 999,
                     'tpcon' => ($x->post('tpcon') === '1') ? $x->post('tpcon') : 0,
                     'tpcond' => ($x->post('tpcon') === '2') ? $x->post('tpcon') : 0,
                     'importe' => ($x->post('tpcon') === '1') ? $x->post('Importe') : 0,
@@ -206,6 +207,7 @@ class ConceptosVariablesNomina extends CI_Controller {
                 $this->db->set('diasemp', $x->post('diasemp'));
                 $this->db->set('tpomov', 1);
                 $this->db->set('status', 1);
+                $this->db->set('registro', 999);
                 $this->db->set('depto', $x->post('deptoemp'));
                 $this->db->set('año', $x->post('Ano'));
 

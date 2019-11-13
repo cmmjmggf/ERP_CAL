@@ -243,6 +243,10 @@
         init();
         handleEnter();
 
+        btnGeneralListaPrecios.click(function () {
+            $('#mdlGeneraPreciosMaquila').modal('show');
+        });
+
         btnBuscarControl.click(function () {
             swal({
                 title: 'BÚSQUEDA X CONTROL',
@@ -535,6 +539,7 @@
             }
         });
         btnAceptar.click(function () {
+            btnAceptar.attr('disabled', true);
             var precio = pnlTablero.find('#Precio').val();
             if (Maquila.val() !== '98') { //Si la maquila no es la 98 hace la validación del precio
                 if (parseFloat(precio) > 0) {
@@ -548,7 +553,7 @@
                         closeOnEsc: false
                     }).then((action) => {
                         if (action) {
-
+                            btnAceptar.attr('disabled', false);
                         }
                     });
                 }
@@ -767,6 +772,7 @@
                                 pnlTablero.find("#Defecto")[0].selectize.clear(true);
                                 pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
                                 pnlTablero.find('#Control').focus();
+                                btnAceptar.attr('disabled', false);
                             }).fail(function (x, y, z) {
                                 getError(x);
                             });

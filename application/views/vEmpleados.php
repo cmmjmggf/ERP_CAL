@@ -317,10 +317,6 @@
                                         <input type="text" id="IMSS" name="IMSS" class="form-control form-control-sm numbersOnly" required="">
                                     </div>
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                        <label for="Fierabono" >Fierabono*</label>
-                                        <input type="text" id="Fierabono" name="Fierabono" class="form-control form-control-sm numbersOnly">
-                                    </div>
-                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="Infonavit" >Infonavit*</label>
                                         <input type="text" id="Infonavit" name="Infonavit" class="form-control form-control-sm numbersOnly" required="">
                                     </div>
@@ -371,6 +367,14 @@
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="AbonoZap" >Abono zap*</label>
                                         <input type="text" id="AbonoZap" name="AbonoZap" class="form-control form-control-sm numbersOnly">
+                                    </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="Fierabono" >Fierabono*</label>
+                                        <input type="text" id="Fierabono" name="Fierabono" class="form-control form-control-sm numbersOnly">
+                                    </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="Fierabono" >Abono Fiera B*</label>
+                                        <input type="text" id="FieraBonoPagos" name="FieraBonoPagos" class="form-control form-control-sm numbersOnly">
                                     </div>
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="Fonacot" >Fonacot*</label>

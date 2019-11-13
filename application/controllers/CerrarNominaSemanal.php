@@ -77,6 +77,28 @@ class CerrarNominaSemanal extends CI_Controller {
                     }
                 }
             }
+            /*             * ************FIERABONOS *************** */
+            //Obtenemos el personal con prestamos
+            $query_personal_fierabono = "SELECT Numero,Fierabono,FieraBonoPagos FROM empleados where  Fierabono >0 order by numero;";
+            $Personalfierabono = $this->db->query($query_personal_fierabono)->result();
+
+            if (!empty($Personalfierabono)) {
+                //Iteramos en los registros para hacer el insert/update
+                foreach ($Personalfierabono as $P) {
+                    $numempzt = $P->Numero;
+                    $fierabono = $P->Fierabono;
+                    $fierabonopagos = $P->FieraBonoPagos;
+
+                    if (intval($fierabonopagos) === 1) {//Si es el último pago actualiza todo a 0
+                        $this->db->query("update empleados set Fierabono = 0 , FieraBonoPagos= 0   where numero =  $numempzt ");
+                    } else if (intval($fierabonopagos) > 1) {//Si hay mas abonos recalcula el saldo y descuenta un pago
+                        $importe = floatval($fierabono) / floatval($fierabonopagos);
+                        $saldo = floatval($fierabono) - $importe;
+                        $abonos = floatval($fierabonopagos) - 1;
+                        $this->db->query("update empleados set Fierabono = $saldo , FieraBonoPagos= $abonos   where numero =  $numempzt ");
+                    }
+                }
+            }
 
             /*             * ***************** ACTUALIZA ESTATUS ************* */
             //Actualizamos toda la prenomina A STATUS 2 si todo OK si no mandamos a cliente error
