@@ -45,10 +45,12 @@ class GeneraNominaDeSemana extends CI_Controller {
 //            $pnl = $this->db->query("SELECT * FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
 //            print_r($pnl);
             $this->db->query("$DF prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999");
-            
-            /* ELIMINAR EN PRESTAMOSPAG */  
-            $this->db->query("$DF prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}"); 
 
+            /* ELIMINAR EN PRESTAMOSPAG */
+            $this->db->query("$DF prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
+
+            $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
+            
             foreach ($empleados as $k => $v) {
 
                 $FijoDestajoAmbos = intval($v->FijoDestajoAmbos);
@@ -58,8 +60,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 if (empty($ASISTENCIAS_SIETE)) {
                     $ASISTENCIAS = 0;
                 } else {
-                    $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
-                    $ASISTENCIAS = intval($dias[$ASISTENCIAS_SIETE[0]->ASISTENCIAS]);
+                    $ASISTENCIAS = intval($dias[intval($ASISTENCIAS_SIETE[0]->ASISTENCIAS)]);
                 }
                 /* SALARIOS : FIJO, DESTAJO, DESTAJO (CELULA), FIJO Y DESTAJO */
                 if ($FijoDestajoAmbos === 1 && intval($ASISTENCIAS) > 0) {
