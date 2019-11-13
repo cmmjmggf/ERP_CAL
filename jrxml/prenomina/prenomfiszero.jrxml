@@ -16,18 +16,21 @@
 IFNULL(D.Clave,999) AS CLAVE, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
 E.Numero AS CLAVE_EMPLEADO,
 CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_EMPLEADO, (CASE WHEN E.TBanamex = 0 THEN "" ELSE E.TBanamex END) AS CUENTA,
-(PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
-PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
-(CASE
-WHEN E.SueldoFijo > (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
-PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)  THEN 0 ELSE E.SueldoFijo END) AS ABONO_FIS,
-(CASE
-WHEN (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
-PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) > E.SueldoFijo THEN
-((PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1) - E.SueldoFijo)
+
+
+( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0)) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
+( CASE
+WHEN E.SueldoFijo > ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0))  THEN 0 ELSE E.SueldoFijo END ) AS ABONO_FIS,
+( CASE
+WHEN ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)-  IFNULL(PNL.fierabono,0)) > E.SueldoFijo THEN
+( ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0))  -  E.SueldoFijo )
 ELSE
-(PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)
-END) AS ABONO_NOMINA
+( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -  IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0))
+END ) AS ABONO_NOMINA
+
 
 FROM empleados AS E LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
 ON E.Numero = PNL.numemp

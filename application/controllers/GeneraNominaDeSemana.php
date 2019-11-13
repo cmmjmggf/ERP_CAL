@@ -34,8 +34,8 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
             $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
-            $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
-            
+            $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1) AND E.Numero = 2808')->result();
+
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
             $DF = "DELETE FROM ";
             /* ELIMINAR EN PRENOMINA */
@@ -51,7 +51,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->query("$DF prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
 
             $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
-            
+
             foreach ($empleados as $k => $v) {
 
                 $FijoDestajoAmbos = intval($v->FijoDestajoAmbos);
@@ -334,6 +334,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
+                $this->db->set('zapper', $v->Comida)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -385,18 +387,19 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onFieraBono($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
             if (floatval($v->Fierabono) > 0) {
+                $importe_fierabono = (floatval($v->Fierabono) / intval($v->FieraBonoPagos));
                 $this->db->insert('prenomina', array(
                     "numsem" => $SEM, "año" => $ANIO,
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 60 /* 60 FIERABONO */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Fierabono, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $importe_fierabono, "fecha" => Date('Y-m-d h:i:s'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
-//                $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
-//                ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                $this->db->set('fierabono', $importe_fierabono)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -448,18 +451,19 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onZapatosTienda($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
             if (floatval($v->ZapatosTDA) > 0) {
+                $importe_zapatostiendas = (floatval($v->ZapatosTDA) / intval($v->AbonoZap));
                 $this->db->insert('prenomina', array(
                     "numsem" => $SEM, "año" => $ANIO,
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 76 /* 76 UNIFORMES/TIENDAS */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->ZapatosTDA, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $importe_zapatostiendas, "fecha" => Date('Y-m-d h:i:s'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
 //                ID, numsem, año, numemp, diasemp, vtazap, zapper
-//                $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
-//                ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                $this->db->set('vtazap', $importe_zapatostiendas)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomlt" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
 	<property name="ireport.zoom" value="2.853116706110129"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="1377"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -15,7 +15,9 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-PNL.ID, PNL.numsem, PNL.año, PNL.numemp, PNL.diasemp, PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao, PNL.vtazap, PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
+PNL.ID, PNL.numsem, PNL.año, PNL.numemp, PNL.diasemp, PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao,
+(IFNULL(PNL.vtazap,0) + IFNULL(PNL.fierabono,0)) AS vtazap,
+	PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
 IFNULL(D.Clave,999) AS NUMDEP, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
 CONCAT(E.PrimerNombre,' ',
 (CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),' ',
@@ -26,16 +28,14 @@ E.Celula AS CELULA, E.CelulaPorcentaje AS CELULA_PORCENTAJE,
 WHEN E.FijoDestajoAmbos = 1 THEN E.Sueldo
 WHEN E.FijoDestajoAmbos = 3 THEN E.Sueldo
 ELSE 0 END) AS SAL_DI,
-(PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1) AS PERCEPCIONES,
+(IFNULL(PNL.salario,0) + IFNULL(PNL.salariod,0) + IFNULL(PNL.horext,0) + IFNULL(PNL.otrper,0) + IFNULL(PNL.otrper1,0)) AS PERCEPCIONES,
 
 (
-PNL.infon + PNL.imss + PNL.impu + PNL.precaha + PNL.cajhao + PNL.vtazap + PNL.zapper + PNL.fune + PNL.cargo + PNL.fonac + PNL.otrde + PNL.otrde1
+IFNULL(PNL.infon,0) + IFNULL(PNL.imss,0) + IFNULL(PNL.impu,0) + IFNULL(PNL.precaha,0) + IFNULL(PNL.cajhao,0) + IFNULL(PNL.vtazap,0) +IFNULL(PNL.fierabono,0) + IFNULL(PNL.zapper,0) + IFNULL(PNL.fune,0) + IFNULL(PNL.cargo,0) + IFNULL(PNL.fonac,0) + IFNULL(PNL.otrde,0) + IFNULL(PNL.otrde1,0)
 ) AS TOTAL_DEDUCCIONES,
 (
-PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1
+IFNULL(PNL.salario,0) + IFNULL(PNL.salariod,0) + IFNULL(PNL.horext,0) + IFNULL(PNL.otrper,0) + IFNULL(PNL.otrper1,0) - IFNULL(PNL.infon,0) - IFNULL(PNL.imss,0) - IFNULL(PNL.impu,0) - IFNULL(PNL.precaha,0) - IFNULL(PNL.cajhao,0) - IFNULL(PNL.vtazap,0) - IFNULL(PNL.zapper,0) - IFNULL(PNL.fune,0) - IFNULL(PNL.cargo,0) - IFNULL(PNL.fonac,0) - IFNULL(PNL.otrde,0) - IFNULL(PNL.otrde1,0)-IFNULL(PNL.fierabono,0)
 ) AS NETO
-
-
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
 WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}
 ORDER BY ABS(NUMDEP) ASC]]>

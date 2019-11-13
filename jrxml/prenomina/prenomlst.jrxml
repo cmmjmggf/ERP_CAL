@@ -15,7 +15,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-PNL.ID, PNL.numsem, PNL.año, PNL.numemp, PNL.diasemp, PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao, PNL.vtazap, PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
+PNL.ID, PNL.numsem, PNL.año, PNL.numemp, PNL.diasemp, PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao, (IFNULL(PNL.vtazap,0) + IFNULL(PNL.fierabono,0)) AS vtazap, PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
 
 IFNULL(D.Clave,999) AS NUMDEP, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
 CONCAT(E.PrimerNombre,' ',
@@ -30,15 +30,15 @@ ELSE 0 END) AS SAL_DI,
 (PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1) AS PERCEPCIONES,
 
 (
-PNL.infon + PNL.imss + PNL.impu + PNL.precaha + PNL.cajhao + PNL.vtazap + PNL.zapper + PNL.fune + PNL.cargo + PNL.fonac + PNL.otrde + PNL.otrde1
+IFNULL(PNL.infon,0)+ IFNULL(PNL.imss,0)+ IFNULL(PNL.impu,0)+ IFNULL(PNL.precaha,0)+ IFNULL(PNL.cajhao,0)+ IFNULL(PNL.vtazap,0)+ IFNULL(PNL.zapper,0)+ IFNULL(PNL.fune,0)+ IFNULL(PNL.cargo,0)+ IFNULL(PNL.fonac,0)+ IFNULL(PNL.otrde,0)+ IFNULL(PNL.otrde1,0)+IFNULL(PNL.fierabono,0)
 ) AS TOTAL_DEDUCCIONES,
 (
-PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap - PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1
+IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0)- IFNULL(PNL.infon,0)- IFNULL(PNL.imss,0)- IFNULL(PNL.impu,0)- IFNULL(PNL.precaha,0)- IFNULL(PNL.cajhao,0)- IFNULL(PNL.vtazap,0)- IFNULL(PNL.zapper,0)- IFNULL(PNL.fune,0)- IFNULL(PNL.cargo,0)- IFNULL(PNL.fonac,0)- IFNULL(PNL.otrde,0)- IFNULL(PNL.otrde1,0)-IFNULL(PNL.fierabono,0)
 ) AS NETO
 
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 2 ORDER BY ABS(NUMDEP) ASC ]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 2 ORDER BY ABS(NUMDEP) ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

@@ -24,7 +24,7 @@ WHEN PNL.diasemp = 4 THEN 5
 WHEN PNL.diasemp = 5 THEN 6
 WHEN PNL.diasemp = 7 THEN 7
 END) AS diasemp,
-PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao, PNL.vtazap, PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
+PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao, (IFNULL(PNL.vtazap,0) + IFNULL(PNL.fierabono,0)) AS vtazap, PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
 IFNULL(D.Clave,999) AS NUMDEP, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
 CONCAT(E.PrimerNombre,' ',
 (CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),' ',
@@ -38,10 +38,10 @@ ELSE 0 END) AS SAL_DI,
 (PNL.salario + PNL.salariod + PNL.horext + PNL.otrper + PNL.otrper1) AS PERCEPCIONES,
 
 (
-IFNULL(PNL.infon,0) + IFNULL(PNL.imss,0) + IFNULL(PNL.impu,0) + IFNULL(PNL.precaha,0) + IFNULL(PNL.cajhao,0) + IFNULL(PNL.vtazap,0) + IFNULL(PNL.zapper,0) + IFNULL(PNL.fune,0) + IFNULL(PNL.cargo,0) + IFNULL(PNL.fonac,0) + IFNULL(PNL.otrde,0) + IFNULL(PNL.otrde1,0)
+IFNULL(PNL.infon,0) + IFNULL(PNL.imss,0) + IFNULL(PNL.impu,0) + IFNULL(PNL.precaha,0) + IFNULL(PNL.cajhao,0) + IFNULL(PNL.vtazap,0)+IFNULL(PNL.fierabono,0) + IFNULL(PNL.zapper,0) + IFNULL(PNL.fune,0) + IFNULL(PNL.cargo,0) + IFNULL(PNL.fonac,0) + IFNULL(PNL.otrde,0) + IFNULL(PNL.otrde1,0)
 ) AS TOTAL_DEDUCCIONES,
 (
-IFNULL(PNL.salario,0) + IFNULL(PNL.salariod,0) + IFNULL(PNL.horext,0) + IFNULL(PNL.otrper,0) + IFNULL(PNL.otrper1,0) - IFNULL(PNL.infon,0) - IFNULL(PNL.imss,0) - IFNULL(PNL.impu,0) - IFNULL(PNL.precaha,0) - IFNULL(PNL.cajhao,0) - IFNULL(PNL.vtazap,0) - IFNULL(PNL.zapper,0) - IFNULL(PNL.fune,0) - IFNULL(PNL.cargo,0) - IFNULL(PNL.fonac,0) - IFNULL(PNL.otrde,0) - IFNULL(PNL.otrde1,0)
+IFNULL(PNL.salario,0) + IFNULL(PNL.salariod,0) + IFNULL(PNL.horext,0) + IFNULL(PNL.otrper,0) + IFNULL(PNL.otrper1,0) - IFNULL(PNL.infon,0) - IFNULL(PNL.imss,0) - IFNULL(PNL.impu,0) - IFNULL(PNL.precaha,0) - IFNULL(PNL.cajhao,0) - IFNULL(PNL.vtazap,0) - IFNULL(PNL.zapper,0) - IFNULL(PNL.fune,0) - IFNULL(PNL.cargo,0) - IFNULL(PNL.fonac,0) - IFNULL(PNL.otrde,0) - IFNULL(PNL.otrde1,0)-IFNULL(PNL.fierabono,0)
 ) AS NETO
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
@@ -407,7 +407,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{otrde1_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{fonac_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="890" y="0" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ccd96fde-d8cb-4f9a-af74-171c096f8180"/>
@@ -503,7 +503,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{fonac_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{otrde1_1}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1223,13 +1223,13 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="797" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2922d730-bfec-4733-bbb8-c09e2f472240">
-					<printWhenExpression><![CDATA[$F{fonac}>0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{otrde1}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fonac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{otrde1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="829" y="0" width="29" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="fbe34a8a-39b1-4769-a4d3-aa9140e91f09">
@@ -1243,13 +1243,13 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="859" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5be8b512-6412-42cf-af93-bf208a5f3600">
-					<printWhenExpression><![CDATA[$F{otrde1}>0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{fonac}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{otrde1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fonac}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="891" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="016b9907-9899-4900-a5c7-a00f798d70a8"/>
