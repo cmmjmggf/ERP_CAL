@@ -35,6 +35,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
+            
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
             $DF = "DELETE FROM ";
             /* ELIMINAR EN PRENOMINA */
@@ -1039,7 +1040,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             foreach ($fracciones as $k => $v) {
                 if (array_key_exists(intval($v->numeroempleado), $celulas)) {
                     $CEL = $celulas[$v->numeroempleado];
-                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
+                    $precio_fraccion = $this->db->query("SELECT FXE.CostoMO, FXE.CostoVTA  FROM fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
                     $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
 
                     $this->db->insert('fracpagnominatmp', array(

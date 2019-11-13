@@ -1,33 +1,50 @@
 <div class="modal fade" id="mdlCargoZapatosFieraBono" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Captura vales de zapato de tiendas a nómina</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fa fa-keyboard"></span> Captura vales de zapato de tiendas a nómina</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-8">
+                <div class="row"> 
+                    <div class="col-7">
                         <label>Empleado</label>
-                        <select id="EmpleadoVZFB" name="EmpleadoVZFB" class="form-control"></select>
+                        <div class="row">  
+                            <div class="col-3"> 
+                                <input id="xEmpleadoVZFB" name="xEmpleadoVZFB" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-9"> 
+                                <select id="EmpleadoVZFB" name="EmpleadoVZFB" class="form-control form-control-sm"></select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <label>1 Vale zapato / 2 FieraBono</label>
+                        <div class="row"> 
+                            <div class="col-4">
+                                <input id="xValeZapatoFieraBono" name="xValeZapatoFieraBono" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-8"> 
+                                <select id="ValeZapatoFieraBono" name="ValeZapatoFieraBono" class="form-control form-control-sm">
+                                    <option></option>
+                                    <option value="1">1 VALE ZAPATO</option>
+                                    <option value="2">2 FIERA BONO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col-3">
+                        <label>Importe</label>
+                        <input type="text" id="ImporteVZFB" name="ImporteVZFB" class="form-control form-control-sm numbersOnly" maxlength="25">
                     </div>
                     <div class="col-4">
-                        <label>1 Vale zapato / 2 FieraBono</label>
-                        <select id="ValeZapatoFieraBono" name="ValeZapatoFieraBono" class="form-control">
-                            <option></option>
-                            <option value="1">1 VALE ZAPATO</option>
-                            <option value="2">2 FIERA BONO</option>
-                        </select>
-                    </div>
-                    <div class="col-6">
-                        <label>Importe</label>
-                        <input type="text" id="ImporteVZFB" name="ImporteVZFB" class="form-control numbersOnly" maxlength="25">
-                    </div>
-                    <div class="col-6">
                         <label>Descontar en cuantos pagos</label>
-                        <input type="text" id="DescuentoPagosVZFB" name="DescuentoPagosVZFB" class="form-control numbersOnly" maxlength="4">
+                        <input type="text" id="DescuentoPagosVZFB" name="DescuentoPagosVZFB" class="form-control form-control-sm numbersOnly" maxlength="4">
+                    </div>
+                    <div class="col-2 mt-4">
+                        <button type="button" class="btn btn-info btn-sm" id="btnGuardarValeFiera"><span class="fa fa-save"></span> GUARDAR</button>
                     </div>
                 </div>
                 <div class="w-100 text-center my-2">
@@ -47,28 +64,91 @@
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnGuardarValeFiera">GUARDAR</button>
-            </div>
+            </div> 
         </div>
     </div>
 </div>
 <script>
     var mdlCargoZapatosFieraBono = $("#mdlCargoZapatosFieraBono"),
-            EmpleadoVZFB = mdlCargoZapatosFieraBono.find("#EmpleadoVZFB"), ValesVZFB,
+            xEmpleadoVZFB = mdlCargoZapatosFieraBono.find("#xEmpleadoVZFB"),
+            EmpleadoVZFB = mdlCargoZapatosFieraBono.find("#EmpleadoVZFB"),
+            ValesVZFB,
             tblValesVZFB = mdlCargoZapatosFieraBono.find("#tblValesVZFB"),
             ValeZapatoFieraBono = mdlCargoZapatosFieraBono.find("#ValeZapatoFieraBono"),
+            xValeZapatoFieraBono = mdlCargoZapatosFieraBono.find("#xValeZapatoFieraBono"),
             btnGuardarValeFiera = mdlCargoZapatosFieraBono.find("#btnGuardarValeFiera"),
             ImporteVZFB = mdlCargoZapatosFieraBono.find("#ImporteVZFB"),
             DescuentoPagosVZFB = mdlCargoZapatosFieraBono.find("#DescuentoPagosVZFB");
 
     $(document).ready(function () {
 
+        ValeZapatoFieraBono.change(function () {
+            if ($(this).val()) {
+                xValeZapatoFieraBono.val($(this).val());
+                ValeZapatoFieraBono[0].selectize.disable();
+                ImporteVZFB.focus();
+            } else {
+                xValeZapatoFieraBono.val('');
+            }
+        });
+
+        xValeZapatoFieraBono.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xValeZapatoFieraBono.val()) {
+                    ValeZapatoFieraBono[0].selectize.setValue(xValeZapatoFieraBono.val());
+                    if (ValeZapatoFieraBono.val()) {
+                        ValeZapatoFieraBono[0].selectize.disable();
+                    } else {
+                        iMsg('NUMERO DE DOCUMENTO INVÁLIDO, INTENTE CON OTRO', 'w', function () {
+                            xValeZapatoFieraBono.focus().select();
+                        });
+                    }
+                } else {
+                    ValeZapatoFieraBono[0].selectize.clear(true);
+                    ValeZapatoFieraBono[0].selectize.enable();
+                }
+            } else {
+                ValeZapatoFieraBono[0].selectize.clear(true);
+                ValeZapatoFieraBono[0].selectize.enable();
+            }
+        });
+
+        EmpleadoVZFB.change(function () {
+            if ($(this).val()) {
+                xEmpleadoVZFB.val($(this).val());
+                EmpleadoVZFB[0].selectize.disable();
+                ValeZapatoFieraBono[0].selectize.focus();
+            } else {
+                xEmpleadoVZFB.val('');
+            }
+        });
+
+        xEmpleadoVZFB.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xEmpleadoVZFB.val()) {
+                    EmpleadoVZFB[0].selectize.setValue(xEmpleadoVZFB.val());
+                    if (EmpleadoVZFB.val()) {
+                        EmpleadoVZFB[0].selectize.disable();
+                    } else {
+                        iMsg('NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', 'w', function () {
+                            xEmpleadoVZFB.focus().select();
+                        });
+                    }
+                } else {
+                    EmpleadoVZFB[0].selectize.clear(true);
+                    EmpleadoVZFB[0].selectize.enable();
+                }
+            } else {
+                EmpleadoVZFB[0].selectize.clear(true);
+                EmpleadoVZFB[0].selectize.enable();
+            }
+        });
 
         btnGuardarValeFiera.click(function () {
             if (EmpleadoVZFB.val() && ValeZapatoFieraBono.val() &&
                     ImporteVZFB.val() && DescuentoPagosVZFB.val()) {
+                EmpleadoVZFB[0].selectize.enable();
+                ValeZapatoFieraBono[0].selectize.enable();
                 HoldOn.open({
                     theme: 'sk-rect',
                     message: 'Espere por favor...'
@@ -96,8 +176,7 @@
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL EMPLEADO, TIPO DE DOCUMENTO, IMPORTE Y LOS PAGOS', 'warning').then((value) => {
-                    EmpleadoVZFB[0].selectize.focus();
-                    EmpleadoVZFB[0].selectize.open();
+                    xEmpleadoVZFB.focus(); 
                 });
             }
         });
@@ -166,7 +245,7 @@
                 ],
                 initComplete: function () {
                     HoldOn.close();
-                    EmpleadoVZFB[0].selectize.focus();
+                    xEmpleadoVZFB.focus();
                 }
             });
         }

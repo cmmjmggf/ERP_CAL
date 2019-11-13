@@ -44,7 +44,9 @@
                     <div class="col-12 mt-4">
                         <div class="alert alert-dismissible alert-primary">
                             <strong>
-                                Nota. <br>Para semana de vacaciones debe ser año actual sem-99. <br>Para semana de aguinaldo debe ser año actual y sem-98
+                                Nota. 
+                                <br>Para semana de vacaciones debe ser año actual semana 99. 
+                                <br>Para semana de aguinaldo debe ser año actual y semana 98.
                             </strong>
                         </div>
                     </div>
@@ -78,11 +80,11 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-primary btn-sm btn-block" id="btnGeneraGNS">
-                            <span class="fa fa-cogs"></span> GENERA</button>
+                        <button type="button" class="btn btn-info btn-sm btn-block" id="btnGeneraGNS">
+                            <span class="fa fa-print"></span> GENERA</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-default btn-sm btn-block"  data-dismiss="modal"id="btnSalirGNS">
+                        <button type="button" class="btn btn-default btn-sm btn-block" style="background-color: #000; color:  #ffffff;" data-dismiss="modal"id="btnSalirGNS">
                             <span class="fa fa-times-circle"></span> SALIR</button>
                     </div>
                     <div class="w-100 my-2"></div>
