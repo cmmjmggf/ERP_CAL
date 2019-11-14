@@ -34,7 +34,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
 //            $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
 //            exit(0);
-//            
+//
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
 
@@ -84,7 +84,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 1.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
-//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero); 
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
                     $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
 
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
@@ -172,7 +172,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                     /* 3.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
-//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero); 
+//                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
                     $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
 
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
@@ -514,7 +514,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onExisteEnPrenomina($ANIO, $SEMANA, $EMP, $TP) {
         try {
-            return $this->db->query("SELECT PN.* FROM prenomina AS PN WHERE PN.año ={$ANIO} AND PN.numsem = {$SEMANA} AND PN.numemp = {$EMP} AND PN.tpcon ={$TP}")->result();
+            return $this->db->query("SELECT PN.* FROM prenomina AS PN WHERE PN.año ={$ANIO} AND PN.numsem = {$SEMANA} AND PN.numemp = {$EMP} AND PN.numcon ={$TP}")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1056,14 +1056,14 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                1006	200	200	PEGADO
 
             $MONTADOAB_ADORNOAB_PEGADO = $this->db->query("
-SELECT (SELECT SUM(IFNULL(F.subtot,0)) 
+SELECT (SELECT SUM(IFNULL(F.subtot,0))
 FROM fracpagnomina AS F WHERE F.numeroempleado = E.Numero AND F.semana = {$SEM}) AS TOTAL_X_CEL,
-(CASE 
-WHEN E.Numero = 991 THEN 190 WHEN E.Numero = 992 THEN 210 
-WHEN E.Numero = 993 THEN 180 WHEN E.Numero = 1005 THEN 220 
-WHEN E.Numero = 1006 THEN 200  
-END) AS DEPTO, E.DepartamentoFisico AS DEPTOF, 
-E.Busqueda AS CELULA_MONTADO_ADORNO_PEGADO FROM empleados AS E  
+(CASE
+WHEN E.Numero = 991 THEN 190 WHEN E.Numero = 992 THEN 210
+WHEN E.Numero = 993 THEN 180 WHEN E.Numero = 1005 THEN 220
+WHEN E.Numero = 1006 THEN 200
+END) AS DEPTO, E.DepartamentoFisico AS DEPTOF,
+E.Busqueda AS CELULA_MONTADO_ADORNO_PEGADO FROM empleados AS E
 WHERE E.Numero IN(991,992,993,1005,1006)")->result();
 
             foreach ($MONTADOAB_ADORNOAB_PEGADO as $k => $v) {
