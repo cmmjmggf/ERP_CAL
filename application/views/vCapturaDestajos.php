@@ -123,7 +123,7 @@
                     <input type="checkbox" class="custom-control-input selectNotEnter" id="cImprimeSemCompletaDest" >
                     <label class="custom-control-label text-info labelCheck" for="cImprimeSemCompletaDest">Imprime toda la semana</label>
                 </div>
-                <button type="button" id="btnAceptar" class="btn btn-primary btn-sm selectNotEnter">
+                <button type="button" id="btnAceptar" disabled="" class="btn btn-primary btn-sm selectNotEnter">
                     <span class="fa fa-check"></span> ACEPTAR
                 </button>
                 <button type="button" class="btn btn-success btn-sm selectNotEnter" id="btnImprimir">
@@ -331,17 +331,18 @@
                         }
                     });
                 } else {//Valida que no esté en blanco el campo
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "DEBES DE CAPTURAR UN # DE CONTROL ",
-                        icon: "warning",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-                        if (action) {
-                            Control.val('').focus();
-                        }
-                    });
+                    Control.val('').focus();
+//                    swal({
+//                        title: "ATENCIÓN",
+//                        text: "DEBES DE CAPTURAR UN # DE CONTROL ",
+//                        icon: "warning",
+//                        closeOnClickOutside: false,
+//                        closeOnEsc: false
+//                    }).then((action) => {
+//                        if (action) {
+//                            Control.val('').focus();
+//                        }
+//                    });
                 }
             }
         });
@@ -365,18 +366,35 @@
                 }
             }
         });
-        btnAceptar.click(function () {
-            var sem = pnlTablero.find("#Sem");
-            var ano = pnlTablero.find("#Ano").val();
-            isValid('pnlTablero');
-            if (valido) {
-                //Valida que no esté cerrada la semana en nomina
-                $.getJSON(master_url + 'onVerificarSemanaNominaCerrada', {Sem: sem.val(), Ano: ano}).done(function (data) {
-                    if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
-                        if (parseInt(data[0].status) === 2) {
+
+        var handler = function (e) {
+            if (Control.val()) {
+                btnAceptar.off("click");
+                e.preventDefault();
+                btnAceptar.prop('disabled', true);
+                isValid('pnlTablero');
+                if (valido) {
+                    //inserta nuevo
+                    var sem = pnlTablero.find("#Sem").val();
+                    var ano = pnlTablero.find("#Ano").val();
+                    var frm = new FormData(pnlTablero.find("#frmCapturaDestajo")[0]);
+                    frm.append('DeptoEmp', DeptoEmp);
+                    frm.append('Sem', sem);
+                    frm.append('Ano', ano);
+
+                    $.ajax(master_url + 'onAgregar', {
+                        type: "POST",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: frm
+                    }).done(function (data) {
+                        console.log(data);
+                        btnAceptar.on('click', handler);
+                        if (data === '1') {
                             swal({
                                 title: "ATENCIÓN",
-                                text: "LA NÓMINA DE LA SEMANA " + sem.val() + " DEL " + ano + " " + "ESTÁ CERRADA",
+                                text: "El EMPLEADO//FRACCIÓN//CONTROL YA HA SIDO CAPTURADO",
                                 icon: "warning",
                                 buttons: {
                                     eliminar: {
@@ -388,25 +406,67 @@
                                 switch (value) {
                                     case "aceptar":
                                         swal.close();
-                                        sem.val('');
-                                        sem.focus();
+                                        pnlTablero.find('#sFraccion')[0].selectize.clear(true);
+                                        pnlTablero.find('#Fraccion').focus().val('');
                                         break;
                                 }
                             });
-                        } else {//Sí está pero esta en estatus 1
-                            onAgregar();
+                            return;
                         }
-                    } else {//Aún no existe la nomina, podemos continuar
-                        onAgregar();
-                    }
-                }).fail(function (x, y, z) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                        if (data === '2') {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "LA NÓMINA DE LA SEMANA " + sem + " DEL " + ano + " " + "ESTÁ CERRADA",
+                                icon: "warning",
+                                buttons: {
+                                    eliminar: {
+                                        text: "Aceptar",
+                                        value: "aceptar"
+                                    }
+                                }
+                            }).then((value) => {
+                                switch (value) {
+                                    case "aceptar":
+                                        swal.close();
+                                        pnlTablero.find("#Sem").val('');
+                                        pnlTablero.find("#Sem").focus();
+                                        break;
+                                }
+                            });
+                            return;
+                        } else {//Sí está pero esta en estatus 1
+                            FraccionesNomina.ajax.reload();
+                            pCelula = 0;
+                            DeptoEmp = 0;
+                            ParesPed = 0;
+                            pnlTablero.find("#Estilo").val("");
+                            pnlTablero.find("#Color").val("");
+                            pnlTablero.find("#Pares").val("");
+                            pnlTablero.find("#Precio").val("");
+                            pnlTablero.find("#Subtotal").val("");
+                            //pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                            //pnlTablero.find("#Fraccion").val('');
+                            pnlTablero.find("#EstatusProduccion").html('');
+                            pnlTablero.find("#Control").val('').focus();
+                        }
+
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                        btnAceptar.prop('disabled', false);
+                    });
+
+                } else {
+                    btnAceptar.prop('disabled', false);
+                    swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
+                }
             } else {
-                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
+                Control.focus();
+                return;
             }
-        });
+        };
+
+        btnAceptar.on('click', handler);
+
         btnImprimir.click(function () {
             var ano = pnlTablero.find("#Ano").val();
             var sem = pnlTablero.find("#Sem").val();
@@ -692,40 +752,6 @@
         });
     }
 
-    function onAgregar() {
-        //inserta nuevo
-
-        var frm = new FormData(pnlTablero.find("#frmCapturaDestajo")[0]);
-        frm.append('DeptoEmp', DeptoEmp);
-
-        $.ajax(master_url + 'onAgregar', {
-            type: "POST",
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: frm
-        }).done(function (data) {
-            console.log(data);
-            FraccionesNomina.ajax.reload();
-            pCelula = 0;
-            DeptoEmp = 0;
-            ParesPed = 0;
-            pnlTablero.find("#Estilo").val("");
-            pnlTablero.find("#Color").val("");
-            pnlTablero.find("#Pares").val("");
-            pnlTablero.find("#Precio").val("");
-            pnlTablero.find("#Subtotal").val("");
-            pnlTablero.find("#sFraccion")[0].selectize.clear(true);
-            pnlTablero.find("#Fraccion").val('');
-            pnlTablero.find("#EstatusProduccion").html('');
-            pnlTablero.find("#Control").val('').focus();
-
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-
-    }
-
     function getRecords(ano, sem, empleado) {
         //HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         temp = 0;
@@ -865,6 +891,7 @@
                     var subtot = data[0].Precio * pnlTablero.find("#Pares").val();
                     pnlTablero.find("#Subtotal").val(parseFloat(subtot).toFixed(2));
                 }
+                btnAceptar.prop('disabled', false);
                 btnAceptar.focus();
             } else {
                 swal({

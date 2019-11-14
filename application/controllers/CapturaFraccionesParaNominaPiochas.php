@@ -94,7 +94,9 @@ class CapturaFraccionesParaNominaPiochas extends CI_Controller {
     public function onVerificarEmpleado() {
         try {
             $clave = $this->input->get('Empleado');
-            print json_encode($this->db->query("select numero from empleados where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) or numero between 899 and 1003 ")->result());
+            print json_encode($this->db->query("select numero from empleados "
+                                    . " where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) "
+                                    . " or (numero between 899 and 1003 and numero = $clave ) ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -243,7 +245,19 @@ class CapturaFraccionesParaNominaPiochas extends CI_Controller {
                 'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
                 'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL
             );
-            $this->CapturaFraccionesParaNomina_model->onAgregar($data);
+            if ($x->post('Control') !== '0' && $x->post('Control') !== '') {
+                $stsnom = $this->CapturaFraccionesParaNomina_model->onVerificarSemanaNominaCerrada($this->input->post('Sem'), $this->input->post('Ano'));
+                if (!empty($stsnom)) {
+                    if ($stsnom[0]->status === '2') {
+                        print 2;
+                        exit();
+                    } else if ($stsnom[0]->status === '1') {
+                        $this->CapturaFraccionesParaNomina_model->onAgregar($data);
+                    }
+                } else {
+                    $this->CapturaFraccionesParaNomina_model->onAgregar($data);
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
