@@ -99,7 +99,38 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         try {
             $estilo = $this->input->get('Estilo');
             $numfrac = $this->input->get('Fraccion');
-            print json_encode($this->db->query("select fraccion from fraccionesxestilo where fraccion = $numfrac and estilo = '$estilo' and estatus = 'ACTIVO' ")->result());
+            $pcelula = $this->input->get('PorCel');
+            $pares = $this->input->get('Pares');
+            $control = $this->input->get('Control');
+            $subtot = 0;
+            $response = array();
+            $ExisteFracXEstilo = $this->db->query("select fraccion,CostoMO from fraccionesxestilo where fraccion = $numfrac and estilo = '$estilo' and estatus = 'ACTIVO' ")->result();
+            if (empty($ExisteFracXEstilo)) {//Si no existe el la fraccion por estilo
+                print 1;
+                exit();
+            } else {//Si existe
+                //Valida si tiene precio
+                $PrecioFrac = $ExisteFracXEstilo[0]->CostoMO;
+                $response['precio'] = $PrecioFrac;
+                if (floatval($PrecioFrac) > 0) {//SI TIENE PRECIO MAYOR A 0
+                    $ExisteEnFragPagNomina = $this->db->query("select * from fracpagnomina where control = $control and numfrac = $numfrac ")->result();
+                    if (!empty($ExisteEnFragPagNomina)) {//Ya existe el control cobrado por otro empleado
+                        print 3;
+                        exit();
+                    } else {//si no existe cobrado por alguien mas
+                        if (floatval($pcelula)) {
+                            $subtot = (floatval($pcelula) * $PrecioFrac) * floatval($pares);
+                        } else {
+                            $subtot = $PrecioFrac * floatval($pares);
+                        }
+                        $response['subtot'] = $subtot;
+                        print json_encode($response);
+                    }
+                } else {
+                    print 2;
+                    exit();
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -108,9 +139,9 @@ class CapturaFraccionesParaNomina extends CI_Controller {
     public function onVerificarEmpleado() {
         try {
             $clave = $this->input->get('Empleado');
-            print json_encode($this->db->query("select numero from empleados "
+            print json_encode($this->db->query("select numero, CelulaPorcentaje as pcecula from empleados "
                                     . " where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) "
-                                    . " or (numero between 899 and 1003 and numero = $clave ) ")->result());
+                                    . " or (numero between 899 and 1006 and numero = $clave ) ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

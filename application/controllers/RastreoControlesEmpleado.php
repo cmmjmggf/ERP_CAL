@@ -59,7 +59,7 @@ class RastreoControlesEmpleado extends CI_Controller {
             $clave = $this->input->get('Empleado');
             print json_encode($this->db->query("select numero from empleados "
                                     . " where numero = $clave and altabaja = 1 and FijoDestajoAmbos in (2,3) "
-                                    . " or (numero between 899 and 1003 and numero = $clave ) ")->result());
+                                    . " or (numero between 899 and 1006 and numero = $clave ) ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

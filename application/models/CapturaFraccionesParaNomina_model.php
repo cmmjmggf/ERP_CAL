@@ -205,7 +205,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
             return $this->db->select("CAST(E.numero AS SIGNED ) AS Clave, "
                                     . " CONCAT(E.Busqueda) AS Empleado ")
                             ->from("empleados AS E")->where_in("E.FijoDestajoAmbos", array("2", "3"))->where("E.altabaja", "1")
-                            ->or_where("E.Numero between 899 and 1003", null, false)
+                            ->or_where("E.Numero between 899 and 1006", null, false)
                             ->order_by('Empleado', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {

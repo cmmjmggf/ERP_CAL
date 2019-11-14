@@ -235,23 +235,25 @@
             }
         });
         pnlTablero.find("#sFraccion").change(function () {
-            var Empleado = pnlTablero.find("#Empleado").val();
-            if (Empleado !== '') {
-                pnlTablero.find('#Fraccion').val($(this).val());
-                var estilo = pnlTablero.find("#Estilo").val();
-                getPrecioFraccion(pnlTablero.find("#sFraccion").val(), estilo);
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES DE SELECCIONAR UN EMPLEADO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false
-                }).then((action) => {
-                    if (action) {
-                        pnlTablero.find("#Empleado").focus().select();
-                    }
-                });
+            if ($(this).val()) {
+                var Empleado = pnlTablero.find("#Empleado").val();
+                if (Empleado !== '') {
+                    pnlTablero.find('#Fraccion').val($(this).val());
+                    var estilo = pnlTablero.find("#Estilo").val();
+                    getPrecioFraccion(pnlTablero.find("#sFraccion").val(), estilo);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBES DE SELECCIONAR UN EMPLEADO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        if (action) {
+                            pnlTablero.find("#Empleado").focus().select();
+                        }
+                    });
+                }
             }
         });
 
