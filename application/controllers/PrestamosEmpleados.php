@@ -48,7 +48,21 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPrestamos() {
         try {
-            print json_encode($this->pem->getPrestamos($this->input->get('EMPLEADO')));
+//            print json_encode($this->pem->getPrestamos($this->input->get('EMPLEADO')));
+
+            $x = $this->input->get();
+            $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
+                            . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
+                            . "P.preemp AS PRESTAMO,FORMAT(P.preemp,2) AS PRESTAMO_TEXT, P.aboemp AS ABONO,FORMAT(P.aboemp,2) AS ABONO_TEXT, P.salemp, "
+                            . "P.pesos,P.fecpag,P.sempag")
+                    ->from("prestamos AS P");
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('P.numemp', $x['EMPLEADO']);
+            }
+            if ($x['EMPLEADO'] === '') {
+                $this->db->limit(25);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -56,7 +70,40 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPrestamosConsulta() {
         try {
-            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA'), $this->input->get('EMPLEADO')));
+//            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA'), $this->input->get('EMPLEADO')));
+            $x = $this->input->get();
+            $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
+                            . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
+                            . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
+                            . "P.pesos,P.fecpag,P.sempag")
+                    ->from("prestamos AS P");
+            if ($x['FECHA'] !== '') {
+                $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$x['FECHA']}\" ", null, false);
+            }
+            if ($x['PAGARE'] !== '') {
+                $this->db->where('P.pagare', $x['PAGARE']);
+            }
+            if ($x['EMPLEADO'] !== '') {
+                $this->db->where('P.numemp', $x['EMPLEADO']);
+            }
+            if ($x['PAGARE'] === '' && $x['FECHA'] === '') {
+                $this->db->limit(999);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getAbonado() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("SUM(PP.aboemp) AS ABONADO ", false)->from("prestamospag AS PP");
+            if ($x["EMPLEADO"] !== '') {
+                $this->db->where("PP.numemp", $x["EMPLEADO"]);
+            } 
+            
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
