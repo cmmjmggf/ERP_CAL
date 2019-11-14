@@ -32,7 +32,9 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
-            $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
+//            $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
+//            exit(0);
+//            
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
             $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
 
@@ -105,9 +107,16 @@ class GeneraNominaDeSemana extends CI_Controller {
                     /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
                     $SUELDO_FINAL_DESTAJO = 0;
                     if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
-                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} AND E.Busqueda LIKE '%CELULA%'")->result();
+                        //              Numero, DEPTO, DEPTOF, CELULA_MONTADO_ADORNO_PEGADO
+                        //                991	190	190	CELULA  MONTADO "B"
+                        //                992	210	210	CELULA  ADORNO "A"
+                        //                993	180	180	CELULA  MONTADO "A"
+                        //                1005	220	220	CELULA  ADORNO "B"
+                        //                1006	200	200	PEGADO
+
+                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} AND E.FijoDestajoAmbos = 2 AND E.AltaBaja = 2 AND E.Numero IN(991,992,993,1005,1006)")->result();
                         if (!empty($CELULA)) {
-                            $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                            $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                             $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
                         } else {
                             $SUELDO_FINAL_DESTAJO = 0;
@@ -778,7 +787,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 );
-                
+
                 $this->db->insert('prenomina', $vp);
                 /* GRABA PRE-NOMINA-L */
                 $pnl = array(
@@ -1039,6 +1048,62 @@ class GeneraNominaDeSemana extends CI_Controller {
             $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
             $query .= "AND FPN.numfrac IN(500,502,600,605,608) ";
             $query .= "AND FPN.numeroempleado IN(991,992,993,1005,1006)";
+//              Numero, DEPTO, DEPTOF, CELULA_MONTADO_ADORNO_PEGADO
+//                991	190	190	CELULA  MONTADO "B"
+//                992	210	210	CELULA  ADORNO "A"
+//                993	180	180	CELULA  MONTADO "A"
+//                1005	220	220	CELULA  ADORNO "B"
+//                1006	200	200	PEGADO
+
+            $MONTADOAB_ADORNOAB_PEGADO = $this->db->query("
+SELECT (SELECT SUM(IFNULL(F.subtot,0)) 
+FROM fracpagnomina AS F WHERE F.numeroempleado = E.Numero AND F.semana = {$SEM}) AS TOTAL_X_CEL,
+(CASE 
+WHEN E.Numero = 991 THEN 190 WHEN E.Numero = 992 THEN 210 
+WHEN E.Numero = 993 THEN 180 WHEN E.Numero = 1005 THEN 220 
+WHEN E.Numero = 1006 THEN 200  
+END) AS DEPTO, E.DepartamentoFisico AS DEPTOF, 
+E.Busqueda AS CELULA_MONTADO_ADORNO_PEGADO FROM empleados AS E  
+WHERE E.Numero IN(991,992,993,1005,1006)")->result();
+
+            foreach ($MONTADOAB_ADORNOAB_PEGADO as $k => $v) {
+
+                $this->db->insert('fracpagnominatmp', array(
+                    "numemp" => 0, "nummaq" => $CEL,
+                    "numcont" => $v->control, "numest" => $v->estilo,
+                    "numfrac" => $fraccion /* 304 */,
+                    "prefrac" => $precio_fraccion[0]->CostoMO,
+                    "pares" => $v->pares,
+                    "subtot" => $subtotal,
+                    "fecha" => $v->fecha,
+                    "semana" => $v->semana,
+                    "depto" => 120/* 120 = PREL-PESPUNTE */,
+                    "registro" => 0,
+                    "año" => $v->anio
+                ));
+
+                $this->db->insert('fracpagnomina', array(
+                    "numeroempleado" => 0,
+                    "maquila" => $CEL,
+                    "control" => $v->control,
+                    "estilo" => $v->estilo,
+                    "numfrac" => $fraccion /* 304 */,
+                    "preciofrac" => $precio_fraccion[0]->CostoMO,
+                    "pares" => $v->pares,
+                    "subtot" => $subtotal,
+                    "fecha" => $v->fecha,
+                    "semana" => $v->semana,
+                    "depto" => 120/* 120 = PREL-PESPUNTE */,
+                    "registro" => 0,
+                    "anio" => $v->anio,
+                    "fraccion" => 304
+                ));
+            }
+
+
+
+            exit(0);
+
             $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
             $fracciones = $this->db->query($query)->result();
             $celulas = array(
