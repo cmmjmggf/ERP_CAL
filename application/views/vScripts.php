@@ -31,6 +31,14 @@
             scrolling: "auto"
         }
     };
+    
+    $(document).ready(function () {
+        $('html').find('input.date:not(.notEnter)').addClass('notEnter');
+        $('html').find('input:not(.form-control-sm)').addClass('form-control-sm');
+        $('html').find('select:not(.form-control-sm)').addClass('form-control-sm');
+        $('html').find('button:not(.btn-sm)').addClass('btn-sm');
+    });
+    
     function onOpenWindow(url) {
         onBeep(1);
         $.fancybox.open({
@@ -132,6 +140,7 @@
     shortcut.add("F5", function () {
         location.reload();
     });
+
 
     //Para desactivar la validacion del selectize
     $('html').not(':focus').click(function () {

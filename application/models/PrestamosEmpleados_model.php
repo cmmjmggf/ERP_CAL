@@ -24,8 +24,8 @@ class PrestamosEmpleados_model extends CI_Model {
         try {
             return $this->db->select("E.Numero AS CLAVE, "
                                     . "CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
-                            ->from("empleados AS E")->join('prestamos AS P','E.Numero = P.numemp')
-                    ->where('E.AltaBaja', 1)->get()->result();
+                            ->from("empleados AS E")->join('prestamos AS P', 'E.Numero = P.numemp')
+                            ->where('E.AltaBaja', 1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -47,15 +47,15 @@ class PrestamosEmpleados_model extends CI_Model {
         }
     }
 
-    public function getPrestamosConsulta($PAGARE, $FECHA,$EMPLEADO) {
+    public function getPrestamosConsulta($PAGARE, $FECHA, $EMPLEADO) {
         try {
             $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
                             . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
                             . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
                             . "P.pesos,P.fecpag,P.sempag")
                     ->from("prestamos AS P");
-            if ($FECHA !== '') {  
-                $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$FECHA}\" ",null,false);
+            if ($FECHA !== '') {
+                $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$FECHA}\" ", null, false);
             }
             if ($PAGARE !== '') {
                 $this->db->where('P.pagare', $PAGARE);
@@ -81,6 +81,10 @@ class PrestamosEmpleados_model extends CI_Model {
                     ->from("prestamospag AS PP");
             if ($EMPLEADO !== '') {
                 $this->db->where('PP.numemp', $EMPLEADO);
+            }
+            $this->db->order_by('PP.fecha', 'DESC');
+            if ($EMPLEADO === '') {
+                $this->db->limit(20);
             }
             return $this->db->get()->result();
         } catch (Exception $exc) {

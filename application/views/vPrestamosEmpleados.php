@@ -1,8 +1,8 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body ">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Préstamos a empleados <span class="fa fa-coins"></span></legend>
+                <legend class="float-left"><span class="fa fa-coins"></span> Préstamos a empleados </legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
                 <button type="button" class="btn btn-danger" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
@@ -12,22 +12,36 @@
                 <button type="button" class="btn btn-info" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="bottom" title="Reimprimir"><span class="fa fa-print"></span> REIMPRESIÓN DE PAGARES<br></button>
             </div>
         </div>
-        <div class="card-block mt-4">
-            <div class="row">
+        <div class="card-block ">
+            <div class="row">  
                 <div class="col-10">
                     <label>No.empleado</label>
-                    <select id="Empleado" name="Empleado" class="form-control"></select>
-                </div>
+                    <div class="row">
+                        <div class="col-1">
+                            <input type="text" id="xEmpleado" name="xEmpleado" class="form-control form-control-sm numbersOnly">
+                        </div>
+                        <div class="col-11">
+                            <select id="Empleado" name="Empleado" class="form-control form-control-sm">
+                                <option></option>
+                                <?php
+                                foreach ($this->db->select("E.Numero AS CLAVE, "
+                                                . "CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+                                        ->from("empleados AS E")->where('E.AltaBaja', 1)->get()->result() as $k => $v) {
+                                    print "<option value=\"{$v->CLAVE}\">{$v->EMPLEADO}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div> 
                 <div class="col-2">
                     <!--ULTIMO DIGITO DEL AÑO, MES, DIA,NUMERO DE EMPLEADO-->
                     <label>Pagare No.</label>
                     <input type="text" id="PagareNo" name="PagareNo" class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-1">
-                    <span class="badge badge-danger">
-                        <h6>Ultimo Saldo</h6>
-                    </span>
+                <div class="col-1 mt-4"> 
+                    <h6 class="text-danger font-weight-bold">Ultimo Saldo</h6> 
                 </div>
                 <div class="col-2">
                     <label>Pres.Acum</label>
@@ -45,19 +59,16 @@
                     <label>Semana</label>
                     <input type="text" id="Semana" name="Semana" class="form-control form-control-sm" data-toggle="tooltip" data-placement="bottom" title="SEMANA DE CARACTER INFORMATIVO" readonly="" autocomplete="off">
                 </div>
-                <div class="col-2">
-                    <div class="alert alert-dismissible alert-info">
-                        <strong> % </strong> Interés semanal sobre saldo insolutos.
-                    </div>
+                <div class="col-3"> 
+                    <h6 class="text-danger font-weight-bold"><strong> % </strong> Interés semanal sobre saldo insolutos.</h6> 
+                    <input type="text" id="Interes" name="Interes" value="0" class="form-control form-control-sm font-weight-bold" autocomplete="off" placeholder="0">
                 </div>
-                <div class="col-2">
-                    <input type="text" id="Interes" name="Interes" value="0" class="form-control form-control-sm" autocomplete="off" placeholder="0">
-                </div>
-                <div class="w-100"></div>
-                <div class="col-1">
-                    <span class="badge badge-danger">
-                        <h6>Prestamo nvo</h6>
-                    </span>
+                <div class="w-100 mt-2"></div> 
+                <div class="my-1 w-100">
+                    <hr>
+                </div> 
+                <div class="col-1 mt-2"> 
+                    <h6 class="text-danger font-weight-bold">Prestamo nvo</h6>  
                 </div>
                 <div class="col-2">
                     <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
@@ -66,15 +77,13 @@
                     <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
                 </div>
                 <div class="col-2">
-                    <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-primary">
-                        <span class="fa fa-check"></span>
-                    </button>
+                    <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-info btn-sm">
+                        <span class="fa fa-check"></span> Acepta
+                    </button> 
                 </div>
                 <div class="w-100 my-2"></div>
-                <div class="col-1">
-                    <span class="badge badge-danger">
-                        <h6>Saldo actual</h6>
-                    </span>
+                <div class="col-1 mt-1"> 
+                    <h6 class="text-danger font-weight-bold">Saldo actual</h6> 
                 </div>
                 <div class="col-2">
                     <input type="text" id="NuevoSaldoPrestamo" name="NuevoSaldoPrestamo" class="form-control form-control-sm" autocomplete="off" readonly="">
@@ -84,13 +93,13 @@
                 <div class="col-2">
                     <input type="text" id="SaldoFinal" name="SaldoFinal" class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
-                <div class="col-2">
-                    <div class="alert alert-dismissible alert-primary">
-                        <p>STS</p>
-                        <p>1 = Sin aplicar</p>
-                        <p>2 = Aplicado</p>
-                    </div>
+                <div class="col-2">  
+                    <span class="text-info font-weight-bold">1 = Sin aplicar</span>
+                    <span class="text-info font-weight-bold">2 = Aplicado</span> 
                 </div>
+                <div class="my-1 w-100">
+                    <hr>
+                </div> 
                 <div class="w-100"></div>
                 <div id="TotalEnLetra" class="col-12 text-center">
                     <p class="font-weight-bold text-warning display-4"></p>
@@ -149,7 +158,7 @@
                 <div class="col-4">
                     <h3 class="font-weight-bold">Total abonos</h3>
                     <input type="text" id="TotalAbonos" name="TotalAbonos" class="form-control d-none" readonly="">
-                    <p id="TotalAbonosParrafo" class="font-weight-bold text-success display-4">$ 0.0</p>
+                    <p id="TotalAbonosParrafo" class="font-weight-bold display-4" style="    color: #b9ca17 !important;">$ 0.0</p>
                 </div>
                 <div class="col-4">
                     <h3 class="font-weight-bold">Saldo movimientos</h3>
@@ -184,7 +193,8 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Empleado = pnlTablero.find("#Empleado"),
+    var pnlTablero = $("#pnlTablero"), xEmpleado = pnlTablero.find("#xEmpleado"),
+            Empleado = pnlTablero.find("#Empleado"),
             Prestamos, tblPrestamos = pnlTablero.find("#tblPrestamos"),
             PrestamosPagos, tblPrestamosPagos = pnlTablero.find("#tblPrestamosPagos"),
             NuevoPrestamo = pnlTablero.find("#NuevoPrestamo"),
@@ -198,8 +208,43 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+
+        pnlTablero.find('input').addClass('font-weight-bold');
         btnGuardarNP.click(function () {
             onGuardarNuevoPrestamo();
+        });
+
+        xEmpleado.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xEmpleado.val()) {
+                    Empleado[0].selectize.setValue(xEmpleado.val());
+                    if (Empleado.val()) {
+                        Empleado[0].selectize.disable();
+                    } else {
+                        Empleado[0].selectize.clear(true);
+                        Empleado[0].selectize.disable();
+                        iMsg('NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', 'w', function () {
+                            xEmpleado.focus().select();
+                            Empleado[0].selectize.enable();
+                            PrestamoAcumulado.val('');
+                            pnlTablero.find("#Abono").val('');
+                            pnlTablero.find("#Saldo").val('');
+                        });
+                    }
+                } else {
+                    Empleado[0].selectize.clear(true);
+                    Empleado[0].selectize.enable();
+                }
+                Prestamos.ajax.reload(function () {
+                    PrestamosPagos.ajax.reload();
+                });
+            } else {
+                Empleado[0].selectize.clear(true);
+                Empleado[0].selectize.enable();
+                Prestamos.ajax.reload(function () {
+                    PrestamosPagos.ajax.reload();
+                });
+            }
         });
 
         mdlInteresPrestamos.find("#btnAceptaInteresPrestamo").click(function () {
@@ -268,7 +313,7 @@
             }
         });
 
-        Empleado[0].selectize.focus();
+        xEmpleado.focus();
 
         Empleado.change(function () {
             HoldOn.open({
@@ -276,7 +321,7 @@
                 message: 'Por favor espere...'
             });
             $.getJSON('<?php print base_url('PrestamosEmpleados/getUltimoSaldo'); ?>', {EMPLEADO: Empleado.val()}).done(function (a) {
-                console.log(a);
+//                console.log(a);
                 var nopagare = '<?php print substr(Date('Y'), 3) . "" . Date('md'); ?>';
 
                 if (a.length > 0) {
@@ -303,6 +348,9 @@
                         pnlTablero.find("#Abono").val(0);
                         pnlTablero.find("#Saldo").val(0);
                         NuevoPrestamo.focus().select();
+                        Prestamos.ajax.reload(function () {
+                            PrestamosPagos.ajax.reload();
+                        });
                     }
                 }
             }).fail(function (x) {
@@ -311,8 +359,8 @@
                 HoldOn.close();
             });
         });
-
-        getEmpleados();
+//        
+//        getEmpleados();
         getPrestamos();
         getPrestamosPagos();
         getInformacionSemana();
@@ -393,8 +441,12 @@
             pnlTablero.find("#SaldoFinal").val(Saldo + Prestamo);
             pnlTablero.find("#TotalEnLetra p").text(NumeroALetras(Prestamo));
         } else {
+            btnGuardarNP.attr('disabled', true);
+            NuevoPrestamoAbono.attr('disabled', true);
             swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA CANTIDAD VALIDA', 'warning').then((value) => {
                 NuevoPrestamo.focus().select();
+                btnGuardarNP.attr('disabled', false);
+                NuevoPrestamoAbono.attr('disabled', false);
             });
         }
     }
@@ -417,9 +469,7 @@
         $.getJSON('<?php print base_url('PrestamosEmpleados/getEmpleados'); ?>').done(function (a) {
             Empleado[0].selectize.clear(true);
             Empleado[0].selectize.clearOptions();
-            a.forEach(function (v) {
-                Empleado[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
-            });
+
         }).fail(function (x, y, z) {
             getError(x);
         }).always(function () {
@@ -441,13 +491,13 @@
                 }
             ];
             Prestamos = tblPrestamos.DataTable({
-                "dom": 'fritp',
+                "dom": 'ritp',
                 "ajax": {
                     "url": '<?php print base_url('PrestamosEmpleados/getPrestamos'); ?>',
                     "contentType": "application/json",
                     "dataSrc": "",
                     "data": function (d) {
-                        d.EMPLEADO = (Empleado.val());
+                        d.EMPLEADO = (Empleado.val() ? Empleado.val() : '');
                     }
                 },
                 buttons: buttons,
@@ -457,33 +507,31 @@
                     {"data": "FECHA"}/*2*/,
                     {"data": "PAGARE"}/*4*/,
                     {"data": "SEM"}/*5*/,
-                    {"data": "PRESTAMO"}/*6*/,
-                    {"data": "ABONO"}/*7*/
+                    {"data": "PRESTAMO_TEXT"}/*6*/,
+                    {"data": "ABONO_TEXT"}/*7*/
                 ],
                 "columnDefs": coldefs,
                 language: lang,
                 select: true,
                 "autoWidth": true,
                 "colReorder": true,
-                "displayLength": 99999999,
+                "displayLength": 50,
                 "bLengthChange": false,
                 "deferRender": true,
                 "scrollCollapse": false,
                 "bSort": true,
-                "scrollY": "400px",
+                "scrollY": "150px",
                 "scrollX": true,
                 "aaSorting": [
                     [0, 'desc']
                 ],
                 "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api();//Get access to Datatable API
+                    var api = this.api();//Get access to Datatable API 
 //                    // Update footer
-                    var prestamos = api.column(5).data().reduce(function (a, b) {
-                        var ax = 0, bx = 0;
-                        ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                        bx = $.isNumeric(b) ? parseFloat(b) : 0;
-                        return  (ax + bx);
-                    }, 0);
+                    var prestamos = 0;
+                    $.each(data, function (k, v) {
+                        prestamos += parseFloat(v.PRESTAMO);
+                    });
                     pnlTablero.find("#TotalPrestamos").val(prestamos);
                     pnlTablero.find("#TotalPrestamosParrafo").text('$' + $.number(parseFloat(prestamos), 2, '.', ','));
                 },
@@ -508,13 +556,13 @@
                 }
             ];
             PrestamosPagos = tblPrestamosPagos.DataTable({
-                "dom": 'fritp',
+                "dom": 'ritp',
                 "ajax": {
                     "url": '<?php print base_url('PrestamosEmpleados/getPrestamosPagos'); ?>',
                     "contentType": "application/json",
                     "dataSrc": "",
                     "data": function (d) {
-                        d.EMPLEADO = (Empleado.val());
+                        d.EMPLEADO = (Empleado.val() ? Empleado.val() : ''); 
                     }
                 },
                 buttons: buttons,
@@ -532,25 +580,23 @@
                 select: true,
                 "autoWidth": true,
                 "colReorder": true,
-                "displayLength": 99999999,
+                "displayLength": 50,
                 "bLengthChange": false,
                 "deferRender": true,
                 "scrollCollapse": false,
                 "bSort": true,
-                "scrollY": "400px",
+                "scrollY": "150px",
                 "scrollX": true,
                 "aaSorting": [
                     [0, 'desc']
                 ],
                 "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api();//Get access to Datatable API
+                    var api = this.api();//Get access to Datatable API 
 //                    // Update footer
-                    var abonos = api.column(4).data().reduce(function (a, b) {
-                        var ax = 0, bx = 0;
-                        ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                        bx = $.isNumeric(b) ? parseFloat(b) : 0;
-                        return  (ax + bx);
-                    }, 0);
+                    var abonos = 0;
+                    $.each(data, function (k, v) {
+                        abonos += parseFloat(v.ABONO);
+                    });
                     pnlTablero.find("#TotalAbonos").val(abonos);
                     pnlTablero.find("#TotalAbonosParrafo").text('$' + $.number(parseFloat(abonos), 2, '.', ','));
                     var saldo = parseFloat(pnlTablero.find("#TotalPrestamos").val()) - parseFloat(abonos);
@@ -559,6 +605,7 @@
                 },
                 initComplete: function () {
                     HoldOn.close();
+                    pnlTablero.find("input[type='search']").addClass("notEnter");
                 }
             });
         }
