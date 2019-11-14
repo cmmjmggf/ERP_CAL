@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenoml" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
 	<property name="ireport.zoom" value="2.357947691000077"/>
-	<property name="ireport.x" value="1110"/>
+	<property name="ireport.x" value="1195"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -638,7 +638,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[< < < < < < < <  DEDUCCIONES > > > > > > > >]]></text>
+				<text><![CDATA[< < < < < < < <  DEDUCCIONES > > > > > > > ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="890" y="33" width="38" height="28" isPrintInFirstWholeBand="true" uuid="a3bf1f34-1d39-4b19-9db9-86e6aadd45bf"/>
@@ -1488,7 +1488,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{fonac_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{otrde1_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="829" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ed60f136-b102-41b5-88f6-35167a0e6883"/>
@@ -1504,7 +1504,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{otrde1_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{fonac_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="890" y="0" width="38" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="e1d5542c-f050-432a-811e-eebf44ed4cf0"/>

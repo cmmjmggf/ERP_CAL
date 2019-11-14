@@ -34,7 +34,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
             $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
 //            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
-            $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1) AND E.Numero = 2808')->result();
+            $empleados = $this->db->query('SELECT E.* FROM empleados AS E WHERE E.AltaBaja IN(1)')->result();
 
             /* ELIMINAR TODO DE LA SEMANA AÑO ESPECIFICADA */
             $DF = "DELETE FROM ";
@@ -495,6 +495,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
+                $this->db->set('precaha', $v->{"AbonoPres"})->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -776,6 +778,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 );
+                
                 $this->db->insert('prenomina', $vp);
                 /* GRABA PRE-NOMINA-L */
                 $pnl = array(
