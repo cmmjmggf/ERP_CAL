@@ -8,25 +8,25 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row"> 
+                <div class="row">
                     <div class="col-7">
                         <label>Empleado</label>
-                        <div class="row">  
-                            <div class="col-3"> 
+                        <div class="row">
+                            <div class="col-3">
                                 <input id="xEmpleadoVZFB" name="xEmpleadoVZFB" class="form-control form-control-sm">
                             </div>
-                            <div class="col-9"> 
+                            <div class="col-9">
                                 <select id="EmpleadoVZFB" name="EmpleadoVZFB" class="form-control form-control-sm"></select>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                     <div class="col-5">
                         <label>1 Vale zapato / 2 FieraBono</label>
-                        <div class="row"> 
+                        <div class="row">
                             <div class="col-4">
                                 <input id="xValeZapatoFieraBono" name="xValeZapatoFieraBono" class="form-control form-control-sm">
                             </div>
-                            <div class="col-8"> 
+                            <div class="col-8">
                                 <select id="ValeZapatoFieraBono" name="ValeZapatoFieraBono" class="form-control form-control-sm">
                                     <option></option>
                                     <option value="1">1 VALE ZAPATO</option>
@@ -34,7 +34,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                     <div class="col-3">
                         <label>Importe</label>
                         <input type="text" id="ImporteVZFB" name="ImporteVZFB" class="form-control form-control-sm numbersOnly" maxlength="25">
@@ -47,8 +47,8 @@
                         <button type="button" class="btn btn-info btn-sm" id="btnGuardarValeFiera"><span class="fa fa-save"></span> GUARDAR</button>
                     </div>
                 </div>
-                <div class="w-100 text-center my-2">
-                    <h3>Personal con deuda</h3>
+                <div class="w-100 text-center my-1">
+                    <legend>Personal con deuda</legend>
                 </div>
                 <div id="ValesVZFB" class="table-responsive">
                     <table id="tblValesVZFB" class="table table-sm display " style="width:100%">
@@ -57,14 +57,16 @@
                                 <th>ID</th>
                                 <th>No</th>
                                 <th>Nombre</th>
-                                <th>Importe</th>
-                                <th>Pagos</th>
+                                <th>Importe Zap</th>
+                                <th>Pagos Zap</th>
+                                <th>Importe FB</th>
+                                <th>Pagos FB</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </div>
@@ -79,7 +81,6 @@
             btnGuardarValeFiera = mdlCargoZapatosFieraBono.find("#btnGuardarValeFiera"),
             ImporteVZFB = mdlCargoZapatosFieraBono.find("#ImporteVZFB"),
             DescuentoPagosVZFB = mdlCargoZapatosFieraBono.find("#DescuentoPagosVZFB");
-
     $(document).ready(function () {
 
         ValeZapatoFieraBono.change(function () {
@@ -91,7 +92,6 @@
                 xValeZapatoFieraBono.val('');
             }
         });
-
         xValeZapatoFieraBono.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xValeZapatoFieraBono.val()) {
@@ -112,7 +112,6 @@
                 ValeZapatoFieraBono[0].selectize.enable();
             }
         });
-
         EmpleadoVZFB.change(function () {
             if ($(this).val()) {
                 xEmpleadoVZFB.val($(this).val());
@@ -122,7 +121,6 @@
                 xEmpleadoVZFB.val('');
             }
         });
-
         xEmpleadoVZFB.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xEmpleadoVZFB.val()) {
@@ -143,7 +141,6 @@
                 EmpleadoVZFB[0].selectize.enable();
             }
         });
-
         btnGuardarValeFiera.click(function () {
             if (EmpleadoVZFB.val() && ValeZapatoFieraBono.val() &&
                     ImporteVZFB.val() && DescuentoPagosVZFB.val()) {
@@ -165,9 +162,8 @@
                     ImporteVZFB.val('');
                     ValeZapatoFieraBono[0].selectize.clear(true);
                     EmpleadoVZFB[0].selectize.clear(true);
-                    EmpleadoVZFB[0].selectize.focus();
-                    EmpleadoVZFB[0].selectize.open();
-
+                    xValeZapatoFieraBono.val('');
+                    xEmpleadoVZFB.val('').focus();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -176,11 +172,10 @@
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR EL EMPLEADO, TIPO DE DOCUMENTO, IMPORTE Y LOS PAGOS', 'warning').then((value) => {
-                    xEmpleadoVZFB.focus(); 
+                    xEmpleadoVZFB.focus();
                 });
             }
         });
-
         mdlCargoZapatosFieraBono.on('shown.bs.modal', function () {
             $.getJSON('<?php print base_url('CargoZapatosFieraBono/getEmpleados'); ?>').done(function (data) {
                 EmpleadoVZFB[0].selectize.clear(true);
@@ -196,7 +191,6 @@
             handleEnterDiv(mdlCargoZapatosFieraBono);
         });
     });
-
     function getValesDeZapatosFieraBono() {
         if ($.fn.DataTable.isDataTable('#tblValesVZFB')) {
             ValesVZFB.ajax.reload(function () {
@@ -208,10 +202,16 @@
                     "targets": [0],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [3, 5],
+                    "render": function (data, type, row) {
+                        return  '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
                 }
             ];
             ValesVZFB = tblValesVZFB.DataTable({
-                "dom": 'ritp',
+                "dom": 'rt',
                 "ajax": {
                     "url": '<?php print base_url('CargoZapatosFieraBono/getRecords'); ?>',
                     "contentType": "application/json",
@@ -226,8 +226,11 @@
                     {"data": "NUMERO"}/*1*/,
                     {"data": "NOMBRE"}/*2*/,
                     {"data": "IMPORTE"}/*4*/,
-                    {"data": "PAGOS"}/*5*/
+                    {"data": "PAGOS"}/*5*/,
+                    {"data": "IMPORTEFB"}/*6*/,
+                    {"data": "PAGOSFB"}/*7*/
                 ],
+
                 "columnDefs": coldefs,
                 language: lang,
                 select: true,
@@ -238,11 +241,31 @@
                 "deferRender": true,
                 "scrollCollapse": false,
                 "bSort": true,
-                "scrollY": "400px",
+                "scrollY": "360px",
                 "scrollX": true,
                 "aaSorting": [
-                    [0, 'desc']
+                    [1, 'asc']
                 ],
+                "createdRow": function (row, data, index) {
+                    $.each($(row).find("td"), function (k, v) {
+                        var c = $(v);
+                        var index = parseInt(k);
+                        switch (index) {
+                            case 2:
+                                c.addClass('text-strong');
+                                break;
+                            case 4:
+                                c.addClass('text-strong');
+                                break;
+                            case 3:
+                                c.addClass('text-strong text-info');
+                                break;
+                            case 5:
+                                c.addClass('text-strong text-success');
+                                break;
+                        }
+                    });
+                },
                 initComplete: function () {
                     HoldOn.close();
                     xEmpleadoVZFB.focus();
@@ -251,3 +274,11 @@
         }
     }
 </script>
+<style>
+    table tbody tr {
+        font-size: 0.75rem !important;
+    }
+    .text-strong {
+        font-weight: bolder;
+    }
+</style>

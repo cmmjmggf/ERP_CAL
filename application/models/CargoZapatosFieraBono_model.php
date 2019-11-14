@@ -16,9 +16,11 @@ class CargoZapatosFieraBono_model extends CI_Model {
                                     . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
                                     . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
                                     . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) AS NOMBRE, "
-                                    . "E.ZapatosTDA AS IMPORTE, E.AbonoZap AS PAGOS", false)
+                                    . "E.ZapatosTDA AS IMPORTE, E.AbonoZap AS PAGOS,"
+                                    . "E.FieraBono AS IMPORTEFB, E.FieraBonoPagos AS PAGOSFB ", false)
                             ->from('empleados AS E')->where('E.AltaBaja', 1)
                             ->where('E.ZapatosTDA > 0', null, false)
+                            ->or_where('E.FieraBono > 0', null, false)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
