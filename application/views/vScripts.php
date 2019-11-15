@@ -1392,7 +1392,7 @@
             opcion += ' <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?> ';
             opcion += '</a>';
             opcion += '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">';
-            opcion += '<a class="dropdown-item" href="#"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
+            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
             opcion += '<a class="dropdown-item" href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
             opcion += '<div class="dropdown-divider"></div>';
             opcion += '<a class="dropdown-item" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';

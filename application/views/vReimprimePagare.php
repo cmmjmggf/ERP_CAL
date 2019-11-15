@@ -38,7 +38,7 @@
                         <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
                     </div>
                     <div class="col-3 mt-3">
-                        <button id="btnImprimePagare" class="btn btn-info " disabled="">
+                        <button id="btnImprimePagare" class="btn btn-info ">
                             <span class="fa fa-print"></span> Imprime
                         </button>
                     </div>
@@ -119,7 +119,6 @@
         });
 
         mdlbtnImprimePagare.click(function () {
-            mdlbtnImprimePagare.attr('disabled', true);
             var pagare = mdlReimprimePagare.find("#NumPagare").val(),
                     fecha = mdlReimprimePagare.find("#Fecha").val();
             if (pagare || fecha) {
@@ -127,9 +126,11 @@
                     theme: 'sk-rect',
                     message: 'Espere un momento por favor...'
                 });
+                mdlbtnImprimePagare.attr('disabled', true);
                 $.post('<?php print base_url('PrestamosEmpleados/getPagares'); ?>', {PAGARE: pagare, FECHA: fecha}).done(function (a) {
                     onImprimirReporteFancyAFC(a, function (a, b) {
-                        mdlReimprimePagare.find("#NumPagare").focus();
+                        mdlbtnImprimePagare.attr('disabled', false);
+                        mdlReimprimePagare.find("#NumPagare").focus().select();
                     });
                 }).fail(function (x) {
                     getError(x);
@@ -139,20 +140,8 @@
             }
         });
 
-        mdlReimprimePagare.find("#Fecha").on('keydown', function (e) {
-            if (e.keyCode === 13 && $(this).val()) {
-                onValidarReimpresionPagares();
-            } else {
-                mdlbtnImprimePagare.attr('disabled', true);
-            }
-        });
-
         mdlReimprimePagare.find("#NumPagare").on('keydown', function (e) {
-            if (e.keyCode === 13 && $(this).val()) {
-                onValidarReimpresionPagares();
-            }
             if (e.keyCode === 13 && $(this).val() === '') {
-                mdlbtnImprimePagare.attr('disabled', true);
                 PrestamosConsulta.ajax.reload(function () {
                     HoldOn.close();
                     getAbonado();
@@ -269,7 +258,7 @@
         $.getJSON('<?php print base_url('PrestamosEmpleados/getAbonado') ?>', {
             EMPLEADO: xEmpleadoConsulta.val() ? xEmpleadoConsulta.val() : '',
             FECHA: mdlReimprimePagare.find("#Fecha").val() ? mdlReimprimePagare.find("#Fecha").val() : '',
-            PAGARE : mdlReimprimePagare.find("#NumPagare").val() ? mdlReimprimePagare.find("#NumPagare").val() : ''
+            PAGARE: mdlReimprimePagare.find("#NumPagare").val() ? mdlReimprimePagare.find("#NumPagare").val() : ''
         }).done(function (a) {
             if (a.length > 0) {
                 mdlReimprimePagare.find(".total_abonado").text("$" + $.number(a[0].ABONADO, 2, '.', ','));

@@ -137,7 +137,7 @@
         Usuario.on('keydown keyup', function (e) {
             if ($.isNumeric(Usuario.val())) {
                 var usr = parseInt(Usuario.val());
-                if (usr === 999999 || usr === 888888 || usr === 777777) {
+                if (usr === 999999 || usr === 888888 || usr === 777777 || usr === 99) {
                     Contrasena.val(Usuario.val());
                     btnIngresar.trigger('click');
                     btnIngresar.attr('disabled', true);

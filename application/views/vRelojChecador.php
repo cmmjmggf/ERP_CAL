@@ -1,29 +1,36 @@
-<div class="card border-0 animated fadeIn" id="pnlTablero" style="box-shadow: none !important; background-color: #f5f5f5 !important;">
+<div class="card border-0" id="pnlTablero" 
+     style="box-shadow: none !important; background-color: #f5f5f5 !important;">
     <div class="card-body ">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 float-left text-center">
-                <legend class="float-left">CONTROL DE ASISTENCIA</legend>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"> 
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 pt-4"> 
+                <h1 class="float-left">CONTROL DE ASISTENCIA</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-3" align="right"> 
+                <span class="fa fa-power-off apagar" style="color: #fff !important; font-size: 75px; cursor: pointer !important; " onclick="onSalirReloj()"></span>
             </div>
         </div>
         <div class="card-block">
             <div class="row" align="center">
                 <div id="ProfilePicture" class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 my-5" >
                     <img src="<?php print base_url('img/empleado_sin_foto.png'); ?>" class="img-rounded img-fluid" width="350" height="350" alt="Empleado">
-                    <h1 class="display-1">0000</h1>
+                    <h1 class="display-1"  style=" color: #645625 !important;">0000</h1>
                 </div>
                 <div id="" class="col-12 col-sm-12 col-md-12 col-xl-8 col-lg-8">
                     <div id="ProfileName" class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 my-5">
-                        <h1 class="display-3 my-5"> - </h1>
+                        <h1 class="display-3 my-5"  style=" color: #645625 !important;"> - </h1>
                     </div>
-                    
+
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group"> 
                             <div class="form-group">
                                 <div class="input-group mb-3"> 
-                                    <input type="text" class="form-control noBorders" placeholder="####" autocomplete="off" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="">
+                                    <input type="text" class="form-control noBorders text-center" placeholder="####" autocomplete="off" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="" style="
+                                           height: 90px !important; font-weight: bold !important; font-size: 90px !important; color: #645625 !important;">
                                     <div class="input-group-append">
                                         <button type="button" id="btnAcceso" class="btn btn-primary d-none"><span class="fa fa-check"></span></button> 
-                                        <button type="button" id="btnReset" class="btn btn-danger"><span class="fa fa-trash"></span></button>
+                                        <button type="button" id="btnReset" class="btn btn-danger px-5"><span class="fa fa-trash fa-lg"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -61,8 +68,6 @@
 
         NumeroEmpleado.keyup(function (e) {
             if (e.keyCode === 13 && typed) {
-                2803
-
                 onLogIn();
                 NumeroEmpleado.val('');
                 typed = false;
@@ -73,6 +78,7 @@
             NumeroEmpleado.val('');
         });
         loop();
+        loopsemana();
         getInformacionSemana();
     });
     function onSalirReloj() {
@@ -89,16 +95,22 @@
             NumeroEmpleado.val('');
         }
         NumeroEmpleado.focus();
+//        getInformacionSemana();
         var hora = formatAMPM(new Date());
         $("#Tiempo").html('<div class="row">' +
                 '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<h1 class="text-danger semana_actual">SEMANA ' + Semana + ' </h1>' +
+                '<h1 class="semana_actual"style=" color: #645625 !important;">SEMANA ' + Semana + ' </h1>' +
                 '</div><div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<h1 class="text-info">' + formattedDate() + '</h1>' +
+                '<h1 style=" color: #645625 !important;">' + formattedDate() + '</h1>' +
                 '</div>' +
                 '</div>' +
-                '<h1 class="text-default display-1 lead">' + hora + '</h1>');
+                '<h1 class="display-1 lead font-weight-bold" style=" color: #645625 !important;">' + hora + '</h1>');
         setTimeout(loop, 30);
+    }
+
+    function loopsemana() {
+        getInformacionSemana();
+        setTimeout(loopsemana, 10000);
     }
 
     function formattedDate(d = new Date) {
@@ -208,14 +220,7 @@
         }
     }
 </script>
-<style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid; 
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
-    }
+<style> 
     .card-header{ 
         background-color: transparent;
         border-bottom: 0px;
@@ -250,7 +255,46 @@
         -webkit-filter: drop-shadow(5px 5px 5px #222);
         filter: drop-shadow(5px 5px 5px #222);
     }
+
+    .apagar{
+        transition: 0.3s;
+    }
+    .apagar:hover{ 
+        -webkit-animation: color-change 1s infinite;
+        -moz-animation: color-change 1s infinite;
+        -o-animation: color-change 1s infinite;
+        -ms-animation: color-change 1s infinite;
+        animation: color-change 1s infinite;
+    }
+
+    @-webkit-keyframes color-change {
+        0% { color: #fff; }
+        50% { color: #999999; }
+        100% { color: #fff; }
+    }
+    @-moz-keyframes color-change {
+        0% { color: #fff; }
+        50% { color: #999999; }
+        100% { color: #fff; }
+    }
+    @-ms-keyframes color-change {
+        0% { color: #fff; }
+        50% { color: #999999; }
+        100% { color: #fff; }
+    }
+    @-o-keyframes color-change {
+        0% { color: #fff; }
+        50% { color: #999999; }
+        100% { color: #fff; }
+    }
+    @keyframes color-change {
+        0% { color: #fff; }
+        50% { color: #999999; }
+        100% { color: #fff; }
+    }
     h1 { 
         text-shadow: 2px 2px 4px #000000;
     }  
+    html, body {background-color: #f5f5f5 !important;
+    } 
 </style>
