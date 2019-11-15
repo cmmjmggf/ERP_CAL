@@ -150,7 +150,7 @@ class PrestamosEmpleados extends CI_Controller {
     }
 
     public function onAgregarPrestamosEmpleados() {
-        try { 
+        try {
             $xxx = $this->input->post();
             $E = $this->db->select("E.Numero AS CLAVE, "
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
@@ -197,12 +197,12 @@ class PrestamosEmpleados extends CI_Controller {
             $p["FECHAPAGARE"] = Date('d/m/Y');
             $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
             $p["LUGAREXPEDICION"] = "LEON GTO";
-            $p["NUMEROENLETRA"] = $xxx['PRESTAMOLETRA'];
-            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
-            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
-            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["NUMEROENLETRA"] = strtoupper($xxx['PRESTAMOLETRA']);
+            $p["DEUDORNOMBRE"] = $this->getValid($empleado_info[0]->NOMBRECOMPLETO);
+            $p["DEUDORDIRECCION"] = $this->getValid($empleado_info[0]->DIRECCION);
+            $p["DEUDORCOLONIA"] = $this->getValid($empleado_info[0]->COLONIA);
             $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
-            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["DEUDORTELEFONO"] = $this->getValid($empleado_info[0]->TEL);
             $p["FECHAPAGO"] = date("d/m/Y", strtotime($fecha_final['FDP']));
             $p["MONTO"] = '$' . number_format($xxx['PRESTAMO'], 2, ".", ",");
             $jc->setParametros($p);
@@ -217,7 +217,7 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPagare() {
         try {
-            /* PAGARE */ 
+            /* PAGARE */
             $xxx = $this->input->post();
             $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
                             . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
@@ -241,7 +241,7 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
-                
+
 
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -250,12 +250,12 @@ class PrestamosEmpleados extends CI_Controller {
             $p["FECHAPAGARE"] = Date('d/m/Y');
             $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
             $p["LUGAREXPEDICION"] = "LEON GTO";
-            $p["NUMEROENLETRA"] = $pagare_info[0]->PRESTAMOLETRAS;
-            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
-            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
-            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["NUMEROENLETRA"] = strtoupper($pagare_info[0]->PRESTAMOLETRAS);
+            $p["DEUDORNOMBRE"] = $this->getValid($empleado_info[0]->NOMBRECOMPLETO);
+            $p["DEUDORDIRECCION"] = $this->getValid($empleado_info[0]->DIRECCION);
+            $p["DEUDORCOLONIA"] = $this->getValid($empleado_info[0]->COLONIA);
             $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
-            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["DEUDORTELEFONO"] = $this->getValid($empleado_info[0]->TEL);
             $p["FECHAPAGO"] = date("d/m/Y", strtotime($pagare_info[0]->FECHA_PAGARE));
             $p["MONTO"] = '$' . number_format($pagare_info[0]->MONTO, 2, ".", ",");
             $jc->setParametros($p);
@@ -266,6 +266,10 @@ class PrestamosEmpleados extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function getValid($str) {
+        return str_replace("0", "", $str);
     }
 
     public function ModificaInteresPrestamos($param) {
