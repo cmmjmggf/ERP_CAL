@@ -101,8 +101,16 @@ class PrestamosEmpleados extends CI_Controller {
             $this->db->select("SUM(PP.aboemp) AS ABONADO ", false)->from("prestamospag AS PP");
             if ($x["EMPLEADO"] !== '') {
                 $this->db->where("PP.numemp", $x["EMPLEADO"]);
-            } 
-            
+            }
+            /* NO EXISTE ENLACE ENTRE EL PRESTAMO Y EL PAGO DE LOS PRESTAMOS */
+            if ($x["PAGARE"] !== '') {
+                $check_pagare = $this->db->query("SELECT P.numemp AS EMPLEADO, P.sem AS SEMANA FROM prestamos AS P WHERE P.pagare = {$x['PAGARE']}")->result();
+                if (count($check_pagare) > 0) {
+                    $pagare = $check_pagare[0];
+                    $this->db->where("PP.numemp", $pagare->EMPLEADO);
+                }
+            }
+
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -182,12 +182,20 @@
             $("#mdlCerrarNominaDeSemana").modal('show');
         });
 
+        var busy = false;
         btnGeneraGNS.click(function () {
+            if (busy)
+            {
+                return;
+            } else {
+                busy = true;
+            }
             var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
                 FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
             console.log(parms);
             console.log(parms);
             btnGeneraGNS.attr('disabled', true);
+
             if (SemanaGNS.val() && AnioGNS.val()) {
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
@@ -202,6 +210,7 @@
                             parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
                             $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
                                 console.log(a);
+                                busy = true;
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {

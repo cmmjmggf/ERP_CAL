@@ -109,6 +109,7 @@
                 PrestamosConsulta.ajax.reload(function () {
                     HoldOn.close();
                     getAbonado();
+                    mdlbtnImprimePagare.attr('disabled', true);
                 });
             }
         });
@@ -141,12 +142,21 @@
         mdlReimprimePagare.find("#Fecha").on('keydown', function (e) {
             if (e.keyCode === 13 && $(this).val()) {
                 onValidarReimpresionPagares();
+            } else {
+                mdlbtnImprimePagare.attr('disabled', true);
             }
         });
 
         mdlReimprimePagare.find("#NumPagare").on('keydown', function (e) {
             if (e.keyCode === 13 && $(this).val()) {
                 onValidarReimpresionPagares();
+            }
+            if (e.keyCode === 13 && $(this).val() === '') {
+                mdlbtnImprimePagare.attr('disabled', true);
+                PrestamosConsulta.ajax.reload(function () {
+                    HoldOn.close();
+                    getAbonado();
+                });
             }
         });
 
@@ -249,6 +259,7 @@
                         prestado += parseFloat(v.PRESTAMO);
                     });
                     mdlReimprimePagare.find(".total_prestado").text("$" + $.number(prestado, 2, '.', ','));
+                    getAbonado();
                 }
             });
         }
@@ -257,7 +268,8 @@
     function getAbonado() {
         $.getJSON('<?php print base_url('PrestamosEmpleados/getAbonado') ?>', {
             EMPLEADO: xEmpleadoConsulta.val() ? xEmpleadoConsulta.val() : '',
-            FECHA: mdlReimprimePagare.find("#Fecha").val() ? mdlReimprimePagare.find("#Fecha").val() : ''
+            FECHA: mdlReimprimePagare.find("#Fecha").val() ? mdlReimprimePagare.find("#Fecha").val() : '',
+            PAGARE : mdlReimprimePagare.find("#NumPagare").val() ? mdlReimprimePagare.find("#NumPagare").val() : ''
         }).done(function (a) {
             if (a.length > 0) {
                 mdlReimprimePagare.find(".total_abonado").text("$" + $.number(a[0].ABONADO, 2, '.', ','));
