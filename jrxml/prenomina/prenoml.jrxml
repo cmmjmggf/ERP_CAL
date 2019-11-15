@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenoml" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
 	<property name="ireport.zoom" value="2.357947691000077"/>
-	<property name="ireport.x" value="1195"/>
+	<property name="ireport.x" value="627"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -1154,7 +1154,9 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<reportElement x="447" y="0" width="1" height="10" uuid="45861241-d770-4a5b-a696-40556119b521"/>
 			</line>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="481" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="45741e6e-517d-4355-b265-3d311f4c0d71"/>
+				<reportElement mode="Transparent" x="481" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="45741e6e-517d-4355-b265-3d311f4c0d71">
+					<printWhenExpression><![CDATA[$F{PERCEPCIONES}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
