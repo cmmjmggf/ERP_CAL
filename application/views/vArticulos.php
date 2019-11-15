@@ -5,6 +5,7 @@
                 <legend class="float-left">Articulos</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
+                <button type="button" class="btn btn-success" id="btnHistoryPrecios"><span class="fa fa-dollar-sign"></span> HISTÓRICO DE PRECIOS</button>
                 <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
             </div>
         </div>
@@ -221,8 +222,14 @@
     var PrecioVentaParaMaquilas, tblPrecioVentaParaMaquilas = $("#tblPrecioVentaParaMaquilas");
     var nuevo = false, precio_actual = 0;
     var ClaveArticulo = 0;
+    var btnHistoryPrecios = $('#btnHistoryPrecios');
 
     $(document).ready(function () {
+        /*HISTORIAL DE PRECIOS*/
+        btnHistoryPrecios.click(function () {
+            $('#mdlImprimeHistoryPrecios').modal('show');
+        });
+
         /*FUNCIONES INICIALES*/
         init();
         handleEnter();
@@ -284,8 +291,6 @@
                 }
             });
         });
-
-
 
         btnIgualaPrecios.click(function () {
             swal({
@@ -402,13 +407,14 @@
                         processData: false,
                         data: frm
                     }).done(function (data, x, jq) {
-                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
-                        nuevo = false;
-                        Articulos.ajax.reload();
-                        PrecioVentaParaMaquilas.clear().draw();
-                        pnlDatos.addClass("d-none");
-                        pnlDatosDetalle.addClass('d-none');
-                        pnlTablero.removeClass("d-none");
+                        console.log(data);
+//                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
+//                        nuevo = false;
+//                        Articulos.ajax.reload();
+//                        PrecioVentaParaMaquilas.clear().draw();
+//                        pnlDatos.addClass("d-none");
+//                        pnlDatosDetalle.addClass('d-none');
+//                        pnlTablero.removeClass("d-none");
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                     }).always(function () {
@@ -563,40 +569,42 @@
                     event = 'dblclick';
                 }
                 if (!nuevo) {
-                    $(row).find("td").eq(1).on(event, function () {
-                        var r = PrecioVentaParaMaquilas.row(row).data();
-                        var input = '<input type="text" class="form-control form-control-sm numbersOnly" maxlength="10" name="Precio" autofocus>';
-                        var exist = $(this).find("#Precio").val();
-                        var celda = $(this);
-                        var componente = tblPrecioVentaParaMaquilas.find("[name='Precio']");
-                        if (componente.val() !== undefined) {
-                            var valor = componente.val();
-                            var padre = componente.parent();
-                            padre.html(valor);
-                        }
-                        if (exist === undefined && celda.text() !== '') {
-                            var vActual = celda.text();
-                            celda.html(input);
-                            var input_precio = celda.find("[name='Precio']");
-                            input_precio.val(getNumberFloat(vActual));
-                            precio_actual = vActual;
-                            var padre = celda.parent();
-                            input_precio.focus().select();
-                            input_precio.focusout(function () {
-                                if (precio_actual !== vActual) {
+                    if (seg === 1) {
+                        $(row).find("td").eq(1).on(event, function () {
+                            var r = PrecioVentaParaMaquilas.row(row).data();
+                            var input = '<input type="text" class="form-control form-control-sm numbersOnly" maxlength="10" name="Precio" autofocus>';
+                            var exist = $(this).find("#Precio").val();
+                            var celda = $(this);
+                            var componente = tblPrecioVentaParaMaquilas.find("[name='Precio']");
+                            if (componente.val() !== undefined) {
+                                var valor = componente.val();
+                                var padre = componente.parent();
+                                padre.html(valor);
+                            }
+                            if (exist === undefined && celda.text() !== '') {
+                                var vActual = celda.text();
+                                celda.html(input);
+                                var input_precio = celda.find("[name='Precio']");
+                                input_precio.val(getNumberFloat(vActual));
+                                precio_actual = vActual;
+                                var padre = celda.parent();
+                                input_precio.focus().select();
+                                input_precio.focusout(function () {
+                                    if (precio_actual !== vActual) {
+                                        onModificarPrecioMaquila(r, padre, celda, this);
+                                    } else {
+                                        celda.html(precio_actual);
+                                    }
+                                }).change(function () {
                                     onModificarPrecioMaquila(r, padre, celda, this);
-                                } else {
-                                    celda.html(precio_actual);
-                                }
-                            }).change(function () {
-                                onModificarPrecioMaquila(r, padre, celda, this);
-                            }).keyup(function (e) {
-                                if (e.keyCode === 13) {
-                                    onModificarPrecioMaquila(r, padre, celda, this);
-                                }
-                            });
-                        }
-                    });
+                                }).keyup(function (e) {
+                                    if (e.keyCode === 13) {
+                                        onModificarPrecioMaquila(r, padre, celda, this);
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -730,6 +738,13 @@
                     pnlDatos.find("#PrecioDos").prop("readonly", true);
                     pnlDatos.find("#PrecioTres").prop("readonly", true);
                 }
+                var user = '<?php print $_SESSION["USERNAME"]; ?>';
+
+                if (user === 'ARABAR') {
+                    pnlDatos.find("#PrecioUno").prop("readonly", false);
+                    pnlDatos.find("#PrecioDos").prop("readonly", false);
+                    pnlDatos.find("#PrecioTres").prop("readonly", false);
+                }
 
 
                 getDetalleByID(ClaveArticulo);
@@ -744,8 +759,8 @@
         });
 
     }
-
-    function getDetalleByID(IDX) {         /*DETALLE*/
+    /*DETALLE*/
+    function getDetalleByID(IDX) {
         $.getJSON(master_url + 'getDetalleByID', {ID: IDX}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {

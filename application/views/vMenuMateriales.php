@@ -81,4 +81,6 @@ $this->load->view('vSalidaMaqGrupoFechas');
 $this->load->view('vMaterialAnoSemMaqDesgloseControlEstilo');
 $this->load->view('vConRelControlesXMaquila');
 $this->load->view('vReporteOrdenesCompraSemanaMaquila');
+$this->load->view('vImprimeHistoryPrecios');
+
 

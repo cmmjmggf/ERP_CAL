@@ -9,7 +9,7 @@ class Articulos extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('Articulos_model')->model('Articulos10_model');
+        $this->load->library('session')->model('Articulos_model')->model('Articulos10_model')->helper('jaspercommand_helper')->helper('file');
     }
 
     public function index() {
@@ -49,6 +49,28 @@ class Articulos extends CI_Controller {
             $this->load->view('vEncabezado');
             $this->load->view('vSesion');
             $this->load->view('vFooter');
+        }
+    }
+
+    public function onReporteHistoryPrecios() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["articulo"] = $this->input->post('ArticuloHistory');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\reporteCambiosPreciosHistory.jasper');
+        $jc->setFilename('HISTORIAL_DE_PRECIOS_POR_ART_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onVerificarArticulo() {
+        try {
+            print json_encode($this->db->query("select clave from articulos where clave = '{$this->input->get('Articulo')}' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 
@@ -207,6 +229,26 @@ class Articulos extends CI_Controller {
                 'UbicacionCuatro' => $x->post('UbicacionCuatro'),
                 'TipoArticulo' => $x->post('TipoArticulo')
             );
+            //Guarda el historial de modificación de precios
+            $p1 = $x->post('PrecioUno');
+            $p2 = $x->post('PrecioDos');
+            $p3 = $x->post('PrecioTres');
+            if (floatval($p1) || floatval($p2) || floatval($p3)) {
+                $precios_ant = $this->db->query("select PrecioUno, PrecioDos, PrecioTres from articulos where clave = '{$x->post('Clave')}' ")->result();
+                $datos_history = array(
+                    'Articulo' => $x->post('Clave'),
+                    'NomArticulo' => $x->post('Descripcion'),
+                    'fecha' => Date('Y-m-d H:i:s'),
+                    'usuario' => $_SESSION["USERNAME"],
+                    'preciounonuevo' => $x->post('PrecioUno'),
+                    'preciodosnuevo' => $x->post('PrecioDos'),
+                    'preciotresnuevo' => $x->post('PrecioTres'),
+                    'preciounoant' => $precios_ant[0]->PrecioUno,
+                    'preciodosant' => $precios_ant[0]->PrecioDos,
+                    'preciotresant' => $precios_ant[0]->PrecioTres
+                );
+                $this->db->insert('articuloshistory', $datos_history);
+            }
             $this->Articulos_model->onModificar($x->post('ID'), $datos);
             $this->Articulos10_model->onModificar($x->post('ID'), $datos);
 
