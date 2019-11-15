@@ -513,7 +513,7 @@
 
         var handler = function (e) {
             if (e.keyCode === 13) {
-                if (Documento.val()) {
+                if (Reimprime.val()) {
                     Reimprime.off("keypress");
                     HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                     $.post('<?php print base_url('ControlPlantilla/onImprimir'); ?>', {
