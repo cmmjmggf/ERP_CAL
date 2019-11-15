@@ -109,7 +109,6 @@
                 PrestamosConsulta.ajax.reload(function () {
                     HoldOn.close();
                     getAbonado();
-                    mdlbtnImprimePagare.attr('disabled', true);
                 });
             }
         });
@@ -136,6 +135,10 @@
                     getError(x);
                 }).always(function () {
                     HoldOn.close();
+                });
+            } else {
+                iMsg('DEBE DE ESPECIFICAR UN PAGARE', 'w', function () {
+                    mdlReimprimePagare.find("#NumPagare").focus().select();
                 });
             }
         });
