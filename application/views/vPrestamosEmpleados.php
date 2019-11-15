@@ -5,11 +5,11 @@
                 <legend class="float-left"><span class="fa fa-coins"></span> Préstamos a empleados </legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-danger" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
+                <button type="button" class="btn btn-danger notEnter" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
 
-                <button type="button" class="btn btn-primary" id="btnEmpleadosConsulta" data-toggle="tooltip" data-placement="bottom" title="Empleados"><span class="fa fa-user-circle"></span> EMPLEADOS <br></button>
+                <button type="button" class="btn btn-primary notEnter" id="btnEmpleadosConsulta" data-toggle="tooltip" data-placement="bottom" title="Empleados"><span class="fa fa-user-circle"></span> EMPLEADOS <br></button>
 
-                <button type="button" class="btn btn-info" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="bottom" title="Reimprimir"><span class="fa fa-print"></span> REIMPRESIÓN DE PAGARES<br></button>
+                <button type="button" class="btn btn-info notEnter" id="btnReimprimirPagare" data-toggle="tooltip" data-placement="bottom" title="Reimprimir"><span class="fa fa-print"></span> REIMPRESIÓN DE PAGARES<br></button>
             </div>
         </div>
         <div class="card-block ">
@@ -45,15 +45,15 @@
                 </div>
                 <div class="col-2">
                     <label>Pres.Acum</label>
-                    <input type="text" id="PrestamoAcumulado" name="PrestamoAcumulado" class="form-control form-control-sm" autocomplete="off">
+                    <input type="text" id="PrestamoAcumulado" name="PrestamoAcumulado" readonly="" class="form-control form-control-sm" autocomplete="off">
                 </div>
                 <div class="col-2">
                     <label>Abono</label>
-                    <input type="text" id="Abono" name="Abono" class="form-control form-control-sm" autocomplete="off">
+                    <input type="text" id="Abono" name="Abono" class="form-control form-control-sm" readonly=""  autocomplete="off">
                 </div>
                 <div class="col-2">
                     <label>Saldo</label>
-                    <input type="text" id="Saldo" name="Saldo" class="form-control form-control-sm" autocomplete="off">
+                    <input type="text" id="Saldo" name="Saldo" class="form-control form-control-sm" readonly=""  autocomplete="off">
                 </div>
                 <div class="col-1">
                     <label>Semana</label>
@@ -71,10 +71,10 @@
                     <h6 class="text-danger font-weight-bold">Prestamo nvo</h6>  
                 </div>
                 <div class="col-2">
-                    <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
+                    <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" placeholder="Total a prestar" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
                 </div>
                 <div class="col-2">
-                    <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
+                    <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" placeholder="Número de abonos..." class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
                 </div>
                 <div class="col-2">
                     <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-info btn-sm">
@@ -91,7 +91,7 @@
                 <div class="col-2">
                 </div>
                 <div class="col-2">
-                    <input type="text" id="SaldoFinal" name="SaldoFinal" class="form-control form-control-sm" autocomplete="off" readonly="">
+                    <input type="text" id="SaldoFinal" name="SaldoFinal" placeholder="Saldo final..." class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
                 <div class="col-2">  
                     <span class="text-info font-weight-bold">1 = Sin aplicar</span>
@@ -170,10 +170,10 @@
     </div>
 </div>
 <div class="modal" id="mdlInteresPrestamos">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Interes para prestamos en nomina</h5>
+                <h5 class="modal-title"><span class="fa fa-percent"></span> Interes para prestamos en nomina</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -187,7 +187,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptaInteresPrestamo"><span class="fa fa-check"></span> Aceptar</button>
+                <button type="button" class="btn btn-info" id="btnAceptaInteresPrestamo"><span class="fa fa-check"></span> Aceptar</button>
             </div>
         </div>
     </div>
@@ -208,6 +208,10 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+
+        mdlInteresPrestamos.on('hidden.bs.modal', function () {
+            xEmpleado.focus().select();
+        });
 
         pnlTablero.find('input').addClass('font-weight-bold');
         btnGuardarNP.click(function () {
@@ -414,7 +418,9 @@
                                 });
                             });
                             /*IMPRIMIR PAGARE*/
-                            onImprimirReporteFancy(a);
+                            onImprimirReporteFancyAFC(a, function (a, b) {
+                                xEmpleado.focus().select();
+                            });
                         }).fail(function (x, y, z) {
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);
@@ -562,7 +568,7 @@
                     "contentType": "application/json",
                     "dataSrc": "",
                     "data": function (d) {
-                        d.EMPLEADO = (Empleado.val() ? Empleado.val() : ''); 
+                        d.EMPLEADO = (Empleado.val() ? Empleado.val() : '');
                     }
                 },
                 buttons: buttons,

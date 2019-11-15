@@ -16,7 +16,7 @@
 	<parameter name="FECHAPAGO" class="java.lang.String"/>
 	<parameter name="MONTO" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare,P.sem,P.fechapre,P.preemp,P.aboemp,P.salemp,P.pesos,P.fecpag,P.sempag FROM erp_cal.prestamos AS P WHERE P.pagare = $P{PAGARE}]]>
+		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare,P.sem,P.fechapre,P.preemp,P.aboemp,P.salemp,P.pesos,P.fecpag,P.sempag FROM prestamos AS P WHERE P.pagare = $P{PAGARE}]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -36,13 +36,13 @@
 	<field name="fechapre" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="preemp" class="java.lang.Float">
+	<field name="preemp" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="aboemp" class="java.lang.Float">
+	<field name="aboemp" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="salemp" class="java.lang.Float">
+	<field name="salemp" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="pesos" class="java.lang.String">

@@ -151,27 +151,27 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function onAgregarPrestamosEmpleados() {
         try {
-            $x = $this->input;
+            $xxx = $this->input->post();
             $E = $this->db->select("E.Numero AS CLAVE, "
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
                             ->from("empleados AS E")
-                            ->where('E.Numero', $x->post('EMPLEADO'))
+                            ->where('E.Numero', $xxx['EMPLEADO'])
                             ->where('E.AltaBaja', 1)->get()->result();
-            $semanas = $x->post('PRESTAMO') / $x->post('ABONO');
+            $semanas = $xxx['PRESTAMO'] / $xxx['ABONO'];
             $dias = $semanas * 7;
             $fecha = Date('Y-m-d');
             $fecha_final = $this->db->query("SELECT DATE_ADD(\"{$fecha}\", INTERVAL {$dias} DAY) AS FDP")->row_array();
 
             $this->db->insert('prestamos', array(
-                'numemp' => $x->post('EMPLEADO'),
+                'numemp' => $xxx['EMPLEADO'],
                 'nomemp' => $E[0]->EMPLEADO,
-                'pagare' => $x->post('PAGARE'),
-                'sem' => $x->post('SEMANA'),
+                'pagare' => $xxx['PAGARE'],
+                'sem' => $xxx['SEMANA'],
                 'fechapre' => Date('Y-m-d h:i:s'),
-                'preemp' => $x->post('PRESTAMO'),
-                'aboemp' => $x->post('ABONO'),
-                'salemp' => $x->post('SALDO'),
-                'pesos' => $x->post('PRESTAMOLETRA'),
+                'preemp' => $xxx['PRESTAMO'],
+                'aboemp' => $xxx['ABONO'],
+                'salemp' => $xxx['SALDO'],
+                'pesos' => $xxx['PRESTAMOLETRA'],
                 'fecpag' => $fecha_final['FDP'],
                 'sempag' => $semanas
             ));
@@ -181,30 +181,30 @@ class PrestamosEmpleados extends CI_Controller {
                                     . "E.Ciudad AS CIUDAD,"
                                     . "E.Tel AS TEL", false)
                             ->from('empleados AS E')
-                            ->where('E.Numero', $x->post('EMPLEADO'))->get()->result();
+                            ->where('E.Numero', $xxx['EMPLEADO'])->get()->result();
 
-            $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))
-                    ->set('AbonoPres', $x->post('ABONO'))
-                    ->set('SaldoPres', $x->post('SALDO'))
-                    ->where('Numero', $x->post('EMPLEADO'))
+            $this->db->set('PressAcum', $xxx['ULTIMOSALDO'])
+                    ->set('AbonoPres', $xxx['ABONO'])
+                    ->set('SaldoPres', $xxx['SALDO'])
+                    ->where('Numero', $xxx['EMPLEADO'])
                     ->update('empleados');
 
             /* PAGARE */
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $p = array();
-            $p["PAGARE"] = $x->post('PAGARE');
+            $p["PAGARE"] = $xxx['PAGARE'];
             $p["FECHAPAGARE"] = Date('d/m/Y');
             $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
             $p["LUGAREXPEDICION"] = "LEON GTO";
-            $p["NUMEROENLETRA"] = $x->post('PRESTAMOLETRA');
-            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
-            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
-            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["NUMEROENLETRA"] = strtoupper($xxx['PRESTAMOLETRA']);
+            $p["DEUDORNOMBRE"] = $this->getValid($empleado_info[0]->NOMBRECOMPLETO);
+            $p["DEUDORDIRECCION"] = $this->getValid($empleado_info[0]->DIRECCION);
+            $p["DEUDORCOLONIA"] = $this->getValid($empleado_info[0]->COLONIA);
             $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
-            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["DEUDORTELEFONO"] = $this->getValid($empleado_info[0]->TEL);
             $p["FECHAPAGO"] = date("d/m/Y", strtotime($fecha_final['FDP']));
-            $p["MONTO"] = '$' . number_format($x->post('PRESTAMO'), 2, ".", ",");
+            $p["MONTO"] = '$' . number_format($xxx['PRESTAMO'], 2, ".", ",");
             $jc->setParametros($p);
             $jc->setJasperurl('jrxml\prestamos\Pagare.jasper');
             $jc->setFilename('Pagare_' . Date('h_i_s'));
@@ -218,16 +218,16 @@ class PrestamosEmpleados extends CI_Controller {
     public function getPagare() {
         try {
             /* PAGARE */
-            $x = $this->input;
+            $xxx = $this->input->post();
             $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
                             . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
                             . "P.aboemp,P.salemp,"
                             . "P.pesos AS PRESTAMOLETRAS,"
                             . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
                     ->from('prestamos AS P')
-                    ->where('P.pagare', $x->post('PAGARE'));
-            if ($x->post('FECHA') !== '') {
-                $pagare_info = $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$x->post('FECHA')}\" ", null, false)
+                    ->where('P.pagare', $xxx['PAGARE']);
+            if ($xxx['FECHA'] !== '') {
+                $pagare_info = $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$xxx['FECHA']}\" ", null, false)
                                 ->get()->result();
             } else {
                 $pagare_info = $this->db->get()->result();
@@ -242,27 +242,20 @@ class PrestamosEmpleados extends CI_Controller {
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
 
-            /* EMPLEADOS : PressAcum, AbonoPres y SaldoPres */
-
-            $this->db->set('PressAcum', $x->post('ULTIMOSALDO'))
-                    ->set('AbonoPres', $x->post('ABONO'))
-                    ->set('SaldoPres', $x->post('SALDO'))
-                    ->where('Numero', $pagare_info[0]->EMPLEADO)
-                    ->update('empleados');
 
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $p = array();
-            $p["PAGARE"] = $x->post('PAGARE');
+            $p["PAGARE"] = $xxx['PAGARE'];
             $p["FECHAPAGARE"] = Date('d/m/Y');
             $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
             $p["LUGAREXPEDICION"] = "LEON GTO";
-            $p["NUMEROENLETRA"] = $pagare_info[0]->PRESTAMOLETRAS;
-            $p["DEUDORNOMBRE"] = $empleado_info[0]->NOMBRECOMPLETO;
-            $p["DEUDORDIRECCION"] = $empleado_info[0]->DIRECCION;
-            $p["DEUDORCOLONIA"] = $empleado_info[0]->COLONIA;
+            $p["NUMEROENLETRA"] = strtoupper($pagare_info[0]->PRESTAMOLETRAS);
+            $p["DEUDORNOMBRE"] = $this->getValid($empleado_info[0]->NOMBRECOMPLETO);
+            $p["DEUDORDIRECCION"] = $this->getValid($empleado_info[0]->DIRECCION);
+            $p["DEUDORCOLONIA"] = $this->getValid($empleado_info[0]->COLONIA);
             $p["DEUDORCIUDAD"] = $empleado_info[0]->CIUDAD;
-            $p["DEUDORTELEFONO"] = $empleado_info[0]->TEL;
+            $p["DEUDORTELEFONO"] = $this->getValid($empleado_info[0]->TEL);
             $p["FECHAPAGO"] = date("d/m/Y", strtotime($pagare_info[0]->FECHA_PAGARE));
             $p["MONTO"] = '$' . number_format($pagare_info[0]->MONTO, 2, ".", ",");
             $jc->setParametros($p);
@@ -275,6 +268,10 @@ class PrestamosEmpleados extends CI_Controller {
         }
     }
 
+    public function getValid($str) {
+        return str_replace("0", "", $str);
+    }
+
     public function ModificaInteresPrestamos($param) {
         try {
             $this->db->set('PP.interes', $this->input->post('INTERES'))->update('prestamos AS PP');
@@ -285,12 +282,12 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPagares() {
         try {
-            $x = $this->input;
+            $xxx = $this->input->post();
             /* PAGARE X NUMERO */
-            if ($x->post('FECHA') === '' && $x->post('PAGARE') !== '') {
+            if ($xxx['FECHA'] === '' && $xxx['PAGARE'] !== '') {
                 $this->getPagare();
             } else
-            if ($x->post('FECHA') !== '' && $x->post('PAGARE') === '') {
+            if ($xxx['FECHA'] !== '' && $xxx['PAGARE'] === '') {
                 /* PAGARE X FECHA */
                 $pagare_info = $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
                                         . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
@@ -298,7 +295,7 @@ class PrestamosEmpleados extends CI_Controller {
                                         . "P.pesos AS PRESTAMOLETRAS,"
                                         . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
                                 ->from('prestamos AS P')
-                                ->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$x->post('FECHA')}\" ", null, false)
+                                ->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$xxx['FECHA']}\" ", null, false)
                                 ->get()->result();
 
                 $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "
@@ -312,7 +309,7 @@ class PrestamosEmpleados extends CI_Controller {
                 $jc = new JasperCommand();
                 $jc->setFolder('rpt/' . $this->session->USERNAME);
                 $p = array();
-                $p["FECHAPAGARES"] = $x->post('FECHA');
+                $p["FECHAPAGARES"] = $xxx['FECHA'];
                 $p["EMPRESA"] = $this->session->EMPRESA_RAZON;
                 $p["LUGAREXPEDICION"] = "LEON GTO";
                 $jc->setParametros($p);

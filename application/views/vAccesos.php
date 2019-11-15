@@ -33,6 +33,9 @@
                 <button id="btnAsignaAvaPRD" type="button" class="btn btn-primary d-none"  data-toggle="tooltip" data-placement="top" title="ASIGNAR AVAPRD">
                     <span class="fa fa-shield-alt"></span>
                 </button>
+                <button id="btnLog" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="LOGS">
+                    <span class="fa fa-align-justify"></span>
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -294,7 +297,65 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<div id="mdlLogs" class="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-bars"></span> Log de usuarios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label>Usuario</label>
+                        <div class="row">
+                            <div class="col-3">
+                                <input type="text" class="form-control form-control-sm" id="UsuarioLog" name="UsuarioLog" placeholder="999">
+                            </div>
+                            <div class="col-9">
+                                <select id="SUsuarioLog" name="SUsuarioLog" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    foreach ($this->db->query("SELECT U.ID AS ID, UPPER(U.Usuario) AS USUARIO FROM usuarios AS U")->result() as $k => $v) {
+                                        print "<option value='{$v->USUARIO}'>{$v->USUARIO}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12"> 
+                        <div id="Logs" class="table-responsive">
+                            <table id="tblLogs" class="table table-sm display nowrap " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Empresa</th>
+                                        <th>Modulo</th>
+                                        <th>Usuario</th>
+                                        <th>Departamento</th>
+                                        <th>Acción</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Dia</th>
+                                        <th>Mes</th>
+                                        <th>Año</th>
+                                        <th>Registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+<script>
     var pnlTablero = $("#pnlTablero"), pnlTableroBody = $("#pnlTablero").find(".card-body");
     var mxu = pnlTableroBody.find("#mxu"), oxmu = pnlTableroBody.find("#oxmu"),
             ixou = pnlTableroBody.find("#ixou"), sixiu = pnlTableroBody.find("#sixiu"),
@@ -309,10 +370,96 @@
             btnAsignarOpcionesxModulos = pnlTableroBody.find("#btnAsignarOpcionesxModulos"),
             btnAsignarItemsXOpcionXModulo = pnlTableroBody.find("#btnAsignarItemsXOpcionXModulo"),
             btnAsignarSubItemsXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubItemsXItemXOpcionXModulo"),
-            btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo");
+            btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo"),
+            btnLog = pnlTableroBody.find("#btnLog"), mdlLogs = $("#mdlLogs"),
+            tblLogs = mdlLogs.find("#tblLogs"), Logs, UsuarioLog = mdlLogs.find("#UsuarioLog"), SUsuarioLog = mdlLogs.find("#SUsuarioLog");
+
     var usr = '<?php PRINT $this->session->ID; ?>';
     $(document).ready(function () {
         console.log(usr);
+
+        mdlLogs.on('shown.bs.modal', function () {
+            Logs.ajax.reload(function () {
+                UsuarioLog.focus().select();
+            });
+        });
+
+        mdlLogs.on('hidden.bs.modal', function () {
+            UsuarioLog.val('');
+            SUsuarioLog[0].selectize.clear(true);
+        });
+
+        SUsuarioLog.change(function () {
+            if (SUsuarioLog.val()) {
+                UsuarioLog.val(SUsuarioLog.val());
+            } else {
+                UsuarioLog.val('');
+            }
+        });
+
+        UsuarioLog.on('keydown', function (e) {
+            if (e.keyCode === 13) { 
+                SUsuarioLog[0].selectize.setValue(UsuarioLog.val());
+                Logs.ajax.reload(function () {
+                    $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                });
+            }
+            if (e.keyCode === 8 && UsuarioLog.val() === '') {
+                SUsuarioLog[0].selectize.clear(true);
+                Logs.ajax.reload();
+            }
+        });
+
+        Logs = tblLogs.DataTable({
+            "dom": 'Bfrtip',
+            "ajax": {
+                "url": '<?php print base_url('Accesos/getLogs'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.USUARIO = (SUsuarioLog.val() ? SUsuarioLog.val() : '');
+                }
+            },
+            buttons: buttons,
+            "columns": [
+                {"data": "ID"}/*0*/,
+                {"data": "Empresa"}/*1*/,
+                {"data": "Modulo"}/*4*/,
+                {"data": "Usuario"}/*2*/,
+                {"data": "Tipo"}/*2*/,
+                {"data": "Accion"}/*5*/,
+                {"data": "Fecha"}/*6*/,
+                {"data": "Hora"}/*7*/,
+                {"data": "Dia"}/*7*/,
+                {"data": "Mes"}/*7*/,
+                {"data": "Anio"}/*7*/,
+                {"data": "Registro"}/*7*/
+            ],
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 20,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true,
+            "aaSorting": [
+                [0, 'desc']/*ID*/
+            ]
+        });
+
+        btnLog.click(function () {
+            mdlLogs.modal('show');
+        });
 
         pnlTableroBody.find("#btnCopiarAccesos").click(function () {
 
@@ -1271,7 +1418,7 @@
     }
     /*FIN SUBSUBITEMS*/
 
-</script>
+</script> 
 <style>
     .card{
         background-color: #f9f9f9;

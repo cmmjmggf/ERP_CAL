@@ -1,5 +1,5 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body ">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-6 float-left">
                 <legend class="float-left">Modifica y elimina pedido con control</legend>
@@ -136,8 +136,7 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+</div> 
 <script>
     var pnlTablero = $("#pnlTablero"), PedidoMEPCC = pnlTablero.find("#PedidoMEPCC"),
             ControlMEPCC = pnlTablero.find("#ControlMEPCC"),

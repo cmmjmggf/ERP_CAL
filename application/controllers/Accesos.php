@@ -26,6 +26,28 @@ class Accesos extends CI_Controller {
         }
     }
 
+    public function getLogs() {
+        try {
+            $x = $this->input->get();
+            $q = "SELECT L.ID AS ID, E.RazonSocial AS Empresa, L.Usuario, "
+                    . "L.Modulo, L.Accion, L.Fecha, L.Hora, L.Dia, L.Mes, "
+                    . "L.Anio, L.Estatus, L.Registro, L.Tipo "
+                    . "FROM logs AS L "
+                    . "INNER JOIN empresas AS E "
+                    . "ON L.Empresa = E.Clave "
+                    . "ORDER BY L.ID DESC";
+            $this->db->select("L.ID AS ID, E.RazonSocial AS Empresa, L.Usuario, L.Modulo, L.Accion, L.Fecha, L.Hora, L.Dia, L.Mes, L.Anio, L.Estatus, L.Registro, L.Tipo", false)
+                    ->from("logs AS L")->join("empresas AS E", "L.Empresa = E.Clave")->join("usuarios AS U", "L.IdUsuario = U.ID");
+            if ($x['USUARIO'] !== '') {
+                $this->db->where("U.Usuario", $x['USUARIO']);
+            }
+            $this->db->order_by('L.ID', 'DESC');
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onCopiarAccesosUsuario() {
         try {
             $usuario_recibe = $this->input->post('UsuarioRecibe');
