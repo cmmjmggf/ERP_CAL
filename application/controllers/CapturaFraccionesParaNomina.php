@@ -334,7 +334,8 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                 'fecha' => $nuevaFecha,
                 'status' => 1,
                 'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
-                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL
+                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL,
+                'fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
             );
             if ($x->post('Control') !== '0' && $x->post('Control') !== '') {
                 $stsnom = $this->CapturaFraccionesParaNomina_model->onVerificarSemanaNominaCerrada($this->input->post('Sem'), $this->input->post('Ano'));
