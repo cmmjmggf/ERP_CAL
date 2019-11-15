@@ -191,14 +191,14 @@ class FacturacionProduccion extends CI_Controller {
             }
 
             $cc = array(
-                'C.cliente' => $x['CLIENTE'], 'C.remicion' => $x['FACTURA'],
-                'C.fecha' => $x['FECHA'], 'C.importe' => $TOTAL,
-                'C.tipo' => $x['TP_DOCTO'],
-                'C.status' => 1, 'C.pagos' => 0,
-                'C.saldo' => $TOTAL, 'C.comiesp' => 1,
-                'C.tcamb' => $x['TIPO_DE_CAMBIO'], 'C.tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
-                'C.nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
-                'C.factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1));
+                'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
+                'fecha' => $x['FECHA'], 'importe' => $TOTAL,
+                'tipo' => $x['TP_DOCTO'],
+                'status' => 1, 'pagos' => 0,
+                'saldo' => $TOTAL, 'comiesp' => 1,
+                'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
+                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1));
             $this->db->insert('cartcliente', $cc);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -292,6 +292,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["ANIO"] = $x['ANIO'];
             $jc->setParametros($p);
             $this->getReportes($jc);
+            $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA DE LA SEMANA {$x['SEMANA']} LA CUAL ESTA ABIERTA.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -539,6 +540,7 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function getNominaCerrada() {
         try {
             $x = $this->input;
+            $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA CERRADA DE LA SEMANA {$x['SEMANA']}.", $this->session);
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $p = array();
@@ -558,7 +560,7 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function getReportes($jc) {
         try {
             $reports = array();
-
+            $this->benchmark->mark('code_start');
             /* 1. REPORTE DE PRENOMINA COMPLETO */
             $jc->setJasperurl('jrxml\prenomina\prenoml.jasper');
             $jc->setFilename('GenNomDeSem_' . Date('his'));
@@ -601,6 +603,10 @@ class GeneraNominaDeSemana extends CI_Controller {
             $jc->setDocumentformat('pdf');
             $reports['7SIETE'] = $jc->getReport();
 
+            $this->benchmark->mark('code_end');
+
+//            $reports['8MARK'] = $this->benchmark->elapsed_time('code_start', 'code_end');
+
 //            echo $this->benchmark->elapsed_time('code_start', 'code_end');
             print json_encode($reports);
         } catch (Exception $exc) {
@@ -611,6 +617,8 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function getVacaciones() {
         try {
             $x = $this->input;
+            $xxx = $this->input->post();
+            $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$xxx['SEMANA']}, {$xxx["ANIO"]}.", $this->session);
             $anio_completo = 365;
             $treinta_dias = 31;
             $total_vacaciones = 0;

@@ -260,7 +260,9 @@
                             }).done(function (a) {
                         console.log(a);
                         if (a.length > 0) {
-                            onImprimirReporteFancyArray(JSON.parse(a));
+                            onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                btnGeneraGNS.attr('disabled', false);
+                            });
                         } else {
 //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
                         }
