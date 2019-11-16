@@ -31,14 +31,14 @@
             scrolling: "auto"
         }
     };
-    
+
     $(document).ready(function () {
         $('html').find('input.date:not(.notEnter)').addClass('notEnter');
         $('html').find('input:not(.form-control-sm)').addClass('form-control-sm');
         $('html').find('select:not(.form-control-sm)').addClass('form-control-sm');
         $('html').find('button:not(.btn-sm)').addClass('btn-sm');
     });
-    
+
     function onOpenWindow(url) {
         onBeep(1);
         $.fancybox.open({
@@ -1328,29 +1328,26 @@
                                                         case 1:
                                                             if (vvv.IsSubItem !== null) {
                                                                 opcion += '<li class="dropdown-submenu">';
-                                                                opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vvv.SubItem + '</a>';
-                                                                /*NIVEL 3*/
-                                                                nav_subsubitems = vvv.SubItemDropdown;
-                                                                if (nav_subsubitems === 0) {
-                                                                    opcion += '<ul class="dropdown-menu  animate slideIn">';
-                                                                }
+                                                                opcion += '<a class="dropdown-item dropdown-toggle" href="#">';
+                                                                opcion += '<span class="fa fa-plus"></span> ';
+                                                                opcion += '<span class="fa fa-plus"></span> ';
+                                                                opcion += vvv.SubItem;
+                                                                opcion += '</a>';
+                                                                opcion += '<ul class="dropdown-menu  animate slideIn">';
                                                                 $.each(subsubitems, function (kss, vss) {
-                                                                    console.log("vss.IsSubSubItem", vss)
-                                                                    if (vss.IsSubSubItem !== null) {
-                                                                        switch (parseInt(vss.SubSubItemModal)) {
-                                                                            case 0:
-                                                                                opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
-                                                                                break;
-                                                                            case 1:
-                                                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
-                                                                                break;
-                                                                        }
-                                                                        nav_subsubitems = 1;
+                                                                    console.log(vss);
+                                                                    switch (parseInt(vss.SubSubItemModal)) {
+                                                                        case 0:
+                                                                            opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                            break;
+                                                                        case 1:
+                                                                            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + ' *</a>';
+                                                                            break;
                                                                     }
                                                                 });
-                                                                if (nav_subsubitems === 1 && parseInt(vvv.SubItemDropdown) === 0) {
-                                                                    opcion += '</ul>';
-                                                                }
+                                                                opcion += '</ul>';
+                                                                opcion += '</li>';
+
                                                             }
                                                             break;
                                                     }/*END SWITCH*/
@@ -1455,6 +1452,7 @@
 
     var modulos_counter = 0;
     function onMenuDisplay(e) {
+        onOpenOverlay('Cargando...');
         window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 

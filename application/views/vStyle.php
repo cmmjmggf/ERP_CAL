@@ -62,7 +62,7 @@
         font-weight: 400;
         color: #495057;
         text-align: left;
-        background-color: transparent;
+        background-color: #F3F3F9;
 
         font-size: 0.8875rem;
     }

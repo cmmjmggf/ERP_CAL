@@ -1,28 +1,32 @@
 <div class="modal" id="mdlReimprimeDocto">
     <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
-        <div class="modal-content">
+        <div class="modal-content"> 
             <div class="modal-header">
                 <h6 class="modal-title">
                     <span class="fa fa-print"></span> Regenera PDF y XML (Factura) y reimprime nota
-                </h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                </h6> 
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-12">
                         <label>Cliente</label>
-                        <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
-                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                                print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <input id="xClienteReg" name="xClienteReg" class="form-control form-control-sm" maxlength="15">
+                            </div>
+                            <div class="col-8">
+                                <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
+                                            ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                        print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Factura</label>
                         <input type="text" id="FacturaReg" name="FacturaReg" class="form-control form-control-sm">
@@ -63,8 +67,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptarReImprime">
-                    <span class="fa fa-check"></span> Aceptar
+                <button type="button" class="btn btn-info" id="btnAceptarReImprime">
+                    <span class="fa fa-print"></span> Aceptar
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     <span class="fa fa-times"></span> Salir</button>
@@ -74,6 +78,7 @@
 </div>
 <script>
     var mdlReimprimeDocto = $("#mdlReimprimeDocto"),
+            xClienteReg = mdlReimprimeDocto.find("#xClienteReg"),
             ClienteReg = mdlReimprimeDocto.find("#ClienteReg"),
             FacturaReg = mdlReimprimeDocto.find("#FacturaReg"),
             TPReg = mdlReimprimeDocto.find("#TPReg"),
@@ -82,6 +87,30 @@
     $(document).ready(function () {
 
         handleEnterDiv(mdlReimprimeDocto);
+        xClienteReg.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xClienteReg.val()) {
+                    ClienteReg[0].selectize.setValue(xClienteReg.val());
+                    if (ClienteReg.val()) {
+                        ClienteReg[0].selectize.disable();
+                    } else {
+                        ClienteReg[0].selectize.clear(true);
+                        ClienteReg[0].selectize.disable();
+                        iMsg('NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', 'w', function () {
+                            xClienteReg.focus().select();
+                            ClienteReg[0].selectize.enable();
+                        });
+                    }
+                } else {
+                    ClienteReg[0].selectize.clear(true);
+                    ClienteReg[0].selectize.enable();
+                }
+            } else {
+                ClienteReg[0].selectize.clear(true);
+                ClienteReg[0].selectize.enable();
+            }
+        });
+
 
         btnAceptarReImprime.click(function () {
             if (ClienteReg.val() && FacturaReg.val() && TPReg.val()) {
@@ -113,7 +142,7 @@
         });
 
         mdlReimprimeDocto.on('shown.bs.modal', function () {
-            ClienteReg[0].selectize.focus();
+            xClienteReg.focus();
         });
     });
 </script>

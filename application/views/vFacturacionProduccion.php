@@ -1,31 +1,33 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
-                <div class="btn-group" role="group" aria-label="BOTON CON CATALOGOS">
-                    <button type="button" class="btn btn-info button-dropdown">CATÁLOGOS</button>
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop3">
-                            <a class="dropdown-item" href="#" onclick="btnClientes.trigger('click');"><span class="fa fa-users"></span> CLIENTES</a>
-                            <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
-                        </div>
+                <div class="btn-group">
+                    <a class="btn btn-info btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        CATÁLOGOS
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#" onclick="btnClientes.trigger('click');"><span class="fa fa-users"></span> CLIENTES</a>
+                        <a class="dropdown-item" href="#"  onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
                     </div>
-                </div>
-                <button type="button" id="btnClientes" name="btnClientes" class="btn btn-primary d-none">
-                    <span class="fa fa-users"></span>  CLIENTES
-                </button>
-                <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
-                    <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
-                </button>
+                </div> 
                 <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
+                </button>
+
+
+                <button type="button" id="btnClientes" name="btnClientes" class="btn btn-primary d-none">
+                    <span class="fa fa-users"></span>  CLIENTES
+                </button>
+                <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
+                    <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" align="center">
@@ -100,7 +102,7 @@
                                     <span class="fa fa-exclamation"></span>
                                 </button>
 
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info d-none" style="padding: 8px 15px 8px 15px !important; ">
+                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info btn-sm d-none" style="padding: 8px 15px 8px 15px !important; ">
                                     <span class="fa fa-eye"></span>
                                 </button>
 
@@ -668,7 +670,7 @@
                 TiendaClave.focus().select();
             }
         });
-        
+
         btnCerrarTiendaModal.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 mdlConsignarA.modal('hide');

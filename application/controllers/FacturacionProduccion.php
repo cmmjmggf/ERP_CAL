@@ -19,7 +19,7 @@ class FacturacionProduccion extends CI_Controller {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
-                case 'SUPER ADMINISTRADOR':
+                case 'SUPER ADMINISTRADOR': 
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
