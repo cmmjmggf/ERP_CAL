@@ -210,12 +210,13 @@
                             parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
                             $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
                                 console.log(a);
-                                busy = true;
+                                busy = false;
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
                                 btnGeneraGNS.attr('disabled', false);
                                 HoldOn.close();
+                                busy = false;
                             });
                         } else {
                             swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
@@ -241,6 +242,7 @@
                         }).always(function () {
                             HoldOn.close();
                             btnGeneraGNS.attr('disabled', false);
+                            busy = false;
                         });
                         break;
                 }
@@ -269,6 +271,7 @@
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
+                        busy = false;
                         btnGeneraGNS.attr('disabled', false);
                         HoldOn.close();
                     });
@@ -292,6 +295,7 @@
                         if (a.length > 0) {
                             onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
                                 btnGeneraGNS.attr('disabled', false);
+                                busy = false;
                             });
                         } else {
                             swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
@@ -301,11 +305,13 @@
                     }).always(function () {
                         btnGeneraGNS.attr('disabled', false);
                         HoldOn.close();
+                        busy = false;
                     });
                 }
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA SEMANA Y UN AÑO', 'warning').then((value) => {
                     SemanaGNS.focus().select();
+                    busy = false;
                 });
             }
         });

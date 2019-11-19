@@ -252,10 +252,10 @@ class FacturacionProduccion extends CI_Controller {
             $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1);
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
-            $f["origen"] = NULL;
+            $f["origen"] = 0;
             $f["referen"] = $x["REFERENCIA"];
 
-            $f["decdias"] = NULL;
+            $f["decdias"] = 0;
             $f["agente"] = $x["AGENTE"];
             $f["colsuel"] = $x["COLOR_TEXT"];
             $f["tpofac"] = 1;
@@ -264,7 +264,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["horas"] = date('h:i:s a');
             $f["numero"] = 1;
             $f["talla"] = 0;
-            $f["cobarr"] = NULL;
+            $f["cobarr"] = "";
             $f["pedime"] = NULL;
             $f["ordcom"] = NULL;
             $f["numadu"] = NULL;

@@ -648,7 +648,19 @@
         handleEnterDiv(mdlConsignarA);
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                ClienteFactura[0].selectize.setValue(ClienteClave.val());
+                if (ClienteClave.val()) {
+                    ClienteFactura[0].selectize.setValue(ClienteClave.val());
+                    if (ClienteFactura.val()) {
+                        ClienteClave[0].selectize.disabled();
+                    } else {
+                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                            ClienteClave.focus().select();
+                        });
+                    }
+                } else {
+                    ClienteClave[0].selectize.enable();
+                    ClienteClave[0].selectize.clear(true);
+                }
             }
         });
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenoml" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
-	<property name="ireport.zoom" value="2.357947691000077"/>
-	<property name="ireport.x" value="627"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenoml" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -331,7 +331,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="254" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="aeb2d3fc-3fbc-4e5d-8fe6-c40dd874f080"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -511,8 +511,8 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<columnHeader>
-		<band height="62">
+	<pageHeader>
+		<band height="61">
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="72" y="16" width="145" height="14" isPrintInFirstWholeBand="true" uuid="660afdd6-47c1-40fe-aa49-8f0f7ee738f2"/>
 				<textElement verticalAlignment="Middle">
@@ -654,7 +654,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<text><![CDATA[Total Deducciones]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="215" y="47" width="20" height="14" isPrintInFirstWholeBand="true" uuid="8a1f3049-94b7-4a2f-8043-524405f45bd8"/>
+				<reportElement isPrintRepeatedValues="false" x="215" y="47" width="25" height="14" isPrintInFirstWholeBand="true" uuid="8a1f3049-94b7-4a2f-8043-524405f45bd8"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -953,7 +953,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<text><![CDATA[Neto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="255" y="47" width="33" height="14" isPrintInFirstWholeBand="true" uuid="c89ecabf-8928-45d0-8b02-fcb0318ab033"/>
+				<reportElement isPrintRepeatedValues="false" x="260" y="47" width="28" height="14" isPrintInFirstWholeBand="true" uuid="c89ecabf-8928-45d0-8b02-fcb0318ab033"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -966,7 +966,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="235" y="47" width="20" height="14" isPrintInFirstWholeBand="true" uuid="bccde6f4-b00e-4a2d-a2c5-5aed43ef434e"/>
+				<reportElement isPrintRepeatedValues="false" x="240" y="47" width="20" height="14" isPrintInFirstWholeBand="true" uuid="bccde6f4-b00e-4a2d-a2c5-5aed43ef434e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -992,6 +992,9 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<text><![CDATA[Cel]]></text>
 			</staticText>
 		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
 	</columnHeader>
 	<detail>
 		<band height="11" splitType="Stretch">
@@ -1041,7 +1044,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<textFieldExpression><![CDATA[$F{CELULA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="215" y="0" width="20" height="10" uuid="b587569a-85ad-4e36-aebd-a30a4164d21b">
+				<reportElement x="214" y="0" width="25" height="10" uuid="b587569a-85ad-4e36-aebd-a30a4164d21b">
 					<printWhenExpression><![CDATA[$F{CELULA_PORCENTAJE}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -1050,7 +1053,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<textFieldExpression><![CDATA[$F{CELULA_PORCENTAJE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="235" y="0" width="20" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f35892bc-d4d3-4bed-8c68-1b2e56755f9b"/>
+				<reportElement mode="Transparent" x="240" y="0" width="20" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f35892bc-d4d3-4bed-8c68-1b2e56755f9b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1058,7 +1061,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<textFieldExpression><![CDATA[$F{diasemp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="0" width="33" height="10" uuid="2e33044f-2a56-4bf0-b945-c4ddc01729c3">
+				<reportElement x="260" y="0" width="29" height="10" uuid="2e33044f-2a56-4bf0-b945-c4ddc01729c3">
 					<printWhenExpression><![CDATA[$F{pares}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -1133,7 +1136,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<textFieldExpression><![CDATA[$F{otrper1}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="254" y="0" width="1" height="10" uuid="5ab51ee8-b56f-4703-ae0e-482eecd98137"/>
+				<reportElement x="260" y="0" width="1" height="10" uuid="5ab51ee8-b56f-4703-ae0e-482eecd98137"/>
 			</line>
 			<line>
 				<reportElement x="288" y="0" width="1" height="10" uuid="c116c45c-2d95-42a8-9ba6-0e22c45ca4d9"/>
@@ -1348,7 +1351,7 @@ ORDER BY ABS(NUMDEP) ASC , E.Busqueda ASC]]>
 				<reportElement x="214" y="0" width="1" height="10" uuid="276be7bd-5d83-4045-9f01-58b439a5a41f"/>
 			</line>
 			<line>
-				<reportElement x="234" y="0" width="1" height="10" uuid="b39f491e-f77c-4fb1-b916-d5878ce00359"/>
+				<reportElement x="239" y="0" width="1" height="10" uuid="b39f491e-f77c-4fb1-b916-d5878ce00359"/>
 			</line>
 		</band>
 	</detail>
