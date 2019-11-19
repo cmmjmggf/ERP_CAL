@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h5 class="modal-title">Captura precio de venta X lista linea </h5>
-                    </div> 
+                    </div>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -25,7 +25,7 @@
                 <div class="row d-none animated fadeIn" id="mdlPanelDos">
                     <div class="col-12">
                         <label for="">Estilo</label>
-                        <input type="text" id="EstiloCPVTAXLTA" name="EstiloCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="EstiloCPVTAXLTA" name="EstiloCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="w-100"></div>
                     <div class="col-12 text-center mt-2">
@@ -33,40 +33,40 @@
                     </div>
                     <div class="col-4">
                         <label for="">Lta-1</label>
-                        <input type="text" id="ListaUnoCPVTAXLTA" name="ListaUnoCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaUnoCPVTAXLTA" name="ListaUnoCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-2</label>
-                        <input type="text" id="ListaDosCPVTAXLTA" name="ListaDosCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaDosCPVTAXLTA" name="ListaDosCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-3</label>
-                        <input type="text" id="ListaTresCPVTAXLTA" name="ListaTresCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaTresCPVTAXLTA" name="ListaTresCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-6</label>
-                        <input type="text" id="ListaSeisCPVTAXLTA" name="ListaSeisCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaSeisCPVTAXLTA" name="ListaSeisCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-12</label>
-                        <input type="text" id="ListaDoceCPVTAXLTA" name="ListaDoceCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaDoceCPVTAXLTA" name="ListaDoceCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-25</label>
-                        <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm" maxlength="15"> 
+                        <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
                     </div>
-                    <div class="col-6 mt-2" align="left">   
+                    <div class="col-6 mt-2" align="left">
                         <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
                             <span class="fa fa-arrow-left"></span> Volver
-                        </button>  
+                        </button>
                     </div>
-                    <div class="col-6 mt-2" align="right">    
+                    <div class="col-6 mt-2" align="right">
                         <button type="button" id="btnAceptaListaXEstilo" name="btnAceptaListaXEstilo" class="btn btn-primary">
                             <span class="fa fa-check"></span> Acepta
                         </button>
                     </div>
                 </div>
-                <div class="col-12"  align="left">  
+                <div class="col-12"  align="left">
                     <button type="button" id="btnPorListasDePrecios" class="btn btn-primary">Por listas de precios 1,2,3 y 12</button>
                 </div>
                 <div class="row">
@@ -92,7 +92,7 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-12" align="left">
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
 
 
     var opciones_detalle = {
-        dom: 'rtip',
+        dom: 'rtp',
         buttons: buttons,
         "columns": [
             {"data": "ID"},
@@ -146,7 +146,7 @@
         "deferRender": true,
         "scrollCollapse": false,
         "bSort": true,
-        "scrollY": "500px",
+        "scrollY": "330px",
         "scrollX": true,
         initComplete: function (x, y) {
             HoldOn.close();
@@ -211,7 +211,7 @@
         });
 
         mdlCapturaDeVtaXListaLinea.on('shown.bs.modal', function () {
-            getRecords();
+            getPreciosVenta();
             getListasDePrecios();
             getLineas();
             ListaCPVTAXLTA[0].selectize.focus();
@@ -259,7 +259,7 @@
         });
     }
 
-    function getRecords() {
+    function getPreciosVenta() {
         HoldOn.open({
             theme: 'sk-rect',
             message: 'Cargando...'

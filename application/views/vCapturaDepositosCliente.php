@@ -24,9 +24,13 @@
                 <label>Tp</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
             </div>
+            <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>Banco</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" required="">
+            </div>
             <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Banco</label>
-                <select id="Banco" name="Banco" class="form-control form-control-sm required" required="" >
+                <label for="" >-</label>
+                <select id="sBanco" name="sBanco" class="form-control form-control-sm required NotSelectize" required="" >
                     <option value=""></option>
                 </select>
             </div>
@@ -107,7 +111,10 @@
     $(document).ready(function () {
         /*BOTONES*/
 
-
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         pnlTablero.find("#btnTipoCambio").click(function () {
             $('#mdlTipoCambio').modal('show');
         });
@@ -242,9 +249,43 @@
                 }
             }
         });
-        pnlTablero.find("#Banco").change(function () {
+        pnlTablero.find('#Banco').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtbco = $(this).val();
+                if (txtbco) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    $.getJSON(master_url + 'onVerificarBanco', {Banco: txtbco, Tp: tp}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sBanco")[0].selectize.addItem(txtbco, true);
+
+                            $.getJSON(master_url + 'getCtaBancoCont', {
+                                Banco: txtbco
+                            }).done(function (data) {
+                                if (data.length > 0) {
+                                    pnlTablero.find("#CtaCont").val(data[0].sctaconf);
+                                }
+                                pnlTablero.find("#FechaDoc").focus().select();
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL BANCO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sBanco")[0].selectize.clear(true);
+                                pnlTablero.find('#Banco').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sBanco").change(function () {
             if ($(this).val()) {
-                var banco = pnlTablero.find("#Tp").val();
+                pnlTablero.find('#Banco').val($(this).val());
+                var banco = pnlTablero.find("#sBanco").val();
                 $.getJSON(master_url + 'getCtaBancoCont', {
                     Banco: banco
                 }).done(function (data) {
@@ -360,6 +401,7 @@
             }
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 swal({
@@ -394,6 +436,7 @@
                             Moneda: mnda,
                             TipoCambio: tc
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
                             remi = 0;
                             DepositosClientes.ajax.reload();
@@ -409,6 +452,7 @@
                     }
                 });
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
 
@@ -602,7 +646,7 @@
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
             getBancos(tp);
-            pnlTablero.find('#Banco')[0].selectize.focus();
+            pnlTablero.find('#Banco').focus().select();
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -616,11 +660,11 @@
         }
     }
     function getBancos(tp) {
-        pnlTablero.find("#Banco")[0].selectize.clear(true);
-        pnlTablero.find("#Banco")[0].selectize.clearOptions();
+        pnlTablero.find("#sBanco")[0].selectize.clear(true);
+        pnlTablero.find("#sBanco")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getBancos', {Tp: tp}).done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Banco")[0].selectize.addOption({text: v.Banco, value: v.Clave});
+                pnlTablero.find("#sBanco")[0].selectize.addOption({text: v.Banco, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -640,7 +684,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

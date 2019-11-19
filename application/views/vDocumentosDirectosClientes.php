@@ -13,9 +13,13 @@
                 <label>Tp</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
             </div>
+            <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>Cliente</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5" required="">
+            </div>
             <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Cliente</label>
-                <select id="Cliente" name="Cliente" class="form-control form-control-sm required" required="" >
+                <label for="" >-</label>
+                <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize" required="" >
                     <option value=""></option>
                 </select>
             </div>
@@ -69,6 +73,10 @@
     var btnGuardar = pnlTablero.find('#btnGuardar');
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
@@ -83,8 +91,32 @@
                 }
             }
         });
-        pnlTablero.find("#Cliente").change(function () {
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
+                            var tp = pnlTablero.find("#Tp").val();
+                            getRecords(txtcte, tp);
+                            pnlTablero.find("#Doc").focus();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
+                pnlTablero.find('#Cliente').val($(this).val());
                 var tp = pnlTablero.find("#Tp").val();
                 getRecords($(this).val(), tp);
                 pnlTablero.find("#Doc").focus();
@@ -298,7 +330,7 @@
     function onVerificarTp(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-            pnlTablero.find('#Cliente')[0].selectize.focus();
+            pnlTablero.find('#Cliente').focus();
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -312,11 +344,11 @@
         }
     }
     function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
+        pnlTablero.find("#sCliente")[0].selectize.clear(true);
+        pnlTablero.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                pnlTablero.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -336,7 +368,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

@@ -295,7 +295,10 @@
         mes = 0;
         mes_act;
         pnlTablero.find("input").val("");
-        pnlTablero.find("select").selectize();
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });

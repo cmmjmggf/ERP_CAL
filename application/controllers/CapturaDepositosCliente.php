@@ -36,6 +36,16 @@ class CapturaDepositosCliente extends CI_Controller {
         }
     }
 
+    public function onVerificarBanco() {
+        try {
+            $Tp = $this->input->get('Tp');
+            $Banco = $this->input->get('Banco');
+            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getBancos() {
         try {
             print json_encode($this->cdc->getBancos($this->input->get('Tp')));
