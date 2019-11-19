@@ -114,7 +114,7 @@
             files.push({
                 toolbar: false,
                 smallBtn: true,
-                src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#pagemode=thumbs',
+                src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#zoom=130',
                 type: 'iframe',
                 opts: {
                     afterClose: doafterClose,

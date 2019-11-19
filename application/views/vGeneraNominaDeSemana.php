@@ -80,7 +80,7 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-info btn-sm btn-block" id="btnGeneraGNS">
+                        <button type="button" class="btn btn-success btn-sm btn-block" style="background-color: #4CAF50; border-color: #4CAF50;" id="btnGeneraGNS">
                             <span class="fa fa-print"></span> GENERA</button>
                     </div>
                     <div class="col-6">
@@ -96,7 +96,9 @@
                         <button type="button" class="btn btn-danger btn-sm btn-block" id="btnCierraNominaGNS">
                             <span class="fa fa-calendar-times"></span> CIERRA NÓMINA</button>
                     </div>
-                    <div class="w-100 my-2"></div>
+                    <div class="w-100 my-2">
+                        <hr>
+                    </div>
                     <div class="col-12">
                         <button type="button" class="btn btn-danger btn-sm btn-block" id="btnEliminaMovGenGNS">
                             <span class="fa fa-calendar-times"></span> ELIMINA MOVIMIENTOS GENERADOS </button>
