@@ -41,13 +41,13 @@
                         <label>Fecha Final</label>
                         <input type="text" id="FechaFinalGNS" name="FechaFinalGDF" maxlength="12" class="form-control form-control-sm date" readonly="">
                     </div>
-                    <div class="col-12 mt-4">
-                        <div class="alert alert-dismissible alert-primary">
-                            <strong>
-                                Nota. 
-                                <br>Para semana de vacaciones debe ser año actual semana 99. 
-                                <br>Para semana de aguinaldo debe ser año actual y semana 98.
-                            </strong>
+                    <div class="col-12">
+                        <div class="m-2 p-2 border border-primary rounded">
+                            <span class="font-weight-bold text-danger">Nota:</span>
+                            <div class="w-100"></div>
+                            <span class="font-weight-bold text-primary">Para semana de vacaciones debe ser año actual semana </span><span class="font-weight-bold text-danger">99. </span>
+                            <div class="w-100"></div>
+                            <span class="font-weight-bold text-primary">Para semana de aguinaldo debe ser año actual y semana </span><span class="font-weight-bold text-danger">98.</span>
                         </div>
                     </div>
                     <!--ESTO SOLO APLICA CUANDO PONEN LA SEM 99 (VACACIONES) Y 98 (AGUINALDO)-->

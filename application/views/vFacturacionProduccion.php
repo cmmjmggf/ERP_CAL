@@ -190,7 +190,7 @@
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
                               id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
                               data-placement="top" title="ELIJE UN CONTROL">
-                            <i class="fa fa-chess-pawn"></i>  SELECCIONA UN CONTROL
+                            <i class="fa fa-hand-pointer mr-2 "></i>  SELECCIONA UN CONTROL
                         </span>
                     </span>
                 </div>
@@ -646,21 +646,36 @@
     $(document).ready(function () {
 
         handleEnterDiv(mdlConsignarA);
+
+        ClienteFactura.change(function () {
+            if (ClienteFactura.val()) {
+                ClienteClave.val(ClienteFactura.val());
+                ClienteFactura[0].selectize.disable();
+            } else {
+                ClienteClave.val('');
+                ClienteFactura[0].selectize.enable();
+                ClienteFactura[0].selectize.clear(true);
+            }
+        });
+
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
                     ClienteFactura[0].selectize.setValue(ClienteClave.val());
                     if (ClienteFactura.val()) {
-                        ClienteClave[0].selectize.disabled();
+                        ClienteFactura[0].selectize.disable();
                     } else {
                         iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
                             ClienteClave.focus().select();
                         });
                     }
                 } else {
-                    ClienteClave[0].selectize.enable();
-                    ClienteClave[0].selectize.clear(true);
+                    ClienteFactura[0].selectize.enable();
+                    ClienteFactura[0].selectize.clear(true);
                 }
+            } else {
+                ClienteFactura[0].selectize.enable();
+                ClienteFactura[0].selectize.clear(true);
             }
         });
 
