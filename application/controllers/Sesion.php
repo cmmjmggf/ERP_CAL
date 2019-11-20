@@ -36,7 +36,15 @@ class Sesion extends CI_Controller {
                     $is_valid = true;
                     break;
                 case 'FACTURACION':
-                    $this->load->view('vMenuClientes');
+                    $MODULOS = $this->db->query("SELECT COUNT(*) AS NM FROM modulosxusuario AS A WHERE A.Usuario IN({$this->session->ID})")->result();
+                    switch (intval($MODULOS[0]->NM)) {
+                        case 1:
+                            $this->load->view('vMenuClientes');
+                            break;
+                        default:
+                            $this->load->view('vMenuPrincipal')->view('vQuickMenu');
+                            break;
+                    }
                     $is_valid = true;
                     break;
                 case 'ALMACEN':
@@ -45,7 +53,6 @@ class Sesion extends CI_Controller {
                     break;
                 case 'PRODUCCION':
                     $MODULOS = $this->db->query("SELECT COUNT(*) AS NM FROM modulosxusuario AS A WHERE A.Usuario IN({$this->session->ID})")->result();
-                    $this->load->view('vNavGeneral');
                     switch (intval($MODULOS[0]->NM)) {
                         case 1:
                             $this->load->view('vMenuProduccion');
