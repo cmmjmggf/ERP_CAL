@@ -42,6 +42,25 @@ class PagosConCincoDescuento extends CI_Controller {
         }
     }
 
+    public function onVerificarBanco() {
+        try {
+            $Tp = $this->input->get('Tp');
+            $Banco = $this->input->get('Banco');
+            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             $cte = $this->input->get('Cliente');

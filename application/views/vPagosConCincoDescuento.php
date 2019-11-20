@@ -18,9 +18,13 @@
                         <label>Tp</label>
                         <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
                     </div>
+                    <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                        <label>Banco</label>
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" required="">
+                    </div>
                     <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >Banco</label>
-                        <select id="Banco" name="Banco" class="form-control form-control-sm required" required="" >
+                        <label for="" >-</label>
+                        <select id="sBanco" name="sBanco" class="form-control form-control-sm required NotSelectize" required="" >
                             <option value=""></option>
                         </select>
                     </div>
@@ -30,9 +34,13 @@
                             <option value=""></option>
                         </select>
                     </div>
+                    <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                        <label>Cliente</label>
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5" required="">
+                    </div>
                     <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >Cliente</label>
-                        <select id="Cliente" name="Cliente" class="form-control form-control-sm required" >
+                        <label for="" >-</label>
+                        <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize" >
                             <option value=""></option>
                         </select>
                     </div>
@@ -193,6 +201,10 @@
 //                console.log(data);
 //            });
 //        });
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
 
         /*FUNCIONES INICIALES*/
         pnlTablero.find("input").val("");
@@ -211,10 +223,46 @@
                 }
             }
         });
-        pnlTablero.find("#Banco").change(function () {
+        pnlTablero.find('#Banco').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtbco = $(this).val();
+                if (txtbco) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    $.getJSON(master_url + 'onVerificarBanco', {Banco: txtbco, Tp: tp}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sBanco")[0].selectize.addItem(txtbco, true);
+                            pnlTablero.find("#Doc")[0].selectize.clear(true);
+                            pnlTablero.find("#Doc")[0].selectize.clearOptions();
+                            $.getJSON(master_url + 'getDocumentos', {
+                                Banco: txtbco,
+                                Tp: tp
+                            }).done(function (data) {
+                                $.each(data, function (k, v) {
+                                    pnlTablero.find("#Doc")[0].selectize.addOption({text: v.docto + '-' + v.banco + '-' + v.cuenta + ' - $' + v.importe, value: v.docto});
+                                });
+                                pnlTablero.find("#Doc")[0].selectize.focus();
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL BANCO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sBanco")[0].selectize.clear(true);
+                                pnlTablero.find('#Banco').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sBanco").change(function () {
             if ($(this).val()) {
                 var tp = pnlTablero.find("#Tp").val();
-                var banco = pnlTablero.find("#Banco").val();
+                var banco = pnlTablero.find("#sBanco").val();
+                pnlTablero.find('#Banco').val($(this).val());
                 pnlTablero.find("#Doc")[0].selectize.clear(true);
                 pnlTablero.find("#Doc")[0].selectize.clearOptions();
                 $.getJSON(master_url + 'getDocumentos', {
@@ -243,7 +291,7 @@
                         pnlTablero.find("#FechaDeposito").val(data[0].fechaF);
                         pnlTablero.find("#EstatusDeposito").val(data[0].status);
                         pnlTablero.find("#CuentaDeposito").val(data[0].cuenta);
-                        pnlTablero.find("#Cliente")[0].selectize.focus();
+                        pnlTablero.find("#Cliente").focus();
                     }
                 }).fail(function (x, y, z) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -252,10 +300,44 @@
 
             }
         });
-        pnlTablero.find("#Cliente").change(function () {
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
+                            $.getJSON(master_url + 'getDatosCliente', {
+                                Cliente: txtcte
+                            }).done(function (data) {
+                                if (data.length > 0) {
+                                    agente = data[0].Agente;
+                                }
+                                //obtenemos los documentos de este cliente con saldo
+                                getRecords(tp, txtcte);
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sCliente").change(function () {
             var cliente = $(this).val();
             var tp = pnlTablero.find("#Tp").val();
             if (cliente) {
+                pnlTablero.find("#Cliente").val(cliente);
                 $.getJSON(master_url + 'getDatosCliente', {
                     Cliente: cliente
                 }).done(function (data) {
@@ -493,7 +575,7 @@
             "colReorder": true,
             "displayLength": 999,
             "scrollX": true,
-            "scrollY": 350,
+            "scrollY": 300,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -624,7 +706,7 @@
             "colReorder": true,
             "displayLength": 999,
             "scrollX": true,
-            "scrollY": 350,
+            "scrollY": 300,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -676,7 +758,7 @@
         var tp = parseInt($(v).val());
         if (tp === 1) {
             getBancos(tp);
-            pnlTablero.find('#Banco')[0].selectize.focus();
+            pnlTablero.find('#Banco').focus();
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -690,11 +772,11 @@
         }
     }
     function getBancos(tp) {
-        pnlTablero.find("#Banco")[0].selectize.clear(true);
-        pnlTablero.find("#Banco")[0].selectize.clearOptions();
+        pnlTablero.find("#sBanco")[0].selectize.clear(true);
+        pnlTablero.find("#sBanco")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getBancos', {Tp: tp}).done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Banco")[0].selectize.addOption({text: v.Banco, value: v.Clave});
+                pnlTablero.find("#sBanco")[0].selectize.addOption({text: v.Banco, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -702,11 +784,11 @@
         });
     }
     function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
+        pnlTablero.find("#sCliente")[0].selectize.clear(true);
+        pnlTablero.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                pnlTablero.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
