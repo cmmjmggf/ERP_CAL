@@ -10,7 +10,7 @@
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT tipo, numdepto, nomdepto, importe, numemp, nomemp, fecha, fechaap, ctaemp,concepto
+		<![CDATA[SELECT tipo, numdepto, nomdepto, truncate(importe,0) as importe, numemp, nomemp, fecha, fechaap, ctaemp,concepto
 FROM nominabanco
 order by tipo asc,numdepto asc, nomemp asc;]]>
 	</queryString>

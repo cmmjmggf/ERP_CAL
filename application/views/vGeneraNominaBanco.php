@@ -38,6 +38,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir"><span class="fa fa-file-alt"></span> EXPORTAR TXT </button>
                 <button type="button" class="btn btn-danger" id="btnImprimirPDF"><span class="fa fa-file-pdf"></span> IMPRIMIR PDF</button>
+                <button type="button" class="btn btn-success" id="btnImprimirXLS"><span class="fa fa-file-excel"></span> EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -65,7 +66,41 @@
             getSemanaByFechaNominaBancoControlNom(getFechaActualConDiagonales());
             mdlGeneraNominaBanco.find('#AnoNominaBanco').focus().select();
         });
+        mdlGeneraNominaBanco.find('#btnImprimirXLS').on("click", function () {
+            mdlGeneraNominaBanco.find('#btnImprimirXLS').attr('disabled', true);
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlGeneraNominaBanco.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesNominaJasper/onReporteNominaBancoXLS',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    window.open(data, '_blank');
+                    mdlGeneraNominaBanco.find('#btnImprimirXLS').attr('disabled', false);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA EL REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlGeneraNominaBanco.find('#btnImprimirXLS').attr('disabled', false);
+                        mdlGeneraNominaBanco.find('#FechaAplicacionNomina').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                mdlGeneraNominaBanco.find('#btnImprimirXLS').attr('disabled', false);
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
         mdlGeneraNominaBanco.find('#btnImprimirPDF').on("click", function () {
+            mdlGeneraNominaBanco.find('#btnImprimirPDF').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlGeneraNominaBanco.find("#frmCaptura")[0]);
             $.ajax({
@@ -78,47 +113,32 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+
+                    onImprimirReporteFancyArrayAFC(JSON.parse(data), function (a, b) {
+                        mdlGeneraNominaBanco.find('#btnImprimirPDF').attr('disabled', false);
                     });
+
+
                 } else {
                     swal({
                         title: "ATENCIÓN",
                         text: "NO EXISTEN DATOS PARA EL REPORTE",
                         icon: "error"
                     }).then((action) => {
+                        mdlGeneraNominaBanco.find('#btnImprimirPDF').attr('disabled', false);
                         mdlGeneraNominaBanco.find('#FechaAplicacionNomina').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlGeneraNominaBanco.find('#btnImprimirPDF').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });
         });
 
         mdlGeneraNominaBanco.find('#btnImprimir').on("click", function () {
+            mdlGeneraNominaBanco.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
             var frm = new FormData(mdlGeneraNominaBanco.find("#frmCaptura")[0]);
             $.ajax({
@@ -129,6 +149,7 @@
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
+                mdlGeneraNominaBanco.find('#btnImprimir').attr('disabled', false);
                 console.log(data);
                 onGeneraNominaFiscal();
                 setTimeout(function () {

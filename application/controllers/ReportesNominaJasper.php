@@ -334,11 +334,11 @@ FROM costomanoobratemp CMT
         $sem = $x->post('SemAguinaldos');
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
-                    truncate(
+                    (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    ,0) as Neto,
-                     truncate(P.salfis,0) as SueldoFiscal,
+                    ) as Neto,
+                    (P.salfis) as SueldoFiscal,
                     '02' as col1,
                     '90' as col3,
                     date_format(now(),'%Y%m%d') as col4,
@@ -433,11 +433,11 @@ FROM costomanoobratemp CMT
         $sem = $x->post('SemAguinaldos');
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
-                    truncate(
+                    (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    ,0) as Neto,
-                    truncate(P.salfis,0) as SueldoFiscal,
+                    ) as Neto,
+                    (P.salfis) as SueldoFiscal,
                     E.numero as numemp,
                     E.busqueda as nomemp,
                     E.TBanbajio,
@@ -515,11 +515,11 @@ FROM costomanoobratemp CMT
         $sem = $x->post('SemNominaBanco');
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
-                    truncate(
+                    (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    ,0) as Neto,
-                    truncate(E.SueldoFijo,0) as SueldoFiscal,
+                    ) as Neto,
+                    (E.SueldoFijo) as SueldoFiscal,
                     E.numero as numemp,
                     E.busqueda as nomemp,
                     E.TBanbajio,
@@ -620,17 +620,156 @@ FROM costomanoobratemp CMT
                     ));
                 }
             }
-            //Imprimimos el reporte
+            $reports = array();
+
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $parametros = array();
             $parametros["logo"] = base_url() . $this->session->LOGO;
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+
+            //Imprimimos el reporte
+//            $jc->setParametros($parametros);
+//            $jc->setJasperurl('jrxml\nominas\reporteNominaBanco.jasper');
+//            $jc->setFilename('NOMINA_BANCO_' . Date('h_i_s'));
+//            $jc->setDocumentformat('pdf');
+//            $reports['1UNO'] = $jc->getReport();
+            //Imprimimos el reporte 2
             $jc->setParametros($parametros);
-            $jc->setJasperurl('jrxml\nominas\reporteNominaBanco.jasper');
-            $jc->setFilename('NOMINA_BANCO_' . Date('h_i_s'));
+            $jc->setJasperurl('jrxml\nominas\reporteNominaBancoNormal.jasper');
+            $jc->setFilename('NOMINA_BANCO_NORMAL_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
-            PRINT $jc->getReport();
+            $reports['2DOS'] = $jc->getReport();
+
+            print json_encode($reports);
+        }
+    }
+
+    public function onReporteNominaBancoXLS() {
+        $x = $this->input;
+        $fechaAp = $x->post('FechaAplicacionNomina');
+        $ano = $x->post('AnoNominaBanco');
+        $sem = $x->post('SemNominaBanco');
+        $this->db->query('truncate table nominabanco');
+        $query = "SELECT
+                    (
+                    (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    ) as Neto,
+                    (E.SueldoFijo) as SueldoFiscal,
+                    E.numero as numemp,
+                    E.busqueda as nomemp,
+                    E.TBanbajio,
+                    ifnull(D.Clave,'999') as numdepto,
+                    ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto
+                    FROM prenominal P
+                    join empleados E on E.Numero = P.numemp
+                    left join departamentos D on D.Clave = E.DepartamentoFisico
+                    where P.año = $ano and P.numsem = $sem
+                    and E.altabaja = 1 and E.Tarjeta = 1
+                    order by cast(E.DepartamentoFisico as signed) asc, P.numemp asc
+                     ";
+        $Registros = $this->db->query($query)->result();
+
+        if (!empty($Registros)) {
+            $ImporteFiscal = 0;
+            $ImporteInterno = 0;
+
+            foreach ($Registros as $M) {
+                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
+                    if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
+                        $ImporteInterno = floatval($M->Neto);
+                        //Agregamos el registro
+                        $this->db->insert("nominabanco", array(
+                            'tipo' => 2,
+                            'importe' => $ImporteInterno,
+                            'fecha' => Date('d/m/Y'),
+                            'fechaap' => $fechaAp,
+                            'numemp' => $M->numemp,
+                            'nomemp' => $M->nomemp,
+                            'ctaemp' => $M->TBanbajio,
+                            'concepto' => 'DEPÓSITO EN EFECTIVO',
+                            'numdepto' => $M->numdepto,
+                            'nomdepto' => $M->nomdepto
+                        ));
+                    } else {//Si el neto es mayor al sueldo fisca ej. Christian gana 3800 en total pero su sueldo fiscal son 1407
+                        if (floatval($M->SueldoFiscal) > 0) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                            $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                            //Agregamos el registro
+                            $this->db->insert("nominabanco", array(
+                                'tipo' => 1,
+                                'importe' => $ImporteFiscal,
+                                'fecha' => Date('d/m/Y'),
+                                'fechaap' => $fechaAp,
+                                'numemp' => $M->numemp,
+                                'nomemp' => $M->nomemp,
+                                'ctaemp' => $M->TBanbajio,
+                                'concepto' => 'ABONO EN NÓMINA',
+                                'numdepto' => $M->numdepto,
+                                'nomdepto' => $M->nomdepto
+                            ));
+
+                            $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
+                            //Agregamos el registro
+                            $this->db->insert("nominabanco", array(
+                                'tipo' => 2,
+                                'importe' => $ImporteInterno,
+                                'fecha' => Date('d/m/Y'),
+                                'fechaap' => $fechaAp,
+                                'numemp' => $M->numemp,
+                                'nomemp' => $M->nomemp,
+                                'ctaemp' => $M->TBanbajio,
+                                'concepto' => 'DEPÓSITO EN EFECTIVO',
+                                'numdepto' => $M->numdepto,
+                                'nomdepto' => $M->nomdepto
+                            ));
+                        } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
+                            $ImporteInterno = floatval($M->Neto);
+                            //Agregamos el registro
+                            $this->db->insert("nominabanco", array(
+                                'tipo' => 2,
+                                'importe' => $ImporteInterno,
+                                'fecha' => Date('d/m/Y'),
+                                'fechaap' => $fechaAp,
+                                'numemp' => $M->numemp,
+                                'nomemp' => $M->nomemp,
+                                'ctaemp' => $M->TBanbajio,
+                                'concepto' => 'DEPÓSITO EN EFECTIVO',
+                                'numdepto' => $M->numdepto,
+                                'nomdepto' => $M->nomdepto
+                            ));
+                        }
+                    }
+                } else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
+                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                    //Agregamos el registro
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 1,
+                        'importe' => $ImporteFiscal,
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'ABONO EN NÓMINA',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
+                }
+            }
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+
+            //Imprimimos el reporte
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\nominas\reporteNominaBancoXLS.jasper');
+            $jc->setFilename('NOMINA_BANCO_' . Date('h_i_s'));
+            $jc->setDocumentformat('xls');
+            print $jc->getReport();
         }
     }
 
@@ -646,7 +785,7 @@ FROM costomanoobratemp CMT
         header('Pragma: public');
         $handle = fopen('php://output', "w");
 
-        $Registros = $this->db->query('SELECT col1,importe,consecutivo FROM nominabanco where tipo = 2')->result();
+        $Registros = $this->db->query('SELECT col1,truncate(importe,0) as importe,consecutivo FROM nominabanco where tipo = 2')->result();
 
         if (!empty($Registros)) {
             /*  ---------------GENERA ARCHIVO INTERNO -------------------  */
@@ -680,7 +819,7 @@ FROM costomanoobratemp CMT
         header('Pragma: public');
         $handle = fopen('php://output', "w");
 
-        $Registros = $this->db->query('SELECT col1,importe,consecutivo FROM nominabanco where tipo = 1')->result();
+        $Registros = $this->db->query('SELECT col1,truncate(importe,0) as importe,consecutivo FROM nominabanco where tipo = 1')->result();
 
         if (!empty($Registros)) {
             /*  ---------------GENERA ARCHIVO FISCAL -------------------  */
@@ -709,11 +848,11 @@ FROM costomanoobratemp CMT
         $sem = $x->post('SemNominaBanco');
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
-                    truncate(
+                    (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
-                    ,0) as Neto,
-                    truncate(E.SueldoFijo,0) as SueldoFiscal,
+                    ) as Neto,
+                    (E.SueldoFijo) as SueldoFiscal,
                     '02' as col1,
                     '90' as col3,
                     date_format(now(),'%Y%m%d') as col4,

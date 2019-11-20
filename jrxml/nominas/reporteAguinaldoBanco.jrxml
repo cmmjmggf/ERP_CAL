@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="289" columnSpacing="9" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="1.6757443455841714"/>
-	<property name="ireport.x" value="70"/>
-	<property name="ireport.y" value="45"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -11,9 +11,9 @@
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="nombre" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT tipo, numdepto, nomdepto, importe, numemp, nomemp, fecha, fechaap, ctaemp,concepto
+		<![CDATA[SELECT tipo, numdepto, nomdepto,  truncate(importe,0) as importe, numemp, nomemp, fecha, fechaap, ctaemp,concepto
 FROM nominabanco
-order by tipo asc,numdepto asc, nomemp asc;]]>
+order by tipo asc,numdepto asc, numemp asc;]]>
 	</queryString>
 	<field name="tipo" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
