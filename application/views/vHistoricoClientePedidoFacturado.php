@@ -1,11 +1,11 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-3 float-left">
-                <legend class="float-left">Historial Clientes</legend>
+            <div class="col-sm-5 float-left">
+                <legend class="float-left">Consulta histórico de clientes</legend>
 
             </div>
-            <div class="col-sm-9" align="right">
+            <div class="col-sm-7" align="right">
                 <button type="button" class="btn btn-success btn-sm " id="btnVerMovimientos" >
                     <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
                 </button>
@@ -31,9 +31,13 @@
             <!--primer columna-->
             <div class="col-7" >
                 <div class="row">
-                    <div class="col-12 col-sm-8 col-md-6 col-xl-5" >
-                        <label for="" >Cliente</label>
-                        <select id="Cliente" name="Cliente" class="form-control form-control-sm required" >
+                    <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-2">
+                        <label>Cliente</label>
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5">
+                    </div>
+                    <div class="col-12 col-sm-8 col-md-4 col-xl-4" >
+                        <label for="" >-</label>
+                        <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize" >
                             <option value=""></option>
                         </select>
                     </div>
@@ -381,7 +385,7 @@
         var frm = new FormData();
         var cliente = pnlTablero.find("#Cliente").val();
         frm.append('Cliente', cliente);
-        frm.append('NomCliente', pnlTablero.find("#Cliente option:selected").text());
+        frm.append('NomCliente', cliente + ' ' + pnlTablero.find("#sCliente option:selected").text());
 
         $.ajax({
             url: base_url + 'index.php/HistoricoClientePedidoFacturado/onImprimirReporteRanking',
@@ -424,7 +428,7 @@
                     text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                     icon: "error"
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
             HoldOn.close();
@@ -480,7 +484,7 @@
                     text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                     icon: "error"
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
             HoldOn.close();
@@ -492,14 +496,121 @@
 
     $(document).ready(function () {
 
-
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
 
         getClientes();
         getPedidosEntregados(0);
         getPedidosNoEntregados(0);
-        pnlTablero.find("#Cliente")[0].selectize.focus();
-        pnlTablero.find("#Cliente").change(function () {
+        pnlTablero.find("#Cliente").focus();
+
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
+                            onOpenOverlay('Cargando datos, por favor espere...');
+                            var cliente = txtcte;
+                            //Obtener registros entregados pedidos
+
+                            getPedidosEntregados(cliente);
+                            getPedidosNoEntregados(cliente);
+                            getCartCliente(cliente);
+
+                            //TODO EN UNO ---------------------------------------------------------------------------------------------------------------
+                            $.getJSON(master_url + 'getInfoTodo', {Cliente: cliente}).done(function (data) {
+                                var f1pesos = 0;
+                                var f1pares = 0;
+                                var f2pares = 0;
+                                var f2pesos = 0;
+                                var tpares = 0;
+                                var tpesos = 0;
+                                //DATOS CLIENTE GENERALES ---------------------------------------------------------------------------------------------------------------
+                                var datosCliente = JSON.parse(data['UNO'])[0];
+                                pnlTablero.find("#Agente").val(datosCliente.Agente);
+                                pnlTablero.find("#Ciudad").val(datosCliente.Ciudad);
+                                pnlTablero.find("#Estado").val(datosCliente.Estado);
+                                pnlTablero.find("#Tel2").val(datosCliente.TelOficina);
+                                pnlTablero.find("#Tel1").val(datosCliente.TelPart);
+                                pnlTablero.find("#ResponsablePagos").val(datosCliente.EncargadoDePagos);
+                                //SACA LOS PARES Y PESOS DE LO QUE ESTA EN PEDIDOS ENTREGADOS  ---------------------------------------------------------------------------
+                                var datosEntregados = JSON.parse(data['DOS'])[0];
+                                pnlTablero.find("#PedEntregados").val($.number(parseFloat(datosEntregados.paresEntregados), 0, '.', ','));
+                                pnlTablero.find("#PedEntregadosPesos").val('$' + $.number(parseFloat(datosEntregados.pesosEntregados), 2, '.', ','));
+                                pnlTablero.find("#UltPedido").val(datosEntregados.FechaPedido);
+                                //SACA LOS PARES Y PESOS DE LO QUE ESTA EN PEDIDOS SIN ENTREGAR  ---------------------------------------------------------------------------
+                                var datosNoEntregados = JSON.parse(data['TRES'])[0];
+                                pnlTablero.find("#PedXEntregar").val($.number(parseFloat(datosNoEntregados.paresNoEntregados), 0, '.', ','));
+                                pnlTablero.find("#PedXEntregarPesos").val('$' + $.number(parseFloat(datosNoEntregados.pesosNoEntregados), 2, '.', ','));
+                                //SACA LOS PARES Y PESOS DE LO QUE ESTA FACTURADO como tp - 1 ECEPTO CANCELADO -------------------------------------------------------------------------- -
+                                var datosFactUno = JSON.parse(data['CUATRO']);
+                                pnlTablero.find("#FacturacionUno").val($.number(parseFloat(datosFactUno[0].paresFacturadosUno), 0, '.', ','));
+                                pnlTablero.find("#FacturacionUnoPesos").val('$' + $.number(parseFloat(datosFactUno[0].pesosFacturadosUno), 2, '.', ','));
+                                pnlTablero.find("#UltVenta").val(datosFactUno[0].fecha);
+                                //Llenamos las variables para sumatoria total tp y tp 2
+                                f1pesos = parseFloat(datosFactUno[0].pesosFacturadosUno);
+                                f1pares = parseFloat(datosFactUno[0].paresFacturadosUno);
+                                //SACA LOS PARES Y PESOS DE LO QUE ESTA FACTURADO como tp-2 ECEPTO CANCELADO ---------------------------------------------------------------------------
+                                var datosFactDos = JSON.parse(data['CINCO']);
+                                pnlTablero.find("#FacturacionDos").val($.number(parseFloat(datosFactDos[0].paresFacturadosDos), 0, '.', ','));
+                                pnlTablero.find("#FacturacionDosPesos").val('$' + $.number(parseFloat(datosFactDos[0].pesosFacturadosDos), 2, '.', ','));
+                                //Si trae datos en tp 2 se ponen para sumarlo a las variables
+                                f2pares = parseFloat(datosFactDos[0].paresFacturadosDos);
+                                f2pesos = parseFloat(datosFactDos[0].pesosFacturadosDos);
+                                //Actualizamos variables con datos de la suma
+                                tpares = f1pares + f2pares;
+                                tpesos = f1pesos + f2pesos;
+                                //Sumamos totales
+                                pnlTablero.find("#TotalPares").val($.number(tpares, 0, '.', ','));
+                                pnlTablero.find("#TotalPesos").val('$' + $.number(tpesos, 2, '.', ','));
+                                //SACA LOS PARES Y PESOS DE LO QUE ESTA FACTURADO pero CANCELADO ---------------------------------------------------------------------------
+                                var datosCancelado = JSON.parse(data['SEIS']);
+                                pnlTablero.find("#CanceladoPares").val($.number(parseFloat(datosCancelado[0].paresCancelados), 0, '.', ','));
+                                pnlTablero.find("#CanceladoPesos").val('$' + $.number(parseFloat(datosCancelado[0].pesosCancelados), 2, '.', ','));
+                                //SACA LOS PARES Y PESOS DE LO QUE NOS PAGO ------------------------------------------------------------------------------------------------------------------
+                                var datosPagado = JSON.parse(data['SIETE']);
+                                pnlTablero.find("#PagadoPares").val($.number(parseFloat(datosPagado[0].ParesPagados), 0, '.', ','));
+                                pnlTablero.find("#PagadoPesos").val('$' + $.number(parseFloat(datosPagado[0].PesosPagados), 2, '.', ','));
+                                pnlTablero.find("#UltPago").val(datosPagado[0].ultPago);
+                                //SACA LOS PARES Y PESOS DE LO QUE NOS devolvio ------------------------------------------------------------------------------------------------------------------
+                                var datosDevol = JSON.parse(data['OCHO']);
+                                pnlTablero.find("#DevolPesos").val($.number(parseFloat(datosDevol[0].ParesDevueltos), 0, '.', ','));
+                                pnlTablero.find("#DevolPares").val('$' + $.number(parseFloat(datosDevol[0].ParesPagados), 2, '.', ','));
+                                pnlTablero.find("#UltDevol").val(datosDevol[0].UltDevol);
+                                //SACA LOS DIAS PROMEDIO --------------------------------------------------------------------------------------------------------------------
+                                var datosPromedio = JSON.parse(data['NUEVE']);
+                                pnlTablero.find("#DiasProm").val($.number(parseFloat(datosPromedio[0].diasPromedio), 0, '.', ','));
+                                pnlTablero.find("#PagosProm").val('$' + $.number(parseFloat(datosPromedio[0].promedioPagos), 2, '.', ','));
+                                //SACA SALDO DE ESTE CLIENTE  ---------------------------------------------------------------------------
+                                var datosSaldo = JSON.parse(data['DIEZ']);
+                                pnlTablero.find("#SaldoFinal").val('$' + $.number(parseFloat(datosSaldo[0].saldo), 2, '.', ','));
+                                onCloseOverlay();
+                            }).fail(function (x) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
+                pnlTablero.find('#Cliente').val($(this).val());
                 onOpenOverlay('Cargando datos, por favor espere...');
                 var cliente = $(this).val();
                 //Obtener registros entregados pedidos
@@ -595,7 +706,7 @@
                     closeOnClickOutside: false,
                     closeOnEsc: false
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
         });
@@ -612,7 +723,7 @@
                     closeOnClickOutside: false,
                     closeOnEsc: false
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
         });
@@ -720,20 +831,19 @@
                     closeOnClickOutside: false,
                     closeOnEsc: false
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
         });
     });
 
     function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
+        pnlTablero.find("#sCliente")[0].selectize.clear(true);
+        pnlTablero.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                pnlTablero.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
-            pnlTablero.find("#Cliente")[0].selectize.open();
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);

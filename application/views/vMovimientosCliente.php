@@ -18,10 +18,13 @@
         </div>
         <hr>
         <div class="row" id="Encabezado">
-
+            <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>Cliente</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5" required="">
+            </div>
             <div class="col-12 col-sm-5 col-md-5 col-xl-3" >
-                <label for="" >Cliente</label>
-                <select id="Cliente" name="Cliente" class="form-control form-control-sm required" required="" >
+                <label for="" >-</label>
+                <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize" required="" >
                     <option value=""></option>
                 </select>
             </div>
@@ -111,15 +114,56 @@
     $(document).ready(function () {
 
         /*FUNCIONES INICIALES*/
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         getClientes();
+        getRecords('0');
+        getPagos('', '', '');
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
-        pnlTablero.find("#Cliente")[0].selectize.focus();
+        pnlTablero.find("#Cliente").focus();
 
-        pnlTablero.find("#Cliente").change(function () {
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#Tp").val('');
+                            pnlTablero.find("#Doc").val('');
+                            getPagos(0, 0, 0);
+                            MovimientosClientes.column(1).search('').draw();
+
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
+                            getRecords(txtcte);
+                            pnlTablero.find("#Tp").focus();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
+                pnlTablero.find("#Tp").val('');
+                pnlTablero.find("#Doc").val('');
+                getPagos(0, 0, 0);
+                MovimientosClientes.column(1).search('').draw();
+
+                pnlTablero.find("#Cliente").val($(this).val());
                 getRecords($(this).val());
                 pnlTablero.find("#Tp").focus();
             }
@@ -138,6 +182,7 @@
                     MovimientosClientes.column(1).search('^' + $(this).val() + '$', true, false).draw();
                     getPagos(pnlTablero.find("#Cliente").val(), $(this).val(), pnlTablero.find("#Tp").val());
                 } else {
+                    getPagos(0, 0, 0);
                     MovimientosClientes.column(1).search('').draw();
                 }
             }
@@ -230,11 +275,11 @@
 
     });
     function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
+        pnlTablero.find("#sCliente")[0].selectize.clear(true);
+        pnlTablero.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                pnlTablero.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -253,9 +298,7 @@
                 text: "EL TP SÓLO PUEDE SER 1 Ó 2",
                 icon: "error",
                 closeOnClickOutside: false,
-                closeOnEsc: false,
-                buttons: false,
-                timer: 1000
+                closeOnEsc: false
             }).then((action) => {
                 $(v).val('').focus();
             });
@@ -324,6 +367,10 @@
                         case 1:
                             /*FECHA ENTREGA*/
                             c.addClass('text-strong');
+                            break;
+                        case 3:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong text-success');
                             break;
                         case 7:
                             /*fecha conf*/
@@ -440,7 +487,7 @@
                             break;
                         case 2:
                             /*FECHA ORDEN*/
-                            c.addClass('text-strong text-success');
+                            c.addClass('text-success text-strong');
                             break;
                         case 5:
                             /*fecha conf*/
@@ -473,10 +520,19 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     .badge{
         font-size: 100% !important;
+    }
+
+    .table-sm th, .table-sm td {
+        padding: 0.092rem;
+    }
+
+
+    .table th, .table td {
+        vertical-align: middle;
     }
 </style>
 

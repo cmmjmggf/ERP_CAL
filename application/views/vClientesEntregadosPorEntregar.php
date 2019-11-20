@@ -22,9 +22,13 @@
             <!--primer columna-->
             <div class="col-12" >
                 <div class="row">
-                    <div class="col-12 col-sm-8 col-md-6 col-xl-5" >
-                        <label for="" >Cliente</label>
-                        <select id="Cliente" name="Cliente" class="form-control form-control-sm required" >
+                    <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                        <label>Cliente</label>
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5" required="">
+                    </div>
+                    <div class="col-12 col-sm-5 col-md-5 col-xl-3" >
+                        <label for="" >-</label>
+                        <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize" required="" >
                             <option value=""></option>
                         </select>
                     </div>
@@ -111,14 +115,43 @@
 
 
     $(document).ready(function () {
-
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         getClientes();
         getPedidosEntregados(0);
         getPedidosNoEntregados(0);
-        pnlTablero.find("#Cliente")[0].selectize.focus();
-        pnlTablero.find("#Cliente").change(function () {
+        pnlTablero.find("#Cliente").focus();
+        pnlTablero.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
+                            //Obtener registros entregados pedidos
+                            getPedidosEntregados(txtcte);
+                            getPedidosNoEntregados(txtcte);
+                            pnlTablero.find("#Pedido").focus();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sCliente")[0].selectize.clear(true);
+                                pnlTablero.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
                 var cliente = $(this).val();
+                pnlTablero.find("#Cliente").val(cliente);
                 //Obtener registros entregados pedidos
                 getPedidosEntregados(cliente);
                 getPedidosNoEntregados(cliente);
@@ -194,13 +227,12 @@
     });
 
     function getClientes() {
-        pnlTablero.find("#Cliente")[0].selectize.clear(true);
-        pnlTablero.find("#Cliente")[0].selectize.clearOptions();
+        pnlTablero.find("#sCliente")[0].selectize.clear(true);
+        pnlTablero.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                pnlTablero.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
-            pnlTablero.find("#Cliente")[0].selectize.open();
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
@@ -395,7 +427,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;
@@ -419,7 +451,4 @@
         margin-bottom: 0.0rem;
     }
 
-    .form-control-sm,  .form-control {
-        padding: 0.15rem 0.5rem;
-    }
 </style>

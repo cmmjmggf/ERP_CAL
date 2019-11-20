@@ -29,6 +29,15 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
         }
     }
 
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPedidosEntregados() {
         $cte = $this->input->get('Cliente');
         print json_encode($this->db->query("SELECT
@@ -59,8 +68,8 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
 
     public function getClientes() {
         try {
-            print json_encode($this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
-                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result());
+            print json_encode($this->db->select("C.Clave AS Clave, CONCAT(C.RazonS) AS Cliente", false)
+                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('Cliente', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

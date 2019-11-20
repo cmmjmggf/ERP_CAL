@@ -28,7 +28,7 @@
                 <label>Banco</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" required="">
             </div>
-            <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
+            <div class="col-12 col-sm-4 col-md-2 col-xl-2" >
                 <label for="" >-</label>
                 <select id="sBanco" name="sBanco" class="form-control form-control-sm required NotSelectize" required="" >
                     <option value=""></option>
@@ -42,11 +42,11 @@
                 <label>Fecha</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly date notEnter" id="FechaDoc" name="FechaDoc" maxlength="12" required>
             </div>
-            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2" >
+            <div class="col-6 col-sm-2 col-md-2 col-lg-1 col-xl-1" >
                 <label>Doc.</label>
                 <input type="text" class="form-control form-control-sm  " readonly="" id="Doc" name="Doc" maxlength="15" required>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-2 col-xl-1">
                 <label for="" >Moneda</label>
                 <select id="Moneda" name="Moneda" class="form-control form-control-sm required" >
                     <option value=""></option>

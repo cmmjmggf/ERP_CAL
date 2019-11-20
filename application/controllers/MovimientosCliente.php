@@ -36,6 +36,15 @@ class MovimientosCliente extends CI_Controller {
         }
     }
 
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             $cliente = $this->input->post('Cliente');
