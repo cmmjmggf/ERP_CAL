@@ -300,8 +300,7 @@ class FacturacionVarios extends CI_Controller {
         try {
             $x = $this->input->post();
 
-            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C "
-                            . "WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
+            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
 
             $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
                             . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
@@ -317,10 +316,10 @@ class FacturacionVarios extends CI_Controller {
                 $cfdi = $dtm[0];
                 $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
                 $UUID = $cfdi->uuid;
-
                 $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
             } else {
                 $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
+                exit(0);
             }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -626,8 +625,7 @@ class FacturacionVarios extends CI_Controller {
                     PRINT $jc->getReport();
                     break;
             }
-        } catch (Exception $exc) {
-
+        } catch (Exception $exc) { 
             echo $exc->getTraceAsString();
         }
     }

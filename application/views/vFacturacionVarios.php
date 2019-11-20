@@ -377,9 +377,9 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-        
+
         var busy = false;
-        
+
         btnCierraDocto.click(function () {
             if (busy) {
                 return;
@@ -597,8 +597,13 @@
             });
         });
 
-
         TPFactura.change(function (e) {
+            if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 3 && parseInt(TPFactura.val()) === 0) {
+                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
+                    TPFactura.focus().select();
+                });
+                return;
+            }
             $.getJSON('<?php print base_url('FacturacionVarios/getTipoDeCambio'); ?>').done(function (abcde) {
                 if (abcde.length > 0) {
                     TIPODECAMBIO.val(abcde[0].DOLAR);

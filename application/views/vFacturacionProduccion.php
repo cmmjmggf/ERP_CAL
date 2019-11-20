@@ -33,7 +33,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" align="center">
                 <div class="row">
                     <div class="col-10">
-                        <h4 class="font-weight-bold font-italic text-danger">F A C T U R A C I Ó N</h4>
+                        <h4 class="font-weight-bold font-italic text-danger" style="cursor: pointer;" onclick="getHistorial()">F A C T U R A C I Ó N</h4>
                     </div>
                     <div class="col-2">
                         <button type="button" id="btnNuevo" name="btnNuevo" 
@@ -117,7 +117,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                 <label>TP</label> 
-                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm  numbersOnly">
+                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm  numbersOnly" maxlength="1">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>FA-PE.ORCO</label>
@@ -505,36 +505,49 @@
 </div>
 <!--CONTROLES X FACTURAR--> 
 <div class="modal" id="mdlControlesXFacturar">
-    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
-        <div class="modal-content" style="width: 950px !important;">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
             <div class="modal-body">
                 <p class="font-italic font-weight-bold">
                     NOTA: Solo se muestran los registros con control y con estatus diferente a 
                     <span class="font-weight-bold text-info">"FACTURADO"</span> y 
                     <span class="font-weight-bold text-danger">"CANCELADO"</span>
                 </p>
-                <table id="tblControlesXFacturar"  class="table table-hover table-sm"  style="width: 100% !important;">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">CONTROL</th>
-                            <th scope="col">PEDIDO</th>
-                            <th scope="col">CLIENTE</th>
-                            <th scope="col">FECHA-PED</th>
-                            <th scope="col">FECHA-ENT</th>
-                            <th scope="col">ESTILO</th>
-                            <th scope="col">COLOR</th>
-                            <th scope="col">PARES</th>
-                            <th scope="col">FAC</th>
-                            <th scope="col">MAQ</th>
-                            <th scope="col">SEM</th>
-                            <th scope="col">PRECIO</th>
-                            <th scope="col">PRECIOT</th>
-                            <th scope="col">COLORT</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row">
+                    <div class="col-4">
+                        <input type="text" id="bControl" name="bControl" class="form-control numbersOnly" maxlength="12" placeholder="Escriba aqui un control...">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" id="bPedido" name="bPedido" class="form-control numbersOnly" maxlength="20" placeholder="Escriba aqui un # de pedido...">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" id="bEstilo" name="bEstilo" class="form-control" maxlength="20" placeholder="Escriba aqui un estilo...">
+                    </div>
+                    <div class="col-12">
+                        <table id="tblControlesXFacturar"  class="table table-hover table-sm nowrap"  style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">CONTROL</th>
+                                    <th scope="col">PEDIDO</th>
+                                    <th scope="col">CLIENTE</th>
+                                    <th scope="col">FECHA-PED</th>
+                                    <th scope="col">FECHA-ENT</th>
+                                    <th scope="col">ESTILO</th>
+                                    <th scope="col">COLOR</th>
+                                    <th scope="col">PARES</th>
+                                    <th scope="col">FAC</th>
+                                    <th scope="col">MAQ</th>
+                                    <th scope="col">SEM</th>
+                                    <th scope="col">PRECIO</th>
+                                    <th scope="col">PRECIOT</th>
+                                    <th scope="col">COLORT</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div> 
+                </div> 
             </div> 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
@@ -580,6 +593,62 @@
         </div>
     </div>
 </div>
+
+
+<div id="mdlHistorialFacturas" class="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-file-invoice"></span> Historial de facturación</h5> 
+            </div>
+            <div class="modal-body">
+                <div class="row"> 
+                    <div class="col-3">
+                        <input type="text" id="hFactura" name="hFactura" class="form-control numbersOnly" maxlength="12" placeholder="Escriba un # de factura...">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" id="hTP" name="hTP" class="form-control numbersOnly" maxlength="1" placeholder="Escriba un tp...">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" id="hCliente" name="hCliente" class="form-control numbersOnly" maxlength="12" placeholder="Escriba un # de cliente...">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" id="hControl" name="hControl" class="form-control numbersOnly" maxlength="15" placeholder="Escriba un # de control...">
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12">
+                        <table id="tblFacturas" class="table table-hover table-sm nowrap" style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>FACTURA</th>
+                                    <th>TP</th>
+                                    <th>CLIENTE</th>
+                                    <th>FECHA</th>
+                                    <th>CONTROL</th>
+                                    <th>ESTILO</th>
+                                    <th>COLOR</th>
+                                    <th>CORRIDA</th>
+                                    <th>PARES</th>
+                                    <th>PRECIO</th>
+                                    <th>SUBTOTAL</th>
+                                    <th>IVA</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
             btnNuevo = pnlTablero.find("#btnNuevo"),
@@ -622,6 +691,9 @@
             ParesFacturadosFacturacion = pnlTablero.find('#ParesFacturadosFacturacion'),
             onoffhandle = true, Hoy = '<?php print Date('d/m/Y'); ?>',
             mdlControlesXFacturar = $("#mdlControlesXFacturar"), ControlesXFacturar,
+            bControl = mdlControlesXFacturar.find("#bControl"),
+            bPedido = mdlControlesXFacturar.find("#bPedido"),
+            bEstilo = mdlControlesXFacturar.find("#bEstilo"),
             tblControlesXFacturar = mdlControlesXFacturar.find("#tblControlesXFacturar"),
             btnControlInCompleto = pnlTablero.find("#btnControlInCompleto"), btnControlCompleto = pnlTablero.find("#btnControlCompleto"),
             btnCierraDocto = pnlTablero.find("#btnCierraDocto"),
@@ -647,12 +719,30 @@
 
         handleEnterDiv(mdlConsignarA);
 
+        bControl.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ControlesXFacturar.ajax.reload();
+            }
+        });
+
+        bPedido.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ControlesXFacturar.ajax.reload();
+            }
+        });
+
+        bEstilo.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ControlesXFacturar.ajax.reload();
+            }
+        });
+
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
-                ClienteClave.val(ClienteFactura.val()); 
+                ClienteClave.val(ClienteFactura.val());
                 ClienteFactura[0].selectize.disable();
             } else {
-                ClienteClave.val(''); 
+                ClienteClave.val('');
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
@@ -662,18 +752,18 @@
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
                     ClienteFactura[0].selectize.setValue(ClienteClave.val());
-                    if (ClienteFactura.val()) { 
+                    if (ClienteFactura.val()) {
                         ClienteFactura[0].selectize.disable();
                     } else {
                         iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
                             ClienteClave.focus().select();
                         });
                     }
-                } else { 
+                } else {
                     ClienteFactura[0].selectize.enable();
                     ClienteFactura[0].selectize.clear(true);
                 }
-            } else { 
+            } else {
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
@@ -690,7 +780,7 @@
         });
 
         mdlConsignarA.on('shown.bs.modal', function () {
-//            console.log(ConsignarATienda.val());
+            //            console.log(ConsignarATienda.val());
             if (TiendaClave.val() === '') {
                 TiendaClave.focus().select();
             } else {
@@ -747,10 +837,10 @@
 
         btnVistaPreviaF.click(function () {
 
-//            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
-//                DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : ''
-//            }).done(function (a) {
-//                if (a.length > 0) {
+            //            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
+            //                DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : ''
+            //            }).done(function (a) {
+            //                if (a.length > 0) {
             if (ClienteFactura.val() && Documento.val() && TPFactura.val()) {
                 onBeep(1);
                 onOpenOverlay('Espere un momento por favor...');
@@ -772,16 +862,16 @@
                     ClienteClave.focus().select();
                 });
             }
-//                } else {
-//                    iMsg('ESTE DOCUMENTO NO TIENE UNA FACTURA ASOCIADA', 'w', function () {
-//                        Documento.focus().select();
-//                    });
-//                }
-//            }).fail(function (x) {
-//                getError(x);
-//            }).always(function () {
-//
-//            });
+            //                } else {
+            //                    iMsg('ESTE DOCUMENTO NO TIENE UNA FACTURA ASOCIADA', 'w', function () {
+            //                        Documento.focus().select();
+            //                    });
+            //                }
+            //            }).fail(function (x) {
+            //                getError(x);
+            //            }).always(function () {
+            //
+            //            });
         });
 
         btnFacturaXAnticipoDeProducto.click(function () {
@@ -800,6 +890,25 @@
         });
 
         btnAcepta.click(function () {
+            ClienteFactura[0].selectize.enable();
+            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                    {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                        FACTURA: Documento.val()
+                    }).done(function (a) {
+                if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
+                    iMsg('ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', 'w', function () {
+                        Documento.focus().select();
+                    });
+                    return;
+                } else {
+                    /*ES UN NUEVO REGISTRO, PERO EL DOCUMENTO/FACTURA NO EXISTE*/
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+
             var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
                     pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
             for (var i = 1; i < 23; i++) {
@@ -813,8 +922,8 @@
                 if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
                     validos = true;
                 } else {
-//                    console.log(pc, pf, paf, pf_mas_paf);
-//                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
+                    //                    console.log(pc, pf, paf, pf_mas_paf);
+                    //                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
                     validos = false;
                     break;
                 }
@@ -831,11 +940,13 @@
                     iMsg('NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', 'w', function () {
                         pnlTablero.find("#CAF1").focus().select();
                     });
+                    return;
                 }
             } else {
                 iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', 'w', function () {
                     pnlTablero.find("#CAF1").focus().select();
                 });
+                return;
             }
         });
 
@@ -869,6 +980,7 @@
                 iMsg('LOS SIGUIENTES CAMPOS SON REQUERIDOS', 'w', function () {
                     ClienteClave.focus().select();
                 });
+                return;
             }
         });
 
@@ -878,7 +990,7 @@
                         {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: Documento.val()
                         }).done(function (a) {
                     if (a.length > 0) {
-//                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
+                        //                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
 
                         if (parseInt(a[0].FACTURA_EXISTE) === 0) {
                             btnAcepta.attr('disabled', false);
@@ -983,6 +1095,8 @@
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
+                    /*SUMAR TODO EL SALDO*/
+
                     for (var i = 1; i < 21; i++) {
                         var x = pnlTablero.find(`#C${i}`).val();
                         var xx = pnlTablero.find(`#CF${i}`).val() ? pnlTablero.find(`#CF${i}`).val() : 0;
@@ -991,6 +1105,15 @@
                         } else {
                             pnlTablero.find("#CAF" + i).val(0);
                         }
+                    }
+                    var saldo_pares = 0;
+                    for (var i = 1; i < 21; i++) {
+                        var x = pnlTablero.find(`#CF${i}`);
+                        saldo_pares += $.isNumeric(x) ? parseInt(x) : 0;
+                    }
+                    if (saldo_pares <= 0) {
+                        CajasFacturacion.focus().select();
+                        return;
                     }
                     pnlTablero.find("#CAF1").focus().select();
                 } else {
@@ -1013,7 +1136,7 @@
                         pnlTablero.find("#CAF" + i).val('');
                     }
                     pnlTablero.find("#CAF1").focus().select();
-                    onNotifyOld('', 'POR FAVOR ESPECIFIQUE LAS CANTIDADES', 'info');
+                    onNotifyOldPCE('', 'POR FAVOR ESPECIFIQUE LAS CANTIDADES', 'info', "bottom", "center");
                 } else {
                     swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
                         Control.focus().select();
@@ -1029,76 +1152,89 @@
         mdlControlesXFacturar.on('shown.bs.modal', function () {
             $.fn.dataTable.ext.errMode = 'throw';
             if (!$.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
-                ControlesXFacturar = tblControlesXFacturar.DataTable({
-                    dom: 'frtip', "ajax": {
-                        "url": '<?php print base_url('FacturacionProduccion/getPedidosXFacturar'); ?>',
-                        "dataSrc": "",
-                        "data": function (d) {
-                            d.CLIENTE = ClienteFactura.val();
+                if (ClienteFactura.val()) {
+                    ControlesXFacturar = tblControlesXFacturar.DataTable({
+                        dom: 'rtip', "ajax": {
+                            "url": '<?php print base_url('FacturacionProduccion/getPedidosXFacturar'); ?>',
+                            "dataSrc": "",
+                            "data": function (d) {
+                                d.CLIENTE = ClienteFactura.val();
+                                d.CONTROL = bControl.val() ? bControl.val() : '';
+                                d.PEDIDO = bPedido.val() ? bPedido.val() : '';
+                                d.ESTILO = bEstilo.val() ? bEstilo.val() : '';
+                            }
+                        },
+                        "columns": [
+                            {"data": "ID"},
+                            {"data": "CONTROL"}, {"data": "PEDIDO"},
+                            {"data": "CLIENTE"}, {"data": "FECHA_PEDIDO"},
+                            {"data": "FECHA_ENTREGA"},
+                            {"data": "ESTILO"}, {"data": "COLOR"},
+                            {"data": "PARES"}, {"data": "FAC"},
+                            {"data": "MAQUILA"}, {"data": "SEMANA"},
+                            {"data": "PRECIOT"}, {"data": "PRECIO"},
+                            {"data": "COLORT"}
+                        ],
+                        "columnDefs": [
+                            //ID
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            },
+                            {
+                                "targets": [13],
+                                "visible": false,
+                                "searchable": false
+                            },
+                            {
+                                "targets": [14],
+                                "visible": false,
+                                "searchable": false
+                            }],
+                        language: lang,
+                        select: true,
+                        "autoWidth": true,
+                        "colReorder": true,
+                        "displayLength": 50,
+                        "bLengthChange": false,
+                        "deferRender": true,
+                        "scrollCollapse": false,
+                        "bSort": true,
+                        "scrollY": 300,
+                        "scrollX": true,
+                        "bSort": true, responsive: false,
+                        "aaSorting": [
+                            [4, 'desc']/*ID*/
+                        ],
+                        initComplete: function () {
+                            mdlControlesXFacturar.find("#bControl").focus().select();
                         }
-                    },
-                    "columns": [
-                        {"data": "ID"},
-                        {"data": "CONTROL"}, {"data": "PEDIDO"},
-                        {"data": "CLIENTE"}, {"data": "FECHA_PEDIDO"},
-                        {"data": "FECHA_ENTREGA"},
-                        {"data": "ESTILO"}, {"data": "COLOR"},
-                        {"data": "PARES"}, {"data": "FAC"},
-                        {"data": "MAQUILA"}, {"data": "SEMANA"},
-                        {"data": "PRECIOT"}, {"data": "PRECIO"},
-                        {"data": "COLORT"}
-                    ],
-                    "columnDefs": [
-                        //ID
-                        {
-                            "targets": [0],
-                            "visible": false,
-                            "searchable": false
-                        },
-                        {
-                            "targets": [13],
-                            "visible": false,
-                            "searchable": false
-                        },
-                        {
-                            "targets": [14],
-                            "visible": false,
-                            "searchable": false
-                        }],
-                    language: lang,
-                    select: true,
-                    "autoWidth": true,
-                    "colReorder": true,
-                    "displayLength": 50,
-                    "bLengthChange": false,
-                    "deferRender": true,
-                    "scrollCollapse": false,
-                    "bSort": true,
-                    "scrollY": 250,
-                    "scrollX": true,
-                    "bSort": true, responsive: true,
-                    "aaSorting": [
-                        [4, 'desc']/*ID*/
-                    ]
-                });
+                    });
 
-                tblControlesXFacturar.on('click', 'tr', function () {
-                    onOpenOverlay('Por favor espere...');
-                    var xxx = ControlesXFacturar.row($(this)).data();
-                    console.log("TR XXX = ", xxx);
-                    Control.val(xxx.CONTROL);
-                    EstiloFacturacion.val(xxx.ESTILO);
-                    ColorFacturacion.val(xxx.COLORT);
-                    ColorClaveFacturacion.val(xxx.COLOR);
-                    CajasFacturacion.val(1);
-                    CajasFacturacion.focus().select();
-                    getInfoXControl();
-                    mdlControlesXFacturar.modal('hide');
-                    CajasFacturacion.focus().select();
-                });
-
+                    tblControlesXFacturar.on('click', 'tr', function () {
+                        onOpenOverlay('Por favor espere...');
+                        var xxx = ControlesXFacturar.row($(this)).data();
+                        console.log("TR XXX = ", xxx);
+                        Control.val(xxx.CONTROL);
+                        EstiloFacturacion.val(xxx.ESTILO);
+                        ColorFacturacion.val(xxx.COLORT);
+                        ColorClaveFacturacion.val(xxx.COLOR);
+                        CajasFacturacion.val(1);
+                        CajasFacturacion.focus().select();
+                        getInfoXControl();
+                        mdlControlesXFacturar.modal('hide');
+                        CajasFacturacion.focus().select();
+                    });
+                } else {
+                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                        ClienteClave.focus().select();
+                    });
+                }
             } else if ($.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
-                ControlesXFacturar.ajax.reload();
+                ControlesXFacturar.ajax.reload(function () {
+                    mdlControlesXFacturar.find("#bControl").focus().select();
+                });
             }
         });
 
@@ -1137,9 +1273,12 @@
         handleEnterDiv(pnlTablero);
 
         TPFactura.keydown(function (e) {
-            console.log(e.keyCode);
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                 getTipoDeCambioYUltimaFactura();
+            } else if (e.keyCode === 13) {
+                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
+                    TPFactura.focus().select();
+                });
             }
         });
 
@@ -1272,11 +1411,11 @@
     }
 
     function onVerTienda() {
-//        $("#ConsignarATienda").toggleClass("d-none");
-//        btnVerTienda.removeClass('d-none');
+        //        $("#ConsignarATienda").toggleClass("d-none");
+        //        btnVerTienda.removeClass('d-none');
         pnlTablero.off("keydown");
-//        onoffhandle = !onoffhandle;
-//        Tienda[0].selectize.focus();
+        //        onoffhandle = !onoffhandle;
+        //        Tienda[0].selectize.focus();
 
         mdlConsignarA.modal({
             backdrop: false
@@ -1392,15 +1531,15 @@
         txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
                 num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
         var res = 0, res1 = 0, res2 = 0, res3 = 0;
-//        console.log("txtreferen3 => " + txtreferen3);
+        //        console.log("txtreferen3 => " + txtreferen3);
         txtreferen4 = txtreferen3 / 97;
-//        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
+        //        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
         res = (txtreferen4 % 1);
         res1 = res * 100;
         res2 = res1 % 1;
         res3 = res1 - res2;
 
-//        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
+        //        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
 
         var ponderador_fijo = 99;
         if (res3 > 0) {
@@ -1408,7 +1547,7 @@
         } else {
             txtreferen10 = ponderador_fijo - res3;
         }
-//        console.log("txtreferen10 => " + txtreferen10);
+        //        console.log("txtreferen10 => " + txtreferen10);
         pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
     }
@@ -1656,6 +1795,8 @@
 
 
         /*REGISTRAR EN FACTURACION*/
+        TPFactura.attr('disabled', false);
+        ClienteFactura[0].selectize.enable();
         var p = {
             FECHA: FechaFactura.val(),
             CLIENTE: ClienteFactura.val(),
@@ -1674,7 +1815,7 @@
             PARES_A_FACTURAR: TotalParesEntregaAF.val(),
             TIENDA: ConsignarATienda.val() ? ConsignarATienda.val() : ''
         };
-//        console.log("PARAMETROS 1: ", p);
+        //        console.log("PARAMETROS 1: ", p);
         for (var i = 1; i < 23; i++) {
             p["C" + i] = ($.isNumeric(pnlTablero.find("#C" + i).val()) ? parseInt(pnlTablero.find("#C" + i).val()) : 0);
             p["CF" + i] = ($.isNumeric(pnlTablero.find("#CF" + i).val()) ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
@@ -1699,7 +1840,7 @@
         p["COLOR_TEXT"] = ColorFacturacion.val();
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
-//        console.log("PARAMETROS 2 : ", p);
+        //        console.log("PARAMETROS 2 : ", p);
         $.post('<?php print base_url('FacturacionProduccion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
             /*REINICIAR VALORES POR DEFECTO PARA EL DETALLE*/
@@ -1754,10 +1895,6 @@
         Control.focus().select();
     }
 
-    function onCargarDoctoByNumero() {
-        var docto = Documento.val();
-    }
-
     function onDisableInputs(tf) {
         if (tf) {
             FechaFactura.attr('disabled', true);
@@ -1798,6 +1935,7 @@
     function getTipoDeCambioYUltimaFactura() {
         var tpx = parseInt(TPFactura.val());
         if (tpx >= 1 && tpx <= 2) {
+            onOpenOverlay('');
             $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
                 if (abcde.length > 0) {
                     TIPODECAMBIO.val(abcde[0].DOLAR);
@@ -1805,7 +1943,7 @@
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
-
+                onCloseOverlay();
             });
             if (ClienteFactura.val() && TPFactura.val()) {
                 var x = tpx === 1 ? 1 : 2;
@@ -1833,6 +1971,7 @@
                 }
             } else {
             }
+            onCloseOverlay();
         } else {
             swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2 xx', 'warning').then((value) => {
                 TPFactura.focus().select();
@@ -1858,6 +1997,103 @@
         });
     }
 
+    var mdlHistorialFacturas = $("#mdlHistorialFacturas"),
+            tblFacturas = mdlHistorialFacturas.find("#tblFacturas"),
+            hFactura = mdlHistorialFacturas.find("#hFactura"),
+            hTP = mdlHistorialFacturas.find("#hTP"),
+            hCliente = mdlHistorialFacturas.find("#hCliente"),
+            hControl = mdlHistorialFacturas.find("#hControl");
+
+    function getHistorial() {
+        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+        if ($.fn.DataTable.isDataTable('#tblFacturas')) {
+            HistorialFacturados.ajax.reload();
+            mdlHistorialFacturas.modal('show');
+            return;
+        } else {
+            HistorialFacturados = tblFacturas.DataTable({
+                dom: 'ritp',
+                "ajax": {
+                    "url": '<?php print base_url('FacturacionProduccion/getHistorialFacturacion'); ?>',
+                    "dataSrc": "",
+                    "data": function (d) {
+                        d.FACTURA = hFactura.val() ? hFactura.val() : '';
+                        d.TP = hTP.val() ? hTP.val() : '';
+                        d.CLIENTE = hCliente.val() ? hCliente.val() : '';
+                        d.CONTROL = hControl.val() ? hControl.val() : '';
+                    }
+                },
+                "columns": [
+                    {"data": "ID"},
+                    {"data": "FACTURA"}, {"data": "TP"},
+                    {"data": "CLIENTE"}, {"data": "FECHA"},
+                    {"data": "CONTROL"},
+                    {"data": "ESTILO"}, {"data": "COLOR"},
+                    {"data": "CORRIDA"}, {"data": "PARES"},
+                    {"data": "PRECIO"}, {"data": "SUBTOTAL"},
+                    {"data": "IVA"}, {"data": "TOTAL"}
+                ],
+                "columnDefs": [{
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }],
+                language: lang,
+                select: true,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 50,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                "scrollY": 450,
+                "scrollX": true
+            });
+
+            hControl.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    onOpenOverlay('');
+                    HistorialFacturados.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                }
+            });
+            hCliente.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    onOpenOverlay('');
+                    HistorialFacturados.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                }
+            });
+            hTP.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    onOpenOverlay('');
+                    HistorialFacturados.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                }
+            });
+            hFactura.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    onOpenOverlay('');
+                    HistorialFacturados.ajax.reload(function () {
+                        onCloseOverlay();
+                    });
+                }
+            });
+
+            mdlHistorialFacturas.on('shown.bs.modal', function () {
+                hFactura.val('');
+                hTP.val('');
+                hCliente.val('');
+                hControl.val('');
+                hFactura.focus().select();
+            });
+            mdlHistorialFacturas.modal('show');
+        }
+    }
 </script>
 
 <style> 

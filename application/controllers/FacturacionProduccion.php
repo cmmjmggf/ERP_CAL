@@ -19,7 +19,7 @@ class FacturacionProduccion extends CI_Controller {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
-                case 'SUPER ADMINISTRADOR': 
+                case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
@@ -112,19 +112,30 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getPedidosXFacturar() {
         try {
-
-            print json_encode(
-                            $this->db->query("SELECT  P.ID, P.Control AS CONTROL, 
+            $xxx = $this->input->get();
+            $this->db->select("P.ID, P.Control AS CONTROL, 
                                 P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
-                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
-                                FROM pedidox AS P 
-                                WHERE P.Control NOT IN(0,1) 
-                                AND P.stsavan NOT IN(13,14) 
-                                AND P.Cliente = '{$this->input->get('CLIENTE')}' 
-                                ORDER BY P.FechaRecepcion DESC")->result());
+                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
+                    ->from("pedidox AS P")
+                    ->where_not_in("P.Control", array(0, 1))
+                    ->where_not_in("P.stsavan", array(13, 14));
+            if ($xxx['CLIENTE'] !== '') {
+                $this->db->where("P.Cliente", $xxx['CLIENTE']);
+            }
+            if ($xxx['CONTROL'] !== '') {
+                $this->db->where("P.Control", $xxx['CONTROL']);
+            }
+            if ($xxx['PEDIDO'] !== '') {
+                $this->db->where("P.Control", $xxx['PEDIDO']);
+            }
+            if ($xxx['ESTILO'] !== '') {
+                $this->db->where("P.Control", $xxx['ESTILO']);
+            }
+            $this->db->order_by("P.FechaRecepcion", "DESC");
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -149,7 +160,7 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('cliente', $x['CLIENTE'])
                     ->where('tp', $x['TP_DOCTO'])
                     ->where('staped', 1)->update('facturacion');
-            
+
             $this->db->set('staped', 2)
                     ->where('factura', $x['FACTURA'])
                     ->where('cliente', $x['CLIENTE'])
@@ -216,6 +227,7 @@ class FacturacionProduccion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
+//            exit(0);
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -274,7 +286,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["costo"] = NULL;
             $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? $x["OBSERVACIONES"] : "SO";
             $this->db->insert('facturacion', $f);
-
+            print $this->db->last_query();
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
                 case 1:
@@ -298,7 +310,7 @@ class FacturacionProduccion extends CI_Controller {
                     'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
                     'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
                     'descripcion' => $x['ESTILOT'], 'Precio' => $x['PRECIO'],
-                    'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
+                    'importe' => $x['SUBTOTAL'], 'fecha' => "$anio-$mes-$dia $hora",
                     'control' => $x['CONTROL'], 'iva' => $x['IVA'],
                     'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                     'tcamb' => $tipo_cambio,
@@ -310,13 +322,32 @@ class FacturacionProduccion extends CI_Controller {
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
             print "SALDO PARES : {$saldopares}";
-            exit(0);
+
             $facturaciondif = array(
                 'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
                 'staped' => (($saldopares == 0) ? 99 : 98)
             );
             if ($saldopares === 0) {
                 $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+                $control = $this->db->query("SELECT P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, "
+                                . "P.C11, P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, "
+                                . "P.C21, P.C22 FROM pedidox AS P WHERE P.Contorl = {$x['CONTROL']} LIMIT 1")->result();
+                $control_pedidox = $control[0];
+                $this->db->where('contped', $x['CONTROL'])->update('facturacion',
+                        array(
+                            'par01' => $control_pedidox->P1, 'par02' => $control_pedidox->P2,
+                            'par03' => $control_pedidox->P3, 'par04' => $control_pedidox->P4,
+                            'par05' => $control_pedidox->P5, 'par06' => $control_pedidox->P6,
+                            'par07' => $control_pedidox->P7, 'par08' => $control_pedidox->P8,
+                            'par09' => $control_pedidox->P9, 'par10' => $control_pedidox->P10,
+                            'par11' => $control_pedidox->P11, 'par12' => $control_pedidox->P12,
+                            'par13' => $control_pedidox->P13, 'par14' => $control_pedidox->P14,
+                            'par15' => $control_pedidox->P15, 'par16' => $control_pedidox->P16,
+                            'par17' => $control_pedidox->P17, 'par18' => $control_pedidox->P18,
+                            'par19' => $control_pedidox->P19, 'par20' => $control_pedidox->P20
+                ));
+
+//                par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22
             }
             /* SUMA LOS PARES FACTURADOS: SI  SON 36 PARES Y SOLO FACTURAN 18, */
             $PF = (is_numeric($x['PARES_A_FACTURAR']) ? intval($x['PARES_A_FACTURAR']) : 0);
@@ -797,6 +828,36 @@ class FacturacionProduccion extends CI_Controller {
     public function getParesDevueltos() {
         try {
             
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getHistorialFacturacion() {
+        try {
+            $xxx = $this->input->get();
+            $this->db->select("F.ID AS ID, F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE,
+F.contped AS CONTROL, F.estilo AS ESTILO, F.combin AS COLOR, F.corrida AS CORRIDA,
+F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
+(IFNULL(F.subtot,0) + IFNULL(F.iva,0)) AS TOTAL, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA", false)->from("facturacion AS F");
+
+            if ($xxx['FACTURA'] !== '') {
+                $this->db->where("F.factura", $xxx['FACTURA']);
+            }
+            if ($xxx['TP'] !== '') {
+                $this->db->where("F.tp", $xxx['TP']);
+            }
+            if ($xxx['CLIENTE'] !== '') {
+                $this->db->where("F.cliente", $xxx['CLIENTE']);
+            }
+            if ($xxx['CONTROL'] !== '') {
+                $this->db->where("F.contped", $xxx['CONTROL']);
+            }
+            if ($xxx['FACTURA'] === '' && $xxx['TP'] === '' && $xxx['CLIENTE'] === '' && $xxx['CONTROL'] === '') {
+                $this->db->limit(99);
+            }
+            $this->db->group_by("F.factura")->order_by("F.fecha", "DESC");
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
