@@ -271,7 +271,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '' && $x["FACTURA"] !== '') {
                 $this->db->where('F.cliente', $x["CLIENTE"])->where('F.factura', $x["FACTURA"]);
             } else {
-                $this->db->order_by('F.fecha', 'DESC')->limit(100);
+                $this->db->order_by('F.fecha', 'DESC')->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -288,7 +288,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('CC.cliente', $x["CLIENTE"]);
             } else {
-                $this->db->order_by('CC.fecha', 'DESC')->limit(100);
+                $this->db->order_by('CC.fecha', 'DESC')->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {

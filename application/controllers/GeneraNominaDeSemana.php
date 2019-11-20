@@ -569,17 +569,16 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function getNominaCerrada() {
         try {
             $x = $this->input;
-            $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA CERRADA DE LA SEMANA {$x['SEMANA']}.", $this->session);
+            $xxx = $this->input->post();
+            $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA CERRADA DE LA SEMANA {$xxx['SEMANA']}.", $this->session);
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $p = array();
-            $p["logo"] = base_url() . $this->session->LOGO;
-            $p["empresa"] = $this->session->EMPRESA_RAZON;
-            $p["SEMANA"] = $x->post('SEMANA');
-            $p["FECHAINI"] = $x->post('FECHAINI');
-            $p["FECHAFIN"] = $x->post('FECHAFIN');
-            $p["ANIO"] = $x->post('ANIO');
-            $jc->setParametros($p);
+            $jc->setParametros(array("logo" => base_url() . $this->session->LOGO,
+                "empresa" => $this->session->EMPRESA_RAZON,
+                "SEMANA" => $xxx['SEMANA'],
+                "FECHAINI" => $xxx['FECHAINI'],
+                "FECHAFIN" => $xxx['FECHAFIN'],
+                "ANIO" => $xxx['ANIO']));
             $this->getReportes($jc);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -627,10 +626,10 @@ class GeneraNominaDeSemana extends CI_Controller {
             $reports['6SEIS'] = $jc->getReport();
 
             /* 7. REPORTE PRENOMINA BANAMEX (ABONO NETO) */
-            $jc->setJasperurl('jrxml\prenomina\prenomfisbanamex.jasper');
-            $jc->setFilename('GenNomDeSemPreNomBanamex_' . Date('his'));
-            $jc->setDocumentformat('pdf');
-            $reports['7SIETE'] = $jc->getReport();
+//            $jc->setJasperurl('jrxml\prenomina\prenomfisbanamex.jasper');
+//            $jc->setFilename('GenNomDeSemPreNomBanamex_' . Date('his'));
+//            $jc->setDocumentformat('pdf');
+//            $reports['7SIETE'] = $jc->getReport();
 
             $this->benchmark->mark('code_end');
 

@@ -1,7 +1,7 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-<!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
-        
-    </div>-->
+    <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
+            
+        </div>-->
     <div class="card-body " style="padding: 7px 10px 10px 10px !important;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
@@ -33,29 +33,39 @@
                 <input type="text" id="ZonaFacturacion" name="ZonaFacturacion" class="form-control form-control-sm" readonly="">
                 <input type="text" id="AgenteCliente" name="AgenteCliente"  class="form-control form-control-sm" readonly="">
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"> 
-                <div class="form-group">
-                    <label class="control-label">Cliente</label>
-                    <div class="form-group">
-                        <div class="input-group mb-3"> 
-                            <select id="ClienteFactura" name="ClienteFactura" class="form-control">
-                                <option></option>
-                                <?php
+            <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                <label class="control-label">Cliente</label>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="text" id="ClienteClave" name="ClienteClave" class="form-control form-control-sm numbersOnly" maxlength="8">
+                    </div>
+                    <div class="col-10">
+                        <div class="form-group"> 
+                            <div class="form-group">
+                                <div class="input-group mb-3"> 
+                                    <select id="ClienteFactura" name="ClienteFactura" class="form-control">
+                                        <option></option>
+                                        <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
-                                }
-                                ?>
-                            </select>
-                            <div class="input-group-append">
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
-                                    <span class="fa fa-exclamation"></span>
-                                </button>
+                                        foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                            print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
+                                            <span class="fa fa-exclamation"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-none">
                 <label>L-P</label>
                 <input type="text" id="LPFactura" name="LPFactura" readonly="" data-toggle="tooltip" data-placement="bottom" title="Lista de precios"  class="form-control form-control-sm">
@@ -263,16 +273,18 @@
                     </thead>
                     <tbody></tbody>
                 </table>    
-            </div>  
-            <div class="col-2" align="center"></div>
-            <div class="col-2" align="center">
-                <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger btn-block">
+            </div>   
+            <div class="col-4" align="center">
+                <button type="button" id="btnCierraDocto" name="btnCierraDocto" 
+                        class="btn btn-danger btn-block my-2">
                     <span class="fa fa-lock"></span>   Cierra docto
                 </button>
-                <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" class="btn btn-info btn-block">
+                <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" 
+                        class="btn btn-info btn-block my-2">
                     <span class="fa fa-eye"></span>  Previsualiza docto
                 </button>
-                <button type="button" id="AddendaCoppel" name="AddendaCoppel" class="btn btn-warning btn-block">
+                <button type="button" id="AddendaCoppel" name="AddendaCoppel" 
+                        class="btn btn-warning btn-block my-2">
                     <span class="fa fa-file-medical"></span>   Addenda Coppel
                 </button> 
             </div>
@@ -285,6 +297,7 @@
             EstatusControl = pnlTablero.find('#EstatusControl'),
             ZonaFacturacion = pnlTablero.find('#ZonaFacturacion'),
             AgenteCliente = pnlTablero.find('#AgenteCliente'),
+            ClienteClave = pnlTablero.find("#ClienteClave"),
             ClienteFactura = pnlTablero.find('#ClienteFactura'),
             LPFactura = pnlTablero.find('#LPFactura'),
             TPFactura = pnlTablero.find('#TPFactura'),
@@ -326,7 +339,55 @@
             getTotales(true);
         });
 
+        ClienteFactura.click(function () {
+            console.log('okokokokoko')
+            ClienteFactura[0].selectize.enable();
+        });
+
+        ClienteFactura.change(function () {
+            if (ClienteFactura.val()) {
+                onBeep(1);
+                ClienteClave.val(ClienteFactura.val());
+                ClienteFactura[0].selectize.disable();
+                TPFactura[0].selectize.focus();
+            } else {
+                ClienteClave.val('');
+                ClienteFactura[0].selectize.enable();
+                ClienteFactura[0].selectize.clear(true);
+            }
+        });
+
+        ClienteClave.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (ClienteClave.val()) {
+                    ClienteFactura[0].selectize.setValue(ClienteClave.val());
+                    if (ClienteFactura.val()) {
+                        ClienteFactura[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                            ClienteClave.focus().select();
+                        });
+                    }
+                } else {
+                    ClienteFactura[0].selectize.enable();
+                    ClienteFactura[0].selectize.clear(true);
+                }
+            } else {
+                ClienteFactura[0].selectize.enable();
+                ClienteFactura[0].selectize.clear(true);
+            }
+        });
+        
+        var busy = false;
+        
         btnCierraDocto.click(function () {
+            if (busy) {
+                return;
+            } else {
+                busy = true;
+            }
+
+            ClienteFactura[0].selectize.enable();
             console.log(DetalleDocumento.rows().count(), ",", DetalleDocumento.data().count());
             onOpenOverlay('Espere un momento por favor...');
             if (!nuevo && ClienteFactura.val() && TPFactura.val() && Documento.val() &&
@@ -355,11 +416,12 @@
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
-
+                    busy = false;
                 });
             } else {
+                busy = false;
                 iMsg('DEBE DE AGREGAR UN DOCUMENTO VÁLIDO', 'w', function () {
-                    ClienteFactura[0].selectize.focus();
+                    ClienteClave.focus().select();
                 });
             }
         });
@@ -371,7 +433,7 @@
             } else {
                 iMsg('DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', 'w', function () {
                     if (ClienteFactura.val()) {
-                        ClienteFactura[0].selectize.focus();
+                        ClienteClave.focus().select();
                     } else if (Documento.val()) {
                         Documento.focus().select();
                     }
@@ -421,7 +483,7 @@
             pnlTablero.find("input,textarea").val('');
             FechaFactura.val(Hoy);
             pnlTablero.find("input[type='checkbox']")[0].checked = false;
-            ClienteFactura[0].selectize.focus();
+            ClienteClave.focus().select();
             Estilo[0].selectize.clear();
             getDetalleDocumento();
             getTotales(false);
@@ -524,7 +586,7 @@
                             }
                         } else {
                             swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
-                                ClienteFactura[0].selectize.focus();
+                                ClienteClave.focus().select();
                             });
                         }
                     }
@@ -630,7 +692,7 @@
             "scrollX": true
         });
 
-        ClienteFactura[0].selectize.focus();
+        ClienteClave.focus().select();
 
         DetalleDocumento = tblDetalleDocumento.DataTable({
             dom: 'rt',
@@ -1067,8 +1129,8 @@
         console.log("txtreferen10 => " + txtreferen10);
         pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
-    } 
-    
+    }
+
     function  getVistaPrevia() {
         $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
             CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',

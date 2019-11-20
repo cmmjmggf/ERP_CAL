@@ -649,10 +649,10 @@
 
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
-                ClienteClave.val(ClienteFactura.val());
+                ClienteClave.val(ClienteFactura.val()); 
                 ClienteFactura[0].selectize.disable();
             } else {
-                ClienteClave.val('');
+                ClienteClave.val(''); 
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
@@ -662,18 +662,18 @@
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
                     ClienteFactura[0].selectize.setValue(ClienteClave.val());
-                    if (ClienteFactura.val()) {
+                    if (ClienteFactura.val()) { 
                         ClienteFactura[0].selectize.disable();
                     } else {
                         iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
                             ClienteClave.focus().select();
                         });
                     }
-                } else {
+                } else { 
                     ClienteFactura[0].selectize.enable();
                     ClienteFactura[0].selectize.clear(true);
                 }
-            } else {
+            } else { 
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
