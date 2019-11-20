@@ -629,11 +629,11 @@ FROM costomanoobratemp CMT
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
 
             //Imprimimos el reporte
-//            $jc->setParametros($parametros);
-//            $jc->setJasperurl('jrxml\nominas\reporteNominaBanco.jasper');
-//            $jc->setFilename('NOMINA_BANCO_' . Date('h_i_s'));
-//            $jc->setDocumentformat('pdf');
-//            $reports['1UNO'] = $jc->getReport();
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\nominas\reporteNominaBanco.jasper');
+            $jc->setFilename('NOMINA_BANCO_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            $reports['1UNO'] = $jc->getReport();
             //Imprimimos el reporte 2
             $jc->setParametros($parametros);
             $jc->setJasperurl('jrxml\nominas\reporteNominaBancoNormal.jasper');

@@ -174,6 +174,16 @@ class AvanceTejido extends CI_Controller {
         }
     }
 
+    public function onVerificarFraccionXEstilo() {
+        try {
+            $estilo = $this->input->get('Estilo');
+            $frac = $this->input->get('Fraccion');
+            print json_encode($this->db->query("select * from fraccionesxestilo where Estilo = '$estilo' and Fraccion = $frac ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarAvance() {
         try {
             print json_encode($this->avtm->onVerificarAvance($this->input->get('CONTROL')));

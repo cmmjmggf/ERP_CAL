@@ -1,13 +1,13 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center">
                 <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance a tejido</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4" align="right">
-                <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-sm m-2 btn-info" 
+                <button type="button" id="btnImprimirVale" name="btnImprimirVale" class="btn btn-sm m-2 btn-info"
                         data-toggle="tooltip" data-placement="top" title="Imprimir vale x documento" >
                     <span class="fa fa-print"></span> Imprimir vale</button>
             </div>
@@ -17,14 +17,14 @@
         <div class="row">
             <div class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-1">
                 <label>Chofer</label>
-                <input id="xChofer" name="xChofer" class="form-control form-control-sm  numbersOnly"> 
+                <input id="xChofer" name="xChofer" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-4 mt-4">
                 <select id="Chofer" name="Chofer" class="form-control form-control-sm"></select>
             </div>
             <div class="col-4 col-xs-4 col-sm-4 col-lg-1 col-xl-1">
                 <label>Tejedora</label>
-                <input id="xTejedora" name="xTejedora" class="form-control form-control-sm numbersOnly"> 
+                <input id="xTejedora" name="xTejedora" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-8 col-xs-8 col-sm-8 col-lg-3 col-xl-4 mt-4">
                 <select id="Tejedora" name="Tejedora" class="form-control form-control-sm"></select>
@@ -101,7 +101,7 @@
                     <div class="col-4" align="right">
 
                         <button type="button" id="btnImprimirValeAyuda" name="btnImprimirValeAyuda" class="btn btn-info d-none"  data-toggle="tooltip" data-placement="top" title="Como se usa?">
-                            <span class="fa fa-question-circle"></span> 
+                            <span class="fa fa-question-circle"></span>
                         </button>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
             btnImprimirVale = pnlTablero.find("#btnImprimirVale"), btnImprimirValeAyuda = pnlTablero.find("#btnImprimirValeAyuda");
 
     $(document).ready(function () {
-
+        getUltimoDocumento();
         Fecha.val('<?php print Date('d/m/Y'); ?>');
         $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
             FECHA: Fecha.val()
@@ -226,7 +226,23 @@
                     console.log(data);
                     onImprimirReporteFancyAFC(data, function (a, b) {
                         btnImprimirVale.attr('disabled', false);
-                        Documento.focus().select();
+                        pnlTablero.find("input").val("");
+                        $.each(pnlTablero.find("select"), function (k, v) {
+                            pnlTablero.find("select")[k].selectize.clear(true);
+                        });
+                        getUltimoDocumento();
+                        Fecha.val('<?php print Date('d/m/Y'); ?>');
+                        $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
+                            FECHA: Fecha.val()
+                        }).done(function (d) {
+                            var s = JSON.parse(d);
+                            if (s.length > 0) {
+                                Semana.val(s[0].SEMANA);
+                            }
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        });
+                        xChofer.focus();
                     });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
@@ -244,11 +260,10 @@
         getChoferes();
         getTejedoras();
         Tejedora.change(function () {
-            getUltimoDocumento();
             xTejedora.val(Tejedora.val());
             if (Tejedora.val()) {
                 if (Chofer.val()) {
-                    Documento.focus().select();
+                    Control.focus().select();
                 } else {
                     onBeep(2);
                     onNotifyOldPC('<span class="fa fa-check"></span>', 'SELECCIONE UN CHOFER', 'success', {from: "top", align: "center"});
@@ -258,7 +273,7 @@
                 xTejedora.focus().select();
             }
         });
-        
+
         btnAceptar.click(function () {
             if (Control.val()) {
                 if (Chofer.val() && Tejedora.val() && Documento.val() &&
@@ -325,14 +340,12 @@
 
         Frac.on('keydown', function (e) {
             if (e.keyCode === 13 && Frac.val()) {
-                onVerificarAvance();
-                getUltimoDocumento();
+                onVerificarFraccionXEstilo();
             }
         });
         Estilo.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 $.getJSON("<?php print base_url('AvanceTejido/getColoresXEstilo') ?>").done(function (x, y, z) {
-                    getUltimoDocumento();
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
@@ -344,45 +357,45 @@
             if (e.keyCode === 13 && Control.val()) {
                 $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
                         {CONTROL: Control.val()}).done(function (ax) {
-                    if (parseInt(ax[0].EXISTE) > 0) {
-                        swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
-                            Control.focus().select();
+//                    if (parseInt(ax[0].EXISTE) > 0) {
+//                        swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
+//                            Control.focus().select();
+//                        });
+//                    } else {
+                    if (Control.val() && e.keyCode === 13) {
+                        getUltimoAvanceXControl();
+                        $.getJSON("<?php print base_url('AvancePespunteMaquila/getInfoControl'); ?>", {
+                            CONTROL: Control.val()
+                        }).done(function (a, b, c) {
+                            console.log(a);
+                            if (a.length > 0) {
+                                var rq = a[0];
+                                onHabilita();
+                                Estilo.val(rq.Estilo);
+                                getColoresXEstilo(rq.Estilo, rq);
+                                Pares.val(rq.Pares);
+                                getSemanaNomina();
+                                Fecha.val('<?php print Date("d/m/Y"); ?>');
+                                Frac.val(401);
+                                /*
+                                 * 401	TEJIDA A MANO->DEFAULT
+                                 * 402	TEJIDA A MANO MUESTRA
+                                 * 403	TEJIDA MAQUINA 1
+                                 * 404	TEJIDA MAQUINA  2
+                                 * 405	TEJIDO DE FLORETA
+                                 */
+                            } else {
+                                swal('ATENCIÓN', 'NO SE TIENE INFORMACIÓN SOBRE ESTE CONTROL, PUEDE QUE NO EXISTA O QUE NO HAYA SIDO AVANZADO AL DEPTO CORRESPONDIENTE', 'warning').then((value) => {
+                                    Control.focus().select();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        }).always(function () {
+                            HoldOn.close();
                         });
-                    } else {
-                        if (Control.val() && e.keyCode === 13) {
-                            getUltimoAvanceXControl();
-                            $.getJSON("<?php print base_url('AvancePespunteMaquila/getInfoControl'); ?>", {
-                                CONTROL: Control.val()
-                            }).done(function (a, b, c) {
-                                console.log(a);
-                                if (a.length > 0) {
-                                    var rq = a[0];
-                                    onHabilita();
-                                    Estilo.val(rq.Estilo);
-                                    getColoresXEstilo(rq.Estilo, rq);
-                                    Pares.val(rq.Pares);
-                                    getSemanaNomina();
-                                    Fecha.val('<?php print Date("d/m/Y"); ?>');
-                                    Frac.val(401);
-                                    /*
-                                     * 401	TEJIDA A MANO->DEFAULT
-                                     * 402	TEJIDA A MANO MUESTRA
-                                     * 403	TEJIDA MAQUINA 1
-                                     * 404	TEJIDA MAQUINA  2
-                                     * 405	TEJIDO DE FLORETA
-                                     */
-                                } else {
-                                    swal('ATENCIÓN', 'NO SE TIENE INFORMACIÓN SOBRE ESTE CONTROL, PUEDE QUE NO EXISTA O QUE NO HAYA SIDO AVANZADO AL DEPTO CORRESPONDIENTE', 'warning').then((value) => {
-                                        Control.focus().select();
-                                    });
-                                }
-                            }).fail(function (x, y, z) {
-                                getError(x);
-                            }).always(function () {
-                                HoldOn.close();
-                            });
-                        }
                     }
+                    //       }
                 });
             } else {
                 if (!Chofer.val()) {
@@ -413,7 +426,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'ript',
+            "dom": 'rtp',
             "ajax": {
                 "url": '<?php print base_url('AvanceTejido/getControlesParaTejido'); ?>',
                 "contentType": "application/json",
@@ -453,7 +466,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'ritp',
+            "dom": 'rtp',
             "ajax": {
                 "url": '<?php print base_url('AvanceTejido/getControlesEnTejido'); ?>',
                 "dataSrc": "",
@@ -527,6 +540,23 @@
             HoldOn.close();
         });
     }
+    function onVerificarFraccionXEstilo() {
+        $.getJSON('<?php print base_url('AvanceTejido/onVerificarFraccionXEstilo') ?>',
+                {Estilo: Estilo.val(), Fraccion: Frac.val()}).done(function (a) {
+            if (a.length > 0) {
+                onVerificarAvance();
+            } else {
+                swal('ATENCIÓN', 'ESTE ESTILO NO TIENE LA FRACCIÓN INDICADA', 'warning').then((value) => {
+                    Frac.val('').focus().select();
+                    return;
+                });
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            HoldOn.close();
+        });
+    }
 
     function onVerificarAvance() {
         $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
@@ -535,12 +565,13 @@
                 if (parseInt(a[0].EXISTE) > 0) {
                     swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL', 'warning').then((value) => {
                         Control.focus().select();
-                        Fra.val('');
+                        Frac.val('');
                         Estilo.val('');
                         Color[0].selectize.clear(true);
                         Pares.val('');
                         Semana.val('');
                         Fecha.val('');
+                        return;
                     });
                 }
             }
