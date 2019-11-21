@@ -296,7 +296,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["costo"] = NULL;
             $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? $x["OBSERVACIONES"] : "SO";
             $this->db->insert('facturacion', $f);
-            print $this->db->last_query();
+//            print $this->db->last_query();
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
                 case 1:
@@ -360,18 +360,22 @@ class FacturacionProduccion extends CI_Controller {
                                 . "P.C11, P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, "
                                 . "P.C21, P.C22 FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
                 $control_pedidox = $control[0];
+                print "\n";
+                print_r($control_pedidox);
+                print "\n";
+                
                 $this->db->where('contped', $x['CONTROL'])->update('facturacion',
                         array(
-                            'par01' => $control_pedidox->P1, 'par02' => $control_pedidox->P2,
-                            'par03' => $control_pedidox->P3, 'par04' => $control_pedidox->P4,
-                            'par05' => $control_pedidox->P5, 'par06' => $control_pedidox->P6,
-                            'par07' => $control_pedidox->P7, 'par08' => $control_pedidox->P8,
-                            'par09' => $control_pedidox->P9, 'par10' => $control_pedidox->P10,
-                            'par11' => $control_pedidox->P11, 'par12' => $control_pedidox->P12,
-                            'par13' => $control_pedidox->P13, 'par14' => $control_pedidox->P14,
-                            'par15' => $control_pedidox->P15, 'par16' => $control_pedidox->P16,
-                            'par17' => $control_pedidox->P17, 'par18' => $control_pedidox->P18,
-                            'par19' => $control_pedidox->P19, 'par20' => $control_pedidox->P20
+                            'par01' => $control_pedidox->C1, 'par02' => $control_pedidox->C2,
+                            'par03' => $control_pedidox->C3, 'par04' => $control_pedidox->C4,
+                            'par05' => $control_pedidox->C5, 'par06' => $control_pedidox->C6,
+                            'par07' => $control_pedidox->C7, 'par08' => $control_pedidox->C8,
+                            'par09' => $control_pedidox->C9, 'par10' => $control_pedidox->C10,
+                            'par11' => $control_pedidox->C11, 'par12' => $control_pedidox->C12,
+                            'par13' => $control_pedidox->C13, 'par14' => $control_pedidox->C14,
+                            'par15' => $control_pedidox->C15, 'par16' => $control_pedidox->C16,
+                            'par17' => $control_pedidox->C17, 'par18' => $control_pedidox->C18,
+                            'par19' => $control_pedidox->C19, 'par20' => $control_pedidox->C20
                 ));
 
 //                par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22
@@ -500,7 +504,6 @@ class FacturacionProduccion extends CI_Controller {
                 $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
             } else {
                 $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
-                exit(0);
             }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -528,6 +531,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 1810:
                             /* ZAPATERIAS COBAN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
@@ -543,6 +547,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 1445:
 //                    print "AQUI 1445";
@@ -559,6 +564,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2394:
                             /* INVERSIONES CENTROAMERICANAS INCEN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
@@ -574,6 +580,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2432:
                             /* CONFIANDO, SOCIEDAD ANONIMA = NO HAY RESULTADOS 28/08/2019 */
@@ -589,6 +596,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2434:
                             /* PIELES FINAS, SOCIEDAD ANONIMA  = NO HAY RESULTADOS 28/08/2019 */
@@ -604,6 +612,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2212:
                             /* COORDINADORA DE FOMENTO AL COMERCIO EXTERIOR DEL ESTADO DE GUANAJUATO  = NO HAY RESULTADOS 28/08/2019 */
@@ -613,6 +622,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2415:
                             /* IMPORTADORA SOES, S.A.   = NO HAY RESULTADOS 28/08/2019 */
@@ -628,7 +638,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
-
+                            exit(0);
                             break;
                         case 2428:
                             /* INTERNACIONAL DE CALZADO, SOCIEDAD ANONIMA    = NO HAY RESULTADOS 28/08/2019 */
@@ -644,6 +654,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 39:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -657,6 +668,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 1755:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -670,6 +682,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2361:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -683,7 +696,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
-
+                            exit(0);
                             break;
                         case 1782:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -697,6 +710,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 696:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -710,7 +724,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
-
+                            exit(0);
                             break;
                         case 100:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -724,6 +738,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2285:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -737,6 +752,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2228:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -752,6 +768,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2332:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -765,6 +782,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 2343:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -779,6 +797,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         case 1967:
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
@@ -787,6 +806,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                         default :
                             $jc->setParametros($pr);
@@ -794,6 +814,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
+                            exit(0);
                             break;
                     }
                     break;
@@ -804,10 +825,10 @@ class FacturacionProduccion extends CI_Controller {
                     $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                     $jc->setDocumentformat('pdf');
                     PRINT $jc->getReport();
+                    exit(0);
                     break;
             }
         } catch (Exception $exc) {
-
             echo $exc->getTraceAsString();
         }
     }

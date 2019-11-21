@@ -319,7 +319,7 @@ class FacturacionVarios extends CI_Controller {
                 $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
             } else {
                 $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
-                exit(0);
+                
             }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);

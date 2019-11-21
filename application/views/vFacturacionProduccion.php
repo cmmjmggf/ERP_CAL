@@ -5,14 +5,16 @@
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
+                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info" style="background-color: #3F51B5;">
+                    <span class="fa fa-plus"></span> Nuevo
+                </button>
                 <div class="btn-group">
                     <a class="btn btn-info btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         CATÁLOGOS
                     </a>
-
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <a class="dropdown-item" href="#" onclick="btnClientes.trigger('click');"><span class="fa fa-users"></span> CLIENTES</a>
-                        <a class="dropdown-item" href="#"  onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
+                        <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
                     </div>
                 </div> 
                 <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" >
@@ -21,8 +23,6 @@
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
-
-
                 <button type="button" id="btnClientes" name="btnClientes" class="btn btn-primary d-none">
                     <span class="fa fa-users"></span>  CLIENTES
                 </button>
@@ -708,7 +708,8 @@
             btnElijeControl = pnlTablero.find("#btnElijeControl"),
             mdlConsignarA = $("#mdlConsignarA"), TiendaClave = mdlConsignarA.find("#TiendaClave"),
             ConsignarATienda = mdlConsignarA.find("#Tienda"),
-            btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal");
+            btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal"),
+            btnNuevaFactura = pnlTablero.find("#btnNuevaFactura");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -716,8 +717,11 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
-
         handleEnterDiv(mdlConsignarA);
+
+        btnNuevaFactura.click(function () {
+            location.reload();
+        });
 
         bControl.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -1387,7 +1391,10 @@
             "scrollCollapse": false,
             "bSort": true,
             "scrollY": 450,
-            "scrollX": true
+            "scrollX": true,
+            initComplete: function () {
+                onCloseOverlay();
+            }
         });
     });
 
@@ -2124,6 +2131,7 @@
         });
         mdlHistorialFacturas.find("div.pares_totales").text("Pares " + prs);
     }
+    onOpenOverlay('');
 </script>
 
 <style> 
