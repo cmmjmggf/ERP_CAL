@@ -944,4 +944,13 @@
         color: #fff !important;
         font-weight: bold ;
     }
+
+
+    label {
+        margin-top: 0.02rem;
+        margin-bottom: 0.0rem;
+    }
+    table tbody tr {
+        font-size: 0.75rem !important;
+    }
 </style>
