@@ -1565,7 +1565,8 @@
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
             $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarControlXCliente'); ?>', {
-                CONTROL: Control.val() ? Control.val() : ''
+                CONTROL: Control.val() ? Control.val() : '',
+                CLIENTE: ClienteClave.val() ? ClienteClave.val() : ''
             }).done(function (abcd) {
                 if (abcd.length > 0) {
                     if (abcd[0].CLIENTE === clientesito) {
@@ -1679,10 +1680,12 @@
                         });
                     }
                 } else {
-                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
+                    onBeep(2);
+                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', 'w', function () {
                         onResetCampos();
                         Control.focus().select();
                     });
+                    return;
                 }
             }).fail(function (x) {
                 getError(x);
@@ -1957,7 +1960,7 @@
                             getReferencia();
                         }
                         FCAFactura.val(0);
-                        PAGFactura.val(1);
+                        PAGFactura.val(0);
                         TMNDAFactura.val(1); //1 = pesos mexicanos, 2 = dolares americanos
                     }).fail(function (xyz) {
                         getError(xyz);
@@ -2048,13 +2051,29 @@
                 "scrollCollapse": false,
                 "bSort": true,
                 "scrollY": 450,
-                "scrollX": true
+                "scrollX": true,
+                "aaSorting": [
+                    [4, 'desc']/*ID*/
+                ],
+                initComplete: function () {
+                    var tblFacturas_info = mdlHistorialFacturas.find("#tblFacturas_info");
+                    //ENCIERRA EL DIV
+                    tblFacturas_info.wrap('<div class="row"></div>');
+                    // CONCATENA DESPUES DEL DIV
+                    tblFacturas_info.after("<div class='font-weight-bold pares_totales' style='color: #cc2418;'> Pares 0 < /div>");
+                    //ENCIERRA EL DIV            
+                    tblFacturas_info.wrap('<div class="col-6"></div>');
+                    //ENCIERRA EL DIV
+                    mdlHistorialFacturas.find(".pares_totales").wrap('<div class="col-6 mt-2 text-center"></div>');
+                    onCalcularParesHistorial();
+                }
             });
 
             hControl.on('keydown', function (e) {
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2063,6 +2082,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2071,6 +2091,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2079,6 +2100,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2093,6 +2115,14 @@
             });
             mdlHistorialFacturas.modal('show');
         }
+    }
+
+    function onCalcularParesHistorial() {
+        var prs = 0;
+        $.each(HistorialFacturados.rows().data(), function (k, v) {
+            prs += $.isNumeric(v.PARES) ? parseInt(v.PARES) : 0;
+        });
+        mdlHistorialFacturas.find("div.pares_totales").text("Pares " + prs);
     }
 </script>
 

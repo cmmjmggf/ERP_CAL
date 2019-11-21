@@ -14,7 +14,7 @@
                             <div class="col-3">
                                 <input id="xClienteReg" name="xClienteReg" class="form-control form-control-sm" maxlength="15">
                             </div>
-                            <div class="col-8">
+                            <div class="col-9">
                                 <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm">
                                     <option></option>
                                     <?php
@@ -132,13 +132,27 @@
                 });
             } else {
                 iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE, UNA FACTURA Y UN TP', 'w', function () {
-                    ClienteReg[0].selectize.focus();
+                    if (!ClienteReg.val()) {
+                        xClienteReg.focus().select();
+                    } else if (!FacturaReg.val()) {
+                        FacturaReg.focus().select();
+                    } else if (!TPReg.val()) {
+                        TPReg.focus().select();
+                    }
                 });
             }
         });
 
         ClienteReg.change(function () {
-
+            if (ClienteReg.val()) {
+                xClienteReg.val(ClienteReg.val());
+                ClienteReg[0].selectize.disable();
+                FacturaReg.focus().select();
+            } else {
+                xClienteReg.val("");
+                ClienteReg[0].selectize.enable();
+                xClienteReg.focus().select();
+            }
         });
 
         mdlReimprimeDocto.on('shown.bs.modal', function () {
