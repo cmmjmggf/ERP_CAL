@@ -1353,7 +1353,7 @@
                                                                 opcion += '</a>';
                                                                 opcion += '<ul class="dropdown-menu  animate slideIn">';
                                                                 $.each(subsubitems, function (kss, vss) {
-                                                                    console.log(vss);
+//                                                                    console.log(vss);
                                                                     switch (parseInt(vss.SubSubItemModal)) {
                                                                         case 0:
                                                                             opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';

@@ -1202,8 +1202,8 @@
                         "scrollCollapse": false,
                         "bSort": true,
                         "scrollY": 300,
-                        "scrollX": true,
-                        "bSort": true, responsive: false,
+                        "scrollX": true, 
+                        responsive: false,
                         "aaSorting": [
                             [4, 'desc']/*ID*/
                         ],
@@ -1565,7 +1565,8 @@
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
             $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarControlXCliente'); ?>', {
-                CONTROL: Control.val() ? Control.val() : ''
+                CONTROL: Control.val() ? Control.val() : '',
+                CLIENTE: ClienteClave.val() ? ClienteClave.val() : ''
             }).done(function (abcd) {
                 if (abcd.length > 0) {
                     if (abcd[0].CLIENTE === clientesito) {
@@ -1679,10 +1680,12 @@
                         });
                     }
                 } else {
-                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
+                    onBeep(2);
+                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', 'w', function () {
                         onResetCampos();
                         Control.focus().select();
                     });
+                    return;
                 }
             }).fail(function (x) {
                 getError(x);
@@ -1957,7 +1960,7 @@
                             getReferencia();
                         }
                         FCAFactura.val(0);
-                        PAGFactura.val(1);
+                        PAGFactura.val(0);
                         TMNDAFactura.val(1); //1 = pesos mexicanos, 2 = dolares americanos
                     }).fail(function (xyz) {
                         getError(xyz);
@@ -2048,7 +2051,15 @@
                 "scrollCollapse": false,
                 "bSort": true,
                 "scrollY": 450,
-                "scrollX": true
+                "scrollX": true,
+                "aaSorting": [
+                    [4, 'desc']/*ID*/
+                ],
+                initComplete: function () {
+                    var parent = mdlHistorialFacturas.parent("#tblFacturas_wrapper");
+                    var tblFacturas_info = parent.find("#tblFacturas_info");
+                    tblFacturas_info.append("<div class='font-weight-bold'>0</div>");
+                }
             });
 
             hControl.on('keydown', function (e) {

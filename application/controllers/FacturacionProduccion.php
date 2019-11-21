@@ -85,9 +85,15 @@ class FacturacionProduccion extends CI_Controller {
 
     public function onComprobarControlXCliente() {
         try {
-            print json_encode($this->db->query("SELECT P.Cliente AS CLIENTE "
-                                    . "FROM pedidox AS P "
-                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+            $xxx = $this->input->get();
+            $this->db->select("P.Cliente AS CLIENTE", false)->from("pedidox AS P")
+                    ->where("P.Control", $xxx['CONTROL']);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            if (!in_array($xxx['CLIENTE'], $people)) {
+                $this->db->where_not_in("P.stsavan", array(13, 14));
+            }
+            $this->db->limit(1);
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -120,8 +126,12 @@ class FacturacionProduccion extends CI_Controller {
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
                                 P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
                     ->from("pedidox AS P")
-                    ->where_not_in("P.Control", array(0, 1))
-                    ->where_not_in("P.stsavan", array(13, 14));
+                    ->where_not_in("P.Control", array(0, 1));
+
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            if (!in_array($xxx['CLIENTE'], $people)) {
+                $this->db->where_not_in("P.stsavan", array(13, 14));
+            }
             if ($xxx['CLIENTE'] !== '') {
                 $this->db->where("P.Cliente", $xxx['CLIENTE']);
             }
@@ -328,10 +338,27 @@ class FacturacionProduccion extends CI_Controller {
                 'staped' => (($saldopares == 0) ? 99 : 98)
             );
             if ($saldopares === 0) {
-                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+                $EstatusProduccion = 'FACTURADO';
+                $DeptoProduccion = 260;
+                /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+                $this->db->set('EstatusProduccion', $EstatusProduccion)
+                        ->set('DeptoProduccion', $DeptoProduccion)
+                        ->where('Control', $x['CONTROL'])->update('controles');
+                /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
+                    'EstatusProduccion' => $EstatusProduccion,
+                    'DeptoProduccion' => $DeptoProduccion
+                ));
+                /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+                $this->db->set('fec13', Date('Y-m-d h:i:s'))->where('contped', $x['CONTROL'])
+                        ->update('avaprd');
+                $l = new Logs("Avance facturado", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
+
+
+
                 $control = $this->db->query("SELECT P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, "
                                 . "P.C11, P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, "
-                                . "P.C21, P.C22 FROM pedidox AS P WHERE P.Contorl = {$x['CONTROL']} LIMIT 1")->result();
+                                . "P.C21, P.C22 FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
                 $control_pedidox = $control[0];
                 $this->db->where('contped', $x['CONTROL'])->update('facturacion',
                         array(
@@ -473,6 +500,7 @@ class FacturacionProduccion extends CI_Controller {
                 $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
             } else {
                 $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
+                exit(0);
             }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -836,8 +864,8 @@ class FacturacionProduccion extends CI_Controller {
     public function getHistorialFacturacion() {
         try {
             $xxx = $this->input->get();
-            $this->db->select("F.ID AS ID, F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE,
-F.contped AS CONTROL, F.estilo AS ESTILO, F.combin AS COLOR, F.corrida AS CORRIDA,
+            $this->db->select("F.ID AS ID, CONCAT(\"<span class='font-weight-bold'>\",F.factura,\"</span>\")  AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE,
+CONCAT(\"<span class='font-weight-bold'>\",F.contped,\"</span>\") AS CONTROL, F.estilo AS ESTILO, F.combin AS COLOR, F.corrida AS CORRIDA,
 F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
 (IFNULL(F.subtot,0) + IFNULL(F.iva,0)) AS TOTAL, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA", false)->from("facturacion AS F");
 
@@ -858,6 +886,14 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
             }
             $this->db->group_by("F.factura")->order_by("F.fecha", "DESC");
             print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onControlSinTerminar() {
+        try {
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
