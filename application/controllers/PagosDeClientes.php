@@ -28,13 +28,22 @@ class PagosDeClientes extends CI_Controller {
         }
     }
 
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getPagosXDocumentos() {
         try {
             $x = $this->input->get();
-            $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO, 
-                CCP.tipo AS TP, DATE_FORMAT(CCP.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO, 
-                 DATE_FORMAT(CCP.fechacap,\"%d/%m/%Y\") AS FECHA_CAPTURA, 
-                FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA, 
+            $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO,
+                CCP.tipo AS TP, DATE_FORMAT(CCP.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO,
+                 DATE_FORMAT(CCP.fechacap,\"%d/%m/%Y\") AS FECHA_CAPTURA,
+                FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA,
                 CCP.numfol AS DIAS ", false)->from("cartctepagos AS CCP");
             if ($x['DOCUMENTO'] !== '') {
                 $this->db->where('CCP.remicion', $x['DOCUMENTO']);
@@ -55,11 +64,11 @@ class PagosDeClientes extends CI_Controller {
 
     public function getClientes() {
         try {
-            print json_encode($this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
+            print json_encode($this->db->select("C.Clave AS Clave, CONCAT(C.RazonS) AS Cliente", false)
                                     ->from('clientes AS C')->join('cartcliente AS CC', 'C.Clave = CC.cliente')
                                     ->where_in('C.Estatus', 'ACTIVO')
                                     ->where('CC.saldo > ', 2)
-                                    ->order_by('ABS(C.Clave)', 'ASC')->get()->result());
+                                    ->order_by('Cliente', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -87,8 +96,8 @@ class PagosDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("CC.ID AS ID, CC.cliente AS CLIENTE, CC.remicion AS DOCUMENTO,
-                CC.tipo AS TP, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO,  
-                FORMAT(CC.importe,2) AS IMPORTE, FORMAT(CC.pagos,2) AS PAGOS, FORMAT(CC.saldo,2) AS SALDO, 
+                CC.tipo AS TP, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO,
+                FORMAT(CC.importe,2) AS IMPORTE, FORMAT(CC.pagos,2) AS PAGOS, FORMAT(CC.saldo,2) AS SALDO,
                 CC.status AS ST, DATEDIFF(NOW(),fecha) AS DIAS, CC.saldo AS SALDOX", false)
                     ->from("cartcliente AS CC");
             if ($x['CLIENTE'] !== '') {
@@ -141,6 +150,7 @@ class PagosDeClientes extends CI_Controller {
                         "regdev" => intval($x['MOVIMIENTO']) === 2 ? "1" . substr(Date('Y'), 1, 2) . "" . Date('Ymds') : 0,
                         "uuid" => intval($x["TP"]) === 1 ? $x['UUID'] : 0,
                         "fechadep" => $FECHA_FINAL,
+                        "fechacap" => $FECHA_FINAL,
                         "nc" => 0,
                         "control" => $x['CLAVE_BANCO'],
                         "stscont" => 0,
@@ -166,6 +176,7 @@ class PagosDeClientes extends CI_Controller {
                         "regdev" => intval($x['MOVIMIENTO']) === 2 ? "2" . substr(Date('Y'), 1, 2) . "" . Date('Ymds') : 0,
                         "uuid" => intval($x['MOVIMIENTO']) === 1 ? $x['UUID'] : 0,
                         "fechadep" => $FECHA_FINAL,
+                        "fechacap" => $FECHA_FINAL,
                         "nc" => 0,
                         "control" => $x['CLAVE_BANCO'],
                         "stscont" => 0,
@@ -186,7 +197,8 @@ class PagosDeClientes extends CI_Controller {
 
     public function getBancos() {
         try {
-            print json_encode($this->db->query("SELECT B.Clave AS CLAVE, CONCAT(B.Clave,' ',B.Nombre) AS BANCO FROM bancos AS B ORDER BY ABS(B.Clave) ASC")->result());
+            $Tp = $this->input->get('Tp');
+            print json_encode($this->db->query("SELECT B.Clave AS CLAVE, CONCAT(B.Clave,' ',B.Nombre) AS BANCO FROM bancos AS B where B.Tp = $Tp ORDER BY ABS(B.Clave) ASC")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

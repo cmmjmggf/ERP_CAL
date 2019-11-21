@@ -224,28 +224,30 @@ class PagosConCincoDescuento extends CI_Controller {
             );
             $this->db->insert('cartctepagos', $datosPagoDescuento);
 
-            //Guardamos el pago del IVA desglosado del descuento
-            $datosIVA = array(
-                'cliente' => $this->input->post('Cliente'),
-                'remicion' => $this->input->post('DocFac'),
-                'fecha' => Date('Y-m-d'),
-                'fechacap' => $nuevaFechaDep,
-                'fechadep' => $nuevaFechaDep,
-                'importe' => $this->input->post('IvaDocto'),
-                'tipo' => $this->input->post('Tp'),
-                'gcom' => 0,
-                'mov' => 5,
-                'doctopa' => "IVA  N-C " . $this->input->post('FolioNC'),
-                'numpol' => 0,
-                'agente' => $this->input->post('Agente'),
-                'status' => 1,
-                'control' => $banco,
-                'pagada' => 0,
-                'posfe' => 0,
-                'nc' => $this->input->post('FolioNC'),
-                'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
-            );
-            $this->db->insert('cartctepagos', $datosIVA);
+            //Guardamos el pago del IVA desglosado del descuento si es Tp1
+            if ($this->input->post('Tp') === '1') {
+                $datosIVA = array(
+                    'cliente' => $this->input->post('Cliente'),
+                    'remicion' => $this->input->post('DocFac'),
+                    'fecha' => Date('Y-m-d'),
+                    'fechacap' => $nuevaFechaDep,
+                    'fechadep' => $nuevaFechaDep,
+                    'importe' => $this->input->post('IvaDocto'),
+                    'tipo' => $this->input->post('Tp'),
+                    'gcom' => 0,
+                    'mov' => 5,
+                    'doctopa' => "IVA  N-C " . $this->input->post('FolioNC'),
+                    'numpol' => 0,
+                    'agente' => $this->input->post('Agente'),
+                    'status' => 1,
+                    'control' => $banco,
+                    'pagada' => 0,
+                    'posfe' => 0,
+                    'nc' => $this->input->post('FolioNC'),
+                    'uuid' => ($this->input->post('Tp') === '1') ? $this->input->post('UUID') : 0
+                );
+                $this->db->insert('cartctepagos', $datosIVA);
+            }
 
             //Guardamos el pago normal(sobrante despues de aplicar descuento) como pago normal
             $datosPagoNormal = array(
@@ -293,8 +295,7 @@ class PagosConCincoDescuento extends CI_Controller {
                 'status' => ($this->input->post('Tp') === '1') ? 0 : 2
             );
             $this->db->insert('notcred', $datosNC);
-
-
+//-------------------------------Timbrar.exe------------------------------------
             //Acualizamos la cartera de clientes
             $importeFac = floatval($this->input->post('MontoDocto'));
             $descuento = $this->input->post('DescuentoDocto');

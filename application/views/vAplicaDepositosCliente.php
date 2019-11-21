@@ -141,7 +141,7 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <label>Folio Fiscal</label>
-                        <input type="text" class="form-control form-control-sm " readonly="" id="FolioDeposito" name="FolioDeposito" required="" >
+                        <input type="text" class="form-control form-control-sm " readonly="" id="FolioDeposito" name="FolioDeposito" >
                     </div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
                         <label>Importe</label>
@@ -579,7 +579,8 @@
                 if (data.length > 0) {
                     pnlTablero.find("#FolioDeposito").val(data[0].uuid);
                 } else {
-                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'error')
+                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'error');
+                    return;
                 }
             });
             pnlTablero.find("#Tp").val(dtm.tipo);

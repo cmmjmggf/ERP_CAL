@@ -1,36 +1,39 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header"> 
+    <div class="card-body">
         <div class="row">
             <div class="col-12 col-sm-12 col-xs-12 col-lg-4 col-xl-4">
-                <h4 class="card-title">Pagos de clientes</h4>  
-            </div> 
-            <div class="col-12 col-sm-12 col-xs-12 col-lg-8 col-xl-8" align="right"> 
+                <h4 class="card-title">Pagos de clientes</h4>
+            </div>
+            <div class="col-12 col-sm-12 col-xs-12 col-lg-8 col-xl-8" align="right">
                 <button type="button" id="btnActualizaDescuentos" name="btnActualizaDescuentos" disabled="" class="btn btn-info btn-sm">
                     Actualiza descuentos
                 </button>
                 <button type="button" id="btnActualizaDevoluciones" name="btnActualizaDevoluciones" disabled="" class="btn btn-info my-1 btn-sm">
                     Actualiza devoluciones
-                </button> 
+                </button>
                 <button type="button" id="btnAplicaAnticiposDeClientes" name="btnAplicaAnticiposDeClientes" disabled="" class="btn btn-info  btn-sm">
                     Aplica anticipos de clientes
-                </button> 
+                </button>
                 <button type="button" id="btnLocPlazas" disabled="" name="btnLocPlazas" class="btn btn-warning  btn-sm">
                     Loc-Plazas
                 </button>
                 <button type="button" id="btnNotaDeCredito" name="btnNotaDeCredito" class="btn btn-danger  btn-sm">
                     Nota de credito
-                </button> 
+                </button>
                 <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info  btn-sm">
                     Movimientos
                 </button>
             </div>
         </div>
-    </div>
-    <div class="card-body">
+        <hr>
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-lg-5 col-xl-5">
-                <label for="">Cliente</label>
-                <select id="ClientePDC" name="ClientePDC" class="form-control form-control-sm">                        
+            <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>Cliente</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="ClientePDC" name="ClientePDC" maxlength="5" required="">
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4">
+                <label for="">-</label>
+                <select id="sClientePDC" name="sClientePDC" class="form-control form-control-sm NotSelectize">
                 </select>
                 <input type="text" id="AgentePDC" name="AgentePDC" class="d-none" readonly="">
             </div>
@@ -40,14 +43,14 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <label for="">Docto</label>
-                <input type="text" id="DoctoPDC" name="DoctoPDC" class="form-control form-control-sm">
+                <input type="text" id="DoctoPDC" name="DoctoPDC" class="form-control form-control-sm numbersOnly" maxlength="10">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-1 col-xl-1">
                 <label for="">Fecha</label>
                 <input type="text" id="FechaPDC" name="FechaPDC" readonly="" class="form-control notEnter form-control-sm date">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-1 col-xl-1">
-                <label for="">TP</label>
+                <label for="">Tp</label>
                 <select id="TPPDC" name="TPPDC" class="form-control form-control-sm">
                     <option></option>
                     <option value="1">1 F</option>
@@ -122,13 +125,13 @@
                         <input type="text" id="RefTres" name="RefTres" class="form-control form-control-sm">
                     </div>
                 </div>
-            </div> 
+            </div>
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1  d-flex align-items-stretch">               
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1  d-flex align-items-stretch">
                 <div class="row">
-                    <label for="">DIAS</label>
+                    <label for="">Días</label>
                     <div class="w-100"></div>
-                    <input type="text" id="Dias" name="Dias" placeholder="" style="font-size: 80px !important;" maxlength="3" readonly="" class="form-control form-control-sm numeric display-1" autocomplete="off">
+                    <input type="text" id="Dias" name="Dias" placeholder="" style="font-size: 45px !important;" maxlength="3" readonly="" class="form-control form-control-sm numeric display-1" autocomplete="off">
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-5 col-xl-5 ">
@@ -179,25 +182,25 @@
                 <div class="row">
                     <div class="col-12">
                         <label for="">Posfechado</label>
-                        <input type="text" id="Posfechado" name="Posfechado" class="form-control form-control-sm date">
+                        <input type="text" id="Posfechado" name="Posfechado" class="form-control form-control-sm date selectNotEnter">
                     </div>
                     <div class="col-12">
                         <label for="">Deposito</label>
-                        <input type="text" id="DepositoFecha" name="DepositoFecha" class="form-control form-control-sm date">
+                        <input type="text" id="DepositoFecha" name="DepositoFecha" class="form-control form-control-sm date selectNotEnter">
                     </div>
                 </div>
             </div>
             <div class="w-100 my-1"><hr></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4 text-center mt-1" style="cursor:pointer !important; ">
-                <p class="text-danger font-weight-bold font-italic">SOLO EN CASO DE * * * EFECTIVO Y DEPOSITO * * *</p>
+            <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4 text-center" style="cursor:pointer !important; ">
+                <p class="text-danger font-weight-bold font-italic">SOLO EN CASO DE * * * EFECTIVO Y DEPÓSITO * * *</p>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4">
                 <label for="">Banco</label>
-                <select id="Banco" name="Banco" class="form-control form-control-sm"></select>
+                <select id="Banco" name="Banco" class="form-control form-control-sm NotSelectize selectNotEnter"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <label for="">Cuenta</label>
-                <input type="text" id="Cuenta" name="Cuenta" class="form-control form-control-sm" maxlength="99">
+                <input type="text" id="Cuenta" name="Cuenta" class="form-control form-control-sm selectNotEnter" maxlength="99">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <br>
@@ -205,7 +208,7 @@
                     <span class="fa fa-check"></span>  Acepta
                 </button>
             </div>
-            <div class="w-100 my-1"><hr></div>
+            <div class="w-100"><hr></div>
             <!--TABLA DE PAGOS POR DOCUMENTO-->
             <div class="col-12 col-xs-12 col-sm-12 col-lg-10 col-xl-10" align="center">
                 <h6 class="text-info font-italic font-weight-bold">Pagos de este documento</h6>
@@ -222,7 +225,7 @@
                         <input type="text" id="SaldoActual" name="SaldoActual" class="form-control form-control-sm" readonly="">
                     </div>
                 </div>
-                <div class="w-100 my-3"><hr></div>
+                <div class="w-100"><hr></div>
                 <div id="PagosDeEsteDocumento" class="table-responsive">
                     <table id="tblPagosDeEsteDocumento" class="table table-sm display " style="width:100%">
                         <thead>
@@ -259,7 +262,7 @@
             </div>
             <div class="w-100"></div>
             <!--TABLA DE DOCUMENTOS CON SALDO POR CLIENTE-->
-            <div class="w-100 my-3"><hr></div>
+            <div class="w-100"><hr></div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-10 col-xl-10" align="center">
                 <h6 class="text-info font-italic font-weight-bold">Documentos con saldo de este cliente</h6>
                 <div id="DocumentosConSaldoXClientes" class="table-responsive">
@@ -320,6 +323,7 @@
             PagosDeEsteDocumento,
             tblPagosDeEsteDocumento = pnlTablero.find("#tblPagosDeEsteDocumento"),
             ClientePDC = pnlTablero.find("#ClientePDC"),
+            sClientePDC = pnlTablero.find("#sClientePDC"),
             DocumentosConSaldoXClientes,
             tblDocumentosConSaldoXClientes = pnlTablero.find("#tblDocumentosConSaldoXClientes"),
             SaldoTotalPendiente = pnlTablero.find("#SaldoTotalPendiente"),
@@ -327,7 +331,12 @@
             SaldoDelDeposito = pnlTablero.find("#SaldoDelDeposito"),
             btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), btnMovimientos = pnlTablero.find("#btnMovimientos");
 
-    $(document).ready(function () { 
+    $(document).ready(function () {
+        ClientePDC.focus();
+        sClientePDC.selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         btnMovimientos.click(function () {
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
@@ -409,8 +418,7 @@
                     onBeep(2);
                     swal('ATENCIÓN', 'EN CASO DE EFECTIVO, DEBE DE CAPTURAR EL BANCO', 'warning')
                             .then((value) => {
-                                Banco[0].focus();
-                                Banco[0].open();
+                                Banco.focus();
                             });
                 } else {
                     if (ClientePDC.val() && DepositoPDC.val() && DoctoPDC.val() && FechaPDC.val() && TPPDC.val() && CapturaPDC.val()) {
@@ -472,9 +480,11 @@
                                 console.log(a);
                                 /*TERMINAR PROCESO */
                                 pnlTablero.find("input:not(#DepositoPDC):not(#Agente)").val('');
-                                $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
-                                    $(v)[0].selectize.clear(true);
-                                });
+                                Banco.empty();
+                                MovUno[0].selectize.clear(true);
+                                MovDos[0].selectize.clear(true);
+                                MovTres[0].selectize.clear(true);
+                                MovCuatro[0].selectize.clear(true);
                                 if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
                                     getPagosDocumento();
                                 } else {
@@ -486,10 +496,6 @@
                                     DocumentosConSaldoXClientes.ajax.reload();
                                 }
                                 DoctoPDC.focus().select();
-                                /*
-                                 ClientePDC[0].selectize.focus();
-                                 ClientePDC[0].selectize.open();
-                                 */
                                 onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
                             }).fail(function (x) {
                                 getError(x);
@@ -508,8 +514,7 @@
                         swal('ATENCIÓN', 'ES NECESARIO CAPTURAR LA INFORMACIÓN DEL CLIENTE,DEPOSITO,DOCUMENTO,TIPO,FECHAS', 'warning')
                                 .then((value) => {
                                     if (!ClientePDC.val()) {
-                                        ClientePDC[0].selectize.open();
-                                        ClientePDC[0].selectize.focus();
+                                        ClientePDC.focus();
                                     } else {
                                         DepositoPDC.focus().select();
                                     }
@@ -549,19 +554,31 @@
                                 SaldoPDC.val(a[0].SALDO);
                                 TPPDC[0].selectize.setValue(a[0].TIPO);
                                 Dias.val(a[0].DIAS);
+
+                                getBancos(a[0].TIPO);
                                 /*OBTENER UUID*/
                                 $.getJSON('<?php print base_url('PagosDeClientes/getUUID'); ?>', {DOCUMENTO: DoctoPDC.val()}).done(function (a) {
                                     console.log(a);
                                     if (a.length > 0) {
                                         FolioFiscal.val(a[0].UUID);
                                         CapturaPDC.focus();
+                                    } else {
+                                        CapturaPDC.focus();
                                     }
                                 }).fail(function (x) {
                                     getError(x);
                                 }).always(function () {
                                 });
-                            }else{
-                                
+                            } else {
+                                swal('ERROR', 'EL DOCUMENTO NO EXISTE', 'warning').then((value) => {
+                                    ImportePDC.val('');
+                                    PagosPDC.val('');
+                                    SaldoPDC.val('');
+                                    TPPDC[0].selectize.clear(true);
+                                    Dias.val('');
+                                    Banco.empty();
+                                    DoctoPDC.focus().val('');
+                                });
                             }
                         }).fail(function (x) {
                     getError(x);
@@ -583,37 +600,96 @@
         DepositoFecha.val(FechaActual);
 
         getClientes();
-        getBancos();
 
-        ClientePDC.change(function (e) {
-            HoldOn.open({
-                theme: 'sk-rect',
-                message:'Por favor espere...'
-            });
-            pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha)").val('');
-            $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
-                $(v)[0].selectize.clear(true);
-            });
-            if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
-                getPagosDocumento();
-            } else {
-                PagosDeEsteDocumento.ajax.reload();
-            }
-            if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
-                getDocumentosConSaldoXClientes();
-            } else {
-                DocumentosConSaldoXClientes.ajax.reload();
-            }
-            $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: ClientePDC.val()})
-                    .done(function (a) {
-                        if (a.length > 0) {
-                            AgentePDC.val(a[0].AGENTE);
+        ClientePDC.keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON('<?php print base_url('PagosDeClientes/onVerificarCliente'); ?>', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            sClientePDC[0].selectize.addItem(txtcte, true);
+
+                            HoldOn.open({
+                                theme: 'sk-rect',
+                                message: 'Por favor espere...'
+                            });
+                            pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+
+
+                            MovUno[0].selectize.clear(true);
+                            MovDos[0].selectize.clear(true);
+                            MovTres[0].selectize.clear(true);
+                            MovCuatro[0].selectize.clear(true);
+
+                            if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+                                getPagosDocumento();
+                            } else {
+                                PagosDeEsteDocumento.ajax.reload();
+                            }
+                            if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+                                getDocumentosConSaldoXClientes();
+                            } else {
+                                DocumentosConSaldoXClientes.ajax.reload();
+                            }
+                            $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: txtcte})
+                                    .done(function (a) {
+                                        if (a.length > 0) {
+                                            AgentePDC.val(a[0].AGENTE);
+                                            DepositoPDC.focus().select();
+                                        }
+                                    }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                                HoldOn.close();
+                            });
+
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                sClientePDC[0].selectize.clear(true);
+                                ClientePDC.focus().val('');
+                            });
                         }
                     }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-                HoldOn.close();
-            });
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        sClientePDC.change(function (e) {
+            if ($(this).val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Por favor espere...'
+                });
+                ClientePDC.val(sClientePDC.val());
+                pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+                MovUno[0].selectize.clear(true);
+                MovDos[0].selectize.clear(true);
+                MovTres[0].selectize.clear(true);
+                MovCuatro[0].selectize.clear(true);
+                if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+                    getPagosDocumento();
+                } else {
+                    PagosDeEsteDocumento.ajax.reload();
+                }
+                if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+                    getDocumentosConSaldoXClientes();
+                } else {
+                    DocumentosConSaldoXClientes.ajax.reload();
+                }
+                $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: sClientePDC.val()})
+                        .done(function (a) {
+                            if (a.length > 0) {
+                                AgentePDC.val(a[0].AGENTE);
+                                DepositoPDC.focus().select();
+                            }
+                        }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            }
         });
 
     });
@@ -652,7 +728,7 @@
             tblPagosDeEsteDocumento.DataTable().destroy();
         }
         PagosDeEsteDocumento = tblPagosDeEsteDocumento.DataTable({
-            "dom": 'rtip',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('PagosDeClientes/getPagosXDocumentos'); ?>',
@@ -700,7 +776,7 @@
             tblDocumentosConSaldoXClientes.DataTable().destroy();
         }
         DocumentosConSaldoXClientes = tblDocumentosConSaldoXClientes.DataTable({
-            "dom": 'rtip',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('PagosDeClientes/getDocumentosConSaldoXClientes'); ?>',
@@ -745,7 +821,7 @@
                 HoldOn.close();
             },
             "footerCallback": function (row, data, start, end, display) {
-                var api = this.api();//Get access to Datatable API  
+                var api = this.api();//Get access to Datatable API
                 var saldox = api.column(10).data().reduce(function (a, b) {
                     var ax = 0, bx = 0;
                     ax = $.isNumeric(a) ? parseFloat(a) : 0;
@@ -760,23 +836,22 @@
     function getClientes() {
         $.getJSON('<?php print base_url('PagosDeClientes/getClientes'); ?>').done(function (a) {
             a.forEach(function (x) {
-                ClientePDC[0].selectize.addOption({text: x.Cliente, value: x.Clave});
+                sClientePDC[0].selectize.addOption({text: x.Cliente, value: x.Clave});
             });
         }).fail(function (x) {
             getError(x);
         }).always(function () {
             handleEnterDiv(pnlTablero);
-            ClientePDC[0].selectize.focus();
-            ClientePDC[0].selectize.open();
-
         });
     }
 
-    function getBancos() {
-        $.getJSON('<?php print base_url('PagosDeClientes/getBancos') ?>')
+    function getBancos(tp) {
+        $.getJSON('<?php print base_url('PagosDeClientes/getBancos') ?>', {Tp: tp})
                 .done(function (a) {
+                    Banco.append($("<option />").val('').text(''));
                     a.forEach(function (e) {
-                        Banco[0].selectize.addOption({text: e.BANCO, value: e.CLAVE});
+
+                        Banco.append($("<option />").val(e.CLAVE).text(e.BANCO));
                     });
                 }).fail(function (x) {
             getError(x);
@@ -857,7 +932,7 @@
         background-color: #f9f9f9;
         background-color: #f5f6fa;
         border-width: 1px 2px 2px;
-        border-style: solid; 
+        border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #003366, rgb(0,0,0,0)) 1 100% ;
     }

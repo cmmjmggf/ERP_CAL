@@ -83,26 +83,26 @@ class NotasCreditoClientes extends CI_Controller {
                     $txtiva = 0;
                 } else {
                     $txtiva = floatval($x['total']) * 0.16;
+                    //Registramos el iva del pago correspondiente
+                    $datospagoIVA = array(
+                        'cliente' => $txtcliente,
+                        'remicion' => $txtnumfac,
+                        'tipo' => $txttp,
+                        'mov' => $txtorden,
+                        'fecha' => $txtfecha,
+                        'fechadep' => $txtfecha,
+                        'fechacap' => $nuevafechacap,
+                        'doctopa' => 'IVA N-C ' . $txtnc,
+                        'importe' => $txtiva,
+                        'agente' => $x['agente'],
+                        'status' => 3,
+                        'nc' => $txtnc,
+                        'control' => 0,
+                        'uuid' => ($txttp === '1') ? $txtuuid : 0
+                    );
+                    $this->db->insert("cartctepagos", $datospagoIVA);
                 }
             }
-            //Registramos el iva del pago correspondiente
-            $datospagoIVA = array(
-                'cliente' => $txtcliente,
-                'remicion' => $txtnumfac,
-                'tipo' => $txttp,
-                'mov' => $txtorden,
-                'fecha' => $txtfecha,
-                'fechadep' => $txtfecha,
-                'fechacap' => $nuevafechacap,
-                'doctopa' => 'IVA N-C ' . $txtnc,
-                'importe' => $txtiva,
-                'agente' => $x['agente'],
-                'status' => 3,
-                'nc' => $txtnc,
-                'control' => 0,
-                'uuid' => ($txttp === '1') ? $txtuuid : 0
-            );
-            $this->db->insert("cartctepagos", $datospagoIVA);
 
             //Actualiza statua a nota de crédito
             $statusnc = ($x['Tp'] === '1') ? 0 : 2;

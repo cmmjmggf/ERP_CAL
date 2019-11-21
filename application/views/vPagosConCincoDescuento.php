@@ -50,8 +50,8 @@
                     <div class="col-12 mt-1" >
                         <label>Documentos con saldo del cliente <span class="badge badge-info" style="font-size: 13px !important;">Doble click para seleccionar</span></label>
                         <div class="card-block">
-                            <div id="AplicaDepositosCliente" class="datatable-wide">
-                                <table id="tblAplicaDepositosCliente" class="table table-sm display " style="width:100%">
+                            <div id="DocsPagosCincoDescuento" class="datatable-wide">
+                                <table id="tblDocsPagosCincoDescuento" class="table table-sm display " style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Cliente</th>
@@ -135,7 +135,7 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <label>Folio Fiscal</label>
-                        <input type="text" class="form-control form-control-sm " readonly="" id="FolioDeposito" name="FolioDeposito" required="" >
+                        <input type="text" class="form-control form-control-sm " readonly="" id="FolioDeposito" name="FolioDeposito" >
                     </div>
                     <div class="col-6 col-sm-2 col-md-4 col-lg-4 col-xl-4" >
                         <label>Monto</label>
@@ -184,8 +184,8 @@
 </div>
 <script>
     var master_url = base_url + 'index.php/PagosConCincoDescuento/';
-    var tblAplicaDepositosCliente = $('#tblAplicaDepositosCliente');
-    var AplicaDepositosCliente;
+    var tblDocsPagosCincoDescuento = $('#tblDocsPagosCincoDescuento');
+    var DocsPagosCincoDescuento;
     var tblPagosDocto = $('#tblPagosDocto');
     var PagosDoctos;
     var pnlTablero = $("#pnlTablero");
@@ -484,7 +484,7 @@
                                     pnlTablero.find("#Tp").focus();
                                 }
                                 PagosDoctos.ajax.reload();
-                                AplicaDepositosCliente.ajax.reload();
+                                DocsPagosCincoDescuento.ajax.reload();
                                 HoldOn.close();
                                 onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
 
@@ -522,13 +522,48 @@
                 }
             });
         });
+        tblDocsPagosCincoDescuento.find('tbody').on('click', 'tr', function () {
+            tblDocsPagosCincoDescuento.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+        });
+        tblDocsPagosCincoDescuento.find('tbody').on('dblclick', 'tr', function () {
+            var dtm = DocsPagosCincoDescuento.row(this).data();
+            /*Obtenemos el folio fiscal*/
+            $.getJSON(master_url + 'getFolioFiscal', {Factura: dtm.docto, Tp: dtm.tipo}).done(function (data) {
+                if (data.length > 0) {
+                    pnlTablero.find("#FolioDeposito").val(data[0].uuid);
+                } else {
+                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'info');
+                    return;
+                }
+            });
+            pnlTablero.find("#Tp").val(dtm.tipo);
+            pnlTablero.find("#Docto").val(dtm.docto);
+            pnlTablero.find("#FechaDocto").val(dtm.fecha);
+            pnlTablero.find("#MontoDocto").val(parseFloat(dtm.saldo).toFixed(2)); //saldo de la factura
+
+            if (parseInt(dtm.tipo) === 1) {
+                pnlTablero.find("#DescuentoDocto").val(((parseFloat(dtm.saldo) * 0.05) / 1.16).toFixed(2)); //el descuento neto del 5% sin iva se divide entre 1.16
+                pnlTablero.find("#IvaDocto").val(((parseFloat(dtm.saldo) * 0.05) - ((parseFloat(dtm.saldo) * 0.05) / 1.16)).toFixed(2)); //al saldo neto le restamos el saldo sin iva y nos da el iva
+            } else {
+                pnlTablero.find("#DescuentoDocto").val((parseFloat(dtm.saldo) * 0.05).toFixed(2)); //el descuento neto del 5%
+                pnlTablero.find("#IvaDocto").val(0); //al saldo neto le restamos el saldo sin iva y nos da el iva
+            }
+            //Ponemos el saldo restante menos el descuento en la captura sugerida
+            var total_sugerido_con_desc = parseFloat(pnlTablero.find("#MontoDocto").val()) - parseFloat(pnlTablero.find("#DescuentoDocto").val()) - parseFloat(pnlTablero.find("#IvaDocto").val());
+            pnlTablero.find("#DepoSugerido").val(parseFloat(total_sugerido_con_desc).toFixed(2));
+            pnlTablero.find("#ImporteAPagar").val(parseFloat(total_sugerido_con_desc).toFixed(2)).focus().select();
+
+            getFolioNC(dtm.tipo);
+            getPagosByClienteFactTp(dtm.cliente, dtm.docto, dtm.tipo);
+        });
     });
     function getRecords(tp, cliente) {
         $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblAplicaDepositosCliente')) {
-            tblAplicaDepositosCliente.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tblDocsPagosCincoDescuento')) {
+            tblDocsPagosCincoDescuento.DataTable().destroy();
         }
-        AplicaDepositosCliente = tblAplicaDepositosCliente.DataTable({
+        DocsPagosCincoDescuento = tblDocsPagosCincoDescuento.DataTable({
             "dom": 'frt',
             buttons: buttons,
             orderCellsTop: true,
@@ -625,34 +660,7 @@
             }
         });
 
-        tblAplicaDepositosCliente.find('tbody').on('click', 'tr', function () {
-            tblAplicaDepositosCliente.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-        });
-        tblAplicaDepositosCliente.find('tbody').on('dblclick', 'tr', function () {
-            var dtm = AplicaDepositosCliente.row(this).data();
-            /*Obtenemos el folio fiscal*/
-            $.getJSON(master_url + 'getFolioFiscal', {Factura: dtm.docto, Tp: dtm.tipo}).done(function (data) {
-                if (data.length > 0) {
-                    pnlTablero.find("#FolioDeposito").val(data[0].uuid);
-                } else {
-                    onNotifyOld('fa fa-times', 'FACTURA NO TIMBRADA EN EL SISTEMA', 'info');
-                }
-            });
-            pnlTablero.find("#Tp").val(dtm.tipo);
-            pnlTablero.find("#Docto").val(dtm.docto);
-            pnlTablero.find("#FechaDocto").val(dtm.fecha);
-            pnlTablero.find("#MontoDocto").val(parseFloat(dtm.saldo).toFixed(2)); //saldo de la factura
-            pnlTablero.find("#DescuentoDocto").val(((parseFloat(dtm.saldo) * 0.05) / 1.16).toFixed(2)); //el descuento neto del 5% sin iva se divide entre 1.16
-            pnlTablero.find("#IvaDocto").val(((parseFloat(dtm.saldo) * 0.05) - ((parseFloat(dtm.saldo) * 0.05) / 1.16)).toFixed(2)); //al saldo neto le restamos el saldo sin iva y nos da el iva
-            //Ponemos el saldo restante menos el descuento en la captura sugerida
-            var total_sugerido_con_desc = parseFloat(pnlTablero.find("#MontoDocto").val()) - parseFloat(pnlTablero.find("#DescuentoDocto").val()) - parseFloat(pnlTablero.find("#IvaDocto").val());
-            pnlTablero.find("#DepoSugerido").val(parseFloat(total_sugerido_con_desc).toFixed(2));
-            pnlTablero.find("#ImporteAPagar").val(parseFloat(total_sugerido_con_desc).toFixed(2)).focus().select();
 
-            getFolioNC(dtm.tipo);
-            getPagosByClienteFactTp(dtm.cliente, dtm.docto, dtm.tipo);
-        });
     }
     function getFolioNC(tp) {
         $.getJSON(master_url + 'getFolioNC', {Tp: tp}).done(function (data) {
@@ -756,13 +764,13 @@
     function onVerificarTp(v) {
 
         var tp = parseInt($(v).val());
-        if (tp === 1) {
+        if (tp === 1 || tp === 2) {
             getBancos(tp);
             pnlTablero.find('#Banco').focus();
         } else {
             swal({
                 title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1",
+                text: "EL TP SÓLO PUEDE SER 1 Ó 2",
                 icon: "error",
                 closeOnClickOutside: false,
                 closeOnEsc: false
