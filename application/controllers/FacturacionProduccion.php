@@ -882,7 +882,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
                 $this->db->where("F.contped", $xxx['CONTROL']);
             }
             if ($xxx['FACTURA'] === '' && $xxx['TP'] === '' && $xxx['CLIENTE'] === '' && $xxx['CONTROL'] === '') {
-                $this->db->limit(99);
+                $this->db->limit(25);
             }
             $this->db->group_by("F.factura")->order_by("F.fecha", "DESC");
             print json_encode($this->db->get()->result());

@@ -1202,8 +1202,8 @@
                         "scrollCollapse": false,
                         "bSort": true,
                         "scrollY": 300,
-                        "scrollX": true, 
-                        responsive: false,
+                        "scrollX": true,
+                        "bSort": true, responsive: false,
                         "aaSorting": [
                             [4, 'desc']/*ID*/
                         ],
@@ -2056,9 +2056,16 @@
                     [4, 'desc']/*ID*/
                 ],
                 initComplete: function () {
-                    var parent = mdlHistorialFacturas.parent("#tblFacturas_wrapper");
-                    var tblFacturas_info = parent.find("#tblFacturas_info");
-                    tblFacturas_info.append("<div class='font-weight-bold'>0</div>");
+                    var tblFacturas_info = mdlHistorialFacturas.find("#tblFacturas_info");
+                    //ENCIERRA EL DIV
+                    tblFacturas_info.wrap('<div class="row"></div>');
+                    // CONCATENA DESPUES DEL DIV
+                    tblFacturas_info.after("<div class='font-weight-bold pares_totales' style='color: #cc2418;'> Pares 0 < /div>");
+                    //ENCIERRA EL DIV            
+                    tblFacturas_info.wrap('<div class="col-6"></div>');
+                    //ENCIERRA EL DIV
+                    mdlHistorialFacturas.find(".pares_totales").wrap('<div class="col-6 mt-2 text-center"></div>');
+                    onCalcularParesHistorial();
                 }
             });
 
@@ -2066,6 +2073,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2074,6 +2082,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2082,6 +2091,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2090,6 +2100,7 @@
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
                     HistorialFacturados.ajax.reload(function () {
+                        onCalcularParesHistorial();
                         onCloseOverlay();
                     });
                 }
@@ -2104,6 +2115,14 @@
             });
             mdlHistorialFacturas.modal('show');
         }
+    }
+
+    function onCalcularParesHistorial() {
+        var prs = 0;
+        $.each(HistorialFacturados.rows().data(), function (k, v) {
+            prs += $.isNumeric(v.PARES) ? parseInt(v.PARES) : 0;
+        });
+        mdlHistorialFacturas.find("div.pares_totales").text("Pares " + prs);
     }
 </script>
 
