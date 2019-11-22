@@ -233,7 +233,7 @@ class FacturacionProduccion extends CI_Controller {
                 'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
-                $l = new Logs("Cerrando factura", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $". number_format($TOTAL, 4, ".", ",")." CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}", $this->session);
+                $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $". number_format($TOTAL, 4, ".", ",").", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -366,7 +366,7 @@ class FacturacionProduccion extends CI_Controller {
                 /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                 $this->db->set('fec13', Date('Y-m-d h:i:s'))->where('contped', $x['CONTROL'])
                         ->update('avaprd');
-                $l = new Logs("Avance facturado", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
+                $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
 
 
 
