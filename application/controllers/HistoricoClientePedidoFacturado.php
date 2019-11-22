@@ -22,6 +22,10 @@ class HistoricoClientePedidoFacturado extends CI_Controller {
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
+                case 'VENTAS':
+                    $this->load->view('vNavGeneral');
+                    $this->load->view('vMenuClientes');
+                    break;
             }
             $this->load->view('vHistoricoClientePedidoFacturado')->view('vFooter');
         } else {

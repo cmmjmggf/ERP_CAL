@@ -116,7 +116,7 @@
         mdlConsolidadoPorMes.find("#TpConsolidadoMes").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onVerificarTp($(this));
+                    onVerificarTpConsPorMes($(this));
                 } else {
                     mdlConsolidadoPorMes.find('#TipoConsolidadoMes')[0].selectize.focus();
                 }
@@ -186,7 +186,7 @@
         });
     });
 
-    function onVerificarTp(v) {
+    function onVerificarTpConsPorMes(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
             mdlConsolidadoPorMes.find('#TipoConsolidadoMes')[0].selectize.focus();

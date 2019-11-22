@@ -42,7 +42,7 @@
             $.each(mdlParesPesosTiendas.find("select"), function (k, v) {
                 mdlParesPesosTiendas.find("select")[k].selectize.clear(true);
             });
-            mdlParesPesosTiendas.find('#AnoParesPesosTiendas').focus();
+            mdlParesPesosTiendas.find('#AnoParesPesosTiendas').val(getYear()).focus();
         });
 
 
@@ -69,7 +69,7 @@
         mdlParesPesosTiendas.find("#TpParesPesosTiendas").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onVerificarTp($(this));
+                    onVerificarTpParesPesosTiendas($(this));
                 } else {
                     mdlParesPesosTiendas.find('#btnImprimir').focus();
                 }
@@ -129,7 +129,7 @@
         });
     });
 
-    function onVerificarTp(v) {
+    function onVerificarTpParesPesosTiendas(v) {
 
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {

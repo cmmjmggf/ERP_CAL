@@ -10,9 +10,14 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <label for="" >Del Cliente</label>
-                            <select id="dClienteDetalleMovimientos" name="dClienteDetalleMovimientos" class="form-control form-control-sm mb-2 required" required="" >
+
+                        <div class="col-3">
+                            <label>Del Cliente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="dClienteDetalleMovimientos" name="dClienteDetalleMovimientos" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sdClienteDetalleMovimientos" name="sdClienteDetalleMovimientos" class="form-control form-control-sm required NotSelectize" required="" >
                                 <option value=""></option>
                             </select>
                         </div>
@@ -42,6 +47,10 @@
     var mdlDetalleMovimientos = $('#mdlDetalleMovimientos');
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlDetalleMovimientos);
+        mdlDetalleMovimientos.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlDetalleMovimientos.on('shown.bs.modal', function () {
             handleEnterDiv(mdlDetalleMovimientos);
             mdlDetalleMovimientos.find("input").val("");
@@ -49,12 +58,37 @@
                 mdlDetalleMovimientos.find("select")[k].selectize.clear(true);
             });
             getClientesDetalleMovimientos();
-            mdlDetalleMovimientos.find('#dClienteDetalleMovimientos')[0].selectize.focus();
+            mdlDetalleMovimientos.find('#dClienteDetalleMovimientos').focus();
             mdlDetalleMovimientos.find('#FechaIniDetalleMovimientos').val(getFirstDayMonth());
             mdlDetalleMovimientos.find('#FechaFinDetalleMovimientos').val(getToday());
         });
-
-
+        mdlDetalleMovimientos.find('#dClienteDetalleMovimientos').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlDetalleMovimientos.find("#sdClienteDetalleMovimientos")[0].selectize.addItem(txtcte, true);
+                            mdlDetalleMovimientos.find('#FechaIniDetalleMovimientos').focus().select();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                mdlDetalleMovimientos.find("#sdClienteDetalleMovimientos")[0].selectize.clear(true);
+                                mdlDetalleMovimientos.find('#dClienteDetalleMovimientos').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlDetalleMovimientos.find("#sdClienteEdoCta").change(function () {
+            if ($(this).val()) {
+                mdlDetalleMovimientos.find("#dClienteDetalleMovimientos").val($(this).val());
+                mdlDetalleMovimientos.find('#FechaIniDetalleMovimientos').focus().select();
+            }
+        });
         mdlDetalleMovimientos.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlDetalleMovimientos.find("#frmCaptura")[0]);
@@ -100,7 +134,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlDetalleMovimientos.find('#dClienteDetalleMovimientos')[0].selectize.focus();
+                        mdlDetalleMovimientos.find('#dClienteDetalleMovimientos').focus();
                     });
                 }
                 HoldOn.close();
@@ -114,11 +148,11 @@
 
 
     function getClientesDetalleMovimientos() {
-        mdlDetalleMovimientos.find("#dClienteDetalleMovimientos")[0].selectize.clear(true);
-        mdlDetalleMovimientos.find("#dClienteDetalleMovimientos")[0].selectize.clearOptions();
+        mdlDetalleMovimientos.find("#sdClienteDetalleMovimientos")[0].selectize.clear(true);
+        mdlDetalleMovimientos.find("#sdClienteDetalleMovimientos")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                mdlDetalleMovimientos.find("#dClienteDetalleMovimientos")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlDetalleMovimientos.find("#sdClienteDetalleMovimientos")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

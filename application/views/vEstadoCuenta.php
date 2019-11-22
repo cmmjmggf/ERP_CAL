@@ -10,19 +10,27 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <label for="" >Del Cliente</label>
-                            <select id="dClienteEdoCta" name="dClienteEdoCta" class="form-control form-control-sm mb-2 required" required="" >
+                        <div class="col-3">
+                            <label>Del Cliente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="dClienteEdoCta" name="dClienteEdoCta" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sdClienteEdoCta" name="sdClienteEdoCta" class="form-control form-control-sm required NotSelectize" required="" >
                                 <option value=""></option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <label for="" >Al Cliente</label>
-                            <select id="aClienteEdoCta" name="aClienteEdoCta" class="form-control form-control-sm mb-2 required" required="" >
+                        <div class="col-3">
+                            <label>Al Cliente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="aClienteEdoCta" name="aClienteEdoCta" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="saClienteEdoCta" name="saClienteEdoCta" class="form-control form-control-sm required NotSelectize" required="" >
                                 <option value=""></option>
                             </select>
                         </div>
-                        <div class="col-6 col-sm-6 col-md-4">
+                        <div class="col-3">
                             <label class="mb-1">Tp: <span class="badge badge-danger" style="font-size: 14px;">Nota: Para ver todo, dejar en blanco</span></label>
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="TpEdoCuenta" name="TpEdoCuenta" required="">
                         </div>
@@ -40,6 +48,10 @@
 <script>
     var mdlEstadoCuenta = $('#mdlEstadoCuenta');
     $(document).ready(function () {
+        mdlEstadoCuenta.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(mdlEstadoCuenta);
         mdlEstadoCuenta.on('shown.bs.modal', function () {
             mdlEstadoCuenta.find("input").val("");
@@ -47,22 +59,66 @@
                 mdlEstadoCuenta.find("select")[k].selectize.clear(true);
             });
             getClientesEdoCuentaUno();
-            mdlEstadoCuenta.find('#dClienteEdoCta')[0].selectize.focus();
+            mdlEstadoCuenta.find('#dClienteEdoCta').focus();
         });
-        mdlEstadoCuenta.find("#dClienteEdoCta").change(function () {
-            if ($(this).val()) {
-                mdlEstadoCuenta.find("#aClienteEdoCta")[0].selectize.focus();
+        mdlEstadoCuenta.find('#dClienteEdoCta').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta.find('#aClienteEdoCta').focus().select();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.clear(true);
+                                mdlEstadoCuenta.find('#dClienteEdoCta').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
             }
         });
-        mdlEstadoCuenta.find("#aClienteEdoCta").change(function () {
+        mdlEstadoCuenta.find("#sdClienteEdoCta").change(function () {
             if ($(this).val()) {
+                mdlEstadoCuenta.find("#dClienteEdoCta").val($(this).val());
+                mdlEstadoCuenta.find("#aClienteEdoCta").focus();
+            }
+        });
+        mdlEstadoCuenta.find('#aClienteEdoCta').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta.find('#TpEdoCuenta').focus().select();
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.clear(true);
+                                mdlEstadoCuenta.find('#aClienteEdoCta').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlEstadoCuenta.find("#saClienteEdoCta").change(function () {
+            if ($(this).val()) {
+                mdlEstadoCuenta.find("#aClienteEdoCta").val($(this).val());
                 mdlEstadoCuenta.find("#TpEdoCuenta").focus();
             }
         });
         mdlEstadoCuenta.find("#TpEdoCuenta").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onVerificarTp($(this));
+                    onVerificarTpEdoCuentaUno($(this));
                 } else {
                     mdlEstadoCuenta.find('#btnImprimir').focus();
                 }
@@ -111,7 +167,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlEstadoCuenta.find('#Cliente')[0].selectize.focus();
+                        mdlEstadoCuenta.find('#dClienteEdoCta').focus();
                     });
                 }
                 HoldOn.close();
@@ -122,7 +178,7 @@
         });
     });
 
-    function onVerificarTp(v) {
+    function onVerificarTpEdoCuentaUno(v) {
 
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
@@ -141,14 +197,14 @@
     }
 
     function getClientesEdoCuentaUno() {
-        mdlEstadoCuenta.find("#dClienteEdoCta")[0].selectize.clear(true);
-        mdlEstadoCuenta.find("#dClienteEdoCta")[0].selectize.clearOptions();
-        mdlEstadoCuenta.find("#aClienteEdoCta")[0].selectize.clear(true);
-        mdlEstadoCuenta.find("#aClienteEdoCta")[0].selectize.clearOptions();
+        mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.clear(true);
+        mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.clearOptions();
+        mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.clear(true);
+        mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                mdlEstadoCuenta.find("#dClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
-                mdlEstadoCuenta.find("#aClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

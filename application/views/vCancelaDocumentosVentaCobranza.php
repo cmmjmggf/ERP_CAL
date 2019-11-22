@@ -106,7 +106,7 @@
                     </div>
                     <div class="col-4 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
                         <button type="button" class="btn btn-primary btn-sm" id="btnAceptar">
-                            <i class="fa fa-check"></i> CANCELAR
+                            <i class="fa fa-check"></i> ACEPTAR CANCELACIÓN
                         </button>
                     </div>
                 </div>
@@ -266,44 +266,54 @@
         btnAceptar.click(function () {
             isValid('pnlDatos');
             if (valido) {
-                onOpenOverlay('Cancelando Documento...');
-                var frm = new FormData(pnlTablero.find("#frmCapturaCancelaDctoVta")[0]);
-                var tipo = $("input[name='CancelaDocsVentas']:checked").attr('tipo');
-                frm.append('Tipo', tipo);
-                $.ajax({
-                    url: master_url + 'onCancelarDocto',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (parseInt(data) === 3) {
-                        swal('ATENCIÓN', 'EL DOCUMENTO YA FUE CANCELADO', 'warning').then((value) => {
-                            pnlTablero.find('#Doc').val('');
-                            pnlTablero.find("#Tp").val('');
-                            pnlTablero.find("#NC").val('');
-                            pnlTablero.find("#Concepto").val('');
-                            pnlTablero.find("#sDoc")[0].selectize.clear(true);
-                            pnlTablero.find("#sDoc")[0].selectize.focus();
-                        });
-                    } else if (parseInt(data) === 5) {
-                        swal('NO CANCELADO EN EL SAT', 'Existe un error en la generación de la factura electronica no se encuentra el uuid', 'error').then((value) => {
-                            init();
-                        });
-                    } else {
-                        swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
-                            init();
+                swal({
+                    buttons: ["Cancelar", "Aceptar"],
+                    title: 'Estás Seguro?',
+                    text: "Esta acción no se puede revertir",
+                    icon: "warning",
+                    closeOnEsc: false,
+                    closeOnClickOutside: false
+                }).then((action) => {
+                    if (action) {
+                        onOpenOverlay('Cancelando Documento...');
+                        var frm = new FormData(pnlTablero.find("#frmCapturaCancelaDctoVta")[0]);
+                        var tipo = $("input[name='CancelaDocsVentas']:checked").attr('tipo');
+                        frm.append('Tipo', tipo);
+                        $.ajax({
+                            url: master_url + 'onCancelarDocto',
+                            type: "POST",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: frm
+                        }).done(function (data, x, jq) {
+                            console.log(data);
+                            if (parseInt(data) === 3) {
+                                swal('ATENCIÓN', 'EL DOCUMENTO YA FUE CANCELADO', 'warning').then((value) => {
+                                    pnlTablero.find('#Doc').val('');
+                                    pnlTablero.find("#Tp").val('');
+                                    pnlTablero.find("#NC").val('');
+                                    pnlTablero.find("#Concepto").val('');
+                                    pnlTablero.find("#sDoc")[0].selectize.clear(true);
+                                    pnlTablero.find("#sDoc")[0].selectize.focus();
+                                });
+                            } else if (parseInt(data) === 5) {
+                                swal('NO CANCELADO EN EL SAT', 'Existe un error en la generación de la factura electronica no se encuentra el uuid', 'error').then((value) => {
+                                    init();
+                                });
+                            } else {
+                                swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
+                                    init();
+                                });
+                            }
+                            onCloseOverlay();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        }).always(function () {
+                            HoldOn.close();
                         });
                     }
-                    onCloseOverlay();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                }).always(function () {
-                    HoldOn.close();
                 });
-
             } else {
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }

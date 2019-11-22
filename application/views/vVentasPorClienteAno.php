@@ -16,9 +16,13 @@
                         </div>
                     </div>
                     <div class="row mt-1">
-                        <div class="col-12">
-                            <label for="" >Del Cliente</label>
-                            <select id="dClienteVtasAnocliente" name="dClienteVtasAnocliente" class="form-control form-control-sm mb-2 required" required="" >
+                        <div class="col-3">
+                            <label>Cliente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="ClienteVtasAnocliente" name="ClienteVtasAnocliente" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sClienteVtasAnocliente" name="sClienteVtasAnocliente" class="form-control form-control-sm mb-2 required NotSelectize" required="" >
                                 <option value=""></option>
                             </select>
                         </div>
@@ -33,7 +37,7 @@
                             </select>
                         </div>
                         <div class="col-6">
-                            <label class="mb-1">Tp <span class="badge badge-info" style="font-size: 14px;">Para ver todo, dejar en blanco</span></label>
+                            <label class="mb-1">Tp</label>
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="TpVtasAnoCliente" name="TpVtasAnoCliente">
                         </div>
                     </div>
@@ -49,7 +53,12 @@
 <script>
     var mdlVentasPorClienteAno = $('#mdlVentasPorClienteAno');
     $(document).ready(function () {
+        mdlVentasPorClienteAno.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlVentasPorClienteAno.on('shown.bs.modal', function () {
+
             mdlVentasPorClienteAno.find("input").val("");
             $.each(mdlVentasPorClienteAno.find("select"), function (k, v) {
                 mdlVentasPorClienteAno.find("select")[k].selectize.clear(true);
@@ -59,7 +68,34 @@
             mdlVentasPorClienteAno.find('#AnoVtasAnoCliente').val(d.getFullYear());
             mdlVentasPorClienteAno.find('#AnoVtasAnoCliente').focus().select();
         });
+        mdlVentasPorClienteAno.find('#ClienteVtasAnocliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlVentasPorClienteAno.find("#sClienteVtasAnocliente")[0].selectize.addItem(txtcte, true);
+                            mdlVentasPorClienteAno.find("#TipoVtasAnoCliente")[0].selectize.focus();
 
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                mdlVentasPorClienteAno.find("#sClienteVtasAnocliente")[0].selectize.clear(true);
+                                mdlVentasPorClienteAno.find('#ClienteVtasAnocliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlVentasPorClienteAno.find("#sClienteVtasAnocliente").change(function () {
+            if ($(this).val()) {
+                mdlVentasPorClienteAno.find("#ClienteVtasAnocliente").val($(this).val());
+                mdlVentasPorClienteAno.find("#TipoVtasAnoCliente")[0].selectize.focus();
+            }
+        });
         mdlVentasPorClienteAno.find("#AnoVtasAnoCliente").keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -76,15 +112,11 @@
                         mdlVentasPorClienteAno.find("#AnoVtasAnoCliente").focus();
                     });
                 } else {
-                    mdlVentasPorClienteAno.find('#dClienteVtasAnocliente')[0].selectize.focus();
+                    mdlVentasPorClienteAno.find('#ClienteVtasAnocliente').focus();
                 }
             }
         });
-        mdlVentasPorClienteAno.find("#dClienteVtasAnocliente").change(function () {
-            if ($(this).val()) {
-                mdlVentasPorClienteAno.find("#TipoVtasAnoCliente")[0].selectize.focus();
-            }
-        });
+
         mdlVentasPorClienteAno.find("#TipoVtasAnoCliente").change(function () {
             if ($(this).val()) {
                 mdlVentasPorClienteAno.find("#TpVtasAnoCliente").focus().select();
@@ -94,10 +126,11 @@
         mdlVentasPorClienteAno.find("#TpVtasAnoCliente").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onVerificarTp($(this));
-                } else {
-                    mdlVentasPorClienteAno.find("#btnImprimir").focus();
+                    onVerificarTpVtasAnocliente($(this));
                 }
+//                else {
+//                    mdlVentasPorClienteAno.find("#btnImprimir").focus();
+//                }
             }
         });
 
@@ -145,7 +178,7 @@
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlVentasPorClienteAno.find('#Cliente')[0].selectize.focus();
+                        mdlVentasPorClienteAno.find('#ClienteVtasAnocliente').focus();
                     });
                 }
                 HoldOn.close();
@@ -156,7 +189,7 @@
         });
     });
 
-    function onVerificarTp(v) {
+    function onVerificarTpVtasAnocliente(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
             mdlVentasPorClienteAno.find("#btnImprimir").focus();
@@ -174,11 +207,11 @@
     }
 
     function getClientesVtasAnoCliente() {
-        mdlVentasPorClienteAno.find("#dClienteVtasAnocliente")[0].selectize.clear(true);
-        mdlVentasPorClienteAno.find("#dClienteVtasAnocliente")[0].selectize.clearOptions();
+        mdlVentasPorClienteAno.find("#sClienteVtasAnocliente")[0].selectize.clear(true);
+        mdlVentasPorClienteAno.find("#sClienteVtasAnocliente")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                mdlVentasPorClienteAno.find("#dClienteVtasAnocliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlVentasPorClienteAno.find("#sClienteVtasAnocliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

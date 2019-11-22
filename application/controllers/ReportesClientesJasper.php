@@ -100,7 +100,7 @@ class ReportesClientesJasper extends CI_Controller {
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $parametros["ano"] = $this->input->post('AnoVtasAnoCliente');
-        $parametros["cliente"] = $this->input->post('dClienteVtasAnocliente');
+        $parametros["cliente"] = $this->input->post('ClienteVtasAnocliente');
 
         switch ($tipo) {
             case '1':

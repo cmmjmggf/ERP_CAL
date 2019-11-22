@@ -26,8 +26,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-primary" disabled="" id="btnImprimir">ACEPTAR</button>
             </div>
         </div>
     </div>
@@ -45,17 +44,21 @@
             mdlEstadoCuentaAgente.find('#dAgenteEdoCuentaAgt').focus();
         });
 
-        mdlEstadoCuentaAgente.find("#TpEdoCtaAgt").change(function () {
-            if ($(this).val()) {
-                onVerificarTp($(this));
-            } else {
-            }
+        mdlEstadoCuentaAgente.find("#TpEdoCtaAgt").keydown(function (e) {
+            if (e.keyCode === 13)
+                if ($(this).val()) {
+                    onVerificarEdoCtaXAgente($(this));
+                } else {
+                    mdlEstadoCuentaAgente.find('#btnImprimir').attr('disabled', false);
+                }
         });
 
-        function onVerificarTp(v) {
+        function onVerificarEdoCtaXAgente(v) {
             var tp = parseInt($(v).val());
             if (tp === 1 || tp === 2) {
+                mdlEstadoCuentaAgente.find('#btnImprimir').attr('disabled', false);
             } else {
+                mdlEstadoCuentaAgente.find('#btnImprimir').attr('disabled', true);
                 swal({
                     title: "ATENCIÓN",
                     text: "EL TP SÓLO PUEDE SER 1 y 2",
@@ -69,6 +72,7 @@
         }
 
         mdlEstadoCuentaAgente.find('#btnImprimir').on("click", function () {
+            mdlEstadoCuentaAgente.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlEstadoCuentaAgente.find("#frmCaptura")[0]);
             $.ajax({
@@ -80,6 +84,7 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                mdlEstadoCuentaAgente.find('#btnImprimir').attr('disabled', true);
                 if (data.length > 0) {
 
                     $.fancybox.open({

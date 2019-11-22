@@ -45,11 +45,12 @@
     var mdlReimprimeNotaCredito = $('#mdlReimprimeNotaCredito');
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlReimprimeNotaCredito);
+        mdlReimprimeNotaCredito.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlReimprimeNotaCredito.on('shown.bs.modal', function () {
-            mdlReimprimeNotaCredito.find('.NotSelectize').selectize({
-                hideSelected: false,
-                openOnFocus: false
-            });
+
             mdlReimprimeNotaCredito.find("input").val("");
             $.each(mdlReimprimeNotaCredito.find("select"), function (k, v) {
                 mdlReimprimeNotaCredito.find("select")[k].selectize.clear(true);
@@ -128,6 +129,7 @@
         });
         mdlReimprimeNotaCredito.find("#sCliente").change(function () {
             if ($(this).val()) {
+                mdlReimprimeNotaCredito.find("#Cliente").val($(this).val());
                 var tp = mdlReimprimeNotaCredito.find("#Tp").val();
                 $.getJSON(base_url + 'index.php/NotasCreditoClientes/getNotasByTpByCliente', {
                     Tp: tp,

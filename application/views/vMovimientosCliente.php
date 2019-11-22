@@ -120,7 +120,7 @@
         });
         getClientes();
         getRecords('0');
-        getPagos('', '', '');
+        getPagos(0, '', '');
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
@@ -136,7 +136,7 @@
                         if (data.length > 0) {
                             pnlTablero.find("#Tp").val('');
                             pnlTablero.find("#Doc").val('');
-                            getPagos(0, 0, 0);
+                            getPagos(txtcte, '', '');
                             MovimientosClientes.column(1).search('').draw();
 
                             pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
@@ -160,7 +160,7 @@
             if ($(this).val()) {
                 pnlTablero.find("#Tp").val('');
                 pnlTablero.find("#Doc").val('');
-                getPagos(0, 0, 0);
+                getPagos($(this).val(), '', '');
                 MovimientosClientes.column(1).search('').draw();
 
                 pnlTablero.find("#Cliente").val($(this).val());
@@ -182,7 +182,7 @@
                     MovimientosClientes.column(1).search('^' + $(this).val() + '$', true, false).draw();
                     getPagos(pnlTablero.find("#Cliente").val(), $(this).val(), pnlTablero.find("#Tp").val());
                 } else {
-                    getPagos(0, 0, 0);
+                    getPagos(pnlTablero.find("#Cliente").val(), '', '');
                     MovimientosClientes.column(1).search('').draw();
                 }
             }
@@ -305,6 +305,8 @@
         }
     }
 
+
+
     function getRecords(cliente) {
         HoldOn.open({
             theme: 'sk-cube',
@@ -344,7 +346,7 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 100,
+            "displayLength": 200,
             "scrollX": true,
             "scrollY": 400,
             "bLengthChange": false,
@@ -352,7 +354,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [2, 'asc'], [1, 'asc']
+                [2, 'desc'], [1, 'asc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {
@@ -426,7 +428,7 @@
             tblPagosClientes.DataTable().destroy();
         }
         PagosClientes = tblPagosClientes.DataTable({
-            "dom": 'rt',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getPagos',
@@ -461,7 +463,7 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 100,
+            "displayLength": 200,
             "scrollX": true,
             "scrollY": 400,
             "bLengthChange": false,
@@ -469,7 +471,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [2, 'asc']
+                [2, 'desc']
             ],
             "createdRow": function (row, data, index) {
                 $.each($(row).find("td"), function (k, v) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="6.363636363636444"/>
-	<property name="ireport.x" value="3860"/>
-	<property name="ireport.y" value="255"/>
+	<property name="ireport.zoom" value="3.592106827615011"/>
+	<property name="ireport.x" value="1040"/>
+	<property name="ireport.y" value="45"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -17,7 +17,9 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select cc.cliente, cte.RazonS as nomcliente, cte.DiasPlazo, cc.remicion, cte.agente,
-cc.fecha as fechaFactura, date_add(cc.fecha, INTERVAL cte.DiasPlazo DAY) as fechaLiquidacion,
+cc.fecha as fechaFactura,
+
+date_add(cc.fecha, INTERVAL cte.DiasPlazo DAY) as fechaLiquidacion,
 cc.importe, cc.pagos, cc.saldo,
 datediff(now(),cc.fecha) as dias
 from cartcliente cc
@@ -50,7 +52,7 @@ order by cc.cliente asc, cc.fecha asc, cc.remicion asc]]>
 	<field name="saldo" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="dias" class="java.lang.Integer">
+	<field name="dias" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="importe_1" class="java.lang.Double" resetType="Group" resetGroup="Cliente" calculation="Sum">
@@ -154,9 +156,6 @@ order by cc.cliente asc, cc.fecha asc, cc.remicion asc]]>
 					</textElement>
 					<text><![CDATA[Total por cliente:]]></text>
 				</staticText>
-				<line>
-					<reportElement x="227" y="0" width="232" height="1" uuid="2c763c37-a0b1-404d-873c-83260b1c5268"/>
-				</line>
 				<textField pattern="¤ #,##0.00">
 					<reportElement x="298" y="0" width="54" height="12" uuid="71b695f9-d672-445d-b8d8-da0c2f40b0f1"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -372,11 +371,11 @@ order by cc.cliente asc, cc.fecha asc, cc.remicion asc]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="173" y="11" width="595" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
+				<reportElement positionType="FixRelativeToBottom" x="173" y="10" width="286" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
 				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
+					<pen lineWidth="0.5" lineColor="#000000"/>
 				</graphicElement>
 			</line>
 			<textField>
@@ -385,13 +384,6 @@ order by cc.cliente asc, cc.fecha asc, cc.remicion asc]]>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DiasPlazo}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="207" y="0" width="46" height="11" uuid="934c83aa-a11d-488f-a131-4e70712097dd"/>
-				<textElement textAlignment="Center">
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fechaFactura}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="253" y="0" width="45" height="11" uuid="e65a205c-b79c-4fbc-8048-14823df81e40"/>
@@ -509,6 +501,13 @@ order by cc.cliente asc, cc.fecha asc, cc.remicion asc]]>
 				</box>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="208" y="0" width="45" height="11" uuid="21e821bc-fb99-48e5-aecf-ae0d3c9637f2"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaFactura}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>

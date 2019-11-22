@@ -114,7 +114,7 @@
         mdlConsolidadoPorLineaEstilo.find("#TpConsolidadoLineaEstilo").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    onVerificarTp($(this));
+                    onVerificarTpConsLineaEstilo($(this));
                 } else {
                     mdlConsolidadoPorLineaEstilo.find('#LineaConsolidadoLineaEstilo')[0].selectize.focus();
                 }
@@ -186,7 +186,7 @@
         });
     });
 
-    function onVerificarTp(v) {
+    function onVerificarTpConsLineaEstilo(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
             mdlConsolidadoPorLineaEstilo.find('#LineaConsolidadoLineaEstilo')[0].selectize.focus();

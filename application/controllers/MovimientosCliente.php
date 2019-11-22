@@ -51,7 +51,7 @@ class MovimientosCliente extends CI_Controller {
             print json_encode($this->db->query(" SELECT
                             CC.cliente,
                             CC.remicion,
-                            date_format(CC.fecha,'%d/%m/%Y') as fechadoc,
+                            date_format(CC.fecha,'%Y/%m/%d') as fechadoc,
                             CC.importe,
                             CC.pagos,
                             CC.saldo,
@@ -70,11 +70,11 @@ class MovimientosCliente extends CI_Controller {
             $cliente = $this->input->post('Cliente');
             $doc = $this->input->post('Doc');
             $tp = $this->input->post('Tp');
-            print json_encode($this->db->query(" SELECT
+            $query = " SELECT
                             CC.remicion,
                             CC.tipo,
-                            date_format(CP.fechacap,'%d/%m/%Y') as fechacap,
-                            date_format(CP.fechadep,'%d/%m/%Y') as fechadep,
+                            date_format(CP.fechacap,'%Y/%m/%d') as fechacap,
+                            date_format(CP.fechadep,'%Y/%m/%d') as fechadep,
                             CP.importe as importeP,
                             CP.mov,
                             CP.pagada,
@@ -82,8 +82,15 @@ class MovimientosCliente extends CI_Controller {
                             datediff(CP.fecha,CC.fecha) as dias
                             FROM cartcliente CC
                             join cartctepagos CP on CC.remicion = CP.remicion
-                            where CC.cliente = $cliente and CC.remicion = $doc and CC.tipo = $tp
-                            ")->result());
+                            where CC.cliente = $cliente
+                            ";
+            if ($doc !== '') {
+                $query .= "and CC.remicion = $doc ";
+            }
+            if ($tp !== '') {
+                $query .= "and CC.tipo = $tp ";
+            }
+            print json_encode($this->db->query($query)->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
