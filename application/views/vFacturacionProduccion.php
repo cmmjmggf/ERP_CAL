@@ -1240,7 +1240,7 @@
                         "bSort": true,
                         "scrollY": 300,
                         "scrollX": true,
-                        "bSort": true, responsive: false,
+                        responsive: false,
                         "aaSorting": [
                             [4, 'desc']/*ID*/
                         ],

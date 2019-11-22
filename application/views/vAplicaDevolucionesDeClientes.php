@@ -6,20 +6,29 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h5 class="text-danger font-italic"><span class="fa fa-exchange-alt"></span> APLICA DEVOLUCIONES PENDIENTES</h5>
                     </div>
+
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <label>Cliente</label>
-                        <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control">
-                            <option></option>
-                            <?php
-                            /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                            foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C "
-                                    . "LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente "
-                                    . "WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-3">
+                                <input type="text" id="xClienteDevolucion" name="xClienteDevolucion" class="form-control" maxlength="12">
+                            </div>
+                            <div class="col-9">
+                                <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control">
+                                    <option></option>
+                                    <?php
+                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
+                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C "
+                                            . "LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente "
+                                            . "WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Fecha</label>
                         <input type="text" id="FechaDevolucion" name="FechaDevolucion" class="form-control form-control-sm date notEnter">
@@ -93,33 +102,33 @@
                         <span class="font-weight-bold text-info serie_text">----</span>
                         <input type="text" id="Serie" name="Serie" class="form-control form-control-sm d-none" readonly=""> 
                     </div>
-                    
+
                     <div class="w-100 my-1"></div>
-                    
+
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe factura: </span> 
                         <span class="font-weight-bold text-info importe_factura">$ 0.00</span> 
                     </div>
-                    
+
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo factura: </span> 
                         <span class="font-weight-bold text-info saldo_factura">$ 0.00</span> 
                     </div>
-                    
+
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe devuelto: </span> 
                         <span class="font-weight-bold text-info importe_devuelto">$ 0.00</span> 
                     </div>
-                    
+
                     <div class="w-100 my-1"></div>
-                    
+
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo: </span> 
                         <span class="font-weight-bold text-info total_devuelto">$ 0.00</span> 
                     </div>
-                    
+
                     <div class="w-100 my-1"></div>
-                    
+
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                         <label>IMPORTE FACTURA</label>
                         <input type="text" id="ImporteFactura" name="ImporteFactura" class="form-control form-control-sm" readonly="">
@@ -253,7 +262,8 @@
 </div>
 
 <script>
-    var pnlTablero = $("#pnlTablero"), ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
+    var pnlTablero = $("#pnlTablero"), xClienteDevolucion = pnlTablero.find('#xClienteDevolucion'),
+            ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
             FechaDevolucion = pnlTablero.find('#FechaDevolucion'),
             TP = pnlTablero.find('#TP'),
             AplicaDevolucion = pnlTablero.find('#AplicaDevolucion'),
@@ -281,6 +291,42 @@
     $(document).ready(function () {
 
         handleEnterDiv(pnlTablero);
+
+        ClienteDevolucion.change(function () {
+            if (ClienteDevolucion.val()) {
+                xClienteDevolucion.val(ClienteDevolucion.val());
+                ClienteDevolucion[0].selectize.disable();
+                FechaDevolucion.focus();
+            } else {
+                xClienteDevolucion.val('');
+                ClienteDevolucion[0].selectize.enable();
+                ClienteDevolucion[0].selectize.clear(true);
+            }
+            DocDeEsteCteConSaldo.ajax.reload();
+            DevCtrlXAplicarDeEsteCliente.ajax.reload();
+            DevolucionDetalle.ajax.reload();
+        });
+
+        xClienteDevolucion.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xClienteDevolucion.val()) {
+                    ClienteDevolucion[0].selectize.setValue(xClienteDevolucion.val());
+                    if (ClienteDevolucion.val()) {
+                        ClienteDevolucion[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                            xClienteDevolucion.focus().select();
+                        });
+                    }
+                } else {
+                    ClienteDevolucion[0].selectize.enable();
+                    ClienteDevolucion[0].selectize.clear(true);
+                }
+            } else {
+                ClienteDevolucion[0].selectize.enable();
+                ClienteDevolucion[0].selectize.clear(true);
+            }
+        });
 
         btnCierraNC.click(function () {
             getTotal();
@@ -382,12 +428,7 @@
         pnlTablero.find("input[name='ReporteX']").change(function () {
             DocDeEsteCteConSaldo.ajax.reload();
         });
-        ClienteDevolucion.change(function () {
-            DocDeEsteCteConSaldo.ajax.reload();
-            DevCtrlXAplicarDeEsteCliente.ajax.reload();
-            DevolucionDetalle.ajax.reload();
-        });
-        ClienteDevolucion[0].selectize.focus();
+        xClienteDevolucion.focus();
         FechaDevolucion.val(Hoy);
         $.fn.dataTable.ext.errMode = 'throw';
         DocDeEsteCteConSaldo = tblDocDeEsteCteConSaldo.DataTable({

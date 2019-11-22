@@ -2,79 +2,121 @@
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
             <div class="w-100"></div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR</h5>
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
                         <label>Cliente</label>
-                        <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control">
-                            <option></option>
-                            <?php
-                            /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                            foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" id="xClienteDevolucion" name="xClienteDevolucion" class="form-control" maxlength="12">
+                            </div>
+                            <div class="col-10">
+                                <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control">
+                                    <option></option>
+                                    <?php
+                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
+                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div> 
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Fecha</label>
                         <input type="text" id="FechaDevolucion" name="FechaDevolucion" class="form-control form-control-sm date notEnter">
                     </div>
                     <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Clasificación</label>
-                        <select id="Clasificacion" name="Clasificacion" class="form-control form-control-sm">
-                            <option></option>
-                            <option value="1">1 Para venta</option>
-                            <option value="2">2 Saldo</option>
-                            <option value="3">3 Reparación</option>
-                            <option value="4">4 Muestras y prototipos</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;">
+                                <input type="text" id="xClasificacion" name="xClasificacion" class="form-control numbersOnly" maxlength="1">
+                            </div>
+                            <div class="col-9">
+                                <select id="Clasificacion" name="Clasificacion" class="form-control form-control-sm">
+                                    <option></option>
+                                    <option value="1">1 Para venta</option>
+                                    <option value="2">2 Saldo</option>
+                                    <option value="3">3 Reparación</option>
+                                    <option value="4">4 Muestras y prototipos</option>
+                                </select>
+                            </div>
+                        </div> 
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Cargo</label>
-                        <select id="Cargo" name="Cargo" class="form-control form-control-sm">
-                            <option></option>
-                            <option value="0">0 No</option>
-                            <option value="1">1 Proveedor</option>
-                            <option value="2">2 Maquila</option> 
-                        </select>
+                        <div class="row">
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                                <input type="text" id="xCargo" name="xCargo" class="form-control numbersOnly" maxlength="1">
+                            </div>
+                            <div class="col-9">
+                                <select id="Cargo" name="Cargo" class="form-control form-control-sm">
+                                    <option></option>
+                                    <option value="0">0 No</option>
+                                    <option value="1">1 Proveedor</option>
+                                    <option value="2">2 Maquila</option> 
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Depto</label>
-                        <select id="Departamento" name="Departamento" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            foreach ($this->db->query("SELECT D.Clave AS CLAVE, D.Descripcion AS DEPTO FROM departamentos AS D ")->result() as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DEPTO}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                                <input type="text" id="xDepartamento" name="xDepartamento" class="form-control numbersOnly" maxlength="3">
+                            </div>
+                            <div class="col-9">
+                                <select id="Departamento" name="Departamento" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    foreach ($this->db->query("SELECT D.Clave AS CLAVE, D.Descripcion AS DEPTO FROM departamentos AS D ")->result() as $k => $v) {
+                                        print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DEPTO}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Defecto</label>
-                        <select id="Defecto" name="Defecto" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            foreach ($this->db->query("SELECT D.Clave AS CLAVE, D.Descripcion AS DEFECTO FROM defectos AS D ")->result() as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DEFECTO}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                                <input type="text" id="xDefecto" name="xDefecto" class="form-control numbersOnly" maxlength="4">
+                            </div>
+                            <div class="col-9">
+                                <select id="Defecto" name="Defecto" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    foreach ($this->db->query("SELECT D.Clave AS CLAVE, D.Descripcion AS DEFECTO FROM defectos AS D ")->result() as $k => $v) {
+                                        print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DEFECTO}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Detalle</label>
-                        <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            foreach ($this->db->query("SELECT DD.Clave AS CLAVE, DD.Descripcion AS DETALLE_DEFECTO FROM defectosdetalle AS DD ")->result() as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DETALLE_DEFECTO}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                                <input type="text" id="xDetalleDefecto" name="xDetalleDefecto" class="form-control numbersOnly" maxlength="4">
+                            </div>
+                            <div class="col-9">
+                                <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    foreach ($this->db->query("SELECT DD.Clave AS CLAVE, DD.Descripcion AS DETALLE_DEFECTO FROM defectosdetalle AS DD ")->result() as $k => $v) {
+                                        print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} {$v->DETALLE_DEFECTO}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-2" align="center">
                         <h5 class="text-danger font-weight-bold serie_control font-italic mt-3">-</h5>
@@ -83,7 +125,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" >
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7" >
                 <div class="row">
                     <div class="col-4">
                         <input type="text" id="ControlF" name="ControlF" class="form-control form-control-sm" placeholder="Control a buscar...">
@@ -331,12 +373,18 @@
 </div> 
 <script>
     var pnlTablero = $("#pnlTablero"),
+            xClienteDevolucion = pnlTablero.find('#xClienteDevolucion'),
             ClienteDevolucion = pnlTablero.find('#ClienteDevolucion'),
             FechaDevolucion = pnlTablero.find('#FechaDevolucion'),
+            xClasificacion = pnlTablero.find('#xClasificacion'),
             Clasificacion = pnlTablero.find('#Clasificacion'),
+            xCargo = pnlTablero.find('#xCargo'),
             Cargo = pnlTablero.find('#Cargo'),
+            xDepartamento = pnlTablero.find('#xDepartamento'),
             Departamento = pnlTablero.find('#Departamento'),
+            xDefecto = pnlTablero.find('#xDefecto'),
             Defecto = pnlTablero.find('#Defecto'),
+            xDetalleDefecto = pnlTablero.find('#xDetalleDefecto'),
             DetalleDefecto = pnlTablero.find('#DetalleDefecto'),
             Serie = pnlTablero.find('#Serie'),
             PRECIO = pnlTablero.find("#PRECIO"),
@@ -375,6 +423,216 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+
+
+        xDetalleDefecto.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xDetalleDefecto.val()) {
+                    DetalleDefecto[0].selectize.setValue(xDetalleDefecto.val());
+                    if (DetalleDefecto.val()) {
+                        DetalleDefecto[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE DETALLE DEFECTO, ESPECIFIQUE OTRO', 'w', function () {
+                            xDetalleDefecto.focus().select();
+                        });
+                    }
+                } else {
+                    DetalleDefecto[0].selectize.enable();
+                    DetalleDefecto[0].selectize.clear(true);
+                }
+            } else {
+                DetalleDefecto[0].selectize.enable();
+                DetalleDefecto[0].selectize.clear(true);
+            }
+        });
+        
+        DetalleDefecto.change(function () {
+            if (DetalleDefecto.val()) {
+                xDetalleDefecto.val(DetalleDefecto.val());
+                DetalleDefecto[0].selectize.disable();
+                xDetalleDefecto.focus();
+            } else {
+                xDetalleDefecto.val('');
+                DetalleDefecto[0].selectize.enable();
+                DetalleDefecto[0].selectize.clear(true);
+            }
+        });
+
+        xDefecto.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xDefecto.val()) {
+                    Defecto[0].selectize.setValue(xDefecto.val());
+                    if (Defecto.val()) {
+                        Defecto[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE DEFECTO, ESPECIFIQUE OTRO', 'w', function () {
+                            xDefecto.focus().select();
+                        });
+                    }
+                } else {
+                    Defecto[0].selectize.enable();
+                    Defecto[0].selectize.clear(true);
+                }
+            } else {
+                Defecto[0].selectize.enable();
+                Defecto[0].selectize.clear(true);
+            }
+        });
+        
+        Defecto.change(function () {
+            if (Defecto.val()) {
+                xDefecto.val(Defecto.val());
+                Defecto[0].selectize.disable();
+                xDefecto.focus();
+            } else {
+                xDefecto.val('');
+                Defecto[0].selectize.enable();
+                Defecto[0].selectize.clear(true);
+            }
+        });
+
+        xDepartamento.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xDepartamento.val()) {
+                    Departamento[0].selectize.setValue(xDepartamento.val());
+                    if (Departamento.val()) {
+                        Departamento[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE DEPARTAMENTO, ESPECIFIQUE OTRO', 'w', function () {
+                            xDepartamento.focus().select();
+                        });
+                    }
+                } else {
+                    Departamento[0].selectize.enable();
+                    Departamento[0].selectize.clear(true);
+                }
+            } else {
+                Departamento[0].selectize.enable();
+                Departamento[0].selectize.clear(true);
+            }
+        });
+        
+        Departamento.change(function () {
+            if (Departamento.val()) {
+                xDepartamento.val(Departamento.val());
+                Departamento[0].selectize.disable();
+                xDefecto.focus();
+            } else {
+                xDepartamento.val('');
+                Departamento[0].selectize.enable();
+                Departamento[0].selectize.clear(true);
+            }
+        });
+
+        xCargo.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xCargo.val()) {
+                    Cargo[0].selectize.setValue(xCargo.val());
+                    if (Cargo.val()) {
+                        Cargo[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE CARGO, ESPECIFIQUE OTRO', 'w', function () {
+                            xCargo.focus().select();
+                        });
+                    }
+                } else {
+                    Cargo[0].selectize.enable();
+                    Cargo[0].selectize.clear(true);
+                }
+            } else {
+                Cargo[0].selectize.enable();
+                Cargo[0].selectize.clear(true);
+            }
+        });
+        
+        Cargo.change(function () {
+            if (Cargo.val()) {
+                xCargo.val(Cargo.val());
+                Cargo[0].selectize.disable();
+                xDepartamento.focus();
+            } else {
+                xCargo.val('');
+                Cargo[0].selectize.enable();
+                Cargo[0].selectize.clear(true);
+            }
+        });
+        
+        
+        
+        Clasificacion.change(function () {
+            if (Clasificacion.val()) {
+                xClasificacion.val(Clasificacion.val());
+                Clasificacion[0].selectize.disable();
+                xClasificacion.focus();
+            } else {
+                xClasificacion.val('');
+                Clasificacion[0].selectize.enable();
+                Clasificacion[0].selectize.clear(true);
+            }
+        });
+        
+        xClasificacion.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xClasificacion.val()) {
+                    Clasificacion[0].selectize.setValue(xClasificacion.val());
+                    if (Clasificacion.val()) {
+                        Clasificacion[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTA CLASIFICACIÓN, ESPECIFIQUE OTRA', 'w', function () {
+                            xClasificacion.focus().select();
+                        });
+                    }
+                } else {
+                    Clasificacion[0].selectize.enable();
+                    Clasificacion[0].selectize.clear(true);
+                }
+            } else {
+                Clasificacion[0].selectize.enable();
+                Clasificacion[0].selectize.clear(true);
+            }
+        });
+        
+
+        xClienteDevolucion.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xClienteDevolucion.val()) {
+                    ClienteDevolucion[0].selectize.setValue(xClienteDevolucion.val());
+                    if (ClienteDevolucion.val()) {
+                        ClienteDevolucion[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                            xClienteDevolucion.focus().select();
+                        });
+                    }
+                } else {
+                    ClienteDevolucion[0].selectize.enable();
+                    ClienteDevolucion[0].selectize.clear(true);
+                }
+            } else {
+                ClienteDevolucion[0].selectize.enable();
+                ClienteDevolucion[0].selectize.clear(true);
+            }
+        });
+        
+        ClienteDevolucion.change(function () {
+            if (ClienteDevolucion.val()) {
+                xClienteDevolucion.val(ClienteDevolucion.val());
+                ClienteDevolucion[0].selectize.disable();
+                FechaDevolucion.focus();
+            } else {
+                xClienteDevolucion.val('');
+                ClienteDevolucion[0].selectize.enable();
+                ClienteDevolucion[0].selectize.clear(true);
+            }
+            Pedidos.ajax.reload(function () {
+                Devoluciones.ajax.reload(function () {
+                });
+            });
+        });
+
+
+
+
 
         btnAceptaReporteDevolucion.click(function () {
             var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
@@ -554,20 +812,6 @@
             }
         });
 
-        ClienteDevolucion.change(function () {
-            onOpenOverlay('');
-            Pedidos.ajax.reload(function () {
-                Devoluciones.ajax.reload(function () {
-                    onCloseOverlay();
-                    ControlF.val('');
-                    EstiloF.val('');
-                    DocumentoF.val('');
-                    Pedidos.columns(1).search('').draw();
-                    Pedidos.columns(2).search('').draw();
-                    Pedidos.columns(6).search('').draw();
-                });
-            });
-        });
 
         Control.on('keydown', function (e) {
             //            if (ClienteDevolucion.val()) {
@@ -590,6 +834,8 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
+                    d.ESTILO = EstiloF.val() ? EstiloF.val() : '';
+                    d.DOCUMENTO = DocumentoF.val() ? DocumentoF.val() : '';
                 }
             },
             "columns": [
@@ -618,7 +864,7 @@
             "scrollX": true,
             "order": [[4, "desc"]],
             "initComplete": function (settings, json) {
-                ClienteDevolucion[0].selectize.focus();
+                xClienteDevolucion.focus();
                 FechaDevolucion.val(Hoy);
             }
         });
