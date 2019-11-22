@@ -34,8 +34,8 @@
 
     $(document).ready(function () {
         $('html').find('input.date:not(.notEnter)').addClass('notEnter');
-        $('html').find('input:not(.form-control-sm)').addClass('form-control-sm');
-        $('html').find('select:not(.form-control-sm)').addClass('form-control-sm');
+        $('html').find('input:not(.form-control-sm):not(.not-form-small)').addClass('form-control-sm');
+        $('html').find('select:not(.form-control-sm):not(.not-form-small)').addClass('form-control-sm');
         $('html').find('button:not(.btn-sm)').addClass('btn-sm');
     });
 

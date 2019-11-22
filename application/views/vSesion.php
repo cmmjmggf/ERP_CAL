@@ -66,10 +66,10 @@
                 <h4 class="mb-3">CONTROL DE ACCESO</h4>
             </div>
             <div class="col-12">
-                <input type="email" id="Usuario" name="Usuario" class="form-control " placeholder="Usuario" required autofocus="">
+                <input type="email" id="Usuario" name="Usuario" class="form-control not-form-small" placeholder="Usuario" required autofocus="">
             </div >
             <div class="col-12">
-                <input type="password" id="Contrasena" name="Contrasena" class="form-control mt-3" placeholder="Contraseña" required>
+                <input type="password" id="Contrasena" name="Contrasena" class="form-control not-form-small mt-3" placeholder="Contraseña" required>
             </div >
         </div>
     </div>
