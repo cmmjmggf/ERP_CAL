@@ -5,10 +5,10 @@
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
-                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info" style="background-color: #3F51B5;">
+                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info selectNotEnter" style="background-color: #3F51B5;">
                     <span class="fa fa-plus"></span> Nuevo
                 </button>
-                <div class="btn-group">
+                <div class="btn-group  selectNotEnter">
                     <a class="btn btn-info btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         CATÁLOGOS
                     </a>
@@ -17,7 +17,7 @@
                         <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
                     </div>
                 </div> 
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" >
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
@@ -59,7 +59,7 @@
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
-                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary">
+                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary selectNotEnter">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
                 <button type="button" id="btnEtiquetasParaCaja" name="btnEtiquetasParaCaja" class="btn btn-primary d-none">
@@ -286,8 +286,8 @@
                                     "></td>';
                                 }
                                 ?>
-                                <td class="font-weight-bold"><input type="text" style="width: 45px;
-                                                                    " id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
+                                <td class="font-weight-bold">
+                                    <input type="text" style="<?php print $style_input; ?>" id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
                                 <td>
                                 </td>
                             </tr>
@@ -303,7 +303,7 @@
                                 }
                                 ?>
                                 <td class="font-weight-bold">
-                                    <input type="text" style="width: 45px; " id="TotalParesEntregaF" 
+                                    <input type="text"  style="<?php print $style_input; ?>" id="TotalParesEntregaF" 
                                            class="form-control form-control-sm " readonly="" data-toggle="tooltip" data-placement="right" title="0">
                                 </td>
                             </tr>
@@ -318,8 +318,9 @@
                                     "></td>';
                                 }
                                 ?>
-                                <td class="font-weight-bold"><input type="text" style="width: 45px;
-                                                                    " id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
+                                <td class="font-weight-bold">
+                                    <input type="text" style="<?php print $style_input; ?>"  id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0">
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -715,7 +716,6 @@
             ConsignarATienda = mdlConsignarA.find("#Tienda"),
             btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal"),
             btnNuevaFactura = pnlTablero.find("#btnNuevaFactura");
-
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
     pnlTablero.find("input,textarea").addClass("font-weight-bold");
@@ -723,6 +723,12 @@
 
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
+        $('.modal').on('show.bs.modal', function (e) {
+            $('body').addClass("example-open");
+        }).on('hide.bs.modal', function (e) {
+            $('body').removeClass("example-open");
+        });
+
         $('input.notdot').keydown(function (e) {
             console.log(e.keyCode);
             /*
@@ -736,25 +742,21 @@
         btnNuevaFactura.click(function () {
             location.reload();
         });
-
         bControl.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ControlesXFacturar.ajax.reload();
             }
         });
-
         bPedido.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ControlesXFacturar.ajax.reload();
             }
         });
-
         bEstilo.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ControlesXFacturar.ajax.reload();
             }
         });
-
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 ClienteClave.val(ClienteFactura.val());
@@ -765,7 +767,6 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
@@ -786,17 +787,14 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ConsignarATienda[0].selectize.setValue(TiendaClave.val());
             }
         });
-
         PrecioFacturacion.on('keydown keypress keyup focusout', function () {
             onRecalcularSubtotal();
         });
-
         mdlConsignarA.on('shown.bs.modal', function () {
             //            console.log(ConsignarATienda.val());
             if (TiendaClave.val() === '') {
@@ -805,7 +803,6 @@
                 TiendaClave.focus().select();
             }
         });
-
         btnCerrarTiendaModal.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 mdlConsignarA.modal('hide');
@@ -819,21 +816,18 @@
             TPFactura.focus().select();
             handleEnterDiv(pnlTablero);
         });
-
         btnNuevo.click(function () {
             onOpenOverlay('');
             onDisableInputs(false);
             onResetCampos();
             btnVistaPreviaF.attr('disabled', true);
             ParesFacturados.rows().remove().draw();
-
             pnlTablero.find(".ReferenciaFactura").text('-');
             pnlTablero.find(".subtotalfacturadopie").text('$0.0');
             pnlTablero.find(".totalivafacturadopie").text('$0.0');
             pnlTablero.find(".totalfacturadopie").text('$0.0');
             pnlTablero.find(".totalfacturadoenletrapie").text('-');
             pnlTablero.find(".totalfacturadoenletrapieDLLS").text('-');
-
             CajasFacturacion.attr('disabled', false);
             pnlTablero.find("input").val('');
             FechaFactura.val(Hoy);
@@ -847,14 +841,12 @@
             btnVerTienda.addClass("d-none");
             onCloseOverlay();
         });
-
         mdlReimprimeDocto.on('hidden.bs.modal', function () {
             ClienteClave.focus().select();
         });
         btnReimprimeDocto.click(function () {
             $("#mdlReimprimeDocto").modal('show');
         });
-
         btnVistaPreviaF.click(function () {
 
             //            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarCFDI'); ?>', {
@@ -882,83 +874,85 @@
             //
             //            });
         });
-
         btnFacturaXAnticipoDeProducto.click(function () {
             onBeep(1);
             getTotalFacturado();
         });
-
         btnEtiquetasParaCaja.click(function () {
             onBeep(1);
             $("#mdlEtiquetaCajas").modal('show');
         });
-
         btnMovClientes.click(function () {
             onBeep(1);
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
-
         btnAcepta.click(function () {
-            ClienteFactura[0].selectize.enable();
-            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                    {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
-                        FACTURA: Documento.val()
-                    }).done(function (a) {
-                if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
-                    iMsg('ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', 'w', function () {
-                        Documento.focus().select();
-                    });
-                    return;
-                } else {
-                    /*ES UN NUEVO REGISTRO, PERO EL DOCUMENTO/FACTURA NO EXISTE*/
+            if (Control.val()) {
+                ClienteFactura[0].selectize.enable();
+                $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                            FACTURA: Documento.val()
+                        }).done(function (a) {
+                    if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
+                        iMsg('ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', 'w', function () {
+                            Documento.focus().select();
+                        });
+                        return;
+                    } else {
+                        /*ES UN NUEVO REGISTRO, PERO EL DOCUMENTO/FACTURA NO EXISTE*/
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
+                var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
+                        pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
+                for (var i = 1; i < 23; i++) {
+                    pc = pnlTablero.find("#C" + i).val();
+                    pf = pnlTablero.find("#CF" + i).val();
+                    paf = pnlTablero.find("#CAF" + i).val();
+                    pf_mas_paf = parseInt(pf ? pf : 0) + parseInt(paf ? paf : 0);
+                    pares += parseInt(pc ? pc : 0); /*FIJO*/
+                    pares_facturados += parseInt(pf ? pf : 0);
+                    pares_a_facturar += parseInt(paf ? paf : 0);
+                    if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
+                        validos = true;
+                    } else {
+                        //                    console.log(pc, pf, paf, pf_mas_paf);
+                        //                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
+                        validos = false;
+                        break;
+                    }
                 }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
 
-            });
-
-            var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
-                    pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
-            for (var i = 1; i < 23; i++) {
-                pc = pnlTablero.find("#C" + i).val();
-                pf = pnlTablero.find("#CF" + i).val();
-                paf = pnlTablero.find("#CAF" + i).val();
-                pf_mas_paf = parseInt(pf ? pf : 0) + parseInt(paf ? paf : 0);
-                pares += parseInt(pc ? pc : 0); /*FIJO*/
-                pares_facturados += parseInt(pf ? pf : 0);
-                pares_a_facturar += parseInt(paf ? paf : 0);
-                if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
-                    validos = true;
+                pares_finales = pares_facturados + pares_a_facturar;
+                if (pares_a_facturar > 0) {
+                    console.log("son pares validos? => ", validos);
+                    if (pares_finales <= pares && validos) {
+                        console.log('PARES OK');
+                        onAceptarControl();
+                    } else {
+                        iMsg('NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', 'w', function () {
+                            pnlTablero.find("#CAF1").focus().select();
+                        });
+                        return;
+                    }
                 } else {
-                    //                    console.log(pc, pf, paf, pf_mas_paf);
-                    //                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
-                    validos = false;
-                    break;
-                }
-            }
-
-            pares_finales = pares_facturados + pares_a_facturar;
-
-            if (pares_a_facturar > 0) {
-                console.log("son pares validos? => ", validos);
-                if (pares_finales <= pares && validos) {
-                    console.log('PARES OK');
-                    onAceptarControl();
-                } else {
-                    iMsg('NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', 'w', function () {
+                    iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', 'w', function () {
                         pnlTablero.find("#CAF1").focus().select();
                     });
                     return;
                 }
             } else {
-                iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', 'w', function () {
-                    pnlTablero.find("#CAF1").focus().select();
+                $(".swal-button--confirm").focus();
+                iMsg('ES NECESARIO ESPECIFICAR UN CONTROL A FACTURAR', 'w', function () {
+                    Control.focus().select();
                 });
+                $(".swal-button--confirm").focus();
                 return;
             }
         });
-
         btnCierraDocto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1022,7 +1016,6 @@
                 return;
             }
         });
-
         Documento.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
@@ -1113,7 +1106,6 @@
                 });
             }
         });
-
         CajasFacturacion.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val() ? $(this).val() : 0) <= 0) {
@@ -1123,11 +1115,9 @@
                 }
             }
         });
-
         tblControlesXFacturar.find("#CAF20").on('keydown', function (e) {
             console.log('ok ok ok');
         });
-
         btnControlCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1164,7 +1154,6 @@
                 });
             }
         });
-
         btnControlInCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1185,7 +1174,6 @@
                 });
             }
         });
-
         mdlControlesXFacturar.on('shown.bs.modal', function () {
             $.fn.dataTable.ext.errMode = 'throw';
             if (!$.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
@@ -1248,7 +1236,6 @@
                             mdlControlesXFacturar.find("#bControl").focus().select();
                         }
                     });
-
                     tblControlesXFacturar.on('click', 'tr', function () {
                         onOpenOverlay('Por favor espere...');
                         var xxx = ControlesXFacturar.row($(this)).data();
@@ -1274,7 +1261,6 @@
                 });
             }
         });
-
         btnControlesXFac.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1285,40 +1271,52 @@
                 });
             }
         });
-
         btnClientes.click(function () {
             onBeep(1);
             onOpenWindow('<?php print base_url('Clientes'); ?>');
         });
-
         Control.on('keydown', function (e) {
-            if (ClienteFactura.val()) {
-                if (Control.val() && e.keyCode === 13) {
-                    onOpenOverlay('Buscando...');
-                    getInfoXControl();
+            if (TPFactura.val()) {
+                if (ClienteFactura.val()) {
+                    if (Control.val() && e.keyCode === 13) {
+                        onOpenOverlay('Buscando...');
+                        getInfoXControl();
+                    }
+                } else {
+                    swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                        ClienteClave.focus().select();
+                    });
+                    $(".swal-button--confirm").focus();
                 }
             } else {
-                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteClave.focus().select();
+                $(".swal-button--confirm").focus();
+                swal('ATENCION', 'DEBE DE ESPECIFICAR UN TIPO DE DOCUMENTO 1 O 2', 'warning').then((value) => {
+                    TPFactura.focus().select();
                 });
                 $(".swal-button--confirm").focus();
             }
         });
-
         FechaFactura.val(Hoy);
         ClienteClave.focus().select();
         handleEnterDiv(pnlTablero);
-
         TPFactura.keydown(function (e) {
             if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                 getTipoDeCambioYUltimaFactura();
             } else if (e.keyCode === 13) {
-                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
+                TPFactura.focus().select();
+//                pnlTablero.find("input:enabled,textarea:enabled").addClass('campo_no_valido');
+//                pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").attr('disabled', true);
+//                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
+//                    pnlTablero.find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").attr('disabled', false);
+//                    pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").removeClass('campo_no_valido');
+//                    TPFactura.focus().select();
+//                });
+                onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                     TPFactura.focus().select();
                 });
+                return;
             }
         });
-
         Tienda.change(function () {
             if (Tienda.val()) {
                 $("#ConsignarATienda").addClass("d-none");
@@ -1328,13 +1326,11 @@
                 Tienda[0].selectize.focus();
             }
         });
-
         btnVerTienda.click(function () {
             if (parseInt(ClienteFactura.val()) === 2121) {
                 onVerTienda();
             }
         });
-
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 if (parseInt(ClienteFactura.val()) === 2121) {
@@ -1363,7 +1359,6 @@
                 $("#ConsignarATienda").addClass("d-none");
             }
         });
-
         ParesFacturados = tblParesFacturados.DataTable({
             dom: 'rt',
             "columnDefs": [{
@@ -1498,16 +1493,13 @@
     function getReferencia() {
         var txtreferen11 = "000000000000398827";
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
-
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
                 num10 = 0, num11 = 0, num12 = 0, num13 = 0,
                 num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
                 num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0;
-
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
-
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
             txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
             switch (refe1) {
@@ -1579,7 +1571,6 @@
         res1 = res * 100;
         res2 = res1 % 1;
         res3 = res1 - res2;
-
         //        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
 
         var ponderador_fijo = 99;
@@ -1774,14 +1765,12 @@
                 TotalLetra.find("span").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
-
                 break;
             case 2:
                 pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 TotalLetra.find("span").text(NumeroALetras(t));
                 pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
-
                 pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
                 break;
         }
@@ -1836,8 +1825,6 @@
         ParesFacturados.row.add(rowx).draw(false);
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         getTotalFacturado();
-
-
         /*REGISTRAR EN FACTURACION*/
         TPFactura.attr('disabled', false);
         ClienteFactura[0].selectize.enable();
@@ -1916,9 +1903,7 @@
             btnFacturaXAnticipoDeProducto.attr('disabled', true);
             btnControlInCompleto.attr('disabled', true);
             btnControlCompleto.attr('disabled', true);
-
             btnVistaPreviaF.attr('disabled', false);
-
             /*DESHABILITAR CAMPOS*/
             FechaFactura.attr('readonly', true);
             Documento.attr('readonly', true);
@@ -2046,7 +2031,6 @@
             hTP = mdlHistorialFacturas.find("#hTP"),
             hCliente = mdlHistorialFacturas.find("#hCliente"),
             hControl = mdlHistorialFacturas.find("#hControl");
-
     function getHistorial() {
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         if ($.fn.DataTable.isDataTable('#tblFacturas')) {
@@ -2108,7 +2092,6 @@
                     onCalcularParesHistorial();
                 }
             });
-
             hControl.on('keydown', function (e) {
                 if (e.keyCode === 13) {
                     onOpenOverlay('');
@@ -2145,7 +2128,6 @@
                     });
                 }
             });
-
             mdlHistorialFacturas.on('shown.bs.modal', function () {
                 hFactura.val('');
                 hTP.val('');
@@ -2165,7 +2147,6 @@
         mdlHistorialFacturas.find("div.pares_totales").text("Pares " + prs);
     }
     onOpenOverlay('');
-
     function getVistaPreviaDocumentoCerrado(f) {
         onBeep(1);
         onOpenOverlay('Espere un momento por favor...');
@@ -2182,6 +2163,7 @@
             onCloseOverlay();
         });
     }
+
 </script>
 
 <style> 
@@ -2213,6 +2195,7 @@
         box-shadow: 0 0px 12px  #03A9F4;
     }
 
+    .example-open .modal-backdrop {background-color:red;}
     /* Safari 4.0 - 8.0 */
     @-webkit-keyframes myfirst { 
         25%  { 
@@ -2246,5 +2229,5 @@
         100% {
             border-color:  #007bff; 
         }
-    }
+    } 
 </style>

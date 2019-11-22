@@ -35,11 +35,7 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <label>TP</label>
-                        <select  id="TP" name="TP" class="form-control form-control-sm">
-                            <option></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
+                        <input type="text" id="TP" name="TP" class="form-control form-control-sm numbersOnly" maxlength="1">                            
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <label>Aplicar</label>

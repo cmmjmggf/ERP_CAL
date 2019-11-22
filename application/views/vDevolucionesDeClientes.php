@@ -424,7 +424,6 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
 
-
         xDetalleDefecto.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xDetalleDefecto.val()) {
@@ -445,7 +444,7 @@
                 DetalleDefecto[0].selectize.clear(true);
             }
         });
-        
+
         DetalleDefecto.change(function () {
             if (DetalleDefecto.val()) {
                 xDetalleDefecto.val(DetalleDefecto.val());
@@ -478,7 +477,7 @@
                 Defecto[0].selectize.clear(true);
             }
         });
-        
+
         Defecto.change(function () {
             if (Defecto.val()) {
                 xDefecto.val(Defecto.val());
@@ -511,7 +510,7 @@
                 Departamento[0].selectize.clear(true);
             }
         });
-        
+
         Departamento.change(function () {
             if (Departamento.val()) {
                 xDepartamento.val(Departamento.val());
@@ -544,7 +543,7 @@
                 Cargo[0].selectize.clear(true);
             }
         });
-        
+
         Cargo.change(function () {
             if (Cargo.val()) {
                 xCargo.val(Cargo.val());
@@ -556,9 +555,7 @@
                 Cargo[0].selectize.clear(true);
             }
         });
-        
-        
-        
+
         Clasificacion.change(function () {
             if (Clasificacion.val()) {
                 xClasificacion.val(Clasificacion.val());
@@ -570,7 +567,7 @@
                 Clasificacion[0].selectize.clear(true);
             }
         });
-        
+
         xClasificacion.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xClasificacion.val()) {
@@ -591,7 +588,6 @@
                 Clasificacion[0].selectize.clear(true);
             }
         });
-        
 
         xClienteDevolucion.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -613,7 +609,7 @@
                 ClienteDevolucion[0].selectize.clear(true);
             }
         });
-        
+
         ClienteDevolucion.change(function () {
             if (ClienteDevolucion.val()) {
                 xClienteDevolucion.val(ClienteDevolucion.val());
@@ -629,10 +625,6 @@
                 });
             });
         });
-
-
-
-
 
         btnAceptaReporteDevolucion.click(function () {
             var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
@@ -712,6 +704,11 @@
         });
 
         btnAcepta.click(function () {
+            
+            $.each(pnlTablero.find("select"), function (k, v) {
+                pnlTablero.find("select")[k].selectize.enable();
+            });
+
             if (ClienteDevolucion.val() && FechaDevolucion.val()) {
                 getTotalPares();
                 var p = {

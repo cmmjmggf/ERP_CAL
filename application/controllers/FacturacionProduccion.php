@@ -211,16 +211,23 @@ class FacturacionProduccion extends CI_Controller {
                 $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
             }
 
-            $cc = array(
+            $fecha = $x['FECHA'];
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+            $hora = Date('h:i:s');
+            $this->db->insert('cartcliente', array(
                 'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
-                'fecha' => $x['FECHA'], 'importe' => $TOTAL,
+                'fecha' => "{$anio}-{$mes}-{$dia} $hora", 'importe' => $TOTAL,
                 'tipo' => $x['TP_DOCTO'],
                 'status' => 1, 'pagos' => 0,
                 'saldo' => $TOTAL, 'comiesp' => 1,
                 'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
-                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1));
-            $this->db->insert('cartcliente', $cc);
+                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -363,7 +370,7 @@ class FacturacionProduccion extends CI_Controller {
                 print "\n";
                 print_r($control_pedidox);
                 print "\n";
-                
+
                 $this->db->where('contped', $x['CONTROL'])->update('facturacion',
                         array(
                             'par01' => $control_pedidox->C1, 'par02' => $control_pedidox->C2,
@@ -800,7 +807,7 @@ class FacturacionProduccion extends CI_Controller {
                             PRINT $jc->getReport();
                             exit(0);
                             break;
-                        case 1967: 
+                        case 1967:
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
