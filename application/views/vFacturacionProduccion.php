@@ -825,7 +825,6 @@
             onDisableInputs(false);
             onResetCampos();
             btnVistaPreviaF.attr('disabled', true);
-            btnReimprimeDocto.attr('disabled', true);
             ParesFacturados.rows().remove().draw();
 
             pnlTablero.find(".ReferenciaFactura").text('-');
@@ -849,6 +848,9 @@
             onCloseOverlay();
         });
 
+        mdlReimprimeDocto.on('hidden.bs.modal', function () {
+            ClienteClave.focus().select();
+        });
         btnReimprimeDocto.click(function () {
             $("#mdlReimprimeDocto").modal('show');
         });
@@ -860,19 +862,8 @@
             //            }).done(function (a) {
             //                if (a.length > 0) {
             if (ClienteFactura.val() && Documento.val() && TPFactura.val()) {
-                onBeep(1);
-                onOpenOverlay('Espere un momento por favor...');
-                $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
-                    CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
-                    DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : '',
-                    TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
-                }).done(function (data, x, jq) {
-                    onBeep(1);
-                    onImprimirReporteFancy(data);
-                }).fail(function (x, y, z) {
-                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                }).always(function () {
-                    onCloseOverlay();
+                getVistaPreviaDocumentoCerrado(function () {
+                    ClienteClave.focus().select();
                 });
             } else {
                 onBeep(2);
@@ -986,9 +977,40 @@
                 $.post('<?php print base_url('FacturacionProduccion/onCerrarDocto') ?>', p).done(function (abc) {
                     btnCierraDocto.attr('disabled', true);
                     btnAcepta.attr('disabled', true);
-                    btnVistaPreviaF.trigger('click');
                     onNotifyOldPCE('', 'SE HA CERRADO EL DOCUMENTO', 'info', "top", "center");
-                    
+                    ClienteFactura[0].selectize.enable();
+                    Documento.attr('readonly', false);
+                    TPFactura.attr('disabled', false);
+                    getVistaPreviaDocumentoCerrado(function () {
+                        nuevo = true;
+                        pnlTablero.find("input").val('');
+                        $.each(pnlTablero.find("select"), function (k, v) {
+                            pnlTablero.find("select")[k].selectize.clear(true);
+                        });
+                        ParesFacturados.rows().remove().draw(false);
+                        pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                        pnlTablero.find(".totalivafacturadopie").text('$' + $.number(0, 2, '.', ','));
+                        pnlTablero.find(".totalfacturadohead").text('$' + $.number(0, 2, '.', ','));
+                        pnlTablero.find(".totalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                        TotalLetra.find("span").text('');
+                        pnlTablero.find(".totalfacturadoenletrapie").text('');
+                        pnlTablero.find(".totalfacturadoenletrapieDLLS").text('');
+                        btnCierraDocto.attr('disabled', true);
+                        btnFacturaXAnticipoDeProducto.attr('disabled', false);
+                        btnControlInCompleto.attr('disabled', true);
+                        btnControlCompleto.attr('disabled', true);
+                        btnVistaPreviaF.attr('disabled', true);
+                        FechaFactura.attr('readonly', false);
+                        Documento.attr('readonly', false);
+                        FCAFactura.attr('readonly', false);
+                        PAGFactura.attr('readonly', false);
+                        TMNDAFactura.attr('readonly', false);
+                        ClienteFactura[0].selectize.enable();
+                        TPFactura.attr('disabled', false);
+                        ClienteClave.focus().select();
+                        FechaFactura.val(Hoy);
+                        ClienteClave.focus().select();
+                    });
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -1012,13 +1034,11 @@
                         if (parseInt(a[0].FACTURA_EXISTE) === 0) {
                             btnAcepta.attr('disabled', false);
                             btnVistaPreviaF.attr('disabled', true);
-                            btnReimprimeDocto.attr('disabled', true);
                             CajasFacturacion.attr('disabled', false);
                             onCloseOverlay();
                         } else {
                             if (ClienteFactura.val() === a[0].CLIENTE) {
                                 btnVistaPreviaF.attr('disabled', false);
-                                btnReimprimeDocto.attr('disabled', false);
                                 btnAcepta.attr('disabled', true);
                                 CajasFacturacion.attr('disabled', true);
                                 onDisableInputs(true);
@@ -1321,6 +1341,7 @@
                     onVerTienda();
                 } else {
                     btnVerTienda.addClass("d-none");
+                    TPFactura.focus().select();
                 }
                 //                onOpenOverlay('');
                 $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
@@ -1897,7 +1918,6 @@
             btnControlCompleto.attr('disabled', true);
 
             btnVistaPreviaF.attr('disabled', false);
-            btnReimprimeDocto.attr('disabled', false);
 
             /*DESHABILITAR CAMPOS*/
             FechaFactura.attr('readonly', true);
@@ -1906,7 +1926,6 @@
             PAGFactura.attr('readonly', true);
             TMNDAFactura.attr('readonly', true);
             ClienteFactura[0].selectize.disable();
-            //        TPFactura[0].selectize.disable();
             TPFactura.attr('disabled', true);
             onNotifyOldPCE('', 'SE HA REGISTRADO EL CONTROL', 'success', "bottom", "center");
         }).fail(function (x) {
@@ -2146,6 +2165,23 @@
         mdlHistorialFacturas.find("div.pares_totales").text("Pares " + prs);
     }
     onOpenOverlay('');
+
+    function getVistaPreviaDocumentoCerrado(f) {
+        onBeep(1);
+        onOpenOverlay('Espere un momento por favor...');
+        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
+            CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '',
+            DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '',
+            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+        }).done(function (data, x, jq) {
+            onBeep(1);
+            onImprimirReporteFancyAFC(data, f);
+        }).fail(function (x, y, z) {
+            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 </script>
 
 <style> 

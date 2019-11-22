@@ -50,11 +50,7 @@
                     <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>TP</label>
-                        <select id="TPReg" name="TPReg" class="form-control form-control-sm">
-                            <option></option> 
-                            <option value="1">1</option> 
-                            <option value="2">2</option> 
-                        </select>
+                        <input type="text" id="TPReg" name="TPReg" class="form-control form-control-sm numbersOnly" maxlength="1">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <div class="form-group"> 
@@ -122,8 +118,10 @@
                     TP: TPReg.val().trim() !== '' ? TPReg.val() : ''
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    onBeep(1);
-                    onImprimirReporteFancy(data);
+                    onBeep(1); 
+                    onImprimirReporteFancyAFC(data, function () {
+                        ClienteReg.focus().select();
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
