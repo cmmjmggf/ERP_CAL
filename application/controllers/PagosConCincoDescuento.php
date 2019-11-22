@@ -97,7 +97,11 @@ class PagosConCincoDescuento extends CI_Controller {
     public function getFolioNC() {
         try {
             $tp = $this->input->get('Tp');
-            print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp and nc < 10000 ")->result());
+            if ($tp === '1') {
+                print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp and nc < 10000 ")->result());
+            } else {
+                print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp  ")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -288,7 +292,7 @@ class PagosConCincoDescuento extends CI_Controller {
                 'descripcion' => 'Desc.5% Nc-' . $this->input->post('FolioNC'),
                 'precio' => $this->input->post('DescuentoDocto'),
                 'subtot' => $this->input->post('DescuentoDocto'),
-                'ImporteLetra' => $this->input->post('ImporteLetra'),
+                'monletra' => $this->input->post('ImporteLetra'),
                 'concepto' => 0,
                 'defecto' => 0,
                 'detalle' => 0,

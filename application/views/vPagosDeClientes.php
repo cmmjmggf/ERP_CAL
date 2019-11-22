@@ -75,7 +75,7 @@
                 <input type="text" id="SaldoPDC" name="SaldoPDC" class="form-control form-control-sm numbersOnly" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-5 col-xl-5">
-                <h3 class="">Tipos de movimiento</h3>
+                <h5 class="">Tipos de movimiento</h5>
                 <span class="badge badge-info border border-primary">2 = Efec </span>
                 <span class="badge badge-info border border-primary">3 = Chec.posf </span>
                 <span class="badge badge-info border border-primary">5 = Decto </span>
@@ -428,6 +428,7 @@
                         });
                         var p = {
                             CLIENTE: ClientePDC.val(),
+                            AGENTE: AgentePDC.val(),
                             NUMERO_RF: DoctoPDC.val(),
                             TP: parseInt(TPPDC.val()),
                             FECHA: FechaPDC.val(),

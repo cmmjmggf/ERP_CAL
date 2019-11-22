@@ -10,13 +10,18 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-6 col-sm-6 col-md-5">
+                        <div class="col-3">
                             <label for="Clave" >Tp</label>
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="Tp" name="Tp" required="">
                         </div>
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <label for="" >Cliente</label>
-                            <select id="Cliente" name="Cliente" class="form-control form-control-sm mb-2 required" required="" >
+                        <div class="w-100"></div>
+                        <div class="col-3">
+                            <label>Cliente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="Cliente" name="Cliente" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sCliente" name="sCliente" class="form-control form-control-sm mb-2 required NotSelectize" required="" >
                                 <option value=""></option>
                             </select>
                         </div>
@@ -41,6 +46,10 @@
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlReimprimeNotaCredito);
         mdlReimprimeNotaCredito.on('shown.bs.modal', function () {
+            mdlReimprimeNotaCredito.find('.NotSelectize').selectize({
+                hideSelected: false,
+                openOnFocus: false
+            });
             mdlReimprimeNotaCredito.find("input").val("");
             $.each(mdlReimprimeNotaCredito.find("select"), function (k, v) {
                 mdlReimprimeNotaCredito.find("select")[k].selectize.clear(true);
@@ -52,7 +61,7 @@
             if (e.keyCode === 13) {
                 var tp = parseInt($(this).val());
                 if (tp === 1 || tp === 2) {
-                    mdlReimprimeNotaCredito.find('#Cliente')[0].selectize.focus();
+                    mdlReimprimeNotaCredito.find('#Cliente').focus();
                 } else {
                     swal({
                         title: "ATENCIÓN",
@@ -66,7 +75,58 @@
                 }
             }
         });
-        mdlReimprimeNotaCredito.find("#Cliente").change(function () {
+        mdlReimprimeNotaCredito.find('#Cliente').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    var tp = mdlReimprimeNotaCredito.find("#Tp").val();
+                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.addItem(txtcte, true);
+
+                            var tp = mdlReimprimeNotaCredito.find("#Tp").val();
+                            $.getJSON(base_url + 'index.php/NotasCreditoClientes/getNotasByTpByCliente', {
+                                Tp: tp,
+                                Cliente: txtcte
+                            }).done(function (data) {
+                                mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.clear(true);
+                                mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.clearOptions();
+                                if (data.length > 0) {//Existe
+                                    $.each(data, function (k, v) {
+                                        mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.addOption({text: v.nc, value: v.nc});
+                                    });
+                                    mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.open();
+                                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "NO EXISTEN NOTAS DE CREDITO PARA ESTE CLIENTE/TP",
+                                        icon: "error",
+                                        closeOnClickOutside: false,
+                                        closeOnEsc: false
+                                    }).then((action) => {
+                                        mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.clear(true);
+                                        mdlReimprimeNotaCredito.find("#NotaCredito")[0].selectize.focus();
+                                    });
+                                }
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+
+                        } else {
+                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.clear(true);
+                                mdlReimprimeNotaCredito.find('#Cliente').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlReimprimeNotaCredito.find("#sCliente").change(function () {
             if ($(this).val()) {
                 var tp = mdlReimprimeNotaCredito.find("#Tp").val();
                 $.getJSON(base_url + 'index.php/NotasCreditoClientes/getNotasByTpByCliente', {
@@ -162,11 +222,11 @@
     }
 
     function getClientesReimprimeNC() {
-        mdlReimprimeNotaCredito.find("#Cliente")[0].selectize.clear(true);
-        mdlReimprimeNotaCredito.find("#Cliente")[0].selectize.clearOptions();
+        mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.clear(true);
+        mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/PagosConCincoDescuento/getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                mdlReimprimeNotaCredito.find("#Cliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

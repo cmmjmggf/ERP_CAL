@@ -275,7 +275,7 @@ class NotasCreditoClientes extends CI_Controller {
             $cte = $this->input->get('Cliente');
             $tipo = $this->input->get('Tp');
             print json_encode($this->db->query("SELECT nc FROM notcred "
-                                    . " where cliente = $cte and tp = $tipo group by nc order by nc asc ")->result());
+                                    . " where cliente = $cte and tp = $tipo group by nc order by nc desc ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
