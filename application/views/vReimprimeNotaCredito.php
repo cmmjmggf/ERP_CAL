@@ -80,7 +80,7 @@
                 var txtcte = $(this).val();
                 if (txtcte) {
                     var tp = mdlReimprimeNotaCredito.find("#Tp").val();
-                    $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                    $.getJSON(base_url + 'PagosConCincoDescuento/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
                         if (data.length > 0) {
                             mdlReimprimeNotaCredito.find("#sCliente")[0].selectize.addItem(txtcte, true);
 
