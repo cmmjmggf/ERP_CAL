@@ -1632,25 +1632,23 @@
             f();
         });
     }
-    
+
     function onCampoInvalido(pnl, msj, fun) {
-        $.each(pnl.find("select:enabled"), function (k, v) {
+        $.each(pnl.find("select.selectized:enabled"), function (k, v) {
             console.log(k, v);
             $(v).addClass('campo_no_valido');
         });
-        $.each(pnl.find("select.campo_no_valido"), function (k, v) {
-            $(v)[k].selectize.disable();
+        $.each(pnl.find("select.selectized:enabled"), function (k, v) {
+            $(v)[0].selectize.disable();
         });
-        pnl.find("input:enabled,textarea:enabled").addClass('campo_no_valido');
-        pnl.find("input.campo_no_valido,textarea.campo_no_valido").attr('disabled', true);
+        pnl.find("input:enabled,textarea:enabled").addClass('campo_no_valido').attr('disabled', true);
         onBeep(2);
         iMsg(msj, "w", function () {
             $.each(pnl.find("select.campo_no_valido:disabled"), function (k, v) {
                 $(v).removeClass('campo_no_valido');
-                $(v)[k].selectize.enable();
+                $(v)[0].selectize.enable();
             });
-            pnl.find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").attr('disabled', false);
-            pnl.find("input.campo_no_valido,textarea.campo_no_valido").removeClass('campo_no_valido');
+            pnl.find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
             fun();
         });
     }

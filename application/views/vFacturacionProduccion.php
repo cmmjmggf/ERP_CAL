@@ -1300,10 +1300,11 @@
         ClienteClave.focus().select();
         handleEnterDiv(pnlTablero);
         TPFactura.keydown(function (e) {
-            if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
-                getTipoDeCambioYUltimaFactura();
-            } else if (e.keyCode === 13) {
-                TPFactura.focus().select();
+            if (ClienteClave.val()) {
+                if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                    getTipoDeCambioYUltimaFactura();
+                } else if (e.keyCode === 13) {
+                    TPFactura.focus().select();
 //                pnlTablero.find("input:enabled,textarea:enabled").addClass('campo_no_valido');
 //                pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").attr('disabled', true);
 //                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
@@ -1311,10 +1312,16 @@
 //                    pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").removeClass('campo_no_valido');
 //                    TPFactura.focus().select();
 //                });
-                onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
-                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
                 });
-                return;
+                return; 
             }
         });
         Tienda.change(function () {
