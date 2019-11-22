@@ -326,56 +326,56 @@
                     </table>
                 </div>
             </div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-1" align="center"> 
-                <div class="row"  align="center">
-                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
-                        <span class = "fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-1" align="center">
+                <div class="row" align="center">
+                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter" id="btnFacturaXAnticipoDeProducto" disabled="">
+                        <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
                     </button>
-                    <div class = "w-100"></div>
-                    <button type = "button" class = "btn btn-info notEnter selectNotEnter" disabled = "" id = "btnControlInCompleto" style = "border-color: #C62828 !important; background-color: #C62828 !important;">
-                        <span class = "fa fa-exclamation"></span> CONTROL INCOMPLETO
+                    <div class="w-100"></div>
+                    <button type="button" class="btn btn-info notEnter selectNotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                        <span class="fa fa-exclamation"></span> CONTROL INCOMPLETO
                     </button>
-                    <div class = "w-100"></div>
-                    <button type = "button" class = "btn btn-info notEnter selectNotEnter" id = "btnControlCompleto" disabled = "" >
-                        <span class = "fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
+                    <div class="w-100"></div>
+                    <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnControlCompleto" disabled="">
+                        <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
                     </button>
                 </div>
             </div>
-            <div class = "col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align = "center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                 <hr>
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
                 <label>Referencia</label>
-                <span class = "text-danger font-weight-bold ReferenciaFactura" style = "font-size: 22px !important;">-</span>
-                <input type = "text" id = "ReferenciaFacturacion" name = "ReferenciaFacturacion" readonly = "" class = "form-control form-control-sm d-none">
+                <span class="text-danger font-weight-bold ReferenciaFactura" style="font-size: 22px !important;">-</span>
+                <input type="text" id="ReferenciaFacturacion" name="ReferenciaFacturacion" readonly="" class="form-control form-control-sm d-none">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>Cajas</label>
-                <input type = "text" id = "CajasFacturacion" name = "CajasFacturacion"style = "color: #ff0000 !important;" class = "form-control form-control-sm numbersOnly font-weight-bold">
+                <input type="text" id="CajasFacturacion" name="CajasFacturacion" style="color: #ff0000 !important;" class="form-control form-control-sm numbersOnly font-weight-bold">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>Estilo</label>
-                <input type = "text" id = "EstiloFacturacion" name = "EstiloFacturacion" readonly = "" class = "form-control form-control-sm">
-                <input type = "text" id = "EstiloTFacturacion" name = "EstiloTFacturacion" readonly = "" class = "d-none form-control form-control-sm">
-                <input type = "text" id = "CodigoSat" name = "CodigoSat" class = "d-none form-control" readonly = "">
+                <input type="text" id="EstiloFacturacion" name="EstiloFacturacion" readonly="" class="form-control form-control-sm">
+                <input type="text" id="EstiloTFacturacion" name="EstiloTFacturacion" readonly="" class="d-none form-control form-control-sm">
+                <input type="text" id="CodigoSat" name="CodigoSat" class="d-none form-control" readonly="">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-left: 5px; padding-right: 5px;">
                 <label>Color</label>
-                <input type = "text" id = "ColorClaveFacturacion" name = "ColorClaveFacturacion" readonly = "" class = "form-control form-control-sm d-none">
-                <input type = "text" id = "ColorFacturacion" name = "ColorFacturacion" readonly = "" class = "form-control form-control-sm">
+                <input type="text" id="ColorClaveFacturacion" name="ColorClaveFacturacion" readonly="" class="form-control form-control-sm d-none">
+                <input type="text" id="ColorFacturacion" name="ColorFacturacion" readonly="" class="form-control form-control-sm">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>Corrida</label>
-                <input type = "text" id = "CorridaFacturacion" name = "CorridaFacturacion" readonly = "" class = "form-control form-control-sm">
+                <input type="text" id="CorridaFacturacion" name="CorridaFacturacion" readonly="" class="form-control form-control-sm">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>Precio</label>
-                <input type = "text" id = "PrecioFacturacion" name = "PrecioFacturacion" style = "color: #ff0000 !important;" class = "form-control form-control-sm font-weight-bold numbersOnly">
+                <input type="text" id="PrecioFacturacion" name="PrecioFacturacion" style="color: #ff0000 !important;" class="form-control form-control-sm font-weight-bold numbersOnly">
             </div>
-            <div class = "col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" style = "padding-left: 5px; padding-right: 5px;">
+            <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="padding-left: 5px; padding-right: 5px;">
                 <label>Subtotal</label>
-                <input type = "text" id = "SubtotalFacturacion" name = "SubtotalFacturacion" readonly = "" class = "form-control form-control-sm">
-                <input type = "text" id = "SubtotalFacturacionIVA" name = "SubtotalFacturacionIVA" readonly = "" class = "d-none form-control form-control-sm">
+                <input type="text" id="SubtotalFacturacion" name="SubtotalFacturacion" readonly="" class="form-control form-control-sm">
+                <input type="text" id="SubtotalFacturacionIVA" name="SubtotalFacturacionIVA" readonly="" class="d-none form-control form-control-sm">
             </div>
             <div class = "w-100"></div>
             <div class = "col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-2">
@@ -408,145 +408,210 @@
                     -
                 </span>
             </div>
-
-            <div class = "w-100 my-2"></div>
+            <div class="w-100 my-2">
+            </div>
 
             <!--DETALLE DE LA FACTURA-->
-            <div class = "col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" align = "center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" align="center">
                 <hr>
             </div>
 
-            <div class = "col-12 col-lg-12 col-xl-12">
-                <div class = "row">
-                    <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"></div>
-                    <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none" align = "center">
-                        <h5 class = "font-weight-bold text-danger font-italic">
+            <div class="col-12 col-lg-12 col-xl-12">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none" align="center">
+                        <h5 class="font-weight-bold text-danger font-italic">
                             DETALLE DE LA FACTURA
                         </h5>
                     </div>
-                    <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none" align = "right">
-                        <h4 class = "font-weight-bold text-danger font-italic totalfacturadohead">$ 0.0</h4>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none" align="right">
+                        <h4 class="font-weight-bold text-danger font-italic totalfacturadohead">$ 0.0</h4>
                     </div>
                 </div>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <table id = "tblParesFacturados" class = "table table-hover table-sm" style = "width: 100% !important;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="tblParesFacturados" class="table table-hover table-sm" style="width: 100% !important;">
                     <thead>
                         <tr>
-                            <th scope = "col">ID</th><!--0 -->
-                            <th scope = "col">Factura</th><!--1 -->
-                            <th scope = "col">Cliente</th><!--2 -->
-                            <th scope = "col">Control</th><!--3 -->
-                            <th scope = "col">Fecha</th><!--4 -->
-                            <th scope = "col">Pares</th><!--5 -->
-                            <th scope = "col">T1</th><!--6 --><!--1 -->
-                            <th scope = "col">T2</th><!--7 --><!--2 -->
-                            <th scope = "col">T3</th><!--8 --><!--3 -->
-                            <th scope = "col">T4</th><!--9 --><!--4 -->
-                            <th scope = "col">T5</th><!--10 --><!--5 -->
-                            <th scope = "col">T6</th><!--11 --><!--6 -->
-                            <th scope = "col">T7</th><!--12 --><!--7 -->
-                            <th scope = "col">T8</th><!--13 --><!--8 -->
-                            <th scope = "col">T9</th><!--14 --><!--9 -->
-                            <th scope = "col">T10</th><!--15 --><!--10 -->
-                            <th scope = "col">T11</th><!--16 --><!--11 -->
-                            <th scope = "col">T12</th><!--17 --><!--12 -->
-                            <th scope = "col">T13</th><!--18 --><!--13 -->
-                            <th scope = "col">T14</th><!--19 --><!--14 -->
-                            <th scope = "col">T15</th><!--20 --><!--15 -->
-                            <th scope = "col">T16</th><!--21 --><!--16 -->
-                            <th scope = "col">T17</th><!--22 --><!--17 -->
-                            <th scope = "col">T18</th><!--23 --><!--18 -->
-                            <th scope = "col">T19</th><!--23 --><!--19 -->
-                            <th scope = "col">T20</th><!--25 --><!--20 -->
-                            <th scope = "col">T21</th><!--26 --><!--21 -->
-                            <th scope = "col">T22</th><!--27 --><!--22 -->
+                            <th scope="col">ID</th>
+                            <!--0 -->
+                            <th scope="col">Factura</th>
+                            <!--1 -->
+                            <th scope="col">Cliente</th>
+                            <!--2 -->
+                            <th scope="col">Control</th>
+                            <!--3 -->
+                            <th scope="col">Fecha</th>
+                            <!--4 -->
+                            <th scope="col">Pares</th>
+                            <!--5 -->
+                            <th scope="col">T1</th>
+                            <!--6 -->
+                            <!--1 -->
+                            <th scope="col">T2</th>
+                            <!--7 -->
+                            <!--2 -->
+                            <th scope="col">T3</th>
+                            <!--8 -->
+                            <!--3 -->
+                            <th scope="col">T4</th>
+                            <!--9 -->
+                            <!--4 -->
+                            <th scope="col">T5</th>
+                            <!--10 -->
+                            <!--5 -->
+                            <th scope="col">T6</th>
+                            <!--11 -->
+                            <!--6 -->
+                            <th scope="col">T7</th>
+                            <!--12 -->
+                            <!--7 -->
+                            <th scope="col">T8</th>
+                            <!--13 -->
+                            <!--8 -->
+                            <th scope="col">T9</th>
+                            <!--14 -->
+                            <!--9 -->
+                            <th scope="col">T10</th>
+                            <!--15 -->
+                            <!--10 -->
+                            <th scope="col">T11</th>
+                            <!--16 -->
+                            <!--11 -->
+                            <th scope="col">T12</th>
+                            <!--17 -->
+                            <!--12 -->
+                            <th scope="col">T13</th>
+                            <!--18 -->
+                            <!--13 -->
+                            <th scope="col">T14</th>
+                            <!--19 -->
+                            <!--14 -->
+                            <th scope="col">T15</th>
+                            <!--20 -->
+                            <!--15 -->
+                            <th scope="col">T16</th>
+                            <!--21 -->
+                            <!--16 -->
+                            <th scope="col">T17</th>
+                            <!--22 -->
+                            <!--17 -->
+                            <th scope="col">T18</th>
+                            <!--23 -->
+                            <!--18 -->
+                            <th scope="col">T19</th>
+                            <!--23 -->
+                            <!--19 -->
+                            <th scope="col">T20</th>
+                            <!--25 -->
+                            <!--20 -->
+                            <th scope="col">T21</th>
+                            <!--26 -->
+                            <!--21 -->
+                            <th scope="col">T22</th>
+                            <!--27 -->
+                            <!--22 -->
 
-                            <th scope = "col">Precio</th><!--28 -->
+                            <th scope="col">Precio</th>
+                            <!--28 -->
                             <!--OUT-->
-                            <th scope = "col">PrecioT</th><!--29 -->
-                            <th scope = "col">SubTotal</th><!--30 -->
-                            <th scope = "col">SubTotalT</th><!--31 -->
-                            <th scope = "col">-</th><!--32 -->
-                            <th scope = "col">CAJAS</th><!--34 -->
-                            <th scope = "col">OBSER</th><!--35 -->
-                            <th scope = "col">DESCUENTO</th><!--36 -->
-                            <th scope = "col">PRS-FAC</th><!--37 -->
-                            <th scope = "col">FOLIO</th><!--38 -->
-                            <th scope = "col">MONDA</th><!--39 -->
-                            <th scope = "col">PAG</th><!--40 -->
-                            <th scope = "col">STS-CTRL</th><!--41 -->
-                            <th scope = "col">NO-IVA</th><!--42 -->
+                            <th scope="col">PrecioT</th>
+                            <!--29 -->
+                            <th scope="col">SubTotal</th>
+                            <!--30 -->
+                            <th scope="col">SubTotalT</th>
+                            <!--31 -->
+                            <th scope="col">-</th>
+                            <!--32 -->
+                            <th scope="col">CAJAS</th>
+                            <!--34 -->
+                            <th scope="col">OBSER</th>
+                            <!--35 -->
+                            <th scope="col">DESCUENTO</th>
+                            <!--36 -->
+                            <th scope="col">PRS-FAC</th>
+                            <!--37 -->
+                            <th scope="col">FOLIO</th>
+                            <!--38 -->
+                            <th scope="col">MONDA</th>
+                            <!--39 -->
+                            <th scope="col">PAG</th>
+                            <!--40 -->
+                            <th scope="col">STS-CTRL</th>
+                            <!--41 -->
+                            <th scope="col">NO-IVA</th>
+                            <!--42 -->
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align = "right">
-                <h3 class = "font-weight-bold text-danger font-italic">SUBTOTAL</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
+                <h3 class="font-weight-bold text-danger font-italic">SUBTOTAL</h3>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align = "right">
-                <h3 class = "font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
+                <h3 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h3>
             </div>
-            <div class = "w-100"></div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align = "right">
-                <h3 class = "font-weight-bold text-danger font-italic">I.V.A</h3>
+            <div class="w-100"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
+                <h3 class="font-weight-bold text-danger font-italic">I.V.A</h3>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align = "right">
-                <h3 class = "font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
+                <h3 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h3>
             </div>
-            <div class = "w-100"></div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align = "left">
-                <h3 class = "font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
+            <div class="w-100"></div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
+                <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align = "left">
-                <h3 class = "font-weight-bold text-danger font-italic totalfacturadoenletrapieDLLS">-</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
+                <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapieDLLS">-</h3>
             </div>
-            <div class = "col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align = "right">
-                <h3 class = "font-weight-bold text-danger font-italic totalfacturadopie">$ 0.0</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
+                <h3 class="font-weight-bold text-danger font-italic totalfacturadopie">$ 0.0</h3>
             </div>
-        </div><!--END CARD BLOCK-->
+        </div>
+        <!--END CARD BLOCK-->
     </div>
 </div>
 <!--CONTROLES X FACTURAR-->
-<div class = "modal" id = "mdlControlesXFacturar">
-    <div class = "modal-dialog modal-lg modal-dialog-centered notdraggable" role = "document">
-        <div class = "modal-content">
-            <div class = "modal-body">
-                <p class = "font-italic font-weight-bold">
+<div class="modal" id="mdlControlesXFacturar">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="font-italic font-weight-bold">
                     NOTA: Solo se muestran los registros con control y con estatus diferente a
-                    <span class = "font-weight-bold text-info">"FACTURADO"</span> y
-                    <span class = "font-weight-bold text-danger">"CANCELADO"</span>
+                    <span class="font-weight-bold text-info">"FACTURADO"</span> y
+                    <span class="font-weight-bold text-danger">"CANCELADO"</span>
                 </p>
-                <div class = "row">
-                    <div class = "col-4">
-                        <input type = "text" id = "bControl" name = "bControl" class = "form-control numbersOnly" maxlength = "12" placeholder = "Escriba aqui un control...">
+                <div class="row">
+                    <div class="col-4">
+                        <input type="text" id="bControl" name="bControl" class="form-control numbersOnly" maxlength="12" placeholder="Escriba aqui un control...">
                     </div>
-                    <div class = "col-4">
-                        <input type = "text" id = "bPedido" name = "bPedido" class = "form-control numbersOnly" maxlength = "20" placeholder = "Escriba aqui un # de pedido...">
+                    <div class="col-4">
+                        <input type="text" id="bPedido" name="bPedido" class="form-control numbersOnly" maxlength="20" placeholder="Escriba aqui un # de pedido...">
                     </div>
-                    <div class = "col-4">
-                        <input type = "text" id = "bEstilo" name = "bEstilo" class = "form-control" maxlength = "20" placeholder = "Escriba aqui un estilo...">
+                    <div class="col-4">
+                        <input type="text" id="bEstilo" name="bEstilo" class="form-control" maxlength="20" placeholder="Escriba aqui un estilo...">
                     </div>
-                    <div class = "col-12">
-                        <table id = "tblControlesXFacturar" class = "table table-hover table-sm nowrap" style = "width: 100% !important;">
+                    <div class="col-12">
+                        <table id="tblControlesXFacturar" class="table table-hover table-sm nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
-                                    <th scope = "col">ID</th>
-                                    <th scope = "col">CONTROL</th>
-                                    <th scope = "col">PEDIDO</th>
-                                    <th scope = "col">CLIENTE</th>
-                                    <th scope = "col">FECHA-PED</th>
-                                    <th scope = "col">FECHA-ENT</th>
-                                    <th scope = "col">ESTILO</th>
-                                    <th scope = "col">COLOR</th>
-                                    <th scope = "col">PARES</th>
-                                    <th scope = "col">FAC</th>
-                                    <th scope = "col">MAQ</th>
-                                    <th scope = "col">SEM</th>
-                                    <th scope = "col">PRECIO</th>
-                                    <th scope = "col">PRECIOT</th>
-                                    <th scope = "col">COLORT</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">CONTROL</th>
+                                    <th scope="col">PEDIDO</th>
+                                    <th scope="col">CLIENTE</th>
+                                    <th scope="col">FECHA-PED</th>
+                                    <th scope="col">FECHA-ENT</th>
+                                    <th scope="col">ESTILO</th>
+                                    <th scope="col">COLOR</th>
+                                    <th scope="col">PARES</th>
+                                    <th scope="col">FAC</th>
+                                    <th scope="col">MAQ</th>
+                                    <th scope="col">SEM</th>
+                                    <th scope="col">PRECIO</th>
+                                    <th scope="col">PRECIOT</th>
+                                    <th scope="col">COLORT</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -554,8 +619,8 @@
                     </div>
                 </div>
             </div>
-            <div class = "modal-footer">
-                <button type = "button" class = "btn btn-danger" data-dismiss = "modal" aria-label = "Close">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                     CERRAR
                 </button>
             </div>
@@ -563,24 +628,24 @@
     </div>
 </div>
 
-<div class = "modal " id = "mdlConsignarA">
-    <div class = "modal-dialog modal-dialog-centered notdraggable" role = "document">
-        <div class = "modal-content blinkb">
-            <div class = "modal-header">
-                <h5 class = "modal-title"><span class = "fa fa-store-alt"></span> Consignar a</h5>
-                <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
-                    <span aria-hidden = "true">&times;
+<div class="modal " id="mdlConsignarA">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content blinkb">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class = "fa fa-store-alt"></span> Consignar a</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;
                     </span>
                 </button>
             </div>
-            <div class = "modal-body">
-                <div class = "row">
-                    <div class = "col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Tienda</label>
-                        <input type = "text" id = "TiendaClave" name = "TiendaClave" autofocus = "" class = "form-control form-control-sm" placeholder = "CLAVE">
+                        <input type="text" id="TiendaClave" name="TiendaClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
                     </div>
-                    <div class = "col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                        <select id = "Tienda" name = "Tienda" class = "form-control form-control-sm mt-4 selectNotEnter">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                        <select id="Tienda" name="Tienda" class="form-control form-control-sm mt-4 selectNotEnter">
                             <option></option>
                             <?php
                             foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
@@ -588,18 +653,17 @@
                                 print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
                             }
                             ?>
-                        </select> 
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info"  id="btnCerrarTiendaModal">
+                <button type="button" class="btn btn-info" id="btnCerrarTiendaModal">
                     <span class="fa fa-save"></span> Aceptar</button>
             </div>
         </div>
     </div>
 </div>
-
 
 <div id="mdlHistorialFacturas" class="modal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -955,6 +1019,10 @@
         });
         btnCierraDocto.click(function () {
             onBeep(1);
+            pnlTablero.find("input,textarea").attr('disabled', false);
+            $.each(pnlTablero.find("select:disabled"), function (k, v) {
+                $(v)[0].selectize.enable();
+            });
             if (ClienteFactura.val()) {
                 onOpenOverlay('Cerrando...');
                 var p = {
@@ -1321,7 +1389,7 @@
                 onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
                     ClienteClave.focus().select();
                 });
-                return; 
+                return;
             }
         });
         Tienda.change(function () {

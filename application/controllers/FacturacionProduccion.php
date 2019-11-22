@@ -154,6 +154,8 @@ class FacturacionProduccion extends CI_Controller {
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
+                
+//            exit(0);
             $HORA = Date('d/m/Y')/* HORA ES UNA FECHA, NO ES UNA HORA NADA QUE VER EL NOMBRE */;
             $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
 
@@ -177,7 +179,11 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('tp', $x['TP_DOCTO'])
                     ->where('staped', 1)->update('facturacion');
 
-            $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'];
+            $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            
+            $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
+            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
 
             /* MONEDAS 
              * 1 = PESOS
@@ -187,10 +193,10 @@ class FacturacionProduccion extends CI_Controller {
                 case 1:
                     switch (intval($x['TP_DOCTO'])) {
                         case 1:
-                            $TOTAL *= 0.16;
+                            $TOTAL = $IMPORTE_TOTAL_CON_IVA;
                             break;
                         case 2:
-                            $TOTAL = $x['IMPORTE_TOTAL_CON_IVA'];
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
                             break;
                     }
                     break;
@@ -201,14 +207,10 @@ class FacturacionProduccion extends CI_Controller {
                             $TOTAL *= 0.16;
                             break;
                         case 2:
-                            $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA * $x['TIPO_DE_CAMBIO'];
                             break;
                     }
                     break;
-            }
-
-            if (intval($x['MONEDA']) === 2) {
-                $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
             }
 
             $fecha = $x['FECHA'];
@@ -219,6 +221,9 @@ class FacturacionProduccion extends CI_Controller {
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
             $hora = Date('h:i:s');
+            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL ***\n";
+            var_dump($TOTAL);
+            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL***\n";
             $this->db->insert('cartcliente', array(
                 'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
                 'fecha' => "{$anio}-{$mes}-{$dia} $hora", 'importe' => $TOTAL,
@@ -228,6 +233,8 @@ class FacturacionProduccion extends CI_Controller {
                 'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
+                $l = new Logs("Cerrando factura", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $". number_format($TOTAL, 4, ".", ",")." CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}", $this->session);
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
