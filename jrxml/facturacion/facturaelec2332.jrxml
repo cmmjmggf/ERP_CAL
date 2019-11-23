@@ -27,7 +27,7 @@ WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
 END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN cfdifa AS CFDI ON CFDI.Factura = F.factura
-WHERE F.factura LIKE CONCAT('',$P{factura},'')]]>
+WHERE F.factura = $P{factura} ]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

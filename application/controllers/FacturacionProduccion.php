@@ -154,7 +154,7 @@ class FacturacionProduccion extends CI_Controller {
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
-                
+
 //            exit(0);
             $HORA = Date('d/m/Y')/* HORA ES UNA FECHA, NO ES UNA HORA NADA QUE VER EL NOMBRE */;
             $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
@@ -180,7 +180,7 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('staped', 1)->update('facturacion');
 
             $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
-            
+
             $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
@@ -233,8 +233,16 @@ class FacturacionProduccion extends CI_Controller {
                 'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
-                $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $". number_format($TOTAL, 4, ".", ",").", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
-
+            $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
+            
+            if (intval($x['TP_DOCTO']) === 1) {
+                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
+                exec('schtasks /run /tn "Timbrar"  ');
+                exec('schtasks /delete /tn "Timbrar" /F ');
+                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
+            
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
