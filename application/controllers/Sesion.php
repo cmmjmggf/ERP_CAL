@@ -159,7 +159,24 @@ class Sesion extends CI_Controller {
     public function onIngreso() {
         try {
             $x = $this->input;
-            $data = $this->um->getAcceso($x->post('USUARIO'), $x->post('CONTRASENA'));
+            $xxx = $this->input->post();
+//            $data = $this->um->getAcceso($x->post('USUARIO'), $x->post('CONTRASENA'));
+            $data = $this->db->query('SELECT U.*,'
+                            . 'E.Representante AS EMPRESA_REPRESENTANTE, '
+                            . 'E.RazonSocial AS EMPRESA_RAZON,'
+                            . 'E.Direccion AS EMPRESA_DIRECCION, '
+                            . 'E.Colonia AS EMPRESA_COLONIA, '
+                            . 'E.RFC AS EMPRESA_RFC, '
+                            . 'E.Telefono AS EMPRESA_TELEFONO, '
+                            . 'E.NoExt AS EMPRESA_NOEXT, '
+                            . 'E.CP AS EMPRESA_CP, '
+                            . 'E.Foto AS LOGO,'
+                            . 'ES.Descripcion AS EMPRESA_ESTADO,'
+                            . 'E.Ciudad AS EMPRESA_CIUDAD,'
+                            . 'U.MH AS TIPOMH FROM usuarios AS U '
+                            . 'INNER JOIN empresas AS E ON U.Empresa = E.ID '
+                            . 'INNER JOIN estados AS ES ON E.Estado = ES.Clave '
+                            . 'WHERE U.Usuario = \'' . $xxx['USUARIO'] . '\' AND \'' . $xxx['CONTRASENA'] . '\' = AES_DECRYPT(U.AES, \'System32\') AND U.Estatus = \'ACTIVO\'')->result();
             if (count($data) > 0) {
                 $dt = $data[0];
                 $newdata = array(
@@ -182,6 +199,7 @@ class Sesion extends CI_Controller {
                     'EMPRESA_CP' => $dt->EMPRESA_CP,
                     'EMPRESA_REPRESENTANTE' => $dt->EMPRESA_REPRESENTANTE,
                     'LOGO' => $dt->LOGO,
+                    'TIPOMH' => $dt->TIPOMH,
                     'SEG' => $dt->Seguridad
                 );
                 $this->session->mark_as_temp('LOGGED', 28800);

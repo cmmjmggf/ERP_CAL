@@ -36,7 +36,8 @@ class Usuario_model extends CI_Model {
                     . 'E.CP AS EMPRESA_CP, '
                     . 'E.Foto AS LOGO,'
                     . 'ES.Descripcion AS EMPRESA_ESTADO,'
-                    . 'E.Ciudad AS EMPRESA_CIUDAD', false);
+                    . 'E.Ciudad AS EMPRESA_CIUDAD,'
+                    . 'E.MH AS TIPOMH', false);
             $this->db->from('usuarios AS U')
                     ->join('empresas AS E', 'U.Empresa = E.ID')
                     ->join('estados AS ES', 'E.Estado = ES.Clave')

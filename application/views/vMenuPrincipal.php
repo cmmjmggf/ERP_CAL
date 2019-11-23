@@ -10,10 +10,11 @@
         <ul class="navbar-nav w-100"> 
             <li class="nav-item dropdown ml-auto">
                 <a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="<?php print "https://bootdey.com/img/Content/avatar/avatar" . rand(1, 8) . ".png"; ?>" class="rounded-circle" width="24">
+                    <img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg") ; ?>" class="rounded-circle" width="24">
                     <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg") ; ?>" width="50%" class="rounded-circle"></a>
                     <a class="dropdown-item" href="#"><i class="fa fa-question-circle"></i> Reportar un problema</a>
                     <a class="dropdown-item" href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>
                     <div class="dropdown-divider"></div>
