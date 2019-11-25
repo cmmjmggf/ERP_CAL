@@ -98,17 +98,7 @@ class Usuario_model extends CI_Model {
             echo $exc->getTraceAsString();
         }
     }
-
-    public function onModificarUltimoAcceso($ID, $ULTIMOACCESO) {
-        try {
-            $this->db->set('UltimoAcceso', $ULTIMOACCESO);
-            $this->db->where('ID', $ID);
-            $this->db->update("usuarios");
-//            print $str = $this->db->last_query();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
+ 
 
     public function onEliminar($ID) {
         try {

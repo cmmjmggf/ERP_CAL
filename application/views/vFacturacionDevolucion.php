@@ -5,10 +5,10 @@
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
-                <div class="btn-group" role="group" aria-label="BOTON CON CATALOGOS">
-                    <button type="button" class="btn btn-info button-dropdown">CATÁLOGOS</button>
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                <div class="btn-group selectNotEnter" role="group" aria-label="BOTON CON CATALOGOS">
+                    <button type="button" class="btn btn-info button-dropdown selectNotEnter">CATÁLOGOS</button>
+                    <div class="btn-group selectNotEnter" role="group">
+                        <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle selectNotEnter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop3">
                             <a class="dropdown-item" href="#" onclick="btnClientes.trigger('click');"><span class="fa fa-users"></span> CLIENTES</a>
                             <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
@@ -22,10 +22,10 @@
                 <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
                     <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info" >
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
-                <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
+                <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info selectNotEnter" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
             </div>
@@ -55,13 +55,13 @@
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
-                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary">
+                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary  selectNotEnter">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
-                <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-primary">
+                <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-primary  selectNotEnter">
                     <span class="fa fa-file-archive"></span>   R-ctr.doc
                 </button>
-                <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-primary">
+                <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-primary  selectNotEnter">
                     <span class="fa fa-file-archive"></span>   R-est.cte
                 </button>
             </div>
@@ -114,11 +114,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                 <label>TP</label>
-                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm" >
-                    <option></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
+                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm numbersOnly" maxlength="1">                    
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>FA-PE.ORCO</label>
@@ -134,7 +130,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
-                <input type="number" id="TMNDAFactura" name="TMNDAFactura" max="2" min="0" class="form-control form-control-sm">
+                <input type="text" id="TMNDAFactura" name="TMNDAFactura" maxlength="1" class="form-control form-control-sm numbersOnly">
             </div> 
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1">
                 <div class="form-group">  
@@ -182,7 +178,7 @@
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
                               id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
                               data-placement="top" title="ELIJE UN CONTROL">
-                            <i class="fa fa-chess-pawn"></i> SELECCIONA UN CONTROL
+                            <i class="fa fa-hand-pointer mr-2"></i>  SELECCIONA UN CONTROL
                         </span>
                     </span>
                 </div>
@@ -268,6 +264,7 @@
                             <tr id="rTallasBuscaManual">
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
+                                $style_input = "width: 40px; font-weight: bold !important;height: 22px;text-align: center;padding-left: 4px;padding-right: 4px;";
                                 for ($index = 1; $index < 23; $index++) {
 //                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
                                     print "<td align='center'><span class=\"T{$index}\">-</span></td>";
@@ -279,7 +276,7 @@
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px; font-weight: 300 !important; cursor: no-allowed !important;" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1);" onchange="onCalcularPares(this,1);" keyup="onCalcularPares(this,1);" onfocusout="onCalcularPares(this,1);"></td>';
+                                    print '<td><input type="text" style="' . $style_input . '" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1);" onchange="onCalcularPares(this,1);" keyup="onCalcularPares(this,1);" onfocusout="onCalcularPares(this,1);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
@@ -290,7 +287,7 @@
                                 <td class="font-weight-bold">Facturado</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;  cursor: no-allowed !important;" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2);" onchange="onCalcularPares(this,2);" keyup="onCalcularPares(this,2);" onfocusout="onCalcularPares(this,2);"></td>';
+                                    print '<td><input type="text" style="' . $style_input . '" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2);" onchange="onCalcularPares(this,2);" keyup="onCalcularPares(this,2);" onfocusout="onCalcularPares(this,2);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold">
@@ -302,7 +299,7 @@
                                 <td class="font-weight-bold">A Facturar</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important;" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onfocus="onCalcularPares(this,3);" onchange="onCalcularPares(this,3);" keyup="onCalcularPares(this,3);" onfocusout="onCalcularPares(this,3);"></td>';
+                                    print '<td><input type="text" style="' . $style_input . '" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onkeydown="onCalcularPares(this,3);"  keyup="onCalcularPares(this,3);" ></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
@@ -404,7 +401,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
-            <div class="col-12 col-lg-12 col-xl-12">
+            <div class="col-12 col-lg-12 col-xl-12 d-none">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="center">
@@ -640,17 +637,33 @@
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
 
     $(document).ready(function () {
-                handleEnterDiv(mdlConsignarA);
+        handleEnterDiv(mdlConsignarA);
+
 
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                ClienteFactura[0].selectize.setValue(ClienteClave.val());
+                if (ClienteClave.val()) {
+                    ClienteFactura[0].selectize.setValue(ClienteClave.val());
+                    if (ClienteFactura.val()) {
+                        ClienteFactura[0].selectize.disable();
+                    } else {
+                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                            ClienteClave.focus().select();
+                        });
+                    }
+                } else {
+                    ClienteFactura[0].selectize.enable();
+                    ClienteFactura[0].selectize.clear(true);
+                }
+            } else {
+                ClienteFactura[0].selectize.enable();
+                ClienteFactura[0].selectize.clear(true);
             }
-        }); 
+        });
 
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                ConsignarATienda[0].selectize.setValue(TiendaClave.val()); 
+                ConsignarATienda[0].selectize.setValue(TiendaClave.val());
             }
         });
 
@@ -658,15 +671,13 @@
             if (e.keyCode === 13) {
                 mdlConsignarA.modal('hide');
                 btnVerTienda.removeClass("d-none");
-                TPFactura[0].selectize.focus();
-                TPFactura[0].selectize.open();
+                TPFactura.focus()
                 handleEnterDiv(pnlTablero);
             }
         }).click(function () {
             mdlConsignarA.modal('hide');
             btnVerTienda.removeClass("d-none");
-            TPFactura[0].selectize.focus();
-            TPFactura[0].selectize.open();
+            TPFactura.focus()
             handleEnterDiv(pnlTablero);
         });
 
@@ -677,6 +688,16 @@
                 TiendaClave.focus().select();
             }
         });
+
+        for (var i = 1; i < 21; i++) {
+            pnlTablero.find(`#CAF${i}`).keydown(function (e) {
+                var cantidad_facturada = pnlTablero.find(`#CF${i}`).val();
+                var cantidad_a_devolver = $(this).val();
+                console.log($(this).attr("id") + ":" + $(this).val(),
+                        pnlTablero.find(`#CF${i}`).attr('id') + ":" + pnlTablero.find(`#CF${i}`).val());
+                        
+            });
+        }
 
         pnlTablero.find("#CAF22").on('keydown', function (e) {
             console.log(e, e.keyCode);
@@ -711,7 +732,7 @@
             FechaFactura.val(Hoy);
             FAPEORCOFactura.val('');
             ClienteFactura[0].selectize.clear(true);
-            TPFactura[0].selectize.clear(true);
+            TPFactura.val('');
             LPFactura.val('');
             btnNuevo.attr('disabled', true);
             btnNuevo.addClass("d-none");
@@ -811,7 +832,7 @@
                     });
                 }
             } else {
-                iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', 'w', function () {
+                iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A DEVOLVER', 'w', function () {
                     pnlTablero.find("#CAF1").focus().select();
                 });
             }
@@ -835,7 +856,7 @@
                     iMsg('SE HA CERRADO EL DOCTO', 's', function () {
                         btnCierraDocto.attr('disabled', true);
                         ClienteFactura[0].selectize.enable();
-                        TPFactura[0].selectize.enable();
+                        TPFactura.attr('disabled', false);
                         FechaFactura.attr('readonly', false);
                         FAPEORCOFactura.attr('readonly', false);
                         FCAFactura.attr('readonly', false);
@@ -917,7 +938,7 @@
                                         btnElijeControl.attr('disabled', true);
                                         if (facturado) {
                                             ClienteFactura[0].selectize.disable();
-                                            TPFactura[0].selectize.disable();
+                                            TPFactura.attr('disabled', true);
                                             btnElijeControl.addClass("d-none");
                                             btnAcepta.addClass("d-none");
                                         }
@@ -1136,14 +1157,22 @@
         });
 
         Control.on('keydown', function (e) {
-            if (ClienteFactura.val()) {
-                if (Control.val() && e.keyCode === 13) {
-                    onOpenOverlay('Buscando...');
-                    getInfoXControl();
+            if (TPFactura.val()) {
+                if (ClienteFactura.val()) {
+                    if (Control.val() && e.keyCode === 13) {
+                        onOpenOverlay('Buscando...');
+                        getInfoXControl();
+                    }
+                } else {
+                    swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                        ClienteClave.focus().select();
+                    });
+                    $(".swal-button--confirm").focus();
                 }
             } else {
-                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-                    ClienteClave.focus().select();
+                $(".swal-button--confirm").focus();
+                swal('ATENCION', 'DEBE DE ESPECIFICAR UN TIPO DE DOCUMENTO 1 O 2', 'warning').then((value) => {
+                    TPFactura.focus().select();
                 });
                 $(".swal-button--confirm").focus();
             }
@@ -1159,12 +1188,29 @@
                 onoffhandle = true;
             }
         });
+        TPFactura.keydown(function (e) {
+            if (ClienteClave.val()) {
+                if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+
+                } else if (e.keyCode === 13) {
+                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+                return;
+            }
+        });
 
         Tienda.change(function () {
             if (Tienda.val()) {
                 $("#ConsignarATienda").addClass("d-none");
-                TPFactura[0].selectize.focus();
-                TPFactura[0].selectize.open();
+                TPFactura.focus()
             } else {
                 Tienda[0].selectize.focus();
             }
@@ -1178,6 +1224,10 @@
 
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
+
+                ClienteClave.val(ClienteFactura.val());
+
+
                 if (parseInt(ClienteFactura.val()) === 2121) {
                     onVerTienda();
                 } else {
@@ -1193,6 +1243,7 @@
                         DescuentoFacturacion.val((parseFloat(xxx[0].DESCUENTO) > 1) ? xxx[0].DESCUENTO : (100 * parseFloat(xxx[0].DESCUENTO)));
                         ZonaFacturacion.val(xxx[0].ZONA);
                         AgenteCliente.val(xxx[0].AGENTE);
+                        ClienteFactura[0].selectize.disable();
                     }
                 }).fail(function (x) {
                     getError(x);
@@ -1205,7 +1256,7 @@
         });
 
         ParesFacturados = tblParesFacturados.DataTable({
-            dom: 'rit',
+            dom: 'rt',
             "columnDefs": [{
                     "targets": [0],
                     "visible": false,
@@ -1264,7 +1315,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 450,
+            "scrollY": 250,
             "scrollX": true
         });
     });
@@ -1333,7 +1384,11 @@
         $.post('<?php print base_url('FacturacionDevolucion/getDevolucionesXControl'); ?>', {CONTROL: Control.val()}).done(function (a) {
             var prs = JSON.parse(a);
             console.log("PARES", prs);
-            pnlTablero.find(".devueltos").text(prs[0].PARES_DEVUELTOS);
+            if (prs.length > 0) {
+                pnlTablero.find(".devueltos").text(prs[0].PARES_DEVUELTOS);
+            } else {
+                pnlTablero.find(".devueltos").text(0);
+            }
         }).fail(function (x) {
             getError(x);
         }).always(function () {
@@ -1355,6 +1410,7 @@
     var control_pertenece_a_cliente = false;
     function getFacturacionDiff() {
         if (Control.val()) {
+            ClienteFactura[0].selectize.enable();
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
             $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarControlXCliente'); ?>', {
@@ -1423,7 +1479,7 @@
                                         ColorFacturacion.val(xx.COLORT);
                                         PrecioFacturacion.val(xx.PRECIO);
                                         CajasFacturacion.val(1);
-                                        CajasFacturacion.focus().select();
+//                                        CajasFacturacion.focus().select();
                                         var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
                                         var stt = parseFloat(xx.Precio) * prs;
                                         SubtotalFacturacion.val(stt);
@@ -1441,10 +1497,12 @@
                                         btnControlInCompleto.attr('disabled', true);
                                         btnControlCompleto.attr('disabled', true);
                                     }
+                                    pnlTablero.find("#CAF1").focus().select();
                                 }).fail(function (x) {
                                     getError(x);
                                 }).always(function () {
                                     onCloseOverlay();
+                                    pnlTablero.find("#CAF1").focus().select();
                                 });
                             } else {
                                 onResetCampos();
@@ -1544,6 +1602,7 @@
     }
     function onAceptarControl() {
 
+        ClienteFactura[0].selectize.enable();
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
@@ -1582,7 +1641,7 @@
         PAGFactura.attr('readonly', true);
         TMNDAFactura.attr('readonly', true);
         ClienteFactura[0].selectize.disable();
-        TPFactura[0].selectize.disable();
+        TPFactura.attr('disabled', true);
         /*REGISTRAR EN FACTURACION*/
         var p = {
             FECHA: FechaFactura.val(),
@@ -1678,7 +1737,7 @@
         if (tf) {
             FechaFactura.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
-            TPFactura[0].selectize.disable();
+            TPFactura.attr('disabled', true);
             FAPEORCOFactura.attr('disabled', true);
             FCAFactura.attr('disabled', true);
             PAGFactura.attr('disabled', true);
@@ -1694,7 +1753,7 @@
         } else {
             FechaFactura.attr('disabled', false);
             ClienteFactura[0].selectize.enable();
-            TPFactura[0].selectize.enable();
+            TPFactura.attr('disabled', false);
             FAPEORCOFactura.attr('disabled', false);
             FCAFactura.attr('disabled', false);
             PAGFactura.attr('disabled', false);
@@ -1714,6 +1773,7 @@
         onOpenWindow('<?php print base_url('ListasPrecioMaquilas/?origen=CLIENTES'); ?>');
     }
     function getReferencia() {
+        ClienteFactura[0].selectize.enable();
         var txtreferen11 = "000000000000398827";
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(FAPEORCOFactura.val(), 4);
 

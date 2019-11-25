@@ -115,7 +115,7 @@ class FacturacionDevolucion extends CI_Controller {
                                 P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
                                 FROM erp_cal.pedidox AS P 
                                 WHERE P.Control NOT IN(0,1) 
-                                AND P.stsavan NOT IN(13,14) 
+                                AND P.stsavan NOT IN(14) 
                                 AND P.Cliente = '{$this->input->get('CLIENTE')}' 
                                 ORDER BY P.FechaRecepcion DESC")->result());
         } catch (Exception $exc) {

@@ -1372,14 +1372,7 @@
                 if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
                 } else if (e.keyCode === 13) {
-                    TPFactura.focus().select();
-//                pnlTablero.find("input:enabled,textarea:enabled").addClass('campo_no_valido');
-//                pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").attr('disabled', true);
-//                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
-//                    pnlTablero.find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").attr('disabled', false);
-//                    pnlTablero.find("input.campo_no_valido,textarea.campo_no_valido").removeClass('campo_no_valido');
-//                    TPFactura.focus().select();
-//                });
+                    TPFactura.focus().select(); 
                     onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                         TPFactura.focus().select();
                     });
@@ -2245,6 +2238,15 @@
     .card{ 
         border: 2px solid #000;
         border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
+    } 
+    table tbody tr {
+        -webkit-touch-callout: none !important; /* iOS Safari */
+        -webkit-user-select: none !important; /* Safari */
+        -khtml-user-select: none !important; /* Konqueror HTML */
+        -moz-user-select: none !important; /* Old versions of Firefox */
+        -ms-user-select: none !important; /* Internet Explorer/Edge */
+        user-select: none !important; /* Non-prefixed version, currently
+                              supported by Chrome, Opera and Firefox */
     }
     #tblParesFacturados tbody td{
         font-weight: bold !important;
@@ -2270,7 +2272,6 @@
         box-shadow: 0 0px 12px  #03A9F4;
     }
 
-    .example-open .modal-backdrop {background-color:red;}
     /* Safari 4.0 - 8.0 */
     @-webkit-keyframes myfirst { 
         25%  { 

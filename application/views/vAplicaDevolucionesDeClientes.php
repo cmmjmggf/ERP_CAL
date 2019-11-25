@@ -147,7 +147,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row">
                             <div class="col-4">
-                                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info btn-block" disabled="">
+                                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-success btn-block" disabled="">
                                     <span class="fa fa-check"></span> Acepta
                                 </button>
                             </div>
@@ -157,23 +157,23 @@
                                 </button>
                             </div>
                             <div class="col-4">
-                                <button type="button" id="btnPagos" name="btnPagos" class="btn btn-info btn-block">
+                                <button type="button" id="btnPagos" name="btnPagos" class="btn btn-info btn-block selectNotEnter">
                                     <span class="fa fa-coins"></span> Pagos
                                 </button>
                             </div>
                             <div class="w-100 my-1"></div>
                             <div class="col-4">
-                                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info btn-block">
+                                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-info btn-block selectNotEnter">
                                     <span class="fa fa-exchange-alt"></span> Movimientos
                                 </button>
                             </div>
                             <div class="col-4">
-                                <button type="button" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc" class="btn btn-info btn-block">
+                                <button type="button" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc" class="btn btn-info btn-block selectNotEnter">
                                     <span class="fa fa-search"></span> Rastreo ctr/doc
                                 </button> 
                             </div>
                             <div class="col-4">
-                                <button type="button" id="btnRastreoEstCte" name="btnRastreoEstCte" class="btn btn-info btn-block">
+                                <button type="button" id="btnRastreoEstCte" name="btnRastreoEstCte" class="btn btn-info btn-block selectNotEnter">
                                     <span class="fa fa-search"></span> Rastreo est/cte
                                 </button> 
                             </div>
@@ -401,6 +401,24 @@
 
         TP.change(function () {
             tblDocDeEsteCteConSaldo.parent().addClass("blinkb");
+        });
+        TP.keydown(function (e) {
+            if (xClienteDevolucion.val()) {
+                if (e.keyCode === 13 && parseInt(TP.val()) >= 1 && parseInt(TP.val()) <= 2) {
+
+                } else if (e.keyCode === 13) {
+                    TP.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TP.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    xClienteDevolucion.focus().select();
+                });
+                return;
+            }
         });
 
         AplicaDevolucion.on('keydown', function (e) {
@@ -762,5 +780,15 @@
         100% {
             border-color:  #007bff; 
         }
+    }
+    .btn-success {
+        color: #fff;
+        background-color: #7CB342;
+        border-color: #7CB342;
+    }
+    .btn-success.disabled, .btn-success:disabled {
+        color: #fff;
+        background-color: #59802F;
+        border-color: #59802F;
     }
 </style>
