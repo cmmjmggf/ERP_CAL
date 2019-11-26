@@ -821,6 +821,7 @@
                 ControlesXFacturar.ajax.reload();
             }
         });
+        
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 ClienteClave.val(ClienteFactura.val());
@@ -831,6 +832,7 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
+        
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
@@ -851,6 +853,7 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
+        
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ConsignarATienda[0].selectize.setValue(TiendaClave.val());

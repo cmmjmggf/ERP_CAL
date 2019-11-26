@@ -72,11 +72,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
                 <label>TP</label>
-                <select id="TPFactura" name="TPFactura" class="form-control form-control-sm" >
-                    <option></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
+                <input type="text" id="TPFactura" name="TPFactura" maxlength="1" class="form-control form-control-sm numbersOnly" >
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
                 <label>T-MNDA</label>
@@ -86,7 +82,8 @@
                 <label>DOCTO</label>
                 <input type="text" id="Documento" name="Documento" class="form-control form-control-sm">
             </div>
-            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            <div class="w-100"></div>
+            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-1 col-xl-1">
                 <label>Fecha</label>
                 <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
             </div> 
@@ -94,16 +91,23 @@
                 <label>Cantidad</label>
                 <input type="number" id="Cantidad" name="Cantidad" max="9999" min="0" class="form-control form-control-sm">
             </div>  
-            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3">
                 <label>Estilo</label>
-                <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
-                    <option></option>
-                    <?php
-                    foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
-                        print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
-                    }
-                    ?>
-                </select>
+                <div class="row">
+                    <div class="col-2" style="padding-right: 5px; padding-left: 5px;">
+                        <input type="text" id="xEstilo" name="xEstilo" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-10">
+                        <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
+                                print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
+                            }
+                            ?>
+                        </select> 
+                    </div>
+                </div>
                 <!--<input type="text" id="Estilo" name="Estilo" maxlength="40" minlength="0" class="form-control form-control-sm">-->
             </div> 
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-2 col-xl-2">
@@ -133,13 +137,15 @@
                 <label>Pedido</label> 
                 <input type="text" id="Pedido" name="Pedido" class="form-control form-control-sm">
             </div>
+
+
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3">
                 <label>Observaciones</label> 
                 <textarea id="Observaciones" name="Observaciones" class="form-control form-control-sm" col="2" rows="2">
                 </textarea>
             </div> 
 
-            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 mt-3">
                 <div class="form-group">
                     <!--CHECK 1-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
@@ -148,7 +154,7 @@
                     </div>
                 </div>      
             </div>
-            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 mt-3">
                 <div class="form-group">
                     <!--CHECK 3-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
@@ -157,7 +163,7 @@
                     </div>
                 </div>      
             </div>
-            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
+            <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 mt-3">
                 <div class="form-group">
                     <!--CHECK 4-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
@@ -305,6 +311,7 @@
             Documento = pnlTablero.find('#Documento'),
             FechaFactura = pnlTablero.find('#FechaFactura'),
             Cantidad = pnlTablero.find('#Cantidad'),
+            xEstilo = pnlTablero.find('#xEstilo'),
             Estilo = pnlTablero.find('#Estilo'),
             Concepto = pnlTablero.find('#Concepto'),
             Precio = pnlTablero.find('#Precio'),
@@ -349,7 +356,7 @@
                 onBeep(1);
                 ClienteClave.val(ClienteFactura.val());
                 ClienteFactura[0].selectize.disable();
-                TPFactura[0].selectize.focus();
+                TPFactura.focus();
             } else {
                 ClienteClave.val('');
                 ClienteFactura[0].selectize.enable();
@@ -447,26 +454,40 @@
 
         Estilo.change(function () {
             if (Estilo.val()) {
-                $.getJSON(
-                        '<?php print base_url('FacturacionVarios/onObtenerCodigoSatXEstilo') ?>',
-                        {ESTILO: Estilo.val()}).done(function (a) {
-                    console.log(a);
-                    if (a.length > 0) {
-                        pnlTablero.find("span.productoSAT").text(a[0].CPS);
-                        ProductoSAT.val(a[0].CPS);
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
+                ClienteClave.val(Estilo.val());
+                onObtenerCodigoSatXEstilo();
+            } else {
+                ClienteClave.val('');
+                Estilo[0].selectize.enable();
+                Estilo[0].selectize.clear(true);
+            }
+        });
 
-                });
+        xEstilo.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xEstilo.val()) {
+                    Estilo[0].selectize.setValue(xEstilo.val());
+                    if (Estilo.val()) {
+                        onObtenerCodigoSatXEstilo(); 
+                    } else {
+                        iMsg('NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', 'w', function () {
+                            xEstilo.focus().select();
+                        });
+                    }
+                } else {
+                    Estilo[0].selectize.enable();
+                    Estilo[0].selectize.clear(true);
+                }
+            } else {
+                Estilo[0].selectize.enable();
+                Estilo[0].selectize.clear(true);
             }
         });
 
         btnDeshacer.click(function () {
             console.log('ok deshacer');
             ClienteFactura[0].selectize.enable();
-            TPFactura[0].selectize.enable();
+            TPFactura.attr('disabled', false);
 
             TMNDAFactura.attr('disabled', false);
             TMNDAFactura.val('');
@@ -479,7 +500,7 @@
             btnDeshacer.addClass("d-none");
             btnDeshacer.attr('disabled', true);
             ClienteFactura[0].selectize.clear();
-            TPFactura[0].selectize.clear();
+            TPFactura.val('');
             pnlTablero.find("input,textarea").val('');
             FechaFactura.val(Hoy);
             pnlTablero.find("input[type='checkbox']")[0].checked = false;
@@ -623,7 +644,7 @@
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                             Documento.val(r);
                         }
-                        TMNDAFactura.val(0); //0 = pesos mexicanos, 1 = dolares americanos
+                        TMNDAFactura.val(1); //1 = pesos mexicanos, 2 = dolares americanos
                         TMNDAFactura.focus().select();
                     }).fail(function (xyz) {
                         getError(xyz);
@@ -938,8 +959,9 @@
         if (ClienteFactura.val() && TPFactura.val()
                 && TMNDAFactura.val() && Documento.val()
                 && FechaFactura.val()) {
+            xClienteFactura.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
-            TPFactura[0].selectize.disable();
+            TPFactura.attr('disabled', true);
             TMNDAFactura.attr('disabled', true);
             Documento.attr('disabled', true);
             FechaFactura.attr('disabled', true);
@@ -1148,6 +1170,22 @@
             swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
         }).always(function () {
             onCloseOverlay();
+        });
+    }
+
+    function onObtenerCodigoSatXEstilo() {
+        $.getJSON(
+                '<?php print base_url('FacturacionVarios/onObtenerCodigoSatXEstilo') ?>',
+                {ESTILO: Estilo.val()}).done(function (a) {
+            console.log(a);
+            if (a.length > 0) {
+                pnlTablero.find("span.productoSAT").text(a[0].CPS);
+                ProductoSAT.val(a[0].CPS);
+                Estilo[0].selectize.disable();
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
         });
     }
 </script>

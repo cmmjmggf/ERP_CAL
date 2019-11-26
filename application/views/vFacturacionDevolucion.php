@@ -695,7 +695,7 @@
                 var cantidad_a_devolver = $(this).val();
                 console.log($(this).attr("id") + ":" + $(this).val(),
                         pnlTablero.find(`#CF${i}`).attr('id') + ":" + pnlTablero.find(`#CF${i}`).val());
-                        
+
             });
         }
 
@@ -1210,7 +1210,7 @@
         Tienda.change(function () {
             if (Tienda.val()) {
                 $("#ConsignarATienda").addClass("d-none");
-                TPFactura.focus()
+                TPFactura.focus();
             } else {
                 Tienda[0].selectize.focus();
             }
