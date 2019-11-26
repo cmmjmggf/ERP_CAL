@@ -15,6 +15,15 @@ class ReportesProveedores extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onComprobarMaquilas() {
         try {
             print json_encode($this->ReportesProveedores_model->onComprobarMaquilas($this->input->get('Clave')));
@@ -491,7 +500,7 @@ class ReportesProveedores extends CI_Controller {
             $pdf->Aproveedor = $aProv;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 10);
+            $pdf->SetAutoPageBreak(true, 5);
 
             $TP_IMPORTE_G = 0;
             $TP_PAGOS_G = 0;
@@ -499,10 +508,10 @@ class ReportesProveedores extends CI_Controller {
             foreach ($Proveedores as $key => $G) {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(70, 5, utf8_decode(mb_strimwidth(utf8_decode($G->ProveedorF), 0, 60, "")), 'B'/* BORDE */, 0, 'L');
+                $pdf->Cell(70, 4, utf8_decode(mb_strimwidth(utf8_decode($G->ProveedorF), 0, 60, "")), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(75);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(10, 5, utf8_decode($G->Plazo), 'B'/* BORDE */, 1, 'C');
+                $pdf->Cell(10, 4, utf8_decode($G->Plazo), 'B'/* BORDE */, 1, 'C');
 
                 $TP_IMPORTE = 0;
                 $TP_PAGOS = 0;
@@ -530,7 +539,7 @@ class ReportesProveedores extends CI_Controller {
                 }
                 $pdf->SetX(95);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(70, 5, utf8_decode('TOTAL POR PROVEEDOR: '), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(70, 4, utf8_decode('TOTAL POR PROVEEDOR: '), 0/* BORDE */, 0, 'L');
 
                 $pdf->RowNoBorder(array(
                     '',
@@ -544,7 +553,7 @@ class ReportesProveedores extends CI_Controller {
             }
             $pdf->SetX(95);
             $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(70, 5, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
+            $pdf->Cell(70, 4, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
 
             $pdf->RowNoBorder(array(
                 '',
@@ -599,10 +608,10 @@ class ReportesProveedores extends CI_Controller {
             foreach ($Proveedores as $key => $G) {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(70, 5, utf8_decode(mb_strimwidth(utf8_decode($G->ProveedorF), 0, 60, "")), 'B'/* BORDE */, 0, 'L');
+                $pdf->Cell(70, 4, utf8_decode(mb_strimwidth(utf8_decode($G->ProveedorF), 0, 60, "")), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(75);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(10, 5, utf8_decode($G->Plazo), 'B'/* BORDE */, 0, 'C');
+                $pdf->Cell(10, 4, utf8_decode($G->Plazo), 'B'/* BORDE */, 0, 'C');
 
                 $TP_IMPORTE = 0;
                 $TP_PAGOS = 0;

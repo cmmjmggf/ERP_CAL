@@ -272,6 +272,11 @@
             }
         });
 
+        tblMovimientosClientes.find('tbody').on('click', 'tr', function () {
+            tblMovimientosClientes.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+        });
+
 
     });
     function getClientes() {
@@ -335,18 +340,18 @@
                 {"data": "tipo"},
                 {"data": "status"}
             ],
-            "columnDefs": [
-                {
-                    "targets": [3, 4, 5],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                }
-            ],
+//            "columnDefs": [
+//                {
+//                    "targets": [3, 4, 5],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                }
+//            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 200,
+            "displayLength": 500,
             "scrollX": true,
             "scrollY": 400,
             "bLengthChange": false,
@@ -356,31 +361,31 @@
             "aaSorting": [
                 [2, 'desc'], [1, 'asc']
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-
-                        case 0:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-strong');
-                            break;
-                        case 3:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-strong text-success');
-                            break;
-                        case 7:
-                            /*fecha conf*/
-                            c.addClass('badge badge-info text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//
+//                        case 0:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 3:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-strong text-success');
+//                            break;
+//                        case 7:
+//                            /*fecha conf*/
+//                            c.addClass('badge badge-info text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
                 // Update footer
@@ -416,10 +421,7 @@
                 HoldOn.close();
             }
         });
-        tblMovimientosClientes.find('tbody').on('click', 'tr', function () {
-            tblMovimientosClientes.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-        });
+
     }
 
     function getPagos(cliente, doc, tp) {
@@ -447,23 +449,23 @@
                 {"data": "doctopa"},
                 {"data": "dias"}
             ],
-            "columnDefs": [
-                {
-                    "targets": [0, 1],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [4],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                }
-            ],
+//            "columnDefs": [
+//                {
+//                    "targets": [0, 1],
+//                    "visible": false,
+//                    "searchable": true
+//                },
+//                {
+//                    "targets": [4],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                }
+//            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 200,
+            "displayLength": 500,
             "scrollX": true,
             "scrollY": 400,
             "bLengthChange": false,
@@ -473,31 +475,31 @@
             "aaSorting": [
                 [2, 'desc']
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-
-                        case 0:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-strong');
-                            break;
-                        case 2:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-success text-strong');
-                            break;
-                        case 5:
-                            /*fecha conf*/
-                            c.addClass('text-info text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//
+//                        case 0:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 2:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//                        case 5:
+//                            /*fecha conf*/
+//                            c.addClass('text-info text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             initComplete: function (a, b) {
                 HoldOn.close();
             }

@@ -936,9 +936,9 @@ class PDFEdoCtaProv extends FPDF {
         $this->SetY(22);
         $this->SetX(5);
 
-        $this->Cell(70, 4, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
+        $this->Cell(70, 3.5, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
         $this->SetX(75);
-        $this->Cell(15, 4, utf8_decode('Plazo'), 'B'/* BORDE */, 1, 'L');
+        $this->Cell(15, 3.5, utf8_decode('Plazo'), 'B'/* BORDE */, 1, 'L');
 
         $this->SetY(22);
         $this->SetX(90);
@@ -980,7 +980,7 @@ class PDFEdoCtaProv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -998,7 +998,7 @@ class PDFEdoCtaProv extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3.5, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1011,7 +1011,7 @@ class PDFEdoCtaProv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1029,7 +1029,7 @@ class PDFEdoCtaProv extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 0, $a);
+            $this->MultiCell($w, 3.5, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }

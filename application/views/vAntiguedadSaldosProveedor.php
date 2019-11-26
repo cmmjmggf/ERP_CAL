@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Antigüedad de Saldos</h5>
+                <h5 class="modal-title">Estado de Cuenta General</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,24 +11,42 @@
                 <form id="frmEdoCta">
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label>Tp <span class="badge badge-warning mb-2" style="font-size: 12px;">Para consultar todo deja en blanco</span></label>
-                            <input type="text" maxlength="1" class="form-control form-control-sm numbersOnly" id="Tp" name="Tp" >
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" maxlength="1" class="form-control form-control-sm numbersOnly" id="Tp" name="Tp" >
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-12 col-sm-12">
+                        <div class="col-12">
                             <label>Del Proveedor:</label>
-                            <select class="form-control form-control-sm required" id="Proveedor" name="Proveedor" >
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="dProveedorEdoCtaGen" name="Proveedor" maxlength="5" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sdProveedorEdoCtaGen" name="sdProveedorEdoCtaGen" class="form-control form-control-sm required NotSelectize" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12 col-sm-12">
+                        <div class="col-12">
                             <label>Al Proveedor:</label>
-                            <select class="form-control form-control-sm required" id="aProveedor" name="aProveedor" >
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="aProveedorEdoCtaGen" name="aProveedor" maxlength="5" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="saProveedorEdoCtaGen" name="saProveedorEdoCtaGen" class="form-control form-control-sm required NotSelectize" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -56,19 +74,24 @@
     var mdlAntiguedadSaldosProveedores = $('#mdlAntiguedadSaldosProveedores');
 
     $(document).ready(function () {
+        mdlAntiguedadSaldosProveedores.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        })
         validacionSelectPorContenedor(mdlAntiguedadSaldosProveedores);
-        setFocusSelectToInputOnChange('#aProveedor', '#FechaIni', mdlAntiguedadSaldosProveedores);
-        handleEnterDiv(mdlAntiguedadSaldosProveedores);
+        setFocusSelectToInputOnChange('#saProveedorEdoCtaGen', '#FechaIni', mdlAntiguedadSaldosProveedores);
         mdlAntiguedadSaldosProveedores.on('shown.bs.modal', function () {
             mdlAntiguedadSaldosProveedores.find("input").val("");
             $.each(mdlAntiguedadSaldosProveedores.find("select"), function (k, v) {
                 mdlAntiguedadSaldosProveedores.find("select")[k].selectize.clear(true);
             });
-            getProveedores();
+            getProveedoresEdoCtaGen();
+            mdlAntiguedadSaldosProveedores.find('#FechaIni').val(getFirstDayMonth());
             mdlAntiguedadSaldosProveedores.find('#FechaFin').val(getToday());
             mdlAntiguedadSaldosProveedores.find('#Tp').focus();
         });
         mdlAntiguedadSaldosProveedores.find('#btnImprimir').on("click", function () {
+            mdlAntiguedadSaldosProveedores.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlAntiguedadSaldosProveedores.find("#frmEdoCta")[0]);
             $.ajax({
@@ -88,6 +111,7 @@
                         opts: {
                             afterShow: function (instance, current) {
                                 console.info('done!');
+                                mdlAntiguedadSaldosProveedores.find('#btnImprimir').attr('disabled', false);
                             },
                             iframe: {
                                 // Iframe template
@@ -112,40 +136,117 @@
                         text: "NO EXISTEN DOCUMENTOS PARA ESTE PROVEEDOR",
                         icon: "error"
                     }).then((action) => {
+                        mdlAntiguedadSaldosProveedores.find('#btnImprimir').attr('disabled', false);
                         mdlAntiguedadSaldosProveedores.find('#Tp').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlAntiguedadSaldosProveedores.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });
         });
-        mdlAntiguedadSaldosProveedores.find("#Tp").change(function () {
-            onVerificarTp($(this));
+
+        mdlAntiguedadSaldosProveedores.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onVerificarTpEdoCtaGen($(this));
+                } else {
+                    mdlAntiguedadSaldosProveedores.find("#dProveedorEdoCtaGen").focus();
+                }
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find('#dProveedorEdoCtaGen').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url_repantigue + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen")[0].selectize.addItem(txtprov, true);
+                            mdlAntiguedadSaldosProveedores.find('#aProveedorEdoCtaGen').focus().select();
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen")[0].selectize.clear(true);
+                                mdlAntiguedadSaldosProveedores.find('#dProveedorEdoCtaGen').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen").change(function () {
+            if ($(this).val()) {
+                mdlAntiguedadSaldosProveedores.find("#dProveedorEdoCtaGen").val($(this).val());
+                mdlAntiguedadSaldosProveedores.find("#aProveedorEdoCtaGen").focus();
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find('#aProveedorEdoCtaGen').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url_repantigue + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.addItem(txtprov, true);
+                            mdlAntiguedadSaldosProveedores.find('#FechaIni').focus();
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.clear(true);
+                                mdlAntiguedadSaldosProveedores.find('#aProveedorEdoCtaGen').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen").change(function () {
+            if ($(this).val()) {
+                mdlAntiguedadSaldosProveedores.find("#aProveedorEdoCtaGen").val($(this).val());
+                mdlAntiguedadSaldosProveedores.find('#FechaIni').focus();
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find('#FechaIni').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtfi = $(this).val();
+                if (txtfi) {
+                    mdlAntiguedadSaldosProveedores.find('#FechaFin').focus();
+                }
+            }
+        });
+        mdlAntiguedadSaldosProveedores.find('#FechaFin').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtff = $(this).val();
+                if (txtff) {
+                    mdlAntiguedadSaldosProveedores.find('#btnImprimir').focus();
+                }
+            }
         });
     });
-    function getProveedores() {
-        mdlAntiguedadSaldosProveedores.find("#Proveedor")[0].selectize.clear(true);
-        mdlAntiguedadSaldosProveedores.find("#Proveedor")[0].selectize.clearOptions();
-
-        mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.clear(true);
-        mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.clearOptions();
-
+    function getProveedoresEdoCtaGen() {
+        mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen")[0].selectize.clear(true);
+        mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen")[0].selectize.clearOptions();
+        mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.clear(true);
+        mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.clearOptions();
         $.getJSON(master_url_repantigue + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                mdlAntiguedadSaldosProveedores.find("#Proveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
-                mdlAntiguedadSaldosProveedores.find("#aProveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
+                mdlAntiguedadSaldosProveedores.find("#sdProveedorEdoCtaGen")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
+                mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         });
     }
-    function onVerificarTp(v) {
+    function onVerificarTpEdoCtaGen(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-
+            mdlAntiguedadSaldosProveedores.find("#dProveedorEdoCtaGen").focus();
 
         } else {
             swal({
