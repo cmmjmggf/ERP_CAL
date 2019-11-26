@@ -276,7 +276,7 @@
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="' . $style_input . '" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1);" onchange="onCalcularPares(this,1);" keyup="onCalcularPares(this,1);" onfocusout="onCalcularPares(this,1);"></td>';
+                                    print '<td><input type="text" style="' . $style_input . '" id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="onCalcularPares(this,1,event);" onchange="onCalcularPares(this,1,event);" keyup="onCalcularPares(this,1,event);" onfocusout="onCalcularPares(this,1,event);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>
@@ -287,7 +287,7 @@
                                 <td class="font-weight-bold">Facturado</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="' . $style_input . '" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2);" onchange="onCalcularPares(this,2);" keyup="onCalcularPares(this,2);" onfocusout="onCalcularPares(this,2);"></td>';
+                                    print '<td><input indice="' . $index . '" type="text" style="' . $style_input . '" id="CF' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly " name="CF' . $index . '" onfocus="onCalcularPares(this,2,event);" onchange="onCalcularPares(this,2,event);" keyup="onCalcularPares(this,2,event);" onfocusout="onCalcularPares(this,2,event);"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold">
@@ -299,7 +299,7 @@
                                 <td class="font-weight-bold">A Facturar</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text" style="' . $style_input . '" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onkeydown="onCalcularPares(this,3);"  keyup="onCalcularPares(this,3);" ></td>';
+                                    print '<td><input indice="' . $index . '" type="text" style="' . $style_input . '" id="CAF' . $index . '" maxlength="3" class="form-control form-control-sm numbersOnly " name="CAF' . $index . '" onkeydown="onCalcularPares(this,3,event);"  keyup="onCalcularPares(this,3,event);" ></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntregaAF" class="form-control form-control-sm " readonly=""  data-toggle="tooltip" data-placement="right" title="0"></td>
@@ -689,15 +689,15 @@
             }
         });
 
-        for (var i = 1; i < 21; i++) {
-            pnlTablero.find(`#CAF${i}`).keydown(function (e) {
-                var cantidad_facturada = pnlTablero.find(`#CF${i}`).val();
+        pnlTablero.find("input[indice^='CAF']").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var indice = parseInt($(this).attr('indice'));
+                var cantidad_facturada = pnlTablero.find("#CF" + indice).val();
                 var cantidad_a_devolver = $(this).val();
                 console.log($(this).attr("id") + ":" + $(this).val(),
-                        pnlTablero.find(`#CF${i}`).attr('id') + ":" + pnlTablero.find(`#CF${i}`).val());
-
-            });
-        }
+                        pnlTablero.find("#CF" + indice).attr('id') + ":" + pnlTablero.find("#CF" + indice).val());
+            }
+        });
 
         pnlTablero.find("#CAF22").on('keydown', function (e) {
             console.log(e, e.keyCode);
@@ -799,42 +799,40 @@
         });
 
         btnAcepta.click(function () {
-            var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
-                    pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
-            for (var i = 1; i < 23; i++) {
-                pc = pnlTablero.find("#C" + i).val();
-                pf = pnlTablero.find("#CF" + i).val();
-                paf = pnlTablero.find("#CAF" + i).val();
-                pf_mas_paf = parseInt(pf ? pf : 0) + parseInt(paf ? paf : 0);
-                pares += parseInt(pc ? pc : 0); /*FIJO*/
-                pares_facturados += parseInt(pf ? pf : 0);
-                pares_a_facturar += parseInt(paf ? paf : 0);
-                if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
-                    validos = true;
+            /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
+            var registro_valido = false, pares_devueltos = 0;
+            for (var i = 1, max = 21; i <= max; i++) {
+                var pares_facturados = pnlTablero.find("#CF" + i).val();
+                var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
+                if (pares_a_devolver > pares_facturados) {
+                    btnAcepta.attr('disabled', true);
+                    registro_valido = false;
+                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
+                        pnlTablero.find("#CAF" + i).focus().select();
+                    });
+                    return;
                 } else {
-                    console.log(pc, pf, paf, pf_mas_paf);
-                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
-                    validos = false;
-                    break;
+                    registro_valido = true;
+                    pares_devueltos += parseInt(pares_a_devolver);
                 }
             }
 
-            pares_finales = pares_facturados + pares_a_facturar;
-
-            if (pares_a_facturar > 0) {
-                console.log("son pares validos? => ", validos);
-                if (pares_finales <= pares && validos) {
-                    console.log('PARES OK');
+            if (pares_devueltos > 0) {
+                if (registro_valido) {
                     onAceptarControl();
                 } else {
-                    iMsg('NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', 'w', function () {
+                    btnAcepta.attr('disabled', true);
+                    onCampoInvalido(pnlTablero, 'VERIFIQUE QUE SEAN VÁLIDAS LAS CANTIDADES INGRESADAS', function () {
                         pnlTablero.find("#CAF1").focus().select();
                     });
+                    return;
                 }
             } else {
-                iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A DEVOLVER', 'w', function () {
+                btnAcepta.attr('disabled', true);
+                onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO', function () {
                     pnlTablero.find("#CAF1").focus().select();
                 });
+                return;
             }
         });
 
@@ -1360,11 +1358,27 @@
         onoffhandle = true;
     }
 
-    function onCalcularPares(e, i) {
-        getTotalPares();
+    function onCalcularPares(e, i, evt) {
+//        console.log("CODEEEE", evt.keyCode);
+        var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val();
+        var cantidad_a_devolver = $(e).val();
+        if (evt.keyCode === 13 || evt.keyCode === 9) {
+            if (cantidad_a_devolver > cantidad_facturada) {
+                btnAcepta.attr('disabled', true);
+                onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA", function () {
+                    $(e).focus().select();
+                    btnAcepta.attr('disabled', true);
+                });
+                return;
+            } else {
+                btnAcepta.attr('disabled', false);
+                getTotalPares();
+            }
+        }
     }
 
     function getTotalPares() {
+
         var ttp = 0, ttpf = 0, ttpaf = 0;
         for (var i = 1; i < 23; i++) {
             var c_component = pnlTablero.find("#C" + i),
@@ -1383,7 +1397,7 @@
         /*OBTENER LOS PARES DEVUELTOS*/
         $.post('<?php print base_url('FacturacionDevolucion/getDevolucionesXControl'); ?>', {CONTROL: Control.val()}).done(function (a) {
             var prs = JSON.parse(a);
-            console.log("PARES", prs);
+//            console.log("PARES", prs);
             if (prs.length > 0) {
                 pnlTablero.find(".devueltos").text(prs[0].PARES_DEVUELTOS);
             } else {
@@ -1421,10 +1435,11 @@
                         control_pertenece_a_cliente = true;
                     } else {
                         onBeep(2);
-                        iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
-                            onResetCampos();
-                            Control.focus().select();
-                        });
+                        onCampoInvalido(pnlTablero, "EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE",
+                                function () {
+                                    onResetCampos();
+                                    Control.focus().select();
+                                });
                     }
                     if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                         $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturacionDiff'); ?>', {

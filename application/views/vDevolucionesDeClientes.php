@@ -1095,10 +1095,8 @@
         console.log(pares_a_devolver);
         if (pares_a_devolver > 0) {
             btnAcepta.attr('disabled', false);
-            btnReportes.attr('disabled', false);
         } else {
             btnAcepta.attr('disabled', true);
-            btnReportes.attr('disabled', true);
         }
     }
 

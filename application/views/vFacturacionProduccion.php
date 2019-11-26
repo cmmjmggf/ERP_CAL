@@ -821,7 +821,7 @@
                 ControlesXFacturar.ajax.reload();
             }
         });
-        
+
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 ClienteClave.val(ClienteFactura.val());
@@ -832,7 +832,7 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-        
+
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
@@ -853,7 +853,7 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-        
+
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ConsignarATienda[0].selectize.setValue(TiendaClave.val());
@@ -1375,7 +1375,7 @@
                 if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
                 } else if (e.keyCode === 13) {
-                    TPFactura.focus().select(); 
+                    TPFactura.focus().select();
                     onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                         TPFactura.focus().select();
                     });
@@ -1706,6 +1706,15 @@
                                 }).done(function (a) {
                                     if (a.length > 0) {
                                         var xx = a[0];
+//                                        if (parseInt(xx.stsavan) === 13) {
+//                                            for (var i = 1; i < 21; i++) { 
+//                                                    pnlTablero.find(`#CF${i}`).val(''); 
+//                                            }
+//                                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO, INTENTE CON OTRO", function () {
+//                                                Control.focus().select();
+//                                            });
+//                                            return;
+//                                        }
                                         Corrida.val(xx.Serie);
                                         var t = 0;
                                         for (var i = 1; i < 21; i++) {
@@ -2266,47 +2275,5 @@
     input{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
-    } 
-    .blinkb{ 
-        border: 2px solid #ffffff;
-        border-radius: 5px;
-        -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
-        animation: myfirst 1.5s linear 0.5s infinite alternate;    
-        box-shadow: 0 0px 12px  #03A9F4;
-    }
-
-    /* Safari 4.0 - 8.0 */
-    @-webkit-keyframes myfirst { 
-        25%  { 
-            border-color:  #007bff; 
-        }
-        50%  {  
-            border-color:  #ffffff; 
-        }
-        75%  {  
-            border-color:  #007bff; 
-        }
-        100% {  
-            border-color:  #ffffff; 
-        }
-    }
-
-    /* Standard syntax */
-    @keyframes myfirst {
-        0%   { 
-            border-color:  #007bff; 
-        }
-        25%  { 
-            border-color:  #ffffff; 
-        }
-        50%  { 
-            border-color:  #007bff; 
-        }
-        75%  {
-            border-color:  #ffffff; 
-        }
-        100% {
-            border-color:  #007bff; 
-        }
     } 
 </style>
