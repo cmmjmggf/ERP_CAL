@@ -13,11 +13,18 @@
                 <label>Tp</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
             </div>
-            <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Proveedor</label>
-                <select id="Proveedor" name="Proveedor" class="form-control form-control-sm required" required="" >
-                    <option value=""></option>
-                </select>
+            <div class="col-12 col-sm-4 col-md-3 col-xl-3">
+                <label>Proveedor</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="5" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1" >
                 <label>Doc.</label>
@@ -33,33 +40,43 @@
             </div>
         </div>
         <div class="row" id="Detalle">
-            <div class="col-12 col-sm-6 col-md-3 col-xl-2">
-                <label for="" >Tipo Material</label>
-                <select id="Grupo" name="Grupo" class="form-control form-control-sm required" required="">
-                    <option value=""></option>
-                </select>
+
+            <div class="col-12 col-sm-4 col-md-3 col-xl-3">
+                <label>Tipo Material</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Grupo" name="Grupo" maxlength="3" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sGrupo" name="sGrupo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+
+            <div class="col-6 col-sm-2 col-md-2 col-lg-1 col-xl-2">
                 <label>Tipo Cont.</label>
                 <input type="text" class="form-control form-control-sm " readonly="" id="TipoCont" name="TipoCont">
             </div>
             <div class="col-12 col-sm-6 col-md-3 col-xl-2">
-                <label for="" >Es por flete?</label>
-                <select id="Flete" name="Flete" class="form-control form-control-sm " required="">
-                    <option value=""></option>
-                    <option value="SI">SI</option>
-                    <option value="NO">NO</option>
-                </select>
+                <label for="" >-</label>
+                <div class="col-12 col-sm-6">
+                    <div class="custom-control custom-checkbox  ">
+                        <input type="checkbox" class="custom-control-input" id="cFlete">
+                        <label class="custom-control-label text-info labelCheck" for="cFlete">Es por Flete?</label>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-2 col-xl-1">
                 <label for="" >Moneda</label>
                 <select id="Moneda" name="Moneda" class="form-control form-control-sm " >
                     <option value=""></option>
-                    <option value="MXN">PESOS</option>
-                    <option value="USD">DOLAR</option>
-                    <option value="EUR">EURO</option>
-                    <option value="LIB">LIBRA</option>
-                    <option value="JEN">JEN</option>
+                    <option value="MXN">1 PESOS</option>
+                    <option value="USD">2 DOLAR</option>
+                    <option value="EUR">3 EURO</option>
+                    <option value="LIB">4 LIBRA</option>
+                    <option value="JEN">5 JEN</option>
                 </select>
             </div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
@@ -68,10 +85,11 @@
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
                 <button type="button" class="btn btn-primary captura" id="btnGuardar" data-toggle="tooltip" data-placement="right" title="Capturar Documento">
-                    <i class="fa fa-save"></i>
+                    <i class="fa fa-check"></i> ACEPTAR
                 </button>
             </div>
         </div>
+        <hr>
         <div class="card-block mt-2">
             <div id="DocumentosDirectos">
                 <table id="tblDocumentosDirectos" class="table table-sm display " style="width:100%">
@@ -103,13 +121,16 @@
     $(document).ready(function () {
 
         /*FUNCIONES INICIALES*/
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Grupo', '#Flete', pnlTablero);
-        setFocusSelectToSelectOnChange('#Flete', '#Moneda', pnlTablero);
         setFocusSelectToInputOnChange('#Moneda', '#TipoCambio', pnlTablero);
 
-        handleEnter();
+        //handleEnter();
         getGrupos();
+        getRecords(0, 0);
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
@@ -118,26 +139,120 @@
         pnlTablero.find("#Tp").focus();
         pnlTablero.find("#Moneda")[0].selectize.addItem('MXN', true);
         pnlTablero.find("#TipoCambio").val('1');
-        pnlTablero.find("#Tp").change(function () {
-            onVerificarTp($(this));
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onVerificarTp($(this));
+                }
+            }
         });
-        pnlTablero.find("#Proveedor").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            getRecords($(this).val(), tp);
+        pnlTablero.find('#Proveedor').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                var tp = pnlTablero.find("#Tp").val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprov, true);
+                            getRecords(txtprov, tp);
+                            pnlTablero.find('#Doc').focus().select();
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
         });
-        pnlTablero.find("#Doc").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            var prov = pnlTablero.find("#Proveedor").val();
-            var fact = pnlTablero.find("#Factura").val();
-            onVerificarExisteDocumento($(this), tp, prov, fact);
+        pnlTablero.find("#sProveedor").change(function () {
+            if ($(this).val()) {
+                var tp = pnlTablero.find("#Tp").val();
+                getRecords($(this).val(), tp);
+                pnlTablero.find('#Doc').focus().select();
+            }
         });
-        pnlTablero.find("#Grupo").change(function () {
-            getTipoCont($(this).val());
+        pnlTablero.find("#Doc").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    var prov = pnlTablero.find("#Proveedor").val();
+                    var fact = pnlTablero.find("#Factura").val();
+                    onVerificarExisteDocumento($(this), tp, prov, fact);
+                }
+            }
+        });
+        pnlTablero.find('#FechaDoc').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    pnlTablero.find('#Importe').focus();
+                }
+            }
+        });
+        pnlTablero.find('#Importe').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    pnlTablero.find('#Grupo').focus();
+                }
+            }
+        });
+        pnlTablero.find('#Grupo').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtgpo = $(this).val();
+                if (txtgpo) {
+                    $.getJSON(master_url + 'onVerificarGrupo', {Grupo: txtgpo}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sGrupo")[0].selectize.addItem(txtgpo, true);
+                            getTipoCont(txtgpo);
+                            pnlTablero.find("#Moneda")[0].selectize.focus();
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sGrupo")[0].selectize.clear(true);
+                                pnlTablero.find('#Grupo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sGrupo").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Grupo').val($(this).val());
+                getTipoCont($(this).val());
+            }
         });
         pnlTablero.find("#Moneda").change(function () {
-            getTipoCambio($(this).val());
+            if ($(this).val()) {
+                getTipoCambio($(this).val());
+                pnlTablero.find('#TipoCambio').focus().select();
+            } else {
+                pnlTablero.find("#Moneda")[0].selectize.focus();
+            }
         });
+        pnlTablero.find('input#Moneda-selectized').on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                pnlTablero.find("#TipoCambio").focus().select();
+            }
+        });
+
+        pnlTablero.find('#TipoCambio').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txttc = $(this).val();
+                if (txttc) {
+                    btnGuardar.focus();
+                }
+            }
+        });
+
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 swal({
@@ -156,7 +271,7 @@
                         var importe = pnlTablero.find("#Importe").val();
                         var TipoCont = pnlTablero.find("#TipoCont").val();
                         var Grupo = pnlTablero.find("#Grupo").val();
-                        var Flete = pnlTablero.find("#Flete").val();
+                        var Flete = (pnlTablero.find("#cFlete")[0].checked) ? 'SI' : 'NO';
                         var Moneda = pnlTablero.find("#Moneda").val();
                         var TipoCambio = pnlTablero.find("#TipoCambio").val();
                         $.post(master_url + 'onAgregar', {
@@ -172,6 +287,7 @@
                             TipoCambio: TipoCambio,
                             Grupo: Grupo
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
                             DocumentosDirectos.ajax.reload();
                             pnlTablero.find("input").val("");
@@ -188,6 +304,7 @@
                     }
                 });
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
 
@@ -228,7 +345,7 @@
         }).done(function (data) {
             if (data.length > 0) {
                 pnlTablero.find('#TipoCont').val(data[0].Tipo);
-                pnlTablero.find('#Flete')[0].selectize.focus();
+                pnlTablero.find('#Moneda')[0].selectize.focus();
             }
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -238,7 +355,7 @@
     function getGrupos() {
         $.getJSON(master_url + 'getGrupos').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Grupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});
+                pnlTablero.find("#sGrupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -260,7 +377,7 @@
                     $(v).val('').focus();
                 });
             } else {//EL DOCUMENTO NO EXISTE
-
+                pnlTablero.find('#FechaDoc').focus();
             }
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -269,10 +386,10 @@
     }
     function getRecords(Proveedor, Tp) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
+//        HoldOn.open({
+//            theme: 'sk-cube',
+//            message: 'CARGANDO...'
+//        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblDocumentosDirectos')) {
             tblDocumentosDirectos.DataTable().destroy();
@@ -296,26 +413,26 @@
                 {"data": "Pagos_Doc"},
                 {"data": "Saldo_Doc"}
             ],
-            "columnDefs": [
-                {
-                    "targets": [3],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [4],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [5],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                }
-            ],
+//            "columnDefs": [
+//                {
+//                    "targets": [3],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                },
+//                {
+//                    "targets": [4],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                },
+//                {
+//                    "targets": [5],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                }
+//            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -329,35 +446,35 @@
             "aaSorting": [
                 [1, 'asc'], [2, 'asc']
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-success text-strong');
-                            break;
-
-                        case 3:
-                            /*fecha conf*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 4:
-                            /*fecha conf*/
-                            c.addClass('text-secondary text-strong');
-                            break;
-                        case 5:
-                            /*fecha conf*/
-                            c.addClass('text-danger text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 0:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//
+//                        case 3:
+//                            /*fecha conf*/
+//                            c.addClass('text-info text-strong');
+//                            break;
+//                        case 4:
+//                            /*fecha conf*/
+//                            c.addClass('text-secondary text-strong');
+//                            break;
+//                        case 5:
+//                            /*fecha conf*/
+//                            c.addClass('text-danger text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             initComplete: function (a, b) {
                 HoldOn.close();
             }
@@ -371,7 +488,7 @@
     function onVerificarTp(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-            pnlTablero.find('#Proveedor')[0].selectize.focus();
+            pnlTablero.find('#Proveedor').focus().select();
             getProveedores(tp);
         } else {
             swal({
@@ -388,11 +505,11 @@
         }
     }
     function getProveedores(tp) {
-        pnlTablero.find("#Proveedor")[0].selectize.clear(true);
-        pnlTablero.find("#Proveedor")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getProveedores').done(function (data) {
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
+        $.getJSON(master_url + 'getProveedoresSinClave').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -413,7 +530,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

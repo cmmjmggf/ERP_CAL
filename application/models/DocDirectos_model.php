@@ -47,9 +47,29 @@ class DocDirectos_model extends CI_Model {
         }
     }
 
+    public function getProveedoresSinClave() {
+        try {
+            return $this->db->select("P.Clave AS ID, "
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                            ->from("proveedores AS P")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getGrupos() {
         try {
             return $this->db->select("G.Clave AS ID, CONCAT(G.Clave,' - ',  IFNULL(G.Nombre,'')) AS Grupo", false)
+                            ->from("grupos AS G")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getGruposSinClave() {
+        try {
+            return $this->db->select("G.Clave AS ID, CONCAT(IFNULL(G.Nombre,'')) AS Grupo", false)
                             ->from("grupos AS G")->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

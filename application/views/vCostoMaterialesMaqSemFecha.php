@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-6 col-xl-3">
                             <label for="" >Maq.*</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="3" id="Maq" name="Maq" required="">
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Maq" name="Maq" required="">
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -46,7 +46,7 @@
 
 
 <script>
-    var master_url = base_url + 'index.php/ReportesProveedores/';
+    var master_url_costo_mat_maqsemfec = base_url + 'index.php/ReportesProveedores/';
     var mdlCostoMaterialMaqSemFecha = $('#mdlCostoMaterialMaqSemFecha');
 
     $(document).ready(function () {
@@ -64,13 +64,14 @@
         });
 
         mdlCostoMaterialMaqSemFecha.find('#btnImprimir').on("click", function () {
+            mdlCostoMaterialMaqSemFecha.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlCostoMaterialMaqSemFecha.find("#frmParametros")[0]);
             var conPrecioActual = mdlCostoMaterialMaqSemFecha.find("#PrecioActual")[0].checked ? '1' : '0';
             frm.append('ConPrecioActual', conPrecioActual);
 
             $.ajax({
-                url: master_url + 'onReporteCostoMaterialesMaqFecha',
+                url: master_url_costo_mat_maqsemfec + 'onReporteCostoMaterialesMaqFecha',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -86,6 +87,7 @@
                         opts: {
                             afterShow: function (instance, current) {
                                 console.info('done!');
+                                mdlCostoMaterialMaqSemFecha.find('#btnImprimir').attr('disabled', false);
                             },
                             iframe: {
                                 // Iframe template
@@ -115,13 +117,14 @@
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlCostoMaterialMaqSemFecha.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });
         });
     });
     function onComprobarMaquilas(v) {
-        $.getJSON(master_url + 'onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
+        $.getJSON(master_url_costo_mat_maqsemfec + 'onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
             if (data.length > 0) {
             } else {
                 swal({
