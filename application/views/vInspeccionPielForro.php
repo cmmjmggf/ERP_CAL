@@ -151,69 +151,65 @@
         <div class="row mt-3">
             <div id="Movimientos" class="col-12 col-sm-12 col-md-6">
                 <label>Detalle Inspección</label>
-                <div class="row">
-                    <table id="tblMovimientos" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Art</th>
-                                <th></th>
-                                <th>Entregada</th>
-                                <th>Devuelta</th>
-                                <th>Defecto</th>
-                                <th>Detalle</th>
-                                <th>(-)</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Total: </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table id="tblMovimientos" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Art</th>
+                            <th></th>
+                            <th>Entregada</th>
+                            <th>Devuelta</th>
+                            <th>Defecto</th>
+                            <th>Detalle</th>
+                            <th>(-)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Total: </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <div id="Compra" class="col-12 col-sm-12 col-md-6">
                 <label>Detalle Orden Compra <span class="badge badge-warning">Haga click para seleccionar material</span></label>
-                <div class="row">
-                    <table id="tblCompra" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Código</th>
-                                <th>Artículo</th>
-                                <th>Entregado</th>
-                                <th>Factura</th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Subtotal</th>
-                                <th>Sem</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Total:</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table id="tblCompra" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Código</th>
+                            <th>Artículo</th>
+                            <th>Entregado</th>
+                            <th>Factura</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Sem</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Total:</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
@@ -926,7 +922,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

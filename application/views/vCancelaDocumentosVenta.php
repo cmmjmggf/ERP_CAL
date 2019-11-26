@@ -98,7 +98,7 @@
                     </div>
                     <div class="col-4 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
                         <button type="button" class="btn btn-primary btn-sm" id="btnAceptar">
-                            <i class="fa fa-check"></i> CANCELAR
+                            <i class="fa fa-check"></i> ACEPTAR
                         </button>
                     </div>
                 </div>
@@ -120,71 +120,6 @@
         pnlTablero.find("input[name='CancelaDocsVentas']").change(function () {
             pnlTablero.find('#Cliente').focus().select();
         });
-        pnlTablero.find("#btnImprimir").click(function () {
-            var fecha = pnlTablero.find("#FechaDoc");
-            if (fecha.val()) {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData();
-                frm.append('Fecha', fecha.val());
-                $.ajax({
-                    url: base_url + 'index.php/CapturaDepositosCliente/onImprimirDepositoClientes',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (data.length > 0) {
-
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
-                                },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "100%",
-                                        height: "100%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                            icon: "error"
-                        }).then((action) => {
-                            fecha.focus();
-                        });
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "CAPTURE LA FECHA PARA IMPRIMIR EL REPORTE",
-                    icon: "warning"
-                }).then((value) => {
-                    fecha.focus();
-                });
-            }
-        });
         pnlTablero.find('#Cliente').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
@@ -201,6 +136,7 @@
                             getDocumentosByCliente(txtcte);
                         } else {
                             swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#sCliente')[0].selectize.clear(true);
                                 pnlTablero.find('#Cliente').focus().val('');
                             });
                         }
@@ -278,12 +214,14 @@
                                     pnlTablero.find("#sDoc")[0].selectize.focus();
                                 });
                             } else if (parseInt(data) === 5) {
-                                swal('NO CANCELADO EN EL SAT', 'Existe un error en la generación de la factura electronica no se encuentra el uuid', 'error').then((value) => {
+                                swal('NO CANCELADO EN EL SAT', 'Existe un error en la generación de la factura electronica no se encuentra el UUID', 'error').then((value) => {
                                     init();
                                 });
                             } else {
                                 swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
-                                    init();
+                                    var tp = pnlTablero.find("#Tp").val();
+                                    var reporte = (tp === '1') ? 'onImprimirReporteNotaCreditoTp1' : 'onImprimirReporteNotaCreditoTp2';
+                                    onImprimirReporteNotaCredito(tp, pnlTablero.find("#NC").val(), pnlTablero.find("#Cliente").val(), reporte);
                                 });
                             }
                         }).fail(function (x, y, z) {
@@ -300,9 +238,34 @@
             }
         });
     });
+    function onImprimirReporteNotaCredito(tp, folio, cte, reporte) {
+        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+        $.post(base_url + 'index.php/NotasCreditoClientes/' + reporte, {
+            Tp: tp,
+            Folio: folio,
+            Cliente: cte
+        }).done(function (data, x, jq) {
+            console.log(data);
+            if (data.length > 0) {
+                onImprimirReporteFancyAFC(data, function (a, b) {
+                    init();
+                });
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "NO EXISTEN REGISTROS",
+                    icon: "error"
+                });
+            }
+            HoldOn.close();
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+            HoldOn.close();
+        });
+    }
     function init() {
         /*FUNCIONES INICIALES*/
-        pnlTablero.find("#Cliente").focus();
+
         tipo = 0;
         remi = 0;
         status = 0;
@@ -316,6 +279,7 @@
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
+        pnlTablero.find("#Cliente").focus();
 
     }
     var tipo, remi, importe, status, mes, mes_act;
@@ -324,6 +288,7 @@
             Remicion: remicion,
             Cliente: cte
         }).done(function (data) {
+            console.log(data);
             if (data.length > 0) {
                 tipo = data[0].tipo;
                 remi = data[0].remicion;
@@ -338,6 +303,7 @@
                         pnlTablero.find("#NC").val('');
                         pnlTablero.find("#sDoc")[0].selectize.clear(true);
                         pnlTablero.find("#sDoc")[0].selectize.focus();
+                        pnlTablero.find("#sDoc")[0].selectize.open();
                     });
                     return;
                 }
@@ -349,6 +315,7 @@
                             pnlTablero.find("#NC").val('');
                             pnlTablero.find("#sDoc")[0].selectize.clear(true);
                             pnlTablero.find("#sDoc")[0].selectize.focus();
+                            pnlTablero.find("#sDoc")[0].selectize.open();
                         });
                         return;
                     } else {//Si los meses son iguales procede la cancelación y agregar el folio de la NC
@@ -383,6 +350,7 @@
                             pnlTablero.find("#NC").val('');
                             pnlTablero.find("#sDoc")[0].selectize.clear(true);
                             pnlTablero.find("#sDoc")[0].selectize.focus();
+                            pnlTablero.find("#sDoc")[0].selectize.open();
                         });
                         return;
                     }
@@ -399,6 +367,7 @@
                 }).then((value) => {
                     pnlTablero.find("#sDoc")[0].selectize.clear(true);
                     pnlTablero.find("#sDoc")[0].selectize.focus();
+                    pnlTablero.find("#sDoc")[0].selectize.open();
                 });
             }
         }).fail(function (x, y, z) {
@@ -414,6 +383,7 @@
                 pnlTablero.find("#sDoc")[0].selectize.addOption({text: v.documento, value: v.remicion});
             });
             pnlTablero.find("#sDoc")[0].selectize.focus();
+            pnlTablero.find("#sDoc")[0].selectize.open();
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);

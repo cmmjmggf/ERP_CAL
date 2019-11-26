@@ -101,57 +101,53 @@
         <div class="row mt-3">
             <div id="Movimientos" class="col-12 col-sm-12 col-md-6">
                 <h5>Detalle de Nota Cargo</h5>
-                <div class="row">
-                    <table id="tblMovimientos" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Articulo</th>
-                                <th></th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Subtotal</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Total: </th>
-                                <th>Cantidad</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table id="tblMovimientos" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Articulo</th>
+                            <th></th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Total: </th>
+                            <th>Cantidad</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <div id="Compra" class="col-12 col-sm-12 col-md-6">
                 <h5>Detalle de la Compra</h5>
-                <div class="row">
-                    <table id="tblCompra" class="table table-sm display " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Articulo</th>
-                                <th></th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th>Total: </th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table id="tblCompra" class="table table-sm display " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Articulo</th>
+                            <th></th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>Total: </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
@@ -933,7 +929,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;
