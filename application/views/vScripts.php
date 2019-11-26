@@ -1635,8 +1635,7 @@
     }
 
     function onCampoInvalido(pnl, msj, fun) {
-        $.each(pnl.find("select.selectized:enabled"), function (k, v) {
-            console.log(k, v);
+        $.each(pnl.find("select.selectized:enabled"), function (k, v) { 
             $(v).addClass('campo_no_valido');
         });
         $.each(pnl.find("select.selectized:enabled"), function (k, v) {

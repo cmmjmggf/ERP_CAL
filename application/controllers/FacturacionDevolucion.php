@@ -156,6 +156,7 @@ class FacturacionDevolucion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
+            
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -251,9 +252,9 @@ class FacturacionDevolucion extends CI_Controller {
                 'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
                 'staped' => (($saldopares == 0) ? 99 : 98)
             );
-            if ($saldopares === 0) {
-                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
-            }
+//            if ($saldopares === 0) {
+//                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+//            }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
             $existe_en_facdetalle = $this->db->query(
                             "SELECT COUNT(*) AS EXISTE, FD.contped AS ID,"

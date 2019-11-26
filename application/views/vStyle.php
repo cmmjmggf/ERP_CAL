@@ -420,4 +420,47 @@
         background-color: #8BC34A !important
             background-size: 36px 36px !important;
     }
+    
+    .blinkb{ 
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
+        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        box-shadow: 0 0px 12px  #03A9F4;
+    }
+
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes myfirst { 
+        25%  { 
+            border-color:  #007bff; 
+        }
+        50%  {  
+            border-color:  #ffffff; 
+        }
+        75%  {  
+            border-color:  #007bff; 
+        }
+        100% {  
+            border-color:  #ffffff; 
+        }
+    }
+
+    /* Standard syntax */
+    @keyframes myfirst {
+        0%   { 
+            border-color:  #007bff; 
+        }
+        25%  { 
+            border-color:  #ffffff; 
+        }
+        50%  { 
+            border-color:  #007bff; 
+        }
+        75%  {
+            border-color:  #ffffff; 
+        }
+        100% {
+            border-color:  #007bff; 
+        }
+    } 
 </style>

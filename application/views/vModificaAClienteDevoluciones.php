@@ -11,16 +11,23 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label>Cliente</label>
-                        <select id="ClienteMCD" name="ClienteMCD" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                            $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl = 1 ORDER BY ABS(C.Clave) ASC;")->result();
-                            foreach ($dtm as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" id="xClienteMCD" name="xClienteMCD" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="10">
+                            </div>
+                            <div class="col-10">
+                                <select id="ClienteMCD" name="ClienteMCD" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
+                                    $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl = 1 ORDER BY ABS(C.Clave) ASC;")->result();
+                                    foreach ($dtm as $k => $v) {
+                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <p class="font-weight-bold text-danger">Controles por aplicar de este cliente</p>
@@ -50,7 +57,7 @@
 
 <div id="mdlSeleccionaCliente" class="modal">
     <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content blinkb">
             <div class="modal-header">
                 <h5 class="modal-title"> <span class="fa fa-exchange-alt"></span> Seleccione un cliente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -60,18 +67,25 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <input type="text" id="IDANTERIOR" name="IDANTERIOR" class="form-control d-none" readonly="">
-                        <input type="text" id="ClienteViejo" name="ClienteViejo" class="form-control d-none" readonly="">
                         <label>Cliente</label>
-                        <select id="ClienteAModificar" name="ClienteAModificar" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                            foreach ($dtm as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
-                        </select>
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" id="xClienteAModificar" name="xClienteAModificar" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-10">
+                                <input type="text" id="IDANTERIOR" name="IDANTERIOR" class="form-control d-none" readonly="">
+                                <input type="text" id="ClienteViejo" name="ClienteViejo" class="form-control d-none" readonly="">
+                                <select id="ClienteAModificar" name="ClienteAModificar" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
+                                    foreach ($dtm as $k => $v) {
+                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,25 +99,87 @@
 <script>
     var mdlModificaAClienteDevoluciones = $("#mdlModificaAClienteDevoluciones"),
             mdlSeleccionaCliente = $("#mdlSeleccionaCliente"),
+            xClienteAModificar = mdlSeleccionaCliente.find("#xClienteAModificar"),
             ClienteAModificar = mdlSeleccionaCliente.find("#ClienteAModificar"),
+            xClienteMCD = mdlModificaAClienteDevoluciones.find("#xClienteMCD"),
             ClienteMCD = mdlModificaAClienteDevoluciones.find("#ClienteMCD"),
             ControlesXAplicarDeEsteCliente,
             tblControlesXAplicarDeEsteCliente = mdlModificaAClienteDevoluciones.find("#tblControlesXAplicarDeEsteCliente");
 
     $(document).ready(function () {
 
+        xClienteAModificar.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    ClienteAModificar[0].selectize.setValue(xClienteAModificar.val());
+                    if (ClienteAModificar.val()) {
+                        ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                            onCloseOverlay();
+                        });
+                    } else {
+                        onCampoInvalido(mdlSeleccionaCliente, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                            xClienteAModificar.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    ClienteAModificar[0].selectize.clear(true);
+                }
+            } else {
+                ClienteAModificar[0].selectize.clear(true);
+            }
+        });
+
+        ClienteAModificar.change(function () {
+            if (ClienteAModificar.val()) {
+                xClienteAModificar.val(ClienteAModificar.val()); 
+            } else {
+                xClienteAModificar.val('');
+                ClienteAModificar[0].selectize.clear(true);
+            }
+        });
+
+        xClienteMCD.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    ClienteMCD[0].selectize.setValue(xClienteMCD.val());
+                    if (ClienteMCD.val()) {
+                        ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                            onCloseOverlay();
+                        });
+                    } else {
+                        onCampoInvalido(mdlModificaAClienteDevoluciones, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                            xClienteMCD.focus().select();
+                            console.log('okokokokokokok')
+                        });
+                        return;
+                    }
+                } else {
+                    ClienteMCD[0].selectize.clear(true);
+                }
+            } else {
+                ClienteMCD[0].selectize.clear(true);
+            }
+        });
+
         ClienteMCD.change(function () {
-            ControlesXAplicarDeEsteCliente.ajax.reload(function () {
-                onCloseOverlay();
-            });
+            if (ClienteMCD.val()) {
+                xClienteMCD.val(ClienteMCD.val());
+                ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            } else {
+                xClienteMCD.val('');
+                ClienteMCD[0].selectize.clear(true);
+            }
         });
 
         mdlSeleccionaCliente.on('shown.bs.modal', function () {
-            ClienteAModificar[0].selectize.focus(); 
+            xClienteAModificar.focus();
         });
-        
+
         mdlSeleccionaCliente.on('hidden.bs.modal', function () {
-            ClienteAModificar[0].selectize.clear(); 
+            xClienteAModificar.val('');
         });
 
         ClienteAModificar.change(function () {
@@ -115,13 +191,23 @@
                 };
                 $.post('<?php print base_url('ModificaAClienteDevoluciones/onCambiarClienteAcontrol') ?>', p).done(function (aaa) {
                     console.log(aaa);
-                    mdlSeleccionaCliente.modal('hide');
-                    onNotifyOld('', 'CLIENTE MODIFICADO', 'success');
-                    ControlesXAplicarDeEsteCliente.ajax.reload(function () {
-                        onCloseOverlay();
-                    });
+                    if (aaa.length > 0) {
+                        var x = JSON.parse(aaa);
+                        switch (parseInt(x.MODIFICADO)) {
+                            case 0:
+                                onNotifyOld('', 'CLIENTE MODIFICADO', 'warning');
+                                break;
+                            case 1:
+                                mdlSeleccionaCliente.modal('hide');
+                                onNotifyOld('', 'CLIENTE MODIFICADO', 'success');
+                                ControlesXAplicarDeEsteCliente.ajax.reload(function () {
+                                    onCloseOverlay();
+                                });
+                                break;
+                        }
+                    }
                 }).fail(function (x) {
-                    getError(x)
+                    getError(x);
                 }).always(function () {
 
                 });
@@ -133,6 +219,7 @@
             if ($.fn.DataTable.isDataTable('#tblControlesXAplicarDeEsteCliente')) {
                 ControlesXAplicarDeEsteCliente.ajax.reload(function () {
                     onCloseOverlay();
+                    xClienteMCD.focus().select();
                 });
             } else {
                 getControlesXAplicarDeEsteCliente();
