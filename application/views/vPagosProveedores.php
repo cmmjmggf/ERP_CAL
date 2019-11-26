@@ -14,11 +14,15 @@
         <div class="row" id="Encabezado">
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
                 <label>Tp</label>
-                <input type="text" class="form-control form-control-sm  numbersOnly captura" id="Tp" maxlength="1" required="">
+                <input type="text" class="form-control form-control-sm  numbersOnly captura" id="TpPago" maxlength="1" required="">
             </div>
-            <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Proveedor</label>
-                <select id="Proveedor" name="Proveedor" class="form-control form-control-sm required captura" required="" >
+            <div class="col-1">
+                <label>Proveedor</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly captura" id="iProveedor" name="iProveedor" maxlength="5" required="">
+            </div>
+            <div class="col-12 col-sm-3 col-md-3 col-xl-3" >
+                <label for="" >-</label>
+                <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required captura NotSelectize" required="" >
                     <option value=""></option>
                 </select>
             </div>
@@ -102,15 +106,19 @@
                 <label>Referencia</label>
                 <input type="text" class="form-control form-control-sm" id="DocPago" name="DocPago" maxlength="15">
             </div>
-            <div class="col-12 col-sm-5 col-md-3 col-xl-2">
-                <label for="" >Banco</label>
-                <select id="Banco" name="Banco" class="form-control form-control-sm" >
+            <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                <label>Banco</label>
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" required="">
+            </div>
+            <div class="col-12 col-sm-4 col-md-2 col-xl-2" >
+                <label for="" >-</label>
+                <select id="sBanco" name="sBanco" class="form-control form-control-sm required NotSelectize" required="" >
                     <option value=""></option>
                 </select>
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary captura" id="btnGuardar" data-toggle="tooltip" data-placement="right" title="Capturar Documento">
-                    <i class="fa fa-save"></i>
+                <button type="button" class="btn btn-primary captura" id="btnGuardar">
+                    <i class="fa fa-check"></i> ACEPTAR
                 </button>
             </div>
         </div>
@@ -170,129 +178,284 @@
     var btnGuardar = pnlTablero.find('#btnGuardar');
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Proveedor', '#Factura', pnlTablero);
-        setFocusSelectToInputOnChange('#TipoPago', '#DocPago', pnlTablero);
-        setFocusSelectToInputOnChange('#Banco', '#btnGuardar', pnlTablero);
-        handleEnter();
-        init();
-        pnlTablero.find("#Tp").change(function () {
-            pnlTablero.find("#Banco")[0].selectize.clear(true);
-            pnlTablero.find("#Banco")[0].selectize.clearOptions();
-            onVerificarTp($(this));
-            getBancos($(this).val());
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
         });
-        pnlTablero.find("#Proveedor").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
-                Tp: tp,
-                Proveedor: $(this).val()
-            }).done(function (data) {
-                pnlTablero.find("#Factura")[0].selectize.clear(true);
-                pnlTablero.find("#Factura")[0].selectize.clearOptions();
-                if (data.length > 0) {//Existe
-                    $.each(data, function (k, v) {
-                        pnlTablero.find("#Factura")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
-                    });
-                    $.notify({
-                        // options
-                        icon: 'fa fa-check',
-                        title: '',
-                        message: 'DOCUMENTOS PENDIENTES CARGADOS'
-                    }, {
-                        // settings
-                        type: 'success',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        delay: 3000,
-                        timer: 1000,
-                        placement: {
-                            from: "bottom",
-                            align: "left"
-                        },
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+        validacionSelectPorContenedor(pnlTablero);
+        setFocusSelectToSelectOnChange('#iProveedor', '#Factura', pnlTablero);
+        setFocusSelectToInputOnChange('#TipoPago', '#DocPago', pnlTablero);
+        setFocusSelectToInputOnChange('#sBanco', '#btnGuardar', pnlTablero);
+        //handleEnterDiv(pnlTablero);
+        init();
+        pnlTablero.find("#TpPago").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+
+                    pnlTablero.find("#sBanco")[0].selectize.clear(true);
+                    pnlTablero.find("#sBanco")[0].selectize.clearOptions();
+
+                    onVerificarTpPagosProv($(this));
+                    getBancos($(this).val());
+                }
+            }
+        });
+        pnlTablero.find('#iProveedor').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprov, true);
+
+
+                            var tp = pnlTablero.find("#TpPago").val();
+                            $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
+                                Tp: tp,
+                                Proveedor: txtprov
+                            }).done(function (data) {
+                                pnlTablero.find("#Factura")[0].selectize.clear(true);
+                                pnlTablero.find("#Factura")[0].selectize.clearOptions();
+                                if (data.length > 0) {//Existe
+                                    $.each(data, function (k, v) {
+                                        pnlTablero.find("#Factura")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
+                                    });
+                                    $.notify({
+                                        // options
+                                        icon: 'fa fa-check',
+                                        title: '',
+                                        message: 'DOCUMENTOS PENDIENTES CARGADOS'
+                                    }, {
+                                        // settings
+                                        type: 'success',
+                                        allow_dismiss: true,
+                                        newest_on_top: false,
+                                        showProgressbar: false,
+                                        delay: 3000,
+                                        timer: 1000,
+                                        placement: {
+                                            from: "bottom",
+                                            align: "left"
+                                        },
+                                        animate: {
+                                            enter: 'animated fadeInDown',
+                                            exit: 'animated fadeOutUp'
+                                        }
+                                    });
+                                    pnlTablero.find('#Factura')[0].selectize.focus();
+                                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                                    $.notify({
+                                        // options
+                                        icon: 'fa fa-exclamation',
+                                        title: 'Atención',
+                                        message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
+                                    }, {
+                                        // settings
+                                        type: 'danger',
+                                        allow_dismiss: true,
+                                        newest_on_top: false,
+                                        showProgressbar: false,
+                                        delay: 3000,
+                                        timer: 1000,
+                                        placement: {
+                                            from: "bottom",
+                                            align: "left"
+                                        },
+                                        animate: {
+                                            enter: 'animated fadeInDown',
+                                            exit: 'animated fadeOutUp'
+                                        }
+                                    });
+                                    pnlTablero.find('#iProveedor').focus();
+                                }
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#iProveedor').focus().val('');
+                            });
                         }
-                    });
-                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
-                    $.notify({
-                        // options
-                        icon: 'fa fa-exclamation',
-                        title: 'Atención',
-                        message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
-                    }, {
-                        // settings
-                        type: 'danger',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        delay: 3000,
-                        timer: 1000,
-                        placement: {
-                            from: "bottom",
-                            align: "left"
-                        },
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
                     });
                 }
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            });
+            }
         });
-        pnlTablero.find("#Factura").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            var prov = pnlTablero.find("#Proveedor").val();
-            onVerificarExisteDocumento($(this), tp, prov);
-        });
-        pnlTablero.find("#Importe").change(function () {
-            var importe = parseFloat($(this).val());
-            var saldo = parseFloat(pnlTablero.find('#Saldo_Doc').val());
-            if (importe > saldo) {
-                swal({//No Existe
-                    title: "IMPORTE A LIQUIDAR ES MAYOR AL DEL DOCUMENTO",
-                    text: "ERROR",
-                    icon: "error"
-                }).then((value) => {
-                    $(this).val('').focus();
+        pnlTablero.find("#sProveedor").change(function () {
+            if ($(this).val()) {
+                var tp = pnlTablero.find("#TpPago").val();
+                pnlTablero.find('#iProveedor').val($(this).val());
+                $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
+                    Tp: tp,
+                    Proveedor: $(this).val()
+                }).done(function (data) {
+                    pnlTablero.find("#Factura")[0].selectize.clear(true);
+                    pnlTablero.find("#Factura")[0].selectize.clearOptions();
+                    if (data.length > 0) {//Existe
+                        $.each(data, function (k, v) {
+                            pnlTablero.find("#Factura")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
+                        });
+                        $.notify({
+                            // options
+                            icon: 'fa fa-check',
+                            title: '',
+                            message: 'DOCUMENTOS PENDIENTES CARGADOS'
+                        }, {
+                            // settings
+                            type: 'success',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: false,
+                            delay: 3000,
+                            timer: 1000,
+                            placement: {
+                                from: "bottom",
+                                align: "left"
+                            },
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            }
+                        });
+                        pnlTablero.find('#Factura')[0].selectize.focus();
+                    } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                        $.notify({
+                            // options
+                            icon: 'fa fa-exclamation',
+                            title: 'Atención',
+                            message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
+                        }, {
+                            // settings
+                            type: 'danger',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: false,
+                            delay: 3000,
+                            timer: 1000,
+                            placement: {
+                                from: "bottom",
+                                align: "left"
+                            },
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            }
+                        });
+                        pnlTablero.find('#iProveedor').focus();
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
                 });
             }
         });
+        pnlTablero.find("#Factura").change(function () {
+            if ($(this).val()) {
+                var tp = pnlTablero.find("#TpPago").val();
+                var prov = pnlTablero.find("#iProveedor").val();
+                onVerificarExisteDocumento($(this), tp, prov);
+            }
+        });
+        pnlTablero.find("#Fecha").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    pnlTablero.find("#Importe").focus().select();
+                }
+            }
+        });
+        pnlTablero.find("#Importe").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var importe = parseFloat($(this).val());
+                if (importe) {
+                    var saldo = parseFloat(pnlTablero.find('#Saldo_Doc').val());
+                    if (parseFloat(importe) > saldo) {
+                        swal({//No Existe
+                            title: "ATENCIÓN",
+                            text: "IMPORTE A LIQUIDAR ES MAYOR AL DEL DOCUMENTO",
+                            icon: "error"
+                        }).then((value) => {
+                            pnlTablero.find("#Importe").val('').focus();
+                        });
+                    } else {
+                        pnlTablero.find("#TipoPago")[0].selectize.open();
+                        pnlTablero.find("#TipoPago")[0].selectize.focus();
+                    }
+                }
+            }
+        });
         pnlTablero.find("#TipoPago").change(function () {
-            switch (parseInt($(this).val())) {
-                case 1:
-                    pnlTablero.find("#Banco")[0].selectize.disable();
-                    pnlTablero.find("#DocPago").val('Efectivo');
-                    btnGuardar.focus();
-                    break;
-                case 2:
-                    pnlTablero.find("#Banco")[0].selectize.enable();
-                    pnlTablero.find("#DocPago").val('Transf-').focus();
-                    break;
-                case 3:
-                    pnlTablero.find("#Banco")[0].selectize.enable();
-                    pnlTablero.find("#DocPago").val('Che-').focus();
-                    break;
-                case 4:
-                    pnlTablero.find("#Banco")[0].selectize.disable();
-                    pnlTablero.find("#DocPago").focus();
-                    break;
-                case 5:
-                    pnlTablero.find("#Banco")[0].selectize.disable();
-                    pnlTablero.find("#DocPago").focus();
-                    break;
-                case 6:
-                    pnlTablero.find("#Banco")[0].selectize.disable();
-                    pnlTablero.find("#DocPago").focus();
-                    break;
+            if ($(this).val()) {
+                switch (parseInt($(this).val())) {
+                    case 1:
+                        pnlTablero.find("#sBanco")[0].selectize.disable();
+                        pnlTablero.find("#DocPago").val('Efectivo');
+                        btnGuardar.focus();
+                        break;
+                    case 2:
+                        pnlTablero.find("#sBanco")[0].selectize.enable();
+                        pnlTablero.find("#DocPago").val('Transf-').focus();
+                        break;
+                    case 3:
+                        pnlTablero.find("#sBanco")[0].selectize.enable();
+                        pnlTablero.find("#DocPago").val('Che-').focus();
+                        break;
+                    case 4:
+                        pnlTablero.find("#sBanco")[0].selectize.disable();
+                        pnlTablero.find("#DocPago").focus();
+                        break;
+                    case 5:
+                        pnlTablero.find("#sBanco")[0].selectize.disable();
+                        pnlTablero.find("#DocPago").focus();
+                        break;
+                    case 6:
+                        pnlTablero.find("#sBanco")[0].selectize.disable();
+                        pnlTablero.find("#DocPago").focus();
+                        break;
+                }
+            }
+        });
+        pnlTablero.find("#DocPago").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var ref = ($(this).val());
+                if (ref) {
+                    pnlTablero.find("#Banco").focus();
+                }
+            }
+        });
+        pnlTablero.find('#Banco').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtbco = $(this).val();
+                if (txtbco) {
+                    var tp = pnlTablero.find("#TpPago").val();
+                    $.getJSON(master_url + 'onVerificarBanco', {Banco: txtbco, Tp: tp}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sBanco")[0].selectize.addItem(txtbco, true);
+                            btnGuardar.focus();
+                        } else {
+                            swal('ERROR', 'EL BANCO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sBanco")[0].selectize.clear(true);
+                                pnlTablero.find('#Banco').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sBanco").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Banco').val($(this).val());
+                btnGuardar.focus();
             }
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 swal({
@@ -304,8 +467,8 @@
                     closeOnClickOutside: false
                 }).then((action) => {
                     if (action) {
-                        var tp = pnlTablero.find("#Tp").val();
-                        var prov = pnlTablero.find("#Proveedor").val();
+                        var tp = pnlTablero.find("#TpPago").val();
+                        var prov = pnlTablero.find("#iProveedor").val();
                         var fact = pnlTablero.find('#Factura').val();
                         var fecPago = pnlTablero.find('#Fecha').val();
                         var importe = pnlTablero.find("#Importe").val();
@@ -323,8 +486,9 @@
                             DocPago: docPago,
                             Banco: banco
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             swal({//No Existe
-                                title: "OPERACIÓN EXITOSA",
+                                title: "ATENCIÓN",
                                 text: "PAGO REGISTRADO EXITOSAMENTE",
                                 icon: "success"
                             }).then((value) => {
@@ -346,13 +510,13 @@
         /*********************** PARA REPORTE ******/
         validacionSelectPorContenedor(mdlEstadoCuentaProveedor);
         setFocusSelectToInputOnChange('#aProveedor', '#btnImprimir', mdlEstadoCuentaProveedor);
-        handleEnter();
+        handleEnterDiv(mdlEstadoCuentaProveedor);
         $('#btnImprimirEdoCtaProveedor').click(function () {
             mdlEstadoCuentaProveedor.modal('show');
         });
 
         mdlEstadoCuentaProveedor.find("#Tp").change(function () {
-            onVerificarTp($(this));
+            onVerificarTpPagosProv($(this));
         });
 
         mdlEstadoCuentaProveedor.find('#btnImprimir').on("click", function () {
@@ -423,7 +587,7 @@
             $.each(mdlEstadoCuentaProveedor.find("select"), function (k, v) {
                 mdlEstadoCuentaProveedor.find("select")[k].selectize.clear(true);
             });
-            getProveedoresAnt();
+            getProveedoresModalEdoCta();
             mdlEstadoCuentaProveedor.find('#Tp').focus();
         });
     });
@@ -435,12 +599,12 @@
             pnlTablero.find("select")[k].selectize.clear(true);
         });
         pnlTablero.find("#Fecha").val(getToday());
-        pnlTablero.find("#Tp").focus();
+        pnlTablero.find("#TpPago").focus();
     }
     function getBancos(tp) {
         $.getJSON(master_url + 'getBancos', {Tp: tp}).done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Banco")[0].selectize.addOption({text: v.Banco, value: v.ID});
+                pnlTablero.find("#sBanco")[0].selectize.addOption({text: v.Banco, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -470,7 +634,7 @@
                     pnlTablero.find('#Dias').val(data[0].Dias);
                     enableFieldsDetalle();
                     disableFieldsEncabezado();
-                    $('#Detalle').find("#Banco")[0].selectize.disable();
+                    $('#Detalle').find("#sBanco")[0].selectize.disable();
                     pnlTablero.find('#Fecha').focus();
                 }
             } else {//EL DOCUMENTO NO EXISTE
@@ -487,11 +651,11 @@
             console.log(x.responseText);
         });
     }
-    function onVerificarTp(v) {
+    function onVerificarTpPagosProv(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-            pnlTablero.find('#Proveedor')[0].selectize.focus();
-            getProveedores(tp);
+            getProveedoresPagosProv(tp);
+
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -506,13 +670,14 @@
             });
         }
     }
-    function getProveedores(tp) {
-        pnlTablero.find("#Proveedor")[0].selectize.clear(true);
-        pnlTablero.find("#Proveedor")[0].selectize.clearOptions();
+    function getProveedoresPagosProv(tp) {
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
+            pnlTablero.find('#iProveedor').focus();
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
@@ -544,7 +709,7 @@
     }
 
     /*Prov para reporte*/
-    function getProveedoresAnt() {
+    function getProveedoresModalEdoCta() {
         mdlEstadoCuentaProveedor.find("#Proveedor")[0].selectize.clear(true);
         mdlEstadoCuentaProveedor.find("#Proveedor")[0].selectize.clearOptions();
         $.getJSON(master_url_remota + 'getProveedores').done(function (data) {
@@ -572,7 +737,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

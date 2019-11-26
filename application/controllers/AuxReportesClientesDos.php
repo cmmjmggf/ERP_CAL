@@ -39,15 +39,27 @@ class AuxReportesClientesDos extends CI_Controller {
                                                 PE.ColorT,
                                                 PE.Maquila,
                                                 PE.Semana,
+                                                PE.stsavan AS Avance,
                                                 CASE
-                                                WHEN PE.Control = 0 OR PE.Control IS NULL THEN 0
-                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 1
-                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN CAST(D.Clave AS SIGNED)
-                                                END AS Avance,
-                                                CASE
-                                                WHEN PE.Control = 0 OR PE.Control IS NULL THEN 'PRE-PROGRAMADO'
-                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 'PROGRAMADO'
-                                                WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN D.Descripcion
+                                                when (PE.stsavan  = 0) then 'Pre-Programado'
+                                                when (PE.stsavan  = 1) then 'Programado'
+                                                when (PE.stsavan = 2) then 'Corte'
+                                                when (PE.stsavan = 3) then 'Rayado'
+                                                when (PE.stsavan = 33) then 'Rebajado'
+                                                when (PE.stsavan = 4) then 'Foleado'
+                                                when (PE.stsavan = 40) then 'Entretelado'
+                                                when (PE.stsavan = 42) then 'Proceso Maq'
+                                                when (PE.stsavan = 44) then 'Alm-Corte'
+                                                when (PE.stsavan = 5) then 'Pespunte'
+                                                when (PE.stsavan = 55) then 'Ensuelado'
+                                                when (PE.stsavan = 6) then 'Alm-Pespu'
+                                                when (PE.stsavan = 7) then 'Tejido'
+                                                when (PE.stsavan = 8) then 'Alm-Tejido'
+                                                when (PE.stsavan = 9) then 'Montado'
+                                                when (PE.stsavan = 10) then 'Adorno'
+                                                when (PE.stsavan = 11) then 'Alm-Adorno'
+                                                when (PE.stsavan = 12) then 'Prd-Termi'
+                                                when (PE.stsavan = 13) then 'Facturado'
                                                 END AS AvanceT ,
                                                 PE.Pares,
                                                 PE.ParesFacturados

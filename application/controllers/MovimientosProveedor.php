@@ -43,7 +43,7 @@ class MovimientosProveedor extends CI_Controller {
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuMateriales');
                     break;
-                case 'PRODUCCION':
+                case 'PRODUCPION':
                     $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
             }
@@ -58,9 +58,51 @@ class MovimientosProveedor extends CI_Controller {
         }
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
-            print json_encode($this->MovimientosProveedor_model->getRecords($this->input->post('Proveedor')));
+            $proveedor = $this->input->post('Proveedor');
+            print json_encode($this->db->query(" SELECT
+                            CP.Proveedor,
+                            CP.Doc,
+                            date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
+                            CP.ImporteDoc,
+                            CP.Pagos_Doc,
+                            CP.Saldo_Doc,
+                            CP.Tp,
+                            CP.Estatus
+                            FROM cartera_proveedores CP
+                            where CP.Proveedor = $proveedor
+                            ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPagos() {
+        try {
+            $prov = $this->input->post('Proveedor');
+            $doc = $this->input->post('Doc');
+            $query = " SELECT
+                            CP.Factura as remicion,
+                            date_format(str_to_date(CP.fecha, '%d/%m/%Y'),'%Y/%m/%d') as fechacap,
+                            CP.importe as importeP,
+                            CP.DocPago
+                            FROM pagosproveedores CP
+                            where CP.Proveedor = $prov
+                            ";
+            if ($doc !== '') {
+                $query .= "and CP.Factura = $doc ";
+            }
+            print json_encode($this->db->query($query)->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

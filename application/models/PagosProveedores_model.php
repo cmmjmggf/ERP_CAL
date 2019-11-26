@@ -13,8 +13,8 @@ class PagosProveedores_model extends CI_Model {
     public function getProveedores() {
         try {
             return $this->db->select("P.Clave AS ID, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreI,'')) AS ProveedorI, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
                             ->from("proveedores AS P")->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -23,7 +23,7 @@ class PagosProveedores_model extends CI_Model {
 
     public function getBancos($Tp) {
         try {
-            return $this->db->select("G.Clave AS ID, CONCAT(G.Clave,' - ',  IFNULL(G.Nombre,'')) AS Banco", false)
+            return $this->db->select("G.Clave AS ID, CONCAT(IFNULL(G.Nombre,'')) AS Banco", false)
                             ->from("bancos AS G")->where("G.Tp", $Tp)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -50,7 +50,7 @@
     var mdlCostoMaterialMaqSemFecha = $('#mdlCostoMaterialMaqSemFecha');
 
     $(document).ready(function () {
-        handleEnter();
+        handleEnterDiv(mdlCostoMaterialMaqSemFecha);
         mdlCostoMaterialMaqSemFecha.find('#mdlCostoMaterialMaqSemFechaDrag').draggable();
 
         mdlCostoMaterialMaqSemFecha.on('shown.bs.modal', function () {

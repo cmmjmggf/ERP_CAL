@@ -137,7 +137,7 @@
                             pnlTablero.find("#Tp").val('');
                             pnlTablero.find("#Doc").val('');
                             getPagos(txtcte, '', '');
-                            MovimientosClientes.column(1).search('').draw();
+                            MovimientosClientes.column(1).search('').draw();//Refresca la tabla sin el doc
 
                             pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
                             getRecords(txtcte);

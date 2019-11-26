@@ -58,6 +58,25 @@ class PagosProveedores extends CI_Controller {
         }
     }
 
+    public function onVerificarBanco() {
+        try {
+            $Tp = $this->input->get('Tp');
+            $Banco = $this->input->get('Banco');
+            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getBancos() {
         try {
             print json_encode($this->PagosProveedores_model->getBancos($this->input->get('Tp')));
