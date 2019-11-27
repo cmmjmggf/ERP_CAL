@@ -108,11 +108,11 @@
             </div>
             <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
                 <label>Banco</label>
-                <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" required="">
+                <input type="text" class="form-control form-control-sm  numbersOnly " id="Banco" name="Banco" maxlength="3" >
             </div>
             <div class="col-12 col-sm-4 col-md-2 col-xl-2" >
                 <label for="" >-</label>
-                <select id="sBanco" name="sBanco" class="form-control form-control-sm required NotSelectize" required="" >
+                <select id="sBanco" name="sBanco" class="form-control form-control-sm  NotSelectize"  >
                     <option value=""></option>
                 </select>
             </div>
@@ -194,6 +194,7 @@
                                         }
                                     });
                                     pnlTablero.find('#Factura')[0].selectize.focus();
+                                    pnlTablero.find("#Factura")[0].selectize.open();
                                 } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
                                     $.notify({
                                         // options
@@ -273,6 +274,7 @@
                             }
                         });
                         pnlTablero.find('#Factura')[0].selectize.focus();
+                        pnlTablero.find("#Factura")[0].selectize.open();
                     } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
                         $.notify({
                             // options
@@ -342,27 +344,33 @@
             if ($(this).val()) {
                 switch (parseInt($(this).val())) {
                     case 1:
+                        pnlTablero.find("#Banco").attr('readonly', true);
                         pnlTablero.find("#sBanco")[0].selectize.disable();
                         pnlTablero.find("#DocPago").val('Efectivo');
                         btnGuardar.focus();
                         break;
                     case 2:
+                        pnlTablero.find("#Banco").attr('readonly', false);
                         pnlTablero.find("#sBanco")[0].selectize.enable();
                         pnlTablero.find("#DocPago").val('Transf-').focus();
                         break;
                     case 3:
+                        pnlTablero.find("#Banco").attr('readonly', false);
                         pnlTablero.find("#sBanco")[0].selectize.enable();
                         pnlTablero.find("#DocPago").val('Che-').focus();
                         break;
                     case 4:
+                        pnlTablero.find("#Banco").attr('readonly', false);
                         pnlTablero.find("#sBanco")[0].selectize.disable();
                         pnlTablero.find("#DocPago").focus();
                         break;
                     case 5:
+                        pnlTablero.find("#Banco").attr('readonly', false);
                         pnlTablero.find("#sBanco")[0].selectize.disable();
                         pnlTablero.find("#DocPago").focus();
                         break;
                     case 6:
+                        pnlTablero.find("#Banco").attr('readonly', false);
                         pnlTablero.find("#sBanco")[0].selectize.disable();
                         pnlTablero.find("#DocPago").focus();
                         break;
@@ -409,47 +417,57 @@
             btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
-                swal({
-                    buttons: ["Cancelar", "Aceptar"],
-                    title: 'Estás Seguro?',
-                    text: "Esta acción no se puede revertir",
-                    icon: "warning",
-                    closeOnEsc: false,
-                    closeOnClickOutside: false
-                }).then((action) => {
-                    if (action) {
-                        var tp = pnlTablero.find("#TpPago").val();
-                        var prov = pnlTablero.find("#iProveedor").val();
-                        var fact = pnlTablero.find('#Factura').val();
-                        var fecPago = pnlTablero.find('#Fecha').val();
-                        var importe = pnlTablero.find("#Importe").val();
-                        var TipoPago = pnlTablero.find("#TipoPago").val();
-                        var docPago = pnlTablero.find("#DocPago").val();
-                        var banco = pnlTablero.find("#Banco").val();
-                        $.post(master_url + 'onAgregar', {
+//                swal({
+//                    buttons: ["Cancelar", "Aceptar"],
+//                    title: 'Estás Seguro?',
+//                    text: "Esta acción no se puede revertir",
+//                    icon: "warning",
+//                    closeOnEsc: false,
+//                    closeOnClickOutside: false
+//                }).then((action) => {
+//                    if (action) {
+//
+//                    }
+//                });
+                var tp = pnlTablero.find("#TpPago").val();
+                var prov = pnlTablero.find("#iProveedor").val();
+                var fact = pnlTablero.find('#Factura').val();
+                var fecPago = pnlTablero.find('#Fecha').val();
+                var importe = pnlTablero.find("#Importe").val();
+                var TipoPago = pnlTablero.find("#TipoPago").val();
+                var docPago = pnlTablero.find("#DocPago").val();
+                var banco = pnlTablero.find("#Banco").val();
+                $.post(master_url + 'onAgregar', {
 
-                            Tp: tp,
-                            Proveedor: prov,
-                            Factura: fact,
-                            Fecha: fecPago,
-                            Importe: importe,
-                            TipoPago: TipoPago,
-                            DocPago: docPago,
-                            Banco: banco
-                        }).done(function (data) {
-                            btnGuardar.attr('disabled', false);
-                            swal({//No Existe
-                                title: "ATENCIÓN",
-                                text: "PAGO REGISTRADO EXITOSAMENTE",
-                                icon: "success"
-                            }).then((value) => {
-                                init();
-                            });
+                    Tp: tp,
+                    Proveedor: prov,
+                    Factura: fact,
+                    Fecha: fecPago,
+                    Importe: importe,
+                    TipoPago: TipoPago,
+                    DocPago: docPago,
+                    Banco: banco
+                }).done(function (data) {
+                    enableFieldsEncabezado();
+                    disableFieldsDetalle();
+                    btnGuardar.attr('disabled', false);
+                    pnlTablero.find("#Importe").val("");
+                    pnlTablero.find("#Banco").val("");
+                    pnlTablero.find("#DocPago").val("");
+                    pnlTablero.find("#ImporteDoc").val("");
+                    pnlTablero.find("#Pagos_Doc").val("");
+                    pnlTablero.find("#Saldo_Doc").val("");
+                    pnlTablero.find("#FechaDoc").val("");
+                    pnlTablero.find("#Dias").val("");
 
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                        });
-                    }
+                    pnlTablero.find("#TipoPago")[0].selectize.clear(true);
+                    pnlTablero.find("#sBanco")[0].selectize.clear(true);
+                    pnlTablero.find("#Factura")[0].selectize.clear(true);
+                    pnlTablero.find("#Factura")[0].selectize.enable();
+                    pnlTablero.find("#Factura")[0].selectize.open();
+                    pnlTablero.find("#Factura")[0].selectize.focus();
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
                 });
             } else {
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
