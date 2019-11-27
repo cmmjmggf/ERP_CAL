@@ -183,7 +183,7 @@
 
         /*DATATABLES*/
         Facturados = tblFacturados.DataTable({
-            "dom": 'ritp',
+            "dom": 'rtp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentosClientes/getFacturas'); ?>',
@@ -225,7 +225,7 @@
         });
 //        TestThisJSONURL('<?php print base_url('RastreoDeControlesEnDocumentosClientes/getDevoluciones'); ?>');
         Devoluciones = tblDevoluciones.DataTable({
-            "dom": 'rit',
+            "dom": 'rpt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentosClientes/getDevoluciones'); ?>',
@@ -271,12 +271,14 @@
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentosClientes/getInfoXControl') ?>", {CONTROL: e}).done(function (a, b, c) {
                 if (a.length > 0) {
                     var xx = a[0];
+                    ParesFabricados.val(xx.TOTAL_PARES);
+                    ParesFacturados.val(xx.TOTAL_PARES);
+                    ParesVendidos.val(xx.PARES_VENDIDOS);
+                    ParesDevueltos.val(xx.PARES_DEVUELTOS);
+                    
                     switch (parseInt(xx.ESTATUS_PEDIDO)) {
                         case 2:
                             /*VENDIDO/CERRADA/CONCLUIDA*/
-                            ParesFabricados.val(xx.TOTAL_PARES);
-                            ParesFacturados.val(xx.TOTAL_PARES);
-                            ParesVendidos.val(xx.PARES_VENDIDOS);
                             ParesCancelados.val(0);
                             /*PARES DEVUELTOS*/
                             $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentosClientes/getDevolucionesXControl') ?>', {CONTROL: e}).done(function (aa, bb, cc) {

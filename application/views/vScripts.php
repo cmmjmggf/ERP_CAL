@@ -1403,7 +1403,7 @@
         }).always(function () {
             opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';
             opcion += '<a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-            opcion += ' <img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" class="rounded-circle" width="24">';
+            opcion += ' <img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" style="cursor:pointer;" class="rounded-circle" width="24">';
             opcion += ' <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?> ';
             opcion += '</a>';
             opcion += '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">';

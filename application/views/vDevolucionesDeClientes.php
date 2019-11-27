@@ -270,7 +270,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-info btn-block" id="btnAcepta" name="btnAcepta" disabled="">
+                        <button type="button" class="btn btn-success btn-block" id="btnAcepta" name="btnAcepta" disabled="">
                             <span class="fa fa-check"></span>  Acepta
                         </button>
                     </div>
@@ -857,7 +857,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 250,
+            "scrollY": 200,
             "scrollX": true,
             "order": [[4, "desc"]],
             "initComplete": function (settings, json) {
@@ -956,7 +956,7 @@
             "bLengthChange": false,
             "deferRender": true, "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 250,
+            "scrollY": 200,
             "scrollX": true,
             "order": [[10, "desc"]],
             "initComplete": function (settings, json) {
@@ -1124,5 +1124,15 @@
     }
     input,.selectize-input > * {
         font-weight: bold !important;
+    }
+    .btn-success {
+        color: #fff;
+        background-color: #7CB342;
+        border-color: #7CB342;
+    }
+    .btn-success.disabled, .btn-success:disabled {
+        color: #fff;
+        background-color: #59802F;
+        border-color: #59802F;
     }
 </style>

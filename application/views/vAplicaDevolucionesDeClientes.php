@@ -474,7 +474,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 250,
+            "scrollY": 200,
             "scrollX": true,
             "order": [[3, "desc"]],
             "initComplete": function (settings, json) {
@@ -519,7 +519,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 250,
+            "scrollY": 200,
             "scrollX": true,
             "order": [[10, "desc"]],
             "initComplete": function (settings, json) {
