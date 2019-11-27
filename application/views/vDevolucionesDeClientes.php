@@ -11,14 +11,14 @@
                         <label>Cliente</label>
                         <div class="row">
                             <div class="col-2">
-                                <input type="text" id="xClienteDevolucion" name="xClienteDevolucion" class="form-control" maxlength="12">
+                                <input type="text" id="xClienteDevolucion" name="xClienteDevolucion" class="form-control form-control-sm" maxlength="12">
                             </div>
                             <div class="col-10">
-                                <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control">
+                                <select id="ClienteDevolucion" name="ClienteDevolucion" class="form-control form-control-sm">
                                     <option></option>
                                     <?php
                                     /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE,  C.RazonS  AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                         print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
                                     }
                                     ?>
@@ -444,7 +444,6 @@
                 DetalleDefecto[0].selectize.clear(true);
             }
         });
-
         DetalleDefecto.change(function () {
             if (DetalleDefecto.val()) {
                 xDetalleDefecto.val(DetalleDefecto.val());
@@ -610,6 +609,9 @@
             }
         });
 
+        ClienteDevolucion.click(function () {
+            ClienteDevolucion[0].selectize.enable();
+        });
         ClienteDevolucion.change(function () {
             if (ClienteDevolucion.val()) {
                 xClienteDevolucion.val(ClienteDevolucion.val());
@@ -704,7 +706,7 @@
         });
 
         btnAcepta.click(function () {
-            
+
             $.each(pnlTablero.find("select"), function (k, v) {
                 pnlTablero.find("select")[k].selectize.enable();
             });

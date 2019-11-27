@@ -25,13 +25,14 @@ class RelojChecador extends CI_Controller {
     public function onAcceder() {
         try {
             $fecha = Date('Y-m-d');
-            $Entrada_Salida = $this->ASM->onComprobarEntrada($this->input->post('Numero'), $fecha);
-            $info_empleado = $this->ASM->getInformacionPorEmpleado($this->input->post('Numero'));
+            $x = $this->input->post();
+            $Entrada_Salida = $this->ASM->onComprobarEntrada($x['Numero'], $fecha);
+            $info_empleado = $this->ASM->getInformacionPorEmpleado($x['Numero']);
             $dtm = json_decode(json_encode($info_empleado), FALSE);
 
             if (count($dtm) > 0) {
                 $es = array(
-                    'numemp' => $this->input->post('Numero'),
+                    'numemp' => $x['Numero'],
                     'fecalta' => Date('Y-m-d H:i:s'),
                     'hora' => Date('H:i:s'),
                     'nomemp' => $dtm[0]->Empleado,
@@ -39,7 +40,7 @@ class RelojChecador extends CI_Controller {
                     'nomdep' => $dtm[0]->DEPTOT,
                     'ampm' => Date('a'),
                     'año' => Date('Y'),
-                    'semana' => $this->input->post('Semana'),
+                    'semana' => $x['Semana'],
                     'reg' => $this->session->ID);
                 switch (count($Entrada_Salida)) {
                     case 0:
@@ -60,6 +61,7 @@ class RelojChecador extends CI_Controller {
                         break;
                 }
                 print json_encode($info_empleado);
+                $l = new Logs("RELOJ CHECADOR", "{$x['Numero']} AH REGISTRADO TURNO {$es['turno']}", $this->session);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

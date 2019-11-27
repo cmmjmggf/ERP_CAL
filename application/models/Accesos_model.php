@@ -35,6 +35,7 @@ class Accesos_model extends CI_Model {
              * FOR DEBUG ONLY
              */
             $str = $this->db->last_query();
+            print $str;
             $data = $query->result();
             return $data;
         } catch (Exception $exc) {

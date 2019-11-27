@@ -1,13 +1,13 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row"> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h5 class="text-danger font-italic"><span class="fa fa-exchange-alt"></span> APLICA DEVOLUCIONES PENDIENTES</h5>
                     </div>
 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                         <label>Cliente</label>
                         <div class="row">
                             <div class="col-3">
@@ -18,7 +18,7 @@
                                     <option></option>
                                     <?php
                                     /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C "
+                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C "
                                             . "LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente "
                                             . "WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                         print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
@@ -29,12 +29,11 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <label>Fecha</label>
                         <input type="text" id="FechaDevolucion" name="FechaDevolucion" class="form-control form-control-sm date notEnter">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
-                        <label>TP</label>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-1 col-xl-1"><label>TP</label>
                         <input type="text" id="TP" name="TP" class="form-control form-control-sm numbersOnly" maxlength="1">                            
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
@@ -70,32 +69,32 @@
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Nota c: </span> 
-                        <span class="font-weight-bold text-info notac_text">- - - -</span> 
+                        <span class="font-weight-bold text-info notac_text" style="color: #1d1d1d !important;">- - - -</span> 
                         <input type="text" id="NotaCredito" name="NotaCredito" readonly="" class="form-control form-control-sm d-none numbersOnly">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2"> 
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Control: </span> 
-                        <span class="font-weight-bold text-info control_text">- - - -</span>
+                        <span class="font-weight-bold text-info control_text" style="color: #1d1d1d !important;">- - - -</span>
                         <input type="text" id="Control" name="Control" readonly="" class="form-control form-control-sm numbersOnly d-none" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Estilo: </span> 
-                        <span class="font-weight-bold text-info estilo_text">----</span>
+                        <span class="font-weight-bold text-info estilo_text" style="color: #1d1d1d !important;">----</span>
                         <input type="text" id="Estilo" name="Estilo"  class="form-control form-control-sm d-none" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Color: </span> 
-                        <span class="font-weight-bold text-info color_text">----</span>
+                        <span class="font-weight-bold text-info color_text" style="color: #1d1d1d !important;">----</span>
                         <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                         <input type="text" id="ColorT" name="ColorT" class="form-control form-control-sm d-none" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2"> 
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Serie: </span> 
-                        <span class="font-weight-bold text-info serie_text">----</span>
+                        <span class="font-weight-bold text-info serie_text" style="color: #1d1d1d !important;">----</span>
                         <input type="text" id="Serie" name="Serie" class="form-control form-control-sm d-none" readonly=""> 
                     </div>
 
@@ -103,24 +102,24 @@
 
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe factura: </span> 
-                        <span class="font-weight-bold text-info importe_factura">$ 0.00</span> 
+                        <span class="font-weight-bold text-info importe_factura" style="color: #1d1d1d !important;">$ 0.00</span> 
                     </div>
 
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo factura: </span> 
-                        <span class="font-weight-bold text-info saldo_factura">$ 0.00</span> 
+                        <span class="font-weight-bold text-info saldo_factura" style="color: #1d1d1d !important;">$ 0.00</span> 
                     </div>
 
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Importe devuelto: </span> 
-                        <span class="font-weight-bold text-info importe_devuelto">$ 0.00</span> 
+                        <span class="font-weight-bold text-info importe_devuelto" style="color: #1d1d1d !important;">$ 0.00</span> 
                     </div>
 
                     <div class="w-100 my-1"></div>
 
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo: </span> 
-                        <span class="font-weight-bold text-info total_devuelto">$ 0.00</span> 
+                        <span class="font-weight-bold text-info total_devuelto" style="color: #1d1d1d !important;">$ 0.00</span> 
                     </div>
 
                     <div class="w-100 my-1"></div>
@@ -181,7 +180,7 @@
                     </div>
                 </div><!--ROW-->
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
                 <p class="font-weight-bold text-danger">DOCUMENTADOS DE ESTE CLIENTE CON SALDO</p>
 
                 <table id="tblDocDeEsteCteConSaldo" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
@@ -402,11 +401,29 @@
         TP.change(function () {
             tblDocDeEsteCteConSaldo.parent().addClass("blinkb");
         });
+        
         TP.keydown(function (e) {
             if (xClienteDevolucion.val()) {
                 if (e.keyCode === 13 && parseInt(TP.val()) >= 1 && parseInt(TP.val()) <= 2) {
 
-                } else if (e.keyCode === 13) {
+                } else if (e.keyCode === 13 || e.keyCode === 9) {
+                    TP.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TP.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    xClienteDevolucion.focus().select();
+                });
+                return;
+            }
+        }).focusout(function () {
+            if (xClienteDevolucion.val()) {
+                if (parseInt(TP.val()) >= 1 && parseInt(TP.val()) <= 2) {
+
+                } else {
                     TP.focus().select();
                     onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                         TP.focus().select();
@@ -572,7 +589,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": 250,
+            "scrollY": 200,
             "scrollX": true,
             "order": [[11, "desc"]],
             responsive: {

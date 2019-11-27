@@ -90,7 +90,7 @@
                             <select id="ClienteFactura" name="ClienteFactura" class="form-control form-control-sm notEnter mt-4 ">
                                 <option></option>
                                 <?php
-                                foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
+                                foreach ($this->db->select("C.Clave AS CLAVE,  C.RazonS AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
                                         ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
                                     print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
                                 }

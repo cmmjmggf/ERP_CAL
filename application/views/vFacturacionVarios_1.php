@@ -374,7 +374,7 @@
                         btnCierraDocto.attr('disabled', true);
                         PrevisualizarDocto.attr('disabled', true);
                         AddendaCoppel.attr('disabled', true);
-                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO',   function () {
                             btnCierraDocto.attr('disabled', false);
                             PrevisualizarDocto.attr('disabled', false);
                             AddendaCoppel.attr('disabled', false);
@@ -538,13 +538,6 @@
 
         btnAcepta.click(function () {
             /*validar encabezado*/
-
-            ClienteClave.attr("disabled", false);
-            $.each(pnlTablero.find("select"), function (k, v) {
-                pnlTablero.find("select")[k].selectize.clear(true);
-            });
-
-            return;
             $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
                     {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
                         FACTURA: Documento.val()
@@ -673,7 +666,7 @@
             }
         }).focusout(function () {
             if (ClienteClave.val()) {
-                if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) { 
                     //ALGUNA FUNCION...
                 } else {
                     TPFactura.focus().select();

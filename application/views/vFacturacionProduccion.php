@@ -92,7 +92,7 @@
                                 <option></option>
                                 <?php
 //                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
                                     print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -267,7 +267,7 @@
                             <tr id="rTallasBuscaManual">
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
-                                $style_input = "width: 40px; font-weight: bold !important;height: 22px;text-align: center;padding-left: 4px;padding-right: 4px;";
+                                $style_input = "width: 35px; border: 1px solid #000 !important; font-weight: bold !important;text-align: center;padding-left: 4px;padding-right: 4px;";
                                 for ($index = 1; $index < 23; $index++) {
 //                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
                                     print "<td align='center'><span class=\"T{$index}\">-</span></td>";
@@ -666,7 +666,7 @@
 </div>
 
 <div id="mdlHistorialFacturas" class="modal">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-file-invoice"></span> Historial de facturación</h5> 
@@ -840,7 +840,7 @@
                     if (ClienteFactura.val()) {
                         ClienteFactura[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero,'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             ClienteClave.focus().select();
                         });
                     }
@@ -1375,6 +1375,24 @@
                 if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
                 } else if (e.keyCode === 13) {
+                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+                return;
+            }
+        }).focusout(function () {
+
+            if (ClienteClave.val()) {
+                if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                    getTipoDeCambioYUltimaFactura();
+                } else {
                     TPFactura.focus().select();
                     onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                         TPFactura.focus().select();

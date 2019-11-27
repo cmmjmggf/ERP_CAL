@@ -18,6 +18,13 @@
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3">
                 <label>Usuario</label>
                 <select id="mxu" name="mxu" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    $usrs = $this->db->query("SELECT U.ID AS ID, U.Usuario AS USUARIO, U.TipoAcceso AS TIPO_ACCESO FROM `usuarios` AS `U` ORDER BY ABS(U.ID) ASC")->result();
+                    foreach ($usrs as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3"align="right">
@@ -79,6 +86,12 @@
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3">
                 <label>Usuario</label>
                 <select id="oxmu" name="oxmu" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    foreach ($usrs as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3">
@@ -128,6 +141,12 @@
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 pb-3">
                 <label>Usuario</label>
                 <select id="ixou" name="ixou" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    foreach ($usrs as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 pb-3">
@@ -182,6 +201,12 @@
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 pb-3">
                 <label>Usuario</label>
                 <select id="sixiu" name="sixiu" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    foreach ($usrs as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 pb-3">
@@ -241,6 +266,12 @@
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 pb-3">
                 <label>Usuario</label>
                 <select id="ssixiu" name="ssixiu" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    foreach ($usrs as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 pb-3">
@@ -315,11 +346,11 @@
                                 <input type="text" class="form-control form-control-sm" id="UsuarioLog" name="UsuarioLog" placeholder="999">
                             </div>
                             <div class="col-9">
-                                <select id="SUsuarioLog" name="SUsuarioLog" class="form-control form-control-sm">
+                                <select id="SUsuarioLog" name="SUsuarioLog" class="form-control form-control-sm"> 
                                     <option></option>
                                     <?php
-                                    foreach ($this->db->query("SELECT U.ID AS ID, UPPER(U.Usuario) AS USUARIO FROM usuarios AS U")->result() as $k => $v) {
-                                        print "<option value='{$v->USUARIO}'>{$v->USUARIO}</option>";
+                                    foreach ($usrs as $k => $v) {
+                                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
                                     }
                                     ?>
                                 </select>
@@ -398,7 +429,7 @@
         });
 
         UsuarioLog.on('keydown', function (e) {
-            if (e.keyCode === 13) { 
+            if (e.keyCode === 13) {
                 SUsuarioLog[0].selectize.setValue(UsuarioLog.val());
                 Logs.ajax.reload(function () {
                     $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
@@ -932,21 +963,21 @@
 
         /*MODULOS POR USUARIO*/
 
-        $.getJSON('<?php print base_url('Accesos/getUsuarios') ?>').done(function (dx) {
-            dx.forEach(function (v) {
-                mxu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                oxmu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                ixou[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                sixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                ssixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                $('#mdlCopiaAccesosUsuario').find('#UsuarioAsigna')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-                $('#mdlCopiaAccesosUsuario').find('#UsuarioRecibe')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x.responseText);
-        }).always(function () {
+//        $.getJSON('<?php print base_url('Accesos/getUsuarios') ?>').done(function (dx) {
+//            dx.forEach(function (v) {
+////                mxu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+////                oxmu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+////                ixou[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+////                sixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+////                ssixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+//                $('#mdlCopiaAccesosUsuario').find('#UsuarioAsigna')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+//                $('#mdlCopiaAccesosUsuario').find('#UsuarioRecibe')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
+//            });
+//        }).fail(function (x, y, z) {
+//            console.log(x.responseText);
+//        }).always(function () {
             mxu[0].selectize.setValue(usr);
-        });
+//        });
 
         $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {
             $.each(dx, function (k, v) {
