@@ -38,6 +38,28 @@ class OrdenCompra extends CI_Controller {
         }
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarArticulo() {
+        try {
+            $Articulo = $this->input->get('Articulo');
+            $Proveedor = $this->input->get('Proveedor');
+            $Depto = $this->input->get('Departamento');
+            print json_encode($this->db->query(" SELECT clave FROM articulos "
+                                    . " where clave = '$Articulo' and Departamento = $Depto and Estatus = 'ACTIVO' "
+                                    . " and (ProveedorUno = '$Proveedor' or ProveedorDos = '$Proveedor' or ProveedorTres = '$Proveedor') ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getOrdenCompraByTpFolio() {
         try {
             print json_encode($this->Ordencompra_model->getOrdenCompraByTpFolio($this->input->get('Tp'), $this->input->get('Folio')));
@@ -81,6 +103,14 @@ class OrdenCompra extends CI_Controller {
     public function getProveedores() {
         try {
             print json_encode($this->Ordencompra_model->getProveedores());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getProveedoresSinClave() {
+        try {
+            print json_encode($this->Ordencompra_model->getProveedoresSinClave());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

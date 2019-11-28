@@ -66,30 +66,44 @@
 
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
+        //handleEnter();
         pnlTablero.find("input").val("");
-
-        pnlTablero.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Ano").val("");
-                    pnlTablero.find("#Ano").focus();
-                });
+        pnlTablero.find("#Ano").val(getYear()).focus().select();
+        pnlTablero.find("#Ano").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlTablero.find("#Ano").val("");
+                        pnlTablero.find("#Ano").focus();
+                    });
+                } else {
+                    pnlTablero.find("#Tp").focus().select();
+                }
             }
         });
 
-        pnlTablero.find("#Tp").keyup(function () {
-            var tp = parseInt($(this).val());
-            if (tp > 2) {
-                $(this).val('').focus();
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp > 2) {
+                    $(this).val('').focus();
+                } else {
+                    pnlTablero.find("#Folio").focus().select();
+                }
+            }
+        });
+
+        pnlTablero.find("#Folio").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    pnlTablero.find("#btnBuscar").focus();
+                }
             }
         });
 
@@ -348,7 +362,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

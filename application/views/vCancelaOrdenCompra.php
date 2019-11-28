@@ -63,78 +63,80 @@
     var nuevo = true;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        handleEnter();
         init();
-        pnlTablero.find("#Tp").change(function () {
-            var tp = parseInt($(this).val());
-            if (tp === 1 || tp === 2) {
-                pnlTablero.find('#Folio').focus();
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                    icon: "error",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    $(this).val('').focus();
-                });
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    pnlTablero.find('#Folio').focus();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
+                    });
+                }
             }
         });
-        pnlTablero.find("#Folio").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            var folio = pnlTablero.find("#Folio");
+        pnlTablero.find("#Folio").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = pnlTablero.find("#Tp").val();
+                var folio = pnlTablero.find("#Folio");
 
-            if (tp !== '' && $(this).val() !== '') {
-                $.getJSON(master_url + 'onVerificarExisteOrdenCompra', {
-                    Tp: tp,
-                    Folio: $(this).val()
-                }).done(function (data) {
-                    if (data.length > 0) {//Si existe el registro
-                        if (data[0].Estatus === 'ACTIVA') {//ACTIVA
+                if (tp !== '' && $(this).val() !== '') {
+                    $.getJSON(master_url + 'onVerificarExisteOrdenCompra', {
+                        Tp: tp,
+                        Folio: $(this).val()
+                    }).done(function (data) {
+                        if (data.length > 0) {//Si existe el registro
+                            if (data[0].Estatus === 'ACTIVA') {//ACTIVA
 
-                            getRecords(tp, folio.val());
-                            console.log(data);
+                                getRecords(tp, folio.val());
+                                btnGuardar.focus();
+                                console.log(data);
 
+                            } else {//ABIERTA
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "YA SE HA RECIBIDO EL MATERIAL DE ESTA ORDEN DE COMPRA",
+                                    icon: "warning"
+                                }).then((value) => {
+                                    folio.val('').focus();
+                                });
+                            }
                         } else {//ABIERTA
                             swal({
                                 title: "ATENCIÓN",
-                                text: "YA SE HA RECIBIDO EL MATERIAL DE ESTA ORDEN DE COMPRA",
-                                icon: "warning"
+                                text: "NO EXISTE LA ORDEN DE COMPRA",
+                                icon: "error"
                             }).then((value) => {
                                 folio.val('').focus();
                             });
                         }
-                    } else {//ABIERTA
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTE LA ORDEN DE COMPRA",
-                            icon: "error"
-                        }).then((value) => {
-                            folio.val('').focus();
-                        });
-                    }
-                });
+                    });
 
 
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES INTRODUCIR EL TP DEL MOVIMIENTO Y EL FOLIO CORRECTAMENTE",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: true
-                }).then((action) => {
-                    $(this).val("");
-                    $(this).focus();
-                });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBES INTRODUCIR EL TP DEL MOVIMIENTO Y EL FOLIO CORRECTAMENTE",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: true
+                    }).then((action) => {
+                        $(this).val("");
+                        $(this).focus();
+                    });
+                }
             }
-
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 swal({
@@ -153,19 +155,27 @@
                             Tp: tp,
                             Folio: folio
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             onNotifyOld('fa fa-check', 'REGISTRO CANCELADO EXITOSAMENTE', 'info');
                             init();
                         }).fail(function (x, y, z) {
+                            btnGuardar.attr('disabled', false);
                             console.log(x, y, z);
                         });
                     }
 
                 });
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
         });
 
+        tblMovimientos.find('tbody').on('click', 'tr', function () {
+            tblMovimientos.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+
+        });
     });
     function init() {
         getRecords('0', '0');
@@ -174,7 +184,7 @@
         pnlTablero.find("#Tp").focus();
     }
     function getRecords(tp, folio) {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+        //HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMovimientos')) {
             tblMovimientos.DataTable().destroy();
@@ -225,27 +235,27 @@
             "aaSorting": [
                 [1, 'asc']
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-success text-strong');
-                            break;
-                        case 2:
-                            /*fecha conf*/
-                            c.addClass('text-info text-strong');
-                            break;
-
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 0:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//                        case 2:
+//                            /*fecha conf*/
+//                            c.addClass('text-info text-strong');
+//                            break;
+//
+//                    }
+//                });
+//            },
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
                 // Update footer
@@ -275,11 +285,6 @@
             }
         });
 
-        tblMovimientos.find('tbody').on('click', 'tr', function () {
-            tblMovimientos.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-
-        });
     }
 </script>
 <style>
@@ -294,7 +299,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

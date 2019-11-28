@@ -59,18 +59,25 @@
                         <label for="Folio" >Folio</label>
                         <input type="text" class="form-control form-control-sm numbersOnly disabledForms" readonly="" id="Folio" name="Folio" required="">
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2">
-                        <label for="" >Tipo*</label>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2 d-none">
+                        <label for="" >Tipo* <span class="badge badge-info" style="font-size:14px;">(80 Suela)</span></label>
                         <select id="Tipo" name="Tipo" class="form-control form-control-sm required" required="">
                             <option value=""></option>
                             <option value="80">80 SUELA</option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                        <label for="" >Proveedor*</label>
-                        <select id="Proveedor" name="Proveedor" class="form-control form-control-sm mb-2 required" required="" >
-                            <option value=""></option>
-                        </select>
+                    <div class="col-12 col-sm-4 col-md-3 col-xl-3">
+                        <label>Proveedor*</label>
+                        <div class="row">
+                            <div class="col-3">
+                                <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="5" required="">
+                            </div>
+                            <div class="col-9">
+                                <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-xl-2">
                         <label for="" >Fecha*</label>
@@ -78,7 +85,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                         <label for="" >Maq.*</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="3" id="Maq" name="Maq" required="">
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Maq" name="Maq" required="">
                     </div>
                     <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                         <label for="" >Año*</label>
@@ -104,18 +111,25 @@
                 </div>
             </form>
         </div>
-        <div class="card-block mt-4" id="pnlDatosDetalle" >
+        <hr>
+        <div class="card-block" id="pnlDatosDetalle" >
             <div class="row" id="ControlesDetalle">
-
-                <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                    <label for="" >Artículo CBZ*</label>
-                    <select id="Articulo" name="Articulo" class="form-control form-control-sm required" required="" >
-                        <option value=""></option>
-                    </select>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>Articulo CBZ*</label>
+                    <div class="row">
+                        <div class="col-3">
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                        </div>
+                        <div class="col-9">
+                            <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <!--TALLAS-->
                 <div class="col-12">
-                    <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;">
+                    <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;" id="dTallas">
                         <label class="font-weight-bold" for="Tallas"></label>
                         <table id="tblTallas" class="Tallas" >
                             <thead></thead>
@@ -124,7 +138,7 @@
                                     <td class="font-weight-bold">Art.</td>
                                     <?php
                                     for ($index = 1; $index < 21; $index++) {
-                                        print '<td><input type="text" style="width: 55px;" id="A' . $index . '" name="A' . $index . '" disabled></td>';
+                                        print '<td><input type="text" style="width: 55px;" id="A' . $index . '" name="A' . $index . '" disabled class="form-control form-control-sm numbersOnly "></td>';
                                     }
                                     ?>
                                 </tr>
@@ -132,7 +146,7 @@
                                     <td class="font-weight-bold">Precio</td>
                                     <?php
                                     for ($index = 1; $index < 21; $index++) {
-                                        print '<td><input type="text" style="width: 55px;" id="P' . $index . '" name="P' . $index . '" disabled></td>';
+                                        print '<td><input type="text" style="width: 55px;" id="P' . $index . '" name="P' . $index . '" disabled class="form-control form-control-sm numbersOnly "></td>';
                                     }
                                     ?>
                                 </tr>
@@ -140,7 +154,7 @@
                                     <td class="font-weight-bold">Tallas</td>
                                     <?php
                                     for ($index = 1; $index < 21; $index++) {
-                                        print '<td><input type="text" style="width: 55px;" id="T' . $index . '" name="T' . $index . '" disabled></td>';
+                                        print '<td><input type="text" style="width: 55px;" id="T' . $index . '" name="T' . $index . '" disabled class="form-control form-control-sm numbersOnly "></td>';
                                     }
                                     ?>
                                 </tr>
@@ -148,7 +162,7 @@
                                     <td class="font-weight-bold">Cant.</td>
                                     <?php
                                     for ($index = 1; $index < 21; $index++) {
-                                        print '<td><input type="text" style="width: 55px;" id="C' . $index . '" class="form-control form-control-sm numbersOnly " name="C' . $index . '" ></td>';
+                                        print '<td><input type="text" style="width: 55px;" id="C' . $index . '" class="form-control form-control-sm numeric " name="C' . $index . '" ></td>';
                                     }
                                     ?>
                                     <td>
@@ -168,8 +182,9 @@
                 </div>
             </div>
             <!--        DETALLE-->
-            <div class="row">
-                <div class="col-12 mt-4">
+            <hr>
+            <div class="row  mt-4">
+                <div class="col-12">
                     <table id="tblComprasDetalle" class="table table-sm" style="width:100%">
                         <thead>
                             <tr>
@@ -225,88 +240,215 @@
 
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlDatos.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        pnlDatosDetalle.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        handleEnterDiv(pnlDatosDetalle.find('#dTallas'));
         init();
-        handleEnter();
+
         validacionSelectPorContenedor(pnlDatos);
         validacionSelectPorContenedor(pnlDatosDetalle);
-        setFocusSelectToSelectOnChange('#Tipo', '#Proveedor', pnlDatos);
-        setFocusSelectToInputOnChange('#Proveedor', '#FechaOrden', pnlDatos);
-        setFocusSelectToInputOnChange('#Articulo', '#C1', pnlDatosDetalle);
+        //setFocusSelectToSelectOnChange('#Tipo', '#Proveedor', pnlDatos);
+        //setFocusSelectToInputOnChange('#Proveedor', '#FechaOrden', pnlDatos);
+        //setFocusSelectToInputOnChange('#Articulo', '#C1', pnlDatosDetalle);
 
-        pnlDatos.find("#Tp").change(function () {
-            var tp = parseInt($(this).val());
-            if (tp === 1 || tp === 2) {
-                getFolio(tp);
-                pnlDatos.find('#Tipo')[0].selectize.focus();
-                getProveedores(tp);
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                    icon: "error",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    $(this).val('').focus();
-                });
+        pnlDatos.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    getFolio(tp);
+                    pnlDatos.find('#Proveedor').focus().select();
+                    getProveedores(tp);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
+                    });
+                }
+            }
+        });
+        pnlDatos.find('#Proveedor').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlDatos.find("#sProveedor")[0].selectize.addItem(txtprov, true);
+
+
+                            pnlDatosDetalle.find("#Articulo").val('');
+                            pnlDatosDetalle.find("#sArticulo")[0].selectize.clear(true);
+                            pnlDatosDetalle.find("#sArticulo")[0].selectize.clearOptions();
+                            var tipo = pnlDatos.find("#Tipo").val();
+                            if (tipo !== '') {
+                                getCabecerosByProveedor(txtprov);
+                                pnlDatos.find('#FechaOrden').focus().select();
+                            } else {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "DEBE ELEGIR UN TIPO DE COMPRA",
+                                    icon: "warning",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false,
+                                    buttons: false,
+                                    timer: 1000
+                                }).then((action) => {
+                                    pnlDatos.find("#Tipo")[0].selectize.focus();
+                                });
+                            }
+
+
+
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find("#sProveedor")[0].selectize.clear(true);
+                                pnlDatos.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
             }
         });
 
-        pnlDatos.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlDatos.find("#Ano").val("");
-                    pnlDatos.find("#Ano").focus();
-                });
-            }
-            pnlDatos.find("#Sem").trigger('change');
-        });
-
-        pnlDatos.find("#Maq").change(function () {
-            onComprobarMaquilas($(this));
-            pnlDatos.find("#Sem").trigger('change');
-        });
-
-        pnlDatos.find("#Sem").change(function () {
-            var ano = pnlDatos.find("#Ano");
-            var maq = pnlDatos.find("#Maq");
-            onComprobarSemanasProduccion($(this), ano.val(), maq.val());
-        });
-
-        pnlDatos.find("#Proveedor").change(function () {
-            pnlDatosDetalle.find("#Articulo")[0].selectize.clear(true);
-            pnlDatosDetalle.find("#Articulo")[0].selectize.clearOptions();
-            var tipo = pnlDatos.find("#Tipo").val();
-            if (tipo !== '') {
-                getCabecerosByProveedor($(this).val());
-                getPorcentajesCompraByProveedor($(this).val());
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBE ELEGIR UN TIPO DE COMPRA",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlDatos.find("#Tipo")[0].selectize.focus();
-                });
+        pnlDatos.find("#sProveedor").change(function () {
+            if ($(this).val()) {
+                pnlDatos.find('#Proveedor').val($(this).val());
+                pnlDatosDetalle.find("#Articulo").val('');
+                pnlDatosDetalle.find("#sArticulo")[0].selectize.clear(true);
+                pnlDatosDetalle.find("#sArticulo")[0].selectize.clearOptions();
+                var tipo = pnlDatos.find("#Tipo").val();
+                if (tipo !== '') {
+                    getCabecerosByProveedor($(this).val());
+                    pnlDatos.find('#FechaOrden').focus().select();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBE ELEGIR UN TIPO DE COMPRA",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: false,
+                        timer: 1000
+                    }).then((action) => {
+                        pnlDatos.find("#Tipo")[0].selectize.focus();
+                    });
+                }
             }
         });
 
-        pnlDatosDetalle.find("#Articulo").change(function () {
-            getArticulosCabecero($(this).val(), pnlDatos.find("#Proveedor").val());
+        pnlDatos.find('#FechaOrden').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtf = $(this).val();
+                if (txtf) {
+                    pnlDatos.find('#Maq').focus().select();
+                }
+            }
+        });
+
+        pnlDatos.find('#Maq').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtf = $(this).val();
+                if (txtf) {
+                    onComprobarMaquilas($(this));
+                }
+            }
+        });
+
+        pnlDatos.find("#Ano").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlDatos.find("#Ano").val("");
+                        pnlDatos.find("#Ano").focus();
+                    });
+                } else {
+                    pnlDatos.find("#Sem").focus().select();
+                }
+            }
+        });
+
+        pnlDatos.find('#Sem').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txts = $(this).val();
+                if (txts) {
+                    var ano = pnlDatos.find("#Ano");
+                    var maq = pnlDatos.find("#Maq");
+                    var tipo = pnlDatos.find("#Tipo");
+                    onComprobarSemanasProduccion($(this), ano.val(), maq.val(), tipo.val());
+                }
+            }
+        });
+
+        pnlDatos.find('#FechaEntrega').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txts = $(this).val();
+                if (txts) {
+                    pnlDatos.find('#ConsignarA').focus().select();
+                }
+            }
+        });
+
+        pnlDatos.find('#ConsignarA').keypress(function (e) {
+            if (e.keyCode === 13) {
+                pnlDatos.find('#Observaciones').focus().select();
+            }
+        });
+
+        pnlDatos.find('#Observaciones').keypress(function (e) {
+            if (e.keyCode === 13) {
+                pnlDatosDetalle.find('#Articulo').focus();
+            }
+        });
+
+        pnlDatosDetalle.find('#Articulo').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    var prov = pnlDatos.find('#Proveedor').val();
+                    var depto = pnlDatos.find('#Tipo').val();
+                    $.getJSON(master_url + 'onVerificarArticulo', {Articulo: txtart, Proveedor: prov, Departamento: depto}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlDatosDetalle.find("#sArticulo")[0].selectize.addItem(txtart, true);
+                            getArticulosCabecero(txtart, prov);
+
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE O NO COINCIDE CON EL PROVEEDOR', 'warning').then((value) => {
+                                pnlDatosDetalle.find("#sArticulo")[0].selectize.clear(true);
+                                pnlDatosDetalle.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlDatosDetalle.find("#sArticulo").change(function () {
+            if ($(this).val()) {
+                var prov = pnlDatos.find("#Proveedor").val();
+                pnlDatosDetalle.find('#Articulo').val($(this).val());
+                getArticulosCabecero($(this).val(), prov);
+            }
         });
 
         /*FUNCIONES X BOTON*/
@@ -338,11 +480,11 @@
                         if (data[0].Estatus === 'BORRADOR') {
 
                             //Obtener Proveedores y llenar campos de toda la orden
-                            pnlDatos.find("#Proveedor")[0].selectize.clear(true);
-                            pnlDatos.find("#Proveedor")[0].selectize.clearOptions();
-                            $.when($.getJSON(master_url + 'getProveedores').done(function (data) {
+                            pnlDatos.find("#sProveedor")[0].selectize.clear(true);
+                            pnlDatos.find("#sProveedor")[0].selectize.clearOptions();
+                            $.when($.getJSON(master_url + 'getProveedoresSinClave').done(function (data) {
                                 $.each(data, function (k, v) {
-                                    pnlDatos.find("#Proveedor")[0].selectize.addOption({text: (parseInt(TpB) === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                                    pnlDatos.find("#sProveedor")[0].selectize.addOption({text: (parseInt(TpB) === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
                                 });
                             })).done(function (x) {
                                 $.each(data[0], function (k, v) {
@@ -357,12 +499,10 @@
                             $.getJSON(master_url + 'getArticuloByDeptoByProveedor', {Departamento: data[0].Tipo, Proveedor: data[0].Proveedor}).done(function (data) {
                                 if (data.length > 0) {
                                     $.each(data, function (k, v) {
-                                        pnlDatosDetalle.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.CLAVE});
+                                        pnlDatosDetalle.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.CLAVE});
                                     });
                                 }
                             });
-                            //Verificamos el proveedor para saber si partimos la orden en base al %
-                            getPorcentajesCompraByProveedor(data[0].Proveedor);
                             //Nos traemos el detalle
                             getDetalleByID(TpB, FolioB);
                             //Acciones secundarias previas a la captura
@@ -376,7 +516,7 @@
                             btnCancelar.removeClass('d-none');
                             btnCerrarOrden.removeClass('d-none');
                             //Seteamos el foco en articulo para continuar capturando
-                            pnlDatosDetalle.find("#Articulo")[0].selectize.focus();
+                            pnlDatosDetalle.find("#Articulo").focus();
 
 
 
@@ -422,34 +562,10 @@
             //HoldOn.open({theme: 'sk-bounce', message: 'GENERANDO REPORTE...'});
             $.post(master_url + 'onImprimirOrdenCompra', {movs: JSON.stringify(movs)}).done(function (data, x, jq) {
                 if (data.length > 0) {
-
-                    $.fancybox.open({
-                        src: data,
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                                init();
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "100%",
-                                    height: "100%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function (a, b) {
+                        console.info('done!');
+                        init();
                     });
-
-
                 } else {
                     swal({
                         title: "ATENCIÓN",
@@ -499,6 +615,7 @@
         });
 
         btnAgregar.click(function () {
+            btnAgregar.attr('disabled', true);
             isValid('pnlDatos');
             if (valido) {
                 //AgregaDetalle
@@ -507,6 +624,7 @@
                     onAgregarDetalle();
                 }
             } else {
+                btnAgregar.attr('disabled', false);
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         });
@@ -566,8 +684,8 @@
         });
 
         btnCerrarOrden.click(function () {
-            var FolioActual = pnlDatos.find("#Folio").val();
-            var tpActual = pnlDatos.find("#Tp").val();
+            var Folio = pnlDatos.find("#Folio").val();
+            var tp = pnlDatos.find("#Tp").val();
             swal({
                 title: "Confirmar",
                 text: "Deseas cerrar la Orden de Compra?",
@@ -576,130 +694,22 @@
                 dangerMode: true
             }).then((willDelete) => {
                 if (willDelete) {
-                    if (!seParte) {
-                        HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
-                        $.post(master_url + 'onCerrarOrden', {Tp: tpActual, Folio: FolioActual}).done(function (data, x, jq) {
-                            btnCancelar.addClass('d-none');
-                            btnCerrarOrden.addClass('d-none');
-                            btnImprimir.removeClass('d-none');
-                            pnlDatosDetalle.find('#ControlesDetalle').addClass('d-none');
-                            //Agregamos al arreglo para poder imprimir el reporte
-                            movs.push({
-                                Tp: tpActual,
-                                Folio: FolioActual
-                            });
-                            HoldOn.close();
-                            btnImprimir.trigger('click');
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                        });
-
-                    } else {//Else de si se parte en dos o no
-                        HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
-                        //Agregamos el mov para el reporte
+                    HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
+                    $.post(master_url + 'onCerrarOrden', {Tp: tp, Folio: Folio}).done(function (data, x, jq) {
+                        btnCancelar.addClass('d-none');
+                        btnCerrarOrden.addClass('d-none');
+                        btnImprimir.removeClass('d-none');
+                        //pnlDatosDetalle.find('#ControlesDetalle').addClass('d-none');
+                        //Agregamos al arreglo para poder imprimir el reporte
                         movs.push({
-                            Tp: tpActual,
-                            Folio: FolioActual
+                            Tp: tp,
+                            Folio: Folio
                         });
-
-                        //Para encabezado nuevo de TP 2
-                        $.getJSON(master_url + 'getOrdenCompraByTpFolio', {Tp: tpActual, Folio: FolioActual}).done(function (dataEncabezado) {
-                            var enc = dataEncabezado[0];
-                            var tpNuevo = (parseInt(tpActual) > 1) ? '1' : '2';
-
-                            $.when($.getJSON(master_url + 'getFolio', {tp: tpNuevo}).done(function (data, x, jq) {
-
-                                if (data.length > 0) {
-                                    folioNuevo = $.isNumeric(data[0].Folio) ? parseInt(data[0].Folio) + 1 : 1;
-                                } else {
-                                    folioNuevo = 1;
-                                }
-                            })).done(function (x) {
-                                movs.push({
-                                    Tp: tpNuevo,
-                                    Folio: folioNuevo
-                                });
-                                //ACtualizamos estatus del encabezado anterior a ACTIVA
-                                $.post(master_url + 'onCerrarOrdenAnterior', {Tp: tpActual, Folio: FolioActual}).done(function (data, x, jq) {
-                                    //Partiendo del anterior encabezado y actualizando el movimiento anterior
-                                    $.getJSON(master_url + 'getDetalleParaSepararByID', {Tp: tpActual, Folio: FolioActual}).done(function (data) {
-                                        $.each(data, function (k, v) {
-                                            var Precio = v.Precio;
-                                            var Articulo = v.Articulo;
-                                            var NuevaCantidadNueva = v.Cantidad * PorRemision;
-                                            var NuevaSubtotalNueva = NuevaCantidadNueva * Precio;
-                                            //Para modificar anterior y restarle el porcentaje
-                                            var NuevaCantidadAnterior = v.Cantidad * PorFactura;
-                                            var NuevaSubtotalAnterior = NuevaCantidadAnterior * Precio;
-
-                                            //insert OC Detalle
-                                            var detalle = {
-                                                Tp: tpNuevo,
-                                                Folio: folioNuevo,
-                                                Tipo: enc.Tipo,
-                                                Proveedor: enc.Proveedor,
-                                                FechaOrden: enc.FechaOrden,
-                                                Maq: enc.Maq,
-                                                Ano: enc.Ano,
-                                                Sem: enc.Sem,
-                                                FechaEntrega: enc.FechaEntrega,
-                                                ConsignarA: enc.ConsignarA,
-                                                Observaciones: enc.Observaciones,
-                                                Articulo: Articulo,
-                                                Cantidad: NuevaCantidadNueva,
-                                                Precio: Precio,
-                                                SubTotal: NuevaSubtotalNueva,
-                                                Estatus: 'ACTIVA'
-                                            };
-                                            //Inserta nuevos registros
-                                            $.post(master_url + 'onAgregarDetalle', detalle).done(function (data) {
-                                                var detalleAnterior = {
-                                                    ID: v.ID,
-                                                    Cantidad: NuevaCantidadAnterior,
-                                                    SubTotal: NuevaSubtotalAnterior
-                                                };
-
-                                                //update actual o.c con las nuevas cantidades
-                                                $.post(master_url + 'onModificarDetalle', detalleAnterior).done(function (data) {
-
-                                                    HoldOn.close();
-                                                    swal({
-                                                        title: 'Importante',
-                                                        text: 'Se ha cerrado la compra TP 1 con el FOLIO: ' + FolioActual,
-                                                        icon: 'success'
-                                                    }).then((value) => {
-                                                        swal({
-                                                            title: 'Importante',
-                                                            text: 'Se ha cerrado la compra TP 2 con el FOLIO: ' + folioNuevo,
-                                                            icon: 'success'
-                                                        }).then((value) => {
-
-                                                            HoldOn.close();
-                                                            btnImprimir.trigger('click');
-                                                        });
-                                                    });
-                                                }).fail(function (x, y, z) {
-                                                    console.log(x, y, z);
-                                                });
-
-                                            }).fail(function (x, y, z) {
-                                                console.log(x, y, z);
-                                            });
-                                        });
-                                    }).fail(function (x) {
-                                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                                        console.log(x.responseText);
-                                    });
-                                }).fail(function (x, y, z) {
-                                    console.log(x, y, z);
-                                }); //CERRAR ORDEN ANTERIOR
-
-                            });
-                        }).fail(function (x) {
-                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                            console.log(x.responseText);
-                        });//OBTENER COMPRA ACTUAL
-                    }//IF DE PARTIR EN DOS
+                        HoldOn.close();
+                        btnImprimir.trigger('click');
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
                 }// Cierra IF de aceptar
             });//Cierra SWALL
         });
@@ -731,9 +741,10 @@
         var n = d.getFullYear();
         pnlDatos.find("#Ano").val(n);
         pnlDatos.find("#FechaOrden").val(getToday());
-        pnlDatos.find("#Tp").focus();
+
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         temp = 0;
+        pnlDatos.find("#Tp").focus();
     }
 
     function getFolio(tp) {
@@ -749,10 +760,6 @@
         });
     }
     var estatus;
-    var PorRemision = 0;
-    var PorFactura = 0;
-    var seParte = false;
-    var tpParte = 0;
     var folioNuevo = 0;
 
     function getArticulosCabecero(Cabecero, Proveedor) {
@@ -782,41 +789,16 @@
                 pnlDatosDetalle.find('#rCantidades').find("input").prop('disabled', true);
             }
             HoldOn.close();
-            pnlDatosDetalle.find('#rCantidades').find('#C1').focus();
+            pnlDatosDetalle.find('#rCantidades').find('#C1').focus().select();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
-        });
-    }
-    function getPorcentajesCompraByProveedor(proveedor) {
-        $.getJSON(master_url + 'getPorcentajesCompraByProveedor', {Proveedor: proveedor}).done(function (data) {
-            if (data.length > 0) {
-                PorRemision = parseFloat(data[0].PorRemision);
-                PorFactura = parseFloat(data[0].PorFactura);
-                if (PorRemision === 0 && PorFactura === 0) {
-                    seParte = false;
-                } else if (PorRemision === 1 || PorFactura === 1) {
-                    seParte = false;
-                } else {
-                    seParte = true;
-                    if (parseFloat(PorFactura) >= parseFloat(PorRemision)) {
-                        tpParte = 1;
-                    } else {
-                        tpParte = 2;
-                    }
-                }
-            } else {
-                seParte = false;
-            }
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
         });
     }
     function getCabecerosByProveedor(proveedor) {
         $.getJSON(master_url + 'getCabecerosByProveedor', {Proveedor: proveedor}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {
-                    pnlDatosDetalle.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.CLAVE});
+                    pnlDatosDetalle.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.CLAVE});
                 });
             } else {
                 swal({
@@ -833,8 +815,8 @@
                     switch (value) {
                         case "aceptar":
                             swal.close();
-                            pnlDatos.find("#Proveedor")[0].selectize.clear(true);
-                            pnlDatos.find("#Proveedor")[0].selectize.focus();
+                            pnlDatos.find("#sProveedor")[0].selectize.clear(true);
+                            pnlDatos.find("#Proveedor").val('').focus();
                             break;
                     }
                 });
@@ -846,25 +828,13 @@
         });
 
     }
-    function getPrecioSerieArticulosCabecero(Articulo) {
-        $.getJSON(master_url + 'getPrecioCompraByArticuloByProveedor', {Articulo: Articulo, Proveedor: Proveedor}).done(function (data) {
 
-            if (data.length > 0) {
-                pnlDatosDetalle.find("#Precio").val(data[0].Precio);
-            } else {
-
-            }
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
     function getProveedores(tp) {
-        pnlDatos.find("#Proveedor")[0].selectize.clear(true);
-        pnlDatos.find("#Proveedor")[0].selectize.clearOptions();
-        $.getJSON(master_url + 'getProveedores').done(function (data) {
+        pnlDatos.find("#sProveedor")[0].selectize.clear(true);
+        pnlDatos.find("#sProveedor")[0].selectize.clearOptions();
+        $.getJSON(master_url + 'getProveedoresSinClave').done(function (data) {
             $.each(data, function (k, v) {
-                pnlDatos.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                pnlDatos.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -874,6 +844,7 @@
     function onComprobarMaquilas(v) {
         $.getJSON(master_url + 'onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
             if (data.length > 0) {
+
                 if (parseInt($(v).val()) > 98) {
                     swal({
                         title: "ATENCIÓN",
@@ -884,27 +855,15 @@
                     });
                 } else {
                     pnlDatos.find('#ConsignarA').val(data[0].Direccion);
+                    pnlDatos.find('#Ano').focus().select();
                 }
-
             } else {
                 swal({
                     title: "ATENCIÓN",
                     text: "LA MAQUILA " + $(v).val() + " NO ES VALIDA",
-                    icon: "warning",
-                    buttons: {
-                        eliminar: {
-                            text: "Aceptar",
-                            value: "aceptar"
-                        }
-                    }
+                    icon: "warning"
                 }).then((value) => {
-                    switch (value) {
-                        case "aceptar":
-                            swal.close();
-                            $(v).val('');
-                            $(v).focus();
-                            break;
-                    }
+                    $(v).val('').focus();
                 });
             }
         }).fail(function (x, y, z) {
@@ -953,23 +912,27 @@
             });
         }
     }
-    function onComprobarSemanaProdCerradaXDepartamento(ano, maq, v) {
+    function onComprobarSemanaProdCerradaXDepartamento(ano, maq, v, tipo) {
         $.getJSON(master_url + 'onVerificarSemanaProdDepartamentoCerrada', {
             Ano: ano,
             Maq: maq,
             Sem: $(v).val(),
-            Departamento: '80'
+            Departamento: tipo
         }).done(function (data) {
             if (data.length > 0) {
                 if (data[0].Estatus === 'CERRADA') {//CERRADA X DEPTO
                     swal({
                         title: "ATENCIÓN",
-                        text: "EL DEPARTAMENTO 80 DE ESTA SEMANA YA ESTA CERRADO",
+                        text: "EL DEPARTAMENTO " + tipo + " DE ESTA SEMANA YA ESTA CERRADO",
                         icon: "warning"
                     }).then((value) => {
                         $(v).val('').focus();
                     });
+                } else {
+                    pnlDatos.find('#FechaEntrega').focus().select();
                 }
+            } else {
+                pnlDatos.find('#FechaEntrega').focus().select();
             }
         });
     }
@@ -1096,7 +1059,7 @@
         var consignarA = pnlDatos.find("#ConsignarA").val();
         var observaciones = pnlDatos.find("#Observaciones").val();
 
-        $.when($.each(table.find("input.numbersOnly:enabled"), function (k, v) {
+        $.when($.each(table.find("input.numeric:enabled"), function (k, v) {
             if (parseFloat($(v).val()) > 0) {
                 var precio = precios.find('td').eq($(this).parent().index()).find("input").val();
                 var articulo = arts.find('td').eq($(this).parent().index()).find("input").val();
@@ -1123,6 +1086,7 @@
 
                 $.post(master_url + 'onAgregarDetalleTemp', detalle).done(function (data) {
                 }).fail(function (x, y, z) {
+                    btnAgregar.attr('disabled', false);
                     console.log(x, y, z);
                 });
 
@@ -1130,7 +1094,9 @@
         })).then(function (data, textStatus, jqXHR) {
 
             $.post(master_url + 'onInsertarDetalleOptimizado', {Tp: tp, Folio: folio}).done(function (data) {
+                btnAgregar.attr('disabled', false);
             }).fail(function (x, y, z) {
+                btnAgregar.attr('disabled', false);
                 console.log(x, y, z);
             });
 
@@ -1145,8 +1111,8 @@
             btnCancelar.removeClass('d-none');
             btnCerrarOrden.removeClass('d-none');
             pnlDatosDetalle.find("input").val('');
-            pnlDatosDetalle.find("[name='Articulo']")[0].selectize.clear(true);
-            pnlDatosDetalle.find("[name='Articulo']")[0].selectize.focus();
+            pnlDatosDetalle.find("[name='sArticulo']")[0].selectize.clear(true);
+            pnlDatosDetalle.find("[name='Articulo']").focus();
             //Deshabilida encabezado
             pnlDatos.find('input').attr('readonly', true);
             $.each(pnlDatos.find("select"), function (k, v) {
@@ -1206,7 +1172,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;
@@ -1214,7 +1180,7 @@
 
     #tblTallas tbody tr:hover {
         background-color: #FFF;
-        color: #000 !important;
+        color: #FFF !important;
     }
 </style>
 

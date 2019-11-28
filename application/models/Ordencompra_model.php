@@ -102,7 +102,7 @@ CASE WHEN A20.ProveedorUno ='$Proveedor'  THEN A20.PrecioUno  WHEN A20.Proveedor
 CASE WHEN A21.ProveedorUno ='$Proveedor'  THEN A21.PrecioUno  WHEN A21.ProveedorDos ='$Proveedor'  THEN A21.PrecioDos  WHEN A21.ProveedorTres ='$Proveedor'  THEN A21.PrecioTres END AS P21,
 CASE WHEN A22.ProveedorUno ='$Proveedor'  THEN A22.PrecioUno  WHEN A22.ProveedorDos ='$Proveedor'  THEN A22.PrecioDos  WHEN A22.ProveedorTres ='$Proveedor'  THEN A22.PrecioTres END AS P22
 
-FROM lobo_solo.suelascompras  sc
+FROM suelascompras  sc
 LEFT JOIN articulos A1 	ON A1.Clave =   sc.A1
 LEFT JOIN articulos A2	ON A2.Clave =	sc.A2
 LEFT JOIN articulos A3	ON A3.Clave =	sc.A3
@@ -185,15 +185,9 @@ where sc.ArticuloCBZ= '$Articulo' ", false);
 
     public function getArticuloByDeptoByProveedor($Depto, $Proveedor) {
         try {
-            $this->db->select(" CONVERT(A.Clave, UNSIGNED INTEGER) AS CLAVE , CONCAT(A.Clave,'-',A.Descripcion) AS Articulo"
-                            . " ", false)
-                    ->from("articulos AS A")
-                    ->where('A.Departamento', $Depto)
-                    ->where('A.ProveedorUno', $Proveedor)
-                    ->or_where('A.ProveedorDos', $Proveedor)
-                    ->or_where('A.ProveedorTres', $Proveedor)
-                    ->where('A.Estatus', 'ACTIVO')
-                    ->order_by('CLAVE', 'ASC');
+            $this->db->select(" clave as CLAVE , Descripcion AS Articulo
+FROM articulos where Departamento = '$Depto' and Estatus = 'ACTIVO' and (ProveedorUno = '$Proveedor' or ProveedorDos = '$Proveedor' or ProveedorTres = '$Proveedor')
+order by Articulo asc  ", false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -209,15 +203,11 @@ where sc.ArticuloCBZ= '$Articulo' ", false);
 
     public function getCabecerosByProveedor($Proveedor) {
         try {
-            $this->db->select(" CONVERT(SC.ArticuloCBZ, UNSIGNED INTEGER) AS CLAVE , CONCAT(A.Clave,'-',A.Descripcion) AS Articulo"
-                            . " ", false)
-                    ->from("suelascompras AS SC")
-                    ->join("articulos AS A", 'ON SC.ArticuloCBZ = A.Clave')
-                    ->where('SC.Estatus', 'ACTIVO')
-                    ->where('A.ProveedorUno', $Proveedor)
-                    ->or_where('A.ProveedorDos', $Proveedor)
-                    ->or_where('A.ProveedorTres', $Proveedor)
-                    ->order_by('CLAVE', 'ASC');
+            $this->db->select(" a.clave as CLAVE, a.Descripcion AS Articulo
+FROM articulos a
+join suelascompras sc on a.Clave = sc.ArticuloCBZ and sc.Estatus = 'ACTIVO'
+where a.Departamento = 80 and a.Estatus = 'ACTIVO' and (a.ProveedorUno = '$Proveedor' or a.ProveedorDos = '$Proveedor' or a.ProveedorTres = '$Proveedor')
+order by Articulo asc  ", false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -291,6 +281,17 @@ where sc.ArticuloCBZ= '$Articulo' ", false);
             return $this->db->select("P.Clave AS ID, "
                                     . "CONCAT(P.Clave,' ',IFNULL(P.NombreI,'')) AS ProveedorI, "
                                     . "CONCAT(P.Clave,' ',IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                            ->from("proveedores AS P")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getProveedoresSinClave() {
+        try {
+            return $this->db->select("P.Clave AS ID, "
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
                             ->from("proveedores AS P")->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

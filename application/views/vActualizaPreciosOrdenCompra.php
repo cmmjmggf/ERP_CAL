@@ -16,7 +16,7 @@
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
                 <button type="button" class="btn btn-primary" id="btnActualizaPrecios" data-toggle="tooltip" data-placement="right" title="Actualizar Precios">
-                    <i class="fa fa-pencil-alt"></i>
+                    <i class="fa fa-pencil-alt"></i> ACTUALIZAR
                 </button>
             </div>
         </div>
@@ -48,17 +48,37 @@
     var btnActualizaPrecios = pnlTablero.find('#btnActualizaPrecios');
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        handleEnter();
         pnlTablero.find("input").val("");
         pnlTablero.find('#Tp').focus().select();
-        pnlTablero.find("#Tp").change(function () {
-            onVerificarTp($(this));
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    pnlTablero.find('#OC').focus();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
+                    });
+                }
+            }
         });
-        pnlTablero.find("#OC").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            getOrdenCompra($(this), tp);
+        pnlTablero.find("#OC").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var oc = pnlTablero.find("#OC");
+                if (oc.val()) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    getOrdenCompra(oc, tp);
+                }
+            }
         });
         btnActualizaPrecios.click(function () {
+            btnActualizaPrecios.attr('disabled', true);
             swal({
                 buttons: ["Cancelar", "Aceptar"],
                 title: 'Estás Seguro?',
@@ -75,6 +95,7 @@
                         Tp: tp,
                         Prov: Prov
                     }).done(function (data) {
+                        btnActualizaPrecios.attr('disabled', false);
                         onNotifyOld('fa fa-check', 'PRECIOS ACTUALIZADOS', 'info');
                         OrdenesCompra.ajax.reload();
                         pnlTablero.find("#Tp").val('');
@@ -82,6 +103,7 @@
                         Prov = 0;
                         pnlTablero.find("#Tp").focus();
                     }).fail(function (x, y, z) {
+                        btnActualizaPrecios.attr('disabled', false);
                         console.log(x, y, z);
                     });
                 }
@@ -185,6 +207,7 @@
                 if (data[0].Estatus === 'ACTIVA') {
                     Prov = data[0].Proveedor;
                     getRecords($(v).val(), Tp);
+                    btnActualizaPrecios.focus();
                 } else {
                     swal({
                         title: "ERROR",
@@ -197,7 +220,7 @@
             } else {
                 swal({
                     title: "ATENCIÓN",
-                    text: "NO EXISTE LA ORDEN DE COMPRA",
+                    text: "NO EXISTE LA ORDEN DE COMPRA Ó ESTÁ CANCELADA",
                     icon: "warning"
                 }).then((value) => {
                     if ($.fn.DataTable.isDataTable('#tblOrdenesCompra')) {
@@ -211,23 +234,7 @@
             console.log(x.responseText);
         });
     }
-    function onVerificarTp(v) {
-        var tp = parseInt(v.val());
-        if (tp === 1 || tp === 2) {
-        } else {
-            swal({
-                title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                icon: "error",
-                closeOnClickOutside: false,
-                closeOnEsc: false,
-                buttons: false,
-                timer: 1000
-            }).then((action) => {
-                $(v).val('').focus();
-            });
-        }
-    }
+
 </script>
 <style>
     .text-strong {
@@ -241,7 +248,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;
