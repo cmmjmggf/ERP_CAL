@@ -19,7 +19,7 @@ class FacturacionDevolucion extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'CLIENTES':
-                   $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
             }
             $this->load->view('vFacturacionDevolucion')->view('vFooter');
@@ -69,7 +69,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         F.par16, F.par17, F.par18, F.par19, F.par20, 
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE 
                                         FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
-                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+                WHERE F.contped = '{$this->input->get('CONTROL')}' LIMIT 1")->result());
 //            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -106,18 +106,38 @@ class FacturacionDevolucion extends CI_Controller {
     public function getPedidosXFacturar() {
         try {
 
-            print json_encode(
-                            $this->db->query("SELECT  P.ID, P.Control AS CONTROL, 
+//            print json_encode(
+//                            $this->db->query("SELECT  P.ID, P.Control AS CONTROL, 
+//                                P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
+//                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
+//                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
+//                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
+//                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
+//                                FROM pedidox AS P 
+//                                WHERE P.Control NOT IN(0,1) 
+//                                AND P.stsavan NOT IN(14) 
+//                                AND P.Cliente = '{$this->input->get('CLIENTE')}' 
+//                                ORDER BY P.FechaRecepcion DESC")->result());
+
+            $xxx = $this->input->get();
+            $this->db->select("P.ID, P.Control AS CONTROL, 
                                 P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
-                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT  
-                                FROM erp_cal.pedidox AS P 
-                                WHERE P.Control NOT IN(0,1) 
-                                AND P.stsavan NOT IN(14) 
-                                AND P.Cliente = '{$this->input->get('CLIENTE')}' 
-                                ORDER BY P.FechaRecepcion DESC")->result());
+                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
+                    ->from("pedidox AS P")
+                    ->where_not_in("P.Control", array(0, 1));
+
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            if (!in_array($xxx['CLIENTE'], $people)) {
+                $this->db->where_not_in("P.stsavan", array(13, 14));
+            }
+            if ($xxx['CLIENTE'] !== '') {
+                $this->db->where("P.Cliente", $xxx['CLIENTE']);
+            } 
+            $this->db->order_by("P.FechaRecepcion", "DESC");
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -156,7 +176,7 @@ class FacturacionDevolucion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
-            
+
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -297,7 +317,7 @@ class FacturacionDevolucion extends CI_Controller {
                 $this->db->insert('facturaciondif', $facturaciondif);
             }
             /* SI EL SALDO ES IGUAL A CERO "0", PASAR A CERO */
-//            $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
+            $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
 
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
