@@ -110,7 +110,7 @@
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToSelectOnChange('#TipoMov', '#Articulo', pnlTablero);
         setFocusSelectToInputOnChange('#Articulo', '#Cantidad', pnlTablero);
-        handleEnter();
+        handleEnterDiv(pnlTablero);
         getArticulos();
         getRecords('0', '0');
         pnlTablero.find("#Ano").change(function () {

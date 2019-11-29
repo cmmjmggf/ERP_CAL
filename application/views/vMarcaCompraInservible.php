@@ -70,7 +70,7 @@
         pnlTablero.find("input").val("");
         pnlTablero.find("#Ano").val(getYear()).focus().select();
         pnlTablero.find("#Ano").keypress(function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && $(this).val()) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
                     swal({
                         title: "ATENCIÓN",
@@ -89,7 +89,7 @@
         });
 
         pnlTablero.find("#Tp").keypress(function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && $(this).val()) {
                 var tp = parseInt($(this).val());
                 if (tp > 2) {
                     $(this).val('').focus();

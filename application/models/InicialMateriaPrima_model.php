@@ -66,9 +66,9 @@ class InicialMateriaPrima_model extends CI_Model {
 
     public function getMateriales() {
         try {
-            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Clave,'-',D.Descripcion) AS Material")
+            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Material")
                             ->from("articulos AS D")
-                            ->order_by('ID', 'ASC')
+                            ->order_by('Material', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

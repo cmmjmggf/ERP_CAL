@@ -108,7 +108,8 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlReporteConfirmacion);
         pnlTablero.find("input").val("");
         pnlTablero.find('#col1_filter').focus();
         validacionSelectPorContenedor(mdlReporteConfirmacion);
@@ -413,7 +414,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

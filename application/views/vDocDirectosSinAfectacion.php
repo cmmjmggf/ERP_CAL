@@ -299,6 +299,7 @@
                             pnlTablero.find("#TipoCambio").val('1');
                             pnlTablero.find("#Tp").focus();
                         }).fail(function (x, y, z) {
+                            btnGuardar.attr('disabled', false);
                             console.log(x, y, z);
                         });
                     }

@@ -41,7 +41,7 @@ class RecibeOrdenCompra extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->Recibeordencompra_model->getRecords());
+            print json_encode($this->Recibeordencompra_model->getRecords($this->input->get('Folio'), $this->input->get('Tp')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

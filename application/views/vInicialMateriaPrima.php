@@ -14,10 +14,17 @@
         </div>
         <div class="row" id="Encabezado">
             <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Material</label>
-                <select id="Clave" name="Clave" class="form-control form-control-sm required" required="" >
-                    <option value=""></option>
-                </select>
+                <label>Material</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                 <label for="" >U.M.</label>
@@ -32,8 +39,8 @@
                 <input type="text" class="form-control form-control-sm numbersOnly " id="Invini" name="Invini" maxlength="15" required>
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary" id="btnGuardar" data-toggle="tooltip" data-placement="right" title="Capturar Existencia">
-                    <i class="fa fa-save"></i>
+                <button type="button" class="btn btn-primary" id="btnGuardar">
+                    <i class="fa fa-save"></i> ACEPTAR
                 </button>
             </div>
         </div>
@@ -78,19 +85,61 @@
 
 
         /*FUNCIONES INICIALES*/
+        pnlTablero.find("#Articulo").focus();
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToInputOnChange('#Clave', '#Precio', pnlTablero);
+        setFocusSelectToInputOnChange('#sArticulo', '#Precio', pnlTablero);
         setFocusSelectToInputOnChange('#Mes', '#btnCerrarInv', pnlTablero);
-        handleEnter();
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
         getMateriales();
-        pnlTablero.find("#Clave").change(function () {
-            getDatosByMaterial($(this).val());
+        pnlTablero.find('#Articulo').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(master_url + 'onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
+                            getDatosByMaterial(txtart);
+
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                pnlTablero.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
         });
+        pnlTablero.find("#sArticulo").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#Articulo").val($(this).val());
+                getDatosByMaterial($(this).val());
+            }
+        });
+        pnlTablero.find("#Pinvini").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                pnlTablero.find("#Invini").focus().select();
+            }
+        });
+
+        pnlTablero.find("#Invini").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                btnGuardar.focus();
+            }
+        });
+
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 var mat = pnlTablero.find("#Clave").val();
@@ -101,6 +150,7 @@
                     Pinvini: pinvini,
                     Invini: invini
                 }).done(function (data) {
+                    btnGuardar.attr('disabled', false);
                     onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                     pnlTablero.find("input").val("");
                     $.each(pnlTablero.find("select"), function (k, v) {
@@ -108,9 +158,11 @@
                     });
                     pnlTablero.find("#Clave")[0].selectize.focus();
                 }).fail(function (x, y, z) {
+                    btnGuardar.attr('disabled', false);
                     console.log(x, y, z);
                 });
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
         });
@@ -209,17 +261,15 @@
         });
     }
     function getMateriales() {
-        HoldOn.open({theme: 'sk-bounce', message: 'INCIALIZANDO DATOS...'});
         $.when($.getJSON(master_url + 'getMateriales').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Clave")[0].selectize.addOption({text: v.Material, value: v.ID});
+                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Material, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         })).then(function (x) {
             HoldOn.close();
-            pnlTablero.find("#Clave")[0].selectize.focus();
         });
 
     }

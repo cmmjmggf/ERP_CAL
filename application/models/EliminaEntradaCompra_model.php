@@ -13,8 +13,8 @@ class EliminaEntradaCompra_model extends CI_Model {
     public function getProveedores() {
         try {
             return $this->db->select("P.Clave AS ID, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreI,'')) AS ProveedorI, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
                             ->from("proveedores AS P")->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

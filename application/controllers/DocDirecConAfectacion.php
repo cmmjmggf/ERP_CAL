@@ -38,6 +38,24 @@ class DocDirecConAfectacion extends CI_Controller {
         }
     }
 
+    public function onVerificarGrupo() {
+        try {
+            $Grupo = $this->input->get('Grupo');
+            print json_encode($this->db->query("select clave from grupos where clave = '$Grupo ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->DocDirectos_model->getRecords($this->input->post('Tp'), $this->input->post('Proveedor')));
@@ -48,7 +66,7 @@ class DocDirecConAfectacion extends CI_Controller {
 
     public function getGrupos() {
         try {
-            print json_encode($this->DocDirectos_model->getGrupos());
+            print json_encode($this->DocDirectos_model->getGruposSinClave());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -73,6 +91,14 @@ class DocDirecConAfectacion extends CI_Controller {
     public function getProveedores() {
         try {
             print json_encode($this->DocDirectos_model->getProveedores());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getProveedoresSinClave() {
+        try {
+            print json_encode($this->DocDirectos_model->getProveedoresSinClave());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -106,12 +132,12 @@ class DocDirecConAfectacion extends CI_Controller {
                 'Saldo_Doc' => ($this->input->post('Tp') === '1') ? $Importe * 1.16 : $Importe,
                 'Estatus' => 'SIN PAGAR',
                 'Tp' => $this->input->post('Tp'),
-                'Moneda' => $this->input->post('Moneda'),
-                'TipoCambio' => ($this->input->post('TipoCambio') !== NULL) ? $this->input->post('TipoCambio') : 1,
+                'Moneda' => 'MXN',
+                'TipoCambio' => 1,
                 'Departamento' => '',
                 'DocDirecto' => 1,
                 'Grupo' => $this->input->post('Grupo'),
-                'Flete' => $this->input->post('Flete'),
+                'Flete' => 'NO',
                 'TipoContable' => $this->input->post('TipoCont'),
                 'Estatus_Contable' => ''
             );

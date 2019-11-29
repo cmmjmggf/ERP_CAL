@@ -12,11 +12,18 @@
                 <label>Tp</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly" id="Tp" maxlength="1" >
             </div>
-            <div class="col-12 col-sm-4 col-md-5 col-lg-4 col-xl-3" >
-                <label for="" >Proveedor</label>
-                <select id="Proveedor" name="Proveedor" class="form-control form-control-sm required" required="" >
-                    <option value=""></option>
-                </select>
+            <div class="col-12 col-sm-4 col-md-4 col-xl-4">
+                <label>Proveedor*</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="5" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" >
                 <label>Docto.</label>
@@ -27,8 +34,8 @@
                 <input type="text" class="form-control form-control-sm numbersOnly " disabled="" id="OrdenCompra" name="OrdenCompra" maxlength="15">
             </div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary" id="btnGuardar" data-toggle="tooltip" data-placement="right" title="Cancela Documento">
-                    <i class="fa fa-save"></i> ACEPTAR
+                <button type="button" class="btn btn-primary" id="btnGuardar">
+                    <i class="fa fa-check"></i> ACEPTAR
                 </button>
             </div>
         </div>
@@ -40,65 +47,96 @@
     var btnGuardar = pnlTablero.find('#btnGuardar');
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToInputOnChange('#Proveedor', '#DocMov', pnlTablero);
-        handleEnter();
+        setFocusSelectToInputOnChange('#sProveedor', '#DocMov', pnlTablero);
         init();
-        pnlTablero.find("#DocMov").blur(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            var prov = pnlTablero.find("#Proveedor").val();
-            if (tp !== '') {
-                if (prov !== '') {
-                    onRevisarDoctoCartProv($(this), tp, prov);
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    getProveedores(tp);
+                    pnlTablero.find('#Proveedor').focus();
                 } else {
                     swal({
                         title: "ATENCIÓN",
-                        text: "DEBES SELECCIONAR UN PROVEEDOR",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#Proveedor').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprov, true);
+                            pnlTablero.find('#DocMov').focus().select();
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sProveedor").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Proveedor').val($(this).val());
+                pnlTablero.find('#DocMov').focus().select();
+            }
+        });
+        pnlTablero.find("#DocMov").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                var tp = pnlTablero.find("#Tp").val();
+                var prov = pnlTablero.find("#Proveedor").val();
+                if (tp !== '') {
+                    if (prov !== '') {
+                        onRevisarDoctoCartProv($(this), tp, prov);
+                    } else {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "DEBES SELECCIONAR UN PROVEEDOR",
+                            icon: "error",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                            buttons: true
+                        }).then((action) => {
+                            pnlTablero.find("#Proveedor").focus();
+                        });
+                    }
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO DEBE SER 1 Ó 2",
                         icon: "error",
                         closeOnClickOutside: false,
                         closeOnEsc: false,
                         buttons: true
                     }).then((action) => {
-                        pnlTablero.find("#Proveedor")[0].selectize.focus();
+                        pnlTablero.find("#Tp").focus();
                     });
                 }
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "EL TP SÓLO DEBE SER 1 Ó 2",
-                    icon: "error",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: true
-                }).then((action) => {
-                    pnlTablero.find("#Tp").focus();
-                });
-            }
 
-
-        });
-        pnlTablero.find("#Tp").change(function () {
-            onVerificarTp($(this));
-        });
-        pnlTablero.find("#Proveedor").change(function () {
-            var tipo = pnlTablero.find("#Tp").val();
-            if (tipo !== '') {
-                //Si existe prov trae datos o realiza accion
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBE ELEGIR UN TP",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Tp")[0].selectize.focus();
-                });
             }
         });
+
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
 
@@ -120,6 +158,7 @@
                             Proveedor: prov,
                             Doc: doc
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             swal({
                                 title: "DOCUMENTO ELIMINADO",
                                 text: "El documento ha sido eliminado con exito",
@@ -130,12 +169,14 @@
                                 init();
                             });
                         }).fail(function (x, y, z) {
+                            btnGuardar.attr('disabled', false);
                             console.log(x, y, z);
                         });
                     }
                 });
 
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
         });
@@ -149,31 +190,12 @@
         pnlTablero.find("#Tp").focus();
     }
 
-    function onVerificarTp(v) {
-        var tp = parseInt(v.val());
-        if (tp === 1 || tp === 2) {
-            getProveedores(tp);
-        } else {
-            swal({
-                title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                icon: "error",
-                closeOnClickOutside: false,
-                closeOnEsc: false,
-                buttons: false,
-                timer: 1000
-            }).then((action) => {
-                $(v).val('').focus();
-            });
-        }
-    }
-
     function getProveedores(tp) {
-        pnlTablero.find("#Proveedor")[0].selectize.clear(true);
-        pnlTablero.find("#Proveedor")[0].selectize.clearOptions();
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -210,6 +232,7 @@
                         }).done(function (data) {
                             if (data.length > 0) { //si existe la compra
                                 pnlTablero.find("#OrdenCompra").val(data[0].OrdenCompra);
+                                btnGuardar.focus();
                             } else {//Si no existe la compra mandar mensaje de alerta
                                 swal({
                                     title: "IMPOSIBLE ELIMINAR",

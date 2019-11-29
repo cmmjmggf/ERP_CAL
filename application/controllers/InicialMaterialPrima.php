@@ -38,6 +38,15 @@ class InicialMaterialPrima extends CI_Controller {
         }
     }
 
+    public function onVerificarArticulo() {
+        try {
+            $Articulo = $this->input->get('Articulo');
+            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and estatus = 'ACTIVO'  ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onModificar() {
         try {
             $x = $this->input;
@@ -45,8 +54,8 @@ class InicialMaterialPrima extends CI_Controller {
                 'Pinvini' => $x->post('Pinvini'),
                 'Invini' => $x->post('Invini')
             );
-            $this->InicialMateriaPrima_model->onModificar($x->post('Clave'), $datos);
-            $this->InicialMateriaPrima_model->onModificarArt_Fabrica($x->post('Clave'), $datos);
+            $this->InicialMateriaPrima_model->onModificar($x->post('Articulo'), $datos);
+            $this->InicialMateriaPrima_model->onModificarArt_Fabrica($x->post('Articulo'), $datos);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -101,14 +110,14 @@ class InicialMaterialPrima extends CI_Controller {
 
             foreach ($Grupos as $key => $D) {
                 if ($COL === 2) {
-                    $pdf->Cell(180, 4, '', 0/* BORDE */, 1, 'L');
+                    $pdf->Cell(180, 3, '', 0/* BORDE */, 1, 'L');
                 }
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', 'B', 8.5);
-                $pdf->Cell(15, 4, 'Grupo', 'B'/* BORDE */, 0, 'L');
+                $pdf->Cell(15, 3, 'Grupo', 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
                 $pdf->SetFont('Calibri', '', 8.5);
-                $pdf->Cell(40, 4, utf8_decode($D->Clave) . ' ' . utf8_decode($D->Nombre), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(40, 3, utf8_decode($D->Clave) . ' ' . utf8_decode($D->Nombre), 'B'/* BORDE */, 1, 'L');
                 $COL = 1;
                 $TOTAL_C_GPO = 0;
                 $TOTAL_GPO = 0;
@@ -120,36 +129,36 @@ class InicialMaterialPrima extends CI_Controller {
                             case 1:
                                 $COL = 2;
                                 $pdf->SetX(5);
-                                $pdf->Cell(8, 4, $F->Clave, 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(8, 3, $F->Clave, 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(13);
-                                $pdf->Cell(43, 4, mb_strimwidth(utf8_decode($F->Descripcion), 0, 28, ""), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(43, 3, mb_strimwidth(utf8_decode($F->Descripcion), 0, 28, ""), 0/* BORDE */, 0, 'L');
                                 $pdf->SetX(56);
-                                $pdf->Cell(10, 4, utf8_decode($F->Unidad), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(10, 3, utf8_decode($F->Unidad), 0/* BORDE */, 0, 'L');
                                 $pdf->SetX(66);
-                                $pdf->Cell(13, 4, '$' . number_format($F->Precio, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(13, 3, '$' . number_format($F->Precio, 2, ".", ","), 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(79);
-                                $pdf->Cell(11, 4, number_format($F->Cantidad, 0, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(11, 3, number_format($F->Cantidad, 0, ".", ","), 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(90);
                                 $pdf->SetLineWidth(0.7);
-                                $pdf->Cell(17, 4, '$' . number_format($F->Total, 2, ".", ","), 'R'/* BORDE */, 0, 'R');
+                                $pdf->Cell(17, 3, '$' . number_format($F->Total, 2, ".", ","), 'R'/* BORDE */, 0, 'R');
                                 $pdf->SetLineWidth(0.2);
 
                                 break;
                             case 2:
                                 $COL = 1;
                                 $pdf->SetX(108.5);
-                                $pdf->Cell(8, 4, $F->Clave, 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(8, 3, $F->Clave, 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(116.5);
-                                $pdf->Cell(43, 4, mb_strimwidth(utf8_decode($F->Descripcion), 0, 28, ""), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(43, 3, mb_strimwidth(utf8_decode($F->Descripcion), 0, 28, ""), 0/* BORDE */, 0, 'L');
                                 $pdf->SetX(159.5);
-                                $pdf->Cell(10, 4, utf8_decode($F->Unidad), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(10, 3, utf8_decode($F->Unidad), 0/* BORDE */, 0, 'L');
                                 $pdf->SetX(169.5);
-                                $pdf->Cell(13, 4, '$' . number_format($F->Precio, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(13, 3, '$' . number_format($F->Precio, 2, ".", ","), 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(182.5);
-                                $pdf->Cell(11, 4, number_format($F->Cantidad, 0, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(11, 3, number_format($F->Cantidad, 0, ".", ","), 0/* BORDE */, 0, 'R');
                                 $pdf->SetX(193.5);
                                 $pdf->SetLineWidth(0.7);
-                                $pdf->Cell(17, 4, '$' . number_format($F->Total, 2, ".", ","), 0/* BORDE */, 1, 'R');
+                                $pdf->Cell(17, 3, '$' . number_format($F->Total, 2, ".", ","), 0/* BORDE */, 1, 'R');
                                 $pdf->SetLineWidth(0.2);
                                 break;
                         }
@@ -160,38 +169,38 @@ class InicialMaterialPrima extends CI_Controller {
                     }
                 }
                 if ($COL === 2) {
-                    $pdf->Cell(180, 4, '', 0/* BORDE */, 1, 'L');
+                    $pdf->Cell(180, 3, '', 0/* BORDE */, 1, 'L');
                 }
                 $pdf->SetX(50);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(29, 4, 'Total por grupo', 'T'/* BORDE */, 0, 'L');
+                $pdf->Cell(29, 3, 'Total por grupo', 'T'/* BORDE */, 0, 'L');
                 $pdf->SetX(79);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(11, 4, number_format($TOTAL_C_GPO, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
+                $pdf->Cell(11, 3, number_format($TOTAL_C_GPO, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
                 $pdf->SetX(90);
-                $pdf->Cell(17, 4, '$' . number_format($TOTAL_GPO, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
+                $pdf->Cell(17, 3, '$' . number_format($TOTAL_GPO, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
                 $pdf->SetLineWidth(0.7);
                 $pdf->SetX(107);
-                $pdf->Cell(5, 4, '', 'L'/* BORDE */, 0, 'L');
+                $pdf->Cell(5, 3, '', 'L'/* BORDE */, 0, 'L');
                 $pdf->SetLineWidth(0.2);
                 if ($COL === 1) {
-                    $pdf->Cell(180, 4, '', 0/* BORDE */, 1, 'L');
+                    $pdf->Cell(180, 3, '', 0/* BORDE */, 1, 'L');
                 }
             }
 
             if ($COL === 2) {
-                $pdf->Cell(180, 4, '', 0/* BORDE */, 1, 'L');
+                $pdf->Cell(180, 3, '', 0/* BORDE */, 1, 'L');
             }
             $pdf->SetX(50);
             $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(29, 4, 'Total inventario', 'T'/* BORDE */, 0, 'L');
+            $pdf->Cell(29, 3, 'Total inventario', 'T'/* BORDE */, 0, 'L');
             $pdf->SetX(79);
             $pdf->SetFont('Calibri', '', 8);
-            $pdf->Cell(11, 4, number_format($TOTAL_C_FIN, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(11, 3, number_format($TOTAL_C_FIN, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
             $pdf->SetX(90);
-            $pdf->Cell(17, 4, '$' . number_format($TOTAL_FIN, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
+            $pdf->Cell(17, 3, '$' . number_format($TOTAL_FIN, 0, ".", ","), 'T'/* BORDE */, 0, 'R');
             if ($COL === 1) {
-                $pdf->Cell(180, 4, '', 0/* BORDE */, 1, 'L');
+                $pdf->Cell(180, 3, '', 0/* BORDE */, 1, 'L');
             }
 
             /* FIN RESUMEN */

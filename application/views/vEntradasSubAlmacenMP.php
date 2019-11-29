@@ -107,7 +107,7 @@
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToSelectOnChange('#TipoMov', '#Articulo', pnlTablero);
         setFocusSelectToInputOnChange('#Articulo', '#Cantidad', pnlTablero);
-        handleEnter();
+        handleEnterDiv(pnlTablero);
         getArticulos();
         getRecords('0');
 
@@ -492,7 +492,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

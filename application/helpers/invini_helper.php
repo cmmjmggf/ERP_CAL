@@ -40,7 +40,7 @@ class PDF extends FPDF {
         /* ENCABEZADO DETALLE TITULOS */
         $anchos = array(51/* 0 */, 13/* 0 */, 13/* 1 */, 13/* 2 */, 13/* 3 */, 51/* 0 */, 13/* 0 */, 13/* 1 */, 13/* 2 */, 13/* 3 */);
         $aligns = array('L', 'L', 'L', 'L', 'L');
-        $this->SetY(21);
+        $this->SetY(18);
         $this->SetX(5);
         $this->SetFont('Calibri', 'B', 9);
         $this->SetWidths($anchos);
@@ -78,7 +78,7 @@ class PDF extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -96,7 +96,7 @@ class PDF extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }

@@ -589,8 +589,7 @@
                         title: "Confirmar",
                         text: "Deseas cancelar el registro?",
                         icon: "warning",
-                        buttons: ["Cancelar", "Aceptar"],
-                        dangerMode: true
+                        buttons: ["Cancelar", "Aceptar"]
                     }).then((willDelete) => {
                         if (willDelete) {
                             HoldOn.open({
@@ -690,8 +689,7 @@
                 title: "Confirmar",
                 text: "Deseas cerrar la Orden de Compra?",
                 icon: "warning",
-                buttons: ["Cancelar", "Aceptar"],
-                dangerMode: true
+                buttons: ["Cancelar", "Aceptar"]
             }).then((willDelete) => {
                 if (willDelete) {
                     HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});

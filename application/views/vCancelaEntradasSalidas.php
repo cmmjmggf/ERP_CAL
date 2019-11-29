@@ -13,7 +13,7 @@
         <div class="row" id="Encabezado">
             <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                 <label for="" >Maq.*</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="3" id="Maq" name="Maq" required="">
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Maq" name="Maq" required="">
             </div>
             <div class="col-12 col-sm-6 col-md-1 col-xl-1">
                 <label for="" >Año*</label>
@@ -28,7 +28,7 @@
                 <input type="text" class="form-control form-control-sm "  id="DocMov" name="DocMov" maxlength="15" required>
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-1 mt-4">
-                <button type="button" class="btn btn-primary" id="btnGuardar" data-toggle="tooltip" data-placement="right" title="Cancelar Docto.">
+                <button type="button" class="btn btn-primary" id="btnGuardar">
                     <i class="fa fa-check"></i> CANCELAR DOCTO
                 </button>
             </div>
@@ -62,55 +62,62 @@
     var nuevo = true;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        handleEnter();
         getRecords('0', '0', '0', '0');
         pnlTablero.find("#Maq").focus();
-        pnlTablero.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Ano").val("");
-                    pnlTablero.find("#Ano").focus();
-                });
+        pnlTablero.find('#Ano').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlTablero.find("#Ano").val("");
+                        pnlTablero.find("#Ano").focus();
+                    });
+                } else {
+                    pnlTablero.find("#Sem").focus().select();
+                }
             }
         });
-        pnlTablero.find("#Maq").change(function () {
-            onComprobarMaquilas($(this));
-            pnlTablero.find("#Sem").trigger('change');
-        });
-        pnlTablero.find("#Sem").change(function () {
-            var ano = pnlTablero.find("#Ano").val();
-            var maq = pnlTablero.find("#Maq").val();
-            onComprobarSemanasProduccion($(this), ano, maq);
-
-        });
-        pnlTablero.find("#DocMov").change(function () {
-            var maq = pnlTablero.find("#Maq").val();
-            var sem = pnlTablero.find("#Sem").val();
-            var ano = pnlTablero.find("#Ano").val();
-            if (maq !== '' && sem !== '' && $(this).val() !== '') {
-                getRecords($(this).val(), maq, sem, ano);
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "DEBES INTRODUCIR UNA MAQUILA Y UNA SEMANA",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: true
-                }).then((action) => {
-                    $(this).val("");
-                    $(this).focus();
-                });
+        pnlTablero.find('#Maq').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onComprobarMaquilas($(this));
+                }
             }
-
+        });
+        pnlTablero.find("#Sem").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                var ano = pnlTablero.find("#Ano").val();
+                var maq = pnlTablero.find("#Maq").val();
+                onComprobarSemanasProduccion($(this), ano, maq);
+            }
+        });
+        pnlTablero.find("#DocMov").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                var maq = pnlTablero.find("#Maq").val();
+                var sem = pnlTablero.find("#Sem").val();
+                var ano = pnlTablero.find("#Ano").val();
+                if (maq !== '' && sem !== '' && $(this).val() !== '') {
+                    getRecords($(this).val(), maq, sem, ano);
+                    btnGuardar.focus();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "DEBES INTRODUCIR UNA MAQUILA Y UNA SEMANA",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: true
+                    }).then((action) => {
+                        $(this).val("");
+                        $(this).focus();
+                    });
+                }
+            }
         });
         btnGuardar.click(function () {
             isValid('pnlTablero');
@@ -164,7 +171,7 @@
             tblMovimientos.DataTable().destroy();
         }
         Movimientos = tblMovimientos.DataTable({
-            "dom": 'rtip',
+            "dom": 'rt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
@@ -191,7 +198,8 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 300,
+            scrollY: 300,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -235,6 +243,7 @@
     function onComprobarMaquilas(v) {
         $.getJSON(master_url + 'onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
             if (data.length > 0) {
+                pnlTablero.find("#Ano").focus().select();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -268,10 +277,10 @@
                                     $(v).val('').focus();
                                 });
                             } else {//ABIERTA
-
+                                pnlTablero.find("#DocMov").focus().select();
                             }
                         } else {//ABIERTA
-
+                            pnlTablero.find("#DocMov").focus().select();
                         }
                     });
                 } else {
@@ -303,7 +312,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

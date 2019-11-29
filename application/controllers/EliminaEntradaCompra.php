@@ -37,6 +37,15 @@ class EliminaEntradaCompra extends CI_Controller {
         }
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getProveedores() {
         try {
             print json_encode($this->EliminaEntradaCompra_model->getProveedores());

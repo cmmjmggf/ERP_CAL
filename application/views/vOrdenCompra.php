@@ -44,7 +44,7 @@
             </div>
         </div>
         <hr>
-        <div class="card-block mt-4" id="pnlDatos">
+        <div class="card-block" id="pnlDatos">
             <form id="frmNuevo">
 
                 <div class="row" >
@@ -307,6 +307,7 @@
                 var tipo = pnlDatos.find("#Tipo").val();
                 if (tipo !== '') {
                     getArticuloByDeptoByProveedor(tipo, $(this).val());
+                    pnlDatos.find('#FechaOrden').focus().select();
                 } else {
                     swal({
                         title: "ATENCIÓN",
@@ -583,8 +584,7 @@
                         title: "Confirmar",
                         text: "Deseas cancelar el registro?",
                         icon: "warning",
-                        buttons: ["Cancelar", "Aceptar"],
-                        dangerMode: true
+                        buttons: ["Cancelar", "Aceptar"]
                     }).then((willDelete) => {
                         if (willDelete) {
                             HoldOn.open({
@@ -630,8 +630,7 @@
                 title: "Confirmar",
                 text: "Deseas cerrar la Orden de Compra?",
                 icon: "warning",
-                buttons: ["Cancelar", "Aceptar"],
-                dangerMode: true
+                buttons: ["Cancelar", "Aceptar"]
             }).then((willDelete) => {
                 if (willDelete) {
                     HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});

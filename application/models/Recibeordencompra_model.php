@@ -10,13 +10,13 @@ class Recibeordencompra_model extends CI_Model {
         parent::__construct();
     }
 
-    public function getRecords() {
+    public function getRecords($Folio, $Tp) {
         try {
             $this->db->select(""
                     . "OC.ID,"
                     . "OC.Tp,"
                     . "OC.Folio, "
-                    . "CONCAT(OC.Articulo,' ',A.Descripcion) AS Articulo, "
+                    . "CONCAT(A.Descripcion) AS Articulo, "
                     . "OC.Cantidad, "
                     . "ifnull(OC.CantidadRecibida,'') AS Recibida, "
                     . "OC.Precio, "
@@ -30,6 +30,8 @@ class Recibeordencompra_model extends CI_Model {
             $this->db->from("ordencompra OC");
             $this->db->join("articulos A", "A.Clave = OC.Articulo ");
             $this->db->where_in('OC.Estatus', array('PENDIENTE', 'ACTIVA'));
+            $this->db->where('OC.Folio', $Folio);
+            $this->db->where('OC.Tp', $Tp);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
