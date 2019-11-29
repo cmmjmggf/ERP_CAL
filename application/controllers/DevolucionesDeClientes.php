@@ -31,7 +31,7 @@ class DevolucionesDeClientes extends CI_Controller {
         }
     }
 
-    public function getPedidos() {
+    public function getPedidosFacturados() {
         try {
             $x = $this->input->get();
             $this->db->select("F.ID, F.contped AS CONTROL, F.factura AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)

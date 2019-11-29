@@ -1,7 +1,7 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
-            <div class="w-100"></div> 
+            <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
@@ -124,7 +124,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7" >
                 <div class="row">
                     <div class="col-4">
@@ -279,22 +278,22 @@
                     </div>
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info btn-block" id="btnReportesDev" name="btnReportesDev">
+                        <button type="button" class="btn btn-info btn-block selectNotEnter" id="btnReportesDev" name="btnReportesDev">
                             <span class="fa fa-file"></span>  Reportes
                         </button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info notEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-asterisk"></span>  Defecto</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-asterisk"></span>  Defecto</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info notEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-ban"></span>  Detalle</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-ban"></span>  Detalle</button>
                     </div>
                     <div class="w-100 my-1"></div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
-                        <button type="button" class="btn btn-info notEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
-                        <button type="button" class="btn btn-info notEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-search"></span> Rastreo est/cte</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-search"></span> Rastreo est/cte</button>
                     </div>
                 </div>
             </div>
@@ -431,7 +430,7 @@
                     if (DetalleDefecto.val()) {
                         DetalleDefecto[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE DETALLE DEFECTO, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE DETALLE DEFECTO, ESPECIFIQUE OTRO', function () {
                             xDetalleDefecto.focus().select();
                         });
                     }
@@ -463,7 +462,7 @@
                     if (Defecto.val()) {
                         Defecto[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE DEFECTO, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE DEFECTO, ESPECIFIQUE OTRO', function () {
                             xDefecto.focus().select();
                         });
                     }
@@ -496,7 +495,7 @@
                     if (Departamento.val()) {
                         Departamento[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE DEPARTAMENTO, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE DEPARTAMENTO, ESPECIFIQUE OTRO', function () {
                             xDepartamento.focus().select();
                         });
                     }
@@ -529,7 +528,7 @@
                     if (Cargo.val()) {
                         Cargo[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE CARGO, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CARGO, ESPECIFIQUE OTRO', function () {
                             xCargo.focus().select();
                         });
                     }
@@ -574,7 +573,7 @@
                     if (Clasificacion.val()) {
                         Clasificacion[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTA CLASIFICACIÓN, ESPECIFIQUE OTRA', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTA CLASIFICACIÓN, ESPECIFIQUE OTRA', function () {
                             xClasificacion.focus().select();
                         });
                     }
@@ -595,7 +594,7 @@
                     if (ClienteDevolucion.val()) {
                         ClienteDevolucion[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             xClienteDevolucion.focus().select();
                         });
                     }
@@ -677,7 +676,7 @@
                     });
                 }
             } else {
-                iMsg("DEBE DE ESPECIFICAR LAS FECHAS", 'w', function () {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR LAS FECHAS", function () {
                     DeLaFechaDev.focus().select();
                 });
             }
@@ -706,52 +705,61 @@
         });
 
         btnAcepta.click(function () {
-
-            $.each(pnlTablero.find("select"), function (k, v) {
-                pnlTablero.find("select")[k].selectize.enable();
-            });
-
-            if (ClienteDevolucion.val() && FechaDevolucion.val()) {
-                getTotalPares();
-                var p = {
-                    CLIENTE: ClienteDevolucion.val(), FECHA: FechaDevolucion.val(),
-                    DOCUMENTO: DOCUMENTO.val(), MOTIVO: Motivo.val(),
-                    CONTROL: Control.val(), ESTILO: Estilo.val(),
-                    COLOR: ColorClave.val(), TP: TP.val(),
-                    PARES_DEVUELTOS: (TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0),
-                    PARES_FACTURADOS: (TotalParesEntregaF.val() ? TotalParesEntregaF.val() : 0)
-                };
-                for (var i = 1; i < 23; i++) {
-                    if (i < 10) {
-                        p["PAR0" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
-                    } else {
-                        p["PAR" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+            if (Motivo.val() && Motivo.val().length > 5) {
+                $.each(pnlTablero.find("select"), function (k, v) {
+                    pnlTablero.find("select")[k].selectize.enable();
+                });
+                if (ClienteDevolucion.val() && FechaDevolucion.val()) {
+                    getTotalPares();
+                    var p = {
+                        CLIENTE: ClienteDevolucion.val(), FECHA: FechaDevolucion.val(),
+                        DOCUMENTO: DOCUMENTO.val(), MOTIVO: Motivo.val(),
+                        CONTROL: Control.val(), ESTILO: Estilo.val(),
+                        COLOR: ColorClave.val(), TP: TP.val(),
+                        PARES_DEVUELTOS: (TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0),
+                        PARES_FACTURADOS: (TotalParesEntregaF.val() ? TotalParesEntregaF.val() : 0)
+                    };
+                    for (var i = 1; i < 23; i++) {
+                        if (i < 10) {
+                            p["PAR0" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+                        } else {
+                            p["PAR" + i] = (pnlTablero.find("#PDF" + i).val() ? pnlTablero.find("#PDF" + i).val() : 0);
+                        }
                     }
-                }
-                p["DEPARTAMENTO"] = Departamento.val();
-                p["DEFECTO"] = Defecto.val();
-                p["DETALLE"] = DetalleDefecto.val();
-                p["CLASIFICACION"] = Clasificacion.val();
-                p["CARGO_A"] = Cargo.val();
-                p["SERIE"] = Serie.val();
-                p["PRECIO"] = PRECIO.val();
-                p["MAQUILA"] = Defecto.val();
-                p["PRECIO_DEVOLUCION"] = PRECIO.val();
+                    p["DEPARTAMENTO"] = Departamento.val();
+                    p["DEFECTO"] = Defecto.val();
+                    p["DETALLE"] = DetalleDefecto.val();
+                    p["CLASIFICACION"] = Clasificacion.val();
+                    p["CARGO_A"] = Cargo.val();
+                    p["SERIE"] = Serie.val();
+                    p["PRECIO"] = PRECIO.val();
+                    p["MAQUILA"] = Defecto.val();
+                    p["PRECIO_DEVOLUCION"] = PRECIO.val();
 
-                $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
-                    onOpenOverlay('');
-                    onResetCampos();
-                    Pedidos.ajax.reload(function () {
-                        Devoluciones.ajax.reload(function () {
-                            onCloseOverlay();
-                            Clasificacion[0].selectize.focus();
+                    $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
+                        onOpenOverlay('');
+                        onResetCampos();
+                        pnlTablero.find("input").val("");
+                        $.each(pnlTablero.find("select"), function (k, v) {
+                            pnlTablero.find("select")[k].selectize.clear(true);
                         });
-                    });
-                    onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
 
+                        Pedidos.ajax.reload(function () {
+                            Devoluciones.ajax.reload(function () {
+                                onCloseOverlay();
+                                Clasificacion[0].selectize.focus();
+                            });
+                        });
+                        onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+
+                    });
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE CAPTURAR UN MOTIVO VÁLIDO.", function () {
+                    Motivo.focus().select();
                 });
             }
         });
@@ -773,6 +781,7 @@
         });
 
         btnControlCompleto.click(function () {
+            onBeep(1);
             for (var i = 1; i < 23; i++) {
                 pnlTablero.find("#PDF" + i).val(pnlTablero.find("#C" + i).val());
             }
@@ -798,14 +807,14 @@
                         console.log($(this).val(), pnlTablero.find("#CF" + index).val());
                         console.log(parseInt($(this).val()) <= parseInt(pnlTablero.find("#CF" + index).val()));
                     } else {
-                        iMsg('LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', function () {
                             pnlTablero.find("#PDF" + index).focus().select();
                         });
                     }
                     onRevisarRegistroValido();
                 }
             } else {
-                iMsg('DEBE DE SELECCIONAR UN CONTROL', 'w', function () {
+                onCampoInvalido(pnlTablero, 'DEBE DE SELECCIONAR UN CONTROL', function () {
 
                 });
             }
@@ -829,7 +838,7 @@
         Pedidos = tblPedidos.DataTable({
             dom: 'rtp',
             "ajax": {
-                "url": '<?php print base_url('DevolucionesDeClientes/getPedidos'); ?>',
+                "url": '<?php print base_url('DevolucionesDeClientes/getPedidosFacturados'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
@@ -977,14 +986,15 @@
                 Serie.val(xx.Serie);
                 pnlTablero.find(".serie_control").text(xx.Serie);
                 var t = 0;
-                for (var i = 1; i < 21; i++) {
+                for (var i = 1; i < 23; i++) {
                     if (parseInt(xx["T" + i]) > 0) {
                         pnlTablero.find("#T" + i).val(xx["T" + i]);
                         pnlTablero.find("span.T" + i).text(xx["T" + i]);
                         pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                         pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
                         pnlTablero.find(`#C${i}`).val(xx["C" + i]);
-                        if (parseInt(xx["C" + i]) <= 0) {
+                        console.log("C" + i + " => ", xx["C" + i]);
+                        if (parseInt(xx["C" + i]) <= 0 || xx["C" + i] === '') {
                             pnlTablero.find("#PDF" + i).attr('disabled', true);
                         } else {
                             pnlTablero.find("#PDF" + i).attr('disabled', false);
@@ -1000,6 +1010,8 @@
                         t += parseInt(xx["C" + i]);
                         TotalParesEntrega.val(t);
                         TotalParesEntregaAF.val(t);
+                    } else {
+                        pnlTablero.find("#PDF" + i).attr('disabled', true);
                     }
                 }
             } else {
@@ -1039,7 +1051,7 @@
         Defecto[0].selectize.clear();
         DetalleDefecto[0].selectize.clear();
 
-        for (var i = 1; i < 21; i++) {
+        for (var i = 1; i < 23; i++) {
             pnlTablero.find("#T" + i).val("");
             pnlTablero.find(`#C${i}`).val("");
             pnlTablero.find(`#CF${i}`).val("");
@@ -1074,7 +1086,7 @@
         $.getJSON('<?php print base_url('DevolucionesDeClientes/getParesFacturadosXControl') ?>', {CONTROL: c}).done(function (a) {
             console.log(a);
             var xx = a[0];
-            for (var i = 1; i < 21; i++) {
+            for (var i = 1; i < 23; i++) {
                 var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
                 if (i < 10) {
                     pnlTablero.find("#CF" + i).val(xx["par0" + i]);

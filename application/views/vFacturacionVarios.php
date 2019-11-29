@@ -434,7 +434,7 @@
                 });
             } else {
                 busy = false;
-                iMsg('DEBE DE AGREGAR UN DOCUMENTO VÁLIDO', 'w', function () {
+                onCampoInvalido(pnlTablero, 'DEBE DE AGREGAR UN DOCUMENTO VÁLIDO', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -445,7 +445,7 @@
                 onOpenOverlay('');
                 getVistaPrevia();
             } else {
-                iMsg('DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', 'w', function () {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', function () {
                     if (ClienteFactura.val()) {
                         ClienteClave.focus().select();
                     } else if (Documento.val()) {
@@ -477,7 +477,7 @@
                     if (Estilo.val()) {
                         onObtenerCodigoSatXEstilo();
                     } else {
-                        iMsg('NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', function () {
                             xEstilo.focus().select();
                         });
                     }
@@ -551,7 +551,7 @@
                     }).done(function (a) {
                 if (a.length > 0) {
                     if (parseInt(a[0].FACTURA_EXISTE) > 0 && nuevo) {
-                        iMsg('LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', function () {
                             Documento.attr('disabled', false);
                             Documento.focus().select();
                             onCloseOverlay();
@@ -634,7 +634,7 @@
 
         TPFactura.change(function (e) {
             if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 3 && parseInt(TPFactura.val()) === 0) {
-                iMsg("SOLO SE PERMITE 1 Y 2", "w", function () {
+                onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
                     TPFactura.focus().select();
                 });
                 return;
@@ -785,7 +785,7 @@
                 }).done(function (a) {
             if (a.length > 0) {
                 if (parseInt(a[0].FACTURA_EXISTE) > 0) {
-                    iMsg('LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', 'w', function () {
+                    onCampoInvalido(pnlTablero, 'LA FACTURA "' + Documento.val() + '" YA EXISTE, INTENTE CON OTRO NUMERO DE FACTURA', function () {
                         Documento.attr('disabled', false);
                         Documento.focus().select();
                         onCloseOverlay();

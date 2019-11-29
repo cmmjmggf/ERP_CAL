@@ -647,7 +647,7 @@
                     if (ClienteFactura.val()) {
                         ClienteFactura[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             ClienteClave.focus().select();
                         });
                     }
@@ -671,13 +671,13 @@
             if (e.keyCode === 13) {
                 mdlConsignarA.modal('hide');
                 btnVerTienda.removeClass("d-none");
-                TPFactura.focus()
+                TPFactura.focus();
                 handleEnterDiv(pnlTablero);
             }
         }).click(function () {
             mdlConsignarA.modal('hide');
             btnVerTienda.removeClass("d-none");
-            TPFactura.focus()
+            TPFactura.focus();
             handleEnterDiv(pnlTablero);
         });
 
@@ -768,7 +768,7 @@
                 });
             } else {
                 onBeep(2);
-                iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -867,7 +867,7 @@
                     onCloseOverlay();
                 });
             } else {
-                iMsg('LOS SIGUIENTES CAMPOS SON REQUERIDOS', 'w', function () {
+                onCampoInvalido(pnlTablero, 'LOS SIGUIENTES CAMPOS SON REQUERIDOS', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -949,7 +949,7 @@
                                 }).always(function () {
                                 });
                             } else {
-                                iMsg('ESTA FACTURA NO PERTENECE A ESTE CLIENTE', 'w', function () {
+                                onCampoInvalido(pnlTablero, 'ESTA FACTURA NO PERTENECE A ESTE CLIENTE', function () {
                                     ClienteClave.focus().select();
                                 });
                             }
@@ -969,7 +969,7 @@
         CajasFacturacion.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val() ? $(this).val() : 0) <= 0) {
-                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN NUMERO DE CAJAS', 'warning').then((value) => {
+                    onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN NUMERO DE CAJAS', function () {
                         CajasFacturacion.focus().select();
                     });
                 }
@@ -995,12 +995,12 @@
                     }
                     pnlTablero.find("#CAF1").focus().select();
                 } else {
-                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+                    onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CONTROL', function () {
                         Control.focus().select();
                     });
                 }
             } else {
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -1016,12 +1016,12 @@
                     pnlTablero.find("#CAF1").focus().select();
                     onNotifyOld('', 'POR FAVOR ESPECIFIQUE LAS CANTIDADES', 'info');
                 } else {
-                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+                    onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CONTROL', function () {
                         Control.focus().select();
                     });
                 }
             } else {
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -1104,7 +1104,7 @@
             if (ClienteFactura.val()) {
                 mdlControlesXFacturar.modal({backdrop: false, keyboard: false});
             } else {
-                swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -1141,11 +1141,27 @@
                         onCloseOverlay();
                     });
                 } else {
-                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2', 'warning').then((value) => {
+                    onCampoInvalido(pnlTablero, 'SOLO SE ACEPTA 1 Y 2', function () {
                         TPFactura.focus().select();
                     });
                 }
             } else {
+            }
+        }).focusout(function (e) {
+            if (ClienteClave.val()) {
+                if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                } else {
+                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+                return;
             }
         });
 
@@ -1162,14 +1178,14 @@
                         getInfoXControl();
                     }
                 } else {
-                    swal('ATENCION', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
+                    onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE', function () {
                         ClienteClave.focus().select();
                     });
                     $(".swal-button--confirm").focus();
                 }
             } else {
                 $(".swal-button--confirm").focus();
-                swal('ATENCION', 'DEBE DE ESPECIFICAR UN TIPO DE DOCUMENTO 1 O 2', 'warning').then((value) => {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN TIPO DE DOCUMENTO 1 O 2', function () {
                     TPFactura.focus().select();
                 });
                 $(".swal-button--confirm").focus();
@@ -1224,7 +1240,6 @@
             if (ClienteFactura.val()) {
 
                 ClienteClave.val(ClienteFactura.val());
-
 
                 if (parseInt(ClienteFactura.val()) === 2121) {
                     onVerTienda();
@@ -1521,7 +1536,7 @@
                                 });
                             } else {
                                 onResetCampos();
-                                iMsg('ESTE CONTROL NO PERTENECE A ESTE CLIENTE 1', 'w', function () {
+                                onCampoInvalido(pnlTablero, 'ESTE CONTROL NO PERTENECE A ESTE CLIENTE', function () {
                                     Control.focus().select();
                                     btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                     btnControlInCompleto.attr('disabled', true);
@@ -1535,7 +1550,7 @@
                         });
                     }
                 } else {
-                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
+                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
                         onResetCampos();
                         Control.focus().select();
                     });
@@ -1743,9 +1758,6 @@
         /*VOLVER AL CAMPO DE CONTROL*/
         Control.val('');
         Control.focus().select();
-    }
-    function onCargarDoctoByNumero() {
-        var docto = FAPEORCOFactura.val();
     }
 
     function onDisableInputs(tf) {

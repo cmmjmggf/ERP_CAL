@@ -840,7 +840,7 @@
                     if (ClienteFactura.val()) {
                         ClienteFactura[0].selectize.disable();
                     } else {
-                        onCampoInvalido(pnlTablero,'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             ClienteClave.focus().select();
                         });
                     }
@@ -926,7 +926,7 @@
                 });
             } else {
                 onBeep(2);
-                iMsg('DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', 'w', function () {
+                onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE, DOCUMENTO VÁLIDO Y UN TP', function () {
                     ClienteClave.focus().select();
                 });
             }
@@ -953,6 +953,7 @@
             onBeep(1);
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
+
         btnAcepta.click(function () {
             if (Control.val()) {
                 ClienteFactura[0].selectize.enable();
@@ -961,7 +962,7 @@
                             FACTURA: Documento.val()
                         }).done(function (a) {
                     if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
-                        iMsg('ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', function () {
                             Documento.focus().select();
                         });
                         return;
@@ -1000,20 +1001,20 @@
                         console.log('PARES OK');
                         onAceptarControl();
                     } else {
-                        iMsg('NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
                             pnlTablero.find("#CAF1").focus().select();
                         });
                         return;
                     }
                 } else {
-                    iMsg('ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', 'w', function () {
+                    onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', function () {
                         pnlTablero.find("#CAF1").focus().select();
                     });
                     return;
                 }
             } else {
                 $(".swal-button--confirm").focus();
-                iMsg('ES NECESARIO ESPECIFICAR UN CONTROL A FACTURAR', 'w', function () {
+                onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CONTROL A FACTURAR', function () {
                     Control.focus().select();
                 });
                 $(".swal-button--confirm").focus();
@@ -1081,12 +1082,13 @@
                 }).always(function () {
                 });
             } else {
-                iMsg('LOS SIGUIENTES CAMPOS SON REQUERIDOS', 'w', function () {
+                onCampoInvalido(pnlTablero, 'LOS SIGUIENTES CAMPOS SON REQUERIDOS', function () {
                     ClienteClave.focus().select();
                 });
                 return;
             }
         });
+
         Documento.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
@@ -1161,7 +1163,7 @@
                                 }).always(function () {
                                 });
                             } else {
-                                iMsg('ESTA FACTURA NO PERTENECE A ESTE CLIENTE', 'w', function () {
+                                onCampoInvalido(pnlTablero, 'ESTA FACTURA NO PERTENECE A ESTE CLIENTE', function () {
                                     ClienteClave.focus().select();
                                 });
                             }
@@ -1694,7 +1696,7 @@
                         control_pertenece_a_cliente = true;
                     } else {
                         onBeep(2);
-                        iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
                             onResetCampos();
                             Control.focus().select();
                         });
@@ -1796,7 +1798,7 @@
                                 });
                             } else {
                                 onResetCampos();
-                                iMsg('ESTE CONTROL NO PERTENECE A ESTE CLIENTE 1', 'w', function () {
+                                onCampoInvalido(pnlTablero, ' * ESTE CONTROL NO PERTENECE A ESTE CLIENTE * ', function () {
                                     Control.focus().select();
                                     btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                     btnControlInCompleto.attr('disabled', true);
@@ -1811,7 +1813,7 @@
                     }
                 } else {
                     onBeep(2);
-                    iMsg('EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', 'w', function () {
+                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
                         onResetCampos();
                         Control.focus().select();
                     });

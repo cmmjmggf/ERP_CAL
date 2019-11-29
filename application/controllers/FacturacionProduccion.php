@@ -76,7 +76,7 @@ class FacturacionProduccion extends CI_Controller {
                                         F.par16, F.par17, F.par18, F.par19, F.par20, 
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE 
                                         FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
-                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+                WHERE F.contped = '{$this->input->get('CONTROL')}' LIMIT 1")->result());
 //            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -163,8 +163,7 @@ class FacturacionProduccion extends CI_Controller {
 //                
 //            }
 
-            $this->db->set('staped', $HORAS)
-                    ->set('hora', $HORA)
+            $this->db->set('hora', $HORA)
                     ->set('horas', $HORAS)
                     ->set('referen', $x['REFERENCIA'])
                     ->set('monletra', $x['TOTAL_EN_LETRA'])

@@ -309,7 +309,7 @@
                     if (ClienteDevolucion.val()) {
                         ClienteDevolucion[0].selectize.disable();
                     } else {
-                        iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             xClienteDevolucion.focus().select();
                         });
                     }
@@ -401,7 +401,7 @@
         TP.change(function () {
             tblDocDeEsteCteConSaldo.parent().addClass("blinkb");
         });
-        
+
         TP.keydown(function (e) {
             if (xClienteDevolucion.val()) {
                 if (e.keyCode === 13 && parseInt(TP.val()) >= 1 && parseInt(TP.val()) <= 2) {
@@ -548,7 +548,7 @@
             if (ClienteDevolucion.val()) {
                 getInfoXControl(dtm);
             } else {
-                iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
+                onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CLIENTE', function () {
                     ClienteDevolucion[0].selectize.focus();
                     DevCtrlXAplicarDeEsteCliente.rows('.important').deselect();
                 });
@@ -610,7 +610,7 @@
             console.log(aaa);
             if (aaa.length <= 0) {
                 onBeep(2);
-                iMsg('ESTE DOCUMENTO NO PERTENECE A ESTE CLIENTE O NO EXISTE, INTENTE CON OTRO NUMERO DE DOCUMENTO', 'w', function () {
+                onCampoInvalido(pnlTablero, 'ESTE DOCUMENTO NO PERTENECE A ESTE CLIENTE O NO EXISTE, INTENTE CON OTRO NUMERO DE DOCUMENTO', function () {
                     AplicaDevolucion.focus();
                 });
             } else {
@@ -668,14 +668,15 @@
 
                 if (total_final < 0) {
                     onBeep(2);
-                    iMsg('LA DEVOLUCIÓN SOBREPASA EL SALDO DEL DOCUMENTO CARGADO, SELECCIONE OTRA DEVOLUCIÓN', 'w', function () {
-                        pnlTablero.find("#ImporteDev").val(0);
-                        pnlTablero.find(".importe_dev").text('0');
-                        pnlTablero.find(".importe_devuelto").text('0');
-                        pnlTablero.find("#NuevoSaldo").val(0);
-                        DevCtrlXAplicarDeEsteCliente.rows().deselect();
-                        tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
-                    });
+                    onCampoInvalido(pnlTablero,
+                            'LA DEVOLUCIÓN SOBREPASA EL SALDO DEL DOCUMENTO CARGADO, SELECCIONE OTRA DEVOLUCIÓN', function () {
+                                pnlTablero.find("#ImporteDev").val(0);
+                                pnlTablero.find(".importe_dev").text('0');
+                                pnlTablero.find(".importe_devuelto").text('0');
+                                pnlTablero.find("#NuevoSaldo").val(0);
+                                DevCtrlXAplicarDeEsteCliente.rows().deselect();
+                                tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+                            });
                 } else {
                     onBeep(1);
                     pnlTablero.find("#ImporteDev").val(idv);
@@ -731,7 +732,7 @@
                 tblDocDeEsteCteConSaldo.parent().removeClass("blinkb");
                 tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
             } else {
-                iMsg('ES NECESARIO ESPECIFICAR UN CLIENTE', 'w', function () {
+                onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CLIENTE', function () {
                     DocDeEsteCteConSaldo.rows('.important').deselect();
                     ClienteDevolucion[0].selectize.focus();
                 });
