@@ -1,9 +1,9 @@
 <!-- Contenido  -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <button class="btn btn-primary text-success btn-sm navbar-brand" id="sidebarCollapse">
+    <button class="btn btn-primary text-success btn-sm navbar-brand selectNotEnter" id="sidebarCollapse">
         <i class="fa fa-cube"></i> Materiales
     </button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler selectNotEnter" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">

@@ -16,7 +16,7 @@
         <div class="row" id="Encabezado">
             <div class="col-2 col-sm-2 col-md-1 col-xl-1">
                 <label for="" >Maq.*</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="3" id="Maq" name="Maq" required="">
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Maq" name="Maq" required="">
             </div>
             <div class="col-2 col-sm-2 col-md-1 col-xl-1">
                 <label for="" >Año*</label>
@@ -34,7 +34,7 @@
                 <label>Fecha</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly date notEnter " readonly="" id="FechaMov" name="FechaMov" maxlength="12" >
             </div>
-            <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-6 col-sm-6 col-md-3 col-lg-2 col-xl-2">
                 <label for="" >Tipo Mov.*</label>
                 <select id="TipoMov" name="TipoMov" class="form-control form-control-sm required" required="">
                     <option value=""></option>
@@ -47,11 +47,18 @@
             </div>
         </div>
         <div class="row" id="Detalle">
-            <div class="col-12 col-sm-5 col-md-3 col-xl-3" >
-                <label for="" >Artículo</label>
-                <select id="Articulo" name="Articulo" class="form-control form-control-sm required" required="" >
-                    <option value=""></option>
-                </select>
+            <div class="col-12 col-sm-4 col-md-4 col-xl-4" >
+                <label>Artículo</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-6 col-sm-2 col-md-1 col-xl-1">
                 <label for="" >U.M.</label>
@@ -66,11 +73,11 @@
                 <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Cantidad" name="Cantidad" maxlength="15" required>
             </div>
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 mt-4">
-                <button type="button" class="btn btn-primary disabledForms" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Capturar Entrada">
-                    <i class="fa fa-save"></i>
+                <button type="button" class="btn btn-primary disabledForms" id="btnGuardar">
+                    <i class="fa fa-save"></i> ACEPTAR
                 </button>
-                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura" data-toggle="tooltip" data-placement="right" title="Terminar Captura">
-                    <i class="fa fa-check"></i> TERMINAR CAPTURA
+                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura">
+                    <i class="fa fa-check"></i> CERRAR
                 </button>
             </div>
         </div>
@@ -107,57 +114,101 @@
     var nuevo = true;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#TipoMov', '#Articulo', pnlTablero);
-        setFocusSelectToInputOnChange('#Articulo', '#Cantidad', pnlTablero);
-        handleEnterDiv(pnlTablero);
+        setFocusSelectToSelectOnChange('#TipoMov', '#sArticulo', pnlTablero);
+        setFocusSelectToInputOnChange('#sArticulo', '#Cantidad', pnlTablero);
         getArticulos();
         getRecords('0', '0');
-        pnlTablero.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Ano").val("");
-                    pnlTablero.find("#Ano").focus();
-                });
+        init();
+        pnlTablero.find('#Maq').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onComprobarMaquilas($(this));
+                }
             }
         });
-        pnlTablero.find("#Maq").change(function () {
-            onComprobarMaquilas($(this));
-            pnlTablero.find("#Sem").trigger('change');
+        pnlTablero.find('#Ano').keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlTablero.find("#Ano").val("");
+                        pnlTablero.find("#Ano").focus();
+                    });
+                } else {
+                    pnlTablero.find("#Sem").focus().select();
+                }
+            }
         });
-        pnlTablero.find("#Sem").change(function () {
-            var ano = pnlTablero.find("#Ano").val();
-            var maq = pnlTablero.find("#Maq").val();
-            onComprobarSemanasProduccion($(this), ano, maq);
-            getFolio();
+        pnlTablero.find("#Sem").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                var ano = pnlTablero.find("#Ano").val();
+                var maq = pnlTablero.find("#Maq").val();
+                onComprobarSemanasProduccion($(this), ano, maq);
+            }
         });
         pnlTablero.find("#TipoMov").change(function () {
-
             isValid('Encabezado');
             if (valido) {
                 pnlTablero.find('#Encabezado').find('input').addClass('disabledForms');
                 pnlTablero.find('#Detalle').find('input, button').removeClass('disabledForms');
-                $.when(pnlTablero.find("#Articulo")[0].selectize.enable()).then(function (data, textStatus, jqXHR) {
-                    pnlTablero.find("#TipoMov")[0].selectize.disable()
-                    pnlTablero.find("#Articulo")[0].selectize.focus();
+                $.when(pnlTablero.find("#sArticulo")[0].selectize.enable()).then(function (data, textStatus, jqXHR) {
+                    pnlTablero.find("#TipoMov")[0].selectize.disable();
+                    pnlTablero.find("#Articulo").attr('readonly', false);
+                    pnlTablero.find("#Articulo").focus();
                 });
             } else {
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
                 pnlTablero.find('#Detalle').find('input, button').addClass('disabledForms');
-                pnlTablero.find("#Articulo")[0].selectize.disable();
+                pnlTablero.find("#sArticulo")[0].selectize.disable();
+                pnlTablero.find("#Articulo").attr('readonly', true);
             }
-
-
         });
-        pnlTablero.find("#Articulo").change(function () {
+        pnlTablero.find('#Articulo').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(master_url + 'onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
+
+                            var maq = pnlTablero.find("#Maq").val();
+                            if (maq !== '') {
+                                getDatosByArticulo(txtart, maq);
+                            } else {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "DEBES DE SELECCIONAR UNA MAQUILA",
+                                    icon: "warning"
+                                }).then((value) => {
+                                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                    pnlTablero.find('#Articulo').val('');
+                                    pnlTablero.find('#Maq').focus();
+                                });
+                            }
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                pnlTablero.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sArticulo").change(function () {
             var maq = pnlTablero.find("#Maq").val();
             if (maq !== '') {
                 getDatosByArticulo($(this).val(), maq);
@@ -168,13 +219,17 @@
                     icon: "warning"
                 }).then((value) => {
                     pnlTablero.find('#Maq').focus();
-                    $(this)[0].selectize.setValue('', true);
+                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
                 });
             }
-
-
+        });
+        pnlTablero.find("#Cantidad").keypress(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                btnGuardar.focus();
+            }
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
                 var ano = pnlTablero.find("#Ano").val();
@@ -199,6 +254,7 @@
                     Ano: ano,
                     Subtotal: subtotal
                 }).done(function (data) {
+                    btnGuardar.attr('disabled', false);
                     onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                     if (nuevo) {
                         getRecords(docMov);
@@ -208,27 +264,16 @@
 
                     }
                     pnlTablero.find('#Detalle').find("input").val('');
-                    pnlTablero.find("#Articulo")[0].selectize.clear(true);
-                    pnlTablero.find("#Articulo")[0].selectize.focus();
+                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                    pnlTablero.find("#Articulo").val('').focus();
                 }).fail(function (x, y, z) {
+                    btnGuardar.attr('disabled', false);
                     console.log(x, y, z);
                 });
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
-        });
-        btnNuevo.click(function () {
-            nuevo = true;
-            Movimientos.clear().draw();
-            pnlTablero.find("input").val("");
-            $.each(pnlTablero.find("select"), function (k, v) {
-                pnlTablero.find("select")[k].selectize.clear(true);
-            });
-            pnlTablero.find('#Encabezado').find('input, button').removeClass('disabledForms');
-            pnlTablero.find("#TipoMov")[0].selectize.enable();
-            pnlTablero.find("#Articulo")[0].selectize.disable();
-            pnlTablero.find("#FechaMov").val(getToday());
-            pnlTablero.find("#Maq").focus();
         });
         btnTerminarCaptura.click(function () {
             var docMov = pnlTablero.find("#DocMov").val();
@@ -242,7 +287,7 @@
                             console.info('done!');
                         },
                         afterClose: function () {
-                            btnNuevo.trigger('click');
+                            init();
                         },
                         iframe: {
                             // Iframe template
@@ -265,14 +310,26 @@
                 console.log(x, y, z);
             });
         });
+        btnNuevo.click(function () {
+            init();
+        });
     });
-
+    function init() {
+        nuevo = true;
+        Movimientos.clear().draw();
+        pnlTablero.find("input").val("");
+        $.each(pnlTablero.find("select"), function (k, v) {
+            pnlTablero.find("select")[k].selectize.clear(true);
+        });
+        pnlTablero.find('#Encabezado').find('input, button').removeClass('disabledForms');
+        pnlTablero.find("#TipoMov")[0].selectize.enable();
+        pnlTablero.find("#Articulo").attr('readonly', true);
+        pnlTablero.find("#sArticulo")[0].selectize.disable();
+        pnlTablero.find("#FechaMov").val(getToday());
+        pnlTablero.find("#Maq").focus();
+    }
     function getRecords(doc, maq) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMovimientos')) {
             tblMovimientos.DataTable().destroy();
@@ -369,6 +426,7 @@
             if (data.length > 0) {
                 pnlTablero.find('#Precio').val(data[0].Precio);
                 pnlTablero.find('#Unidad').val(data[0].Unidad);
+                pnlTablero.find('#Cantidad').focus().select();
             }
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -376,19 +434,16 @@
         });
     }
     function getArticulos() {
-        HoldOn.open({theme: 'sk-bounce', message: 'INCIALIZANDO DATOS...'});
         $.when($.getJSON(master_url + 'getArticulos').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.ID});
+                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         })).then(function (x) {
             HoldOn.close();
-            btnNuevo.trigger('click');
         });
-
     }
     function onComprobarMaquilas(v) {
         $.getJSON(master_url + 'onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
@@ -403,9 +458,9 @@
                         $(v).val('').focus();
                     });
                 } else {
-
+                    pnlTablero.find('#EntregaMat').text(data[0].EntregaMat);
+                    pnlTablero.find("#Ano").focus().select();
                 }
-                pnlTablero.find('#EntregaMat').text(data[0].EntregaMat);
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -439,10 +494,14 @@
                                     $(v).val('').focus();
                                 });
                             } else {//ABIERTA
-
+                                getFolio();
+                                pnlTablero.find("#TipoMov")[0].selectize.focus();
+                                pnlTablero.find("#TipoMov")[0].selectize.open();
                             }
                         } else {//ABIERTA
-
+                            getFolio();
+                            pnlTablero.find("#TipoMov")[0].selectize.focus();
+                            pnlTablero.find("#TipoMov")[0].selectize.open();
                         }
                     });
                 } else {

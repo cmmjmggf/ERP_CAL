@@ -21,9 +21,9 @@
                 <label for="" >Tipo*</label>
                 <select id="Tipo" name="Tipo" class="form-control form-control-sm required" required="">
                     <option value=""></option>
-                    <option value="1">SUELA</option>
-                    <option value="2">PLANTA</option>
-                    <option value="3">ENTRESUELA</option>
+                    <option value="1">1 SUELA</option>
+                    <option value="2">2 PLANTA</option>
+                    <option value="3">3 ENTRESUELA</option>
                 </select>
             </div>
             <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2">
@@ -128,15 +128,12 @@
 
     var estilo, color, tipoArt;
     $(document).ready(function () {
-
-        handleEnter();
         init();
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToInputOnChange('#Tipo', '#Control', pnlTablero);
         btnControlCompleto.click(function () {
             var control = pnlTablero.find('#Control').val();
-            $.getJSON(master_url + 'getPedidoByControl', {
-                Control: control
+            $.getJSON(master_url + 'getPedidoByControl', {Control: control
             }).done(function (data) {
                 if (data.length > 0) { //Si el control existe
                     $.each(data[0], function (k, v) {
@@ -193,77 +190,83 @@
             });
         });
 
-        pnlTablero.find('#Control').blur(function () {
+        pnlTablero.find('#Tipo').change(function () {
+            if ($(this).val()) {
+                pnlTablero.find('#Control').focus().select();
+            }
+        });
+        pnlTablero.find('#Control').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var control = $(this).val().toString();
+                if (control !== '') {
 
-            var control = $(this).val().toString();
-            if (control !== '') {
+                    tipoArt = pnlTablero.find('#Tipo').val();
+                    var descTipoArt = pnlTablero.find("#Tipo").text();
+                    if (tipoArt !== '') {
+                        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+                        //Verificamos si ya fue entregado en cada uno de los tipos
+                        $.getJSON(master_url + 'onVerificarMaterialEntregado', {
+                            Control: $(this).val(),
+                            Tipo: tipoArt
+                        }).done(function (data) {
+                            if (data.length > 0) {
+                                //YA FUE ENTREGADA
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "EL CONTROL " + control + " YA FUE ENTREGADO EN --> " + descTipoArt,
+                                    icon: "warning",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                }).then((action) => {
+                                    if (action) {
 
-                tipoArt = pnlTablero.find('#Tipo').val();
-                var descTipoArt = pnlTablero.find("#Tipo").text();
-                if (tipoArt !== '') {
-                    HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
-                    //Verificamos si ya fue entregado en cada uno de los tipos
-                    $.getJSON(master_url + 'onVerificarMaterialEntregado', {
-                        Control: $(this).val(),
-                        Tipo: tipoArt
-                    }).done(function (data) {
-                        if (data.length > 0) {
-                            //YA FUE ENTREGADA
-                            swal({
-                                title: "ATENCIÓN",
-                                text: "EL CONTROL " + control + " YA FUE ENTREGADO EN --> " + descTipoArt,
-                                icon: "warning",
-                                closeOnClickOutside: false,
-                                closeOnEsc: false
-                            }).then((action) => {
-                                if (action) {
-                                    getFolio();//Armamos el documento con la fecha/hora de hoy
-                                    //Aún así lo dejamos capturar, sólo se le avisa que ya está capturado
-                                    onObtenerControlPedidoSerie(control);
-                                    btnControlCompleto.addClass('d-none');
-                                }
-                            });
-                        } else {//EL CONTROL NO HA SIDO ENTREGADO
-                            getFolio();//Armamos el documento con la fecha/hora de hoy
-                            //---------------------------
-                            //----------------------------
-                            //-----------------------------
-                            //---------------Consultar Contro en pedido-------------------
-                            onObtenerControlPedidoSerie(control);
-                            btnControlCompleto.removeClass('d-none');
-                            //---------------------------
-                            //----------------------------
-                            //-----------------------------
+                                        //Aún así lo dejamos capturar, sólo se le avisa que ya está capturado
+                                        onObtenerControlPedidoSerie(control);
+                                        btnControlCompleto.addClass('d-none');
+                                    }
+                                });
+                            } else {//EL CONTROL NO HA SIDO ENTREGADO
+                                //---------------------------
+                                //----------------------------
+                                //-----------------------------
+                                //---------------Consultar Contro en pedido-------------------
+                                onObtenerControlPedidoSerie(control);
+                                btnControlCompleto.removeClass('d-none');
+                                //---------------------------
+                                //----------------------------
+                                //-----------------------------
 
-                        }
-                    }).fail(function (x, y, z) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                            }
+                        }).fail(function (x, y, z) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                        });
 
-                } else {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "DEBE ELEGIR UN TIPO DE SALIDA",
-                        icon: "warning",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-                        if (action) {
-                            pnlTablero.find("#Tipo")[0].selectize.focus();
-                        }
-                    });
+                    } else {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "DEBE ELEGIR UN TIPO DE SALIDA",
+                            icon: "warning",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+                            if (action) {
+                                pnlTablero.find("#Tipo")[0].selectize.focus();
+                            }
+                        });
+                    }
+
                 }
-
             }
         });
         btnAceptar.click(function () {
-
+            btnAceptar.attr('disabled', true);
             var maq = pnlTablero.find("#Pares").val();
             if (parseInt(maq) === 97) {
                 swal("Atención", "LA MAQUILA 97 NO PUEDE ENTREGAR SUELA/PLANTA/ENTRESUELA ", {
                     buttons: ["Cancelar", true]
                 }).then((value) => {
+                    btnAceptar.attr('disabled', false);
                     pnlTablero.find('#Control').val('').focus();
                 });
             } else {
@@ -320,7 +323,6 @@
             var f2 = 0;
             $.each(rows.find("tr input.numbersOnly:enabled"), function (i, v) {
                 f2++;
-
             });
             $.each(rows.find("tr input.numbersOnly:enabled"), function () {
                 var cant = parseInt($(this).val());
@@ -358,11 +360,13 @@
                                 Ano: ano
                             }
                         }).done(function (data, x, jq) {
+                            btnAceptar.attr('disabled', false);
                             f1 = f1 + 1;
                             if (f1 === f2) {
                                 onImprimirValeEntrada(doc);
                             }
                         }).fail(function (x, y, z) {
+                            btnAceptar.attr('disabled', false);
                             console.log(x, y, z);
                         });
 
@@ -420,12 +424,12 @@
             });
         });
     }
-
+    handleEnterDiv($('#rCantidades'));
     function onObtenerControlPedidoSerie(control) {
-        $.getJSON(master_url + 'getPedidoByControl', {
-            Control: control
+        $.getJSON(master_url + 'getPedidoByControl', {Control: control
         }).done(function (data) {
             if (data.length > 0) { //Si el control existe
+                getFolio();//Armamos el documento con la fecha/hora de hoy
                 estilo = data[0].Estilo;
                 color = data[0].Color;
                 $.each(data[0], function (k, v) {
@@ -443,6 +447,8 @@
                 });
                 pnlTablero.find('#MaquilaRecibe').text(data[0].EntregaMat);
                 pnlTablero.find('#rCantidades').find('#TotalParesEntrega').val(data[0].Pares);
+
+                pnlTablero.find('#rCantidades input[type="text"]:first-child:enabled:eq(0)').focus().select();
 
                 //Consultar Ficha Tecnica para traer cabecero
                 $.getJSON(master_url + 'getCabeceroFichaTecnica', {

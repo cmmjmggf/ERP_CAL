@@ -37,6 +37,15 @@ class NotasCargo extends CI_Controller {
         }
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->NotasCargo_model->getRecords($this->input->post('NC'), $this->input->post('Tp'), $this->input->post('Proveedor')));

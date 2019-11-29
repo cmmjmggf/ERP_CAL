@@ -22,11 +22,18 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-12 col-sm-12">
-                            <label>Proveedor:</label>
-                            <select class="form-control form-control-sm required" id="ProveedorC" name="ProveedorC" >
-                                <option value=""></option>
-                            </select>
+                        <div class="col-12" >
+                            <label>Proveedor</label>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="ProveedorC" name="ProveedorC" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sProveedorC" name="sProveedorC" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -67,9 +74,12 @@
     var mdlMovimientosProv = $('#mdlMovimientosProv');
     var mdlVista = mdlMovimientosProv.find('#mdlVista');
     $(document).ready(function () {
+        mdlCancelaNotaCargo.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(mdlCancelaNotaCargo);
-        setFocusSelectToInputOnChange('#ProveedorC', '#btnCancelarDoc', mdlCancelaNotaCargo);
-        handleEnter();
+        setFocusSelectToInputOnChange('#sProveedorC', '#btnCancelarDoc', mdlCancelaNotaCargo);
         mdlCancelaNotaCargo.on('shown.bs.modal', function () {
             mdlCancelaNotaCargo.find("input").val("");
             $.each(mdlCancelaNotaCargo.find("select"), function (k, v) {
@@ -84,10 +94,62 @@
         btnVerMovProv.click(function () {
             mdlMovimientosProv.modal('show');
         });
-        mdlCancelaNotaCargo.find("#TpC").change(function () {
-            onVerificarTp($(this));
+        mdlCancelaNotaCargo.find("#TpC").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onVerificarTp($(this));
+                }
+            }
+        });
+        mdlCancelaNotaCargo.find("#FolioC").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    mdlCancelaNotaCargo.find("#ProveedorC").focus();
+                }
+            }
+        });
+        mdlCancelaNotaCargo.find('#ProveedorC').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.addItem(txtprov, true);
+                            mdlCancelaNotaCargo.find("#btnCancelarDoc").focus();
+
+                        } else {
+                            onCampoInvalido('', 'EL PROVEEDOR NO EXISTE', function () {
+                                mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.clear(true);
+                                mdlCancelaNotaCargo.find('#ProveedorC').focus().val('');
+                                return;
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    onCampoInvalido('', 'DEBE DE CAPTURAR EL PROVEEDOR', function () {
+                        mdlCancelaNotaCargo.find('#ProveedorC').focus();
+                        return;
+                    });
+                }
+            }
+        });
+        mdlCancelaNotaCargo.find("#sProveedorC").change(function () {
+            if ($(this).val()) {
+                mdlCancelaNotaCargo.find('#Proveedorc').val($(this).val());
+                mdlCancelaNotaCargo.find("#btnCancelarDoc").focus();
+
+            } else {
+                onCampoInvalido('', 'DEBE DE CAPTURAR EL PROVEEDOR', function () {
+                    mdlCancelaNotaCargo.find('#ProveedorC').focus();
+                    return;
+                });
+            }
         });
         mdlCancelaNotaCargo.find("#btnCancelarDoc").click(function () {
+            mdlCancelaNotaCargo.find("#btnCancelarDoc").attr('disabled', true);
             var tp = mdlCancelaNotaCargo.find("#TpC").val();
             var folio = mdlCancelaNotaCargo.find("#FolioC").val();
             var prov = mdlCancelaNotaCargo.find("#ProveedorC").val();
@@ -104,8 +166,10 @@
                         closeOnClickOutside: false,
                         closeOnEsc: false
                     }).then((action) => {
-                        mdlCancelaNotaCargo.find("#ProveedorC")[0].selectize.clear(true);
-                        mdlCancelaNotaCargo.find("#ProveedorC")[0].selectize.clearOptions();
+                        mdlCancelaNotaCargo.find("#btnCancelarDoc").attr('disabled', false);
+                        mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.clear(true);
+                        mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.clearOptions();
+                        mdlCancelaNotaCargo.find('#ProveedorC').val('');
                         mdlCancelaNotaCargo.find('#FolioC').val('');
                         mdlCancelaNotaCargo.find('#TpC').val('').focus();
                     });
@@ -117,10 +181,12 @@
                         closeOnClickOutside: false,
                         closeOnEsc: false
                     }).then((action) => {
+                        mdlCancelaNotaCargo.find("#btnCancelarDoc").attr('disabled', false);
                         mdlCancelaNotaCargo.modal('hide');
                     });
                 }
             }).fail(function (x, y, z) {
+                mdlCancelaNotaCargo.find("#btnCancelarDoc").attr('disabled', false);
                 console.log(x, y, z);
             });
         });
@@ -130,7 +196,7 @@
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
             getProveedoresCancela(tp);
-
+            mdlCancelaNotaCargo.find('#FolioC').focus().select();
         } else {
             swal({
                 title: "ATENCIÓN",
@@ -146,11 +212,11 @@
         }
     }
     function getProveedoresCancela(tp) {
-        mdlCancelaNotaCargo.find("#ProveedorC")[0].selectize.clear(true);
-        mdlCancelaNotaCargo.find("#ProveedorC")[0].selectize.clearOptions();
+        mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.clear(true);
+        mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                mdlCancelaNotaCargo.find("#ProveedorC")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                mdlCancelaNotaCargo.find("#sProveedorC")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

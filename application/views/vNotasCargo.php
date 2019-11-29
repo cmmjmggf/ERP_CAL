@@ -8,14 +8,14 @@
                 </legend>
             </div>
             <div class="col-sm-8" align="right">
-                <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#mdlCancelaNotaCargo" data-backdrop='true'>
+                <a class="btn btn-danger btn-sm selectNotEnter" href="#" data-toggle="modal" data-target="#mdlCancelaNotaCargo" data-backdrop='true'>
                     <span class="fa fa-ban" ></span> CANCELAR NOTA</a>
-                <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#mdlEstadoCuentaProveedor" data-backdrop='true'>
+                <a class="btn btn-primary btn-sm selectNotEnter" href="#" data-toggle="modal" data-target="#mdlEstadoCuentaProveedor" data-backdrop='true'>
                     <span class="fa fa-file-pdf" ></span> EDOS. DE CUENTA</a>
-                <button type="button" class="btn btn-warning btn-sm" id="btnVerArticulos" >
+                <button type="button" class="btn btn-warning btn-sm selectNotEnter" id="btnVerArticulos" >
                     <span class="fa fa-cube" ></span> ARTÍCULOS
                 </button>
-                <button type="button" class="btn btn-info btn-sm " id="btnNuevo" >
+                <button type="button" class="btn btn-info btn-sm selectNotEnter" id="btnNuevo" >
                     <span class="fa fa-plus" ></span> NUEVO
                 </button>
             </div>
@@ -90,7 +90,7 @@
                 <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Subtotal" name="Cantidad" >
             </div>
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 mt-4">
-                <button type="button" class="btn btn-primary" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Aceptar">
+                <button type="button" class="btn btn-primary selectNotEnter" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Aceptar">
                     <i class="fa fa-save"></i>
                 </button>
                 <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura" data-toggle="tooltip" data-placement="right" title="Finalizar">
@@ -173,7 +173,7 @@
         setFocusSelectToInputOnChange('#DocCartProv', '#Concepto', pnlTablero);
         setFocusSelectToSelectOnChange('#Tipo', '#Articulo', pnlTablero);
         setFocusSelectToInputOnChange('#Articulo', '#Precio', pnlTablero);
-        handleEnter();
+        // handleEnter();
         init();
         pnlTablero.find("#Tp").change(function () {
             var tp = parseInt($(this).val());

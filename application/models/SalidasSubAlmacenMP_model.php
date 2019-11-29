@@ -48,9 +48,9 @@ class SalidasSubAlmacenMP_model extends CI_Model {
 
     public function getArticulos() {
         try {
-            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Clave,'-',D.Descripcion) AS Articulo")
+            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo")
                             ->from("articulos AS D")
-                            ->order_by('ID', 'ASC')
+                            ->order_by('Articulo', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
