@@ -83,35 +83,43 @@
                 <label class="text-danger">Devolver</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" id="CantidadDevuelta" maxlength="6" name="CantidadDevuelta">
             </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
-                <label for="" >Defecto</label>
-                <select id="Defecto" name="Defecto" class="form-control form-control-sm required" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
-                <label for="" >Detalle</label>
-                <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm required">
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-1 col-xl-1">
-                <label for="Clave" >1ra</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Primera" name="Primera" >
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-1 col-xl-1">
-                <label for="Clave" >2da</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Segunda" name="Segunda" >
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-1 col-xl-1">
-                <label for="Clave" >3ra</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Tercera" name="Tercera" >
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-1 col-xl-1">
-                <label for="Clave" >4ta</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cuarta" name="Cuarta" >
-            </div>
+            <div id = 'sContenedorSinValidar' class="col-4">
+                <div class="row">
+                    <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-6" >
+                        <label for="" >Defecto</label>
+                        <select id="Defecto" name="Defecto" class="form-control form-control-sm required" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-6" >
+                        <label for="" >Detalle</label>
+                        <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm required">
+                            <option value=""></option>
+                        </select>
+                    </div>
 
+                </div>
+            </div>
+            <div id = 'sContenedorSinValidar2' class="col-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="Clave" >1ra</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Primera" name="Primera" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="Clave" >2da</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Segunda" name="Segunda" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="Clave" >3ra</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Tercera" name="Tercera" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="Clave" >4ta</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cuarta" name="Cuarta" >
+                    </div>
+                </div>
+            </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-6 col-md-4 col-xl-4" >
                 <label for="" >Observaciones</label>
@@ -140,11 +148,11 @@
             </div>
 
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 mt-4">
-                <button type="button" class="btn btn-primary selectNotEnter" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Aceptar">
-                    <i class="fa fa-save"></i>
+                <button type="button" class="btn btn-primary selectNotEnter" id="btnGuardar" >
+                    <i class="fa fa-save"></i> ACEPTAR
                 </button>
-                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura" data-toggle="tooltip" data-placement="right" title="Finalizar">
-                    <i class="fa fa-check"></i> TERMINAR CAPTURA
+                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura">
+                    <i class="fa fa-check"></i> IMPRIME
                 </button>
             </div>
         </div>
@@ -230,16 +238,15 @@
 
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Defecto', '#DetalleDefecto', pnlTablero);
-        setFocusSelectToInputOnChange('#DetalleDefecto', '#Primera', pnlTablero);
         setFocusSelectToInputOnChange('#Aprovechamiento', '#HojasRevisadas', pnlTablero);
-        handleEnter();
         init();
+        //handleEnterDiv(pnlTablero.find('#sContenedorSinValidar'));
+        handleEnterDiv(pnlTablero.find('#sContenedorSinValidar2'));
         btnNuevo.click(function () {
             init();
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             //Calcular total 1
             var cant = $.isNumeric(pnlTablero.find("#Cantidad").val()) ? parseFloat(pnlTablero.find("#Cantidad").val()) : 0;
             var cant_dev = $.isNumeric(pnlTablero.find("#CantidadDevuelta").val()) ? parseFloat(pnlTablero.find("#CantidadDevuelta").val()) : 0;
@@ -305,6 +312,7 @@
                         Tercera: tercera,
                         Cuarta: cuarta
                     }).done(function (data) {
+                        btnGuardar.attr('disabled', false);
                         onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'success');
                         if (nuevo) {
                             getRecords(tp, fact, clave_prov);
@@ -319,10 +327,12 @@
                         pnlTablero.find('#Cantidad').focus();
                         btnTerminarCaptura.removeClass('disabledForms');
                     }).fail(function (x, y, z) {
+                        btnGuardar.attr('disabled', false);
                         console.log(x, y, z);
                     });
 
                 } else {
+                    btnGuardar.attr('disabled', false);
                     swal('ATENCION', 'Completa los campos requeridos', 'warning');
                 }
             }
@@ -353,64 +363,111 @@
                 });
             }
         });
-        pnlTablero.find("#Tp").change(function () {
-            var tp = parseInt($(this).val());
-            if (tp === 1 || tp === 2) {
-                pnlTablero.find('#OrdenCompra').focus();
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                    icon: "error",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    pnlTablero.find('#OrdenCompra').focus();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
+                    });
+                }
+            }
+        });
+        pnlTablero.find('#OrdenCompra').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtoc = $(this).val();
+                if (txtoc) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    onVerificarExisteOrdenCompra(tp, $(this));
+                }
+            }
+        });
+        pnlTablero.find("#Factura").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtf = $(this).val();
+                if (txtf) {
+                    var tp = pnlTablero.find("#Tp").val();
+                    onVerificarExisteFactura(tp, $(this));
+                }
+            }
+        });
+        pnlTablero.find("#FechaFactura").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtf = $(this).val();
+                if (txtf) {
+                    pnlTablero.find("#NumHojas").focus().select();
+                }
+            }
+        });
+        pnlTablero.find("#NumHojas").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtf = $(this).val();
+                if (txtf) {
+                    onNotifyOld('fa fa-exclamation', 'SELECCIONE EL ARTICULO A RECIBIR EN EL DETALLE DE LA ORDEN DE COMPRA', 'info');
+                    tblCompra.parent().addClass('blinkb');
+                }
+            }
+        });
+        pnlTablero.find("#Cantidad").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val() !== '' && parseFloat($(this).val()) > 0) {
+                    pnlTablero.find("#CantidadDevuelta").focus();
+                } else {
                     $(this).val('').focus();
-                });
+                }
             }
         });
-        pnlTablero.find("#OrdenCompra").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            if ($(this).val() !== '') {
-                onVerificarExisteOrdenCompra(tp, $(this));
-            }
-        });
-        pnlTablero.find("#Factura").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            if ($(this).val() !== '') {
-                onVerificarExisteFactura(tp, $(this));
-            }
-        });
-        pnlTablero.find("#NumHojas").change(function () {
-            if ($(this).val() !== '' && parseFloat($(this).val()) > 0) {
-                onNotifyOld('fa fa-exclamation', 'SELECCIONE EL ARTICULO A RECIBIR EN EL DETALLE DE LA ORDEN DE COMPRA', 'info');
-            }
-        });
-        pnlTablero.find("#Cantidad").change(function () {
-            if ($(this).val() !== '' && parseFloat($(this).val()) > 0) {
-                pnlTablero.find("#CantidadDevuelta").focus();
-            } else {
-                $(this).val('').focus();
-            }
-        });
-        pnlTablero.find("#CantidadDevuelta").change(function () {
-            var cantidad_rec = parseFloat(pnlTablero.find("#Cantidad").val());
-            if ($(this).val() !== '' && parseFloat($(this).val()) <= cantidad_rec) {
-                pnlTablero.find("#Defecto")[0].selectize.focus();
-            } else {
+        pnlTablero.find("#CantidadDevuelta").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    var cantidad_rec = parseFloat(pnlTablero.find("#Cantidad").val());
+                    if ($(this).val() !== '' && parseFloat($(this).val()) <= cantidad_rec) {
+                        pnlTablero.find("#Defecto")[0].selectize.focus();
+                    } else {
 
-                swal({//No Existe
-                    title: "ATENCIÓN",
-                    text: "LA CANTIDAD A DEVOLVER NO PUEDE SER MAYOR A CANTIDAD RECIBIDA",
-                    icon: "warning"
-                }).then((value) => {
-                    $(this).val('').focus();
-                });
+                        swal({//No Existe
+                            title: "ATENCIÓN",
+                            text: "LA CANTIDAD A DEVOLVER NO PUEDE SER MAYOR A CANTIDAD RECIBIDA",
+                            icon: "warning"
+                        }).then((value) => {
+                            $(this).val('').focus();
+                        });
+                    }
+                } else {
+                    pnlTablero.find("#Defecto")[0].selectize.focus();
+                }
             }
         });
-        pnlTablero.find("#HojasRevisadas").keydown(function (e) {
+        pnlTablero.find("#Defecto").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#DetalleDefecto")[0].selectize.focus();
+            }
+        });
+        pnlTablero.find("#DetalleDefecto").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#Primera").focus();
+            }
+        });
+        pnlTablero.find("#Observaciones").keypress(function (e) {
+            if (e.keyCode === 13) {
+                pnlTablero.find("#Aprovechamiento")[0].selectize.focus();
+                pnlTablero.find("#Aprovechamiento")[0].selectize.open();
+            }
+        });
+        pnlTablero.find("#Aprovechamiento").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#HojasRevisadas").focus();
+            }
+        });
+        pnlTablero.find("#HojasRevisadas").keypress(function (e) {
             if (e.keyCode === 13) {
                 var cantidad_rec = parseFloat(pnlTablero.find("#Cantidad").val());
                 if ($(this).val() !== '' && parseFloat($(this).val()) > 0) {
@@ -443,7 +500,6 @@
 
     function onImprimirReporteInspeccion(tp, fact) {
         //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-
         $.post(master_url + 'onReporteInspeccion', {
             Tp: tp,
             Proveedor: clave_prov,
@@ -583,6 +639,7 @@
                 } else {//SI SE PUEDE PROCESAR
                     pnlTablero.find('#Proveedor').val(data[0].Proveedor + ' - ' + prov);
                     pnlTablero.find('#FechaOrden').val(data[0].FechaOrden);
+                    pnlTablero.find("#Factura").focus().select();
                     getDetalleOrdenCompra(tp, $(v).val());
                 }
 
@@ -614,6 +671,8 @@
                 }).then((value) => {
                     pnlTablero.find('#Factura').val('').focus();
                 });
+            } else {
+                pnlTablero.find('#FechaFactura').focus();
             }
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -623,10 +682,6 @@
 
     function getRecords(tp, fact, prov) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMovimientos')) {
             tblMovimientos.DataTable().destroy();
@@ -749,10 +804,6 @@
 
     function getDetalleOrdenCompra(tp, folio) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblCompra')) {
             tblCompra.DataTable().destroy();
@@ -891,6 +942,7 @@
     }
 
     function init() {
+        tblCompra.parent().removeClass('blinkb');
         nuevo = true;
         total = 0;
         clave_prov = '';
@@ -930,5 +982,13 @@
 
     #Titulo span.badge{
         font-size: 16px !important;
+    }
+
+    .blinkb{
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
+        animation: myfirst 1.5s linear 0.5s infinite alternate;
+        box-shadow: 0 0px 12px  #03A9F4;
     }
 </style>

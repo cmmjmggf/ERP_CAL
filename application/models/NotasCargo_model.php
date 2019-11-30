@@ -228,14 +228,13 @@ class NotasCargo_model extends CI_Model {
             $this->db->select("CAST(A.Clave AS SIGNED ) AS Clave, "
                             . "A.Descripcion, "
                             . "C.Cantidad, "
-                            . "U.Descripcion AS Unidad , "
+                            . "(select descripcion from unidades where clave = a.unidadmedida) as Unidad,"
                             . "C.Precio, "
                             . "C.Subtotal "
                             . ' '
                             . "")
                     ->from("compras AS C")
                     ->join("articulos A", 'ON C.Articulo = A.Clave')
-                    ->join("unidades U", 'ON U.Clave =  A.UnidadMedida')
                     ->where("C.Doc", $Doc)
                     ->where("C.Tp", $Tp)
                     ->where("C.Proveedor", $Proveedor)

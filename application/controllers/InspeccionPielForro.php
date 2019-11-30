@@ -161,10 +161,10 @@ class InspeccionPielForro extends CI_Controller {
             foreach ($Proveedores as $key => $P) {
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 7.5);
+                $pdf->SetFont('Calibri', 'B', 7);
                 $pdf->Cell(15, 4, utf8_decode('Proveedor: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 7.5);
+                $pdf->SetFont('Calibri', '', 7);
                 $pdf->Cell(50, 4, utf8_decode($P->Proveedor), 'B'/* BORDE */, 1, 'L');
 
                 $CONT = 0;
@@ -228,7 +228,7 @@ class InspeccionPielForro extends CI_Controller {
                     if ($P->ClaveNum === $D->ClaveNum) {
 
                         $pdf->SetLineWidth(0.2);
-                        $pdf->SetFont('Calibri', '', 7.5);
+                        $pdf->SetFont('Calibri', '', 7);
                         $pdf->Row(array(
                             $D->OrdenCompra,
                             $D->Factura,
@@ -274,10 +274,10 @@ class InspeccionPielForro extends CI_Controller {
                     }
                 }
                 $pdf->SetX(40);
-                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetFont('Calibri', 'B', 7);
                 $pdf->Cell(15, 4, utf8_decode('Total por Proveedor: '), 0/* BORDE */, 0, 'L');
 
-                $pdf->SetFont('Calibri', 'B', 8.5);
+                $pdf->SetFont('Calibri', 'B', 7);
 
                 $anchos = array(
                     12/* 1 O.C. */,
@@ -357,7 +357,7 @@ class InspeccionPielForro extends CI_Controller {
                     0/* 22 Inicial */,
                     0/* 23 Final */);
                 $pdf->SetWidths($anchos);
-                $pdf->SetFont('Calibri', 'B', 8.5);
+                $pdf->SetFont('Calibri', 'B', 7);
                 $pdf->Row(array(
                     '',
                     '',

@@ -25,11 +25,18 @@
                 <label for="Clave" >Tp*</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="Tp" name="Tp" required="">
             </div>
-            <div class="col-12 col-sm-4 col-md-3 col-xl-3" >
-                <label for="" >Proveedor*</label>
-                <select id="Proveedor" name="Proveedor" class="form-control form-control-sm mb-2 required" required="" >
-                    <option value=""></option>
-                </select>
+            <div class="col-12 col-sm-4 col-md-3 col-xl-3">
+                <label>Proveedor*</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly captura" id="Proveedor" name="Proveedor" maxlength="5" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2" >
                 <label for="" >Documento</label>
@@ -67,11 +74,18 @@
         </div>
         <hr>
         <div class="row" id="Detalle">
-            <div class="col-12 col-sm-5 col-md-3 col-xl-3" >
-                <label for="" >Artículo</label>
-                <select id="Articulo" name="Articulo" class="form-control form-control-sm required" required="" >
-                    <option value=""></option>
-                </select>
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>Articulo*</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-6 col-sm-2 col-md-1 col-xl-1">
                 <label for="" >U.M.</label>
@@ -90,11 +104,11 @@
                 <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Subtotal" name="Cantidad" >
             </div>
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 mt-4">
-                <button type="button" class="btn btn-primary selectNotEnter" id="btnGuardar" data-toggle="tooltip" data-placement="top" title="Aceptar">
-                    <i class="fa fa-save"></i>
+                <button type="button" class="btn btn-primary selectNotEnter" id="btnGuardar">
+                    <i class="fa fa-save"></i> ACEPTAR
                 </button>
-                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura" data-toggle="tooltip" data-placement="right" title="Finalizar">
-                    <i class="fa fa-check"></i> TERMINAR CAPTURA
+                <button type="button" class="btn btn-success disabledForms" id="btnTerminarCaptura">
+                    <i class="fa fa-check"></i> CERRAR N.C
                 </button>
             </div>
         </div>
@@ -168,180 +182,339 @@
 
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Proveedor', '#DocCartProv', pnlTablero);
-        setFocusSelectToInputOnChange('#DocCartProv', '#Concepto', pnlTablero);
-        setFocusSelectToSelectOnChange('#Tipo', '#Articulo', pnlTablero);
-        setFocusSelectToInputOnChange('#Articulo', '#Precio', pnlTablero);
+        setFocusSelectToSelectOnChange('#sProveedor', '#DocCartProv', pnlTablero);
+        //setFocusSelectToInputOnChange('#DocCartProv', '#Concepto', pnlTablero);
+        setFocusSelectToSelectOnChange('#Tipo', '#sArticulo', pnlTablero);
+        setFocusSelectToInputOnChange('#sArticulo', '#Precio', pnlTablero);
         // handleEnter();
         init();
-        pnlTablero.find("#Tp").change(function () {
-            var tp = parseInt($(this).val());
-            if (tp === 1 || tp === 2) {
-
-                getProveedores(tp);
-                pnlTablero.find('#Proveedor')[0].selectize.focus();
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                    icon: "error",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    $(this).val('').focus();
-                });
-            }
-        });
-        pnlTablero.find("#Proveedor").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
-                Tp: tp,
-                Proveedor: $(this).val()
-            }).done(function (data) {
-                pnlTablero.find("#DocCartProv")[0].selectize.clear(true);
-                pnlTablero.find("#DocCartProv")[0].selectize.clearOptions();
-                if (data.length > 0) {//Existe
-                    $.each(data, function (k, v) {
-                        pnlTablero.find("#DocCartProv")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
-                    });
-                    $.notify({
-                        // options
-                        icon: 'fa fa-check',
-                        title: '',
-                        message: 'DOCUMENTOS PENDIENTES CARGADOS'
-                    }, {
-                        // settings
-                        type: 'success',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        delay: 3000,
-                        timer: 1000,
-                        placement: {
-                            from: "bottom",
-                            align: "left"
-                        },
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        }
-                    });
-                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
-                    $.notify({
-                        // options
-                        icon: 'fa fa-exclamation',
-                        title: 'Atención',
-                        message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
-                    }, {
-                        // settings
-                        type: 'danger',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        delay: 3000,
-                        timer: 1000,
-                        placement: {
-                            from: "bottom",
-                            align: "left"
-                        },
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        }
+        pnlTablero.find("#Tp").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var tp = parseInt($(this).val());
+                if (tp === 1 || tp === 2) {
+                    pnlTablero.find('#Proveedor').focus();
+                    getProveedores(tp);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "EL TP SÓLO PUEDE SER 1 Ó 2",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        $(this).val('').focus();
                     });
                 }
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            });
+            }
+        });
+        pnlTablero.find('#Proveedor').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtprov = $(this).val();
+                if (txtprov) {
+                    $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprov, true);
+
+                            var tp = pnlTablero.find("#Tp").val();
+                            $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
+                                Tp: tp,
+                                Proveedor: txtprov
+                            }).done(function (data) {
+                                pnlTablero.find("#DocCartProv")[0].selectize.clear(true);
+                                pnlTablero.find("#DocCartProv")[0].selectize.clearOptions();
+                                if (data.length > 0) {//Existe
+                                    $.each(data, function (k, v) {
+                                        pnlTablero.find("#DocCartProv")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
+                                    });
+                                    pnlTablero.find("#DocCartProv")[0].selectize.focus();
+                                    pnlTablero.find("#DocCartProv")[0].selectize.open();
+                                    $.notify({
+                                        // options
+                                        icon: 'fa fa-check',
+                                        title: '',
+                                        message: 'DOCUMENTOS PENDIENTES CARGADOS'
+                                    }, {
+                                        // settings
+                                        type: 'success',
+                                        allow_dismiss: true,
+                                        newest_on_top: false,
+                                        showProgressbar: false,
+                                        delay: 3000,
+                                        timer: 1000,
+                                        placement: {
+                                            from: "bottom",
+                                            align: "left"
+                                        },
+                                        animate: {
+                                            enter: 'animated fadeInDown',
+                                            exit: 'animated fadeOutUp'
+                                        }
+                                    });
+                                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                                    $.notify({
+                                        // options
+                                        icon: 'fa fa-exclamation',
+                                        title: 'Atención',
+                                        message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
+                                    }, {
+                                        // settings
+                                        type: 'danger',
+                                        allow_dismiss: true,
+                                        newest_on_top: false,
+                                        showProgressbar: false,
+                                        delay: 3000,
+                                        timer: 1000,
+                                        placement: {
+                                            from: "bottom",
+                                            align: "left"
+                                        },
+                                        animate: {
+                                            enter: 'animated fadeInDown',
+                                            exit: 'animated fadeOutUp'
+                                        }
+                                    });
+                                }
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        } else {
+                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sProveedor").change(function () {
+            if ($(this).val()) {
+                var tp = pnlTablero.find("#Tp").val();
+                $.getJSON(master_url + 'getDocumentosByTpByProveedor', {
+                    Tp: tp,
+                    Proveedor: $(this).val()
+                }).done(function (data) {
+                    pnlTablero.find("#DocCartProv")[0].selectize.clear(true);
+                    pnlTablero.find("#DocCartProv")[0].selectize.clearOptions();
+                    if (data.length > 0) {//Existe
+                        $.each(data, function (k, v) {
+                            pnlTablero.find("#DocCartProv")[0].selectize.addOption({text: v.Doc + ' ----> [' + v.FechaDoc + ']', value: v.Doc});
+                        });
+                        pnlTablero.find("#DocCartProv")[0].selectize.focus();
+                        pnlTablero.find("#DocCartProv")[0].selectize.open();
+                        $.notify({
+                            // options
+                            icon: 'fa fa-check',
+                            title: '',
+                            message: 'DOCUMENTOS PENDIENTES CARGADOS'
+                        }, {
+                            // settings
+                            type: 'success',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: false,
+                            delay: 3000,
+                            timer: 1000,
+                            placement: {
+                                from: "bottom",
+                                align: "left"
+                            },
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            }
+                        });
+                    } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                        $.notify({
+                            // options
+                            icon: 'fa fa-exclamation',
+                            title: 'Atención',
+                            message: 'PROVEEDOR NO TIENE DOCUMENTOS PENDIENTES DE PAGO'
+                        }, {
+                            // settings
+                            type: 'danger',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: false,
+                            delay: 3000,
+                            timer: 1000,
+                            placement: {
+                                from: "bottom",
+                                align: "left"
+                            },
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            }
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+            }
         });
         pnlTablero.find("#DocCartProv").change(function () {
             var tp = pnlTablero.find("#Tp").val();
             var prov = pnlTablero.find("#Proveedor").val();
-            pnlTablero.find("#Articulo")[0].selectize.clear(true);
-            pnlTablero.find("#Articulo")[0].selectize.clearOptions();
+            pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+            pnlTablero.find("#sArticulo")[0].selectize.clearOptions();
+            pnlTablero.find("#Articulo").val('');
             onVerificarExisteDocumento($(this), tp, prov);
         });
-        pnlTablero.find("#Articulo").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            var prov = pnlTablero.find("#Proveedor").val();
-            var doc = pnlTablero.find("#DocCartProv").val();
-            $.getJSON(master_url + 'getDatosArticuloCompra', {
-                Tp: tp,
-                Doc: doc,
-                Proveedor: prov,
-                Articulo: $(this).val()
-            }).done(function (data) {
-                if (data.length > 0) {//Existe
-
-                    pnlTablero.find('#Unidad').val(data[0].Unidad);
-                    pnlTablero.find('#Precio').val(parseFloat(data[0].Precio).toFixed(2));
-                    pnlTablero.find('#Cantidad').val(parseFloat(data[0].Cantidad).toFixed(2));
-                    pnlTablero.find('#Subtotal').val(parseFloat(data[0].Subtotal).toFixed(2));
-                    pnlTablero.find('#Precio').focus().select();
+        pnlTablero.find('#Concepto').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtc = $(this).val();
+                if (txtc) {
+                    pnlTablero.find('#Tipo')[0].selectize.focus();
+                    pnlTablero.find('#Tipo')[0].selectize.open();
                 }
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            });
+            }
         });
         pnlTablero.find("#Tipo").change(function () {
-            isValid('Encabezado');
-            if (valido) {
-                enableFieldsDetalle();
-                disableFieldsEncabezado();
-                pnlTablero.find("#Articulo")[0].selectize.focus();
-                pnlTablero.find("#Articulo")[0].selectize.open();
-
-            }
-        });
-        pnlTablero.find("#Precio").change(function () {
-            var cant = pnlTablero.find("#Cantidad").val();
-            var saldo = pnlTablero.find("#Saldo_Doc").val();
-            var subt = 0;
-            if (cant !== '' && $(this).val() !== '') {
-                subt = (parseFloat($(this).val()) * parseFloat(cant));
-
-                if (subt > parseFloat(saldo)) {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "EL IMPORTE ES MAYOR AL SALDO DEL DOCUMENTO",
-                        icon: "error",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-
-                        $(this).val('').focus();
-                    });
-                } else {
-                    pnlTablero.find("#Subtotal").val(subt.toFixed(2));
+            if ($(this).val()) {
+                isValid('Encabezado');
+                if (valido) {
+                    enableFieldsDetalle();
+                    disableFieldsEncabezado();
+                    pnlTablero.find("#Articulo").focus();
                 }
             }
         });
-        pnlTablero.find("#Cantidad").change(function () {
-            var precio = pnlTablero.find("#Precio").val();
-            var saldo = pnlTablero.find("#Saldo_Doc").val();
-            var subt = 0;
-            if (precio !== '' && $(this).val() !== '') {
-                subt = (parseFloat($(this).val()) * parseFloat(precio));
+        pnlTablero.find('#Articulo').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    var prov = pnlTablero.find('#Proveedor').val();
+                    var tp = pnlTablero.find('#Tp').val();
+                    var doc = pnlTablero.find('#DocCartProv').val();
+                    $.getJSON(master_url + 'onVerificarArticulo',
+                            {
+                                Articulo: txtart,
+                                Proveedor: prov,
+                                Tp: tp,
+                                Folio: doc
+                            }).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
 
-                if (subt > parseFloat(saldo)) {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "EL IMPORTE ES MAYOR AL SALDO DEL DOCUMENTO",
-                        icon: "error",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
 
-                        $(this).val('').focus();
+                            $.getJSON(master_url + 'getDatosArticuloCompra', {
+                                Tp: tp,
+                                Doc: doc,
+                                Proveedor: prov,
+                                Articulo: txtart
+                            }).done(function (data) {
+                                if (data.length > 0) {//Existe
+
+                                    pnlTablero.find('#Unidad').val(data[0].Unidad);
+                                    pnlTablero.find('#Precio').val(parseFloat(data[0].Precio).toFixed(2));
+                                    pnlTablero.find('#Cantidad').val(parseFloat(data[0].Cantidad).toFixed(2));
+                                    pnlTablero.find('#Subtotal').val(parseFloat(data[0].Subtotal).toFixed(2));
+                                    pnlTablero.find('#Precio').focus().select();
+                                }
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE EN EL DOCUMENTO', 'warning').then((value) => {
+                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                pnlTablero.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
                     });
-                } else {
-                    pnlTablero.find("#Subtotal").val(subt.toFixed(2));
-                    btnGuardar.removeClass('disabledForms');
+                }
+            }
+        });
+        pnlTablero.find("#sArticulo").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#Articulo").val($(this).val());
+                var tp = pnlTablero.find("#Tp").val();
+                var prov = pnlTablero.find("#Proveedor").val();
+                var doc = pnlTablero.find("#DocCartProv").val();
+                $.getJSON(master_url + 'getDatosArticuloCompra', {
+                    Tp: tp,
+                    Doc: doc,
+                    Proveedor: prov,
+                    Articulo: $(this).val()
+                }).done(function (data) {
+                    if (data.length > 0) {//Existe
+
+                        pnlTablero.find('#Unidad').val(data[0].Unidad);
+                        pnlTablero.find('#Precio').val(parseFloat(data[0].Precio).toFixed(2));
+                        pnlTablero.find('#Cantidad').val(parseFloat(data[0].Cantidad).toFixed(2));
+                        pnlTablero.find('#Subtotal').val(parseFloat(data[0].Subtotal).toFixed(2));
+                        pnlTablero.find('#Precio').focus().select();
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+            }
+        });
+        pnlTablero.find("#Precio").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var cant = pnlTablero.find("#Cantidad").val();
+                var saldo = pnlTablero.find("#Saldo_Doc").val();
+                var subt = 0;
+                if (cant !== '' && $(this).val() !== '') {
+                    subt = (parseFloat($(this).val()) * parseFloat(cant));
+
+                    if (subt > parseFloat(saldo)) {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "EL IMPORTE ES MAYOR AL SALDO DEL DOCUMENTO",
+                            icon: "error",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+
+                            $(this).val('').focus();
+                        });
+                    } else {
+                        pnlTablero.find("#Subtotal").val(subt.toFixed(2));
+                        pnlTablero.find("#Cantidad").focus().select();
+                    }
+                }
+            }
+        });
+        pnlTablero.find("#Cantidad").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var precio = pnlTablero.find("#Precio").val();
+                var saldo = pnlTablero.find("#Saldo_Doc").val();
+                var subt = 0;
+                if (precio !== '' && $(this).val() !== '') {
+                    subt = (parseFloat($(this).val()) * parseFloat(precio));
+
+                    if (subt > parseFloat(saldo)) {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "EL IMPORTE ES MAYOR AL SALDO DEL DOCUMENTO",
+                            icon: "error",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+
+                            $(this).val('').focus();
+                        });
+                    } else {
+                        pnlTablero.find("#Subtotal").val(subt.toFixed(2));
+                        btnGuardar.removeClass('disabledForms').focus();
+                    }
                 }
             }
         });
@@ -371,6 +544,7 @@
             });
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             var saldo = pnlTablero.find("#Saldo_Doc").val();
             var subtotal = pnlTablero.find("#Subtotal").val();
             if (parseFloat(subtotal) > parseFloat(saldo)) {
@@ -416,6 +590,7 @@
                             Concepto: concepto
 
                         }).done(function (data) {
+                            btnGuardar.attr('disabled', false);
                             onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                             if (nuevo) {
                                 getRecords(folio, tp, prov);
@@ -426,17 +601,19 @@
                             }
                             Compra.ajax.reload();
                             pnlTablero.find('#Detalle').find("input").val('');
-                            pnlTablero.find("#Articulo")[0].selectize.clear(true);
-                            pnlTablero.find("#Articulo")[0].selectize.focus();
+                            pnlTablero.find("#sArticulo")[0].selectize.clear(true);
                             pnlTablero.find('#Tipo')[0].selectize.disable();
                             btnTerminarCaptura.removeClass('disabledForms');
+                            pnlTablero.find("#Articulo").val('').focus();
                         }).fail(function (x, y, z) {
+                            btnGuardar.attr('disabled', false);
                             console.log(x, y, z);
                         });
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                     });
                 } else {
+                    btnGuardar.attr('disabled', false);
                     swal('ATENCION', 'Completa los campos requeridos', 'warning');
                 }
             }
@@ -532,10 +709,6 @@
     }
     function getCompra(doc, tp, prov) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblCompra')) {
             tblCompra.DataTable().destroy();
@@ -587,30 +760,30 @@
             "aaSorting": [
                 [0, 'asc']
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-success text-strong');
-                            break;
-                        case 2:
-                            /*fecha conf*/
-                            c.addClass('text-strong');
-                            break;
-                        case 3:
-                            /*fecha conf*/
-                            c.addClass('text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 0:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//                        case 2:
+//                            /*fecha conf*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 3:
+//                            /*fecha conf*/
+//                            c.addClass('text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
                 // Update footer
@@ -638,10 +811,6 @@
     var total = 0;
     function getRecords(nc, tp, prov) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMovimientos')) {
             tblMovimientos.DataTable().destroy();
@@ -823,18 +992,20 @@
                     }).done(function (data) {
                         if (data.length > 0) {//Existen
                             $.each(data, function (k, v) {
-                                pnlTablero.find("#Articulo")[0].selectize.addOption({text: v.Clave + ' - ' + v.Descripcion, value: v.Clave});
+                                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Descripcion, value: v.Clave});
                             });
                             //Obtenemos la tabla de la compra
                             getCompra($(v).val(), tp, prov);
-                            pnlTablero.find('#Tipo').focus();
+                            pnlTablero.find('#Concepto').focus();
                         } else {
                             swal({//No Existe
                                 title: "ATENCIÓN",
                                 text: "NO EXISTEN REGISTROS DE MATERIALES CON ESTOS DATOS",
                                 icon: "warning"
                             }).then((value) => {
-                                $(v).val('').focus();
+                                $(v)[0].selectize.clear(true);
+                                $(v)[0].selectize.focus();
+                                $(v)[0].selectize.open();
                             });
                         }
                     }).fail(function (x, y, z) {
@@ -858,11 +1029,11 @@
         });
     }
     function getProveedores(tp) {
-        pnlTablero.find("#Proveedor")[0].selectize.clear(true);
-        pnlTablero.find("#Proveedor")[0].selectize.clearOptions();
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -905,7 +1076,8 @@
     function disableFieldsEncabezado() {
         pnlTablero.find('#Tp').prop("readonly", true);
         pnlTablero.find('#Concepto').prop("readonly", true);
-        pnlTablero.find('#Proveedor')[0].selectize.disable();
+        pnlTablero.find('#Proveedor').prop("readonly", true);
+        pnlTablero.find('#sProveedor')[0].selectize.disable();
         pnlTablero.find('#DocCartProv')[0].selectize.disable();
         //pnlTablero.find('#Tipo')[0].selectize.disable();
     }
