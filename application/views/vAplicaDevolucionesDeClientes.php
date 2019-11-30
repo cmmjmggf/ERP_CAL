@@ -326,12 +326,18 @@
         btnCierraNC.click(function () {
             getTotal();
             btnCierraNC.attr('disabled', true);
+
+            pnlTablero.find("input,textarea").attr('disabled', false);
+            $.each(pnlTablero.find("select:disabled"), function (k, v) {
+                $(v)[0].selectize.enable();
+            });
             var p = {
                 CLIENTE: ClienteDevolucion.val(),
                 DOCUMENTO: NotaCredito.val(),
                 APLICA: AplicaDevolucion.val(),
                 NC: NotaCredito.val(),
                 TP: TP.val(),
+                FECHA: FechaDevolucion.val(),
                 CONTROL: Control.val(),
                 ESTILO: Estilo.val(),
                 COLOR: Color.val(),
@@ -341,6 +347,15 @@
             };
             $.post('<?php print base_url('AplicaDevolucionesDeClientes/onCerrarNC'); ?>', p).done(function (aaa) {
                 console.log(aaa);
+                onImprimirReporteFancyAFC(aaa, function (a, b) {
+                    nuevo = true;
+                    pnlTablero.find("input").val('');
+                    $.each(pnlTablero.find("select"), function (k, v) {
+                        pnlTablero.find("select")[k].selectize.clear(true);
+                    });
+                    xClienteDevolucion.focus().select();
+
+                });
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
@@ -356,12 +371,12 @@
                 APLICA: AplicaDevolucion.val(),
                 NC: NotaCredito.val(),
                 TP: TP.val(),
+                FECHA: FechaDevolucion.val(),
                 CONTROL: Control.val(),
                 ESTILO: Estilo.val(),
                 COLOR: Color.val(),
                 SERIE: Serie.val(),
                 PRECIO: Precio.val(),
-                FECHA: FechaDevolucion.val(),
                 TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
             };
 
@@ -380,13 +395,13 @@
                     nuevo = false;
                     DevolucionDetalle.ajax.reload();
                     onNotifyOld('', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
-                    ClienteDevolucion[0].selectize.disable();
+                    onDisable(ClienteDevolucion);
                     FechaDevolucion.attr("readonly", true);
                     AplicaDevolucion.attr("readonly", true);
-                    TP[0].selectize.disable();
-                    tblDevCtrlXAplicarDeEsteCliente.parent().addClass("blinkb");
+                    onDisable(TP);
+                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
                     DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
-                        btnCierraNC.attr('disabled', false);
+                        onEnable(btnCierraNC);
                     });
                     getTotal();
                 }).fail(function (x) {

@@ -328,7 +328,7 @@
     </div>
 </div>
 
-<div id="mdlLogs" class="modal">
+<div id="mdlLogs" class="modal modal-fullscreen">
     <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -363,13 +363,13 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
                                         <th>Empresa</th>
                                         <th>Modulo</th>
                                         <th>Usuario</th>
                                         <th>Departamento</th>
                                         <th>Acción</th>
-                                        <th>Fecha</th>
-                                        <th>Hora</th>
                                         <th>Dia</th>
                                         <th>Mes</th>
                                         <th>Año</th>
@@ -453,13 +453,13 @@
             buttons: buttons,
             "columns": [
                 {"data": "ID"}/*0*/,
+                {"data": "Fecha"}/*6*/,
+                {"data": "Hora"}/*7*/,
                 {"data": "Empresa"}/*1*/,
                 {"data": "Modulo"}/*4*/,
                 {"data": "Usuario"}/*2*/,
                 {"data": "Tipo"}/*2*/,
                 {"data": "Accion"}/*5*/,
-                {"data": "Fecha"}/*6*/,
-                {"data": "Hora"}/*7*/,
                 {"data": "Dia"}/*7*/,
                 {"data": "Mes"}/*7*/,
                 {"data": "Anio"}/*7*/,
@@ -476,12 +476,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "500px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/

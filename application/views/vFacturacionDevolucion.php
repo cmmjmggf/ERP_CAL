@@ -272,7 +272,7 @@
                                 ?>                        
                                 <td></td> 
                             </tr>  
-                            <tr class="rCapturaCantidades" id="rCantidades">
+                            <tr class="rCapturaCantidades" id="rPares">
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
@@ -283,7 +283,7 @@
                                 <td>
                                 </td>
                             </tr>
-                            <tr class="rCapturaCantidades" id="rCantidades">
+                            <tr class="rCapturaCantidades d-none" id="rParesFacturados">
                                 <td class="font-weight-bold">Facturado</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
@@ -295,7 +295,7 @@
                                            class="form-control form-control-sm " readonly="" data-toggle="tooltip" data-placement="right" title="0">
                                 </td>
                             </tr>
-                            <tr class="rCapturaCantidades" id="rCantidades">
+                            <tr class="rCapturaCantidades" id="rParesAFacturar">
                                 <td class="font-weight-bold">A Facturar</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
@@ -689,7 +689,7 @@
             }
         });
 
-        pnlTablero.find("input[indice^='CAF']").keydown(function (e) {
+        pnlTablero.find("input[id^='CAF']").keydown(function (e) {
             if (e.keyCode === 13) {
                 var indice = parseInt($(this).attr('indice'));
                 var cantidad_facturada = pnlTablero.find("#CF" + indice).val();
@@ -697,14 +697,23 @@
                 console.log($(this).attr("id") + ":" + $(this).val(),
                         pnlTablero.find("#CF" + indice).attr('id') + ":" + pnlTablero.find("#CF" + indice).val());
             }
-        });
-
-        pnlTablero.find("#CAF22").on('keydown', function (e) {
-            console.log(e, e.keyCode);
-            if (e.keyCode === 13) {
-                CajasFacturacion.focus().select();
+        }).focusout(function () {
+            console.log("focusout", $(this).val());
+            var input = $(this);
+            var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
+            var cantidad_a_devolver = $(this).val();
+            if (cantidad_a_devolver > cantidad_facturada) {
+                onDisable(btnAcepta);
+                onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 1", function () {
+                    input.focus().select();
+                    onEnable(btnAcepta);
+                });
+                return;
+            } else {
+                onEnable(btnAcepta);
             }
         });
+
 
         btnRastreoDeControlesEnDocumento.click(function () {
             onOpenWindow('<?php print base_url('RastreoDeControlesEnDocumentosClientes'); ?>');
@@ -1442,124 +1451,133 @@
             ClienteFactura[0].selectize.enable();
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
-            $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarControlXCliente'); ?>', {
-                CONTROL: Control.val() ? Control.val() : ''
-            }).done(function (abcd) {
-                if (abcd.length > 0) {
-                    if (abcd[0].CLIENTE === clientesito) {
-                        control_pertenece_a_cliente = true;
-                    } else {
-                        onBeep(2);
-                        onCampoInvalido(pnlTablero, "EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE",
-                                function () {
-                                    onResetCampos();
-                                    Control.focus().select();
-                                });
+//            $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarControlXCliente'); ?>', {
+//                CONTROL: Control.val() ? Control.val() : ''
+//            }).done(function (abcd) {
+//                if (abcd.length > 0) {
+//                    if (abcd[0].CLIENTE === clientesito) {
+            control_pertenece_a_cliente = true;
+//                    } else {
+//                        onBeep(2);
+//                        onCampoInvalido(pnlTablero, "EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE",
+//                                function () {
+//                                    onResetCampos();
+//                                    Control.focus().select();
+//                                });
+//                    }
+            if (clientesito !== '') {
+                $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturacionDiff'); ?>', {
+                    CONTROL: Control.val() ? Control.val() : ''
+                }).done(function (aa) {
+                    var abc = aa[0];
+                    if (abc !== undefined) {
+                        for (var i = 1; i < 23; i++) {
+                            var ccc = 0;
+                            if (i < 10) {
+                                ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
+                                pnlTablero.find(`#CF${i}`).val(ccc);
+                            } else {
+                                ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
+                                pnlTablero.find(`#CF${i}`).val(ccc);
+                            }
+                        }
                     }
-                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
-                        $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturacionDiff'); ?>', {
-                            CONTROL: Control.val() ? Control.val() : ''
-                        }).done(function (aa) {
-                            var abc = aa[0];
-                            if (abc !== undefined) {
-                                if (control_pertenece_a_cliente) {
-                                    for (var i = 1; i < 21; i++) {
-                                        var ccc = 0;
-                                        if (i < 10) {
-                                            ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
-                                            pnlTablero.find(`#CF${i}`).val(ccc);
-                                        } else {
-                                            ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
-                                            pnlTablero.find(`#CF${i}`).val(ccc);
-                                        }
-                                    }
+//                            if (control_pertenece_a_cliente) {
+                    $.getJSON('<?php print base_url('FacturacionDevolucion/getInfoXControl'); ?>', {
+                        CONTROL: Control.val()
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            if (a[0].hasOwnProperty('EXISTE')) {
+                                console.log('TIENE LA PROPIEDAD EXISTE');
+                            } else {
+                                console.log('NO TIENE LA PROPIEDAD EXISTE');
+                            }
+                            var xx = a[0];
+                            Corrida.val(xx.Serie);
+                            var t = 0;
+                            for (var i = 1; i < 23; i++) {
+                                if (parseInt(xx["T" + i]) > 0) {
+                                    pnlTablero.find("#T" + i).val(xx["T" + i]);
+                                    pnlTablero.find("span.T" + i).text(xx["T" + i]);
+                                    pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
+                                    pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
+                                    pnlTablero.find(`#C${i}`).val(xx["C" + i]);
+                                    var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
+                                    pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
+                                    pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
+                                    pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
+                                    t += parseInt(xx["C" + i]);
+                                    TotalParesEntrega.val(t);
+                                    TotalParesEntregaAF.val(t);
                                 }
                             }
-                            if (control_pertenece_a_cliente) {
-                                $.getJSON('<?php print base_url('FacturacionDevolucion/getInfoXControl'); ?>', {
-                                    CONTROL: Control.val()
-                                }).done(function (a) {
-                                    if (a.length > 0) {
-                                        var xx = a[0];
-                                        Corrida.val(xx.Serie);
-                                        var t = 0;
-                                        for (var i = 1; i < 21; i++) {
-                                            if (parseInt(xx["T" + i]) > 0) {
-                                                pnlTablero.find("#T" + i).val(xx["T" + i]);
-                                                pnlTablero.find("span.T" + i).text(xx["T" + i]);
-                                                pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
-                                                pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
-                                                pnlTablero.find(`#C${i}`).val(xx["C" + i]);
-                                                var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
-                                                pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
-                                                pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
-                                                pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
-                                                t += parseInt(xx["C" + i]);
-                                                TotalParesEntrega.val(t);
-                                                TotalParesEntregaAF.val(t);
-                                            }
-                                        }
-                                        getTotalPares();
-                                        /*OBTENER CODIGO DEL SAT X ESTILO*/
-                                        onObtenerCodigoSatXEstilo();
-                                        FolioFactura.val(xx.CLAVE_PEDIDO);
-                                        CorridaFacturacion.val(xx.SERIET);
-                                        EstiloFacturacion.val(xx.ESTILOT);
-                                        EstiloTFacturacion.val(xx.ESTILO_TEXT);
-                                        ColorFacturacion.val(xx.COLORT);
-                                        PrecioFacturacion.val(xx.PRECIO);
-                                        CajasFacturacion.val(1);
+                            getTotalPares();
+                            /*OBTENER CODIGO DEL SAT X ESTILO*/
+                            onObtenerCodigoSatXEstilo();
+                            FolioFactura.val(xx.CLAVE_PEDIDO);
+                            CorridaFacturacion.val(xx.SERIET);
+                            EstiloFacturacion.val(xx.ESTILOT);
+                            EstiloTFacturacion.val(xx.ESTILO_TEXT);
+                            ColorFacturacion.val(xx.COLORT);
+                            PrecioFacturacion.val(xx.PRECIO);
+                            CajasFacturacion.val(1);
 //                                        CajasFacturacion.focus().select();
-                                        var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
-                                        var stt = parseFloat(xx.Precio) * prs;
-                                        SubtotalFacturacion.val(stt);
-                                        SubtotalFacturacionIVA.val(stt * 0.16);
-                                        //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
-                                        TotalLetra.find("span").text(NumeroALetras(stt));
+                            var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
+                            var stt = parseFloat(xx.Precio) * prs;
+                            SubtotalFacturacion.val(stt);
+                            SubtotalFacturacionIVA.val(stt * 0.16);
+                            //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
+                            TotalLetra.find("span").text(NumeroALetras(stt));
 //                                        pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
-                                        EstatusControl.val(xx.ESTATUS);
-                                        btnFacturaXAnticipoDeProducto.attr('disabled', false);
-                                        btnControlInCompleto.attr('disabled', false);
-                                        btnControlCompleto.attr('disabled', false);
-                                    } else {
-                                        Control.focus().select();
-                                        btnFacturaXAnticipoDeProducto.attr('disabled', true);
-                                        btnControlInCompleto.attr('disabled', true);
-                                        btnControlCompleto.attr('disabled', true);
-                                    }
-                                    pnlTablero.find("#CAF1").focus().select();
-                                }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                    onCloseOverlay();
-                                    pnlTablero.find("#CAF1").focus().select();
-                                });
+                            EstatusControl.val(xx.ESTATUS);
+                            btnFacturaXAnticipoDeProducto.attr('disabled', false);
+                            btnControlInCompleto.attr('disabled', false);
+                            btnControlCompleto.attr('disabled', false);
+                        } else {
+                            Control.focus().select();
+                            btnFacturaXAnticipoDeProducto.attr('disabled', true);
+                            btnControlInCompleto.attr('disabled', true);
+                            btnControlCompleto.attr('disabled', true);
+                        }
+                        for (var i = 1; i < 23; i++) {
+                            if (parseInt(pnlTablero.find("#C" + i).val()) <= 0 || pnlTablero.find("#C" + i).val() === '') {
+                                onDisable(pnlTablero.find("#CAF" + i));
                             } else {
-                                onResetCampos();
-                                onCampoInvalido(pnlTablero, 'ESTE CONTROL NO PERTENECE A ESTE CLIENTE', function () {
-                                    Control.focus().select();
-                                    btnFacturaXAnticipoDeProducto.attr('disabled', true);
-                                    btnControlInCompleto.attr('disabled', true);
-                                    btnControlCompleto.attr('disabled', true);
-                                });
+                                onEnable(pnlTablero.find("#CAF" + i));
                             }
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
-                            onCloseOverlay();
-                        });
-                    }
-                } else {
-                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
-                        onResetCampos();
-                        Control.focus().select();
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                        pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                     });
-                }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-                onCloseOverlay();
-            });
+//                            } else {
+//                                onResetCampos();
+//                                onCampoInvalido(pnlTablero, 'ESTE CONTROL NO PERTENECE A ESTE CLIENTE', function () {
+//                                    Control.focus().select();
+//                                    btnFacturaXAnticipoDeProducto.attr('disabled', true);
+//                                    btnControlInCompleto.attr('disabled', true);
+//                                    btnControlCompleto.attr('disabled', true);
+//                                });
+//                            }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
+                });
+            }
+//                } else {
+//                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
+//                        onResetCampos();
+//                        Control.focus().select();
+//                    });
+//                }
+//            }).fail(function (x) {
+//                getError(x);
+//            }).always(function () {
+//                onCloseOverlay();
+//            });
         }
     }
 

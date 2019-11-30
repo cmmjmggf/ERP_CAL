@@ -1661,4 +1661,53 @@
         });
     }
 
+    function onReadAndWrite(e) { 
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('readonly', false);
+                break;
+            case "TEXTAREA":
+                $(e).attr('readonly', false);
+                break; 
+        }
+    }
+
+    function onReadOnly(e) { 
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('readonly', true);
+                break;
+            case "TEXTAREA":
+                $(e).attr('readonly', true);
+                break; 
+        }
+    }
+    
+    function onEnable(e) { 
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', false);
+                break;
+            case "SELECT":
+                $(e)[0].selectize.enable();
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', false);
+                break;
+        }
+    }
+
+    function onDisable(e) { 
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', true);
+                break;
+            case "SELECT":
+                $(e)[0].selectize.disable();
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', true);
+                break;
+        }
+    }
 </script>

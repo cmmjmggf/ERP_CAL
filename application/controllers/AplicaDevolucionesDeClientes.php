@@ -4,6 +4,8 @@
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
+require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/phpqrcode/qrlib.php";
 
 class AplicaDevolucionesDeClientes extends CI_Controller {
 
@@ -11,7 +13,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
         $this->load->library('session')
-                ->helper('jaspercommand_helper');
+                ->helper('jaspercommand_helper')
+                ->helper('Notacreditoclientes_helper')
+                ->helper('nc_helper')->helper('file');
     }
 
     public function index() {
@@ -220,6 +224,15 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         $nc["par{$i}"] = $x["PAR{$i}"];
                     }
                 }
+                switch (intval($x["TP"])) {
+                    case 1:
+                        $subtotal = $x["PRECIO"] * $r->paredev;
+                        $subtotal *= 1.16;
+                        break;
+                    case 2:
+                        $subtotal = $x["PRECIO"] * $r->paredev;
+                        break;
+                }
                 $ncc = array_merge($nc, array(
                     "defecto" => $r->defecto,
                     "detalle" => $r->detalle,
@@ -230,7 +243,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "comb" => $x["COLOR"],
                     "seriped" => $r->seriped,
                     "precio" => $x["PRECIO"],
-                    "subtot" => ($x["PRECIO"] * $r->paredev),
+                    "subtot" => ($subtotal),
                     "registro" => 0
                 ));
                 $this->db->insert('devctes', $ncc);
@@ -241,6 +254,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $this->db->set('staapl', 1)->set('nc', $x["NC"])
                         ->where('control', $x['CONTROL'])
                         ->update('devolucionnp');
+                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES", "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+
+//                SE CONSIDERA COMO PASO 2 PARA UNA DEVOLUCION
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -250,11 +266,15 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function onCerrarNC() {
         try {
             $x = $this->input->post();
+//            var_dump($x);
+//            exit(0);
             $HORA = Date("h:i:s");
             $dnnp = $this->db->query("SELECT D.* FROM devctes AS D "
                             . "WHERE D.cliente = {$x["CLIENTE"]} "
                             . "AND D.nc = {$x["NC"]} ")->result();
             $total_final = 0;
+            $cte = $this->db->query("SELECT C.* FROM clientes AS C WHERE C.Clave = {$x["CLIENTE"]} LIMIT 1")->result();
+
             foreach ($dnnp as $k => $v) {
 //                var_dump($v);
                 $fecha = $x["FECHA"];
@@ -264,18 +284,25 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
 
                 $nueva_fecha = new DateTime();
                 $nueva_fecha->setDate($anio, $mes, $dia);
-                $cte = $this->db->query("SELECT C.* FROM clientes AS C WHERE C.Clave = {$x["CLIENTE"]} LIMIT 1")->result();
                 $cartctepagos = array(
-                    "cliente" => $x["CLIENTE"], "remicion" => $x["DOCUMENTO"],
+                    "cliente" => $x["CLIENTE"],
+                    "remicion" => $x["DOCUMENTO"],
+                    "tipo" => $x["TP"],
                     "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "importe" => $v->subtot, "tipo" => $x["TP"],
-                    "gcom" => 0, "agente" => $cte[0]->Agente,
-                    "mov" => 6, "doctopa" => "{$v->conce}-NC{$x["NC"]}",
-                    "numpol" => 0, "numfol" => 0,
-                    "status" => 1, "posfe" => 0,
                     "fechadep" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "pagada" => 0, "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "nc" => $x["NC"], "control" => $x["CONTROL"],
+                    "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "doctopa" => "{$v->conce}-NC{$x["NC"]}",
+                    "importe" => $v->subtot,
+                    "agente" => $cte[0]->Agente,
+                    "mov" => 6,
+                    "status" => 1,
+                    "nc" => $x["NC"],
+                    "control" => $x["CONTROL"],
+                    "gcom" => 0,
+                    "numpol" => 0,
+                    "numfol" => 0,
+                    "posfe" => 0,
+                    "pagada" => 0,
                     "stscont" => 0, "regdev" => 0);
                 $this->db->insert('cartctepagos', $cartctepagos);
                 $total_final += $v->subtot;
@@ -286,48 +313,99 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "numfac" => $x["DOCUMENTO"],
                     "tp" => $x["TP"], "orden" => 6,
                     "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "hora" => $HORA, "cant" => $v->paredev, "descripcion" => $v->conce,
-                    "precio" => $v->precio, "subtot" => $v->subtot,
+                    "hora" => $HORA, "cant" => $v->paredev,
+                    "descripcion" => $v->conce,
+                    "precio" => $v->precio,
+                    "subtot" => $v->subtot,
                     "concepto" => NULL,
-                    "monletra" => $x["TOTAL_EN_LETRA"], "defecto" => $v->defecto,
-                    "detalle" => $v->detalle, "registro" => $x["xxxxx"],
-                    "tmnda" => $x["xxxxx"], "tcamb" => $x["xxxxx"]);
-                $notcred["status"] = 0;
+                    "monletra" => $x["TOTAL_EN_LETRA"],
+                    "defecto" => $v->defecto,
+                    "detalle" => $v->detalle,
+                    "registro" => 0,
+                    "tmnda" => 1, "tcamb" => 0);
+                switch (intval($x["TP"])) {
+                    case 1:
+                        $notcred["status"] = 0;
+                        break;
+                    case 2:
+                        $notcred["status"] = 2;
+                        break;
+                }
                 $this->db->insert('notcred', $notcred);
                 /* SI EL TP ES 1, SE AÑADE A LA NOTADE CREDITO UN */
-                if (intval($x["TP"]) === 1) {
-
-                }
             }/* END FOR */
 
-            /* REPORTE */
-            switch (intval($x["TP"])) {
-                case 1:
-//                    notcreelec
-                    $jc = new JasperCommand();
-                    $jc->setFolder('rpt/' . $this->session->USERNAME);
-                    $jc->setParametros(array("logo" => base_url() . $this->session->LOGO,
-                        "empresa" => $this->session->EMPRESA_RAZON,
-                        "cliente" => $this->input->post('Cliente'),
-                        "tp" => $this->input->post('Tp')));
-                    $jc->setJasperurl('jrxml\notadecredito\notcreelec.jasper');
-                    $jc->setFilename('notcreelec_' . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    print $jc->getReport();
-                    break;
-                case 2:
-//                    notacrer2
-                    $jc = new JasperCommand();
-                    $jc->setFolder('rpt/' . $this->session->USERNAME);
-                    $jc->setParametros(array("logo" => base_url() . $this->session->LOGO,
-                        "empresa" => $this->session->EMPRESA_RAZON,
-                        "cliente" => $this->input->post('Cliente'),
-                        "tp" => $this->input->post('Tp')));
-                    $jc->setJasperurl('jrxml\notadecredito\notacrer2.jasper');
-                    $jc->setFilename('notacrer2_' . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    print $jc->getReport();
-                    break;
+            $cartcliente = $this->db->query("SELECT * FROM cartcliente  AS N WHERE remicion = {$x['NC']} and cliente= {$x['CLIENTE']} and tipo= {$x['TP']}")->result();
+            if (intval($x["TP"]) === 1) {
+                $cartctepagos = array(
+                    "cliente" => $x["CLIENTE"],
+                    "remicion" => $x["DOCUMENTO"],
+                    "tipo" => $x["TP"],
+                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fechadep" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "doctopa" => "IVA-NC{$x["NC"]}",
+                    "importe" => $total_final * 0.16,
+                    "agente" => $cte[0]->Agente,
+                    "mov" => 6,
+                    "status" => 1,
+                    "nc" => $x["NC"],
+                    "control" => $x["CONTROL"],
+                    "gcom" => 0,
+                    "numpol" => 0,
+                    "numfol" => 0,
+                    "posfe" => 0,
+                    "pagada" => 0,
+                    "stscont" => 0,
+                    "regdev" => 0);
+                $this->db->insert('cartctepagos', $cartctepagos);
+                /* MODIFICAR MONEDA - LETRA */
+                $SALDO = $cartcliente[0]->saldo;
+                $PAGOS = $cartcliente[0]->pagos;
+                $STATUS = $cartcliente[0]->status;
+                $saldo_final = ($SALDO - ($total_final * 1.16));
+                $this->db->set('saldo', $saldo_final)
+                        ->set('pagos', ($PAGOS + ($total_final * 1.16)))
+                        ->where('cliente', $x['CLIENTE'])
+                        ->where('remicion', $x['NC'])
+                        ->where('tipo', $x['TP'])
+                        ->update('cartcliente');
+                $status = 2;
+                if ($saldo_final <= 5) {
+                    $status = 3;
+                }
+                if ($saldo_final > 1) {
+                    $status = 2;
+                }
+                $this->db->set('status', $status)
+                        ->where('cliente', $x['CLIENTE'])
+                        ->where('remicion', $x['NC'])
+                        ->where('tipo', $x['TP'])
+                        ->update('cartcliente');
+                $this->onImprimirReporteNotaCreditoTp1Local($x['TP'], $x['NC'], $x['CLIENTE']);
+                exit(0);
+            } else {
+                $saldo_final = ($SALDO - $total_final);
+                $this->db->set('saldo', $saldo_final)
+                        ->set('pagos', ($PAGOS + $total_final))
+                        ->where('cliente', $x['CLIENTE'])
+                        ->where('remicion', $x['NC'])
+                        ->where('tipo', $x['TP'])
+                        ->update('cartcliente');
+                $status = 2;
+                if ($saldo_final <= 5) {
+                    $status = 3;
+                }
+                if ($saldo_final > 1) {
+                    $status = 2;
+                }
+                $this->db->set('status', $status)
+                        ->where('cliente', $x['CLIENTE'])
+                        ->where('remicion', $x['NC'])
+                        ->where('tipo', $x['TP'])
+                        ->update('cartcliente');
+                $this->onImprimirReporteNotaCreditoTp2Local($x['TP'], $x['NC'], $x['CLIENTE']);
+                exit(0);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -357,151 +435,4 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         }
     }
 
-    /*
-     *
-
-
-      Private Sub CmdCierra_Click()
-      '  graba en la nota de credito --------------------------------------------------------
-      Data1.RecordSource = "SELECT * FROM devolucionnp  WHERE cliente = " & Val(txtcliente) & " and nc = " & Val(txtnc) & "  and aplica = " & Val(facorem) & "": Data1.Refresh
-      Do While Not Data1.Recordset.EOF
-      Tnotcred.AddNew
-      Tnotcred.Fields("nc") = Data1.Recordset.Fields("nc")
-      Tnotcred.Fields("cliente") = Data1.Recordset.Fields("cliente")
-      Tnotcred.Fields("numfac") = Data1.Recordset.Fields("aplica")
-      Tnotcred.Fields("tp") = Data1.Recordset.Fields("tp")
-      Tnotcred.Fields("orden") = 6
-      Tnotcred.Fields("fecha") = Data1.Recordset.Fields("fechadev")
-      Tnotcred.Fields("hora") = Time
-      Tnotcred.Fields("cant") = Data1.Recordset.Fields("paredev")
-      Tnotcred.Fields("descripcion") = Data1.Recordset.Fields("conce")
-      Tnotcred.Fields("precio") = Data1.Recordset.Fields("precio")
-      Tnotcred.Fields("subtot") = Data1.Recordset.Fields("precio") * Data1.Recordset.Fields("paredev")
-      Tnotcred.Fields("concepto") = Data1.Recordset.Fields("control")
-      Tnotcred.Fields("defecto") = Data1.Recordset.Fields("defecto")
-      Tnotcred.Fields("detalle") = Data1.Recordset.Fields("detalle")
-      If Val(txttp) = 1 Then
-      Tnotcred.Fields("status") = 0
-      Else
-      Tnotcred.Fields("status") = 2
-      End If
-      Tnotcred.Update
-      Data1.Recordset.MoveNext
-      Loop
-      ' saca de la nota de clredito para aplicar en dev.pagos y cartera ----------------------------------------------------
-      txtstatus = 1: txttsubtot = 0
-      Data5.RecordSource = "SELECT * FROM notcred  WHERE nc= " & Val(txtnc) & " and status= " & Val(txtstatus) & " and numfac= " & Val(facorem) & "": Data5.Refresh
-      Do While Not Data5.Recordset.EOF
-      txtnc = Data5.Recordset.Fields("nc"):
-      txtcliente = Data5.Recordset.Fields("cliente"):
-      txtnumfac = Data5.Recordset.Fields("numfac"):
-      txttp = Data5.Recordset.Fields("tp")
-      txtfechadev = Data5.Recordset.Fields("fecha"):
-      txtdesc = Data5.Recordset.Fields("descripcion"):
-      txtsubtot = Data5.Recordset.Fields("subtot"):
-      txtorden = Data5.Recordset.Fields("orden")
-      txtcontrol = Data5.Recordset.Fields("concepto")
-
-      Tcartctepagos.AddNew
-      Tcartctepagos.Fields("cliente") = Val(txtcliente)
-      Tcartctepagos.Fields("remicion") = Val(txtnumfac)
-      Tcartctepagos.Fields("tipo") = Val(txttp)
-      Tcartctepagos.Fields("mov") = Val(txtorden)
-      Tcartctepagos.Fields("fecha") = txtfechadev
-      Tcartctepagos.Fields("fechadep") = txtfechadev
-      Tcartctepagos.Fields("fechacap") = txtfechadev
-      Tcartctepagos.Fields("doctopa") = txtdesc
-      Tcartctepagos.Fields("importe") = Val(txtsubtot)
-      Tcartctepagos.Fields("agente") = Val(txtagente)
-      Tcartctepagos.Fields("status") = 1
-      Tcartctepagos.Fields("nc") = Val(txtnc)
-      Tcartctepagos.Fields("control") = Val(txtcontrol)
-      Tcartctepagos.Update
-      txttsubtot = Val(txttsubtot) + Val(txtsubtot)
-      Data5.Recordset.MoveNext
-      Loop
-      If Val(txttp) = 1 Then
-      txtiva = Val(txttsubtot) * 0.16
-      Tcartctepagos.AddNew
-      Tcartctepagos.Fields("cliente") = Val(txtcliente)
-      Tcartctepagos.Fields("remicion") = Val(txtnumfac)
-      Tcartctepagos.Fields("tipo") = Val(txttp)
-      Tcartctepagos.Fields("fecha") = txtfechadev
-      Tcartctepagos.Fields("fechacap") = txtfechadev
-      Tcartctepagos.Fields("fechadep") = txtfechadev
-      Tcartctepagos.Fields("doctopa") = "IVA " + " N-C " + txtnc
-      Tcartctepagos.Fields("importe") = Val(txtiva)
-      Tcartctepagos.Fields("agente") = Val(txtagente)
-      Tcartctepagos.Fields("mov") = 6
-      Tcartctepagos.Fields("status") = 1
-      Tcartctepagos.Fields("nc") = Val(txtnc)
-      Tcartctepagos.Fields("control") = Val(txtcontrol)
-      Tcartctepagos.Update
-      End If
-      If Val(txttp) = 1 Then Total = Val(txttsubtot) + Val(txtiva): numeletra
-      If Val(txttp) = 2 Then Total = Val(txttsubtot): numeletra
-
-      txtstatus = 1
-      Data5.RecordSource = "SELECT * FROM notcred  WHERE nc = " & Val(txtnc) & " and cliente = " & Val(txtcliente) & " and status = " & Val(txtstatus) & "": Data5.Refresh
-      Do While Not Data5.Recordset.EOF
-      Data5.Recordset.Edit
-      Data5.Recordset.Fields("status") = 2
-      Data5.Recordset.Fields("monletra") = Label4
-      Data5.Recordset.Update
-      Data5.Recordset.MoveNext
-      Loop
-      Tcartcliente.Index = "llacldotp"
-      Tcartcliente.Seek "=", Val(txtcliente), Val(txtnumfac), Val(txttp)
-      If Tcartcliente.NoMatch Then    'no existe
-      Else
-      txtsaldo = Tcartcliente.Fields("saldo"): txtpagos = Tcartcliente.Fields("pagos"): txtstatus = Tcartcliente.Fields("status")
-      If Val(txttp) = 1 Then
-      txtsaldo = Val(txtsaldo) - Val(txttsubtot) - Val(txtiva): txtpagos = Val(txtpagos) + Val(txttsubtot) + Val(txtiva)
-      Else
-      txtsaldo = Val(txtsaldo) - Val(txttsubtot): txtpagos = Val(txtpagos) + Val(txttsubtot)
-      End If
-
-      Tcartcliente.Edit
-      If Val(txtmov) = 4 Then Tcartcliente.Fields("saldo") = 0 Else Tcartcliente.Fields("saldo") = Val(txtsaldo)
-      Tcartcliente.Fields("pagos") = Val(txtpagos)
-      If Val(txtsaldo) <= 0.1 Then Tcartcliente.Fields("status") = 3: Tcartcliente.Fields("saldo") = 0
-      If Val(txtsaldo) > 0 Then Tcartcliente.Fields("status") = 2
-      Tcartcliente.Update
-      End If
-
-      Data6 = "": txtnumfol = 0
-      Data6.RecordSource = "SELECT * FROM cartctepagos WHERE numfol = " & Val(txtnumfol) & "": Data6.Refresh
-      Do While Not Data6.Recordset.EOF
-      txtnumcte = Data6.Recordset.Fields("cliente"): txtremicion = Data6.Recordset.Fields("remicion"): txttp = Data6.Recordset.Fields("tipo"): fecha = Data6.Recordset.Fields("fecha")
-      dia1 = Val(Mid(fecha, 1, 2)): mes1 = Val(Mid(fecha, 4, 2)) * 30.41: año1 = Val(Mid(fecha, 7, 4)) * 365: tdiasp = Val(dia1) + Val(mes1) + Val(año1):
-
-      Tcartcliente.Index = "llacldotp"
-      Tcartcliente.Seek "=", Val(txtnumcte), Val(txtremicion), Val(txttp)
-      If Tcartcliente.NoMatch Then    'no existe
-      Else
-      fechafa = Tcartcliente.Fields("fecha")
-      dia1 = Val(Mid(fechafa, 1, 2)): mes1 = Val(Mid(fechafa, 4, 2)) * 30.41: año1 = Val(Mid(fechafa, 7, 4)) * 365: tdiasf = Val(dia1) + Val(mes1) + Val(año1):
-      End If
-      Tclientes.Index = "llanumcte"
-      Tclientes.Seek "=", Val(txtnumcte)
-      If Tclientes.NoMatch Then    'no existe
-      Else
-      txtseccte = Tclientes("seccte")
-      End If
-      Data6.Recordset.Edit
-      Data6.Recordset.Fields("agente") = Val(txtseccte)
-      Data6.Recordset.Fields("numfol") = Val(tdiasp) - Val(tdiasf)
-      Data6.Recordset.Update
-      Data6.Recordset.MoveNext
-      Loop
-      txtcliente = "": cmbcte = "": txttp = "": txtaplicasn = "": txtclasif = "": txtcargoa = "": txtnumdefe = "": Cmbdefe = "": txtnumdeta = "": Cmbdeta = ""
-      facorem = "": txtnc = "": txtsaldofacorem = "": regact = "": siapli = 0: tipodocto = 0: yagrabonc = "": limpia
-      CmdAcepta.Enabled = False: CmdCierra.Enabled = False: CmdSalir.Enabled = True: Frame1.Enabled = True: txtcliente.SetFocus
-      End Sub
-
-     *
-     *
-     *
-     *
-     */
 }

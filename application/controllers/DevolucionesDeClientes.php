@@ -136,13 +136,15 @@ class DevolucionesDeClientes extends CI_Controller {
                 }
             }
             $registro = $this->db->query("SELECT (D.registro +1) AS REGISTRITO FROM devolucionnp AS D ORDER BY D.registro DESC LIMIT 1")->result();
+            $subtotal = 0;
+            $subtotal = $x["PRECIO"] * $x["PARES_DEVUELTOS"];
             $pp = array_merge($p, array(
                 "defecto" => $x["DEFECTO"], "detalle" => $x["DETALLE"],
                 "clasif" => $x["CLASIFICACION"], "cargoa" => $x["CARGO_A"],
                 "fecha" => $fecha, "fechadev" => $fecha,
                 "estilo" => $x["ESTILO"], "comb" => $x["COLOR"],
                 "seriped" => $x["SERIE"], "precio" => $x["PRECIO"],
-                "subtot" => $x["PRECIO"] * $x["PARES_DEVUELTOS"],
+                "subtot" => $subtotal,
                 "registro" => (empty($registro) ? 1 : $registro[0]->REGISTRITO),
                 "stafac" => 0, "staapl" => 0,
                 "maq" => $x["MAQUILA"], "preciodev" => $x["PRECIO_DEVOLUCION"],
@@ -150,7 +152,10 @@ class DevolucionesDeClientes extends CI_Controller {
                 "ctenvo" => $x["DEPARTAMENTO"]
             ));
             $this->db->insert('devolucionnp', $pp);
-        } catch (Exception $exc) {
+            $l = new Logs("DEVOLUCIONES PENDIENTES POR APLICAR", "HA CREADO UNA DEVOLUCION DEL CLIENTE {$x["CLIENTE"]} CON EL CONTROL {$x['CONTROL']} DE {$x["PARES_DEVUELTOS"]} PAR(ES) POR $ {$subtotal}.", $this->session);
+       
+//                SE CONSIDERA COMO PASO 1 PARA UNA DEVOLUCION
+                 } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }

@@ -51,7 +51,7 @@ class Logs {
         $xlog["IdUsuario"] = $this->sesion->ID;
         $xlog["Usuario"] = $this->sesion->Nombre . " " . $this->sesion->Apellidos;
         $xlog["Modulo"] = strtoupper($this->getModulo());
-        $xlog["Accion"] = strtoupper($this->sesion->Nombre . " " . $this->sesion->Apellidos . " - " . $this->getAccion_o_mensaje());
+        $xlog["Accion"] = strtoupper($this->getAccion_o_mensaje());
         $xlog["Fecha"] = Date('d/m/Y');
         $xlog["Hora"] = Date('h:i:s a');
         $xlog["Dia"] = Date('d');
