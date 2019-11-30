@@ -46,6 +46,19 @@ class NotasCargo extends CI_Controller {
         }
     }
 
+    public function onVerificarArticulo() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            $Tp = $this->input->get('Tp');
+            $Folio = $this->input->get('Folio');
+            $Articulo = $this->input->get('Articulo');
+            print json_encode($this->db->query("select articulo from compras "
+                                    . " where Proveedor = '$Proveedor ' and Tp = '$Tp' and Doc = '$Folio' and articulo = '$Articulo' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->NotasCargo_model->getRecords($this->input->post('NC'), $this->input->post('Tp'), $this->input->post('Proveedor')));
