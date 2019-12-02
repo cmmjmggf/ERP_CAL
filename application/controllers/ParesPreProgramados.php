@@ -107,63 +107,18 @@ class ParesPreProgramados extends CI_Controller {
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');
-            $pdf = new PDF('L', 'mm', array(215.9, 279.4));
+            $pdf = new PDFParesPreProCliente('L', 'mm', array(215.9, 279.4));
             $pdf->AddFont('Calibri', '');
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
+
+
+            $pdf->setFechai($x->post('FECHA'));
+            $pdf->setFechaf($x->post('FECHAF'));
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
-            /* ENCABEZADO FIJO */
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->SetY(10);
-            $pdf->Rect(10, 10, 259, 12.5);
-            $pdf->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
-            $pdf->SetX(10);
-//            $pdf->Rect(10, 10, 259, 195);/*DELIMITADOR DE MARGENES*/
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por cliente"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(50);
-            $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(70);
-            $pdf->Cell(60, $alto_celda, $x->post('FECHA') . "   a la fecha   " . $x->post('FECHAF'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
-            $anchos = array(100/* 0 */, 23/* 1 */, 43/* 2 */, 30/* 3 */, 15/* 4 */, 16/* 5 */, 12/* 6 */, 20/* 7 */);
-            $spacex = 10;
-            $bordes = 1;
-            /* SUB ENCABEZADO */
-            $pdf->SetY($pdf->GetY() + $alto_celda + .5);
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[0], $alto_celda, 'Cliente', $bordes/* BORDE */, 0/* SALTO */, 'L');
-            $spacex += $anchos[0];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Pedido', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[4];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[1], $alto_celda, 'Linea', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[1];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[6], $alto_celda, 'Estilo', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[6];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Color', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[7], $alto_celda, 'Fecha-Ent', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[7];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[5], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[5];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Maq', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[4];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Sem', $bordes/* BORDE */, 1/* SALTO */, 'C');
-            /* FIN SUB ENCABEZADO */
-            /* FIN ENCABEZADO FIJO */
 
             $pdf->SetFont('Calibri', 'B', 8);
             $Y = 0;

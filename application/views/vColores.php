@@ -130,7 +130,8 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
+        handleEnterDiv(pnlDatos);
+        handleEnterDiv(pnlTablero);
         validacionSelectPorContenedor(pnlDatos);
         setFocusSelectToInputOnChange('#trEtiqueta', '#trPiel', pnlDatos);
 

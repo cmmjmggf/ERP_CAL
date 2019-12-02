@@ -144,6 +144,9 @@
     }
 
     function PaPreProInit() {
+
+        mdlParesPreProgramados.find("#PaPreProFecha").val(getToday());
+        mdlParesPreProgramados.find("#PaPreProFechaF").val(getToday());
         $.getJSON(master_url_pares_preprogramados + 'getClientes').done(function (data) {
             $.each(data, function (k, v) {
                 mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE_CLIENTE});
