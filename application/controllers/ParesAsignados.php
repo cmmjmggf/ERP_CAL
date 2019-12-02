@@ -11,14 +11,14 @@ class ParesAsignados extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('ParesAsignados_model', 'pam')->helper('paresasignados_helper')
+        $this->load->library('session')->model('ParesAsignados_model', 'pam')
+                ->helper('paresasignados_helper')
                 ->helper('jaspercommand_helper');
     }
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
-            $this->load->view('vNavGeneral');
+            $this->load->view('vEncabezado')->view('vNavGeneral');
 
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':

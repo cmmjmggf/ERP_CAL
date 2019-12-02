@@ -11,7 +11,8 @@ class ParesPreProgramados extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('ParesPreProgramados_model', 'pam')->helper('parespreprogramados_helper');
+        $this->load->library('session')->model('ParesPreProgramados_model', 'pam')
+                ->helper('parespreprogramados_helper');
     }
 
     public function index() {
@@ -57,7 +58,7 @@ class ParesPreProgramados extends CI_Controller {
     public function getParesPreProgramados() {
         try {
             $x = $this->input;
-            switch ($x->post('TIPO')) {
+            switch (intval($x->post('TIPO'))) {
                 case 1:
                     $this->getParesPreProgramadosCliente();
                     break;
@@ -98,7 +99,7 @@ class ParesPreProgramados extends CI_Controller {
             $this->db->join('estilos AS E', 'P.Estilo = E.Clave');
             $this->db->join('lineas AS L', 'E.Linea = L.Clave');
             $this->db->where("P.Registro BETWEEN STR_TO_DATE('{$xx['FECHA']}', \"%d/%m/%Y\") "
-                    . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\")");
+                    . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\") AND P.Ano ={$xx['ANIO']} ");
             $this->db->where("P.Estatus = 'A'", null, false);
 
             $CLIENTES = $this->db->group_by('C.ID')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
@@ -229,67 +230,39 @@ class ParesPreProgramados extends CI_Controller {
         try {
             $x = $this->input;
             $xx = $this->input->post();
-            $ESTILOS = $this->pam->getEstilos($x->post('ESTILO'), $x->post('CLIENTE'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'));
+            $xxx = $this->input->post();
+
+            $this->db->select(' P.Ano,P.Estilo AS CLAVE_ESTILO, P.ColorT AS COLOR', false)
+                    ->from('pedidox AS P');
+            if ($xxx['ESTILO'] !== '') {
+//                $this->db->where('P.Estilo', $xxx['ESTILO']);
+            }
+            if ($xxx['CLIENTE'] !== '') {
+                $this->db->where('P.Cliente', $xxx['CLIENTE']);
+            }
+            if ($xxx['MAQUILA'] !== '') {
+                $this->db->where("P.Maquila", $xxx['MAQUILA']);
+            }
+            if ($xxx['SEMANA'] !== '') {
+                $this->db->where("P.Semana", $xxx['SEMANA']);
+            }
+            $this->db->where("P.Control = 0  AND P.stsavan NOT IN(13,14)", null, false);
+            $ESTILOS = $this->db->group_by('P.Estilo')->order_by('ABS(P.Estilo)', 'ASC')->get()->result();
+//            var_dump($ESTILOS);
+//            exit(0);
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');
             $pdf = new PDF('L', 'mm', array(215.9, 279.4));
+
             $pdf->AddFont('Calibri', '');
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
+            $pdf->setTipoEncabezado(2);
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
-            /* ENCABEZADO FIJO */
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->SetY(10);
-            $pdf->Rect(10, 10, 259, 12.5);
-            $pdf->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
-            $pdf->SetX(10);
-            //$pdf->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por estilo"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(160);
-            $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(180);
-            $pdf->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
-            $anchos = array(103/* 0 */, 15/* 1 */, 20/* 2 */, 30/* 3 */, 15/* 4 */, 16/* 5 */, 40/* 6 */);
-            $spacex = 10;
-            $bordes = 1;
-            /* SUB ENCABEZADO */
-            $pdf->SetY($pdf->GetY() + $alto_celda + .5);
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Estilo', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[4];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[6], $alto_celda, 'Color', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[6];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[0], $alto_celda, 'Cliente', $bordes/* BORDE */, 0/* SALTO */, 'L');
-            $spacex += $anchos[0];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[1], $alto_celda, 'Pedido', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[1];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Linea', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Fecha-Ent', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[5], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[5];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Maq', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[4];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Sem', $bordes/* BORDE */, 1/* SALTO */, 'C');
-            /* FIN SUB ENCABEZADO */
-            /* FIN ENCABEZADO FIJO */
 
             $pdf->SetFont('Calibri', 'B', 8);
             $Y = 0;
@@ -312,7 +285,13 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->SetWidths(array(15/* 0 */, 40/* 1 */, 20/* 2 */));
                 $pdf->RowNoBorder(array(utf8_decode($v->CLAVE_ESTILO)/* 0 */, utf8_decode($v->COLOR)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 65, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), $x->post('MAQUILA'), $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2, 
+                        $x->post('CLIENTE'), $x->post('ESTILO'), 
+                        $x->post('LINEA'), $x->post('MAQUILA'), 
+                        $x->post('SEMANA'), $x->post('FECHA'), 
+                        $x->post('FECHAF'), $xx['ANIO']);
+                var_dump($PARES_PREPROGRAMADOS);
+                exit(0);
                 $bordes = 0;
                 $pdf->SetX(65);
                 foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {

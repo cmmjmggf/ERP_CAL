@@ -22,7 +22,7 @@
                     <?php
                     $usrs = $this->db->query("SELECT U.ID AS ID, U.Usuario AS USUARIO, U.TipoAcceso AS TIPO_ACCESO FROM `usuarios` AS `U` ORDER BY ABS(U.ID) ASC")->result();
                     foreach ($usrs as $k => $v) {
-                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                     }
                     ?>
                 </select>
@@ -89,7 +89,7 @@
                     <option></option>
                     <?php
                     foreach ($usrs as $k => $v) {
-                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                     }
                     ?>
                 </select>
@@ -144,7 +144,7 @@
                     <option></option>
                     <?php
                     foreach ($usrs as $k => $v) {
-                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                     }
                     ?>
                 </select>
@@ -204,7 +204,7 @@
                     <option></option>
                     <?php
                     foreach ($usrs as $k => $v) {
-                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                     }
                     ?>
                 </select>
@@ -269,7 +269,7 @@
                     <option></option>
                     <?php
                     foreach ($usrs as $k => $v) {
-                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                     }
                     ?>
                 </select>
@@ -350,7 +350,7 @@
                                     <option></option>
                                     <?php
                                     foreach ($usrs as $k => $v) {
-                                        print "<option value='{$v->ID}'>{$v->USUARIO}</option>";
+                                        print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
                                     }
                                     ?>
                                 </select>
@@ -976,7 +976,7 @@
 //        }).fail(function (x, y, z) {
 //            console.log(x.responseText);
 //        }).always(function () {
-            mxu[0].selectize.setValue(usr);
+        mxu[0].selectize.setValue(usr);
 //        });
 
         $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {

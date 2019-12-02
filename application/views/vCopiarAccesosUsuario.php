@@ -1,5 +1,5 @@
 <div class="modal " id="mdlCopiaAccesosUsuario"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Copiar Accesos de un Usuario a Otro</h5>
@@ -14,12 +14,23 @@
                             <label>Usuario Asigna</label>
                             <select id="UsuarioAsigna" name="UsuarioAsigna" class="form-control form-control-sm ">
                                 <option value=""></option>
+                                <?php
+                                $usrs = $this->db->query("SELECT U.ID AS ID, U.Usuario AS USUARIO, U.TipoAcceso AS TIPO_ACCESO FROM `usuarios` AS `U` ORDER BY ABS(U.ID) ASC")->result();
+                                foreach ($usrs as $k => $v) {
+                                    print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                         <div class="col-6" >
                             <label>Usuario Final</label>
                             <select id="UsuarioRecibe" name="UsuarioRecibe" class="form-control form-control-sm ">
                                 <option value=""></option>
+                                <?php
+                                foreach ($usrs as $k => $v) {
+                                    print "<option value='{$v->ID}'>{$v->USUARIO} ({$v->TIPO_ACCESO})</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>

@@ -248,6 +248,78 @@ class PDF extends FPDF {
 
     public $Borders = 0;
     public $Filled = 0;
+    public $TipoEncabezado = 0;
+
+    function Header() {
+        $bordes = 0;
+        $alto_celda = 4;
+        switch ($this->getTipoEncabezado()) {
+            case 1:
+                /* ESTE ESTA EN UNA CLASE EN LA PARTE SUPERIOR */
+                break;
+            case 2:
+                /* ENCABEZADO FIJO */
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Calibri', 'B', 10);
+                $this->SetY(10);
+                $this->Rect(10, 10, 259, 12.5);
+                $this->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
+                $this->SetX(10);
+                //$this->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por estilo"), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(160);
+                $this->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $this->SetX(180);
+                $this->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
+
+                $anchos = array(103/* 0 */, 15/* 1 */, 20/* 2 */, 30/* 3 */, 15/* 4 */, 16/* 5 */, 40/* 6 */);
+                $spacex = 10;
+                $bordes = 1;
+                /* SUB ENCABEZADO */
+                $this->SetY($this->GetY() + $alto_celda + .5);
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Estilo', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[4];
+                $this->SetX($spacex);
+                $this->Cell($anchos[6], $alto_celda, 'Color', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[6];
+                $this->SetX($spacex);
+                $this->Cell($anchos[0], $alto_celda, 'Cliente', $bordes/* BORDE */, 0/* SALTO */, 'L');
+                $spacex += $anchos[0];
+                $this->SetX($spacex);
+                $this->Cell($anchos[1], $alto_celda, 'Pedido', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[1];
+                $this->SetX($spacex);
+                $this->Cell($anchos[2], $alto_celda, 'Linea', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[2];
+                $this->SetX($spacex);
+                $this->Cell($anchos[2], $alto_celda, 'Fecha-Ent', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[2];
+                $this->SetX($spacex);
+                $this->Cell($anchos[5], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[5];
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Maq', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[4];
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Sem', $bordes/* BORDE */, 1/* SALTO */, 'C');
+                /* FIN SUB ENCABEZADO */
+                /* FIN ENCABEZADO FIJO */
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+        }
+    }
 
     function Footer() {
         // Go to 1.5 cm from bottom
@@ -273,6 +345,15 @@ class PDF extends FPDF {
 
     function setBorders($Borders) {
         $this->Borders = $Borders;
+    }
+
+    public function getTipoEncabezado() {
+        return $this->TipoEncabezado;
+    }
+
+    public function setTipoEncabezado($TipoEncabezado) {
+        $this->TipoEncabezado = $TipoEncabezado;
+        return $this;
     }
 
     var $widths;

@@ -6,11 +6,47 @@
         <div class="row">
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <label>Cliente</label>
-                <select id="PaPreProCliente" name="PaPreProCliente" class="form-control form-control-sm"></select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" id="xPaPreProCliente" name="xPaPreProCliente" class="form-control form-control-sm" autofocus="">
+                    </div>
+                    <div class="col-9">
+                        <select id="PaPreProCliente" name="PaPreProCliente" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            $dtm = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus = 'ACTIVO' ORDER BY ABS(C.Clave) ASC")->result();
+                            foreach ($dtm as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                 <label>Maquila</label>
-                <select id="PaPreProMaquila" name="PaPreProMaquila" class="form-control form-control-sm"></select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" id="xPaPreProMaquila" name="xPaPreProMaquila" class="form-control form-control-sm" autofocus="">
+                    </div>
+                    <div class="col-9">
+                        <select id="PaPreProMaquila" name="PaPreProMaquila" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            $dtm = $this->db->select('M.Clave AS CLAVE, M.Nombre AS MAQUILA, M.CapacidadPares AS CAPACIDAD_PARES', false)
+                                            ->from('pedidox AS P')
+                                            ->join('maquilas AS M', 'P.Maquila = M.Clave')
+                                            ->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false)
+                                            ->group_by(array('M.Nombre'))
+                                            ->order_by('abs(P.Maquila)', 'ASC')
+                                            ->order_by('abs(P.Semana)', 'ASC')->get()->result();
+                            foreach ($dtm as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->MAQUILA}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                 <label>Semana</label>
@@ -22,11 +58,46 @@
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <label>Linea</label>
-                <select id="PaPreProLinea" name="PaPreProLinea" class="form-control form-control-sm"></select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" id="xPaPreProLinea" name="xPaPreProLinea" class="form-control form-control-sm" autofocus="">
+                    </div>
+                    <div class="col-9">
+                        <select id="PaPreProLinea" name="PaPreProLinea" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select('L.Clave AS CLAVE, L.Descripcion AS LINEA', false)
+                                    ->from('pedidox AS P')->join('estilos AS E', 'P.Estilo = E.Clave')
+                                    ->join('lineas AS L', 'E.Linea = L.Clave')
+                                    ->where("P.Control = 0 AND P.Estatus = 'A'", null, false)
+                                    ->group_by('L.Clave')->order_by('ABS(L.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value=\"{$v->CLAVE}\">{$v->LINEA}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <label>Estilo</label>
-                <select id="PaPreProEstilo" name="PaPreProEstilo" class="form-control form-control-sm"></select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" id="xPaPreProEstilo" name="xPaPreProEstilo" class="form-control form-control-sm" autofocus="">
+                    </div>
+                    <div class="col-9">
+                        <select id="PaPreProEstilo" name="PaPreProEstilo" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select('E.Clave AS CLAVE, E.Descripcion AS ESTILO,E.Linea AS LINEA', false)
+                                    ->from('estilos AS E')
+                                    ->order_by('ABS(E.Clave)', 'ASC')
+                                    ->group_by('E.Clave')->get()->result() as $k => $v) {
+                                print "<option value=\"{$v->CLAVE}\">{$v->ESTILO}(LINEA {$v->LINEA})</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="w-100"></div>
             <div class="col-12 my-2">
@@ -61,9 +132,17 @@
 </div>
 
 <script>
-    var mdlParesPreProgramados = $("#mdlParesPreProgramados");
-    var master_url_pares_preprogramados = base_url + 'index.php/ParesPreProgramados/';
-    var Anio = '<?php print Date('Y'); ?>', PaPreProAno = mdlParesPreProgramados.find('#PaPreProAno');
+    var mdlParesPreProgramados = $("#mdlParesPreProgramados"),
+            Anio = '<?php print Date('Y'); ?>',
+            PaPreProAno = mdlParesPreProgramados.find('#PaPreProAno'),
+            xPaPreProCliente = mdlParesPreProgramados.find("#xPaPreProCliente"),
+            PaPreProCliente = mdlParesPreProgramados.find("#PaPreProCliente"),
+            xPaPreProMaquila = mdlParesPreProgramados.find("#xPaPreProMaquila"),
+            PaPreProMaquila = mdlParesPreProgramados.find("#PaPreProMaquila"),
+            xPaPreProLinea = mdlParesPreProgramados.find("#xPaPreProLinea"),
+            PaPreProLinea = mdlParesPreProgramados.find("#PaPreProLinea"),
+            xPaPreProEstilo = mdlParesPreProgramados.find("#xPaPreProEstilo"),
+            PaPreProEstilo = mdlParesPreProgramados.find("#PaPreProEstilo");
 
 
     $(document).ready(function () {
@@ -71,6 +150,135 @@
         PaPreProAno.val(Anio);
 
         PaPreProInit();
+
+
+        PaPreProEstilo.change(function () {
+            if (PaPreProEstilo.val()) {
+                xPaPreProEstilo.val(PaPreProEstilo.val());
+                PaPreProEstilo[0].selectize.disable();
+            } else {
+                xPaPreProEstilo.val('');
+                PaPreProEstilo[0].selectize.enable();
+                PaPreProEstilo[0].selectize.clear(true);
+            }
+        });
+
+        xPaPreProEstilo.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xPaPreProEstilo.val()) {
+                    PaPreProEstilo[0].selectize.setValue(xPaPreProEstilo.val());
+                    if (PaPreProEstilo.val()) {
+                        PaPreProEstilo[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(mdlParesPreProgramados, 'NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', function () {
+                            xPaPreProEstilo.focus().select();
+                        });
+                    }
+                } else {
+                    PaPreProEstilo[0].selectize.enable();
+                    PaPreProEstilo[0].selectize.clear(true);
+                }
+            } else {
+                PaPreProEstilo[0].selectize.enable();
+                PaPreProEstilo[0].selectize.clear(true);
+            }
+        });
+
+        PaPreProLinea.change(function () {
+            if (PaPreProLinea.val()) {
+                xPaPreProLinea.val(PaPreProLinea.val());
+                PaPreProLinea[0].selectize.disable();
+            } else {
+                xPaPreProLinea.val('');
+                PaPreProLinea[0].selectize.enable();
+                PaPreProLinea[0].selectize.clear(true);
+            }
+        });
+
+        xPaPreProLinea.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xPaPreProLinea.val()) {
+                    PaPreProLinea[0].selectize.setValue(xPaPreProLinea.val());
+                    if (PaPreProLinea.val()) {
+                        PaPreProLinea[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(mdlParesPreProgramados, 'NO EXISTE ESTA LINEA, ESPECIFIQUE OTRA', function () {
+                            xPaPreProLinea.focus().select();
+                        });
+                    }
+                } else {
+                    PaPreProLinea[0].selectize.enable();
+                    PaPreProLinea[0].selectize.clear(true);
+                }
+            } else {
+                PaPreProLinea[0].selectize.enable();
+                PaPreProLinea[0].selectize.clear(true);
+            }
+        });
+
+        PaPreProMaquila.change(function () {
+            if (PaPreProMaquila.val()) {
+                xPaPreProMaquila.val(PaPreProMaquila.val());
+                PaPreProMaquila[0].selectize.disable();
+            } else {
+                xPaPreProMaquila.val('');
+                PaPreProMaquila[0].selectize.enable();
+                PaPreProMaquila[0].selectize.clear(true);
+            }
+        });
+
+        xPaPreProMaquila.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xPaPreProMaquila.val()) {
+                    PaPreProMaquila[0].selectize.setValue(xPaPreProMaquila.val());
+                    if (PaPreProMaquila.val()) {
+                        PaPreProMaquila[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(mdlParesPreProgramados, 'NO EXISTE ESTA MAQUILA, ESPECIFIQUE OTRA', function () {
+                            xPaPreProMaquila.focus().select();
+                        });
+                    }
+                } else {
+                    PaPreProMaquila[0].selectize.enable();
+                    PaPreProMaquila[0].selectize.clear(true);
+                }
+            } else {
+                PaPreProMaquila[0].selectize.enable();
+                PaPreProMaquila[0].selectize.clear(true);
+            }
+        });
+
+        PaPreProCliente.change(function () {
+            if (PaPreProCliente.val()) {
+                xPaPreProCliente.val(PaPreProCliente.val());
+                PaPreProCliente[0].selectize.enable();
+            } else {
+                xPaPreProCliente.val('');
+                PaPreProCliente[0].selectize.enable();
+                PaPreProCliente[0].selectize.clear(true);
+            }
+        });
+
+        xPaPreProCliente.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xPaPreProCliente.val()) {
+                    PaPreProCliente[0].selectize.setValue(xPaPreProCliente.val());
+                    if (PaPreProCliente.val()) {
+                        PaPreProCliente[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(mdlParesPreProgramados, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                            xPaPreProCliente.focus().select();
+                        });
+                    }
+                } else {
+                    PaPreProCliente[0].selectize.enable();
+                    PaPreProCliente[0].selectize.clear(true);
+                }
+            } else {
+                PaPreProCliente[0].selectize.enable();
+                PaPreProCliente[0].selectize.clear(true);
+            }
+        });
 
         mdlParesPreProgramados.on('shown.bs.modal', function () {
             HoldOn.close();
@@ -83,7 +291,14 @@
 
         mdlParesPreProgramados.find("#btnEstiloPreProgramado").click(function () {
             console.log('ESTILO');
-            getParesPreProgramados(2);
+            if (xPaPreProEstilo.val()) {
+                PaPreProEstilo[0].selectize.setValue(xPaPreProEstilo.val());
+                getParesPreProgramados(2);
+            } else {
+                onCampoInvalido(mdlParesPreProgramados, "ESPECIFIQUE UN ESTILO POR FAVOR", function () {
+                    xPaPreProEstilo.focus().select();
+                });
+            }
         });
 
         mdlParesPreProgramados.find("#btnLineasPreProgramado").click(function () {
@@ -103,6 +318,11 @@
     });
 
     function getParesPreProgramados(t) {
+        mdlParesPreProgramados.find("input,textarea").attr('disabled', false);
+        $.each(mdlParesPreProgramados.find("select:disabled"), function (k, v) {
+            $(v)[0].selectize.enable();
+        });
+
         var Cliente = mdlParesPreProgramados.find("#PaPreProCliente").val(),
                 Maquila = mdlParesPreProgramados.find("#PaPreProMaquila").val(),
                 Semana = mdlParesPreProgramados.find("#PaPreProSemana").val(),
@@ -110,12 +330,11 @@
                 FechaF = mdlParesPreProgramados.find("#PaPreProFechaF").val(),
                 Linea = mdlParesPreProgramados.find("#PaPreProLinea").val(),
                 Estilo = mdlParesPreProgramados.find("#PaPreProEstilo").val();
-//        if (Cliente !== '') {
         HoldOn.open({
             theme: 'sk-bounce',
             message: 'Por favor espere...'
         });
-        $.post(master_url_pares_preprogramados + 'getParesPreProgramados', {
+        $.post('<?php print base_url('ParesPreProgramados/getParesPreProgramados'); ?>', {
             CLIENTE: Cliente !== '' ? Cliente : '',
             MAQUILA: Maquila !== '' ? Maquila : '',
             SEMANA: Semana !== '' ? Semana : '',
@@ -135,61 +354,10 @@
         }).always(function () {
             HoldOn.close();
         });
-//        } else {
-//            swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CLIENTE', 'warning').then((value) => {
-//                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.focus();
-//                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.open();
-//            });
-//        }
     }
 
     function PaPreProInit() {
-
         mdlParesPreProgramados.find("#PaPreProFecha").val(getToday());
         mdlParesPreProgramados.find("#PaPreProFechaF").val(getToday());
-        $.getJSON(master_url_pares_preprogramados + 'getClientes').done(function (data) {
-            $.each(data, function (k, v) {
-                mdlParesPreProgramados.find("#PaPreProCliente")[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE_CLIENTE});
-            });
-        }).fail(function (x, y, z) {
-            console.log("\n *CLIENTES ERROR* \n", x.responseText);
-            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER LOS CLIENTES', 'warning');
-        }).always(function () {
-
-        });
-
-        $.getJSON(master_url_pares_preprogramados + 'getMaquilas').done(function (data) {
-            $.each(data, function (k, v) {
-                mdlParesPreProgramados.find("#PaPreProMaquila")[0].selectize.addOption({text: v.MAQUILA, value: v.CLAVE_MAQUILA});
-            });
-        }).fail(function (x, y, z) {
-            console.log("\n *MAQUILAS ERROR* \n", x.responseText);
-            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER LAS MAQUILAS', 'warning');
-        }).always(function () {
-
-        });
-
-        $.getJSON(master_url_pares_preprogramados + 'getLineas').done(function (data) {
-//            console.log("*LINEAS*\n",data);
-            $.each(data, function (k, v) {
-                mdlParesPreProgramados.find("#PaPreProLinea")[0].selectize.addOption({text: v.LINEA, value: v.CLAVE_LINEA});
-            });
-        }).fail(function (x, y, z) {
-            console.log("\n *LINEAS ERROR* \n", x.responseText);
-            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER LOS CLIENTES', 'warning');
-        }).always(function () {
-
-        });
-
-        $.getJSON(master_url_pares_preprogramados + 'getEstilos').done(function (data) {
-            $.each(data, function (k, v) {
-                mdlParesPreProgramados.find("#PaPreProEstilo")[0].selectize.addOption({text: v.CLAVE_ESTILO + ' - ' + v.ESTILO, value: v.CLAVE_ESTILO});
-            });
-        }).fail(function (x, y, z) {
-            console.log("\n *ESTILOS ERROR* \n", x.responseText);
-            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER LOS CLIENTES', 'warning');
-        }).always(function () {
-
-        });
     }
 </script>

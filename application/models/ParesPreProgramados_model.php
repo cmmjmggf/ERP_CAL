@@ -27,9 +27,11 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
                     $this->db->where("C.Clave", $CEL);
                     break;
                 case 2:
-                    $this->db->where("P.Estilo", $CEL);
-                    $this->db->where("E.Clave", $CEL);
-                    $this->db->where("CO.Estilo", $CEL);
+                    if ($CEL !== '') {
+                        $this->db->where("P.Estilo", $CEL);
+                        $this->db->where("E.Clave", $CEL);
+                        $this->db->where("CO.Estilo", $CEL);
+                    }
                     break;
                 case 3:
                     $this->db->where("L.Clave", $CEL);
@@ -63,7 +65,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             }
             $this->db->where("P.Estatus = 'A' AND P.Control = 0 AND P.stsavan <> 14 OR P.Control IS NULL", null, false);
             $sql = $this->db->get()->result();
-//            PRINT $this->db->last_query();
+            PRINT $this->db->last_query();
             return $sql;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -111,7 +113,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             }
             $this->db->where("P.Estatus = 'A'", null, false);
 
-            $this->db->group_by('C.ID') ;
+            $this->db->group_by('C.ID');
 //            print $this->db->last_query();
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -147,9 +149,10 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
             if ($S !== '') {
                 $this->db->where("P.Semana", $S);
             }
-            $this->db->where("P.Control = 0 AND P.Estatus LIKE 'A'", null, false);
-            return $this->db->group_by('P.Estilo')
-                            ->order_by('ABS(P.Estilo)', 'ASC')->get()->result();
+            $this->db->where("P.Control = 0 AND P.Estatus = 'A'", null, false);
+            $dtm = $this->db->group_by('P.Estilo')->order_by('ABS(P.Estilo)', 'ASC')->get()->result();
+//            print $this->db->last_query();
+            return $dtm;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -308,7 +311,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
 //            return $this->db->get()->result();
 
             $sql = $this->db->get();
-//            PRINT $this->db->last_query();
+            PRINT $this->db->last_query();
             return $sql->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
