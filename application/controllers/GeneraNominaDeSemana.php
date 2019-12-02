@@ -128,12 +128,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                                 $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
                             } else {
-                                /* LOS EMPLEADOS EN MONTADO "A" Y EN MONTADO "B" EN PORCENTAJE DE CELULAS, 
+                                /* LOS EMPLEADOS EN MONTADO "A" Y EN MONTADO "B" EN PORCENTAJE DE CELULAS,
                                  * A VECES EL NUMERO DE CELULA ES CERO (0) Y NO ES POSIBLE ENLAZARLOS, ES NECESARIO USAR EL DEPARTAMENTO */
 //                                switch (intval($v->DepartamentoFisico)) {
 //                                    case 180:
 ////                                        MONTADO "A"
-//                                        
+//
 //                                        break;
 //                                    case 190:
 //                                        break;
