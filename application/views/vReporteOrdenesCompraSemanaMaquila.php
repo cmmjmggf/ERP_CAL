@@ -265,7 +265,7 @@
     function getProveedoresOCMaqSem(tp) {
         mdlOrdenesCompraSemMaq.find("#ProveedorOCMaqSem")[0].selectize.clear(true);
         mdlOrdenesCompraSemMaq.find("#ProveedorOCMaqSem")[0].selectize.clearOptions();
-        $.getJSON(base_url + 'index.php/NotasCargo/getProveedores').done(function (data) {
+        $.getJSON(base_url + 'index.php/NotasCargo/getProveedoresConClave').done(function (data) {
             $.each(data, function (k, v) {
                 mdlOrdenesCompraSemMaq.find("#ProveedorOCMaqSem")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });

@@ -284,6 +284,14 @@ class NotasCargo extends CI_Controller {
         }
     }
 
+    public function getProveedoresConClave() {
+        try {
+            print json_encode($this->NotasCargo_model->getProveedoresConClave());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onImprimirReporteNotaCargo() {
         $Tp = $this->input->post('Tp');
         $Folio = $this->input->post('Folio');

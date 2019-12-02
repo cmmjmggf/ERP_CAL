@@ -320,6 +320,16 @@ class NotasCargo_model extends CI_Model {
         }
     }
 
+    public function getProveedoresConClave() {
+        try {
+            return $this->db->select("P.Clave AS ID, "
+                            . "CONCAT(P.Clave,' ',P.NombreI) AS ProveedorI, "
+                            . "CONCAT(P.Clave,' ',P.NombreF) AS ProveedorF ", false)->from("proveedores AS P")->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     /* CANCELA NOTA CREDITO */
 
     public function getRegistrosParaCancelar($tp, $nc, $prov) {
