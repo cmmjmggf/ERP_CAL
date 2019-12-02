@@ -87,10 +87,12 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
-
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(mdlConsultaArticulos);
         pnlTablero.find('#Grupo').on("change", function () {
-            getRecords($(this).val());
+            if ($(this).val()) {
+                getRecords($(this).val());
+            }
         });
 
         pnlTablero.find('#btnImprimir').on("click", function () {
@@ -168,12 +170,14 @@
     });
 
     function init() {
-        getRecords('');
         getGrupos();
+        getRecords(0);
+
+        pnlTablero.find("#Grupo")[0].selectize.focus();
     }
 
     function getGrupos() {
-        $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGrupos').done(function (data) {
+        $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGruposConClave').done(function (data) {
             $.each(data, function (k, v) {
                 pnlTablero.find("#Grupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});
                 mdlConsultaArticulos.find("#dGrupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});
@@ -196,7 +200,7 @@
             tblArticulos.DataTable().destroy();
         }
         Articulos = tblArticulos.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'Bfrt',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getRecords',
@@ -256,7 +260,8 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 500,
+            "scrollY": 500,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -269,7 +274,6 @@
             }
         });
 
-        $('#tblArticulos_filter input[type=search]').focus();
 
     }
 
@@ -292,7 +296,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     span.badge{
         font-size: 100% !important;

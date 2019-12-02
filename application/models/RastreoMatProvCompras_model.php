@@ -46,8 +46,8 @@ class RastreoMatProvCompras_model extends CI_Model {
     public function getProveedores() {
         try {
             return $this->db->select("CONVERT(P.Clave, UNSIGNED INTEGER) AS ID, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreI,'')) AS ProveedorI, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
                             ->from("proveedores AS P")
                             ->order_by("ID", "ASC")
                             ->get()->result();
@@ -59,10 +59,10 @@ class RastreoMatProvCompras_model extends CI_Model {
     public function getArticulos() {
         try {
             return $this->db->select("CONVERT(A.Clave, UNSIGNED INTEGER) AS Clave , "
-                                    . "CONCAT(A.Clave,' ',A.Descripcion) AS Articulo "
+                                    . "CONCAT(A.Descripcion) AS Articulo "
                                     . " ", false)
                             ->from("articulos AS A")
-                            ->order_by("Clave", "ASC")
+                            ->order_by("Articulo", "ASC")
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

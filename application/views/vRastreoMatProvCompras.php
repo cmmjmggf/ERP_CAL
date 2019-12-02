@@ -7,17 +7,31 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6 col-sm-6 col-md-5 col-lg-4">
+            <div class="col-4">
                 <label>Proveedor</label>
-                <select class="form-control form-control-sm" id="Proveedor" name="Proveedor" >
-                    <option value=""></option>
-                </select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-5 col-lg-4">
+            <div class="col-4">
                 <label>Artículo</label>
-                <select class="form-control form-control-sm" id="Articulo" name="Articulo" >
-                    <option value=""></option>
-                </select>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-6 col-sm-5 col-md-2 col-lg-2 col-xl-1 mt-4">
                 <button type="button" class="btn btn-primary" id="btnAceptar" data-toggle="tooltip" data-placement="right" title="Aceptar">
@@ -57,11 +71,13 @@
 
     var valida = false;
     $(document).ready(function () {
-
-        handleEnter();
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        handleEnterDiv(pnlTablero);
         init();
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToInputOnChange('#Proveedor', '#Articulo', pnlTablero);
 
         pnlTablero.find('#btnAceptar').click(function () {
 
@@ -69,6 +85,67 @@
             var articulo = pnlTablero.find('#Articulo').val();
             getRecords(proveedor, articulo);
         });
+
+        pnlTablero.find('#Proveedor').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtprv = $(this).val();
+                if (txtprv) {
+                    $.getJSON(base_url + 'index.php/RastreoMatProvCompras/onVerificarProveedor', {Proveedor: txtprv}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprv, true);
+                            pnlTablero.find('#Articulo').focus().select();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find('#sProveedor').change(function () {
+            var txtprv = $(this).val();
+            if (txtprv) {
+                pnlTablero.find('#Proveedor').val(txtprv);
+                pnlTablero.find('#Articulo').focus().select();
+            }
+        });
+
+        pnlTablero.find('#Articulo').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(base_url + 'index.php/RastreoMatProvCompras/onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
+                            pnlTablero.find('#btnAceptar').focus();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                pnlTablero.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find('#sArticulo').change(function () {
+            var txtart = $(this).val();
+            if (txtart) {
+                pnlTablero.find('#Articulo').val(txtart);
+                pnlTablero.find('#btnAceptar').focus();
+            }
+        });
+
 
     });
 
@@ -177,15 +254,15 @@
     function init() {
         getArticulos();
         getProveedores();
-        pnlTablero.find('#Proveedor')[0].selectize.focus();
+        pnlTablero.find('#Proveedor').focus();
     }
 
     function getArticulos() {
-        pnlTablero.find("#Articulo")[0].selectize.clear(true);
-        pnlTablero.find("#Articulo")[0].selectize.clearOptions();
+        pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+        pnlTablero.find("#sArticulo")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getArticulos').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
+                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -194,11 +271,11 @@
     }
 
     function getProveedores() {
-        pnlTablero.find("#Proveedor")[0].selectize.clear(true);
-        pnlTablero.find("#Proveedor")[0].selectize.clearOptions();
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(master_url + 'getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Proveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -219,7 +296,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

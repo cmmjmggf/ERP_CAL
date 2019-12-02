@@ -15,15 +15,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-3">
                             <label>Año</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <div class="col-9">
                             <label>Cliente</label>
-                            <select class="form-control form-control-sm required selectize" id="ClienteExplosion" name="ClienteExplosion" >
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly" id="ClienteExplosion" name="ClienteExplosion" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sClienteExplosion" name="sClienteExplosion" class="form-control form-control-sm required NotSelectize " required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -91,8 +98,12 @@
 <script>
     var mdlExplosionSemanalCliente = $('#mdlExplosionSemanalCliente');
     $(document).ready(function () {
+        mdlExplosionSemanalCliente.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(mdlExplosionSemanalCliente);
-        setFocusSelectToInputOnChange('#ClienteExplosion', '#Maq', mdlExplosionSemanalCliente);
+        setFocusSelectToInputOnChange('#sClienteExplosion', '#Maq', mdlExplosionSemanalCliente);
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlExplosionSemanalCliente);
         mdlExplosionSemanalCliente.on('shown.bs.modal', function () {
             handleEnterDiv(mdlExplosionSemanalCliente);
@@ -101,7 +112,37 @@
                 mdlExplosionSemanalCliente.find("select")[k].selectize.clear(true);
             });
             getClientes();
-            mdlExplosionSemanalCliente.find('#Ano').focus();
+            mdlExplosionSemanalCliente.find('#Ano').val(getYear()).focus();
+        });
+
+        mdlExplosionSemanalCliente.find('#ClienteExplosion').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtcte = $(this).val();
+                if (txtcte) {
+                    $.getJSON(base_url + 'index.php/ExplosionesPorCliente/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlExplosionSemanalCliente.find("#sClienteExplosion")[0].selectize.addItem(txtcte, true);
+                            mdlExplosionSemanalCliente.find('#Maq').focus().select();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlExplosionSemanalCliente.find("#sClienteExplosion")[0].selectize.clear(true);
+                                mdlExplosionSemanalCliente.find('#ClienteExplosion').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        mdlExplosionSemanalCliente.find('#sClienteExplosion').change(function () {
+            var txtcte = $(this).val();
+            if (txtcte) {
+                mdlExplosionSemanalCliente.find('#ClienteExplosion').val(txtcte);
+                mdlExplosionSemanalCliente.find('#Maq').focus().select();
+            }
         });
 
         mdlExplosionSemanalCliente.find('#btnImprimir').on("click", function () {
@@ -266,11 +307,11 @@
     }
 
     function getClientes() {
-        mdlExplosionSemanalCliente.find("#ClienteExplosion")[0].selectize.clear(true);
-        mdlExplosionSemanalCliente.find("#ClienteExplosion")[0].selectize.clearOptions();
-        $.getJSON(base_url + 'index.php/Pedidos/getClientes').done(function (data) {
+        mdlExplosionSemanalCliente.find("#sClienteExplosion")[0].selectize.clear(true);
+        mdlExplosionSemanalCliente.find("#sClienteExplosion")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/ExplosionesPorCliente/getClientes').done(function (data) {
             $.each(data, function (k, v) {
-                mdlExplosionSemanalCliente.find("#ClienteExplosion")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlExplosionSemanalCliente.find("#sClienteExplosion")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

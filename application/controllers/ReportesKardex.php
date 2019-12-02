@@ -15,6 +15,24 @@ class ReportesKardex extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarArticulo() {
+        try {
+            $Articulo = $this->input->get('Articulo');
+            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getProveedores() {
         try {
             print json_encode($this->ReportesKardex_model->getProveedores());

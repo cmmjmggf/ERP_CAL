@@ -36,6 +36,24 @@ class RastreoMatProvCompras extends CI_Controller {
         }
     }
 
+    public function onVerificarProveedor() {
+        try {
+            $Proveedor = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select clave from proveedores where clave = '$Proveedor ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarArticulo() {
+        try {
+            $Articulo = $this->input->get('Articulo');
+            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
             print json_encode($this->RastreoMatProvCompras_model->getRecords($this->input->post('Proveedor'), $this->input->post('Articulo')));

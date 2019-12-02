@@ -14,11 +14,18 @@
                             <label for="Clave" >Tp</label>
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="Tp" name="Tp" required="">
                         </div>
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <label for="" >Proveedor</label>
-                            <select id="Proveedor" name="Proveedor" class="form-control form-control-sm mb-2 required" required="" >
-                                <option value=""></option>
-                            </select>
+                        <div class="col-12">
+                            <label>Proveedor</label>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-6 col-sm-6 col-md-5" >
                             <label for="" >Nota</label>
@@ -39,6 +46,10 @@
 <script>
     var mdlReimprimirNotaCargo = $('#mdlReimprimirNotaCargo');
     $(document).ready(function () {
+        mdlReimprimirNotaCargo.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(mdlReimprimirNotaCargo);
         setFocusSelectToSelectOnChange('#Proveedor', '#NotaCargo', mdlReimprimirNotaCargo);
         setFocusSelectToInputOnChange('#NotaCargo', '#btnImprimir', mdlReimprimirNotaCargo);
@@ -55,7 +66,7 @@
             if (tp === 1 || tp === 2) {
 
                 getProveedoresReimprimeNC(tp);
-                mdlReimprimirNotaCargo.find('#Proveedor')[0].selectize.focus();
+                mdlReimprimirNotaCargo.find('#Proveedor').focus();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -70,53 +81,127 @@
                 });
             }
         });
+
+
+        mdlReimprimirNotaCargo.find('#Proveedor').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtprv = $(this).val();
+                if (txtprv) {
+                    $.getJSON(base_url + 'index.php/RastreoMatProvCompras/onVerificarProveedor', {Proveedor: txtprv}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlReimprimirNotaCargo.find("#sProveedor")[0].selectize.addItem(txtprv, true);
+                            var tp = mdlReimprimirNotaCargo.find("#Tp").val();
+                            $.getJSON(base_url + 'index.php/NotasCargo/getNotasByTpByProveedor', {
+                                Tp: tp,
+                                Proveedor: txtprv
+                            }).done(function (data) {
+                                mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clear(true);
+                                mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clearOptions();
+                                if (data.length > 0) {//Existe
+                                    $.each(data, function (k, v) {
+                                        mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.addOption({text: v.Nota, value: v.Nota});
+                                    });
+                                    mdlReimprimirNotaCargo.find('#NotaCargo')[0].selectize.focus();
+                                    mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.open();
+                                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                                    $.notify({
+                                        // options
+                                        icon: 'fa fa-exclamation',
+                                        title: 'Atención',
+                                        message: 'PROVEEDOR NO TIENE NOTAS DE CARGO REGISTRADAS'
+                                    }, {
+                                        // settings
+                                        type: 'danger',
+                                        allow_dismiss: true,
+                                        newest_on_top: false,
+                                        showProgressbar: false,
+                                        delay: 3000,
+                                        timer: 1000,
+                                        placement: {
+                                            from: "bottom",
+                                            align: "left"
+                                        },
+                                        animate: {
+                                            enter: 'animated fadeInDown',
+                                            exit: 'animated fadeOutUp'
+                                        }
+                                    });
+                                }
+                            }).fail(function (x, y, z) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlReimprimirNotaCargo.find("#sProveedor")[0].selectize.clear(true);
+                                mdlReimprimirNotaCargo.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        mdlReimprimirNotaCargo.find('#sProveedor').change(function () {
+            var txtprv = $(this).val();
+            if (txtprv) {
+                mdlReimprimirNotaCargo.find('#Proveedor').val(txtprv);
+
+                var tp = mdlReimprimirNotaCargo.find("#Tp").val();
+                $.getJSON(base_url + 'index.php/NotasCargo/getNotasByTpByProveedor', {
+                    Tp: tp,
+                    Proveedor: txtprv
+                }).done(function (data) {
+                    mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clear(true);
+                    mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clearOptions();
+                    if (data.length > 0) {//Existe
+                        $.each(data, function (k, v) {
+                            mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.addOption({text: v.Nota, value: v.Nota});
+                        });
+                        mdlReimprimirNotaCargo.find('#NotaCargo')[0].selectize.focus();
+                        mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.open();
+                    } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
+                        $.notify({
+                            // options
+                            icon: 'fa fa-exclamation',
+                            title: 'Atención',
+                            message: 'PROVEEDOR NO TIENE NOTAS DE CARGO REGISTRADAS'
+                        }, {
+                            // settings
+                            type: 'danger',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: false,
+                            delay: 3000,
+                            timer: 1000,
+                            placement: {
+                                from: "bottom",
+                                align: "left"
+                            },
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            }
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+
+
+            }
+        });
+
         mdlReimprimirNotaCargo.find('#btnImprimir').on("click", function () {
             var tp = mdlReimprimirNotaCargo.find("#Tp").val();
             var folio = mdlReimprimirNotaCargo.find("#NotaCargo").val();
             var prov = mdlReimprimirNotaCargo.find("#Proveedor").val();
             onImprimirReporteNotaCargo(tp, folio, prov);
-        });
-        mdlReimprimirNotaCargo.find("#Proveedor").change(function () {
-            var tp = mdlReimprimirNotaCargo.find("#Tp").val();
-            $.getJSON(base_url + 'index.php/NotasCargo/getNotasByTpByProveedor', {
-                Tp: tp,
-                Proveedor: $(this).val()
-            }).done(function (data) {
-                mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clear(true);
-                mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.clearOptions();
-                if (data.length > 0) {//Existe
-                    $.each(data, function (k, v) {
-                        mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.addOption({text: v.Nota, value: v.Nota});
-                    });
-                    mdlReimprimirNotaCargo.find("#NotaCargo")[0].selectize.open();
-                } else {//NO TIENE DOCUMENTOS PENDIENTES DE PAGO
-                    $.notify({
-                        // options
-                        icon: 'fa fa-exclamation',
-                        title: 'Atención',
-                        message: 'PROVEEDOR NO TIENE NOTAS DE CARGO REGISTRADAS'
-                    }, {
-                        // settings
-                        type: 'danger',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        delay: 3000,
-                        timer: 1000,
-                        placement: {
-                            from: "bottom",
-                            align: "left"
-                        },
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        }
-                    });
-                }
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            });
         });
     });
 
@@ -137,7 +222,11 @@
                     opts: {
                         afterShow: function (instance, current) {
                             console.info('done!');
-                            init();
+                            mdlReimprimirNotaCargo.find("input").val("");
+                            $.each(mdlReimprimirNotaCargo.find("select"), function (k, v) {
+                                mdlReimprimirNotaCargo.find("select")[k].selectize.clear(true);
+                            });
+                            mdlReimprimirNotaCargo.find('#Tp').focus();
                         },
                         iframe: {
                             // Iframe template
@@ -171,11 +260,11 @@
     }
 
     function getProveedoresReimprimeNC(tp) {
-        mdlReimprimirNotaCargo.find("#Proveedor")[0].selectize.clear(true);
-        mdlReimprimirNotaCargo.find("#Proveedor")[0].selectize.clearOptions();
+        mdlReimprimirNotaCargo.find("#sProveedor")[0].selectize.clear(true);
+        mdlReimprimirNotaCargo.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/NotasCargo/getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                mdlReimprimirNotaCargo.find("#Proveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                mdlReimprimirNotaCargo.find("#sProveedor")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

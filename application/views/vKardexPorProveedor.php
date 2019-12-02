@@ -27,11 +27,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-12">
+                        <div class="col-12">
                             <label>Proveedor</label>
-                            <select class="form-control form-control-sm" id="ProveedorKardex" name="Proveedor" >
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="ProveedorKardex" name="Proveedor" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sProveedorKardex" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -52,8 +59,11 @@
 
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlSalidasMaquilasPorDia);
-        setFocusSelectToInputOnChange('#ProveedorKardex', '#btnImprimir', mdlKardexPorProveedor);
-
+        setFocusSelectToInputOnChange('#sProveedorKardex', '#btnImprimir', mdlKardexPorProveedor);
+        mdlKardexPorProveedor.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlKardexPorProveedor.on('shown.bs.modal', function () {
             handleEnterDiv(mdlKardexPorProveedor);
             mdlKardexPorProveedor.find("input").val("");
@@ -70,13 +80,43 @@
             onVerificarTpKardex($(this));
         });
 
-        mdlKardexPorProveedor.find('#btnImprimir').on("click", function () {
-            var Art = parseInt(mdlKardexPorProveedor.find('#ProveedorKardex').val());
+        mdlKardexPorProveedor.find('#ProveedorKardex').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtprv = $(this).val();
+                if (txtprv) {
+                    $.getJSON(base_url + 'index.php/ReportesKardex/onVerificarProveedor', {Proveedor: txtprv}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlKardexPorProveedor.find("#sProveedorKardex")[0].selectize.addItem(txtprv, true);
+                            mdlKardexPorProveedor.find('#btnImprimir').focus();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlKardexPorProveedor.find("#sProveedorKardex")[0].selectize.clear(true);
+                                mdlKardexPorProveedor.find('#ProveedorKardex').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
 
-            if (Art > 0) {
+        mdlKardexPorProveedor.find('#sProveedorKardex').change(function () {
+            var txtprv = $(this).val();
+            if (txtprv) {
+                mdlKardexPorProveedor.find('#ProveedorKardex').val(txtprv);
+                mdlKardexPorProveedor.find('#btnImprimir').focus();
+            }
+        });
+
+        mdlKardexPorProveedor.find('#btnImprimir').on("click", function () {
+            var PROV = parseInt(mdlKardexPorProveedor.find('#ProveedorKardex').val());
+
+            if (PROV > 0) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                 var frm = new FormData(mdlKardexPorProveedor.find("#frmCaptura")[0]);
-                var nombre_prov = mdlKardexPorProveedor.find("#ProveedorKardex option:selected").text();
+                var nombre_prov = mdlKardexPorProveedor.find('#ProveedorKardex').val() + ' ' + mdlKardexPorProveedor.find("#sProveedorKardex option:selected").text();
                 frm.append('Nombre', nombre_prov);
                 $.ajax({
                     url: base_url + 'index.php/ReportesKardex/onReporteKardexPorProveedor',
@@ -121,7 +161,7 @@
                             text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                             icon: "error"
                         }).then((action) => {
-                            mdlKardexPorProveedor.find('#ProveedorKardex')[0].selectize.focus();
+                            mdlKardexPorProveedor.find('#ProveedorKardex').focus();
                         });
                     }
                     HoldOn.close();
@@ -132,10 +172,10 @@
             } else {
                 swal({
                     title: "ATENCIÓN",
-                    text: "DEBES DE SELECCIONAR UN ARTÍCULO",
+                    text: "DEBES DE SELECCIONAR UN PROV",
                     icon: "error"
                 }).then((action) => {
-                    mdlKardexPorProveedor.find('#ProveedorKardex')[0].selectize.focus();
+                    mdlKardexPorProveedor.find('#ProveedorKardex').focus();
                 });
             }
         });
@@ -145,7 +185,7 @@
     function onVerificarTpKardex(v) {
         var tp = parseInt($(v).val());
         if (tp === 1 || tp === 2) {
-            mdlKardexPorProveedor.find('#ProveedorKardex')[0].selectize.focus();
+            mdlKardexPorProveedor.find('#ProveedorKardex').focus();
             getProveedoresKardex(tp);
         } else {
             swal({
@@ -163,11 +203,11 @@
     }
 
     function getProveedoresKardex(tp) {
-        mdlKardexPorProveedor.find("#ProveedorKardex")[0].selectize.clear(true);
-        mdlKardexPorProveedor.find("#ProveedorKardex")[0].selectize.clearOptions();
+        mdlKardexPorProveedor.find("#sProveedorKardex")[0].selectize.clear(true);
+        mdlKardexPorProveedor.find("#sProveedorKardex")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReportesKardex/getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                mdlKardexPorProveedor.find("#ProveedorKardex")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
+                mdlKardexPorProveedor.find("#sProveedorKardex")[0].selectize.addOption({text: (tp === 1) ? v.ProveedorF : v.ProveedorI, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

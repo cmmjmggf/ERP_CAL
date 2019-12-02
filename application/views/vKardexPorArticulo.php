@@ -21,14 +21,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-12">
+                        <div class="col-12">
                             <label>Artículo</label>
-                            <select class="form-control form-control-sm" id="Articulo" name="Articulo" >
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -45,8 +51,12 @@
     var mdlKardexPorArticulo = $('#mdlKardexPorArticulo');
 
     $(document).ready(function () {
+        mdlKardexPorArticulo.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         validacionSelectPorContenedor(mdlSalidasMaquilasPorDia);
-        setFocusSelectToInputOnChange('#Articulo', '#btnImprimir', mdlKardexPorArticulo);
+        setFocusSelectToInputOnChange('#sArticulo', '#btnImprimir', mdlKardexPorArticulo);
 
         mdlKardexPorArticulo.on('shown.bs.modal', function () {
             handleEnterDiv(mdlKardexPorArticulo);
@@ -60,6 +70,37 @@
             mdlKardexPorArticulo.find('#FechaFin').val(getLastDayMonth());
             mdlKardexPorArticulo.find('#FechaIni').focus();
         });
+
+        mdlKardexPorArticulo.find('#Articulo').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(base_url + 'index.php/ReportesKardex/onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlKardexPorArticulo.find("#sArticulo")[0].selectize.addItem(txtart, true);
+                            mdlKardexPorArticulo.find('#btnImprimir').focus();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlKardexPorArticulo.find("#sArticulo")[0].selectize.clear(true);
+                                mdlKardexPorArticulo.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        mdlKardexPorArticulo.find('#sArticulo').change(function () {
+            var txtart = $(this).val();
+            if (txtart) {
+                mdlKardexPorArticulo.find('#Articulo').val(txtart);
+                mdlKardexPorArticulo.find('#btnImprimir').focus();
+            }
+        });
+
         mdlKardexPorArticulo.find('#btnImprimir').on("click", function () {
             mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', true);
             var Art = parseInt(mdlKardexPorArticulo.find('#Articulo').val());
@@ -109,11 +150,11 @@
     });
 
     function getArticulosKardexPorArt() {
-        mdlKardexPorArticulo.find("#Articulo")[0].selectize.clear(true);
-        mdlKardexPorArticulo.find("#Articulo")[0].selectize.clearOptions();
+        mdlKardexPorArticulo.find("#sArticulo")[0].selectize.clear(true);
+        mdlKardexPorArticulo.find("#sArticulo")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReportesKardex/getArticulos').done(function (data) {
             $.each(data, function (k, v) {
-                mdlKardexPorArticulo.find("#Articulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
+                mdlKardexPorArticulo.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

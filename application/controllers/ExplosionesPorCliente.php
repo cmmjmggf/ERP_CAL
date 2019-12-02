@@ -11,6 +11,24 @@ class ExplosionesPorCliente extends CI_Controller {
                 ->helper('Explosiones_helper')->helper('file');
     }
 
+    public function getClientes() {
+        try {
+            print json_encode($this->db->select("C.Clave AS Clave, CONCAT(C.RazonS) AS Cliente", false)
+                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente ' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onReporteExplosionSemanaSuelaDesglose() {
         $Tipo = $this->input->post('Tipo');
         $Maq = $this->input->post('Maq');

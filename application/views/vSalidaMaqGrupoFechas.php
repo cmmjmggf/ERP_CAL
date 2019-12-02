@@ -118,7 +118,7 @@
     });
 
     function getGrupos() {
-        $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGrupos').done(function (data) {
+        $.getJSON(base_url + 'index.php/DocDirecConAfectacion/getGruposConClave').done(function (data) {
             $.each(data, function (k, v) {
                 mdlSalidaMaqGrupoFechas.find("#Grupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});
             });

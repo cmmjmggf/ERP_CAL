@@ -13,8 +13,8 @@ class ReportesKardex_model extends CI_Model {
     public function getProveedores() {
         try {
             return $this->db->select("CONVERT(P.Clave, UNSIGNED INTEGER) AS ID, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreI,'')) AS ProveedorI, "
-                                    . "CONCAT(P.Clave,' ',IFNULL(P.NombreF,'')) AS ProveedorF ", false)
+                                    . "CONCAT(IFNULL(P.NombreI,'')) AS ProveedorI, "
+                                    . "CONCAT(IFNULL(P.NombreF,'')) AS ProveedorF ", false)
                             ->from("proveedores AS P")
                             ->order_by("ID", "ASC")
                             ->get()->result();
@@ -26,7 +26,7 @@ class ReportesKardex_model extends CI_Model {
     public function getArticulos() {
         try {
             return $this->db->select("CONVERT(A.Clave, UNSIGNED INTEGER) AS Clave , "
-                                    . "CONCAT(A.Clave,' ',A.Descripcion) AS Articulo "
+                                    . "CONCAT(A.Descripcion) AS Articulo "
                                     . " ", false)
                             ->from("articulos AS A")
                             ->order_by("Clave", "ASC")
@@ -140,8 +140,8 @@ class ReportesKardex_model extends CI_Model {
     public function getDoctosByProveedor($Proveedor, $fecha, $aFecha, $Texto_Mes_Anterior) {
         try {
             $this->db->query("SET sql_mode = '';");
-            return $this->db->select("(SELECT $Texto_Mes_Anterior FROM articulos WHERE Clave = MA.Articulo) AS SaldoInicial,  "
-                                    . "(SELECT P$Texto_Mes_Anterior FROM articulos WHERE Clave = MA.Articulo) AS PrecioInicial, "
+            return $this->db->select("(SELECT $Texto_Mes_Anterior FROM articulos WHERE Clave = MA.Articulo limit 1) AS SaldoInicial,  "
+                                    . "(SELECT P$Texto_Mes_Anterior FROM articulos WHERE Clave = MA.Articulo limit 1) AS PrecioInicial, "
                                     . "CAST(A.Grupo AS SIGNED) AS ClaveGrupo, "
                                     . "MA.Articulo AS ClaveArt, A.Descripcion AS Articulo, "
                                     . "MA.DocMov, "
@@ -149,12 +149,12 @@ class ReportesKardex_model extends CI_Model {
                                     . "CASE "
                                     . "WHEN MA.TipoMov ='EXC' "
                                     . "THEN "
-                                    . "(select Maq from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' ) "
+                                    . "(select Maq from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' limit 1 ) "
                                     . "ELSE MA.Maq END AS Maq, "
                                     . "CASE "
                                     . "WHEN MA.TipoMov ='EXC' "
                                     . "THEN "
-                                    . "(select Sem from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' ) "
+                                    . "(select Sem from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' limit 1 ) "
                                     . "ELSE MA.Sem END AS Sem, "
                                     . "MA.TipoMov, MA.FechaMov, MA.PrecioMov, MA.Subtotal,"
                                     . "STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") AS FechaOrd,"

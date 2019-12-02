@@ -72,6 +72,14 @@ class DocDirecConAfectacion extends CI_Controller {
         }
     }
 
+    public function getGruposConClave() {
+        try {
+            print json_encode($this->DocDirectos_model->getGrupos());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getTipoCont() {
         try {
             print json_encode($this->DocDirectos_model->getTipoCont($this->input->get('Grupo')));
