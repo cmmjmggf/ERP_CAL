@@ -109,7 +109,7 @@ class GeneraCostosVenta extends CI_Controller {
 
                     $Tejida = $this->db->query("select sum(CostoVTA) as tejida "
                                     . "from fraccionesxestilo "
-                                    . "where estilo = '9281' and AfectaCostoVTA = 1 and fraccion  in ('401','402','403'); ")->result()[0]->tejida;
+                                    . "where estilo = '$estilo' and AfectaCostoVTA = 1 and fraccion  in ('401','402','403'); ")->result()[0]->tejida;
 
                     //Nos traemos los parametros fijos GASTOS etc.
                     $ParamFijos = $this->db->query("SELECT * FROM costofijo where lista = $lista ")->result();
