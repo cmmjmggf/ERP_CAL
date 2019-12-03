@@ -118,25 +118,35 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
 
     public function getPedidosXFacturar() {
         try {
-            $xxx = $this->input->get();
-            $this->db->select("P.ID, P.Control AS CONTROL, 
-                                P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
-                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
-                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
-                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
-                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
-                    ->from("pedidox AS P")
-                    ->where_not_in("P.Control", array(0, 1));
+//            $xxx = $this->input->get();
+//            $this->db->select("P.ID, P.Control AS CONTROL, 
+//                                P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
+//                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
+//                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
+//                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
+//                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
+//                    ->from("pedidox AS P")
+//                    ->where_not_in("P.Control", array(0, 1));
+//
+//            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+//            if (!in_array($xxx['CLIENTE'], $people)) {
+//                $this->db->where_not_in("P.stsavan", array(13, 14));
+//            }
+//            if ($xxx['CLIENTE'] !== '') {
+//                $this->db->where("P.Cliente", $xxx['CLIENTE']);
+//            }
+//            $this->db->order_by("P.FechaRecepcion", "DESC");
+//            print json_encode($this->db->get()->result());
 
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
-            if (!in_array($xxx['CLIENTE'], $people)) {
-                $this->db->where_not_in("P.stsavan", array(13, 14));
-            }
-            if ($xxx['CLIENTE'] !== '') {
-                $this->db->where("P.Cliente", $xxx['CLIENTE']);
-            }
-            $this->db->order_by("P.FechaRecepcion", "DESC");
-            print json_encode($this->db->get()->result());
+            $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
+                D.cargoa AS CARGOA, 
+                D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
+                D.par06 AS P6, D.par07 AS P7, D.par08 AS P8, D.par09 AS P9, D.par10 AS P10, 
+                D.par11 AS P11, D.par12 AS P12, D.par13 AS P13, D.par14 AS P14, D.par15 AS P15, 
+                D.par16 AS P16, D.par17 AS P17, D.par18 AS P18, D.par19 AS P19, D.par20 AS P20, 
+                D.par21 AS P21, D.par22 AS P22 FROM devolucionnp AS D ORDER BY D.fechadev DESC")->result();
+             print json_encode($dt);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

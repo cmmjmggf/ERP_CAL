@@ -59,12 +59,20 @@ class DevolucionesDeClientes extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-            print json_encode($this->db->query("SELECT P.*,P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT P.*,P.Clave AS CLAVE_PEDIDO, "
+                                    . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
+                                    . "P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
                                     . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, P.EstiloT AS ESTILO_TEXT "
-                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}'")->result());
+                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+                                    . "P.EstiloT AS ESTILO_TEXT,"
+                                    . "F.par01, F.par02, F.par03, F.par04, F.par05, "
+                                    . "F.par06, F.par07, F.par08, F.par09, F.par10, "
+                                    . "F.par11, F.par12, F.par13, F.par14, F.par15, "
+                                    . "F.par16, F.par17, F.par18, F.par19, F.par20, F.par21, F.par22 "
+                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave INNER JOIN facturacion AS F ON P.Control = F.contped "
+                                    . "WHERE P.Control = '{$x['CONTROL']}' AND F.ID = {$x['ID']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -153,9 +161,9 @@ class DevolucionesDeClientes extends CI_Controller {
             ));
             $this->db->insert('devolucionnp', $pp);
             $l = new Logs("DEVOLUCIONES PENDIENTES POR APLICAR", "HA CREADO UNA DEVOLUCION DEL CLIENTE {$x["CLIENTE"]} CON EL CONTROL {$x['CONTROL']} DE {$x["PARES_DEVUELTOS"]} PAR(ES) POR $ {$subtotal}.", $this->session);
-       
+
 //                SE CONSIDERA COMO PASO 1 PARA UNA DEVOLUCION
-                 } catch (Exception $exc) {
+        } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }

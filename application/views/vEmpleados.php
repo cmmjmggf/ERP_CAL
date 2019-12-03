@@ -101,13 +101,13 @@
                                         <label for="NumFis" >N-fis*</label>
                                         <input type="text" class="form-control form-control-sm" id="NumFis" name="NumFis" required >
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-4" align="center">
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-4 d-none" align="center">
                                         <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                                             <input type="checkbox" class="custom-control-input selectNotEnter" id="Egresos" name="Egresos" style="cursor: pointer !important;">
                                             <label class="custom-control-label text-danger labelCheck" for="Egresos" style="cursor: pointer !important;">Egresos</label>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-4" align="center">
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-4 d-none" align="center">
                                         <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                                             <input type="checkbox" class="custom-control-input selectNotEnter" id="Activos" name="Activos" style="cursor: pointer !important;">
                                             <label class="custom-control-label text-danger labelCheck" for="Activos" style="cursor: pointer !important;">Activos</label>
@@ -437,12 +437,21 @@
         pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').on('keydown', function (e) {
             if ($(this).val() && e.keyCode === 13) {
                 onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
+            } else {
+                onBuscar("", e, tblEmpleados, Empleados, $(this), 1);
             }
         });
+
         NumeroEmpleado.unbind();
-        NumeroEmpleado.on('keydown keyup', function (e) {
-            onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
+
+        NumeroEmpleado.on('keydown', function (e) {
+            if ($(this).val()) {
+                onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
+            } else {
+                onBuscar("", e, tblEmpleados, Empleados, $(this), 1);
+            }
         });
+
         btnVerTodos.click(function () {
             getRecords(2);
         });
@@ -937,8 +946,9 @@
             } else {
                 onBeep(2);
                 HoldOn.close();
-                iMsg('EMPLEADO NO ENCONTRADO O ESTA DADO DE BAJA. HAGA CLIC EN "VER TODOS" Y REALICE LA BUSQUEDA NUEVAMENTE.', 'w', function () {
+                onCampoInvalido(pnlDatos, 'EMPLEADO NO ENCONTRADO O ESTA DADO DE BAJA. HAGA CLIC EN "VER TODOS" Y REALICE LA BUSQUEDA NUEVAMENTE.', function () {
                     input.focus().select();
+                    tbl.DataTable().column(index_column).search("").draw();
                 });
             }
         } else {
