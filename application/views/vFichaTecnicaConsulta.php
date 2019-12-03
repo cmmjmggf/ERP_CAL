@@ -414,17 +414,29 @@
             if (data.length > 0) {
                 var dtm = data[0];
                 var vp = pnlDetalle.find("#VistaPrevia");
-                if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                    var ext = getExt(dtm.Foto);
-                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                        vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail img-fluid" width="400px" />');
+                var esf = '<?php print base_url('uploads/Estilos/esf.jpg'); ?>';
+                $.ajax({
+                    url: base_url + dtm.Foto,
+                    type: 'HEAD',
+                    error: function ()
+                    {
+                        vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                    },
+                    success: function ()
+                    {
+                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                            var ext = getExt(dtm.Foto);
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail img-fluid" width="400px" />');
+                            }
+                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                            }
+                        } else {
+                            vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                        }
                     }
-                    if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                        vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                    }
-                } else {
-                    vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                }
+                });
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -444,5 +456,5 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 </style>

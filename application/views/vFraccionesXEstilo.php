@@ -587,8 +587,15 @@
         getFracciones();
         handleEnterDiv(pnlTablero);
         handleEnterDiv(pnlDatos);
+        handleEnterDiv(pnlDetalle);
         handleEnterDiv(mdlEditarRenglon);
         handleEnterDiv(mdlAumentaPrecioFracciones);
+
+        pnlTablero.find("#tblFraccionesXEstilo_filter").find('input[type="search"]').on('keydown', function (e) {
+            if ($(this).val() && e.keyCode === 13) {
+                getEstiloFraccionByID($(this).val());
+            }
+        });
 
     });
 
@@ -809,7 +816,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            keys: true,
+            keys: false,
             "bSort": true,
             "aaSorting": [
                 [0, 'desc']/*ID*/
@@ -827,27 +834,31 @@
             $(this).addClass("success");
             var dtm = FraccionesXEstilo.row(this).data();
             temp = dtm.EstiloId;
-            $.getJSON(master_url + 'getFraccionXEstiloByEstilo', {Estilo: dtm.EstiloId}).done(function (data, x, jq) {
-                pnlDatos.find("input").val("");
-                $.each(pnlDatos.find("select"), function (k, v) {
-                    pnlDatos.find("select")[k].selectize.clear(true);
-                });
-                Estilo[0].selectize.disable();
-                pnlDatos.find("#FechaAlta").addClass('disabledForms');
-                pnlDatos.find("#Estilo")[0].selectize.setValue(data[0].Estilo);
-                pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
-                getFotoXEstilo(dtm.EstiloId);
-                onVerificarEstiloBloqueadoCostos(dtm.EstiloId);
-                pnlTablero.addClass("d-none");
-                pnlDetalle.removeClass('d-none');
-                pnlControlesDetalle.removeClass('d-none');
-                pnlDatos.removeClass('d-none');
-                btnImprimirFraccionesXEstilo.removeClass('d-none');
-                pnlControlesDetalle.find("[name='Departamento']")[0].selectize.focus();
-            }).fail(function (x, y, z) {
-                console.log(x, y, z);
-            }).always(function () {
+            getEstiloFraccionByID(temp);
+
+        });
+    }
+    function getEstiloFraccionByID(clave) {
+        $.getJSON(master_url + 'getFraccionXEstiloByEstilo', {Estilo: clave}).done(function (data, x, jq) {
+            pnlDatos.find("input").val("");
+            $.each(pnlDatos.find("select"), function (k, v) {
+                pnlDatos.find("select")[k].selectize.clear(true);
             });
+            Estilo[0].selectize.disable();
+            pnlDatos.find("#FechaAlta").addClass('disabledForms');
+            pnlDatos.find("#Estilo")[0].selectize.setValue(data[0].Estilo);
+            pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
+            getFotoXEstilo(clave);
+            onVerificarEstiloBloqueadoCostos(clave);
+            pnlTablero.addClass("d-none");
+            pnlDetalle.removeClass('d-none');
+            pnlControlesDetalle.removeClass('d-none');
+            pnlDatos.removeClass('d-none');
+            btnImprimirFraccionesXEstilo.removeClass('d-none');
+
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
         });
     }
     var seguridad;
@@ -863,6 +874,7 @@
                         //Acciones
                     });
                 } else {
+                    pnlControlesDetalle.find("[name='Departamento']")[0].selectize.focus();
                     btnAgregar.removeClass('d-none');
                     btnEliminar.removeClass("d-none");
                     getFraccionesXEstiloDetalleByID(Estilo);
@@ -937,17 +949,29 @@
             if (data.length > 0) {
                 var dtm = data[0];
                 var vp = pnlDetalle.find("#VistaPrevia");
-                if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                    var ext = getExt(dtm.Foto);
-                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                        vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail img-fluid" width="400px" />');
+                var esf = '<?php print base_url('uploads/Estilos/esf.jpg'); ?>';
+                $.ajax({
+                    url: base_url + dtm.Foto,
+                    type: 'HEAD',
+                    error: function ()
+                    {
+                        vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                    },
+                    success: function ()
+                    {
+                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                            var ext = getExt(dtm.Foto);
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail img-fluid" width="400px" />');
+                            }
+                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
+                            }
+                        } else {
+                            vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                        }
                     }
-                    if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                        vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                    }
-                } else {
-                    vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                }
+                })
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);

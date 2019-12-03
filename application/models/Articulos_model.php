@@ -52,7 +52,7 @@ class Articulos_model extends CI_Model {
 
     public function getArticuloByID($ID) {
         try {
-            return $this->db->select("A.*", false)->from("articulos AS A")->where('A.ID', $ID)->get()->result();
+            return $this->db->select("A.*", false)->from("articulos AS A")->where('A.Clave', $ID)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -648,6 +648,7 @@
         handleEnterDiv(pnlControlesDetalle);
         handleEnterDiv(mdlEditarArticulo);
 
+
     });
 
 

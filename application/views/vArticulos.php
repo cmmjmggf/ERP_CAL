@@ -257,7 +257,7 @@
 
         pnlTablero.find("#tblArticulos_filter").find('input[type="search"]').on('keydown', function (e) {
             if ($(this).val() && e.keyCode === 13) {
-                onBuscar($(this).val(), e, tblArticulos, Articulos, $(this), 1);
+                getArticuloByID($(this).val());
             }
         });
 
@@ -535,42 +535,10 @@
             pnlDatosDetalle.addClass("d-none");
             temp = 0;
             ClaveArticulo = 0;
-            Articulos.clear().draw();
             $('#tblArticulos_filter input[type=search]').focus().select();
         });
     });
 
-    function onBuscar(search_value, evt, tbl, objeto, input, index_column) {
-        tbl.DataTable().column(index_column).search(search_value).draw();
-        if (evt.keyCode === 13) {
-            HoldOn.open({
-                theme: 'sk-rect',
-                message: 'Buscando...'
-            });
-            tbl.DataTable().column(index_column).search("^" + search_value + "$", true, false, true).draw();
-            var row_count = objeto.page.info().recordsDisplay;
-            if (row_count > 0) {
-                $.each(tbl.find("tbody > tr"), function (k, v) {
-                    var row = objeto.row($(this)).data();
-                    temp = parseInt(row.ID);
-                    ClaveArticulo = parseInt(row.Clave);
-                    return false;
-                });
-                getArticuloByID(temp, ClaveArticulo);
-            } else {
-                onBeep(2);
-                HoldOn.close();
-                iMsg('REGISTRO NO ENCONTRADO O ESTA DADO DE BAJA.', 'w', function () {
-                    tbl.DataTable().column(index_column).search("").draw();
-                    input.focus().select();
-                });
-            }
-        } else {
-            if (input.val().length <= 0) {
-                tbl.DataTable().column(index_column).search("").draw();
-            }
-        }
-    }
 
     function init() {
         getRecords();
@@ -757,54 +725,58 @@
             tblArticulos.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = Articulos.row(this).data();
-            temp = parseInt(dtm.ID);
             ClaveArticulo = parseInt(dtm.Clave);
-            getArticuloByID(temp, ClaveArticulo);
+            getArticuloByID(ClaveArticulo);
 
         });
 
     }
 
-    function getArticuloByID(temp, ClaveArticulo) {
-        $.getJSON(master_url + 'getArticuloByID', {ID: temp}).done(function (data) {
-            pnlDatos.find("input").val("");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
-            });
-            $.each(pnlDatosDetalle.find("select"), function (k, v) {
-                pnlDatosDetalle.find("select")[k].selectize.clear(true);
-            });
-            $.each(data[0], function (k, v) {
-                pnlDatos.find("[name='" + k + "']").val(v);
-                if (pnlDatos.find("[name='" + k + "']").is('select')) {
-                    pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
+    function getArticuloByID(ClaveArticulo) {
+        $.getJSON(master_url + 'getArticuloByID', {ID: ClaveArticulo}).done(function (data) {
+            if (data.length > 0) {
+                pnlDatos.find("input").val("");
+                $.each(pnlDatos.find("select"), function (k, v) {
+                    pnlDatos.find("select")[k].selectize.clear(true);
+                });
+                $.each(pnlDatosDetalle.find("select"), function (k, v) {
+                    pnlDatosDetalle.find("select")[k].selectize.clear(true);
+                });
+                $.each(data[0], function (k, v) {
+                    pnlDatos.find("[name='" + k + "']").val(v);
+                    if (pnlDatos.find("[name='" + k + "']").is('select')) {
+                        pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
+                    }
+                });
+                btnIgualaPrecios.removeClass("d-none");
+                btnGeneraPreciosMaq.removeClass("d-none");
+                pnlTablero.addClass("d-none");
+                pnlDatos.removeClass('d-none');
+                pnlDatosDetalle.removeClass('d-none');
+                pnlDatos.find("#Departamento")[0].selectize.focus();
+
+                /*DESHABILITAR CAMPOS CLAVE DEL ARTICULO*/
+                if (seg === 0) {
+                    pnlDatos.find("#UnidadMedida")[0].selectize.disable();
+                    pnlDatos.find("#PrecioUno").prop("readonly", true);
+                    pnlDatos.find("#PrecioDos").prop("readonly", true);
+                    pnlDatos.find("#PrecioTres").prop("readonly", true);
                 }
-            });
-            btnIgualaPrecios.removeClass("d-none");
-            btnGeneraPreciosMaq.removeClass("d-none");
-            pnlTablero.addClass("d-none");
-            pnlDatos.removeClass('d-none');
-            pnlDatosDetalle.removeClass('d-none');
-            pnlDatos.find("#Departamento")[0].selectize.focus();
+                var user = '<?php print $_SESSION["USERNAME"]; ?>';
 
-            /*DESHABILITAR CAMPOS CLAVE DEL ARTICULO*/
-            if (seg === 0) {
-                pnlDatos.find("#UnidadMedida")[0].selectize.disable();
-                pnlDatos.find("#PrecioUno").prop("readonly", true);
-                pnlDatos.find("#PrecioDos").prop("readonly", true);
-                pnlDatos.find("#PrecioTres").prop("readonly", true);
+                if (user === 'ARABAR') {
+                    pnlDatos.find("#PrecioUno").prop("readonly", false);
+                    pnlDatos.find("#PrecioDos").prop("readonly", false);
+                    pnlDatos.find("#PrecioTres").prop("readonly", false);
+                }
+
+
+                getDetalleByID(ClaveArticulo);
+            } else {
+                iMsg('NO EXISTE EL REGISTRO', 'w', function () {
+                    $('#tblArticulos_filter input[type=search]').val('').focus().select();
+                });
             }
-            var user = '<?php print $_SESSION["USERNAME"]; ?>';
-
-            if (user === 'ARABAR') {
-                pnlDatos.find("#PrecioUno").prop("readonly", false);
-                pnlDatos.find("#PrecioDos").prop("readonly", false);
-                pnlDatos.find("#PrecioTres").prop("readonly", false);
-            }
-
-
-            getDetalleByID(ClaveArticulo);
-
 
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
