@@ -311,7 +311,7 @@ P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES, P.Maquila AS MAQUILA, P.Seman
 //            return $this->db->get()->result();
 
             $sql = $this->db->get();
-            PRINT $this->db->last_query();
+//            PRINT $this->db->last_query();
             return $sql->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

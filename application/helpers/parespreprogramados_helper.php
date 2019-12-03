@@ -310,13 +310,136 @@ class PDF extends FPDF {
                 /* FIN ENCABEZADO FIJO */
                 break;
             case 3:
+                /* ENCABEZADO FIJO */
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Calibri', 'B', 10);
+                $this->SetY(10);
+                $this->Rect(10, 10, 259, 12.5);
+                $this->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
+                $this->SetX(10);
+                //$this->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por linea"), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(160);
+                $this->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $this->SetX(180);
+                $this->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
+                $anchos = array(20/* 0 */, 103/* 1 */, 15/* 2 */, 15/* 3 */, 40/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
+                $spacex = 10;
+                $bordes = 1;
+                /* SUB ENCABEZADO */
+                $this->SetY($this->GetY() + $alto_celda + .5);
+                $this->SetX($spacex);
+                $this->Cell($anchos[0], $alto_celda, 'Linea', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[0];
+                $this->SetX($spacex);
+                $this->Cell($anchos[1], $alto_celda, 'Cliente', $bordes/* BORDE */, 0/* SALTO */, 'L');
+                $spacex += $anchos[1];
+                $this->SetX($spacex);
+                $this->Cell($anchos[2], $alto_celda, 'Pedido', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[2];
+                $this->SetX($spacex);
+                $this->Cell($anchos[3], $alto_celda, 'Estilo', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[3];
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Color', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[4];
+                $this->SetX($spacex);
+                $this->Cell($anchos[5], $alto_celda, 'Fecha-Ent', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[5];
+                $this->SetX($spacex);
+                $this->Cell($anchos[6], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[6];
+                $this->SetX($spacex);
+                $this->Cell($anchos[7], $alto_celda, 'Maq', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[7];
+                $this->SetX($spacex);
+                $this->Cell($anchos[8], $alto_celda, 'Sem', $bordes/* BORDE */, 1/* SALTO */, 'C');
+                /* FIN SUB ENCABEZADO */
+                /* FIN ENCABEZADO FIJO */
                 break;
-            case 4:
+            case 4: 
+                /* ENCABEZADO FIJO */
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Calibri', 'B', 10);
+                $this->SetY(10);
+                $this->Rect(10, 10, 195.9, 12.5);
+                $this->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
+                $this->SetX(10);
+                //$this->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode("Reporte de pedidos en preprogramación por maquila"), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(160);
+                $this->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $this->SetX(180);
+                $this->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
+                $anchos = array(90.9/* 0 */, 30/* 1 */, 25/* 2 */, 25/* 3 */, 25/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
+                $spacex = 10;
+                $bordes = 1;
+                /* SUB ENCABEZADO */
+                $this->SetY($this->GetY() + $alto_celda + .5);
+                $this->SetX($spacex);
+                $this->Cell($anchos[0], $alto_celda, 'Maquila', $bordes/* BORDE */, 0/* SALTO */, 'L');
+                $spacex += $anchos[0];
+                $this->SetX($spacex);
+                $this->Cell($anchos[1], $alto_celda, 'Capacidad', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[1];
+                $this->SetX($spacex);
+                $this->Cell($anchos[2], $alto_celda, 'Semana', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[2];
+                $this->SetX($spacex);
+                $this->Cell($anchos[3], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[3];
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Diferencia', $bordes/* BORDE */, 1/* SALTO */, 'C');
+                /* FIN SUB ENCABEZADO */
+                /* FIN ENCABEZADO FIJO */
                 break;
             case 5:
+                /* ENCABEZADO FIJO */
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Calibri', 'B', 10);
+                $this->SetY(10);
+                $this->Rect(10, 10, 195.9, 12.5);
+                $this->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
+                $this->SetX(10);
+                //$this->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(40);
+                $this->Cell(229, $alto_celda, utf8_decode("Reporte de pedidos en preprogramación por maquila"), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $this->SetX(160);
+                $this->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $this->SetX(180);
+                $this->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
+                $anchos = array(90.9/* 0 */, 30/* 1 */, 25/* 2 */, 25/* 3 */, 25/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
+                $spacex = 10;
+                $bordes = 1;
+                /* SUB ENCABEZADO */
+                $this->SetY($this->GetY() + $alto_celda + .5);
+                $this->SetX($spacex);
+                $this->Cell($anchos[0], $alto_celda, 'Maquila', $bordes/* BORDE */, 0/* SALTO */, 'L');
+                $spacex += $anchos[0];
+                $this->SetX($spacex);
+                $this->Cell($anchos[1], $alto_celda, 'Capacidad', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[1];
+                $this->SetX($spacex);
+                $this->Cell($anchos[2], $alto_celda, 'Semana', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[2];
+                $this->SetX($spacex);
+                $this->Cell($anchos[3], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $spacex += $anchos[3];
+                $this->SetX($spacex);
+                $this->Cell($anchos[4], $alto_celda, 'Diferencia', $bordes/* BORDE */, 1/* SALTO */, 'C');
+                /* FIN SUB ENCABEZADO */
+                /* FIN ENCABEZADO FIJO */
                 break;
         }
     }

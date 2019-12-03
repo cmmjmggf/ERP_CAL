@@ -285,10 +285,10 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->SetWidths(array(15/* 0 */, 40/* 1 */, 20/* 2 */));
                 $pdf->RowNoBorder(array(utf8_decode($v->CLAVE_ESTILO)/* 0 */, utf8_decode($v->COLOR)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 65, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2, 
-                        $x->post('CLIENTE'), $x->post('ESTILO'), 
-                        $x->post('LINEA'), $x->post('MAQUILA'), 
-                        $x->post('SEMANA'), $x->post('FECHA'), 
+                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_ESTILO, 2,
+                        $x->post('CLIENTE'), $x->post('ESTILO'),
+                        $x->post('LINEA'), $x->post('MAQUILA'),
+                        $x->post('SEMANA'), $x->post('FECHA'),
                         $x->post('FECHAF'), $xx['ANIO']);
                 var_dump($PARES_PREPROGRAMADOS);
                 exit(0);
@@ -363,58 +363,9 @@ class ParesPreProgramados extends CI_Controller {
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
+            $pdf->setTipoEncabezado(3);
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
-            /* ENCABEZADO FIJO */
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->SetY(10);
-            $pdf->Rect(10, 10, 259, 12.5);
-            $pdf->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
-            $pdf->SetX(10);
-            //$pdf->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode("Pares preprogramados por linea"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(160);
-            $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(180);
-            $pdf->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
-
-            $anchos = array(20/* 0 */, 103/* 1 */, 15/* 2 */, 15/* 3 */, 40/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
-            $spacex = 10;
-            $bordes = 1;
-            /* SUB ENCABEZADO */
-            $pdf->SetY($pdf->GetY() + $alto_celda + .5);
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[0], $alto_celda, 'Linea', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[0];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[1], $alto_celda, 'Cliente', $bordes/* BORDE */, 0/* SALTO */, 'L');
-            $spacex += $anchos[1];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Pedido', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[3], $alto_celda, 'Estilo', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[3];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Color', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[4];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[5], $alto_celda, 'Fecha-Ent', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[5];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[6], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[6];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[7], $alto_celda, 'Maq', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[7];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[8], $alto_celda, 'Sem', $bordes/* BORDE */, 1/* SALTO */, 'C');
-            /* FIN SUB ENCABEZADO */
-            /* FIN ENCABEZADO FIJO */
 
             $pdf->SetFont('Calibri', 'B', 8);
             $Y = 0;
@@ -507,46 +458,9 @@ class ParesPreProgramados extends CI_Controller {
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
+            $pdf->setTipoEncabezado(4);
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
-            /* ENCABEZADO FIJO */
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->SetY(10);
-            $pdf->Rect(10, 10, 195.9, 12.5);
-            $pdf->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
-            $pdf->SetX(10);
-            //$pdf->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode("Reporte de pedidos en preprogramación por maquila"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(160);
-            $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(180);
-            $pdf->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
-
-            $anchos = array(90.9/* 0 */, 30/* 1 */, 25/* 2 */, 25/* 3 */, 25/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
-            $spacex = 10;
-            $bordes = 1;
-            /* SUB ENCABEZADO */
-            $pdf->SetY($pdf->GetY() + $alto_celda + .5);
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[0], $alto_celda, 'Maquila', $bordes/* BORDE */, 0/* SALTO */, 'L');
-            $spacex += $anchos[0];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[1], $alto_celda, 'Capacidad', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[1];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Semana', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[3], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[3];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Diferencia', $bordes/* BORDE */, 1/* SALTO */, 'C');
-            /* FIN SUB ENCABEZADO */
-            /* FIN ENCABEZADO FIJO */
 
             $pdf->SetFont('Calibri', 'B', 8);
             $Y = 0;
@@ -627,7 +541,29 @@ class ParesPreProgramados extends CI_Controller {
         try {
             $z = $this->input->post();
             $xxx = $this->input;
-            $MAQUILAS = $this->pam->getMaquila($this->input->post('MAQUILA'), $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'), $z['ANIO']);
+
+            $this->db->select('M.Clave AS CLAVE_MAQUILA, CONCAT(M.Clave," - ", M.Nombre) AS MAQUILA, M.CapacidadPares AS CAPACIDAD_PARES', false)
+                    ->from('pedidox AS P')
+                    ->join('maquilas AS M', 'P.Maquila = M.Clave')
+                    ->where("P.Control = 0 AND P.Estatus = 'A'", null, false);
+            if ($z['MAQUILA'] !== '') {
+                $this->db->where('M.Clave', $z['MAQUILA']);
+            }
+            if ($z['CLIENTE'] !== '') {
+                $this->db->where("P.Cliente", $z['CLIENTE']);
+            }
+            if ($z['ESTILO'] !== '') {
+                $this->db->where("P.Estilo", $z['ESTILO']);
+            }
+            if ($z['SEMANA'] !== '') {
+                $this->db->where("P.Semana", $z['SEMANA']);
+            }
+            if ($z['ANIO'] !== '') {
+                $this->db->where("P.Ano", $z['ANIO']);
+            }
+            $this->db->group_by(array('M.Nombre'))->order_by('abs(P.Maquila)', 'ASC')->order_by('abs(P.Semana)', 'ASC');
+            $MAQUILAS = $this->db->get()->result();
+
 
             $bordes = 0;
             $alto_celda = 4;
@@ -636,46 +572,10 @@ class ParesPreProgramados extends CI_Controller {
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
+            $pdf->setTipoEncabezado(5);
             $pdf->AddPage();
             $pdf->SetAutoPageBreak(true, 10);
-            /* ENCABEZADO FIJO */
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('Calibri', 'B', 10);
-            $pdf->SetY(10);
-            $pdf->Rect(10, 10, 195.9, 12.5);
-            $pdf->Image($_SESSION["LOGO"], /* LEFT */ 10, 10/* TOP */, /* ANCHO */ 30, 12.5);
-            $pdf->SetX(10);
-            //$pdf->Rect(10, 10, 259, 195); /* DELIMITADOR DE MARGENES */
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(40);
-            $pdf->Cell(229, $alto_celda, utf8_decode("Reporte de pedidos en preprogramación por maquila"), $bordes/* BORDE */, 1/* SALTO */, 'L');
-            $pdf->SetX(160);
-            $pdf->Cell(20, $alto_celda, "Fecha ", $bordes/* BORDE */, 0/* SALTO */, 'R');
-            $pdf->SetX(180);
-            $pdf->Cell(20, $alto_celda, Date('d/m/Y'), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
-            $anchos = array(90.9/* 0 */, 30/* 1 */, 25/* 2 */, 25/* 3 */, 25/* 4 */, 20/* 5 */, 16/* 6 */, 15/* 7 */, 15/* 8 */);
-            $spacex = 10;
-            $bordes = 1;
-            /* SUB ENCABEZADO */
-            $pdf->SetY($pdf->GetY() + $alto_celda + .5);
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[0], $alto_celda, 'Maquila', $bordes/* BORDE */, 0/* SALTO */, 'L');
-            $spacex += $anchos[0];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[1], $alto_celda, 'Capacidad', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[1];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[2], $alto_celda, 'Semana', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[2];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[3], $alto_celda, 'Pares', $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $spacex += $anchos[3];
-            $pdf->SetX($spacex);
-            $pdf->Cell($anchos[4], $alto_celda, 'Diferencia', $bordes/* BORDE */, 1/* SALTO */, 'C');
-            /* FIN SUB ENCABEZADO */
-            /* FIN ENCABEZADO FIJO */
 
             $pdf->SetFont('Calibri', 'B', 8);
             $Y = 0;
@@ -699,7 +599,36 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->setAlto(4);
                 $pdf->RowNoBorder(array(utf8_decode($v->MAQUILA)/* 0 */, utf8_decode($v->CAPACIDAD_PARES)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 130.9, $pdf->GetY());
-                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramadosPorMaquila($v->CLAVE_MAQUILA, $xxx->post('CLIENTE'), $xxx->post('ESTILO'), $xxx->post('MAQUILA'), $xxx->post('SEMANA'), $z['ANIO']);
+                
+                $this->db->select('M.Clave AS CLAVE_MAQUILA, M.Nombre AS MAQUILA, '
+                                . 'M.CapacidadPares AS CAPACIDAD_PARES, P.Semana AS SEMANA, '
+                                . 'SUM(P.Pares) AS PARES, '
+                                . 'M.CapacidadPares - SUM(P.Pares) AS DIFERENCIA', false)
+                        ->from('pedidox AS P')
+                        ->join('maquilas AS M', 'P.Maquila = M.Clave')
+                        ->where('M.Clave', $v->CLAVE_MAQUILA)->where('P.Maquila', $v->CLAVE_MAQUILA);
+
+                if ($z['CLIENTE'] !== '') {
+                    $this->db->where("P.Cliente", $z['CLIENTE']);
+                }
+                if ($z['ESTILO'] !== '') {
+                    $this->db->where("P.Estilo", $z['ESTILO']);
+                }
+                if ($v->CLAVE_MAQUILA !== '') {
+                    $this->db->where("P.Maquila", $v->CLAVE_MAQUILA);
+                }
+                if ($z['ESTILO'] !== '') {
+                    $this->db->where("P.Semana", $z['ESTILO']);
+                }
+                if ($z['ANIO'] !== '') {
+                    $this->db->where("P.Ano", $z['ANIO']);
+                }
+                $this->db->where("P.Control = 0 AND P.stsavan NOT IN(13,14) OR P.Control IS NULL", null, false);
+                $PARES_PREPROGRAMADOS = $this->db->group_by(array('M.Nombre', 'P.Semana'))
+                        ->order_by('abs(P.Maquila)', 'ASC')
+                        ->order_by('abs(P.Semana)', 'ASC');
+
+
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->setAlto(3.5);
