@@ -187,7 +187,7 @@
                             <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                 <label for="Ano" >Año*</label>
                                 <input type="text" id="Ano" onchange="yearValidation(this.value, event, this)"
-                                       name="Ano" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="" >
+                                       name="Ano" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="" required="">
                             </div>
                         </div>
                         <!--SEPTIMO RENGLON-->
@@ -615,24 +615,36 @@
                         }
                     }
                 });
-                if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                    var ext = getExt(dtm.Foto);
-                    foto = true;
+                var esf = '<?php print base_url('uploads/Estilos/esf.jpg'); ?>';
+                $.ajax({
+                    url: base_url + dtm.Foto,
+                    type: 'HEAD',
+                    error: function ()
+                    {
 
-                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                        pnlDatos.find("#VistaPrevia").html('<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img id="trtImagen" src="' + base_url + dtm.Foto + '" class ="img-thumbnail img-fluid rounded mx-auto"  onclick="printImg(\' ' + base_url + dtm.Foto + ' \')"  />');
+                        VistaPrevia.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                    },
+                    success: function ()
+                    {
+                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                            var ext = getExt(dtm.Foto);
+
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                pnlDatos.find("#VistaPrevia").html('<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img id="trtImagen" src="' + base_url + dtm.Foto + '" class ="img-thumbnail img-fluid rounded mx-auto"  onclick="printImg(\' ' + base_url + dtm.Foto + ' \')"  />');
+                            }
+                            if (ext === "PDF" || ext === "Pdf" || ext === "pdf") {
+                                pnlDatos.find("#VistaPrevia").html('<div class="col-md-8"></div> <button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><embed src="' + base_url + dtm.Foto + '" type="application/pdf" width="90%" height="800px" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                            }
+                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                VistaPrevia.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                            }
+                        } else {
+                            VistaPrevia.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                        }
                     }
-                    if (ext === "PDF" || ext === "Pdf" || ext === "pdf") {
-                        pnlDatos.find("#VistaPrevia").html('<div class="col-md-8"></div> <button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><embed src="' + base_url + dtm.Foto + '" type="application/pdf" width="90%" height="800px" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
-                    }
-                    if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                        //pnlDatos.find("#VistaPrevia").html('<h1>NO EXISTE ARCHIVO ADJUNTO</h1>');
-                        VistaPrevia.html(' <img src="img/camera.png" class="img-thumbnail img-fluid rounded mx-auto " >');
-                    }
-                } else {
-                    //pnlDatos.find("#VistaPrevia").html('<h3>NO EXISTE ARCHIVO ADJUNTO</h3>');
-                    VistaPrevia.html(' <img src="img/camera.png" class="img-thumbnail img-fluid rounded mx-auto " >');
-                }
+                });
+
+
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
                 btnEliminar.removeClass("d-none");

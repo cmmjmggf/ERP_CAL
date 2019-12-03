@@ -713,7 +713,7 @@
                     // alert("Year is not proper. Please check");
                     return false;
                 }
-                var current_year = new Date().getFullYear();
+                var current_year = new Date().getFullYear() + 2;
                 if ((year < 2000) || (year > current_year))
                 {
                     $(Input).val('');
@@ -1661,29 +1661,29 @@
         });
     }
 
-    function onReadAndWrite(e) { 
+    function onReadAndWrite(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('readonly', false);
                 break;
             case "TEXTAREA":
                 $(e).attr('readonly', false);
-                break; 
+                break;
         }
     }
 
-    function onReadOnly(e) { 
+    function onReadOnly(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('readonly', true);
                 break;
             case "TEXTAREA":
                 $(e).attr('readonly', true);
-                break; 
+                break;
         }
     }
-    
-    function onEnable(e) { 
+
+    function onEnable(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', false);
@@ -1697,7 +1697,7 @@
         }
     }
 
-    function onDisable(e) { 
+    function onDisable(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', true);
