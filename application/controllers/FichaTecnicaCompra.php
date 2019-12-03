@@ -398,7 +398,7 @@ class FichaTecnicaCompra extends CI_Controller {
             $pdf->SetFont('Calibri', '', 7);
             $pdf->Cell(30, 4, 'MATERIALES', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_CONSUMO_COSTO_GEN, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
 
             $pdf->SetY($Y + 20);
             $pdf->SetX(70);
@@ -418,7 +418,7 @@ class FichaTecnicaCompra extends CI_Controller {
             $pdf->SetX(100);
             $pdf->Cell(10, 4, '$' . number_format($UtilidadPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
 
-            $TOTAL_CONSUMO_COSTO_GEN = $TOTAL_CONSUMO_COSTO_GEN +
+            $TOTAL_CONSUMO_COSTO_GEN = $TOTAL_DESPERDICIO_GEN +
                     $ManoObraPOST +
                     $GastosPOST +
                     $UtilidadPOST;

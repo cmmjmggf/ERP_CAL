@@ -34,8 +34,9 @@ class ConciliaFabricaProduccion extends CI_Controller {
 
 
         $this->db->query("TRUNCATE TABLE concilias_temp ");
-        //Obtenemos todas las DEVOLUCIONES del minialmacen
-        $this->db->query("
+        //Sí Obtenemos todas las DEVOLUCIONES del minialmacen
+        if ($Maq === '1') {
+            $this->db->query("
                 INSERT INTO concilias_temp
                 (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
                  SELECT
@@ -56,6 +57,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 AND MA.Sem = '$Sem'
                 GROUP BY A.Clave, A.Descripcion, MA.tipomov
                 ORDER BY A.Descripcion ASC; ");
+        }
         //Obtenemos todas las salidas a maquilas de movarticulos einsertamos a tabla temporal del reporte
         $this->db->query("
                 INSERT INTO concilias_temp
