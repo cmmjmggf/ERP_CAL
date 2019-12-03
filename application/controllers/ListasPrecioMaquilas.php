@@ -51,9 +51,44 @@ class ListasPrecioMaquilas extends CI_Controller {
         }
     }
 
+    public function getColoresXEstilo() {
+        try {
+            $Estilo = $this->input->get('Estilo');
+            print json_encode($this->db->select("CAST(C.Clave AS SIGNED ) AS ID, CONCAT(C.Descripcion) AS Descripcion ", false)
+                                    ->from('colores AS C')
+                                    ->where('C.Estilo', $Estilo)
+                                    ->where('C.Estatus', 'ACTIVO')
+                                    ->order_by('Descripcion', 'ASC')
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarEstiloColor() {
+        try {
+            $Estilo = $this->input->get('Estilo');
+            $Color = $this->input->get('Color');
+            print json_encode($this->db->query("select clave from colores where estilo = '$Estilo' and clave = '$Color' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarEstilo() {
+        try {
+            $Estilo = $this->input->get('Estilo');
+            print json_encode($this->db->query("select clave, linea from estilos where clave = '$Estilo'  ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
-            print json_encode($this->ListasPrecioMaquilas_model->getRecords());
+            $Maq = $this->input->post('Maq');
+            $Linea = $this->input->post('Linea');
+            print json_encode($this->ListasPrecioMaquilas_model->getRecords($Maq, $Linea));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

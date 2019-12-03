@@ -10,7 +10,7 @@ class ListasPrecioMaquilas_model extends CI_Model {
         parent::__construct();
     }
 
-    public function getRecords() {
+    public function getRecords($Maq, $Linea) {
         try {
             $this->db->select(""
                     . "LPM.ID, "
@@ -22,8 +22,18 @@ class ListasPrecioMaquilas_model extends CI_Model {
                     . "LPM.PrecioVta, "
                     . 'CONCAT(\'<span class="fa fa-trash fa-lg" onclick="onEliminarDetalleByID(\',LPM.ID,\')">\',\'</span>\') AS Eliminar'
                     . "", false);
-            $this->db->from("listapreciosmaquilas LPM")
-                    ->order_by("LPM.Maq", "ASC")
+            $this->db->from("listapreciosmaquilas LPM");
+
+            $this->db->where("LPM.Maq", $Maq);
+
+
+            if ($Linea === '0' || $Linea === '') {
+
+            } else {
+                $this->db->where("LPM.Linea", $Linea);
+            }
+
+            $this->db->order_by("LPM.Maq", "ASC")
                     ->order_by("LPM.Linea", "ASC")
                     ->order_by("LPM.Estilo", "ASC")
                     ->order_by("LPM.Color", "ASC");

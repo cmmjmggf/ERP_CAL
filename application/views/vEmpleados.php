@@ -425,7 +425,8 @@
             numeroEmp = 0, prestamo, zaptda;
 
     $(document).ready(function () {
-        handleEnter();
+        handleEnterDiv(pnlTablero);
+        handleEnterDiv(pnlDatos);
         getRecords(1);
         getEstados();
         getDepartamentos();

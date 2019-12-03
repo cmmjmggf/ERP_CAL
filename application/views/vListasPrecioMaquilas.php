@@ -8,7 +8,7 @@
         <div class="row" id="Encabezado">
             <div class="col-12 col-sm-6 col-md-2 col-xl-1">
                 <label for="" >Maq.*</label>
-                <input type="text" class="form-control form-control-sm" maxlength="3" id="Maq" name="Maq" required="">
+                <input type="text" class="form-control form-control-sm" maxlength="2" id="Maq" name="Maq" required="">
             </div>
             <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-2">
                 <label for="" >Linea*</label>
@@ -18,21 +18,22 @@
             </div>
         </div>
         <div class="row" id="Detalle">
-            <div class="col-12 col-sm-4 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-3 col-md-2 col-lg-1">
                 <label for="Estilo">Estilo*</label>
-                <select class="form-control form-control-sm required " id="Estilo" name="Estilo" required>
-                    <option></option>
-                    <?php
-                    foreach ($this->db->query("SELECT A.Clave, CONCAT(A.Clave, \" - \", A.Descripcion) AS Estilo FROM estilos AS A where estatus = 'ACTIVO' order by A.Clave ASC ")->result() as $k => $v) {
-                        print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
-                    }
-                    ?>
-                </select>
+                <input type="text" class="form-control form-control-sm" maxlength="7" id="Estilo" name="estilo"   >
             </div>
             <div class="col-12 col-sm-4 col-md-4 col-lg-3">
-                <label for="Color">Color*</label>
-                <select class="form-control form-control-sm required " id="Color" name="Color" required>
-                </select>
+                <label>Color</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Color" name="Color" maxlength="2" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sColor" name="sColor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-sm-4 col-md-2 col-xl-1">
                 <label>Corrida</label>
@@ -80,57 +81,107 @@
 
 
     $(document).ready(function () {
-
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         /*FUNCIONES INICIALES*/
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#Linea', '#Estilo', pnlTablero);
-        setFocusSelectToSelectOnChange('#Estilo', '#Color', pnlTablero);
-        setFocusSelectToInputOnChange('#Color', '#Corrida', pnlTablero);
+        setFocusSelectToInputOnChange('#Linea', '#Estilo', pnlTablero);
 
-        handleEnter();
+        //handleEnterDiv(pnlTablero);
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
         });
         pnlTablero.find("#Maq").focus();
         getLineasPM();
-        getRecords();
+        getRecords(0, 0);
         tblListasPrecioMaquilas.find('tbody').on('click', 'tr', function () {
             tblListasPrecioMaquilas.find("tbody tr").removeClass("success");
             $(this).addClass("success");
 
         });
-        pnlTablero.find('#Maq').on('keyup', function () {
-            if ($(this).val()) {
-                ListasPrecioMaquilas.column(1).search('^' + $(this).val() + '$', true, false).draw();
-            } else {
-                ListasPrecioMaquilas.column(1).search('').draw();
+        pnlTablero.find("#Maq").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    onComprobarMaquilas($(this));
+
+                } else {
+                    getRecords(0, 0);
+                }
             }
-        });
-        pnlTablero.find("#Proveedor").change(function () {
-            var tp = pnlTablero.find("#Tp").val();
-            getRecords($(this).val(), tp);
-        });
-        pnlTablero.find("#Maq").change(function () {
-            onComprobarMaquilas($(this));
         });
         pnlTablero.find("#Linea").change(function () {
             if ($(this).val()) {
-
-                ListasPrecioMaquilas.column(2).search('^' + $(this).val() + '$', true, false).draw();
+                getRecords(pnlTablero.find("#Maq").val(), pnlTablero.find("#Linea").val());
             } else {
-                ListasPrecioMaquilas.column(2).search('').draw();
+                getRecords(0, 0);
             }
         });
-        pnlTablero.find("#Estilo").change(function () {
-            if ($(this).val()) {
-                getColoresByEstilo($(this).val());
-                ListasPrecioMaquilas.column(3).search('^' + $(this).val() + '$', true, false).draw();
-            } else {
-                ListasPrecioMaquilas.column(3).search('').draw();
+        pnlTablero.find("#Estilo").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Estilo = $(this).val();
+                if (Estilo) {
+                    $.getJSON(base_url + 'index.php/ListasPrecioMaquilas/onVerificarEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            pnlTablero.find('#Color').val('').focus();
+                            pnlTablero.find("#Linea")[0].selectize.addItem(data[0].linea, true);
+                            getRecords(pnlTablero.find("#Maq").val(), data[0].linea);
+                            getColoresByEstilo(Estilo);
+                            ListasPrecioMaquilas.column(3).search('^' + Estilo + '$', true, false).draw();
+                        } else {
+                            swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#Estilo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                } else {
+                    ListasPrecioMaquilas.column(3).search('').draw();
+                }
+            }
+        });
+        pnlTablero.find("#Color").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var col = $(this).val();
+                if (col) {
+                    var estilo = pnlTablero.find('#Estilo').val();
+                    $.getJSON(base_url + 'index.php/ListasPrecioMaquilas/onVerificarEstiloColor', {Estilo: estilo, Color: col}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            pnlTablero.find('#Corrida').val('').focus();
+                            pnlTablero.find("#sColor")[0].selectize.addItem(col, true);
+                        } else {
+                            swal('ERROR', 'COLOR NO EXISTE EN EL ESTILO', 'warning').then((value) => {
+                                pnlTablero.find("#sColor")[0].selectize.clear(true);
+                                pnlTablero.find('#Color').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#Corrida").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var corr = $(this).val();
+                if (corr) {
+                    pnlTablero.find("#PrecioVta").focus().select();
+                }
+            }
+        });
+        pnlTablero.find("#PrecioVta").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var corr = $(this).val();
+                if (corr) {
+                    btnGuardar.focus();
+                }
             }
         });
         btnGuardar.click(function () {
+            btnGuardar.attr('disabled', true);
             isValid('pnlTablero');
             if (valido) {
 
@@ -151,19 +202,20 @@
                     PrecioVta: PrecioVta,
                     Sem: Sem
                 }).done(function (data) {
+                    btnGuardar.attr('disabled', false);
                     onNotifyOld('fa fa-check', 'REGISTRO AGREGADO', 'info');
                     ListasPrecioMaquilas.ajax.reload();
-                    ListasPrecioMaquilas.search('').columns().search('').draw();
-                    pnlTablero.find("input").val("");
-                    $.each(pnlTablero.find("select"), function (k, v) {
-                        pnlTablero.find("select")[k].selectize.clear(true);
-                    });
-                    pnlTablero.find("#Maq").focus();
+                    pnlTablero.find("#Corrida").val("");
+                    pnlTablero.find("#PrecioVta").val("");
+                    pnlTablero.find("#sColor")[0].selectize.clear(true);
+                    pnlTablero.find("#Color").val('').focus();
                 }).fail(function (x, y, z) {
+                    btnGuardar.attr('disabled', false);
                     console.log(x, y, z);
                 });
 
             } else {
+                btnGuardar.attr('disabled', false);
                 swal('ATENCION', 'Completa los campos requeridos', 'warning');
             }
 
@@ -173,6 +225,8 @@
     function onComprobarMaquilas(v) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
             if (data.length > 0) {
+                //getRecords($(v).val(), pnlTablero.find("#Linea").val());
+                pnlTablero.find("#Linea")[0].selectize.focus();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -203,14 +257,12 @@
         });
     }
 
-
-
     function getColoresByEstilo(estilo) {
-        pnlTablero.find("[name='Color']")[0].selectize.clear(true);
-        pnlTablero.find("[name='Color']")[0].selectize.clearOptions();
-        $.getJSON(base_url + 'index.php/FichaTecnica/getColoresXEstilo', {Estilo: estilo}).done(function (data, x, jq) {
+        pnlTablero.find("#sColor")[0].selectize.clear(true);
+        pnlTablero.find("#sColor")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/ListasPrecioMaquilas/getColoresXEstilo', {Estilo: estilo}).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#Color")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                pnlTablero.find("#sColor")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -245,25 +297,26 @@
 
     }
 
-    function getRecords() {
+    function getRecords(maq, linea) {
         temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
+//        HoldOn.open({
+//            theme: 'sk-cube',
+//            message: 'CARGANDO...'
+//        });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblListasPrecioMaquilas')) {
             tblListasPrecioMaquilas.DataTable().destroy();
         }
         ListasPrecioMaquilas = tblListasPrecioMaquilas.DataTable({
-            "dom": 'rtip',
+            "dom": 'rt',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "type": "POST"
+                "type": "POST",
+                "data": {Maq: maq, Linea: linea}
             },
             "columns": [
                 {"data": "ID"},
@@ -292,38 +345,38 @@
             language: lang,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 50,
             "scrollX": true,
+            "scrollY": 400,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-success text-strong');
-                            break;
-
-                        case 5:
-                            /*fecha conf*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 6:
-                            /*fecha conf*/
-                            c.addClass('text-danger text-strong');
-                            break;
-                    }
-                });
-            }
-            ,
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 0:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//
+//                        case 5:
+//                            /*fecha conf*/
+//                            c.addClass('text-info text-strong');
+//                            break;
+//                        case 6:
+//                            /*fecha conf*/
+//                            c.addClass('text-danger text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             initComplete: function (a, b) {
                 HoldOn.close();
             }
