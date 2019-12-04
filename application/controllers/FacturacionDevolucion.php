@@ -145,8 +145,14 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par06 AS P6, D.par07 AS P7, D.par08 AS P8, D.par09 AS P9, D.par10 AS P10, 
                 D.par11 AS P11, D.par12 AS P12, D.par13 AS P13, D.par14 AS P14, D.par15 AS P15, 
                 D.par16 AS P16, D.par17 AS P17, D.par18 AS P18, D.par19 AS P19, D.par20 AS P20, 
-                D.par21 AS P21, D.par22 AS P22 FROM devolucionnp AS D ORDER BY D.fechadev DESC")->result();
-             print json_encode($dt);
+                D.par21 AS P21, D.par22 AS P22,
+                (D.par01 +  D.par02 +  D.par03 +   D.par04 +  D.par05  +  
+                D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
+                D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
+                D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
+                D.par21 +  D.par22 ) AS PARES_TOTALES
+                FROM devolucionnp AS D WHERE D.stafac = 1 ORDER BY D.fechadev DESC")->result();
+            print json_encode($dt);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -155,20 +161,82 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
-            $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'];
-            if (intval($x['MONEDA']) === 1) {
-                $TOTAL = $x['IMPORTE_TOTAL_SIN_IVA'] * $x['TIPO_DE_CAMBIO'];
+            $HORA = Date('d/m/Y')/* HORA ES UNA FECHA, NO ES UNA HORA NADA QUE VER EL NOMBRE */;
+            $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
+            $this->db->set('hora', $HORA)
+                    ->set('horas', $HORAS)
+                    ->set('referen', $x['REFERENCIA'])
+                    ->set('monletra', $x['TOTAL_EN_LETRA'])
+                    ->where('factura', $x['FACTURA'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->where('tp', $x['TP_DOCTO'])
+                    ->where('staped', 1)->update('facturacion');
+            $this->db->set('staped', 2)
+                    ->where('factura', $x['FACTURA'])
+                    ->where('cliente', $x['CLIENTE'])
+                    ->where('tp', $x['TP_DOCTO'])
+                    ->where('staped', 1)->update('facturacion');
+            $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
+            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+            /* MONEDAS 
+             * 1 = PESOS
+             * 2 = DOLARES
+             */
+            switch (intval($x['MONEDA'])) {
+                case 1:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL = $IMPORTE_TOTAL_CON_IVA;
+                            break;
+                        case 2:
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL *= $x['TIPO_DE_CAMBIO'];
+                            $TOTAL *= 0.16;
+                            break;
+                        case 2:
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA * $x['TIPO_DE_CAMBIO'];
+                            break;
+                    }
+                    break;
             }
-            $cc = array(
-                'C.cliente' => $x['CLIENTE'], 'C.remicion' => $x['FACTURA'],
-                'C.fecha' => $x['FECHA'], 'C.importe' => $TOTAL,
-                'C.tipo' => $x['TP_DOCTO'],
-                'C.status' => 1, 'C.pagos' => 0,
-                'C.saldo' => $TOTAL, 'C.comiesp' => 1,
-                'C.tcamb' => $x['TIPO_DE_CAMBIO'], 'C.tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
-                'C.nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
-                'C.factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1));
-            $this->db->insert('cartcliente', $cc);
+
+            $fecha = $x['FECHA'];
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+            $hora = Date('h:i:s');
+            PRINT "\n*** IMPORTE TOTAL ***\n";
+            var_dump($TOTAL);
+            PRINT "\n*** IMPORTE TOTAL ***\n";
+            $this->db->insert('cartcliente', array(
+                'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
+                'fecha' => "{$anio}-{$mes}-{$dia} $hora", 'importe' => $TOTAL,
+                'tipo' => $x['TP_DOCTO'],
+                'status' => 1, 'pagos' => 0,
+                'saldo' => $TOTAL, 'comiesp' => 1,
+                'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
+                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
+            $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
+
+            if (intval($x['TP_DOCTO']) === 1) {
+                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
+                exec('schtasks /run /tn "Timbrar"  ');
+                exec('schtasks /delete /tn "Timbrar" /F ');
+                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -185,7 +253,6 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
-
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -222,10 +289,10 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1);
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
-            $f["origen"] = NULL;
+            $f["origen"] = 0;
             $f["referen"] = $x["REFERENCIA"];
 
-            $f["decdias"] = NULL;
+            $f["decdias"] = 0;
             $f["agente"] = $x["AGENTE"];
             $f["colsuel"] = $x["COLOR_TEXT"];
             $f["tpofac"] = 1;
@@ -234,7 +301,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["horas"] = date('h:i:s a');
             $f["numero"] = 1;
             $f["talla"] = 0;
-            $f["cobarr"] = NULL;
+            $f["cobarr"] = "";
             $f["pedime"] = NULL;
             $f["ordcom"] = NULL;
             $f["numadu"] = NULL;
@@ -276,55 +343,31 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $this->db->insert('facturadetalle', $facturacion_detalle);
 
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
-            $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
-            $facturaciondif = array(
-                'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
-                'staped' => (($saldopares == 0) ? 99 : 98)
-            );
-//            if ($saldopares === 0) {
-//                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
-//            }
-            /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
-            $existe_en_facdetalle = $this->db->query(
-                            "SELECT COUNT(*) AS EXISTE, FD.contped AS ID,"
-                            . "FD.contped, FD.pareped, "
-                            . "FD.par01, FD.par02, FD.par03, FD.par04, FD.par05, "
-                            . "FD.par06, FD.par07, FD.par08, FD.par09, FD.par10, "
-                            . "FD.par11, FD.par12, FD.par13, FD.par14, FD.par15, "
-                            . "FD.par16, FD.par17, FD.par18, FD.par19, FD.par20, "
-                            . "FD.par21, FD.par22 "
-                            . "FROM facturaciondif AS FD "
-                            . "WHERE FD.contped LIKE '{$x['CONTROL']}'")->result();
+            $saldopares = intval($x['PARES']) - intval($x['PARES_A_FACTURAR']);
 
-            if (intval($existe_en_facdetalle[0]->EXISTE) > 0) {
-                for ($ii = 1; $ii < 23; $ii++) {
-                    $c = 0;
-                    if (intval($x["CAF$ii"]) > 0) {
-                        $c = intval($x["C$ii"]) - (intval($x["CF$ii"]) + intval($x["CAF$ii"]));
-                    }
-                    if ($ii < 10) {
-                        $facturaciondif["par0$ii"] = $c;
-                    } else {
-                        $facturaciondif["par$ii"] = $c;
-                    }
-                }
-                $this->db->where('contped', $x['CONTROL'])
-                        ->update('facturaciondif', $facturaciondif);
-            } else {
-                for ($iii = 1; $iii < 23; $iii++) {
-                    $c = 0;
-                    if (intval($x["CAF$iii"]) > 0) {
-                        $c = (intval($x["C$iii"]) - intval($x["CAF$iii"]));
-                    }
-                    if ($iii < 10) {
-                        $facturaciondif["par0$iii"] = intval($x["CAF$iii"]);
-                    } else {
-                        $facturaciondif["par$iii"] = intval($x["CAF$iii"]);
-                    }
-                }
-                $facturaciondif['contped'] = $x['CONTROL'];
-                $this->db->insert('facturaciondif', $facturaciondif);
+            $devolucion = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.ID = {$x['DEVOLUCION']}")->result();
+            if ($saldopares === 0) {
+                $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
+                $this->db->query("UPDATE devolucionnp "
+                        . "SET stafac = 2, "
+                        . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
+            } else if (intval($x['PARES_A_FACTURAR']) < $saldopares) {
+                $this->db->query("UPDATE devolucionnp "
+                        . "SET stafac = 1, "
+                        . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
             }
+            if (intval($devolucion[0]->fact) === 0) {
+                $this->db->query("UPDATE devolucionnp "
+                        . "SET fact = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+            } else if (intval($devolucion[0]->fact1) === 0) {
+                $this->db->query("UPDATE devolucionnp "
+                        . "SET fact1 = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+            } else if (intval($devolucion[0]->fact2) === 0) {
+                $this->db->query("UPDATE devolucionnp "
+                        . "SET fact2 = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+            }
+            /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
+
             /* SI EL SALDO ES IGUAL A CERO "0", PASAR A CERO */
 //            $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13));
 

@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<div class="animated fadeIn text-dark d-none" id="pnlDatos">
+<div class="text-dark d-none" id="pnlDatos">
     <form id="frmNuevo">
         <fieldset>
             <!--PRIMER CONTENEDOR-->
@@ -199,10 +199,11 @@
                                         <table id="tblTallas" class="Tallas" >
                                             <thead></thead>
                                             <tbody>
-                                                <tr>
+                                                <tr style="justify-content: center; text-align: center;">
                                                     <?php
+                                                    $new_style = "width: 37px;padding-right: 1px;padding-left: 1px; font-weight: bold; ";
                                                     for ($index = 1; $index < 23; $index++) {
-                                                        print '<td><input type="text" style="width: 37px;" maxlength="4" class="numbersOnly" name="T' . $index . '" disabled></td>';
+                                                        print '<td><span class="T' . $index . '" style="font-weight: bold; "></span><input type="text" style="' . $new_style . '" maxlength="4" class="numbersOnly form-control text-center d-none" id="T' . $index . '" name="T' . $index . '" disabled></td>';
                                                     }
                                                     ?>
                                                     <td class="font-weight-bold">Pares</td>
@@ -210,10 +211,10 @@
                                                 <tr id="rCantidades">
                                                     <?php
                                                     for ($index = 1; $index < 23; $index++) {
-                                                        print '<td><input type="text" style="width: 37px;" maxlength="4" class=" numbersOnly" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
+                                                        print '<td><input type="text" style="' . $new_style . '" maxlength="4" class=" numbersOnly form-control text-center" id="C' . $index . '" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
                                                     }
                                                     ?>
-                                                    <td><input type="text" style="width: 40px;" maxlength="4" class=" numbersOnly font-weight-bold" disabled=""  id="TPares"></td>
+                                                    <td><input type="text" style="width: 40px;" maxlength="4" class="form-control numbersOnly font-weight-bold" disabled=""  id="TPares"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -244,60 +245,62 @@
             <div class="card  m-3 ">
                 <div class="card-body">
                     <div class="row">
-                        <table id="tblPedidoDetalle" class="table table-hover table-sm"  style="width: 100% !important;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th><!--0-->
-                                    <th scope="col">Recibido</th><!--1-->
-                                    <th scope="col">Estilo</th><!--2-->
-                                    <th scope="col">Estilo</th><!--3-->
-                                    <th scope="col">Color</th><!--4-->
-                                    <th scope="col">Color</th><!--5-->
-                                    <th scope="col">Sem</th><!--6-->
-                                    <th scope="col">Maq</th><!--7-->
+                        <div class="col-12"> 
+                            <table id="tblPedidoDetalle" class="table table-hover table-sm"  style="width: 100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th><!--0-->
+                                        <th scope="col">Recibido</th><!--1-->
+                                        <th scope="col">Estilo</th><!--2-->
+                                        <th scope="col">Estilo</th><!--3-->
+                                        <th scope="col">Color</th><!--4-->
+                                        <th scope="col">Color</th><!--5-->
+                                        <th scope="col">Sem</th><!--6-->
+                                        <th scope="col">Maq</th><!--7-->
 
-                                    <th scope="col">-</th><!--8-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--10-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--12-->
+                                        <th scope="col">-</th><!--8-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--10-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--12-->
 
-                                    <th scope="col">-</th><!--13-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--15-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--17-->
+                                        <th scope="col">-</th><!--13-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--15-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--17-->
 
-                                    <th scope="col">-</th><!--18-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--20-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--22-->
+                                        <th scope="col">-</th><!--18-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--20-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--22-->
 
-                                    <th scope="col">-</th><!--23-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--25-->
-                                    <th scope="col">-</th>
-                                    <th scope="col">-</th><!--27-->
+                                        <th scope="col">-</th><!--23-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--25-->
+                                        <th scope="col">-</th>
+                                        <th scope="col">-</th><!--27-->
 
-                                    <th scope="col">-</th><!--28-->
-                                    <th scope="col">-</th><!--29-->
+                                        <th scope="col">-</th><!--28-->
+                                        <th scope="col">-</th><!--29-->
 
-                                    <th scope="col">Precio</th><!--30-->
-                                    <th scope="col">Pares</th><!--31-->
-                                    <th scope="col">F. Ent</th><!--32-->
-                                    <th scope="col">Eliminar</th><!--33-->
-                                    <!--OUT-->
-                                    <th scope="col">Recio</th><!--34-->
-                                    <th scope="col">Titulo Observaciones</th><!--35-->
-                                    <th scope="col">Observaciones</th><!--36-->
-                                    <th scope="col">Serie</th><!--37-->
-                                    <th scope="col">Estatus Registro</th><!--38-->
-                                    <th scope="col">Importe</th><!--39-->
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                                        <th scope="col">Precio</th><!--30-->
+                                        <th scope="col">Pares</th><!--31-->
+                                        <th scope="col">F. Ent</th><!--32-->
+                                        <th scope="col">Eliminar</th><!--33-->
+                                        <!--OUT-->
+                                        <th scope="col">Recio</th><!--34-->
+                                        <th scope="col">Titulo Observaciones</th><!--35-->
+                                        <th scope="col">Observaciones</th><!--36-->
+                                        <th scope="col">Serie</th><!--37-->
+                                        <th scope="col">Estatus Registro</th><!--38-->
+                                        <th scope="col">Importe</th><!--39-->
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div> 
                     </div><!--ROW-->
                     <div class="row mt-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 font-weight-bold "></div>
@@ -614,19 +617,9 @@
                             $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: estilo}).done(function (data) {
                                 if (data.length > 0) {
                                     var dtm = data[0];
-                                    pnlDatos.find("#Serie").val(data[0].Serie);
-                                    pnlDatos.find("#Maquila").val(data[0].Maquila);
-                                    onComprobarSemanaMaquila(data[0].Maquila, pnlDatos.find("#Semana").val());
-                                    //SET TALLAS
-                                    $.each(data[0], function (k, v) {
-                                        var Can = k.replace("T", "C");
-                                        if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
-                                            pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', true);
-                                        } else {
-                                            pnlDatos.find('#rCantidades').find("[name='" + Can + "']").prop('disabled', false);
-                                            pnlDatos.find('#tblTallas').find("[name='" + k + "']").val(v);
-                                        }
-                                    });
+                                    pnlDatos.find("#Serie").val(dtm.Serie);
+                                    pnlDatos.find("#Maquila").val(dtm.Maquila);
+                                    onComprobarSemanaMaquila(dtm.Maquila, pnlDatos.find("#Semana").val());
                                     //MOSTRAR FOTO
                                     if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
                                         var ext = getExt(dtm.Foto);
@@ -675,6 +668,28 @@
                                                     '</div>'
                                         });
                                     }
+                                    //SET TALLAS
+                                    console.log("* * * * * *  dtm ANTES DEL DELETE * * * * * * ");
+                                    console.log(dtm);
+                                    console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
+                                    delete dtm.Maquila;
+                                    delete dtm.Serie;
+                                    delete dtm.Foto;
+                                    console.log("* * * * * *  dtm DESPUES DEL DELETE * * * * * * ");
+                                    console.log(dtm);
+                                    console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
+                                    $.each(data[0], function (k, v) {
+                                        var Can = k.replace("T", "C");
+                                        var rCantidades = pnlDatos.find("#rCantidades"),
+                                                tblTallas = pnlDatos.find('#tblTallas');
+                                        if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
+                                            onDisable(rCantidades.find("#" + Can));
+                                        } else {
+                                            onEnable(rCantidades.find("#" + Can));
+                                            tblTallas.find("[name='" + k + "']").val(v);
+                                            tblTallas.find("span." + k).text(v);
+                                        }
+                                    });
                                 } else {
                                     pnlDatos.find('#tblTallas').find("input").val("");
                                     pnlDatos.find('#rCantidades').find("input").prop('disabled', true);

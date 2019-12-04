@@ -541,6 +541,7 @@ class Pedidos extends CI_Controller {
                             ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
                             ->where('P.Clave', $IDX)
                             ->where('P.Cliente', $CLIENTE)
+                            ->where_not_in('P.stsavan', 14)
                             ->order_by('P.ID', 'DESC')
                             ->get()->result();
 
@@ -561,6 +562,7 @@ class Pedidos extends CI_Controller {
                             ->order_by('S.Clave', 'ASC')
                             ->where('P.Clave', $IDX)
                             ->where('P.Cliente', $CLIENTE)
+                            ->where_not_in('P.stsavan', 14)
                             ->get()->result();
 
             $pdf->SetFont('Calibri', '', 7.5);

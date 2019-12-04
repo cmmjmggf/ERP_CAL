@@ -36,10 +36,10 @@
                     <label for="">Cliente</label>
                     <select id="ClienteMEPCC" name="ClienteMEPCC" class="form-control form-control-sm">
                         <option></option>
-                        <?php 
+                        <?php
                         foreach ($this->db->select("C.Clave AS Clave, CONCAT(C.Clave, \" - \",C.RazonS) AS Cliente", false)
-                                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')
-                                    ->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')
+                                ->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
                             print "<option value='{$v->Clave}'>{$v->Cliente}</option>";
                         }
                         ?>
@@ -56,10 +56,11 @@
                                 <table id="tblTallas" class="Tallas">
                                     <thead></thead>
                                     <tbody>
-                                        <tr>
+                                        <tr id="rTallas"  style="justify-content: center; text-align: center;">
                                             <?php
+                                            $new_style = "width: 37px;padding-right: 1px;padding-left: 1px; font-weight: bold; ";
                                             for ($i = 1; $i < 23; $i++) {
-                                                print '<td><input type="text" style="width: 37px;" maxlength="4" class="numbersOnly" name="T' . $i . '" disabled></td>';
+                                                print '<td><span class="T' . $i . '" style="font-weight: bold; "></span><input type="text" style="' . $new_style . '" maxlength="4" class="numbersOnly d-none" name="T' . $i . '" disabled></td>';
                                             }
                                             ?>
                                             <td class="font-weight-bold text-white">Pares</td>
@@ -67,10 +68,10 @@
                                         <tr>
                                             <?php
                                             for ($index = 1; $index < 23; $index++) {
-                                                print '<td><input type="text" style="width: 37px;" maxlength="4" class=" numbersOnly" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
+                                                print '<td><input type="text" style="' . $new_style . '" maxlength="4" class="form-control numbersOnly" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
                                             }
                                             ?>
-                                            <td><input type="text" style="width: 40px;" maxlength="4" class=" numbersOnly font-weight-bold" disabled=""  id="TPares"></td>
+                                            <td><input type="text" style="width: 40px;" maxlength="4" class="form-control numbersOnly font-weight-bold" disabled=""  id="TPares"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -199,6 +200,7 @@
         "scrollX": true,
         initComplete: function (x, y) {
             HoldOn.close();
+            ControlMEPCC.focus().select();
         }
     };
     $(document).ready(function () {
@@ -246,8 +248,11 @@
                                 PedidoMEPCC.val(a[0].Clave);
                                 getSerie(a[0].Serie);
                                 ClienteMEPCC[0].selectize.setValue(a[0].Cliente);
+                                delete a[0].Clave;
+                                delete a[0].Serie;
+                                delete a[0].Cliente;
                                 $.each(a[0], function (k, v) {
-                                    console.log(k, v)
+                                    console.log(k, v);
                                     pnlTablero.find("#tblTallas input[name='" + k + "']").val(v);
                                 });
                                 pnlTablero.find("#tblTallas input[name='C1']").focus().select();
@@ -259,26 +264,26 @@
                     HoldOn.close();
                 });
             }
-        }); 
+        });
     });
 
     function onCalcularPares(e) {
-        console.log(e);
         var total = 0;
         $.each(pnlTablero.find("#tblTallas").find("input[name^='C']"), function (k, v) {
             if ($(v).val()) {
-                total += parseInt($(v).val()); 
+                total += parseInt($(v).val());
             }
         });
         TPares.val(total);
     }
- 
+
 
     function getSerie(s) {
         $.getJSON('<?php print base_url('ModificaEliminaPedidoConControl/getSerieXControl'); ?>', {
             SERIE: s
         }).done(function (a) {
             $.each(a[0], function (k, v) {
+                pnlTablero.find("#tblTallas").find("#rTallas span." + k).text(v);
                 pnlTablero.find("#tblTallas input[name='" + k + "']").val(v);
             });
         }).fail(function (x) {
@@ -295,7 +300,7 @@
         });
         temp = 0;
         opciones_detalle.ajax = {
-            "url": '<?php print base_url('ModificaEliminaPedidoConControl/getPedidoByID') ?>', 
+            "url": '<?php print base_url('ModificaEliminaPedidoConControl/getPedidoByID') ?>',
             "dataSrc": "",
             "data": function (d) {
                 d.CONTROL = ControlMEPCC.val();

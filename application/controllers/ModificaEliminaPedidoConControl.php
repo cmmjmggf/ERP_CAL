@@ -28,7 +28,12 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
     public function getPedidoXControl() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT P.* FROM pedidox AS P WHERE P.Control LIKE '{$x["CONTROL"]}'")->result());
+            print json_encode($this->db->query("SELECT P.Clave, P.Serie, P.Cliente, "
+                                    . "P.C1, P.C2, P.C3, P.C4, P.C5, "
+                                    . "P.C6, P.C7, P.C8, P.C9, P.C10, "
+                                    . "P.C11, P.C12, P.C13, P.C14, P.C15, "
+                                    . "P.C16, P.C17, P.C18, P.C19, P.C20, "
+                                    . "P.C21, P.C22 FROM pedidox AS P WHERE P.Control LIKE '{$x["CONTROL"]}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -126,13 +131,14 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
               historialcontroles
              */
             $X = 0;
-            $C = $this->input->get('CONTROL');
+            $xxx = $this->input->get();
+            $C = $xxx['CONTROL'];
             $sql = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END";
             $ASIGNAPFTSACXC = $this->db->query("{$sql} AS TOTAL FROM asignapftsacxc AS ASPFST WHERE ASPFST.Control = '{$C}'")->result();
-            $CONTROLPES = $this->db->query("{$sql} AS TOTAL FROM controlpes AS CPS WHERE CPS.Control LIKE '{$C}'")->result();
-            $CONTROLPLA = $this->db->query("{$sql} AS TOTAL FROM controlpla AS CPL WHERE CPL.Control LIKE '{$C}'")->result();
-            $CONTROLTEJ = $this->db->query("{$sql} AS TOTAL FROM controltej AS CTEJ WHERE CTEJ.Control LIKE '{$C}'")->result();
-            $CONTROLTERM = $this->db->query("{$sql} AS TOTAL FROM controlterm AS CTERM WHERE CTERM.Control LIKE '{$C}'")->result();
+            $CONTROLPES = $this->db->query("{$sql} AS TOTAL FROM controlpes AS CPS WHERE CPS.Control = '{$C}'")->result();
+            $CONTROLPLA = $this->db->query("{$sql} AS TOTAL FROM controlpla AS CPL WHERE CPL.Control = '{$C}'")->result();
+            $CONTROLTEJ = $this->db->query("{$sql} AS TOTAL FROM controltej AS CTEJ WHERE CTEJ.Control = '{$C}'")->result();
+            $CONTROLTERM = $this->db->query("{$sql} AS TOTAL FROM controlterm AS CTERM WHERE CTERM.Control = '{$C}'")->result();
 
             $X = intval($ASIGNAPFTSACXC[0]->TOTAL) + intval($CONTROLPES[0]->TOTAL) + intval($CONTROLPLA[0]->TOTAL) + intval($CONTROLTEJ[0]->TOTAL) + intval($CONTROLTERM[0]->TOTAL);
 //            print "NUMERO DE AVANCES : {$X}";
@@ -143,10 +149,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 exit(0);
             } else {
                 print json_encode(array("DELETED" => 1, "CONTROL" => $C, "MATCHES" => $X));
-                $this->db->set('stsavan', 14)->where('ID', $this->input->post('ID'))
-                        ->where('Clave', $this->input->post('CLAVE'))
-                        ->where('Control', $this->input->post('CONTROL'))
-                        ->update('pedidox');
+                $this->db->set('stsavan', 14)->where('ID', $xxx['ID'])->where('Clave', $xxx['CLAVE'])->where('Control', $xxx['CONTROL'])->update('pedidox');
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
                 exit(0);
             }

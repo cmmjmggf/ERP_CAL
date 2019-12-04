@@ -98,6 +98,7 @@ class Pedidos_model extends CI_Model {
                             ->join('series AS S', 'P.Serie = S.Clave')
                             ->where('P.Clave', $ID)
                             ->where('P.Cliente', $CLIENTE)
+                            ->where_not_in('P.stsavan', 14)
                             ->order_by('abs(S.Clave)', 'ASC')
                             ->get()->result();
 //            print $this->db->last_query();

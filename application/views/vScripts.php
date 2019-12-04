@@ -1683,7 +1683,7 @@
         }
     }
 
-    function onEnable(e) {
+    function onEnable(e) { 
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', false);
@@ -1697,7 +1697,7 @@
         }
     }
 
-    function onDisable(e) {
+    function onDisable(e) { 
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', true);

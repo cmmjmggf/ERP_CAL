@@ -381,9 +381,9 @@ class FacturacionProduccion extends CI_Controller {
                                 . "P.C11, P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, "
                                 . "P.C21, P.C22 FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
                 $control_pedidox = $control[0];
-                print "\n";
-                print_r($control_pedidox);
-                print "\n";
+//                print "\n";
+//                print_r($control_pedidox);
+//                print "\n";
 
                 $this->db->where('contped', $x['CONTROL'])->update('facturacion',
                         array(

@@ -182,6 +182,7 @@
                         </span>
                     </span>
                 </div>
+                <input type="text" id="Clave_Devolucion" name="Clave_Devolucion" class="form-control d-none">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1 d-none" style="padding-left: 5px; padding-right: 5px;">
                 <label>FOLIO</label>
@@ -497,8 +498,7 @@
 <!--CONTROLES X FACTURAR--> 
 <div class="modal" id="mdlControlesXFacturar">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
-        <div class="modal-content" style="width: 950px !important;">
-
+        <div class="modal-content">
             <div class="modal-body"> 
                 <table id="tblControlesXFacturar"  class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
@@ -534,17 +534,13 @@
                             <th scope="col">T19</th>  
                             <th scope="col">T20</th>  
                             <th scope="col">T21</th>  
-                            <th scope="col">T22</th>    
+                            <th scope="col">T22</th>  
+                            <th scope="col">PARES</th>    
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div> 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                    <span class="fa fa-times"></span>    CERRAR
-                </button>
-            </div>
         </div>
     </div>
 </div>
@@ -587,6 +583,7 @@
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
             btnNuevo = pnlTablero.find("#btnNuevo"),
             btnVerTienda = pnlTablero.find("#btnVerTienda"),
+            Clave_Devolucion = pnlTablero.find("#Clave_Devolucion"),
             btnControlesXFac = pnlTablero.find("#btnControlesXFac"),
             tblParesFacturados = pnlTablero.find("#tblParesFacturados"),
             ClienteClave = pnlTablero.find("#ClienteClave"),
@@ -833,10 +830,16 @@
         });
 
         btnAcepta.click(function () {
+            if (parseInt(PrecioFacturacion.val()) === 0 || PrecioFacturacion.val() === "") {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
+                    PrecioFacturacion.focus().select();
+                });
+                return;
+            } 
             getSubtotal();
             /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
             var registro_valido = false, pares_devueltos = 0;
-            for (var i = 1, max = 21; i <= max; i++) {
+            for (var i = 1; i < 23; i++) {
                 var pares_facturados = pnlTablero.find("#CF" + i).val();
                 var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
                 if (pares_a_devolver > pares_facturados) {
@@ -848,10 +851,12 @@
                     return;
                 } else {
                     registro_valido = true;
-                    pares_devueltos += parseInt(pares_a_devolver);
+                    if (parseInt(pares_a_devolver) > 0) {
+                        pares_devueltos += parseInt(pares_a_devolver);
+                    }
                 }
             }
-
+            console.log("pares degueltos ", pares_devueltos);
             if (pares_devueltos > 0) {
                 if (registro_valido) {
                     onAceptarControl();
@@ -864,7 +869,7 @@
                 }
             } else {
                 btnAcepta.attr('disabled', true);
-                onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO', function () {
+                onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO (' + pares_devueltos + ')', function () {
                     pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                 });
                 return;
@@ -1088,7 +1093,7 @@
                         {"data": "P13"}, {"data": "P14"}, {"data": "P15"},
                         {"data": "P16"}, {"data": "P17"}, {"data": "P18"},
                         {"data": "P19"}, {"data": "P20"}, {"data": "P21"},
-                        {"data": "P22"}
+                        {"data": "P22"}, {"data": "PARES_TOTALES"}
                     ],
                     "columnDefs": [
                         //ID
@@ -1125,6 +1130,7 @@
                 tblControlesXFacturar.on('click', 'tr', function () {
                     onOpenOverlay('Por favor espere...');
                     var xxx = ControlesXFacturar.row($(this)).data();
+                    Clave_Devolucion.val(xxx.ID);
                     Control.val(xxx.CONTROL);
                     EstiloFacturacion.val(xxx.ESTILO);
                     ColorFacturacion.val(xxx.COLORT);
@@ -1661,6 +1667,7 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
+        getTotalPares();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
@@ -1699,6 +1706,7 @@
         TPFactura.attr('disabled', true);
         /*REGISTRAR EN FACTURACION*/
         var p = {
+            DEVOLUCION: Clave_Devolucion.val(),
             FECHA: FechaFactura.val(),
             CLIENTE: ClienteFactura.val(),
             AGENTE: AgenteCliente.val(),
@@ -1726,7 +1734,7 @@
         switch (parseInt(TPFactura.val())) {
             case 1:
                 p["IVA"] = (SubtotalFacturacion.val() * 0.16);
-                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
+                p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val() * 1.16);
                 break;
             case 2:
                 p["IVA"] = 0;

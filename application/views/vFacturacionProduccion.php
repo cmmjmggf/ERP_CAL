@@ -955,6 +955,13 @@
         });
 
         btnAcepta.click(function () {
+
+            if (PrecioFacturacion.val() === '' || parseFloat(PrecioFacturacion.val()) < 0) {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
+                    PrecioFacturacion.focus().select();
+                });
+                return;
+            }
             if (Control.val()) {
                 ClienteFactura[0].selectize.enable();
                 $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
