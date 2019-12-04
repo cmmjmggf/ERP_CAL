@@ -336,29 +336,29 @@ class FichaTecnicaCompra extends CI_Controller {
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(75);
                 $pdf->SetFont('Calibri', 'BI', 8);
-                $pdf->Cell(75, 4, 'Total del Departamento: ' . utf8_decode($D->DDEPTO), 'BTL'/* BORDE */, 0, 'L');
+                $pdf->Cell(75, 3.5, 'Total del Departamento: ' . utf8_decode($D->DDEPTO), 'BTL'/* BORDE */, 0, 'L');
                 $pdf->SetX(150);
-                $pdf->Cell(14, 4, number_format($TOTAL_CONSUMO_DEPTOS, 3, ".", ","), 'BT'/* BORDE */, 0, 'C');
+                $pdf->Cell(14, 3.5, number_format($TOTAL_CONSUMO_DEPTOS, 3, ".", ","), 'BT'/* BORDE */, 0, 'C');
                 $pdf->SetX(164);
-                $pdf->Cell(14, 4, number_format($TOTAL_COSTO_DEPTOS, 3, ".", ","), 'BT'/* BORDE */, 0, 'C');
+                $pdf->Cell(14, 3.5, number_format($TOTAL_COSTO_DEPTOS, 3, ".", ","), 'BT'/* BORDE */, 0, 'C');
                 $pdf->SetX(178);
-                $pdf->Cell(22, 4, number_format($TOTAL_CONSUMO_COSTO_DEPTOS, 4, ".", ","), 'BT'/* BORDE */, 0, 'C');
+                $pdf->Cell(22, 3.5, number_format($TOTAL_CONSUMO_COSTO_DEPTOS, 4, ".", ","), 'BT'/* BORDE */, 0, 'C');
                 $pdf->SetX(200);
-                $pdf->Cell(10, 4, number_format($TOTAL_DESPERDICIO_DEPTOS, 2, ".", ","), 'BTR'/* BORDE */, 1, 'R');
+                $pdf->Cell(10, 3.5, number_format($TOTAL_DESPERDICIO_DEPTOS, 2, ".", ","), 'BTR'/* BORDE */, 1, 'R');
             }
 
             /* TOTALES POR DEPARTAMENTOS */
             $pdf->SetX(75);
-            $pdf->SetFont('Calibri', 'BI', 9.5);
-            $pdf->Cell(75, 4, 'Total de Materiales del Estilo Color: ', 'BTL'/* BORDE */, 0, 'L');
+            $pdf->SetFont('Calibri', 'BI', 8.5);
+            $pdf->Cell(75, 3.5, 'Total de Materiales del Estilo Color: ', 'BTL'/* BORDE */, 0, 'L');
             $pdf->SetX(150);
-            $pdf->Cell(14, 4, '', 'BT'/* BORDE */, 0, 'C');
+            $pdf->Cell(14, 3.5, '', 'BT'/* BORDE */, 0, 'C');
             $pdf->SetX(164);
-            $pdf->Cell(14, 4, '', 'BT'/* BORDE */, 0, 'C');
+            $pdf->Cell(14, 3.5, '', 'BT'/* BORDE */, 0, 'C');
             $pdf->SetX(178);
-            $pdf->Cell(22, 4, number_format($TOTAL_CONSUMO_COSTO_GEN, 2, ".", ","), 'BT'/* BORDE */, 0, 'C');
+            $pdf->Cell(22, 3.5, number_format($TOTAL_CONSUMO_COSTO_GEN, 2, ".", ","), 'BT'/* BORDE */, 0, 'C');
             $pdf->SetX(200);
-            $pdf->Cell(10, 4, number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'BTR'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 3.5, number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'BTR'/* BORDE */, 1, 'R');
 
             /* DATOS FINALES */
 
@@ -366,20 +366,25 @@ class FichaTecnicaCompra extends CI_Controller {
             /* Resumen */
             $TOTAL_MO = 0;
             $Y = $pdf->GetY();
+            $Y2 = $pdf->GetY();
+            $Y3 = $pdf->GetY();
             /* Datos Mano Obra */
-            $pdf->SetY($Y + 10);
+            $pdf->SetY($Y + 5);
             $pdf->SetX(5);
             $pdf->SetFont('Calibri', 'B', 8.5);
-            $pdf->Cell(30, 4, 'Mano de Obra', 'B'/* BORDE */, 1, 'L');
+            $pdf->Cell(30, 4, 'Mano de Obra', 'B'/* BORDE */, 0, 'L');
             $pdf->SetFont('Calibri', '', 7);
+
             foreach ($ManoObra as $key => $MO) {
+                $pdf->SetY($pdf->GetY() + 4);
                 $pdf->SetX(5);
                 $pdf->Cell(50, 4, utf8_decode($MO->CDEPTO . ' ' . $MO->DDEPTO), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(55);
-                $pdf->Cell(10, 4, '$' . number_format($MO->COSTOMO, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+                $pdf->Cell(10, 4, '$' . number_format($MO->COSTOMO, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                 $TOTAL_MO += $MO->COSTOMO;
             }
             $pdf->SetFont('Calibri', 'BI', 8.5);
+            $pdf->SetY($pdf->GetY() + 4);
             $pdf->SetX(5);
             $pdf->Cell(30, 4, 'Total M.O.', ''/* BORDE */, 0, 'L');
             $pdf->SetX(55);
@@ -388,77 +393,80 @@ class FichaTecnicaCompra extends CI_Controller {
 
             /* Datos Resumen Generales */
             $pdf->SetFont('Calibri', 'B', 8.5);
-            $pdf->SetY($Y + 10);
+            $pdf->SetY($Y2 + 5);
             $pdf->SetX(70);
             /* Titulo */
             $pdf->Cell(30, 4, 'Datos Maquila', 'B'/* BORDE */, 1, 'L');
-            $pdf->SetY($Y + 15);
+            $pdf->SetY($Y2 + 9);
             $pdf->SetX(70);
             /* total materiales */
             $pdf->SetFont('Calibri', '', 7);
             $pdf->Cell(30, 4, 'MATERIALES', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
 
-            $pdf->SetY($Y + 20);
+            $pdf->SetY($Y2 + 13);
             $pdf->SetX(70);
             $pdf->Cell(30, 4, 'MANO OBRA', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($ManoObraPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($ManoObraPOST, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
 
-            $pdf->SetY($Y + 25);
+            $pdf->SetY($Y2 + 17);
             $pdf->SetX(70);
             $pdf->Cell(30, 4, 'GASTOS', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($GastosPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($GastosPOST, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
 
-            $pdf->SetY($Y + 30);
+            $pdf->SetY($Y2 + 21);
             $pdf->SetX(70);
             $pdf->Cell(30, 4, 'UTILIDAD', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($UtilidadPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($UtilidadPOST, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
 
             $TOTAL_CONSUMO_COSTO_GEN = $TOTAL_DESPERDICIO_GEN +
                     $ManoObraPOST +
                     $GastosPOST +
                     $UtilidadPOST;
 
-            $pdf->SetY($Y + 35);
+            $pdf->SetY($Y2 + 25);
             $pdf->SetX(70);
             $pdf->SetFont('Calibri', 'BI', 8.5);
             $pdf->Cell(30, 4, 'Total', ''/* BORDE */, 0, 'L');
             $pdf->SetX(100);
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_CONSUMO_COSTO_GEN, 2, ".", ","), ''/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_CONSUMO_COSTO_GEN, 2, ".", ","), ''/* BORDE */, 0, 'R');
 
             /* TOTAL GENERAL */
 
             /* Datos Resumen Generales */
             $pdf->SetFont('Calibri', 'B', 8.5);
-            $pdf->SetY($Y + 10);
+            $pdf->SetY($Y3 + 5);
             $pdf->SetX(170);
             /* Titulo */
-            $pdf->Cell(30, 4, 'Total General', 'B'/* BORDE */, 1, 'L');
-            $pdf->SetY($Y + 15);
+            $pdf->Cell(30, 4, 'Total General', 'B'/* BORDE */, 0, 'L');
+            $pdf->SetY($Y3 + 9);
             $pdf->SetX(170);
             /* total materiales */
             $pdf->SetFont('Calibri', '', 7);
             $pdf->Cell(30, 4, 'MATERIALES', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(200);
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_DESPERDICIO_GEN, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+            $pdf->SetY($Y3 + 13);
             $pdf->SetX(170);
             $pdf->Cell(30, 4, 'MANO OBRA', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(200);
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_MO, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_MO, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+            $pdf->SetY($Y3 + 17);
             $pdf->SetX(170);
             $pdf->Cell(30, 4, 'GASTOS', 'B'/* BORDE */, 0, 'L');
             $pdf->SetX(200);
-            $pdf->Cell(10, 4, '$' . number_format($GastosPOST, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($GastosPOST, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+            $pdf->SetY($Y3 + 21);
             $pdf->SetFont('Calibri', 'BI', 10);
             $pdf->SetX(170);
             $pdf->Cell(30, 4, 'Total', ''/* BORDE */, 0, 'L');
             $pdf->SetX(200);
             $TOTAL_FINAL = $TOTAL_DESPERDICIO_GEN + $TOTAL_MO + $GastosPOST;
-            $pdf->Cell(10, 4, '$' . number_format($TOTAL_FINAL, 2, ".", ","), ''/* BORDE */, 1, 'R');
+            $pdf->Cell(10, 4, '$' . number_format($TOTAL_FINAL, 2, ".", ","), ''/* BORDE */, 0, 'R');
 
 
             /* FIN RESUMEN */
