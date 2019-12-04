@@ -129,6 +129,7 @@
         });
 
         mdlExplosionSemanalArticulo.find('#btnImprimir').on("click", function () {
+            onDisable(mdlExplosionSemanalArticulo.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
             var Tipo = parseInt(mdlExplosionSemanalArticulo.find('#Tipo').val());
@@ -151,6 +152,7 @@
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
+                onEnable(mdlExplosionSemanalArticulo.find('#btnImprimir'));
                 console.log(data);
                 if (data.length > 0) {
 
@@ -186,11 +188,13 @@
                         text: "NO EXISTEN PROGRAMACION DE LA SEMANA/MAQUILA O EL TIPO ES INCORRECTO",
                         icon: "error"
                     }).then((action) => {
+                        onEnable(mdlExplosionSemanalArticulo.find('#btnImprimir'));
                         mdlExplosionSemanalArticulo.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlExplosionSemanalArticulo.find('#btnImprimir'));
                 console.log(x, y, z);
                 HoldOn.close();
             });

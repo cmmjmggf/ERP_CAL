@@ -567,10 +567,10 @@ class ReporteExplosionConProyeccion extends CI_Controller {
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(15, 5, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->Cell(15, 4, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
                 $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(38, 5, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(38, 4, utf8_decode($G->ClaveGrupo . '    ' . $G->NombreGrupo), 'B'/* BORDE */, 1, 'L');
 
                 $pdf->SetLineWidth(0.2);
 
@@ -578,41 +578,41 @@ class ReporteExplosionConProyeccion extends CI_Controller {
                     if ($G->ClaveGrupo === $D->ClaveGrupo) {
                         $pdf->SetFont('Calibri', '', 7);
                         $pdf->SetX(5);
-                        $pdf->Cell(10, 4, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->Cell(10, 3.5, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(40, 4, mb_strimwidth(utf8_decode($D->Descripcion), 0, 35, ""), 'B'/* BORDE */, 0, 'L');
+                        $pdf->Cell(40, 3.5, mb_strimwidth(utf8_decode($D->Descripcion), 0, 35, ""), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(15, 4, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
+                        $pdf->Cell(15, 3.5, utf8_decode($D->Unidad), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Inicial <> 0) ? number_format($D->Inicial, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Inicial <> 0) ? number_format($D->Inicial, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(13, 4, ($D->Entradas <> 0) ? number_format($D->Entradas, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(13, 3.5, ($D->Entradas <> 0) ? number_format($D->Entradas, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(13, 4, ($D->Salidas <> 0) ? number_format($D->Salidas, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(13, 3.5, ($D->Salidas <> 0) ? number_format($D->Salidas, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Actual <> 0) ? number_format($D->Actual, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Actual <> 0) ? number_format($D->Actual, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12, 4, mb_strimwidth(utf8_decode($D->OrdCom), 0, 10, ""), 'TBL'/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, mb_strimwidth(utf8_decode($D->OrdCom), 0, 10, ""), 'TBL'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, utf8_decode($D->FechaCom), 'TBL'/* BORDE */, 0, 'C');
+                        $pdf->Cell(14, 3.5, utf8_decode($D->FechaCom), 'TBL'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(13, 4, ($D->Pedido <> 0) ? number_format($D->Pedido, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(13, 3.5, ($D->Pedido <> 0) ? number_format($D->Pedido, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(13, 4, ($D->Recibido <> 0) ? number_format($D->Recibido, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(13, 3.5, ($D->Recibido <> 0) ? number_format($D->Recibido, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Anterior <> 0) ? number_format($D->Anterior, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Anterior <> 0) ? number_format($D->Anterior, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem1 <> 0) ? number_format($D->Sem1, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem1 <> 0) ? number_format($D->Sem1, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem2 <> 0) ? number_format($D->Sem2, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem2 <> 0) ? number_format($D->Sem2, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem3 <> 0) ? number_format($D->Sem3, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem3 <> 0) ? number_format($D->Sem3, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem4 <> 0) ? number_format($D->Sem4, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem4 <> 0) ? number_format($D->Sem4, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem5 <> 0) ? number_format($D->Sem5, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem5 <> 0) ? number_format($D->Sem5, 2, ".", ",") : '', 'TBL'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(14, 4, ($D->Sem6 <> 0) ? number_format($D->Sem6, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
+                        $pdf->Cell(14, 3.5, ($D->Sem6 <> 0) ? number_format($D->Sem6, 2, ".", ",") : '', 'TRBL'/* BORDE */, 1, 'R');
                     }
                 }
             }

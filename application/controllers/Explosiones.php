@@ -63,10 +63,10 @@ class Explosiones extends CI_Controller {
 
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetX(5);
-                $pdf->Cell(20, 5, 'Grupo: ', 0/* BORDE */, 0, 'L');
+                $pdf->Cell(20, 4, 'Grupo: ', 0/* BORDE */, 0, 'L');
                 $pdf->SetX(25);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(50, 5, utf8_decode($G->Clave . '     ' . $G->Nombre), 0/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(50, 4, utf8_decode($G->Clave . '     ' . $G->Nombre), 0/* BORDE */, 1, 'L');
 
 
                 foreach ($Materiales as $key => $M) {

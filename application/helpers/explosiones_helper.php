@@ -140,11 +140,11 @@ class CotejaOrdComExplosionTallas extends FPDF {
         $this->SetX($this->GetX());
         $this->Cell(8, 3.5, utf8_decode('U.M.'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(17, 3.5, utf8_decode('Explosión'), 1/* BORDE */, 0, 'C');
+        $this->Cell(16, 3.5, utf8_decode('Explosión'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(14, 3.5, utf8_decode('Precio'), 1/* BORDE */, 0, 'C');
+        $this->Cell(12, 3.5, utf8_decode('Precio'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 3.5, utf8_decode('Subtotal'), 1/* BORDE */, 0, 'C');
+        $this->Cell(21, 3.5, utf8_decode('Subtotal'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
         $this->Cell(16, 3.5, utf8_decode('Cant.'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
@@ -799,11 +799,11 @@ class CotejaOrdComExplosion extends FPDF {
         $this->SetX($this->GetX());
         $this->Cell(13, 3.5, utf8_decode('U.M.'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(17, 3.5, utf8_decode('Explosión'), 1/* BORDE */, 0, 'C');
+        $this->Cell(16, 3.5, utf8_decode('Explosión'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(14, 3.5, utf8_decode('Precio'), 1/* BORDE */, 0, 'C');
+        $this->Cell(12, 3.5, utf8_decode('Precio'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
-        $this->Cell(18, 3.5, utf8_decode('Subtotal'), 1/* BORDE */, 0, 'C');
+        $this->Cell(21, 3.5, utf8_decode('Subtotal'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
         $this->Cell(16, 3.5, utf8_decode('Cant.'), 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
@@ -825,9 +825,9 @@ class CotejaOrdComExplosion extends FPDF {
             10/* ClaveArt */,
             60/* Articulo */,
             13/* UM */,
-            17/* Explosion */,
-            14/* Precio */,
-            18/* Subtotal */,
+            16/* Explosion */,
+            12/* Precio */,
+            21/* Subtotal */,
             16/* cant */,
             18/* pesos */,
             16/* cant */,
@@ -866,7 +866,7 @@ class CotejaOrdComExplosion extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -884,7 +884,7 @@ class CotejaOrdComExplosion extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 3.5, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -897,7 +897,7 @@ class CotejaOrdComExplosion extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -915,7 +915,7 @@ class CotejaOrdComExplosion extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 3.5, $data[$i], 0, $a);
+            $this->MultiCell($w, 3, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1118,8 +1118,8 @@ class PDFExpTallas extends FPDF {
             10/* UM */,
             10/* Tallas */,
             15/* Explosion */,
-            15/* Precio */,
-            15/* Subtotal */,
+            14/* Precio */,
+            16/* Subtotal */,
             20/* Requerido */,
             25/* 1raEnt */,
             20/* 2daEnt */);
@@ -1139,7 +1139,7 @@ class PDFExpTallas extends FPDF {
             '1ra Entrega', '2da Entrega'));
 
         $anchos = array(10/* ClaveArt */, 65/* Articulo */, 7/* UM */, 13/* Tallas */, 12/* Explosion */,
-            15/* Precio */, 15/* Subtotal */, 22/* Requerido */, 23/* 1raEnt */, 23/* 2daEnt */);
+            14/* Precio */, 16/* Subtotal */, 22/* Requerido */, 23/* 1raEnt */, 23/* 2daEnt */);
         $aligns = array('R', 'L', 'L', 'C', 'R', 'R', 'R', 'C', 'L', 'L');
         $this->SetAligns($aligns);
         $this->SetWidths($anchos);
@@ -1169,7 +1169,7 @@ class PDFExpTallas extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1187,7 +1187,7 @@ class PDFExpTallas extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1200,7 +1200,7 @@ class PDFExpTallas extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1218,7 +1218,7 @@ class PDFExpTallas extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1231,7 +1231,7 @@ class PDFExpTallas extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1249,7 +1249,7 @@ class PDFExpTallas extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 0, $a);
+            $this->MultiCell($w, 3, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1452,8 +1452,8 @@ class PDF extends FPDF {
             0/* Clasif */,
             13/* UM */,
             17/* Explosion */,
-            15/* Precio */,
-            20/* Subtotal */,
+            14/* Precio */,
+            21/* Subtotal */,
             20/* Requerido */,
             20/* 1raEnt */,
             20/* 2daEnt */);
@@ -1487,8 +1487,8 @@ class PDF extends FPDF {
             7/* Clasif */,
             13/* UM */,
             15/* Explosion */,
-            14/* Precio */,
-            18/* Subtotal */,
+            13/* Precio */,
+            19/* Subtotal */,
             21/* Requerido */,
             22/* 1raEnt */,
             22/* 2daEnt */);
@@ -1521,7 +1521,7 @@ class PDF extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1539,7 +1539,7 @@ class PDF extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1552,7 +1552,7 @@ class PDF extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1570,7 +1570,7 @@ class PDF extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3.5, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -1583,7 +1583,7 @@ class PDF extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -1601,7 +1601,7 @@ class PDF extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 0, $a);
+            $this->MultiCell($w, 3.5, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
