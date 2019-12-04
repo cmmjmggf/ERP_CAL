@@ -703,16 +703,46 @@
                         $.post(base_url + 'index.php/GeneraCostosVenta/onActualizarCostos', {Lista: lista, Linea: linea, Corrida: corrida}).done(function (data) {
                             console.log(data);
 
-                            if (data.length > 0) {
-                                //no existen parámetros fijos
-                                onNotifyOld('fa fa-times', 'NO EXISTEN PARÁMETROS FIJOS', 'danger');
-                            } else {
-                                //se ha actualizado con existo
-                                onNotifyOld('fa fa-check', 'ACTUALIZACIÓN EXITOSA', 'success');
-                                Registros.ajax.reload();
-                                //Ejecutar funcion para traernos el precio promedio y numero de registros
-                                obtenerInfoInicial(linea, lista, corrida);
+                            if (data === '0') {
+                                swal('ERROR', 'LA LISTA DE PRECIOS NO TIENE PARÁMETROS FIJOS', 'warning').then((value) => {
+                                    pnlTablero.find('#Corrida').focus();
+                                });
+                            } else if (data === '1') {
+                                swal('ERROR', 'NO EXISTEN ESTILOS EN ESTA LINEA//LISTA//CORRIDA', 'warning').then((value) => {
+                                    pnlTablero.find('#Corrida').focus();
+                                });
+                            } else if (data === '2') {
+                                swal('ERROR', 'NO EXISTEN ESTILOS PARA SACAR PRECIO FINAL', 'warning').then((value) => {
+                                    pnlTablero.find('#Corrida').focus();
+                                });
+                            } else {//Se hace la actualización y se manda mensaje en caso de haber incidencias
+
+                                if (data !== '') {
+                                    swal('ATENCIÓN', 'Los siguientes estilos no tienen clasificación para venta: \n' + data, 'warning').then((value) => {
+                                        onNotifyOld('fa fa-check', 'ACTUALIZACIÓN EXITOSA', 'success');
+                                        Registros.ajax.reload();
+                                        //Ejecutar funcion para traernos el precio promedio y numero de registros
+                                        obtenerInfoInicial(linea, lista, corrida);
+                                    });
+                                } else {
+                                    onNotifyOld('fa fa-check', 'ACTUALIZACIÓN EXITOSA', 'success');
+                                    Registros.ajax.reload();
+                                    //Ejecutar funcion para traernos el precio promedio y numero de registros
+                                    obtenerInfoInicial(linea, lista, corrida);
+                                }
+
                             }
+
+//                            if (data.length > 0) {
+//                                //no existen parámetros fijos
+//                                onNotifyOld('fa fa-times', 'NO EXISTEN PARÁMETROS FIJOS', 'danger');
+//                            } else {
+//                                //se ha actualizado con existo
+//                                onNotifyOld('fa fa-check', 'ACTUALIZACIÓN EXITOSA', 'success');
+//                                Registros.ajax.reload();
+//                                //Ejecutar funcion para traernos el precio promedio y numero de registros
+//                                obtenerInfoInicial(linea, lista, corrida);
+//                            }
                             HoldOn.close();
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
@@ -986,7 +1016,7 @@
         });
         pnlTablero.find('#PreAutori').keypress(function (e) {
             if (e.keyCode === 13) {
-                if (estiloS > 0) {
+                if (estiloS.length > 0) {
                     if ($(this).val()) {
                         $.post(master_url + 'onActualizarPrecioAutorizado', {PrecioAut: $(this).val(), Linea: lineaS, Lista: listaS, Estilo: estiloS, Color: colorS}).done(function (data) {
                             Registros.ajax.reload();

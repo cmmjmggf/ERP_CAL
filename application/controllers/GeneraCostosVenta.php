@@ -50,6 +50,7 @@ class GeneraCostosVenta extends CI_Controller {
             $lista = $this->input->post('Lista');
             $linea = $this->input->post('Linea');
             $corr = $this->input->post('Corrida');
+            $response = '';
 
             //$this->db->query("delete from costovaria where linea = $linea and lista = $lista and corr = $corr ");
             //------------------------------Obtenemos los estilos y colores con su porcentaje de desperdicio------------------------------
@@ -72,119 +73,131 @@ class GeneraCostosVenta extends CI_Controller {
                     $estilo = $E->estilo;
                     $color = $E->numcolor;
                     $colord = $E->nomcolor;
-                    $porcentajeDesp = $E->PorcenDesperd;
-                    //------------------------------Obtenemos la materia prima "materiales"------------------------------
-                    $FichaTecnica = $this->db->query("select ft.consumo, a.grupo, pm.precio
+
+                    //Verifica si existe clasificacion para precio de venta
+
+                    if ($color !== null) {
+                        $porcentajeDesp = $E->PorcenDesperd;
+                        //------------------------------Obtenemos la materia prima "materiales"------------------------------
+                        $FichaTecnica = $this->db->query("select ft.consumo, a.grupo, pm.precio
                                             from fichatecnica ft
                                             join articulos a on a.clave  = ft.articulo
                                             join preciosmaquilas pm on pm.Articulo = a.clave and pm.maquila = 1
                                             where ft.estilo = '$estilo' and ft.color = '$color' and ft.afectapv = 0
                                             order by abs(a.grupo) asc ")->result();
-                    $txtmaprpt = 0;
-                    $txtmaprft = 0;
-                    $txtmaprig = 0;
-                    $txtmapri = 0;
-                    foreach ($FichaTecnica as $key => $F) {
-                        $precio = floatval($F->precio);
-                        $grupo = $F->grupo;
-                        $consumo = floatval($F->consumo);
-                        if ($grupo === '1') {
-                            $txtconsu = floatval($consumo) * floatval($porcentajeDesp);
-                            $txtconsup = floatval($txtconsu) * floatval($precio);
-                            $txtmaprpt = floatval($txtmaprpt) + floatval($txtconsup);
+                        $txtmaprpt = 0;
+                        $txtmaprft = 0;
+                        $txtmaprig = 0;
+                        $txtmapri = 0;
+                        foreach ($FichaTecnica as $key => $F) {
+                            $precio = floatval($F->precio);
+                            $grupo = $F->grupo;
+                            $consumo = floatval($F->consumo);
+                            if ($grupo === '1') {
+                                $txtconsu = floatval($consumo) * floatval($porcentajeDesp);
+                                $txtconsup = floatval($txtconsu) * floatval($precio);
+                                $txtmaprpt = floatval($txtmaprpt) + floatval($txtconsup);
+                            }
+                            if ($grupo === '2') {
+                                $txtconsu = floatval($consumo) * floatval($porcentajeDesp);
+                                $txtconsuf = floatval($txtconsu) * floatval($precio);
+                                $txtmaprft = floatval($txtmaprft) + floatval($txtconsuf);
+                            }
+                            $txtmapr = floatval($consumo) * floatval($precio);
+                            $txtmapri = floatval($txtmapri) + floatval($txtmapr);
+                            $txtmaprig = floatval($txtmaprig) + floatval($txtmapr);
                         }
-                        if ($grupo === '2') {
-                            $txtconsu = floatval($consumo) * floatval($porcentajeDesp);
-                            $txtconsuf = floatval($txtconsu) * floatval($precio);
-                            $txtmaprft = floatval($txtmaprft) + floatval($txtconsuf);
+                        //------------------------------ Obtenemos la mano de obra ------------------------------
+                        $ManoObra = $this->db->query("select sum(CostoVTA) as manoobra "
+                                        . "from fraccionesxestilo "
+                                        . "where estilo = '$estilo' and AfectaCostoVTA = 1 and fraccion not in ('401','402','403'); ")->result()[0]->manoobra;
+
+                        $Tejida = $this->db->query("select sum(CostoVTA) as tejida "
+                                        . "from fraccionesxestilo "
+                                        . "where estilo = '$estilo' and AfectaCostoVTA = 1 and fraccion  in ('401','402','403'); ")->result()[0]->tejida;
+
+                        //Nos traemos los parametros fijos GASTOS etc.
+                        $ParamFijos = $this->db->query("SELECT * FROM costofijo where lista = $lista ")->result();
+
+                        if (empty($ParamFijos)) {//No existen parametros fijos
+                            $response = 0;
+                            print $response;
+                            exit();
+                        } else {//Existen parametros fijos y obtenemos los datos para inserar o actualizar
+                            $txttolera = $ParamFijos[0]->toler;
+                            $txtgfabri = $ParamFijos[0]->gfabri;
+                            $txtgvta = $ParamFijos[0]->gvta;
+                            $txtgadmon = $ParamFijos[0]->gadmon;
+                            $txthms = $ParamFijos[0]->hms;
+                            $txtutili = $ParamFijos[0]->utili;
+                            $txtdesc = $ParamFijos[0]->desc;
+                            $txtcomic = $ParamFijos[0]->comic;
+                            $txtflete = $ParamFijos[0]->flete;
+
+                            //Verificamos si existe ya el registro estilo-color-linea-lista para saber si inserta o actualiza
+                            $CostoVaria = $this->db->query("SELECT estilo,color FROM costovaria where lista = $lista and linea = $linea and estilo = '$estilo' and color = $color and corr = $corr ")->result();
+
+                            if (empty($CostoVaria)) {
+                                //Inserta Nuevo
+                                $this->db->insert("costovaria", array(
+                                    'lista' => $lista,
+                                    'estilo' => $estilo,
+                                    'color' => $color,
+                                    'colord' => $colord,
+                                    'linea' => $linea,
+                                    'matpri' => $txtmapri,
+                                    'maob' => $ManoObra,
+                                    'toler' => $txttolera,
+                                    'gfabri' => $txtgfabri,
+                                    'gvta' => $txtgvta,
+                                    'gadmon' => $txtgadmon,
+                                    'hms' => $txthms,
+                                    'utili' => $txtutili,
+                                    'desc' => $txtdesc,
+                                    'comic' => $txtcomic,
+                                    'tejida' => $Tejida,
+                                    'precto' => 0,
+                                    'flete' => $txtflete,
+                                    'pextr' => $porcentajeDesp,
+                                    'corr' => $corr,
+                                    'mextr' => floatval($txtmaprpt + $txtmaprft),
+                                    'fecha' => Date('Y-m-d')
+                                ));
+                            } else {
+                                //Actualiza
+                                $this->db->where('lista', $lista)->where('linea', $linea)->where('estilo', $estilo)->where('color', $color)->where('corr', $corr)
+                                        ->update("costovaria", array(
+                                            'matpri' => $txtmapri,
+                                            'maob' => $ManoObra,
+                                            'toler' => $txttolera,
+                                            'gfabri' => $txtgfabri,
+                                            'gvta' => $txtgvta,
+                                            'gadmon' => $txtgadmon,
+                                            'hms' => $txthms,
+                                            'utili' => $txtutili,
+                                            'desc' => $txtdesc,
+                                            'comic' => $txtcomic,
+                                            'tejida' => $Tejida,
+                                            'flete' => $txtflete,
+                                            'pextr' => $porcentajeDesp,
+                                            'corr' => $corr,
+                                            'mextr' => floatval($txtmaprpt + $txtmaprft),
+                                            'fecha' => Date('Y-m-d')
+                                ));
+                            }
                         }
-                        $txtmapr = floatval($consumo) * floatval($precio);
-                        $txtmapri = floatval($txtmapri) + floatval($txtmapr);
-                        $txtmaprig = floatval($txtmaprig) + floatval($txtmapr);
-                    }
-                    //------------------------------ Obtenemos la mano de obra ------------------------------
-                    $ManoObra = $this->db->query("select sum(CostoVTA) as manoobra "
-                                    . "from fraccionesxestilo "
-                                    . "where estilo = '$estilo' and AfectaCostoVTA = 1 and fraccion not in ('401','402','403'); ")->result()[0]->manoobra;
-
-                    $Tejida = $this->db->query("select sum(CostoVTA) as tejida "
-                                    . "from fraccionesxestilo "
-                                    . "where estilo = '$estilo' and AfectaCostoVTA = 1 and fraccion  in ('401','402','403'); ")->result()[0]->tejida;
-
-                    //Nos traemos los parametros fijos GASTOS etc.
-                    $ParamFijos = $this->db->query("SELECT * FROM costofijo where lista = $lista ")->result();
-
-                    if (empty($ParamFijos)) {//No existen parametros fijos
-                        print 0;
-                    } else {//Existen parametros fijos y obtenemos los datos para inserar o actualizar
-                        $txttolera = $ParamFijos[0]->toler;
-                        $txtgfabri = $ParamFijos[0]->gfabri;
-                        $txtgvta = $ParamFijos[0]->gvta;
-                        $txtgadmon = $ParamFijos[0]->gadmon;
-                        $txthms = $ParamFijos[0]->hms;
-                        $txtutili = $ParamFijos[0]->utili;
-                        $txtdesc = $ParamFijos[0]->desc;
-                        $txtcomic = $ParamFijos[0]->comic;
-                        $txtflete = $ParamFijos[0]->flete;
-
-                        //Verificamos si existe ya el registro estilo-color-linea-lista para saber si inserta o actualiza
-                        $CostoVaria = $this->db->query("SELECT estilo,color FROM costovaria where lista = $lista and linea = $linea and estilo = '$estilo' and color = $color and corr = $corr ")->result();
-
-                        if (empty($CostoVaria)) {
-                            //Inserta Nuevo
-                            $this->db->insert("costovaria", array(
-                                'lista' => $lista,
-                                'estilo' => $estilo,
-                                'color' => $color,
-                                'colord' => $colord,
-                                'linea' => $linea,
-                                'matpri' => $txtmapri,
-                                'maob' => $ManoObra,
-                                'toler' => $txttolera,
-                                'gfabri' => $txtgfabri,
-                                'gvta' => $txtgvta,
-                                'gadmon' => $txtgadmon,
-                                'hms' => $txthms,
-                                'utili' => $txtutili,
-                                'desc' => $txtdesc,
-                                'comic' => $txtcomic,
-                                'tejida' => $Tejida,
-                                'precto' => 0,
-                                'flete' => $txtflete,
-                                'pextr' => $porcentajeDesp,
-                                'corr' => $corr,
-                                'mextr' => floatval($txtmaprpt + $txtmaprft),
-                                'fecha' => Date('Y-m-d')
-                            ));
-                        } else {
-                            //Actualiza
-                            $this->db->where('lista', $lista)->where('linea', $linea)->where('estilo', $estilo)->where('color', $color)->where('corr', $corr)
-                                    ->update("costovaria", array(
-                                        'matpri' => $txtmapri,
-                                        'maob' => $ManoObra,
-                                        'toler' => $txttolera,
-                                        'gfabri' => $txtgfabri,
-                                        'gvta' => $txtgvta,
-                                        'gadmon' => $txtgadmon,
-                                        'hms' => $txthms,
-                                        'utili' => $txtutili,
-                                        'desc' => $txtdesc,
-                                        'comic' => $txtcomic,
-                                        'tejida' => $Tejida,
-                                        'flete' => $txtflete,
-                                        'pextr' => $porcentajeDesp,
-                                        'corr' => $corr,
-                                        'mextr' => floatval($txtmaprpt + $txtmaprft),
-                                        'fecha' => Date('Y-m-d')
-                            ));
-                        }
+                    } else {
+                        //Acumulamos los estilos sin clasificacion para mostrarlos en mensaje
+                        $response .= $estilo . " \n";
                     }
                 }
 
                 //Actualizamos el precto ya una vez actualizado los campos de costovaria
                 $CostoVariaFinal = $this->db->query("SELECT * FROM costovaria where lista = $lista and linea = $linea and corr = $corr ")->result();
                 if (empty($CostoVariaFinal)) {//No existen estilos en costo varia para sacar precio final
-                    print 2;
+                    $response = 2;
+                    print $response;
+                    exit();
                 } else {//hacemos la iteración
                     $cont = 1;
                     foreach ($CostoVariaFinal as $key => $CF) {
@@ -233,8 +246,11 @@ class GeneraCostosVenta extends CI_Controller {
                     }
                 }
             } else {//No existen estilos
-                print 1;
+                $response = 1;
+                print $response;
+                exit();
             }
+            print $response;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -367,7 +383,7 @@ class GeneraCostosVenta extends CI_Controller {
             $estilo = $this->input->post('Estilo');
             $color = $this->input->post('Color');
             $PrecioAut = $this->input->post('PrecioAut');
-            $this->db->query("update costovaria set preaut = $PrecioAut where linea = $linea and lista = $lista and estilo = $estilo and color = $color ");
+            $this->db->query("update costovaria set preaut = $PrecioAut where linea = $linea and lista = $lista and estilo = '$estilo' and color = $color ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -379,7 +395,7 @@ class GeneraCostosVenta extends CI_Controller {
             $lista = $this->input->post('Lista');
             $estilo = $this->input->post('Estilo');
             $color = $this->input->post('Color');
-            $query = "delete from costovaria where linea = $linea and lista = $lista and estilo = $estilo and color = $color ";
+            $query = "delete from costovaria where linea = $linea and lista = $lista and estilo = '$estilo' and color = $color ";
             //print $query;
             $this->db->query($query);
         } catch (Exception $exc) {

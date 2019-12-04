@@ -40,6 +40,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row d-none">
+                        <div class="col-12 col-sm-4">
+                            <label>% Desperdicio</label>
+                            <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly disabledForms" id="Desperdicio" name="Desperdicio" >
+                        </div>
+                        <div class="col-12 col-sm-8">
+                            <br>
+                            <label class="badge badge-info">Por piezas de estilo y maquila</label>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -108,10 +118,12 @@
         mdlFichaTecnicaPreciosCostos.find("#Maquila").keypress(function (e) {
             if (e.keyCode === 13) {
                 var Maquila = $(this).val();
+                var Piezas = mdlFichaTecnicaPreciosCostos.find("#Piezas").val();
                 if (Maquila) {
                     $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarMaquila', {Maquila: Maquila}).done(function (data, x, jq) {
                         if (data.length > 0) {
                             mdlFichaTecnicaPreciosCostos.find("#sMaquila")[0].selectize.addItem(Maquila, true);
+                            getDesperdicioByMaquilaPiezas(Maquila, Piezas);
                             mdlFichaTecnicaPreciosCostos.find("#btnImprimirFichaTecnica").focus();
                         } else {
                             swal('ERROR', 'LA MAQUILA NO EXISTE', 'warning').then((value) => {
@@ -200,7 +212,26 @@
             });
         });
     });
+    function getDesperdicioByMaquilaPiezas(Maquila, Piezas) {
+        $.getJSON(base_url + 'index.php/Maquilas/getMaquilaByClave', {Clave: Maquila}).done(function (data, x, jq) {
+            if (data.length > 0) {
+                if (Piezas <= 10) {
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra3a10));
+                } else if (Piezas <= 14) {
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra11a14));
+                } else if (Piezas <= 18) {
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra15a18));
+                } else if (Piezas > 19) {
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra19a));
+                }
+            } else {
+                mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val('0')
+            }
 
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        });
+    }
     function getMaquilasCostosEstilos() {
         $.getJSON(base_url + 'index.php/FichaTecnicaCompra/getMaquilas').done(function (data, x, jq) {
             $.each(data, function (k, v) {
