@@ -1179,6 +1179,7 @@
                 });
             }
         });
+
         CajasFacturacion.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val() ? $(this).val() : 0) <= 0) {
@@ -1188,22 +1189,38 @@
                 }
             }
         });
+
         tblControlesXFacturar.find("#CAF20").on('keydown', function (e) {
             console.log('ok ok ok');
         });
+
         btnControlCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
-                    /*SUMAR TODO EL SALDO*/
 
+                    /*SUMAR TODO EL SALDO*/
                     for (var i = 1; i < 21; i++) {
-                        var x = pnlTablero.find(`#C${i}`).val();
-                        var xx = pnlTablero.find(`#CF${i}`).val() ? pnlTablero.find(`#CF${i}`).val() : 0;
-                        if (parseFloat(x) > 0) {
-                            pnlTablero.find("#CAF" + i).val(x - xx);
+                        var pares = pnlTablero.find(`#C${i}`),
+                                pares_facturados = pnlTablero.find(`#CF${i}`),
+                                pares_a_facturar = pnlTablero.find(`#CAF${i}`);
+                        var pares_disponibles_para_facturar = parseInt(pares.val()) - parseInt(pares_facturados.val() ? pares_facturados.val() : 0);
+                        if (pares_disponibles_para_facturar >= 1) {
+                            var x = pnlTablero.find(`#C${i}`).val();
+                            var xx = pnlTablero.find(`#CF${i}`).val() ? pnlTablero.find(`#CF${i}`).val() : 0;
+                            if (parseFloat(x) > 0) {
+                                pnlTablero.find("#CAF" + i).val(x - xx);
+                            } else {
+                                pnlTablero.find("#CAF" + i).val('');
+                            }
+
+                            if (parseFloat(pares.val()) > 0) {
+                                onEnable(pares_a_facturar);
+                            } else {
+                                onDisable(pares_a_facturar);
+                            }
                         } else {
-                            pnlTablero.find("#CAF" + i).val(0);
+                            onDisable(pares_a_facturar);
                         }
                     }
                     var saldo_pares = 0;
@@ -1227,12 +1244,23 @@
                 });
             }
         });
+
         btnControlInCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
-                    for (var i = 1; i < 21; i++) {
+                    for (var i = 1; i < 23; i++) {
                         pnlTablero.find("#CAF" + i).val('');
+                    }
+
+                    for (var i = 1; i < 23; i++) {
+                        var pares = pnlTablero.find(`#C${i}`),
+                                pares_a_facturar = pnlTablero.find(`#CAF${i}`);
+                        if (parseFloat(pares.val()) > 0) {
+                            onEnable(pares_a_facturar);
+                        } else {
+                            onDisable(pares_a_facturar);
+                        }
                     }
                     pnlTablero.find("#CAF1").focus().select();
                     onNotifyOldPCE('', 'POR FAVOR ESPECIFIQUE LAS CANTIDADES', 'info', "bottom", "center");
@@ -1708,7 +1736,7 @@
                             var abc = aa[0];
                             if (abc !== undefined) {
                                 if (control_pertenece_a_cliente) {
-                                    for (var i = 1; i < 21; i++) {
+                                    for (var i = 1; i < 23; i++) {
                                         var ccc = 0;
                                         if (i < 10) {
                                             ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
@@ -1737,20 +1765,28 @@
 //                                        }
                                         Corrida.val(xx.Serie);
                                         var t = 0;
-                                        for (var i = 1; i < 21; i++) {
+                                        for (var i = 1; i < 23; i++) {
                                             if (parseInt(xx["T" + i]) > 0) {
                                                 pnlTablero.find("#T" + i).val(xx["T" + i]);
                                                 pnlTablero.find("span.T" + i).text(xx["T" + i]);
                                                 pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                                                 pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
-                                                pnlTablero.find(`#C${i}`).val(xx["C" + i]);
+                                                pnlTablero.find(`#C${i}`).val(parseFloat(xx["C" + i]) > 0 ? xx["C" + i] : "");
                                                 var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
-                                                pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
+                                                pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : ""));
                                                 pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
                                                 pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
                                                 t += parseInt(xx["C" + i]);
                                                 TotalParesEntrega.val(t);
                                                 TotalParesEntregaAF.val(t);
+
+                                                var pares = pnlTablero.find(`#C${i}`),
+                                                        pares_a_facturar = pnlTablero.find(`#CAF${i}`);
+                                                if (parseFloat(pares.val()) > 0) {
+                                                    onEnable(pares_a_facturar);
+                                                } else {
+                                                    onDisable(pares_a_facturar);
+                                                }
                                             }
                                         }
                                         getTotalPares();

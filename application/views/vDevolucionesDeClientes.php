@@ -10,7 +10,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
                         <label>Cliente</label>
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col-2"  style="padding-right: 10px; padding-left: 10px;">
                                 <input type="text" id="xClienteDevolucion" name="xClienteDevolucion" class="form-control form-control-sm" maxlength="12">
                             </div>
                             <div class="col-10">
@@ -799,19 +799,26 @@
         });
 
         pnlTablero.find("input[id^=PDF]").on('keydown', function (e) {
+            console.log(e.keyCode)
+            if (e.keyCode === 106 || e.keyCode === 107 || e.keyCode === 109 || e.keyCode === 110) {
+                e.preventDefault();
+            }
             if (Control.val()) {
                 console.log($(this).attr("id"), $(this).val());
                 if (e.keyCode === 13) {
                     var index = $(this).attr('indice');
-                    if (parseInt(($(this).val() ? $(this).val() : 0)) <= parseInt((pnlTablero.find("#CF" + index).val() ? pnlTablero.find("#CF" + index).val() : 0))) {
+                    var cantidad_facturada = (pnlTablero.find("#CF" + index).val() ? pnlTablero.find("#CF" + index).val() : 0);
+                    var cantidad_a_devolver = parseInt(($(this).val() ? $(this).val() : 0));
+                    if (cantidad_a_devolver > 0 && cantidad_a_devolver <= parseInt(cantidad_facturada)) {
                         console.log($(this).val(), pnlTablero.find("#CF" + index).val());
                         console.log(parseInt($(this).val()) <= parseInt(pnlTablero.find("#CF" + index).val()));
                     } else {
+                        onDisable(btnAcepta);
                         onCampoInvalido(pnlTablero, 'LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', function () {
                             pnlTablero.find("#PDF" + index).focus().select();
+
                         });
                     }
-                    onRevisarRegistroValido();
                 }
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE SELECCIONAR UN CONTROL', function () {
@@ -904,7 +911,7 @@
             }
             if (cvalidos) {
                 var z = Pedidos.row($(this)).data();
-                console.log("Z = >", z);
+                console.log("Z = > ", z);
                 Control.val(z.CONTROL);
                 Color.val(z.COLOR);
                 Estilo.val(z.ESTILO);
@@ -925,10 +932,9 @@
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
-
+                    getInfoXControl(z.CONTROL, z);
+//                    getParesFacturadosXControl(z.CONTROL);
                 });
-                getInfoXControl(z.CONTROL);
-                getParesFacturadosXControl(z.CONTROL);
                 btnControlCompleto.attr('disabled', false);
             }
         });
@@ -975,17 +981,31 @@
         });
     });
 
-    function getInfoXControl(c) {
+    function getInfoXControl(c, r) {
         var indice_f = 0;
         onOpenOverlay('Cargando...');
+
+        for (var i = 1; i < 23; i++) {
+            pnlTablero.find("#T" + i).val('');
+            pnlTablero.find("#PDF" + i).val('');
+            pnlTablero.find("span.T" + i).text('');
+            pnlTablero.find("#T" + i).attr("title", '');
+            pnlTablero.find("#T" + i).attr("data-original-title", '');
+            pnlTablero.find(`#C${i}`).val('');
+        }
+
         $.getJSON('<?php print base_url('DevolucionesDeClientes/getInfoXControl'); ?>', {
-            CONTROL: c
+            CONTROL: c,
+            ID: r.ID,
+            DOCTO: r.DOCUMENTO,
+            PARES: r.PARES
         }).done(function (a) {
             if (a.length > 0) {
                 var xx = a[0];
+                console.log(xx);
                 Serie.val(xx.Serie);
                 pnlTablero.find(".serie_control").text(xx.Serie);
-                var t = 0;
+                var t = 0, indice = 0, prs = 0;
                 for (var i = 1; i < 23; i++) {
                     if (parseInt(xx["T" + i]) > 0) {
                         pnlTablero.find("#T" + i).val(xx["T" + i]);
@@ -993,16 +1013,33 @@
                         pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                         pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
                         pnlTablero.find(`#C${i}`).val(xx["C" + i]);
-                        console.log("C" + i + " => ", xx["C" + i]);
-                        if (parseInt(xx["C" + i]) <= 0 || xx["C" + i] === '') {
-                            pnlTablero.find("#PDF" + i).attr('disabled', true);
+//                        console.log("C" + i + " => ", xx["C" + i]);
+
+                        var cantidad_facturada = pnlTablero.find("#CF" + i);
+                        var cantidad_a_devolver = pnlTablero.find("#PDF" + i);
+                        if (i < 10) {
+                            cantidad_facturada.val(xx["par0" + i]);
                         } else {
-                            pnlTablero.find("#PDF" + i).attr('disabled', false);
-                            if (indice_f === 0) {
-                                indice_f = i;
-                            }
+                            cantidad_facturada.val(xx["par" + i]);
                         }
-                        var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
+                        if (parseInt(cantidad_facturada.val()) >= 1) {
+                            onEnable(cantidad_a_devolver);
+                            prs = prs + 1;
+                            cantidad_a_devolver.addClass("pares-ok");
+                            if (indice === 0) {
+                                indice = i;
+                            }
+                        } else {
+                            onDisable(cantidad_a_devolver);
+                            cantidad_a_devolver.removeClass("pares-ok");
+                        }
+//                        if (parseInt(cantidad_facturada.val()) <= 0) {
+//                            onDisable(cantidad_facturada);
+//                        } else if (parseInt(cantidad_facturada.val()) >= 1) {
+//                            onEnable(cantidad_facturada);
+//                        } else {
+//                            onDisable(cantidad_facturada);
+//                        }
                         /* PDF = Pares Devueltos Facturados*/
                         //                        pnlTablero.find("#PDF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
                         pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
@@ -1013,6 +1050,9 @@
                     } else {
                         pnlTablero.find("#PDF" + i).attr('disabled', true);
                     }
+                }
+                if (prs === 1) {
+                    pnlTablero.find("#PDF" + indice).focus().select();
                 }
             } else {
                 Control.focus().select();
@@ -1148,5 +1188,9 @@
         color: #fff;
         background-color: #59802F;
         border-color: #59802F;
+    }
+    .pares-ok{
+        /*8BC34A*/
+        border: 2px solid #99cc00 !important;
     }
 </style>

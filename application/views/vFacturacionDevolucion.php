@@ -496,33 +496,45 @@
 
 <!--CONTROLES X FACTURAR--> 
 <div class="modal" id="mdlControlesXFacturar">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
         <div class="modal-content" style="width: 950px !important;">
 
-            <div class="modal-body">
-                <p class="font-italic font-weight-bold">
-                    NOTA: Solo se muestran los registros con control y con estatus diferente a 
-                    <span class="font-weight-bold text-info">"FACTURADO"</span> y 
-                    <span class="font-weight-bold text-danger">"CANCELADO"</span>
-                </p>
+            <div class="modal-body"> 
                 <table id="tblControlesXFacturar"  class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">CONTROL</th>
-                            <th scope="col">PEDIDO</th>
-                            <th scope="col">CLIENTE</th>
-                            <th scope="col">FECHA-PED</th>
-                            <th scope="col">FECHA-ENT</th>
                             <th scope="col">ESTILO</th>
                             <th scope="col">COLOR</th>
                             <th scope="col">PARES</th>
                             <th scope="col">FAC</th>
+                            <th scope="col">REG</th> 
                             <th scope="col">MAQ</th>
-                            <th scope="col">SEM</th>
-                            <th scope="col">PRECIO</th>
-                            <th scope="col">PRECIOT</th>
-                            <th scope="col">COLORT</th>
+                            <th scope="col">ST</th>
+                            <th scope="col">CARGO</th> 
+                            <th scope="col">T1</th>  
+                            <th scope="col">T2</th>  
+                            <th scope="col">T3</th>  
+                            <th scope="col">T4</th>  
+                            <th scope="col">T5</th>  
+                            <th scope="col">T6</th>  
+                            <th scope="col">T7</th>  
+                            <th scope="col">T8</th>  
+                            <th scope="col">T9</th>  
+                            <th scope="col">T10</th>  
+                            <th scope="col">T11</th>  
+                            <th scope="col">T12</th>  
+                            <th scope="col">T13</th>  
+                            <th scope="col">T14</th>  
+                            <th scope="col">T15</th>  
+                            <th scope="col">T16</th>  
+                            <th scope="col">T17</th>  
+                            <th scope="col">T18</th>  
+                            <th scope="col">T19</th>  
+                            <th scope="col">T20</th>  
+                            <th scope="col">T21</th>  
+                            <th scope="col">T22</th>    
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -530,7 +542,7 @@
             </div> 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                    CERRAR
+                    <span class="fa fa-times"></span>    CERRAR
                 </button>
             </div>
         </div>
@@ -639,6 +651,9 @@
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
 
+        PrecioFacturacion.keydown(function () {
+            getSubtotal();
+        });
 
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -690,15 +705,26 @@
         });
 
         pnlTablero.find("input[id^='CAF']").keydown(function (e) {
-            if (e.keyCode === 13) {
-                var indice = parseInt($(this).attr('indice'));
-                var cantidad_facturada = pnlTablero.find("#CF" + indice).val();
+            console.log(e.keyCode)
+            var cde = e.keyCode;
+            if (cde === 13 || cde === 9) {
+                var input = $(this);
+                var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
                 var cantidad_a_devolver = $(this).val();
-                console.log($(this).attr("id") + ":" + $(this).val(),
-                        pnlTablero.find("#CF" + indice).attr('id') + ":" + pnlTablero.find("#CF" + indice).val());
+                if (cantidad_a_devolver > cantidad_facturada) {
+                    onDisable(btnAcepta);
+                    onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 1", function () {
+                        input.focus().select();
+                    });
+                    return;
+                } else {
+                    onEnable(btnAcepta);
+                }
+            }
+            if (cde === 13 || cde === 9 || cde === 8 || cde === 46) {
+                getSubtotal();
             }
         }).focusout(function () {
-            console.log("focusout", $(this).val());
             var input = $(this);
             var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
             var cantidad_a_devolver = $(this).val();
@@ -706,11 +732,10 @@
                 onDisable(btnAcepta);
                 onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 1", function () {
                     input.focus().select();
-                    onEnable(btnAcepta);
                 });
                 return;
             } else {
-                onEnable(btnAcepta);
+                getSubtotal();
             }
         });
 
@@ -808,6 +833,7 @@
         });
 
         btnAcepta.click(function () {
+            getSubtotal();
             /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
             var registro_valido = false, pares_devueltos = 0;
             for (var i = 1, max = 21; i <= max; i++) {
@@ -832,14 +858,14 @@
                 } else {
                     btnAcepta.attr('disabled', true);
                     onCampoInvalido(pnlTablero, 'VERIFIQUE QUE SEAN VÁLIDAS LAS CANTIDADES INGRESADAS', function () {
-                        pnlTablero.find("#CAF1").focus().select();
+                        pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                     });
                     return;
                 }
             } else {
                 btnAcepta.attr('disabled', true);
                 onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO', function () {
-                    pnlTablero.find("#CAF1").focus().select();
+                    pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                 });
                 return;
             }
@@ -983,6 +1009,8 @@
                     });
                 }
             }
+            getTotalPares();
+
         });
 
         tblControlesXFacturar.find("#CAF20").on('keydown', function (e) {
@@ -993,13 +1021,13 @@
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
-                    for (var i = 1; i < 21; i++) {
+                    for (var i = 1; i < 23; i++) {
                         var x = pnlTablero.find(`#C${i}`).val();
                         var xx = pnlTablero.find(`#CF${i}`).val() ? pnlTablero.find(`#CF${i}`).val() : 0;
                         if (parseFloat(x) > 0) {
                             pnlTablero.find("#CAF" + i).val(x - xx);
                         } else {
-                            pnlTablero.find("#CAF" + i).val(0);
+                            pnlTablero.find("#CAF" + i).val("");
                         }
                     }
                     pnlTablero.find("#CAF1").focus().select();
@@ -1019,7 +1047,7 @@
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
-                    for (var i = 1; i < 21; i++) {
+                    for (var i = 1; i < 23; i++) {
                         pnlTablero.find("#CAF" + i).val('');
                     }
                     pnlTablero.find("#CAF1").focus().select();
@@ -1040,7 +1068,7 @@
             $.fn.dataTable.ext.errMode = 'throw';
             if (!$.fn.DataTable.isDataTable('#tblControlesXFacturar')) {
                 ControlesXFacturar = tblControlesXFacturar.DataTable({
-                    dom: 'frtip', "ajax": {
+                    dom: 'frtp', "ajax": {
                         "url": '<?php print base_url('FacturacionDevolucion/getPedidosXFacturar'); ?>',
                         "dataSrc": "",
                         "data": function (d) {
@@ -1049,14 +1077,18 @@
                     },
                     "columns": [
                         {"data": "ID"},
-                        {"data": "CONTROL"}, {"data": "PEDIDO"},
-                        {"data": "CLIENTE"}, {"data": "FECHA_PEDIDO"},
-                        {"data": "FECHA_ENTREGA"},
-                        {"data": "ESTILO"}, {"data": "COLOR"},
-                        {"data": "PARES"}, {"data": "FAC"},
-                        {"data": "MAQUILA"}, {"data": "SEMANA"},
-                        {"data": "PRECIOT"}, {"data": "PRECIO"},
-                        {"data": "COLORT"}
+                        {"data": "CONTROL"}, {"data": "ESTILO"},
+                        {"data": "COLOR"},
+                        {"data": "PARES"}, {"data": "FACTURADOS"},
+                        {"data": "REG"}, {"data": "MAQUILA"}, {"data": "ST"}, {"data": "CARGOA"},
+                        {"data": "P1"}, {"data": "P2"}, {"data": "P3"},
+                        {"data": "P4"}, {"data": "P5"}, {"data": "P6"},
+                        {"data": "P7"}, {"data": "P8"}, {"data": "P9"},
+                        {"data": "P10"}, {"data": "P11"}, {"data": "P12"},
+                        {"data": "P13"}, {"data": "P14"}, {"data": "P15"},
+                        {"data": "P16"}, {"data": "P17"}, {"data": "P18"},
+                        {"data": "P19"}, {"data": "P20"}, {"data": "P21"},
+                        {"data": "P22"}
                     ],
                     "columnDefs": [
                         //ID
@@ -1084,7 +1116,7 @@
                     "deferRender": true,
                     "scrollCollapse": false,
                     "bSort": true,
-                    "scrollY": 450,
+                    "scrollY": 300,
                     "scrollX": true,
                     "aaSorting": [
                         [4, 'desc']/*ID*/
@@ -1111,7 +1143,7 @@
         btnControlesXFac.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
-                mdlControlesXFacturar.modal({backdrop: false, keyboard: false});
+                mdlControlesXFacturar.modal({keyboard: false});
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE', function () {
                     ClienteClave.focus().select();
@@ -1451,20 +1483,7 @@
             ClienteFactura[0].selectize.enable();
             onOpenOverlay('Cargando...');
             var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
-//            $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarControlXCliente'); ?>', {
-//                CONTROL: Control.val() ? Control.val() : ''
-//            }).done(function (abcd) {
-//                if (abcd.length > 0) {
-//                    if (abcd[0].CLIENTE === clientesito) {
             control_pertenece_a_cliente = true;
-//                    } else {
-//                        onBeep(2);
-//                        onCampoInvalido(pnlTablero, "EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE",
-//                                function () {
-//                                    onResetCampos();
-//                                    Control.focus().select();
-//                                });
-//                    }
             if (clientesito !== '') {
                 $.getJSON('<?php print base_url('FacturacionDevolucion/getFacturacionDiff'); ?>', {
                     CONTROL: Control.val() ? Control.val() : ''
@@ -1474,10 +1493,10 @@
                         for (var i = 1; i < 23; i++) {
                             var ccc = 0;
                             if (i < 10) {
-                                ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
+                                ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : "";
                                 pnlTablero.find(`#CF${i}`).val(ccc);
                             } else {
-                                ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
+                                ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : "";
                                 pnlTablero.find(`#CF${i}`).val(ccc);
                             }
                         }
@@ -1502,13 +1521,20 @@
                                     pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
                                     pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
                                     pnlTablero.find(`#C${i}`).val(xx["C" + i]);
-                                    var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
-                                    pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
+                                    var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : "");
+                                    pnlTablero.find("#CAF" + i).val("");
                                     pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
                                     pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
                                     t += parseInt(xx["C" + i]);
                                     TotalParesEntrega.val(t);
                                     TotalParesEntregaAF.val(t);
+                                    var pares = pnlTablero.find(`#C${i}`),
+                                            pares_a_facturar = pnlTablero.find(`#CAF${i}`);
+                                    if (parseFloat(pares.val()) > 0) {
+                                        onEnable(pares_a_facturar);
+                                    } else {
+                                        onDisable(pares_a_facturar);
+                                    }
                                 }
                             }
                             getTotalPares();
@@ -1523,7 +1549,8 @@
                             CajasFacturacion.val(1);
 //                                        CajasFacturacion.focus().select();
                             var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
-                            var stt = parseFloat(xx.Precio) * prs;
+                            var stt = parseFloat(xx.PRECIO) * prs;
+                            console.log("parseFloat(xx.Precio) * prs", xx.PRECIO, prs);
                             SubtotalFacturacion.val(stt);
                             SubtotalFacturacionIVA.val(stt * 0.16);
                             //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
@@ -1552,32 +1579,12 @@
                         onCloseOverlay();
                         pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                     });
-//                            } else {
-//                                onResetCampos();
-//                                onCampoInvalido(pnlTablero, 'ESTE CONTROL NO PERTENECE A ESTE CLIENTE', function () {
-//                                    Control.focus().select();
-//                                    btnFacturaXAnticipoDeProducto.attr('disabled', true);
-//                                    btnControlInCompleto.attr('disabled', true);
-//                                    btnControlCompleto.attr('disabled', true);
-//                                });
-//                            }
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
                     onCloseOverlay();
                 });
             }
-//                } else {
-//                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
-//                        onResetCampos();
-//                        Control.focus().select();
-//                    });
-//                }
-//            }).fail(function (x) {
-//                getError(x);
-//            }).always(function () {
-//                onCloseOverlay();
-//            });
         }
     }
 
@@ -1710,9 +1717,9 @@
             TIENDA: Tienda.val()
         };
         for (var i = 1; i < 23; i++) {
-            p["C" + i] = ($.isNumeric(pnlTablero.find("#C" + i).val()) ? parseInt(pnlTablero.find("#C" + i).val()) : 0);
-            p["CF" + i] = ($.isNumeric(pnlTablero.find("#CF" + i).val()) ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
-            p["CAF" + i] = ($.isNumeric(pnlTablero.find("#CAF" + i).val()) ? parseInt(pnlTablero.find("#CAF" + i).val()) : 0);
+            p["C" + i] = ($.isNumeric(pnlTablero.find("#C" + i).val()) ? parseInt(pnlTablero.find("#C" + i).val()) : "");
+            p["CF" + i] = ($.isNumeric(pnlTablero.find("#CF" + i).val()) ? parseInt(pnlTablero.find("#CF" + i).val()) : "");
+            p["CAF" + i] = ($.isNumeric(pnlTablero.find("#CAF" + i).val()) ? parseInt(pnlTablero.find("#CAF" + i).val()) : "");
         }
         p["PRECIO"] = PrecioFacturacion.val();
         p["SUBTOTAL"] = SubtotalFacturacion.val();
@@ -1916,6 +1923,19 @@
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
     }
 
+    function getSubtotal() {
+        var pares_facturados = 0, cantidad_a_facturar = 0;
+        for (var i = 0; i < 23; i++) {
+            cantidad_a_facturar = pnlTablero.find("#CAF" + i);
+            var pares_a_facturar = parseFloat(cantidad_a_facturar.val() ? cantidad_a_facturar.val() : 0);
+            console.log(pares_facturados, pares_a_facturar);
+            pares_facturados = pares_facturados + pares_a_facturar;
+        }
+
+        var stt = pares_facturados * (parseFloat(PrecioFacturacion.val()) > 0 ? PrecioFacturacion.val() : 1);
+        SubtotalFacturacion.val(stt);
+        SubtotalFacturacionIVA.val(stt * 1.16);
+    }
 </script>
 
 <style> 
