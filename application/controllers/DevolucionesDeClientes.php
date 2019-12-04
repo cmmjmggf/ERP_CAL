@@ -134,7 +134,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 "conce" => $x["MOTIVO"] . "-" . $x["CONTROL"] . "-" . $x["ESTILO"] . "-" . $x["COLOR"],
                 "tp" => $x["TP"], "tpvta" => 0,
                 "control" => $x["CONTROL"], "controlprd" => 0,
-                "paredev" => $x["PARES_DEVUELTOS"], "parefac" => $x["PARES_FACTURADOS"]);
+                "paredev" => $x["PARES_DEVUELTOS"], "parefac" => 0);
 
             for ($index = 1; $index < 23; $index++) {
                 if ($index < 10) {

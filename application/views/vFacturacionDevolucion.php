@@ -648,8 +648,13 @@
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
 
-        PrecioFacturacion.keydown(function () {
+        PrecioFacturacion.keydown(function (e) {
             getSubtotal();
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                getTotalFacturado();
+            }
+        }).focusout(function () {
+            getTotalFacturado();
         });
 
         ClienteClave.on('keydown', function (e) {
@@ -835,7 +840,7 @@
                     PrecioFacturacion.focus().select();
                 });
                 return;
-            } 
+            }
             getSubtotal();
             /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
             var registro_valido = false, pares_devueltos = 0;
@@ -881,14 +886,15 @@
             if (ClienteFactura.val()) {
                 onOpenOverlay('Guardando...');
                 var p = {
-                    FECHA: FechaFactura.val(),
-                    CLIENTE: ClienteFactura.val(),
-                    TP_DOCTO: TPFactura.val(),
-                    FACTURA: FAPEORCOFactura.val(),
+                    FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
+                    TP_DOCTO: TPFactura.val(), FACTURA: FAPEORCOFactura.val(),
                     MONEDA: TMNDAFactura.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
+                    IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),
-                    REFACTURACION: xRefacturacion[0].cheked ? 1 : 0
+                    REFACTURACION: (xRefacturacion[0].cheked ? 1 : 0),
+                    TOTAL_EN_LETRA: TotalLetra.find("span").text(),
+                    REFERENCIA: ReferenciaFacturacion.val()
                 };
                 $.post('<?php print base_url('FacturacionDevolucion/onCerrarDocto') ?>', p).done(function (abc) {
                     iMsg('SE HA CERRADO EL DOCTO', 's', function () {
@@ -1596,7 +1602,7 @@
 
     function onResetCampos() {
         Corrida.val('');
-        for (var i = 1; i < 21; i++) {
+        for (var i = 1; i < 23; i++) {
             pnlTablero.find("#T" + i).val("");
             pnlTablero.find(`#C${i}`).val("");
             pnlTablero.find("#CAF" + i).val("");
@@ -1619,6 +1625,7 @@
 
     function getTotalFacturado() {
         var t = 0, indice = 31;
+        console.log("TOTALES ", ParesFacturados.rows().count());
         $.each(ParesFacturados.rows().data(), function (k, v) {
             t += $.isNumeric(v[indice]) ? parseFloat(v[indice]) : 0;
         });

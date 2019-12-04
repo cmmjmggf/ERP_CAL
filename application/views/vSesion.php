@@ -96,30 +96,28 @@
                 theme: 'sk-bounce',
                 message: 'ESPERE...'
             });
-            setTimeout(function () {
-                $.ajax({
-                    url: master_url + "onIngreso",
-                    type: "POST",
-                    data: {
-                        USUARIO: pnlAcceso.find("#Usuario").val(),
-                        CONTRASENA: pnlAcceso.find("#Contrasena").val()
-                    }
-                }).done(function (data, x, jq) {
-                    if (parseInt(data) === 1) {
-                        location.reload(true);
-                    } else {
-                        acceso = false;
-                        onNotify('<span class="fa fa-exclamation fa-lg"></span>', data, 'danger');
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                }).always(function () {
-                    btnIngresar.attr('disabled', false);
-                    btnOlvidasteContrasena.attr('disabled', false);
-                });
-            }, 1000);
+            $.ajax({
+                url: master_url + "onIngreso",
+                type: "POST",
+                data: {
+                    USUARIO: pnlAcceso.find("#Usuario").val(),
+                    CONTRASENA: pnlAcceso.find("#Contrasena").val()
+                }
+            }).done(function (data, x, jq) {
+                if (parseInt(data) === 1) {
+                    location.reload(true);
+                } else {
+                    acceso = true;
+                    onNotify('<span class="fa fa-exclamation fa-lg"></span>', data, 'danger');
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            }).always(function () {
+                btnIngresar.attr('disabled', false);
+                btnOlvidasteContrasena.attr('disabled', false);
+            });
         } else {
         }
     }

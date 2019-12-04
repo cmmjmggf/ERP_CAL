@@ -382,6 +382,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         ->where('remicion', $x['NC'])
                         ->where('tipo', $x['TP'])
                         ->update('cartcliente');
+               
+                
+                /*                 * ********************** TimbrarNC.exe TODAVIA NO LO TENEMOS***************** */
                 $this->onImprimirReporteNotaCreditoTp1Local($x['TP'], $x['NC'], $x['CLIENTE']);
                 exit(0);
             } else {
