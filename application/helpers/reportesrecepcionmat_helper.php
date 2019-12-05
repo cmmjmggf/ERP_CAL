@@ -243,24 +243,24 @@ class PDF extends FPDF {
 
         $this->SetY(7);
         $this->SetX(180);
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9);
         $this->Cell(30, 4, utf8_decode("Fecha: " . date("d-m-Y     h:i:s a")), 0/* BORDE */, 1, 'R');
         $this->AliasNbPages(' {totalPages}');
 
 
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(0/* 0 */, 90/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 26/* 6 */, 26/* 7 */);
-        $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C');
+        $anchos = array(0/* 0 */, 85/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
+        $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C');
 
         $this->SetY(22);
         $this->SetX(5);
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
-        $this->Row(array('', utf8_decode('Artículo'), 'Cant.', 'U.M.', 'Precio', 'Subtotal', utf8_decode('Fecha'), 'O. Compra'));
+        $this->Row(array('', utf8_decode('Artículo'), 'Cant.', 'U.M.', 'Precio', 'Subtotal', utf8_decode('Fecha'), 'O. Compra', 'Maq', 'Sem'));
 
-        $anchos = array(10/* 0 */, 80/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 26/* 6 */, 26/* 7 */);
-        $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C');
+        $anchos = array(10/* 0 */, 75/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
+        $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C');
         $this->SetAligns($aligns);
         $this->SetWidths($anchos);
     }

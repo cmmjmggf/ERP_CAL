@@ -320,13 +320,15 @@ class RecibeOrdenCompra extends CI_Controller {
 
                 $pdf->Row(array(
                     utf8_decode($F->Articulo),
-                    mb_strimwidth(utf8_decode($F->DescArticulo), 0, 70, "..."),
+                    mb_strimwidth(utf8_decode($F->DescArticulo), 0, 65, "..."),
                     number_format($F->Cantidad, 2, ".", ","),
                     utf8_decode($F->Unidad),
                     '$' . number_format($F->Precio, 2, ".", ","),
                     '$' . number_format($F->Subtotal, 2, ".", ","),
                     utf8_decode($F->FechaDoc),
-                    utf8_decode($F->OrdenCompra)
+                    utf8_decode($F->OrdenCompra),
+                    $F->Maq,
+                    $F->Sem
                 ));
                 $Subtotal += $F->Subtotal;
             }
