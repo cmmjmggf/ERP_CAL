@@ -95,11 +95,13 @@
                         text: "NO EXISTEN PROGRAMACION DE LA SEMANA/MAQUILA",
                         icon: "error"
                     }).then((action) => {
+                        mdlCotejaExplosionOrdCom.find('#btnImprimir').attr('disabled', false);
                         mdlCotejaExplosionOrdCom.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlCotejaExplosionOrdCom.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });

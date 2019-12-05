@@ -142,11 +142,13 @@
                         text: "NO EXISTEN PROGRAMACION DE LA SEMANA/MAQUILA",
                         icon: "error"
                     }).then((action) => {
+                        mdlExplosionSemanalOrdComProyeccion.find('#btnImprimir').attr('disabled', false);
                         mdlExplosionSemanalOrdComProyeccion.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlExplosionSemanalOrdComProyeccion.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });

@@ -104,8 +104,10 @@
             var Tipo = parseInt(mdlExplosionSemanal.find('#Tipo').val());
             var Reporte = '';
 
-            if (Tipo === 10 || Tipo === 80 || Tipo === 90) {
+            if (Tipo === 10 || Tipo === 80) {
                 Reporte = 'index.php/Explosiones/onReporteExplosionSemana';
+            } else if (Tipo === 90) {
+                Reporte = 'index.php/Explosiones/onReporteExplosionSemanaIndirectos';
             } else {
                 Reporte = 'index.php/Explosiones/onReporteExplosionSemanaSuelaDesglose';
             }
@@ -133,11 +135,13 @@
                         text: "NO EXISTEN PROGRAMACION DE LA SEMANA/MAQUILA",
                         icon: "error"
                     }).then((action) => {
+                        mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
                         mdlExplosionSemanal.find('#Ano').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });

@@ -1083,7 +1083,7 @@ class CapturaInventarios extends CI_Controller {
                 break;
         }
 
-        $Grupos = $this->ReporteCapturaFisica_model->getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes);
+        $Grupos = $this->ReporteCapturaFisica_model->getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior);
 
         $Detalle = $this->ReporteCapturaFisica_model->getDetalleReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior);
 

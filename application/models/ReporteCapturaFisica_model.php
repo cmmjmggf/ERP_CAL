@@ -127,7 +127,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                     ->from("$Maq A")
                     ->join("unidades U", 'ON U.Clave = A.UnidadMedida', "left")
                     ->join("preciosmaquilas PM", "ON PM.Articulo = A.Clave AND PM.Maquila = '1' ", "left")
-                    ->where("A.$Texto_Mes > 0 ", null, false)
+                    ->where("A.$Mes_Anterior > 0 ", null, false)
                     ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
                             . "WHERE EntradaSalida = 1 "
                             . "AND Articulo = A.Clave "
@@ -154,7 +154,7 @@ class ReporteCapturaFisica_model extends CI_Model {
         }
     }
 
-    public function getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes) {
+    public function getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior) {
         try {
             if ($Tipo === '0') {
                 $Tipo = '';
@@ -170,7 +170,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                             . "")
                     ->from("$Maq A")
                     ->join("grupos G", 'ON A.Grupo = G.Clave')
-                    ->where("A.$Texto_Mes > 0 ", null, false)
+                    ->where("A.$Texto_Mes_Anterior > 0 ", null, false)
                     ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
                             . "WHERE EntradaSalida = 1 "
                             . "AND Articulo = A.Clave "

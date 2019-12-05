@@ -91,6 +91,7 @@
                             });
                             HoldOn.close();
                         }).fail(function (x, y, z) {
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
                             console.log(x, y, z);
                             HoldOn.close();
                         });
@@ -105,6 +106,7 @@
                     text: "DEBES DE SELECCIONAR UN TIPO DE PRECIO",
                     icon: "error"
                 }).then((action) => {
+                    mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
                     mdlConciliaFabricaProduccion.find('#Precio')[0].selectize.focus();
                 });
             }
