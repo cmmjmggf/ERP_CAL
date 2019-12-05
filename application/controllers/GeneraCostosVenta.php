@@ -56,7 +56,9 @@ class GeneraCostosVenta extends CI_Controller {
             //------------------------------Obtenemos los estilos y colores con su porcentaje de desperdicio------------------------------
             $Estilos = $this->db->query("select e.clave as estilo ,
                             CASE
-                            WHEN e.PiezasCorte <= 10 THEN m.PorExtra3a10
+                            WHEN e.PiezasCorte = 1 THEN m.PorExtraXBotaAlta
+                            WHEN e.PiezasCorte = 2 THEN m.PorExtraXBota
+                            WHEN e.PiezasCorte > 2 AND e.PiezasCorte <= 10 THEN m.PorExtra3a10
                             WHEN e.PiezasCorte > 10 AND e.PiezasCorte <= 14 THEN m.PorExtra11a14
                             WHEN e.PiezasCorte > 14 AND e.PiezasCorte <= 18 THEN m.PorExtra15a18
                             WHEN e.PiezasCorte > 18  THEN m.PorExtra19a END AS PorcenDesperd,

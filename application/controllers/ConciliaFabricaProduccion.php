@@ -89,7 +89,11 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 SELECT EXPL.Grupo, EXPL.Articulo, EXPL.Unidad,'' AS Talla, sum(EXPL.Explosion) as Explosion, 0 as ENT, 0 as DEV, EXPL.Precio
                 from ( SELECT A.Grupo, FT.Articulo, U.Descripcion AS Unidad,
                 CASE WHEN A.Grupo in ('1', '2') then
-                (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                (PE.Pares *  FT.Consumo)*
+                (CASE
+                WHEN E.PiezasCorte = 1 THEN MA.PorExtraXBotaAlta
+                WHEN E.PiezasCorte = 2 THEN MA.PorExtraXBota
+                WHEN E.PiezasCorte > 2 AND E.PiezasCorte <= 10 THEN MA.PorExtra3a10
                 WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
                 WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
                 WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )

@@ -92,7 +92,7 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
 
             $this->db->query("set sql_mode=''");
             $this->db->select("C.Grupo, C.Articulo, C.NomArticulo AS Descripcion, C.Unidad, C.Precio, "
-                            . "sum(C.Talla) AS Talla, sum(C.explosion) AS Explosion, 
+                            . "sum(C.Talla) AS Talla, sum(C.explosion) AS Explosion,
 
                                     ifnull((select sum(OC.Cantidad) from ordencompra OC
                                     where OC.Articulo = C.Articulo
@@ -231,7 +231,11 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
 
                                     from (SELECT A.Grupo, FT.Articulo, A.Descripcion, U.Descripcion AS Unidad,
                                     case when $TipoE = '10' then
-                                    (PE.Pares *  FT.Consumo)*(CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                                    (PE.Pares *  FT.Consumo)*
+                                    (CASE
+                                    WHEN E.PiezasCorte = 1 THEN MA.PorExtraXBotaAlta
+                                    WHEN E.PiezasCorte = 2 THEN MA.PorExtraXBota
+                                    WHEN E.PiezasCorte > 2 AND E.PiezasCorte <= 10 THEN MA.PorExtra3a10
                                     WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
                                     WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
                                     WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a END + 1 )

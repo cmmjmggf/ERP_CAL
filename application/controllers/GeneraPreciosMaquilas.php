@@ -20,7 +20,9 @@ class GeneraPreciosMaquilas extends CI_Controller {
             $this->db->query("delete from listapreciosmaquilas where Maq = 1 and estilo = '$txtestilo' and color = $txtcolor ");
             $Estilo = $this->db->query("select e.clave as estilo , e.linea,
                             CASE
-                            WHEN e.PiezasCorte <= 10 THEN m.PorExtra3a10
+                            WHEN e.PiezasCorte = 1 THEN m.PorExtraXBotaAlta
+                            WHEN e.PiezasCorte = 2 THEN m.PorExtraXBota
+                            WHEN e.PiezasCorte > 2 AND E.PiezasCorte <= 10 THEN m.PorExtra3a10
                             WHEN e.PiezasCorte > 10 AND e.PiezasCorte <= 14 THEN m.PorExtra11a14
                             WHEN e.PiezasCorte > 14 AND e.PiezasCorte <= 18 THEN m.PorExtra15a18
                             WHEN e.PiezasCorte > 18  THEN m.PorExtra19a END AS PorcenDesperd
@@ -82,7 +84,9 @@ class GeneraPreciosMaquilas extends CI_Controller {
                     $this->db->query("delete from listapreciosmaquilas where Maq = 1 and estilo = '$txtestilo' and color = $txtcolor ");
                     $Estilo = $this->db->query("select e.clave as estilo , e.linea,
                             CASE
-                            WHEN e.PiezasCorte <= 10 THEN m.PorExtra3a10
+                            WHEN e.PiezasCorte = 1 THEN m.PorExtraXBotaAlta
+                            WHEN e.PiezasCorte = 2 THEN m.PorExtraXBota
+                            WHEN e.PiezasCorte > 2 AND e.PiezasCorte <= 10 THEN m.PorExtra3a10
                             WHEN e.PiezasCorte > 10 AND e.PiezasCorte <= 14 THEN m.PorExtra11a14
                             WHEN e.PiezasCorte > 14 AND e.PiezasCorte <= 18 THEN m.PorExtra15a18
                             WHEN e.PiezasCorte > 18  THEN m.PorExtra19a END AS PorcenDesperd

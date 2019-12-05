@@ -88,10 +88,13 @@ class GenerarCostosFabricacion_model extends CI_Model {
                                 FT.Color as color,
                                 CAST(P.Departamento AS SIGNED ) AS depto,
                                 (select GFD.costo from gastosfabricaxdepto GFD where GFD.clave = P.Departamento limit 1) as gastosdepto,
-                                @desperdicio := CASE WHEN E.PiezasCorte <= 10 THEN MA.PorExtra3a10
+                                @desperdicio := CASE
+                                WHEN E.PiezasCorte = 1 THEN MA.PorExtraXBotaAlta
+                                WHEN E.PiezasCorte = 2 THEN MA.PorExtraXBota
+                                WHEN E.PiezasCorte > 2 AND E.PiezasCorte <= 10 THEN MA.PorExtra3a10
                                 WHEN E.PiezasCorte > 10 AND E.PiezasCorte <= 14 THEN MA.PorExtra11a14
                                 WHEN E.PiezasCorte > 14 AND E.PiezasCorte <= 18 THEN MA.PorExtra15a18
-                                WHEN E.PiezasCorte > 18  THEN MA.PorExtra19a ELSE 0 END as Desperdicio,
+                                WHEN E.PiezasCorte > 18 THEN MA.PorExtra19a ELSE 0 END as Desperdicio,
                                 @costo := FT.Consumo *  PM.Precio as CostoSinDesp,
                                 CASE WHEN G.Clave IN (1, 2) THEN
                                 @costo + ((@costo) * @desperdicio)
