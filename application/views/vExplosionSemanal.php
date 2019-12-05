@@ -48,7 +48,6 @@
                                 <option value="10">10 PIEL Y FORRO</option>
                                 <option value="80">80 SUELA</option>
                                 <option value="90">90 INDIRECTOS</option>
-                                <option value="0">80 SUELA C/ DESGLOSE</option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -104,12 +103,12 @@
             var Tipo = parseInt(mdlExplosionSemanal.find('#Tipo').val());
             var Reporte = '';
 
-            if (Tipo === 10 || Tipo === 80) {
-                Reporte = 'index.php/Explosiones/onReporteExplosionSemana';
+            if (Tipo === 80) {
+                Reporte = 'index.php/Explosiones/onReporteExplosionSemanaSuelas';
             } else if (Tipo === 90) {
                 Reporte = 'index.php/Explosiones/onReporteExplosionSemanaIndirectos';
-            } else {
-                Reporte = 'index.php/Explosiones/onReporteExplosionSemanaSuelaDesglose';
+            } else if (Tipo === 10) {
+                Reporte = 'index.php/Explosiones/onReporteExplosionSemana';
             }
 
             var frm = new FormData(mdlExplosionSemanal.find("#frmExplosion")[0]);
@@ -126,9 +125,15 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-                    onImprimirReporteFancyAFC(data, function (a, b) {
-                        mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
-                    });
+                    if (Tipo === 80) {
+                        onImprimirReporteFancyArrayAFC(JSON.parse(data), function (a, b) {
+                            mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
+                        });
+                    } else {
+                        onImprimirReporteFancyAFC(data, function (a, b) {
+                            mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
+                        });
+                    }
                 } else {
                     swal({
                         title: "ATENCIÓN",

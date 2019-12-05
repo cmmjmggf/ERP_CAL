@@ -11,6 +11,18 @@ class Explosiones extends CI_Controller {
                 ->helper('Explosiones_helper')->helper('file');
     }
 
+    public function onReporteExplosionSemanaSuelas() {
+        /* Borramos el archivo anterior */
+        if (delete_files('uploads/Reportes/Explosion/')) {
+            /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+        }
+        $reportes = array();
+        $reportes['1UNO'] = $this->onReporteExplosionSemana();
+        $reportes['2DOS'] = $this->onReporteExplosionSemanaSuelaDesglose();
+
+        print json_encode($reportes);
+    }
+
     public function onReporteExplosionSemanaSuelaDesglose() {
         $Tipo = $this->input->post('Tipo');
         $Maq = $this->input->post('Maq');
@@ -188,12 +200,9 @@ class Explosiones extends CI_Controller {
             }
             $file_name = "EXPLOSION MATERIALES DESGLOSE TALLAS" . ' ' . date("d-m-Y his");
             $url = $path . '/' . $file_name . '.pdf';
-            /* Borramos el archivo anterior */
-            if (delete_files('uploads/Reportes/Explosion/')) {
-                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
-            }
+
             $pdf->Output($url);
-            print base_url() . $url;
+            return base_url() . $url;
         }
     }
 
@@ -388,12 +397,18 @@ class Explosiones extends CI_Controller {
             }
             $file_name = "EXPLOSION MATERIALES " . ' ' . date("d-m-Y his");
             $url = $path . '/' . $file_name . '.pdf';
-            /* Borramos el archivo anterior */
-            if (delete_files('uploads/Reportes/Explosion/')) {
-                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+
+            if ($Tipo === '10') {
+                /* Borramos el archivo anterior */
+                if (delete_files('uploads/Reportes/Explosion/')) {
+                    /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+                }
+                $pdf->Output($url);
+                print base_url() . $url;
+            } else {
+                $pdf->Output($url);
+                return base_url() . $url;
             }
-            $pdf->Output($url);
-            print base_url() . $url;
         }
     }
 
@@ -496,8 +511,8 @@ class Explosiones extends CI_Controller {
                                         $pdf->Row(array(
                                             utf8_decode($DT->Articulo),
                                             utf8_decode(mb_strimwidth($DT->Descripcion, 0, 40, "")),
-                                            utf8_decode($DT->Unidad),
                                             $Talla,
+                                            utf8_decode($DT->Unidad),
                                             number_format($Exp_Acum, 2, ".", ","),
                                             '$' . number_format($D->Precio, 2, ".", ","),
                                             '$' . number_format($Exp_Acum * $D->Precio, 2, ".", ","),
@@ -512,8 +527,8 @@ class Explosiones extends CI_Controller {
                                         $pdf->Row(array(
                                             utf8_decode($DT->Articulo),
                                             utf8_decode(mb_strimwidth($DT->Descripcion, 0, 40, "")),
-                                            utf8_decode($DT->Unidad),
                                             $Talla,
+                                            utf8_decode($DT->Unidad),
                                             number_format($Exp_Acum, 2, ".", ","),
                                             '$' . number_format($D->Precio, 2, ".", ","),
                                             '$' . number_format($Exp_Acum * $D->Precio, 2, ".", ","),

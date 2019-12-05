@@ -1483,8 +1483,8 @@ class PDF extends FPDF {
         }
         $anchos = array(
             10/* ClaveArt */,
-            63/* Articulo */,
-            7/* Clasif */,
+            62/* Articulo */,
+            8/* Clasif */,
             13/* UM */,
             15/* Explosion */,
             13/* Precio */,
