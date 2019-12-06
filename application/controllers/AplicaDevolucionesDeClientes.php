@@ -185,8 +185,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function getUltimaNC() {
         try {
             print json_encode($this->db->query("SELECT (NC.nc + 1) AS NCU FROM notcred AS NC "
-                                    . "WHERE NC.tp = 1 AND NC.tp = 1 "
-                                    . "ORDER BY NC.nc DESC LIMIT 1")->result());
+                                    . "WHERE NC.tp = 1 ORDER BY NC.nc DESC LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -382,8 +381,6 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         ->where('remicion', $x['NC'])
                         ->where('tipo', $x['TP'])
                         ->update('cartcliente');
-               
-                
                 /*                 * ********************** TimbrarNC.exe TODAVIA NO LO TENEMOS***************** */
                 $this->onImprimirReporteNotaCreditoTp1Local($x['TP'], $x['NC'], $x['CLIENTE']);
                 exit(0);

@@ -77,7 +77,7 @@
                         <span class="font-weight-bold text-info notac_text" style="color: #1d1d1d !important;">- - - -</span> 
                         <input type="text" id="NotaCredito" name="NotaCredito" readonly="" class="form-control form-control-sm d-none numbersOnly">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2"> 
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Control: </span> 
                         <span class="font-weight-bold text-info control_text" style="color: #1d1d1d !important;">- - - -</span>
@@ -96,7 +96,7 @@
                         <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                         <input type="text" id="ColorT" name="ColorT" class="form-control form-control-sm d-none" readonly="">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2"> 
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
                         <span class="font-weight-bold text-danger">Serie: </span> 
                         <span class="font-weight-bold text-info serie_text" style="color: #1d1d1d !important;">----</span>
@@ -124,7 +124,7 @@
 
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4"> 
                         <span class="font-weight-bold text-danger">Saldo: </span> 
-                        <span class="font-weight-bold text-info total_devuelto" style="color: #1d1d1d !important;">$ 0.00</span> 
+                        <span class="font-weight-bold text-info saldo_total" style="color: #1d1d1d !important;">$ 0.00</span> 
                     </div>
 
                     <div class="w-100 my-1"></div>
@@ -664,7 +664,7 @@
             if (aaa.length <= 0) {
                 onBeep(2);
                 onCampoInvalido(pnlTablero, 'ESTE DOCUMENTO NO PERTENECE A ESTE CLIENTE O NO EXISTE, INTENTE CON OTRO NUMERO DE DOCUMENTO', function () {
-                    AplicaDevolucion.focus();
+                    AplicaDevolucion.focus().select();
                 });
             } else {
                 $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getDocumentadosDeEsteClienteConSaldoXDocumento') ?>', {
@@ -735,6 +735,7 @@
                     pnlTablero.find("#ImporteDev").val(idv);
                     pnlTablero.find(".importe_dev").text(idv);
                     pnlTablero.find(".importe_devuelto").text(idv);
+                    pnlTablero.find(".saldo_total").text(total_final);
                     pnlTablero.find("#NuevoSaldo").val(total_final);
                     var pp = {
                         CLIENTE: ClienteDevolucion.val(),
