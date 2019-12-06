@@ -1629,7 +1629,7 @@
 
     function iMsg(msg, t, f) {
         swal('ATENCIÓN', msg,
-                (t === 's' ? 'success' : (t === 'i' ? 'info' : (t === 'w' ? 'warning' : 'error')))).then(function () {
+                (t === 's' ? 'success' : (t === 'i' ? 'info' : (t === 'w' ? 'warning' : 'error')))).then(function (v) {
             f();
         });
     }
@@ -1637,24 +1637,24 @@
     function onCampoInvalido(pnl, msj, fun) {
         $.each($("body").find("select.selectized:enabled"), function (k, v) {
             $(v).addClass('campo_no_valido');
+            onDisable($(v));
         });
         $.each($("body").find("button:enabled"), function (k, v) {
             $(v).addClass('disabledForms');
-            $(v).addClass('boton_no_valido').attr('disabled', true);
-        });
-        $.each($("body").find("select.selectized:enabled"), function (k, v) {
-            $(v)[0].selectize.disable();
+            $(v).addClass('boton_no_valido');
+            onDisable($(v));
         });
         $("body").find("input:enabled,textarea:enabled").addClass('campo_no_valido').attr('disabled', true);
         onBeep(2);
-        iMsg(msj, "w", function () {
+        swal('ATENCIÓN', msj, 'warning').then(function (v) {
             $.each($("body").find("select.campo_no_valido:disabled"), function (k, v) {
                 $(v).removeClass('campo_no_valido');
-                $(v)[0].selectize.enable();
+                onEnable($(v));
             });
             $.each($("body").find("button.boton_no_valido:disabled"), function (k, v) {
                 $(v).removeClass('disabledForms');
-                $(v).removeClass('boton_no_valido').attr('disabled', false);
+                $(v).removeClass('boton_no_valido');
+                onEnable($(v));
             });
             $("body").find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
             fun();
@@ -1683,7 +1683,7 @@
         }
     }
 
-    function onEnable(e) { 
+    function onEnable(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', false);
@@ -1697,7 +1697,7 @@
         }
     }
 
-    function onDisable(e) { 
+    function onDisable(e) {
         switch (e[0].tagName) {
             case "INPUT":
                 $(e).attr('disabled', true);

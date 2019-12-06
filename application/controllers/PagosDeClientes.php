@@ -13,16 +13,16 @@ class PagosDeClientes extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
-            $this->load->view('vEncabezado');
+            $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
-                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vMenuClientes');
                     break;
                 case 'VENTAS':
-                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    $this->load->view('vMenuClientes');
                     break;
             }
-            $this->load->view('vPagosDeClientes')->view('vFooter');
+            $this->load->view('vFondo')->view('vPagosDeClientes')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

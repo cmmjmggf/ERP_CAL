@@ -334,7 +334,7 @@ class Pedidos extends CI_Controller {
                 "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
                 "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
                 "C21" => $x['C21'], "C22" => $x['C22'],
-                "Estatus" => 'A', "Registro" => Date('Y-m-d h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Estatus" => 'A', "Registro" => Date('Y-m-d 00:00:00'), "Recibido" => $x['RECIBIDO'],
                 "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
                 "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
                 "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
@@ -342,6 +342,9 @@ class Pedidos extends CI_Controller {
                 "DeptoProduccion" => NULL, "stsavan" => 0
             );
             $this->db->insert('pedidox', $p);
+            $insert_id = $this->db->insert_id();
+            $l = new Logs("PEDIDOS", "AGREGO UN REGISTRO AL PEDIDO({$insert_id}) {$x['PEDIDO']} DE {$x['PARES']} PARES, CON EL ESTILO-COLOR {$x['ESTILO']} {$x['COLOR']}.", $this->session);
+
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
             } else {
@@ -456,6 +459,8 @@ class Pedidos extends CI_Controller {
                 $data["Estatus"] = 'A';
                 $data["Registro"] = Date('Y-m-d h:i:s');
                 $this->db->insert("pedidox", $data);
+                $insert_id = $this->db->insert_id();
+                $l = new Logs("PEDIDOS", "ID({$insert_id}), AGREGO UN REGISTRO AL PEDIDO({$x['PEDIDO']}) DE {$x['PARES']} PARES DEL CLIENTE({$x['CLIENTE']}) (SERIE-{$x['SERIE']}), CON EL ESTILO-COLOR ({$x['ESTILO']} - {$x['COLOR']}).", $this->session);
             }
             //RETURN ID
             print '{ "ID":' . $x->post('Clave') . ',"EVT":"Agregar"}';
@@ -493,6 +498,9 @@ class Pedidos extends CI_Controller {
                 "DeptoProduccion" => NULL
             );
             $this->db->insert('pedidox', $p);
+            $insert_id = $this->db->insert_id();
+            $l = new Logs("PEDIDOS", "ID({$insert_id}), AGREGO UN REGISTRO AL PEDIDO({$x['PEDIDO']}) DE {$x['PARES']} PARES DEL CLIENTE({$x['CLIENTE']}) (SERIE-{$x['SERIE']}), CON EL ESTILO-COLOR ({$x['ESTILO']} - {$x['COLOR']}).", $this->session);
+
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
             } else {
@@ -542,7 +550,7 @@ class Pedidos extends CI_Controller {
                             ->where('P.Clave', $IDX)
                             ->where('P.Cliente', $CLIENTE)
                             ->where_not_in('P.stsavan', 14)
-                            ->order_by('P.ID', 'DESC')
+                            ->order_by('P.ID', 'ASC')
                             ->get()->result();
 
 //            $Series = $this->pem->getSerieXPedido($IDX, $CLIENTE);

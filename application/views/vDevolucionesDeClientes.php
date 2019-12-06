@@ -369,7 +369,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 <script>
     var pnlTablero = $("#pnlTablero"),
             xClienteDevolucion = pnlTablero.find('#xClienteDevolucion'),
@@ -443,6 +443,7 @@
                 DetalleDefecto[0].selectize.clear(true);
             }
         });
+        
         DetalleDefecto.change(function () {
             if (DetalleDefecto.val()) {
                 xDetalleDefecto.val(DetalleDefecto.val());
@@ -611,6 +612,7 @@
         ClienteDevolucion.click(function () {
             ClienteDevolucion[0].selectize.enable();
         });
+        
         ClienteDevolucion.change(function () {
             if (ClienteDevolucion.val()) {
                 xClienteDevolucion.val(ClienteDevolucion.val());
@@ -799,7 +801,7 @@
         });
 
         pnlTablero.find("input[id^=PDF]").on('keydown', function (e) {
-            console.log(e.keyCode)
+            console.log(e.keyCode);
             if (e.keyCode === 106 || e.keyCode === 107 || e.keyCode === 109 || e.keyCode === 110) {
                 e.preventDefault();
             }
@@ -826,7 +828,6 @@
                 });
             }
         });
-
 
         Control.on('keydown', function (e) {
             //            if (ClienteDevolucion.val()) {

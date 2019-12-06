@@ -29,11 +29,18 @@
         <div class="row">
             <div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1">
                 <label>Cliente</label>
-                <input type="text" class="form-control form-control-sm  numbersOnly " id="ClientePDC" name="ClientePDC" maxlength="5" required="">
+                <input type="text" id="ClientePDC" name="ClientePDC"  class="form-control form-control-sm  numbersOnly "maxlength="5" required="">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4">
                 <label for="">-</label>
                 <select id="sClientePDC" name="sClientePDC" class="form-control form-control-sm NotSelectize">
+                    <option></option>
+                    <?php
+                    $q = $this->db->query("SELECT C.Clave AS CLAVE,  C.RazonS AS CLIENTE FROM clientes AS C INNER JOIN cartcliente AS CC ON C.Clave = CC.cliente WHERE C.Estatus IN('ACTIVO') AND CC.saldo > 2 ORDER BY C.RazonS ASC")->result();
+                    foreach ($q as $k => $v) {
+                        print "<option value='{$v->CLAVE}'>{$v->CLAVE} {$v->CLIENTE} </option>";
+                    }
+                    ?>
                 </select>
                 <input type="text" id="AgentePDC" name="AgentePDC" class="d-none" readonly="">
             </div>
@@ -196,7 +203,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4">
                 <label for="">Banco</label>
-                <select id="Banco" name="Banco" class="form-control form-control-sm NotSelectize selectNotEnter"></select>
+                <select id="Banco" name="Banco" class="form-control form-control-sm selectNotEnter"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <label for="">Cuenta</label>
@@ -600,15 +607,81 @@
         CapturaPDC.val(FechaActual);
         DepositoFecha.val(FechaActual);
 
-        getClientes();
+        ClientePDC.on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                if (ClientePDC.val()) {
+                    sClientePDC[0].selectize.setValue(ClientePDC.val());
+                    if (sClientePDC.val()) {
+                        var txtcte = $(this).val();
+                        if (txtcte) {
+                            $.getJSON('<?php print base_url('PagosDeClientes/onVerificarCliente'); ?>', {Cliente: txtcte}).done(function (data) {
+                                if (data.length > 0) {
+                                    onOpenOverlay('Por favor espere...');
+                                    pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+
+
+                                    MovUno[0].selectize.clear(true);
+                                    MovDos[0].selectize.clear(true);
+                                    MovTres[0].selectize.clear(true);
+                                    MovCuatro[0].selectize.clear(true);
+
+                                    if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+                                        getPagosDocumento();
+                                    } else {
+                                        PagosDeEsteDocumento.ajax.reload();
+                                    }
+                                    if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+                                        getDocumentosConSaldoXClientes();
+                                    } else {
+                                        DocumentosConSaldoXClientes.ajax.reload();
+                                    }
+                                    $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: txtcte})
+                                            .done(function (a) {
+                                                if (a.length > 0) {
+                                                    AgentePDC.val(a[0].AGENTE);
+                                                    DepositoPDC.focus().select();
+                                                }
+                                            }).fail(function (x) {
+                                        getError(x);
+                                    }).always(function () {
+                                        HoldOn.close();
+                                    });
+
+                                } else {
+                                    swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                                        sClientePDC[0].selectize.clear(true);
+                                        ClientePDC.focus().val('');
+                                    });
+                                }
+                            }).fail(function (x) {
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                                console.log(x.responseText);
+                            });
+                        }
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                            ClientePDC.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    sClientePDC[0].selectize.enable();
+                    sClientePDC[0].selectize.clear(true);
+                }
+            } else {
+                sClientePDC[0].selectize.enable();
+                sClientePDC[0].selectize.clear(true);
+            }
+        });
 
         ClientePDC.keydown(function (e) {
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
+                sClientePDC[0].selectize.setValue(txtcte);
+                return;
                 if (txtcte) {
                     $.getJSON('<?php print base_url('PagosDeClientes/onVerificarCliente'); ?>', {Cliente: txtcte}).done(function (data) {
                         if (data.length > 0) {
-                            sClientePDC[0].selectize.addItem(txtcte, true);
 
                             HoldOn.open({
                                 theme: 'sk-rect',
@@ -831,18 +904,6 @@
                 }, 0);
                 pnlTablero.find("#SaldoTotalPendiente h4").text('Saldo $' + $.number(parseFloat(saldox), 2, '.', ','));
             }
-        });
-    }
-
-    function getClientes() {
-        $.getJSON('<?php print base_url('PagosDeClientes/getClientes'); ?>').done(function (a) {
-            a.forEach(function (x) {
-                sClientePDC[0].selectize.addOption({text: x.Cliente, value: x.Clave});
-            });
-        }).fail(function (x) {
-            getError(x);
-        }).always(function () {
-            handleEnterDiv(pnlTablero);
         });
     }
 

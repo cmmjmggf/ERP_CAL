@@ -104,7 +104,7 @@ class ParesPreProgramados extends CI_Controller {
 
             $CLIENTES = $this->db->group_by('C.ID')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
 //            print $this->db->last_query();
-
+                
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');
