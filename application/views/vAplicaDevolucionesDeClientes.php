@@ -2,11 +2,16 @@
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row"> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
-                <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row"> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
                         <h5 class="text-danger font-italic"><span class="fa fa-exchange-alt"></span> APLICA DEVOLUCIONES PENDIENTES</h5>
                     </div>
-
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <button type="button" style="border-color:#D8317F !important;  background-color: #D8317F !important; color: #fff !important;" id="btnPrecioEnPrice" name="btnPrecioEnPrice" class="btn btn-info btn-sm btn-price">
+                            <span class="fa fa-eye"></span> PRECIO EN PRICE
+                        </button> 
+                    </div> 
+                    <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                         <label>Cliente</label>
                         <div class="row">
@@ -280,12 +285,18 @@
             btnMovimientos = pnlTablero.find("#btnMovimientos"),
             btnRastreoCtrlDoc = pnlTablero.find("#btnRastreoCtrlDoc"),
             btnRastreoEstCte = pnlTablero.find("#btnRastreoEstCte"),
-            documento_dtm, devolucion_dtm,
+            documento_dtm, devolucion_dtm, btnPrecioEnPrice = pnlTablero.find("#btnPrecioEnPrice"),
             nuevo = true;
 
     $(document).ready(function () {
 
         handleEnterDiv(pnlTablero);
+
+        btnPrecioEnPrice.click(function () {
+            onOpenWindowAFC("http://proveedores.priceshoes.com/", function () {
+                Precio.focus().select();
+            });
+        });
 
         ClienteDevolucion.change(function () {
             if (ClienteDevolucion.val()) {
@@ -324,6 +335,11 @@
         });
 
         btnCierraNC.click(function () {
+            onEnable(xClienteDevolucion);
+            onEnable(ClienteDevolucion);
+            onReadAndWrite(FechaDevolucion);
+            onReadAndWrite(AplicaDevolucion);
+            onEnable(TP);
             getTotal();
             btnCierraNC.attr('disabled', true);
 
@@ -365,6 +381,11 @@
 
 
         btnAcepta.click(function () {
+            onEnable(xClienteDevolucion);
+            onEnable(ClienteDevolucion);
+            onReadAndWrite(FechaDevolucion);
+            onReadAndWrite(AplicaDevolucion);
+            onEnable(TP);
             var p = {
                 CLIENTE: ClienteDevolucion.val(),
                 DOCUMENTO: NotaCredito.val(),
@@ -409,7 +430,24 @@
                 }).always(function () {
                 });
             } else {
-
+                $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
+                    console.log(aaa);
+                    nuevo = false;
+                    DevolucionDetalle.ajax.reload();
+                    onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HAN GUARDADO LOS CAMBIOS', 'warning', {from: "bottom", align: "center"});
+                    onDisable(ClienteDevolucion);
+                    FechaDevolucion.attr("readonly", true);
+                    AplicaDevolucion.attr("readonly", true);
+                    onDisable(TP);
+                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
+                    DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
+                        onEnable(btnCierraNC);
+                    });
+                    getTotal();
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                });
             }
         });
 
@@ -823,5 +861,10 @@
         color: #fff;
         background-color: #59802F;
         border-color: #59802F;
+    }
+    .btn-price:not(:disabled):not(.disabled):active, .btn-price:not(:disabled):not(.disabled).active, .show > .btn-price.dropdown-toggle {
+        color: #fff;
+        background-color: #AC205F;
+        border-color: #AC205F;
     }
 </style>

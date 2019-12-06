@@ -20,6 +20,15 @@
         // Iframe template
         tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
         preload: true,
+        // Should display close button (using `btnTpl.smallBtn` template) over the content
+        // Can be true, false, "auto"
+        // If "auto" - will be automatically enabled for "html", "inline" or "ajax" items
+        smallBtn: "auto",
+
+        // Should display toolbar (buttons at the top)
+        // Can be true, false, "auto"
+        // If "auto" - will be automatically hidden if "smallBtn" is enabled
+        toolbar: "true",
         // Custom CSS styling for iframe wrapping element
         // You can use this to set custom iframe dimensions
         css: {
@@ -1707,6 +1716,23 @@
                 break;
             case "BUTTON":
                 $(e).attr('disabled', true);
+                break;
+        }
+    }
+
+    function onClear(e) {
+        var text_tags = ["P", "SPAN", "H1", "H2", "H3", "H4", "H5", "H6",
+            "BUTTON", "TD", "TH", "DIV", "LEGEND", "OPTION"];
+        if (text_tags !== -1) {
+            $(e).text('');
+            return;
+        }
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).val('');
+                break;
+            case "SELECT":
+                $(e)[0].selectize.clear(true);
                 break;
         }
     }
