@@ -611,4 +611,30 @@ class ReportesClientesJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteComparativoVentasPorAno() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["agt"] = $this->input->post('Agente');
+        $parametros["anoI"] = $this->input->post('AnoI');
+        $parametros["anoF"] = $this->input->post('AnoF');
+        $parametros["mes"] = $this->input->post('Mes');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\ventas\comparativoVentasPorAno.jasper');
+        $jc->setFilename('VENTAS_X_ANO_COMPARATIVO_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onVerificarAgente() {
+        try {
+            $Agente = $this->input->get('Agente');
+            print json_encode($this->db->query("select clave from agentes where clave = '$Agente ' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }
