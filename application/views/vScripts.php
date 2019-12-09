@@ -1697,6 +1697,9 @@
             case "INPUT":
                 $(e).attr('disabled', false);
                 break;
+            case "TEXTAREA":
+                $(e).attr('disabled', false);
+                break;
             case "SELECT":
                 $(e)[0].selectize.enable();
                 break;
@@ -1711,6 +1714,9 @@
             case "INPUT":
                 $(e).attr('disabled', true);
                 break;
+            case "TEXTAREA":
+                $(e).attr('disabled', true);
+                break;
             case "SELECT":
                 $(e)[0].selectize.disable();
                 break;
@@ -1718,6 +1724,43 @@
                 $(e).attr('disabled', true);
                 break;
         }
+    }
+
+
+    function onEnableAFS(e, f) {
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', false);
+                break;
+            case "TEXTAREA":
+                $(e).attr('disabled', false);
+                break;
+            case "SELECT":
+                $(e)[0].selectize.enable();
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', false);
+                break;
+        }
+        f();
+    }
+
+    function onDisableAFS(e, f) {
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', true);
+                break;
+            case "TEXTAREA":
+                $(e).attr('disabled', true);
+                break;
+            case "SELECT":
+                $(e)[0].selectize.disable();
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', true);
+                break;
+        }
+        f();
     }
 
     function onClear(e) {
@@ -1731,9 +1774,29 @@
             case "INPUT":
                 $(e).val('');
                 break;
+            case "TEXTAREA":
+                $(v).val('');
+                break;
             case "SELECT":
                 $(e)[0].selectize.clear(true);
                 break;
         }
+    }
+
+    function onClearPanelInputSelect(pnl, f) {
+        $.each(pnl.find("input,textarea,select"), function (k, v) {
+            switch ($(v)[0].tagName) {
+                case "INPUT":
+                    $(v).val('');
+                    break;
+                case "TEXTAREA":
+                    $(v).val('');
+                    break;
+                case "SELECT":
+                    $(v)[0].selectize.clear(true);
+                    break;
+            }
+        });
+        f();
     }
 </script>

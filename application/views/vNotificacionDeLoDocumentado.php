@@ -100,7 +100,7 @@
                             <span class="fa fa-save"></span> Acepta</button> 
                     </div>
                     <div class="col-4 justify-content-center text-center">
-                        <button type="button" class="btn btn-info" id="btnImprimeNDOC">
+                        <button type="button" class="btn btn-info d-none" id="btnImprimeNDOC">
                             <span class="fa fa-print"></span> Imprime</button> 
                     </div>
                     <div class="col-4 justify-content-center text-center">
@@ -120,14 +120,83 @@
             ClaveTransporteNDOC = mdlNotificacionDeLoDocumentado.find("#ClaveTransporteNDOC"),
             TransporteNDOC = mdlNotificacionDeLoDocumentado.find("#TransporteNDOC"),
             TPNDOC = mdlNotificacionDeLoDocumentado.find("#TPNDOC"),
+            CajasNDOC = mdlNotificacionDeLoDocumentado.find("#CajasNDOC"),
+            Talon = mdlNotificacionDeLoDocumentado.find("#Talon"),
             btnAceptaNDOC = mdlNotificacionDeLoDocumentado.find("#btnAceptaNDOC"),
-            tblDocumentos = mdlNotificacionDeLoDocumentado.find("#tblDocumentos"), Documentos;
+            tblDocumentos = mdlNotificacionDeLoDocumentado.find("#tblDocumentos"), Documentos,
+            btnMovimientoNDOC = mdlNotificacionDeLoDocumentado.find("#btnMovimientoNDOC");
 
     $(document).ready(function () {
         handleEnterDiv(mdlNotificacionDeLoDocumentado);
 
+        btnMovimientoNDOC.click(function () {
+            onOpenWindowAFC('<?php print base_url('MovimientosCliente'); ?>',function(){
+                ClienteClaveNDOC.focus().select();
+            });
+        });
+
         btnAceptaNDOC.click(function () {
-            
+
+            var p = {
+                CLIENTE: ClienteClaveNDOC.val(),
+                DOCUMENTO: DoctoNDOC.val(),
+                TP: TPNDOC.val(),
+                CAJAS: CajasNDOC.val(),
+                TALON: Talon.val(),
+                TRANSPORTE_CLAVE: ClaveTransporteNDOC.val(),
+                TRANSPORTE: TransporteNDOC.find("option:selected").text()
+            };
+            if (ClienteClaveNDOC.val() === '' || ClienteFacturaNDOC.val() === ''
+                    || DoctoNDOC.val() === '' || TPNDOC.val() === '') {
+                onCampoInvalido(mdlNotificacionDeLoDocumentado, "POR FAVOR ESPECIFIQUE UN CLIENTE, UN DOCUMENTO Y UN TIPO(TP)", function () {
+                    if (ClienteClaveNDOC.val() === '') {
+                        ClienteClaveNDOC.focus().select();
+                    } else if (DoctoNDOC.val() === '') {
+                        DoctoNDOC.focus().select();
+                    } else if (TPNDOC.val() === '') {
+                        TPNDOC.focus().select();
+                    }
+                });
+                return;
+            }
+            $.post('<?php print base_url('NotificacionDeLoDocumentado/onNotificar'); ?>', p).done(function (a) {
+                console.log(a);
+                onNotifyOldPC('<span class="fa fa-check"></span>', 'NOTIFICACION COMPLETADA', 'success', {from: "bottom", align: "center"});
+                onClearPanelInputSelect(mdlNotificacionDeLoDocumentado, function () {
+                    ClienteClaveNDOC.focus().select();
+                    Documentos.ajax.reload(function () {
+                        if (Documentos.rows().count() > 0) {
+                            onEnable(btnAceptaNDOC);
+                        } else {
+                            onDisable(btnAceptaNDOC);
+                        }
+                    });
+                });
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+        });
+
+        DoctoNDOC.on('keydown', function (e) {
+            if (e.keyCode === 13 || e.keyCode === 8 || e.keyCode === 9 || e.keyCode === 46) {
+                Documentos.ajax.reload(function () {
+                    if (Documentos.rows().count() > 0) {
+                        onEnable(btnAceptaNDOC);
+                    } else {
+                        onDisable(btnAceptaNDOC);
+                    }
+                });
+            }
+        }).focusout(function () {
+            Documentos.ajax.reload(function () {
+                if (Documentos.rows().count() > 0) {
+                    onEnable(btnAceptaNDOC);
+                } else {
+                    onDisable(btnAceptaNDOC);
+                }
+            });
         });
 
         ClienteFacturaNDOC.change(function () {
@@ -139,14 +208,19 @@
                 ClienteFacturaNDOC[0].selectize.enable();
                 ClienteFacturaNDOC[0].selectize.clear(true);
             }
-            Documentos.ajax.reload();
+            Documentos.ajax.reload(function () {
+                if (ClienteFacturaNDOC.val()) {
+                    onEnable(ClienteFacturaNDOC);
+                }
+            });
         });
 
         ClienteClaveNDOC.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 || e.keyCode === 9) {
                 if (ClienteClaveNDOC.val()) {
                     ClienteFacturaNDOC[0].selectize.setValue(ClienteClaveNDOC.val());
                     if (ClienteFacturaNDOC.val()) {
+                        onDisable(ClienteFacturaNDOC);
                     } else {
                         onCampoInvalido(mdlNotificacionDeLoDocumentado, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             ClienteClaveNDOC.focus().select();
@@ -159,6 +233,13 @@
             } else {
                 ClienteFacturaNDOC[0].selectize.enable();
                 ClienteFacturaNDOC[0].selectize.clear(true);
+                Documentos.ajax.reload(function () {
+                    if (Documentos.rows().count() > 0) {
+                        onEnable(btnAceptaNDOC);
+                    } else {
+                        onDisable(btnAceptaNDOC);
+                    }
+                });
             }
         });
 
@@ -170,6 +251,13 @@
                 TransporteNDOC[0].selectize.enable();
                 TransporteNDOC[0].selectize.clear(true);
             }
+            Documentos.ajax.reload(function () {
+                if (Documentos.rows().count() > 0) {
+                    onEnable(btnAceptaNDOC);
+                } else {
+                    onDisable(btnAceptaNDOC);
+                }
+            });
         });
 
         ClaveTransporteNDOC.on('keydown', function (e) {
@@ -195,6 +283,13 @@
         TPNDOC.keydown(function (e) {
             if (ClienteClaveNDOC.val()) {
                 if (e.keyCode === 13 && parseInt(TPNDOC.val()) >= 1 && parseInt(TPNDOC.val()) <= 2) {
+                    Documentos.ajax.reload(function () {
+                        if (Documentos.rows().count() > 0) {
+                            onEnable(btnAceptaNDOC);
+                        } else {
+                            onDisable(btnAceptaNDOC);
+                        }
+                    });
                     return;
                 } else if (e.keyCode === 13 && parseInt(TPNDOC.val()) >= 3) {
                     TPNDOC.focus().select();
@@ -210,9 +305,16 @@
                 return;
             }
         }).focusout(function () {
-
             if (ClienteClaveNDOC.val()) {
                 if (parseInt(TPNDOC.val()) >= 1 && parseInt(TPNDOC.val()) <= 2) {
+                    Documentos.ajax.reload(function () {
+                        if (Documentos.rows().count() > 0) {
+                            onEnable(btnAceptaNDOC);
+                        } else {
+                            onDisable(btnAceptaNDOC);
+                        }
+                    });
+                    return;
                 } else if (parseInt(TPNDOC.val()) >= 3) {
                     TPNDOC.focus().select();
                     onCampoInvalido(mdlNotificacionDeLoDocumentado, "SOLO SE PERMITE 1 Y 2", function () {
@@ -226,16 +328,33 @@
                 });
                 return;
             }
+            Documentos.ajax.reload(function () {
+                if (Documentos.rows().count() > 0) {
+                    onEnable(btnAceptaNDOC);
+                } else {
+                    onDisable(btnAceptaNDOC);
+                }
+            });
         });
-        
+
         mdlNotificacionDeLoDocumentado.on('shown.bs.modal', function () {
             getDocumentos();
+        });
+
+        mdlNotificacionDeLoDocumentado.on('hidden.bs.modal', function () {
+            onClearPanelInputSelect(mdlNotificacionDeLoDocumentado, function () {});
         });
     });
 
     function getDocumentos() {
         if ($.fn.DataTable.isDataTable('#tblDocumentos')) {
-            Documentos.ajax.reload(); 
+            Documentos.ajax.reload(function () {
+                if (Documentos.rows().count() > 0) {
+                    onEnable(btnAceptaNDOC);
+                } else {
+                    onDisable(btnAceptaNDOC);
+                }
+            });
             return;
         }
         Documentos = tblDocumentos.DataTable({
@@ -245,6 +364,8 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CLIENTE = ClienteFacturaNDOC.val() ? ClienteFacturaNDOC.val() : '';
+                    d.DOCUMENTO = DoctoNDOC.val() ? DoctoNDOC.val() : '';
+                    d.TP = TPNDOC.val() ? TPNDOC.val() : '';
                 }
             },
             "columns": [
@@ -271,6 +392,9 @@
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
+            "aaSorting": [
+                [5, 'desc']/*FECHA*/
+            ],
             initComplete: function () {
                 onCloseOverlay();
             }
