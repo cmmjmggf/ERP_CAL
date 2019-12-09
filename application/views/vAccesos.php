@@ -63,7 +63,7 @@
                 <button type="button" id="modulos_leftSelected" class="btn btn-block  btn-danger" data-toggle="tooltip" data-placement="top" title="REMOVER"><i class="fa fa-chevron-left"></i></button>
                 <button type="button" id="modulos_leftAll" class="btn btn-block  btn-danger" data-toggle="tooltip" data-placement="top" title="REMOVER TODOS"><i class="fa fa-backward"></i></button>
 
-                <button type="button" id="modulo_nuevo" class="btn btn-info mt-2"  data-toggle="tooltip" data-placement="top" title="AGREGAR MODULO"><span class="fa fa-plus"></span></button>
+                <button type="button" id="modulo_nuevo" class="btn btn-info mt-2"><span class="fa fa-plus"></span></button>
                 <button type="button" id="modulo_editor" class="btn btn-warning mt-2" data-toggle="tooltip" data-placement="top" title="EDITAR MODULO"><span class="fa fa-pencil-alt"></span></button>
                 <button type="button" id="modulo_eliminar" class="btn btn-danger mt-2" data-toggle="tooltip" data-placement="top" title="ELIMINAR MODULO"><span class="fa fa-trash"></span></button>
             </div>
@@ -1475,3 +1475,6 @@
         cursor: pointer !important;
     }
 </style>
+<?php 
+
+$this->load->view("vNuevasOpciones");

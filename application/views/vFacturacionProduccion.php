@@ -1028,6 +1028,7 @@
                 return;
             }
         });
+
         btnCierraDocto.click(function () {
             onBeep(1);
             pnlTablero.find("input,textarea").attr('disabled', false);
@@ -1039,7 +1040,7 @@
                 var p = {
                     FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
                     TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(),
-                    MONEDA: TMNDAFactura.val(),
+                    MONEDA: TMNDAFactura.val(), CAJAS: CajasFacturacion.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
                     IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),

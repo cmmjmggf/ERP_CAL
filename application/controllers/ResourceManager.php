@@ -83,4 +83,19 @@ class ResourceManager extends CI_Controller {
         }
     }
 
+    public function onNuevoModulo() {
+        try {
+            $x = $this->input->post();
+            $this->db->insert("modulos",
+                    array("Modulo" => $x['MODULO'],
+                        "Fecha" => Date('d/m/Y'),
+                        "Icon" => $x['ICONO'],
+                        "Ref" => $x['REFERENCIA'],
+                        "Order" => $x['ORDEN']));
+            print json_encode(array("REGISTRO" => 1));
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

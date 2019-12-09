@@ -237,6 +237,27 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 exec('schtasks /delete /tn "Timbrar" /F ');
                 $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
             }
+            /*             * *CARTAFAC** */
+            $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            $PARES = 0;
+            $PARES = $FACTURA_PARES[0]->PARES;
+            $this->db->insert("cartafac", array(
+                "cliente" => $x['CLIENTE'],
+                "subcte" => 0,
+                "factura" => $x['FACTURA'],
+                "tp" => $x['TP_DOCTO'],
+                "guia" => 0,
+                "fecha" => "{$anio}-{$mes}-{$dia} 00:00:00",
+                "pares" => $FACTURA_PARES[0]->PARES,
+                "status" => 2,
+                "cajas" => $FACTURA_CAJAS[0]->CAJAS,
+                "importe" => $TOTAL,
+                "traspo" => 0,
+                "transp" => 0
+            ));
+            $l = new Logs("FACTURACION (CIERRE)(CARTAFAC)", "HA GENERADO UNA CARTA PARA LA FACTURA ({$x['FACTURA']}) DEL CLIENTE({$x['CLIENTE']}) CON {$PARES} PARES TIPO {$x['TP_DOCTO']}.", $this->session);
+            /*             * *CARTAFAC** */
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
