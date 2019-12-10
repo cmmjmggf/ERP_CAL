@@ -52,7 +52,7 @@
                         <div class="col-12 col-sm-6">
                             <div class="custom-control custom-checkbox  ">
                                 <input type="checkbox" class="custom-control-input" id="Desglosado">
-                                <label class="custom-control-label text-info labelCheck" for="Desglosado">Desglosado</label>
+                                <label class="custom-control-label text-info labelCheck" for="Desglosado">Sin Desgloce</label>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
             var frm = new FormData(mdlEstadoCuentaProveedor.find("#frmEdoCta")[0]);
-            var desgloce = mdlEstadoCuentaProveedor.find("#Desglosado")[0].checked ? '1' : '0';
+            var desgloce = mdlEstadoCuentaProveedor.find("#Desglosado")[0].checked ? '0' : '1';
             var reporte = '';
             if (desgloce === '1') {
                 reporte = 'onReporteEdosCuentaDesgloce';

@@ -599,24 +599,6 @@ class PDFAntiguedadProv extends FPDF {
 
     public $Proveedor;
     public $Aproveedor;
-    public $fecha;
-    public $Afecha;
-
-    function getFecha() {
-        return $this->fecha;
-    }
-
-    function getAfecha() {
-        return $this->Afecha;
-    }
-
-    function setFecha($fecha) {
-        $this->fecha = $fecha;
-    }
-
-    function setAfecha($Afecha) {
-        $this->Afecha = $Afecha;
-    }
 
     function getProveedor() {
         return $this->Proveedor;
@@ -662,21 +644,6 @@ class PDFAntiguedadProv extends FPDF {
         $this->SetFont('Calibri', '', 10);
         $this->Cell(10, 4, utf8_decode($this->getAproveedor()), 0/* BORDE */, 1, 'C');
 
-        $this->SetX(36);
-        $this->SetFont('Calibri', 'B', 10);
-        $this->Cell(10, 4, utf8_decode("Del: "), 0/* BORDE */, 0, 'L');
-        $this->SetX(46);
-        $this->SetFont('Calibri', '', 10);
-        $this->Cell(25, 4, utf8_decode($this->getFecha()), 0/* BORDE */, 0, 'C');
-
-
-        $this->SetX(71);
-        $this->SetFont('Calibri', 'B', 10);
-        $this->Cell(10, 4, 'Al: ', 0/* BORDE */, 0, 'C');
-        $this->SetX(81);
-        $this->SetFont('Calibri', '', 10);
-        $this->Cell(25, 4, utf8_decode($this->getAfecha()), 0/* BORDE */, 1, 'C');
-
 
         //Paginador
         $this->SetY(3);
@@ -694,32 +661,51 @@ class PDFAntiguedadProv extends FPDF {
 
 
 
-        $this->SetFont('Times', 'B', 9);
-        $this->SetY(22);
+        $this->SetFont('Calibri', 'B', 8);
+        $this->SetY(18);
         $this->SetX(5);
 
-        $this->Cell(45, 4, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
+        $this->Cell(20, 3.5, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
 
+//        $this->SetX(5);
+//        $this->Cell(24, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX(104);
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//        $this->SetX($this->GetX());
+//        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+//
 
-        $this->SetY(22);
-        $this->SetX(30);
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(6/* 1 */, 12/* 2 */, 15/* 3 */, 17/* 4 */, 17/* 5 */, 17/* 6 */, 8/* 7 */,
-            17/* 8 */,
-            17/* 9 */,
-            17/* 10 */,
-            17/* 11 */,
-            17/* 12 */,
-            17/* 13 */,
-            17/* 14 */,
-            17/* 15 */,
-            17/* 16 */);
+        $anchos = array(5/* 1 */, 10/* 2 */, 12/* 3 */, 18/* 4 */, 18/* 5 */, 18/* 6 */, 7/* 7 */,
+            18/* 8 */,
+            18/* 9 */,
+            18/* 10 */,
+            18/* 11 */,
+            18/* 12 */,
+            18/* 13 */,
+            18/* 14 */,
+            18/* 15 */,
+            18/* 16 */);
         $aligns = array('C', 'C', 'C', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R');
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Times', 'B', 8.5);
+        $this->SetFont('Calibri', 'B', 8);
         $this->Row(array('Tp', 'Doc', 'Fecha', 'Importe', 'Pagos', 'Saldo', 'Dias',
             'de 0 a 7',
             'de 8 a 15',
@@ -760,12 +746,12 @@ class PDFAntiguedadProv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(30);
+        $this->SetX(25);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {
@@ -778,7 +764,7 @@ class PDFAntiguedadProv extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3.5, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -791,12 +777,12 @@ class PDFAntiguedadProv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(30);
+        $this->SetX(25);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {
@@ -809,7 +795,7 @@ class PDFAntiguedadProv extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 0, $a);
+            $this->MultiCell($w, 3.5, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }

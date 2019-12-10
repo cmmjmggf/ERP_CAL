@@ -182,7 +182,7 @@ class ReportesProveedores_model extends CI_Model {
         }
     }
 
-    public function getProveedoresReporteAntiguedad($prov, $aprov, $tp, $fecha, $aFecha) {
+    public function getProveedoresReporteAntiguedad($prov, $aprov, $tp) {
         try {
             $this->db->query("SET sql_mode = '';");
             return $this->db->select("CAST(P.Clave AS SIGNED ) AS ClaveNum, P.Plazo, "
@@ -193,21 +193,20 @@ class ReportesProveedores_model extends CI_Model {
                             ->like("CP.Tp", $tp)
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
-                            ->where("STR_TO_DATE(CP.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$fecha', \"%d/%m/%Y\") AND STR_TO_DATE('$aFecha', \"%d/%m/%Y\")")
                             ->group_by("CP.Proveedor")
-                            ->order_by("ClaveNum", 'ASC')
+                            ->order_by("P.NombreF", 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function getDoctosByProveedorTpAntiguedad($prov, $aprov, $tp, $fecha, $aFecha) {
+    public function getDoctosByProveedorTpAntiguedad($prov, $aprov, $tp) {
         try {
             return $this->db->select("CAST(CP.Proveedor AS SIGNED ) AS ClaveNum, "
                                     . "CP.Tp,"
                                     . "CP.Doc, "
-                                    . "CP.FechaDoc, "
+                                    . "date_format(str_to_date(CP.FechaDoc,'%d/%m/%Y'),'%d/%m/%y') AS FechaDoc, "
                                     . "CP.ImporteDoc, "
                                     . "CP.Pagos_Doc,"
                                     . "CP.Saldo_Doc,"
@@ -254,7 +253,6 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
                             ->like("CP.Tp", $tp)
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
-                            ->where("STR_TO_DATE(CP.FechaDoc, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$fecha', \"%d/%m/%Y\") AND STR_TO_DATE('$aFecha', \"%d/%m/%Y\")")
                             ->order_by("ClaveNum", 'ASC')
                             ->order_by("Dias", 'DESC')
                             ->order_by("CP.Doc", 'ASC')
@@ -296,6 +294,7 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
                             ->order_by("ClaveNum", 'ASC')
+                            ->order_by("CP.Tp", 'ASC')
                             ->order_by("Dias", 'DESC')
                             ->order_by("CP.Doc", 'ASC')
                             ->get()->result();

@@ -140,23 +140,22 @@ class AuxReportesClientes extends CI_Controller {
 
                     if ($G->ClaveNum === $D->ClaveNum) {
 
-                        $pdf->SetFont('Calibri', '', 7);
                         $pdf->SetX(5);
-                        $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                        $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
@@ -176,7 +175,7 @@ class AuxReportesClientes extends CI_Controller {
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                        $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                         $TP_IMPORTE += $D->ImporteDoc;
                         $TP_PAGOS += $D->Pagos_Doc;
@@ -343,21 +342,21 @@ class AuxReportesClientes extends CI_Controller {
                     if ($G->ClaveNum === $D->ClaveNum) {
                         $pdf->SetFont('Calibri', '', 7);
                         $pdf->SetX(5);
-                        $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                        $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                        $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                        $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
@@ -377,7 +376,7 @@ class AuxReportesClientes extends CI_Controller {
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                        $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                         $TP_IMPORTE += $D->ImporteDoc;
                         $TP_PAGOS += $D->Pagos_Doc;
@@ -569,21 +568,21 @@ class AuxReportesClientes extends CI_Controller {
                             if ($G->ClaveNum === $D->ClaveNum) {
                                 $pdf->SetFont('Calibri', '', 7);
                                 $pdf->SetX(5);
-                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
@@ -603,7 +602,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
@@ -838,21 +837,21 @@ class AuxReportesClientes extends CI_Controller {
                             if ($G->ClaveNum === $D->ClaveNum) {
                                 $pdf->SetFont('Calibri', '', 7);
                                 $pdf->SetX(5);
-                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
@@ -872,7 +871,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
@@ -1108,21 +1107,21 @@ class AuxReportesClientes extends CI_Controller {
                             if ($G->ClaveNum === $D->ClaveNum) {
                                 $pdf->SetFont('Calibri', '', 7);
                                 $pdf->SetX(5);
-                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
@@ -1142,7 +1141,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
@@ -1379,21 +1378,21 @@ class AuxReportesClientes extends CI_Controller {
                             if ($G->ClaveNum === $D->ClaveNum) {
                                 $pdf->SetFont('Calibri', '', 7);
                                 $pdf->SetX(5);
-                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 0/* BORDE */, 0, 'L');
+                                $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(9, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(12, 3.5, utf8_decode($D->FechaVen), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 0/* BORDE */, 0, 'R');
+                                $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 0/* BORDE */, 0, 'C');
+                                $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
@@ -1413,7 +1412,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 0/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
