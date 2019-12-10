@@ -246,14 +246,14 @@
             if (cliente) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                 $.ajax({
-                    url: master_url + 'imprimirReportesCartera',
+                    url: master_url + 'onReporteAntiguedadSaldosPorCliente',
                     type: "POST",
                     data: {
                         Cliente: cliente
                     }
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    onImprimirReporteFancyArray(JSON.parse(data));
+                    onImprimirReporteFancy(data);
                     HoldOn.close();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);

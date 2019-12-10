@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fraccionesPagadasNominaPorSemMaq" language="groovy" columnCount="4" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="137" columnSpacing="13" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.968683328607466"/>
+	<property name="ireport.zoom" value="2.027650658156865"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -58,13 +58,6 @@ order by cp.tipo asc, cp.cliente asc,cp.fecha asc]]>
 		<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
 		<groupFooter>
 			<band height="10">
-				<staticText>
-					<reportElement style="Column header" x="447" y="0" width="80" height="10" forecolor="#000000" uuid="b5365502-10f1-4098-a652-a5bca9f7ed12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="7" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Promedio por Tp:]]></text>
-				</staticText>
 				<line>
 					<reportElement style="Title" positionType="FixRelativeToBottom" x="447" y="9" width="140" height="1" uuid="788ca08e-fb21-4455-9757-34e331056d52"/>
 					<graphicElement>
@@ -78,6 +71,14 @@ order by cp.tipo asc, cp.cliente asc,cp.fecha asc]]>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{dias_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="447" y="0" width="80" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="b468f9ec-59be-476c-b9ea-0b456765a707"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Promedio por Tp "+ $F{tipo} +":"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -252,6 +253,14 @@ order by cp.tipo asc, cp.cliente asc,cp.fecha asc]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaFinF}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="false">
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="77" y="24" width="80" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="efe9f370-1df1-47fe-8032-734a767d6862"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tp "+ $F{tipo} ]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
