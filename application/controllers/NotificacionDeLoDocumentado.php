@@ -32,7 +32,9 @@ class NotificacionDeLoDocumentado extends CI_Controller {
             if ($x["TP"] !== '') {
                 $this->db->where("C.tp", $x['TP']);
             }
+            $this->db->where("C.status<", 3);
             $data = $this->db->get()->result();
+//            print $this->db->last_query();
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

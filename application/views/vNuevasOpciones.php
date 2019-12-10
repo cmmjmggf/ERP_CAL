@@ -47,6 +47,21 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
+                        <label>Modulo</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xModuloXOpcion" name="xModuloXOpcion" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-8">
+                                <select id="ModuloXOpcion" name="ModuloXOpcion" class="form-control form-control-sm">
+                                </select> 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                    <div class="col-12">
                         <label>Nombre</label>
                         <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm ">
                     </div>
@@ -74,21 +89,7 @@
                         <label>Clase(css)</label>
                         <input type="text" id="ClaseCss" name="ClaseCss" placeholder="info,warning, success..." class="form-control form-control-sm " maxlength="999">
                     </div>
-                    <div class="col-12">
-                        <hr>
-                    </div>
-                    <div class="col-12">
-                        <label>Modulo</label>
-                        <div class="row">
-                            <div class="col-4">
-                                <input type="text" id="xModuloXOpcion" name="xModuloXOpcion" class="form-control form-control-sm">
-                            </div>
-                            <div class="col-8">
-                                <select id="ModuloXOpcion" name="ModuloXOpcion" class="form-control form-control-sm">
-                                </select> 
-                            </div>
-                        </div> 
-                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -110,7 +111,11 @@
             NombreOpcion = mdlNuevaOpcionXModulo.find("#NombreOpcion"),
             NombreIconoOpcion = mdlNuevaOpcionXModulo.find("#NombreIconoOpcion"),
             OrdenOpcion = mdlNuevaOpcionXModulo.find("#OrdenOpcion"),
-            ReferenciaOpcion = mdlNuevaOpcionXModulo.find("#ReferenciaOpcion");
+            ReferenciaOpcion = mdlNuevaOpcionXModulo.find("#ReferenciaOpcion"),
+            EsBoton = mdlNuevaOpcionXModulo.find("#EsBoton"),
+            ClaseCss = mdlNuevaOpcionXModulo.find("#ClaseCss"),
+            xModuloXOpcion = mdlNuevaOpcionXModulo.find("#xModuloXOpcion"),
+            ModuloXOpcion = mdlNuevaOpcionXModulo.find("#ModuloXOpcion");
 
     $(document).ready(function () {
 
@@ -125,21 +130,19 @@
             if (NombreOpcion.val() && NombreIconoOpcion.val() && OrdenOpcion.val() && ReferenciaOpcion.val()) {
                 onOpenOverlay('');
                 var p = {
-                    MODULO: NombreOpcion.val(),
-                    ICONO: NombreIconoOpcion.val(),
-                    REFERENCIA: ReferenciaOpcion.val(),
-                    ORDEN: OrdenOpcion.val()
+                    MODULO: ModuloXOpcion.val(), NOMBRE_OPCION: NombreOpcion.val(),
+                    ICONO: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
+                    ORDEN_OPCION: OrdenOpcion.val(), BOTON: mdlNuevaOpcionXModulo.find("#EsBoton")[0].checked ? 1 : 0,
+                    CLASECSS: mdlNuevaOpcionXModulo.find("#ClaseCss").val()
                 };
-                $.post('<?php print base_url('ResourceManager/onNuevoModulo'); ?>', p).done(function (a) {
+                $.post('<?php print base_url('ResourceManager/onNuevaOpcionXModulo'); ?>', p).done(function (a) {
                     console.log(a);
                     var r = JSON.parse(a);
                     console.log(r);
-                    iMsg("MODULO AGREGADO", "s", function () {
-                        onClear(NombreOpcion);
-                        onClear(NombreIconoOpcion);
-                        onClear(ReferenciaOpcion);
-                        onClear(OrdenOpcion);
-                        NombreOpcion.focus().select();
+                    iMsg("OPCION POR MODULO AGREGADA", "s", function () {
+                        onClearPanelInputSelect(mdlNuevaOpcionXModulo, function () {
+                            NombreOpcion.focus().select();
+                        });
                     });
                 }).fail(function (x, y, z) {
                     onError(x);

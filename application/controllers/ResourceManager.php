@@ -100,14 +100,17 @@ class ResourceManager extends CI_Controller {
 
     public function onNuevaOpcionXModulo() {
         try {
-            $x = $this->input->post(); 
+            $x = $this->input->post();
             $this->db->insert("opcionesxmodulo",
-                    array("Opcion" => $x['MODULO'],
+                    array(
                         "Modulo" => $x['MODULO'],
+                        "Opcion" => $x['NOMBRE_OPCION'],
                         "Fecha" => Date('d/m/Y'),
-                        "Icon" => $x['ICONO'],
-                        "Ref" => $x['REFERENCIA'],
-                        "Order" => $x['ORDEN']));
+                        "Icon" => $x['ICONO_OPCION'],
+                        "Ref" => $x['REFERENCIA_OPCION'],
+                        "Order" => $x['ORDEN_OPCION'],
+                        "Button" => $x['BOTON'],
+                        "Class" => $x['CLASECSS']));
             print json_encode(array("REGISTRO" => 1));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
