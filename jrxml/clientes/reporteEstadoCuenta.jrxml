@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.592106827615016"/>
-	<property name="ireport.x" value="858"/>
+	<property name="ireport.zoom" value="1.675744345584177"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -19,7 +19,8 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select cc.cliente, ct.RazonS as nomcliente, ct.DiasPlazo, ct.TelOficina,
+		<![CDATA[select cc.cliente,
+ifnull(ct.RazonS,'') as nomcliente, ct.DiasPlazo, ct.TelOficina,
 cc.tipo, cc.remicion, cc.fecha,
 cc.importe,
 cc.pagos,
@@ -28,7 +29,7 @@ case when cc.nc = 999 then 'ANTICIPO' end as anticipos,
 date_add(cc.fecha, INTERVAL ct.DiasPlazo DAY) as fechavencimiento,
 datediff(now(), cc.fecha) as dias, cc.tmnda, cc.tcamb
 from cartcliente cc
-join clientes ct on ct.clave = cc.cliente
+left join clientes ct on ct.clave = cc.cliente
 where cc.cliente between $P{dCliente} and $P{aCliente}
 and cc.tipo like concat('%',$P{tp},'%')
 and cc.status < 4
@@ -187,14 +188,14 @@ order by cc.tipo, cc.cliente, cc.remicion asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="285" y="0" width="15" height="11" uuid="b01f567f-8099-4e7a-a820-2da9cc80c3c1"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DiasPlazo}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="329" y="0" width="82" height="11" uuid="99cf96e1-fc4e-441a-a271-545fd6f0dfd2"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
@@ -457,7 +458,7 @@ order by cc.tipo, cc.cliente, cc.remicion asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{anticipos}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="402" y="0" width="62" height="11" uuid="c789200c-f342-44b1-ae0d-13b0326c6743"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>

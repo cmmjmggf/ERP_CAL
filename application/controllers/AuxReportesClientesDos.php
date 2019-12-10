@@ -78,8 +78,30 @@ class AuxReportesClientesDos extends CI_Controller {
 
     /* REPORTES EDOS DE CUENTA */
 
-    public function onReporteAntiguedadSaldosTp1() {
-        $Tp = 1;
+    public function imprimirReportesCartera() {
+        $Dias = $this->input->post('Dias');
+        if (intval($Dias) > 0) {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["dCliente"] = $this->input->post('dClienteEdoCtaMasDias');
+            $parametros["aCliente"] = $this->input->post('aClienteEdoCtaMasDias');
+            $parametros["tp"] = $this->input->post('TpEdoCuentaMasDias');
+            $parametros["dias"] = $Dias;
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\clientes\reporteEstadoCuenta6090.jasper');
+            $jc->setFilename('EDO_CTA_CLIENTES_60_90_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } else {
+            $this->onReporteAntiguedadSaldosGeneral();
+        }
+    }
+
+    public function onReporteAntiguedadSaldosGeneral() {
+        $Tp = $this->input->post('TpEdoCuentaMasDias');
         $Cte = $this->input->post('dClienteEdoCtaMasDias');
         $aCte = $this->input->post('aClienteEdoCtaMasDias');
 
@@ -95,7 +117,7 @@ class AuxReportesClientesDos extends CI_Controller {
             $pdf->Acliente = $aCte;
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 5);
+            $pdf->SetAutoPageBreak(true, 3.5);
 
             $TP_IMPORTE_G = 0;
             $TP_PAGOS_G = 0;
@@ -114,9 +136,9 @@ class AuxReportesClientesDos extends CI_Controller {
 
             foreach ($Clientes as $key => $G) {
                 $pdf->SetX(5);
-                $pdf->SetFont('Times', 'B', 7.2);
+                $pdf->SetFont('Calibri', 'B', 7.5);
                 $pdf->SetLineWidth(0.5);
-                $pdf->Cell(90, 6, utf8_decode($G->ClienteF . ' =====> PLAZO: ' . $G->Plazo . ' DÍAS'), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(110, 4, utf8_decode('Cliente:  ' . $G->ClienteF . '***PLAZO: ' . $G->Plazo . ' DÍAS***'), 1/* BORDE */, 1, 'L');
                 $pdf->SetLineWidth(0.2);
 
                 $TP_IMPORTE = 0;
@@ -136,11 +158,12 @@ class AuxReportesClientesDos extends CI_Controller {
                 foreach ($Doctos as $key => $D) {
 
                     if ($G->ClaveNum === $D->ClaveNum) {
-                        $pdf->SetFont('Times', '', 7.2);
+                        $pdf->SetFont('Calibri', '', 7);
                         $pdf->Row(array(
                             utf8_decode($D->Tp),
                             mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""),
                             utf8_decode($D->FechaDoc),
+                            utf8_decode($D->FechaVen),
                             '$' . number_format($D->ImporteDoc, 2, ".", ","),
                             ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '',
                             '$' . number_format($D->Saldo_Doc, 2, ".", ","),
@@ -186,10 +209,11 @@ class AuxReportesClientesDos extends CI_Controller {
                     }
                 }
                 $pdf->SetX(5);
-                $pdf->SetFont('Times', 'B', 7.2);
-                $pdf->Cell(70, 4, utf8_decode('TOTAL POR CLIENTE: '), 0/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 7);
+                $pdf->Cell(70, 3.5, utf8_decode('TOTAL POR CLIENTE: '), 0/* BORDE */, 0, 'L');
 
                 $pdf->RowNoBorder(array(
+                    '',
                     '',
                     '',
                     '',
@@ -213,10 +237,11 @@ class AuxReportesClientesDos extends CI_Controller {
                 $pdf->SetLineWidth(0.2);
             }
             $pdf->SetX(5);
-            $pdf->SetFont('Times', 'B', 7.2);
-            $pdf->Cell(70, 4, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->Cell(70, 3.5, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
 
             $pdf->RowNoBorder(array(
+                '',
                 '',
                 '',
                 '',
@@ -249,232 +274,32 @@ class AuxReportesClientesDos extends CI_Controller {
                 /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
             }
             $pdf->Output($url);
-            return base_url() . $url;
+            print base_url() . $url;
         } else {
             return 0;
         }
     }
 
-    public function onReporteAntiguedadSaldosTp2() {
-        $Tp = 2;
-        $Cte = $this->input->post('dClienteEdoCtaMasDias');
-        $aCte = $this->input->post('aClienteEdoCtaMasDias');
-
-
-        $Clientes = $this->getClientesReporteAntiguedad($Cte, $aCte, $Tp);
-        $Doctos = $this->getDoctosByClientesTpAntiguedad($Cte, $aCte, $Tp);
-
-
-        if (!empty($Clientes)) {
-
-            $pdf = new PDFAntiguedadCliente('L', 'mm', array(215.9, 279.4));
-            $pdf->Cliente = $Cte;
-            $pdf->Acliente = $aCte;
-
-            $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 5);
-
-            $TP_IMPORTE_G = 0;
-            $TP_PAGOS_G = 0;
-            $TP_SALDO_G = 0;
-
-            $GTOTAL_1 = 0;
-            $GTOTAL_2 = 0;
-            $GTOTAL_3 = 0;
-            $GTOTAL_4 = 0;
-            $GTOTAL_5 = 0;
-            $GTOTAL_6 = 0;
-            $GTOTAL_7 = 0;
-            $GTOTAL_8 = 0;
-            $GTOTAL_9 = 0;
-            $GPares = 0;
-
-            foreach ($Clientes as $key => $G) {
-                $pdf->SetX(5);
-                $pdf->SetFont('Times', 'B', 7.2);
-                $pdf->SetLineWidth(0.5);
-                $pdf->Cell(90, 6, utf8_decode($G->ClienteF . ' =====> PLAZO: ' . $G->Plazo . ' DÍAS'), 'B'/* BORDE */, 1, 'L');
-                $pdf->SetLineWidth(0.2);
-
-                $TP_IMPORTE = 0;
-                $TP_PAGOS = 0;
-                $TP_SALDO = 0;
-
-                $TOTAL_1 = 0;
-                $TOTAL_2 = 0;
-                $TOTAL_3 = 0;
-                $TOTAL_4 = 0;
-                $TOTAL_5 = 0;
-                $TOTAL_6 = 0;
-                $TOTAL_7 = 0;
-                $TOTAL_8 = 0;
-                $TOTAL_9 = 0;
-                $Pares = 0;
-                foreach ($Doctos as $key => $D) {
-
-                    if ($G->ClaveNum === $D->ClaveNum) {
-                        $pdf->SetFont('Times', '', 7.2);
-                        $pdf->Row(array(
-                            utf8_decode($D->Tp),
-                            mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""),
-                            utf8_decode($D->FechaDoc),
-                            '$' . number_format($D->ImporteDoc, 2, ".", ","),
-                            ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '',
-                            '$' . number_format($D->Saldo_Doc, 2, ".", ","),
-                            utf8_decode($D->Dias),
-                            ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '',
-                            ($D->DOS > 0) ? '$' . number_format($D->DOS, 2, ".", ",") : '',
-                            ($D->TRES > 0) ? '$' . number_format($D->TRES, 2, ".", ",") : '',
-                            ($D->CUATRO > 0) ? '$' . number_format($D->CUATRO, 2, ".", ",") : '',
-                            ($D->CINCO > 0) ? '$' . number_format($D->CINCO, 2, ".", ",") : '',
-                            ($D->SEIS > 0) ? '$' . number_format($D->SEIS, 2, ".", ",") : '',
-                            ($D->SIETE > 0) ? '$' . number_format($D->SIETE, 2, ".", ",") : '',
-                            ($D->OCHO > 0) ? '$' . number_format($D->OCHO, 2, ".", ",") : '',
-                            ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '',
-                            ($D->pares > 0) ? $D->pares : '',
-                        ));
-
-                        $TP_IMPORTE += $D->ImporteDoc;
-                        $TP_PAGOS += $D->Pagos_Doc;
-                        $TP_SALDO += $D->Saldo_Doc;
-                        $TP_IMPORTE_G += $D->ImporteDoc;
-                        $TP_PAGOS_G += $D->Pagos_Doc;
-                        $TP_SALDO_G += $D->Saldo_Doc;
-                        $TOTAL_1 += $D->UNO;
-                        $TOTAL_2 += $D->DOS;
-                        $TOTAL_3 += $D->TRES;
-                        $TOTAL_4 += $D->CUATRO;
-                        $TOTAL_5 += $D->CINCO;
-                        $TOTAL_6 += $D->SEIS;
-                        $TOTAL_7 += $D->SIETE;
-                        $TOTAL_8 += $D->OCHO;
-                        $TOTAL_9 += $D->NUEVE;
-                        $GTOTAL_1 += $D->UNO;
-                        $GTOTAL_2 += $D->DOS;
-                        $GTOTAL_3 += $D->TRES;
-                        $GTOTAL_4 += $D->CUATRO;
-                        $GTOTAL_5 += $D->CINCO;
-                        $GTOTAL_6 += $D->SEIS;
-                        $GTOTAL_7 += $D->SIETE;
-                        $GTOTAL_8 += $D->OCHO;
-                        $GTOTAL_9 += $D->NUEVE;
-                        $Pares += $D->pares;
-                        $GPares += $D->pares;
-                    }
-                }
-                $pdf->SetX(5);
-                $pdf->SetFont('Times', 'B', 7.2);
-                $pdf->Cell(70, 4, utf8_decode('TOTAL POR CLIENTE: '), 0/* BORDE */, 0, 'L');
-
-                $pdf->RowNoBorder(array(
-                    '',
-                    '',
-                    '',
-                    mb_strimwidth('$' . number_format($TP_IMPORTE, 2, ".", ","), 0, 14, ""),
-                    mb_strimwidth('$' . number_format($TP_PAGOS, 2, ".", ","), 0, 14, ""),
-                    mb_strimwidth('$' . number_format($TP_SALDO, 2, ".", ","), 0, 14, ""),
-                    '',
-                    ($TOTAL_1 > 0) ? mb_strimwidth('$' . number_format($TOTAL_1, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_2 > 0) ? mb_strimwidth('$' . number_format($TOTAL_2, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_3 > 0) ? mb_strimwidth('$' . number_format($TOTAL_3, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_4 > 0) ? mb_strimwidth('$' . number_format($TOTAL_4, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_5 > 0) ? mb_strimwidth('$' . number_format($TOTAL_5, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_6 > 0) ? mb_strimwidth('$' . number_format($TOTAL_6, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_7 > 0) ? mb_strimwidth('$' . number_format($TOTAL_7, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_8 > 0) ? mb_strimwidth('$' . number_format($TOTAL_8, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTAL_9 > 0) ? mb_strimwidth('$' . number_format($TOTAL_9, 2, ".", ","), 0, 14, "") : '',
-                    ($Pares > 0) ? $Pares : '',
-                ));
-                $pdf->SetLineWidth(0.8);
-                $pdf->Line(5, $pdf->GetY(), 274.9, $pdf->GetY());
-                $pdf->SetLineWidth(0.2);
-            }
-            $pdf->SetX(5);
-            $pdf->SetFont('Times', 'B', 7.2);
-            $pdf->Cell(70, 4, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
-
-            $pdf->RowNoBorder(array(
-                '',
-                '',
-                '',
-                mb_strimwidth('$' . number_format($TP_IMPORTE_G, 2, ".", ","), 0, 14, ""),
-                mb_strimwidth('$' . number_format($TP_PAGOS_G, 2, ".", ","), 0, 14, ""),
-                mb_strimwidth('$' . number_format($TP_SALDO_G, 2, ".", ","), 0, 14, ""),
-                '',
-                ($GTOTAL_1 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_1, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_2 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_2, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_3 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_3, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_4 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_4, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_5 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_5, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_6 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_6, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_7 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_7, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_8 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_8, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_9 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_9, 2, ".", ","), 0, 14, "") : '',
-                ($GPares > 0) ? $GPares : '',
-            ));
-
-
-            /* FIN RESUMEN */
-            $path = 'uploads/Reportes/Clientes/Tp2';
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-            $file_name = "ANTIGUEDAD SALDOS CLIENTES TP2 " . ' ' . date("d-m-Y his");
-            $url = $path . '/' . $file_name . '.pdf';
-            /* Borramos el archivo anterior */
-            if (delete_files('uploads/Reportes/Clientes/Tp2/')) {
-                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
-            }
-            $pdf->Output($url);
-            return base_url() . $url;
-        } else {
-            return 0;
-        }
-    }
-
-    public function onReporteEdoCta306090() {
-        $Tp = $this->input->post('TpEdoCuentaMasDias');
-        $reports = array();
-        $reports['CARTERACLIENTESTP1'] = 0;
-        $reports['CARTERACLIENTESTP2'] = 0;
-        //Validamos que reporte se va a imprimir a si se imprimen los dos
-        if ($Tp === '1') {
-            $reports['CARTERACLIENTESTP1'] = $this->onReporteAntiguedadSaldosTp1();
-        } else if ($Tp === '2') {
-            $reports['CARTERACLIENTESTP2'] = $this->onReporteAntiguedadSaldosTp2();
-        } else {
-            $reports['CARTERACLIENTESTP1'] = $this->onReporteAntiguedadSaldosTp1();
-            $reports['CARTERACLIENTESTP2'] = $this->onReporteAntiguedadSaldosTp2();
-        }
-        if ($reports['CARTERACLIENTESTP1'] === 0) {
-            unset($reports['CARTERACLIENTESTP1']);
-        }
-        if ($reports['CARTERACLIENTESTP2'] === 0) {
-            unset($reports['CARTERACLIENTESTP2']);
-        }
-        print json_encode($reports);
-    }
-
+//$dias = $this->input->post('DiasEdoCta');
     public function getClientesReporteAntiguedad($cte, $acte, $tp) {
         try {
-            $dias = $this->input->post('DiasEdoCta');
+
             $this->db->query("SET sql_mode = '';");
 
             $query = "SELECT
-                                    CAST(C.Clave AS SIGNED ) AS ClaveNum,
+                                    CAST(CC.cliente AS SIGNED ) AS ClaveNum,
                                     C.DiasPlazo as Plazo,
                                     Ag.Clave as numagente,
                                     Ag.Nombre as nomagente,
-                                    CONCAT(C.Clave,' ',IFNULL(C.RazonS,'')) AS ClienteF
+                                    CONCAT(CC.cliente,' ',IFNULL(C.RazonS,'')) AS ClienteF
                                     FROM cartcliente AS CC
-                                    JOIN clientes AS C ON C.Clave =  CC.cliente
-                                    join agentes Ag on Ag.Clave = C.Agente
+                                    left JOIN clientes AS C ON C.Clave =  CC.cliente
+                                    left join agentes Ag on Ag.Clave = C.Agente
                                     WHERE CC.status < 3
-                                    and DATEDIFF(CURRENT_DATE(), CC.fecha) > $dias
                                     and CC.cliente BETWEEN $cte AND $acte
-                                    and CC.tipo = $tp
+                                    and CC.tipo like '%$tp%'
                                     group by CC.cliente
-                                    order by C.RazonS asc ";
+                                    order by ClaveNum asc ";
 
             return $this->db->query($query)->result();
         } catch (Exception $exc) {
@@ -490,7 +315,8 @@ class AuxReportesClientesDos extends CI_Controller {
                                     Ag.Nombre as nomagente,
                                     CC.tipo as Tp,
                                     CC.remicion as Doc,
-                                    date_format(CC.fecha,'%d/%m/%Y') as FechaDoc,
+                                    date_format(CC.fecha,'%d/%m/%y') as FechaDoc,
+                                    date_format(date_add(CC.fecha,INTERVAL C.DiasPlazo DAY),'%d/%m/%y') as FechaVen,
                                     CC.importe as ImporteDoc,
                                     CC.pagos as Pagos_Doc,
                                     CC.saldo as Saldo_Doc,
@@ -531,12 +357,11 @@ class AuxReportesClientesDos extends CI_Controller {
                                     CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 60
                                             THEN CC.saldo END AS 'NUEVE'
                                         FROM cartcliente AS CC
-                                        JOIN clientes AS C ON C.Clave =  CC.cliente
-                                        join agentes Ag on Ag.Clave = C.Agente
+                                        left JOIN clientes AS C ON C.Clave =  CC.cliente
+                                        left join agentes Ag on Ag.Clave = C.Agente
                                         WHERE CC.status < 3
-                                        and DATEDIFF(CURRENT_DATE(), CC.fecha) > $dias
                                         and CC.cliente BETWEEN $cte AND $acte
-                                        and CC.tipo = $tp
+                                        and CC.tipo like '%$tp%'
                                         order by CC.fecha asc, CC.remicion asc ";
             return $this->db->query($query)->result();
         } catch (Exception $exc) {

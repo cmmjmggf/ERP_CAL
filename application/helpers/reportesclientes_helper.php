@@ -64,34 +64,54 @@ class PDFAntiguedadCliente extends FPDF {
 
 
 
-        $this->SetFont('Times', 'B', 7.2);
+        $this->SetFont('Calibri', 'B', 7);
         $this->SetY(22);
         $this->SetX(5);
 
-        $this->Cell(45, 4, utf8_decode('Cliente'), 'B'/* BORDE */, 0, 'L');
 
+        $this->SetY(18);
+        $this->SetX(20);
+        $this->Cell(24, 4, 'Fechas', 1/* BORDE */, 0, 'C');
 
         $this->SetY(22);
         $this->SetX(20);
-
+        $this->Cell(24, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX(105);
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
+        $this->SetX($this->GetX());
+        $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(6/* 1 */, 10/* 2 */, 15/* 3 */, 17/* 4 */, 17/* 5 */, 17/* 6 */, 8/* 7 */,
-            17/* 8 */,
-            17/* 9 */,
-            17/* 10 */,
-            17/* 11 */,
-            17/* 12 */,
-            17/* 13 */,
-            17/* 14 */,
-            17/* 15 */,
-            17/* 16 */,
-            10/* 17 */);
-        $aligns = array('C', 'C', 'C', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R');
+        $anchos = array(5/* 1 */, 9/* 2 */, 12/* 3 */, 12/* 3 */, 18/* 4 */, 18/* 5 */, 18/* 6 */, 7/* 7 */,
+            18/* 8 */,
+            18/* 9 */,
+            18/* 10 */,
+            18/* 11 */,
+            18/* 12 */,
+            18/* 13 */,
+            18/* 14 */,
+            18/* 15 */,
+            18/* 16 */,
+            9/* 17 */);
+        $aligns = array('C', 'C', 'C', 'C', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R');
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
 
-        $this->Row(array('Tp', 'Doc', 'Fecha', 'Importe', 'Pagos', 'Saldo', 'Dias',
+        $this->Row(array('Tp', 'Doc', 'Docto', 'Vencim', 'Importe', 'Pagos', 'Saldo', 'Dias',
             'de 0 a 7',
             'de 8 a 15',
             'de 16 a 21',
@@ -132,12 +152,12 @@ class PDFAntiguedadCliente extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(20);
+        $this->SetX(5);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {
@@ -150,7 +170,7 @@ class PDFAntiguedadCliente extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 'B', $a);
+            $this->MultiCell($w, 3.5, $data[$i], 'B', $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
@@ -163,12 +183,12 @@ class PDFAntiguedadCliente extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(20);
+        $this->SetX(5);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {
@@ -181,7 +201,7 @@ class PDFAntiguedadCliente extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], 0, $a);
+            $this->MultiCell($w, 3.5, $data[$i], 0, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
