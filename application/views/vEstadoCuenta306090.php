@@ -25,7 +25,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="rGen" name="Reporte" class="custom-control-input" checked="">
+                                    <input type="radio" id="rGen" name="Reporte" class="custom-control-input" checked="true">
                                     <label class="custom-control-label text-danger" for="rGen">General</label>
                                 </div>
                                 <div class="custom-control custom-radio">
@@ -56,12 +56,7 @@
         mdlEstadoCuenta306090.on('shown.bs.modal', function () {
             dias = 0;
             mdlEstadoCuenta306090.find("input").val("");
-            $.each(mdlEstadoCuenta306090.find("select"), function (k, v) {
-                mdlEstadoCuenta306090.find("select")[k].selectize.clear(true);
-            });
-            mdlEstadoCuenta306090.on('shown.bs.modal', function () {
-                mdlEstadoCuenta306090.find('input:radio').prop("checked", false);
-            });
+            mdlEstadoCuenta306090.find('#rGen').prop("checked", true);
             mdlEstadoCuenta306090.find('#dClienteEdoCtaMasDias').focus();
         });
         mdlEstadoCuenta306090.find('#rGen').change(function () {

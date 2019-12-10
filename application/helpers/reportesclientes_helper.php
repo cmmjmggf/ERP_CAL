@@ -70,13 +70,13 @@ class PDFAntiguedadCliente extends FPDF {
 
 
         $this->SetY(18);
-        $this->SetX(20);
+        $this->SetX(19);
         $this->Cell(24, 4, 'Fechas', 1/* BORDE */, 0, 'C');
 
         $this->SetY(22);
-        $this->SetX(20);
+        $this->SetX(19);
         $this->Cell(24, 3.5, '', 1/* BORDE */, 0, 'C');
-        $this->SetX(105);
+        $this->SetX(104);
         $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
         $this->SetX($this->GetX());
         $this->Cell(18, 3.5, '', 1/* BORDE */, 0, 'C');
