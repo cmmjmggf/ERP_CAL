@@ -1772,7 +1772,11 @@
         }
         switch (e[0].tagName) {
             case "INPUT":
-                $(e).val('');
+                if ($(e).attr('type') === 'checkbox') {
+                    $(e)[0].checked = false;
+                } else {
+                    $(e).val('');
+                }
                 break;
             case "TEXTAREA":
                 $(v).val('');
@@ -1787,7 +1791,11 @@
         $.each(pnl.find("input,textarea,select"), function (k, v) {
             switch ($(v)[0].tagName) {
                 case "INPUT":
-                    $(v).val('');
+                    if ($(v).attr('type') === 'checkbox') {
+                        $(v)[0].checked = false;
+                    } else {
+                        $(v).val('');
+                    }
                     break;
                 case "TEXTAREA":
                     $(v).val('');

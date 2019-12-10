@@ -130,7 +130,7 @@
         handleEnterDiv(mdlNotificacionDeLoDocumentado);
 
         btnMovimientoNDOC.click(function () {
-            onOpenWindowAFC('<?php print base_url('MovimientosCliente'); ?>',function(){
+            onOpenWindowAFC('<?php print base_url('MovimientosCliente'); ?>', function () {
                 ClienteClaveNDOC.focus().select();
             });
         });
@@ -347,6 +347,7 @@
     });
 
     function getDocumentos() {
+        ClienteClaveNDOC.focus().select();
         if ($.fn.DataTable.isDataTable('#tblDocumentos')) {
             Documentos.ajax.reload(function () {
                 if (Documentos.rows().count() > 0) {
