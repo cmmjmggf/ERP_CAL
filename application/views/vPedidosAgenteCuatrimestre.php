@@ -35,7 +35,8 @@
     </div>
 </div>
 <script>
-    var mdlPedidosAgenteCuatrimestre = $('#mdlPedidosAgenteCuatrimestre');
+    var mdlPedidosAgenteCuatrimestre = $('#mdlPedidosAgenteCuatrimestre'),
+            btnImprimirPedidosAgenteCuatrimestre = mdlPedidosAgenteCuatrimestre.find('#btnImprimir');
     $(document).ready(function () {
         validacionSelectPorContenedor(mdlPedidosAgenteCuatrimestre);
         mdlPedidosAgenteCuatrimestre.on('shown.bs.modal', function () {
@@ -72,11 +73,12 @@
                 mdlPedidosAgenteCuatrimestre.find("#btnImprimir").focus();
             }
         });
-        mdlPedidosAgenteCuatrimestre.find('#btnImprimir').on("click", function () {
+        btnImprimirPedidosAgenteCuatrimestre.on("click", function () {
+            onDisable(btnImprimirPedidosAgenteCuatrimestre);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlPedidosAgenteCuatrimestre.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteAgentesCuatriAnual',
+                url: '<?php print base_url('ReportesClientesJasper/onReporteAgentesCuatriAnual'); ?>',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -86,29 +88,9 @@
                 console.log(data);
                 if (data.length > 0) {
                     console.log(data);
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function () {
+                        mdlPedidosAgenteCuatrimestre.find('#AnoCuatrimestre').focus();
+                        onEnable(btnImprimirPedidosAgenteCuatrimestre);
                     });
                     HoldOn.close();
                 } else {

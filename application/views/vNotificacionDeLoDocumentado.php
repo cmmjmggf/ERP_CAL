@@ -136,7 +136,7 @@
         });
 
         btnAceptaNDOC.click(function () {
-
+            onDisable(btnAceptaNDOC);
             var p = {
                 CLIENTE: ClienteClaveNDOC.val(),
                 DOCUMENTO: DoctoNDOC.val(),

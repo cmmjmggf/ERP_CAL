@@ -136,6 +136,9 @@
                 onEnable(mdlEstadoCuenta8.find('#btnImprimir'));
                 console.log(x, y, z);
                 HoldOn.close();
+            }).always(function () {
+                mdlEstadoCuenta8.find('#dClienteEdoCtaOchoDias').focus();
+                onEnable(mdlEstadoCuenta8.find('#btnImprimir'));
             });
         });
     });

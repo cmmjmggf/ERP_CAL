@@ -1,5 +1,5 @@
 <div class="modal modal-fullscreen" id="mdlConsultaPedidoXAgenteFechaCaptura"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Consulta Pedidos Por Agente y Fechas</h5>
@@ -102,7 +102,7 @@
             "dom": 'frtip',
             buttons: buttons,
             "ajax": {
-                "url": base_url + 'index.php/AuxReportesClientesDos/getPedidosXAgenteFechaCaptura',
+                "url": '<?php print base_url('AuxReportesClientesDos/getPedidosXAgenteFechaCaptura'); ?>',
                 "dataType": "json",
                 "type": 'GET',
                 "data": {FechaIni: fechaIni, FechaFin: fechaFin, Agente: agente},
@@ -197,7 +197,7 @@
     }
 
     function getAgentesConsultaPedidosAgenteFechas() {
-        $.getJSON(base_url + 'index.php/Agentes/' + 'getAgentesSelect').done(function (data, x, jq) {
+        $.getJSON('<?php print base_url('Agentes/getAgentesSelect'); ?>').done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlConsultaPedidoXAgenteFechaCaptura.find("#AgenteConsultaFechas")[0].selectize.addOption({text: v.Agente, value: v.Clave});
             });

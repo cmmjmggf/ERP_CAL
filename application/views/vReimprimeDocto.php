@@ -109,6 +109,7 @@
 
 
         btnAceptarReImprime.click(function () {
+            onDisable(btnAceptarReImprime);
             if (ClienteReg.val() && FacturaReg.val() && TPReg.val()) {
                 onBeep(1);
                 onOpenOverlay('Espere por favor...');
@@ -121,6 +122,7 @@
                     onBeep(1);
                     onImprimirReporteFancyAFC(data, function () {
                         ClienteReg.focus().select();
+                        onEnable(btnAceptarReImprime);
                     });
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);

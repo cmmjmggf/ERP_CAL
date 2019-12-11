@@ -1,5 +1,5 @@
 <div class="modal " id="mdlConsolidadoPorMes"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ventas Consolidado por Mes</h5>
@@ -132,42 +132,23 @@
                 mdlConsolidadoPorMes.find("#btnImprimir").focus();
             }
         });
+
         mdlConsolidadoPorMes.find('#btnImprimir').on("click", function () {
+            onDisable(mdlConsolidadoPorMes.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlConsolidadoPorMes.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteConsolidadoMes',
+                url: '<?php print base_url('ReportesClientesJasper/onReporteConsolidadoMes'); ?>',
                 type: "POST",
                 cache: false,
                 contentType: false,
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
-                console.log(data);
                 if (data.length > 0) {
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function () {
+                        mdlConsolidadoPorMes.find('#dAnoConsolidadoMes').focus().select();
+                        onEnable(mdlConsolidadoPorMes.find('#btnImprimir'));
                     });
                 } else {
                     swal({

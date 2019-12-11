@@ -73,12 +73,12 @@
         });
 
         mdlVentasPorFecha.find('#btnImprimir').on("click", function () {
+            onDisable(mdlVentasPorFecha.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlVentasPorFecha.find("#frmCaptura")[0]);
             frm.append('Reporte', mdlVentasPorFecha.find('input[name=ReporteVentasPorFecha]:checked').attr('valor'));
-
             $.ajax({
-                url: base_url + 'index.php/ReportesClientesJasper/onReporteVentasPorFecha',
+                url: '<?php print base_url('ReportesClientesJasper/onReporteVentasPorFecha'); ?>',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -86,11 +86,14 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
-                onImprimirReporteFancyArray(JSON.parse(data));
+                onImprimirReporteFancyArrayAFC(JSON.parse(data), function () {
+                    onEnable(mdlVentasPorFecha.find('#btnImprimir'));
+                });
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
                 HoldOn.close();
+                onEnable(mdlVentasPorFecha.find('#btnImprimir'));
             });
         });
     });
