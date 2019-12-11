@@ -1,8 +1,8 @@
-<div class="modal animated flipInY" id="mdlFichaTecnicaCompra"  role="dialog">
+<div class="modal" id="mdlFichaTecnicaCompra"  role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Imprimir Ficha Técnica</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Imprimir Ficha Técnica</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -211,7 +211,7 @@
         });
 
         mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').on("click", function () {
-            mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').attr('disabled', true);
+            onDisable(mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica'));
             var TipoFicha = mdlFichaTecnicaCompra.find("#FichaSinPrecios")[0].checked ? 'onImprimirFichaTecnicaSinPrecios' : 'onImprimirFichaTecnicaCompra';
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData($('#mdlFichaTecnicaCompra').find("#frmFichaTecnicaCompras")[0]);
@@ -228,32 +228,10 @@
             }).done(function (data, x, jq) {
                 mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica').attr('disabled', false);
                 if (data.length > 0) {
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function () {
+                        onEnable(mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica'));
+                        mdlFichaTecnicaCompra.find('#Estilo').focus().select();
                     });
-
-
                 } else {
                     swal({
                         title: "ATENCIÓN",
@@ -267,6 +245,7 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
                 HoldOn.close();
+                onEnable(mdlFichaTecnicaCompra.find('#btnImprimirFichaTecnica'));
             });
         });
         //handleEnterDiv(mdlFichaTecnicaCompra);

@@ -1727,6 +1727,28 @@
     }
 
 
+    function onEnableDisable(e, tf) {
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', tf);
+                break;
+            case "TEXTAREA":
+                $(e).attr('disabled', tf);
+                break;
+            case "SELECT":
+                if (tf) {
+                    $(e)[0].selectize.disable();
+                } else {
+                    $(e)[0].selectize.enable();
+                }
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', tf);
+                break;
+        }
+    }
+
+
     function onEnableAFS(e, f) {
         switch (e[0].tagName) {
             case "INPUT":
@@ -1802,6 +1824,30 @@
                     break;
                 case "SELECT":
                     $(v)[0].selectize.clear(true);
+                    break;
+            }
+        });
+        f();
+    }
+
+    function onClearPanelInputSelectEnableDisable(pnl, f, ed) {
+        $.each(pnl.find("input,textarea,select"), function (k, v) {
+            switch ($(v)[0].tagName) {
+                case "INPUT":
+                    if ($(v).attr('type') === 'checkbox') {
+                        $(v)[0].checked = false;
+                    } else {
+                        $(v).val('');
+                    }
+                    onEnableDisable($(v), ed);
+                    break;
+                case "TEXTAREA":
+                    $(v).val('');
+                    onEnableDisable($(v), ed);
+                    break;
+                case "SELECT":
+                    $(v)[0].selectize.clear(true);
+                    onEnableDisable($(v), ed);
                     break;
             }
         });

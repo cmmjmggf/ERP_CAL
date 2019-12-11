@@ -118,6 +118,7 @@
         });
 
         mdlBloqueoClientesXCliente.find('#btnAceptar').click(function () {
+            onDisable(mdlBloqueoClientesXCliente.find('#btnAceptar'));
             isValid('pnlCapturaBloqueoInd');
             if (valido) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -137,13 +138,18 @@
                         mdlBloqueoClientesXCliente.find("select")[k].selectize.clear(true);
                     });
                     mdlBloqueoClientesXCliente.find('#ClienteBloqInd')[0].selectize.focus();
+                    
                     HoldOn.close();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                     HoldOn.close();
+                }).always(function(){
+                     onEnable(mdlBloqueoClientesXCliente.find('#btnAceptar'));
                 });
             } else {
-                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
+                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error').then((value)=>{
+                    onEnable(mdlBloqueoClientesXCliente.find('#btnAceptar'));
+                });
             }
 
         });

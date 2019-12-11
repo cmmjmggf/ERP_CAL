@@ -156,6 +156,7 @@
         handleEnterDiv(mdlCapturaDeVtaXListaLinea);
 
         btnAceptaListaXEstilo.click(function () {
+            onDisable(btnAceptaListaXEstilo);
             if (EstiloCPVTAXLTA.val()) {
                 if (ListaUnoCPVTAXLTA.val() || ListaDosCPVTAXLTA.val() || ListaTresCPVTAXLTA.val()
                         || ListaSeisCPVTAXLTA.val() || ListaDoceCPVTAXLTA.val() || ListaDosCincoCPVTAXLTA.val()) {
@@ -179,17 +180,20 @@
                         getError(x);
                     }).always(function () {
                         HoldOn.close();
+                        onEnable(btnAceptaListaXEstilo);
                     });
                     console.log(listas);
                 } else {
                     console.log("NINGUNO");
                     swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN PRECIO PARA LAS LISTA 1,2,3,6,12 Y 25', 'warning').then((value) => {
                         ListaUnoCPVTAXLTA.focus().select();
+                        onEnable(btnAceptaListaXEstilo);
                     });
                 }
             } else {
                 swal('ATENCION', 'DEBE DE ESPECIFICAR UN ESTILO', 'warning').then((value) => {
                     EstiloCPVTAXLTA.focus().select();
+                    onEnable(btnAceptaListaXEstilo);
                 });
             }
         });

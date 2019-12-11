@@ -84,7 +84,7 @@
 
         });
         mdlAvanceProduccion.find('#btnExcel').on("click", function () {
-
+            onDisable(mdlAvanceProduccion.find('#btnExcel'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlAvanceProduccion.find("#frmCaptura")[0]);
             $.ajax({
@@ -112,6 +112,8 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
                 HoldOn.close();
+            }).always(function () {
+                onEnable(mdlAvanceProduccion.find('#btnExcel'));
             });
 
         });
@@ -151,6 +153,8 @@
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                         HoldOn.close();
+                    }).always(function () {
+                        onEnable(mdlAvanceProduccion.find('#btnImprimir'));
                     });
                 } else {
                     onImprimirReporte('onReporteAvanceNormalDepto');

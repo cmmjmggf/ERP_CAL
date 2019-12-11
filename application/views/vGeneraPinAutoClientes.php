@@ -68,6 +68,7 @@
         });
 
         mdlGeneraPinAutoClientes.find('#btnAceptar').click(function () {
+            onDisable(mdlGeneraPinAutoClientes.find('#btnAceptar'));
             var frm = new FormData(mdlGeneraPinAutoClientes.find("#frmCaptura")[0]);
             $.ajax({
                 url: base_url + 'index.php/Pin/onGeneraNuevoPin',
@@ -83,6 +84,8 @@
                 swal('ATENCIÓN', '* OCURRIO UN ERROR, PIN NO GENERADO *', 'error');
                 console.log(x, y, z);
                 HoldOn.close();
+            }).always(function () {
+                onEnable(mdlGeneraPinAutoClientes.find('#btnAceptar'));
             });
         });
     });

@@ -116,6 +116,7 @@
         });
 
         mdlCajasFlete.find('#btnAceptar').click(function () {
+            onDisable(mdlCajasFlete.find('#btnAceptar'));
             isValid('pnlCapturaCajasFlete');
             if (valido) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -138,6 +139,8 @@
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                     HoldOn.close();
+                }).always(function () {
+                    onEnable(mdlCajasFlete.find('#btnAceptar'));
                 });
             } else {
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');

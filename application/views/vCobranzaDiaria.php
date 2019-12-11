@@ -42,6 +42,7 @@
         });
 
         mdlCobranzaDiaria.find('#btnImprimir').on("click", function () {
+            onDisable(mdlCobranzaDiaria.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlCobranzaDiaria.find("#frmCaptura")[0]);
             $.ajax({
@@ -54,30 +55,9 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "85%",
-                                    height: "85%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
+                    onImprimirReporteFancyAFC(data, function () {
+                        mdlCobranzaDiaria.find('#dAgente').focus();
+                        onEnable(mdlCobranzaDiaria.find('#btnImprimir'));
                     });
                 } else {
                     swal({
@@ -92,6 +72,8 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
                 HoldOn.close();
+            }).always(function () {
+                onEnable(mdlCobranzaDiaria.find('#btnImprimir'));
             });
 
         });

@@ -46,7 +46,8 @@
 </div>
 <script>
 
-    var mdlTipoCambio = $('#mdlTipoCambio');
+    var mdlTipoCambio = $('#mdlTipoCambio'),
+            btnGuardarTipoCambio = mdlTipoCambio.find('#btnGuardarTipoCambio');
     $(document).ready(function () {
 
         $("#iframe").fancybox({
@@ -67,10 +68,11 @@
 
         });
 
-        mdlTipoCambio.find('#btnGuardarTipoCambio').on("click", function () {
+        btnGuardarTipoCambio.on("click", function () {
+            onDisable(btnGuardarTipoCambio);
             var frm = new FormData(mdlTipoCambio.find("#frmTipoCambio")[0]);
             $.ajax({
-                url: base_url + 'index.php/TipoCambio/onModificar',
+                url: '<?php print base_url('TipoCambio/onModificar'); ?>',
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -83,6 +85,7 @@
                     icon: "success"
                 }).then((action) => {
                     mdlTipoCambio.find('#btnSalir').focus();
+                    onEnable(btnGuardarTipoCambio);
                 });
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
@@ -93,7 +96,7 @@
     });
 
     function getTipoCambio() {
-        $.getJSON(base_url + 'index.php/TipoCambio/getTipoCambio').done(function (data, x, jq) {
+        $.getJSON('<?php print base_url('TipoCambio/getTipoCambio'); ?>').done(function (data, x, jq) {
             $.each(data[0], function (k, v) {
                 mdlTipoCambio.find("[name='" + k + "']").val(v);
             });

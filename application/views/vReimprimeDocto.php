@@ -118,7 +118,7 @@
                     TP: TPReg.val().trim() !== '' ? TPReg.val() : ''
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    onBeep(1); 
+                    onBeep(1);
                     onImprimirReporteFancyAFC(data, function () {
                         ClienteReg.focus().select();
                     });
@@ -155,6 +155,10 @@
 
         mdlReimprimeDocto.on('shown.bs.modal', function () {
             xClienteReg.focus();
+        });
+
+        mdlReimprimeDocto.on('hidden.bs.modal', function () {
+            onClearPanelInputSelectEnableDisable(mdlReimprimeDocto, true);
         });
     });
 </script>

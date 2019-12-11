@@ -54,7 +54,8 @@
     </div>
 </div>
 <script>
-    var mdlBloqueoClientesAutomatico = $('#mdlBloqueoClientesAutomatico');
+    var mdlBloqueoClientesAutomatico = $('#mdlBloqueoClientesAutomatico'),
+            btnAceptarBloqueoClientesAutomatico = mdlBloqueoClientesAutomatico.find('#btnAceptar');
     var dias = 0;
     $(document).ready(function () {
         mdlBloqueoClientesAutomatico.on('shown.bs.modal', function () {
@@ -73,7 +74,8 @@
             dias = $(this).find('input').attr('data-value');
         });
 
-        mdlBloqueoClientesAutomatico.find('#btnAceptar').click(function () {
+        btnAceptarBloqueoClientesAutomatico.click(function () {
+            onDisable(btnAceptarBloqueoClientesAutomatico);
             if (dias > 0) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                 var frm = new FormData(mdlBloqueoClientesAutomatico.find("#frmCaptura")[0]);
@@ -100,6 +102,8 @@
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                     HoldOn.close();
+                }).always(function () {
+                    onEnable(btnAceptarBloqueoClientesAutomatico);
                 });
             } else {
                 swal({
