@@ -209,6 +209,7 @@
                                 <th scope="col">Precio</th>
                                 <th scope="col">Estatus</th>
                                 <th scope="col">-</th>
+                                <th scope="col">Maquila</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -378,7 +379,7 @@
                             Maquila.find("option:selected").text(),
                             $.number(Precio.val(), 2, '.', ','),
                             'NUEVO',
-                            btn]).draw(false);
+                            btn,Maquila.val()]).draw(false);
 
                         Precio.val('');
                         btnIgualaPrecios.removeClass("d-none");
@@ -416,7 +417,7 @@
 
                             if (r[3] === 'NUEVO') {
                                 precios.push({
-                                    Maquila: r[1],
+                                    Maquila: r[5],
                                     Precio: r[2]
                                 });
                                 console.log(precios);
@@ -584,6 +585,11 @@
                 },
                 {
                     "targets": [4],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [5],
                     "visible": false,
                     "searchable": false
                 }
@@ -802,7 +808,7 @@
         $.getJSON(master_url + 'getDetalleByID', {ID: IDX}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {
-                    PrecioVentaParaMaquilas.row.add([v.ID, v.Maquila, v.Precio, v.Estatus, v.ClaveMaquila, '<button type="button" class="btn btn-danger" onclick="onEliminarDetalle(' + v.ID + ',this)"><span class="fa fa-trash"></span></button>']).draw(false);
+                    PrecioVentaParaMaquilas.row.add([v.ID, v.Maquila, v.Precio, v.Estatus, v.ClaveMaquila, '<button type="button" class="btn btn-danger" onclick="onEliminarDetalle(' + v.ID + ',this)"><span class="fa fa-trash"></span></button>',v.Maquila]).draw(false);
                 });
             }
         }).fail(function (x, y, z) {
