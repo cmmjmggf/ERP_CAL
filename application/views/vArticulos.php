@@ -375,7 +375,7 @@
                         var btn = '<button type="button" class="btn btn-danger" onclick="onEliminarDetalleSN(this)"><span class="fa fa-trash"></span></button>';
                         PrecioVentaParaMaquilas.row.add([
                             0,
-                            Maquila.val(),
+                            Maquila.find("option:selected").text(),
                             $.number(Precio.val(), 2, '.', ','),
                             'NUEVO',
                             btn]).draw(false);
@@ -798,6 +798,7 @@
     }
     /*DETALLE*/
     function getDetalleByID(IDX) {
+        PrecioVentaParaMaquilas.rows().remove().draw();
         $.getJSON(master_url + 'getDetalleByID', {ID: IDX}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {
