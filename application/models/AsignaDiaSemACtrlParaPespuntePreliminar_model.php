@@ -47,7 +47,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar_model extends CI_Model {
                                     . " CONCAT('{$spbf}',PR.frac,'{$spf}') AS Frac, PR.fecha AS Fecha, PR.estilo AS Estilo, "
                                     . "PR.par AS Pares, PR.tiempo AS Tiempo, PR.precio AS Precio, "
                                     . "PR.nomart", false)
-                            ->from("programacion AS PR")->where_in("PR.frac", array(300, 304))->get()->result();
+                            ->from("programacion AS PR")->where_in("PR.frac", array(90, 199, 290, 293, 295, 298, 299, 300, 301, 302, 303, 304, 305, 317, 322, 324, 333, 344, 349))->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -67,7 +67,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar_model extends CI_Model {
         try {
             return $this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
                             ->from('fracciones AS F')
-                            ->where_in('F.Clave', array(300, 301, 304))
+                            ->where_in('F.Clave', array(90, 199, 290, 293, 295, 298, 299, 300, 301, 302, 303, 304, 305, 317, 322, 324, 333, 344, 349))
                             ->where_in('F.Departamento', array(110, 120))
                             ->order_by('ABS(F.Clave)', 'ASC')
                             ->get()->result();

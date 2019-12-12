@@ -13,7 +13,20 @@ class ResourceManager extends CI_Controller {
 
     public function getModulos() {
         try {
-            print json_encode($this->rsm->getModulos());
+            print json_encode($this->db->select("M.ID, M.Modulo, M.Fecha, M.Icon, M.Ref")->from("modulos AS M")
+                            ->join('modulosxusuario AS MXU', 'MXU.Modulo = M.ID', 'left')
+                            ->where('MXU.Usuario', $_SESSION["ID"])
+                            ->order_by('M.Order', 'ASC')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function getModulosX() {
+        try {
+            print json_encode($this->db->select("M.ID, M.Modulo")->from("modulos AS M")
+                            ->join('modulosxusuario AS MXU', 'MXU.Modulo = M.ID', 'left')
+                            ->where('MXU.Usuario', $_SESSION["ID"])
+                            ->order_by('M.Order', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -116,5 +129,6 @@ class ResourceManager extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+ 
 
 }

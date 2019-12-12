@@ -1796,6 +1796,9 @@
             case "INPUT":
                 if ($(e).attr('type') === 'checkbox') {
                     $(e)[0].checked = false;
+                } else
+                if ($(e).attr('type') === 'radio') {
+                    $(e)[0].checked = false;
                 } else {
                     $(e).val('');
                 }
@@ -1809,11 +1812,19 @@
         }
     }
 
+    function onClearSelect(e) {
+        $(e)[0].selectize.clear(true);
+        $(e)[0].selectize.clearOptions();
+    }
+
     function onClearPanelInputSelect(pnl, f) {
         $.each(pnl.find("input,textarea,select"), function (k, v) {
             switch ($(v)[0].tagName) {
                 case "INPUT":
                     if ($(v).attr('type') === 'checkbox') {
+                        $(v)[0].checked = false;
+                    } else
+                    if ($(v).attr('type') === 'radio') {
                         $(v)[0].checked = false;
                     } else {
                         $(v).val('');
@@ -1835,6 +1846,9 @@
             switch ($(v)[0].tagName) {
                 case "INPUT":
                     if ($(v).attr('type') === 'checkbox') {
+                        $(v)[0].checked = false;
+                    } else
+                    if ($(v).attr('type') === 'radio') {
                         $(v)[0].checked = false;
                     } else {
                         $(v).val('');

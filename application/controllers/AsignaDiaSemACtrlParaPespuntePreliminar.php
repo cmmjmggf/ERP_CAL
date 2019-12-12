@@ -37,15 +37,26 @@ class AsignaDiaSemACtrlParaPespuntePreliminar extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->db->select("P.ID, CONCAT('<span class=\"badge badge-info\" style=\"font-size: 100%;\">',P.Control,'</span>') AS Control, P.Cliente, "
-                                            . "P.Estilo, P.Color, P.Pares, "
-                                            . "P.Semana AS Semana", false)
-                                    ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
-                                    ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
-                                    ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
-                                    ->where('PR.Control IS NULL', null, false)
-                                    ->where_not_in('P.Control', array(0))
-                                    ->get()->result());
+            $x = $this->input->get();
+            $this->db->select("P.ID, CONCAT('<span class=\"badge badge-info\" style=\"font-size: 100%;\">',P.Control,'</span>') AS Control, P.Cliente, "
+                            . "P.Estilo, P.Color, P.Pares, "
+                            . "P.Semana AS Semana", false)
+                    ->from("pedidox AS P")->join('estilos AS E', 'P.Estilo = E.Clave')
+                    ->join('tiemposxestilodepto AS TXE', 'P.Estilo = TXE.Estilo')
+                    ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
+                    ->where('PR.Control IS NULL', null, false)
+                    ->where_not_in('P.Control', array(0));
+            if ($x['ANIO'] !== '') {
+                $this->db->where('P.Ano', $x['ANIO']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('P.Semana', $x['SEMANA']);
+            }
+            if ($x['SEMANA'] === '') {
+                $this->db->limit(25);
+            }
+
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
