@@ -146,8 +146,11 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "OP.Pares AS PARES")
                     ->from("ordendeproduccion AS OP")
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
-            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
-                $xdb->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            if ($x['SEMANA'] !== '') {
+                $xdb->where('OP.Semana', $x['SEMANA']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $xdb->where('OP.ControlT', $x['CONTROL']);
             }
             $xdb->where('OPD.Grupo', 1)->where('OPD.Departamento', 10)
                     ->group_by('OPD.OrdenDeProduccion')
@@ -180,8 +183,11 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "OP.Pares AS PARES")
                     ->from("ordendeproduccion AS OP")
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
-            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
-                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('OP.ControlT', $x['CONTROL']);
             }
             $this->db->where('OPD.Grupo', 2)->where('OPD.Departamento', 10)
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
@@ -211,8 +217,11 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "OP.Pares AS PARES")
                     ->from("ordendeproduccion AS OP")
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
-            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
-                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('OP.ControlT', $x['CONTROL']);
             }
             $this->db->where('OPD.Grupo', 34)->where('OPD.Departamento', 10)
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
@@ -244,8 +253,11 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "OP.Pares AS PARES")
                     ->from("ordendeproduccion AS OP")
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
-            if ($x['SEMANA'] !== '' && $x['CONTROL'] !== '') {
-                $this->db->where('OP.Semana', $x['SEMANA'])->where('OP.ControlT', $x['CONTROL']);
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('OP.Semana', $x['SEMANA']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('OP.ControlT', $x['CONTROL']);
             }
             $this->db->where('OPD.Grupo', 40)->where('OPD.Departamento', 10)
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
