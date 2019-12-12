@@ -34,6 +34,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXPORTAR A EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -80,7 +81,39 @@
                 }
             }
         });
-
+        mdlPagosDiariosClientes.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlPagosDiariosClientes.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlPagosDiariosClientes.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesClientesJasper/onReportePagosClientesExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onEnable(mdlPagosDiariosClientes.find('#btnImprimirExcel'));
+                if (data.length > 0) {
+                    window.open(data, '_blank');
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlPagosDiariosClientes.find('#FechaIni').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            }).always(function () {
+                onEnable(mdlPagosDiariosClientes.find('#btnImprimirExcel'));
+            });
+        });
         mdlPagosDiariosClientes.find('#btnImprimir').on("click", function () {
             onDisable(mdlPagosDiariosClientes.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});

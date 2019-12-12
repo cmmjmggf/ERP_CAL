@@ -407,6 +407,22 @@ class ReportesClientesJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteEstadoCuentaExcel() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["dCliente"] = $this->input->post('dClienteEdoCta');
+        $parametros["aCliente"] = $this->input->post('aClienteEdoCta');
+        $parametros["tp"] = $this->input->post('TpEdoCuenta');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\reporteEstadoCuentaExcel.jasper');
+        $jc->setFilename('EDO_CTA_CLIENTES_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteControlesEntregadosPorFabrica() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIni'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
@@ -482,6 +498,30 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setJasperurl('jrxml\clientes\reportePagosClientes.jasper');
         $jc->setFilename('PAGOS_CLIENTES_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReportePagosClientesExcel() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIni'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFin'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["fechaIniF"] = $this->input->post('FechaIni');
+        $parametros["fechaFinF"] = $this->input->post('FechaFin');
+        $parametros["tp"] = $this->input->post('TpPagoDiario');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\reportePagosClientesExcel.jasper');
+        $jc->setFilename('PAGOS_CLIENTES_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
         PRINT $jc->getReport();
     }
 

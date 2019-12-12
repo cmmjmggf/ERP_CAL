@@ -33,7 +33,7 @@
             </div>
             <div class="col-12 col-sm-5 col-md-2 col-lg-1 col-xl-1">
                 <label for="Cliente" >Cliente</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cliente" name="Cliente" required="" placeholder="">
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Cliente" name="Cliente"  placeholder="">
             </div>
             <div class="col-3" >
                 <label for="" >-</label>

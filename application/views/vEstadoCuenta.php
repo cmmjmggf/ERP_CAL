@@ -28,6 +28,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXPORTAR A EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -66,6 +67,39 @@
                 }
             }
         });
+        mdlEstadoCuenta.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlEstadoCuenta.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlEstadoCuenta.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesClientesJasper/onReporteEstadoCuentaExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                onEnable(mdlEstadoCuenta.find('#btnImprimirExcel'));
+                console.log(data);
+                if (data.length > 0) {
+                    window.open(data, '_blank');
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlEstadoCuenta.find('#dClienteEdoCta').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlEstadoCuenta.find('#btnImprimirExcel'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
         mdlEstadoCuenta.find('#btnImprimir').on("click", function () {
             onDisable(mdlEstadoCuenta.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -99,7 +133,8 @@
                 HoldOn.close();
             });
         });
-    });
+    }
+    );
 
     function onVerificarTpEdoCuentaUno(v) {
 
