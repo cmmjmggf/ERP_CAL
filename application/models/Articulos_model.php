@@ -52,7 +52,7 @@ class Articulos_model extends CI_Model {
 
     public function getArticuloByID($ID) {
         try {
-            return $this->db->select("A.*", false)->from("articulos AS A")->where('A.Clave', $ID)->get()->result();
+            return $this->db->select("A.*, date_format(A.Registro,'%d/%m/%Y')  as Registro ", false)->from("articulos AS A")->where('A.Clave', $ID)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -157,7 +157,7 @@ class Articulos_model extends CI_Model {
 
     public function onModificar($ID, $DATA) {
         try {
-            $this->db->where('ID', $ID)->update("articulos", $DATA);
+            $this->db->where('Clave', $ID)->update("articulos", $DATA);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -177,6 +177,7 @@ class Articulos extends CI_Controller {
                 'Grupo' => $x->post('Grupo'),
                 'UnidadMedida' => $x->post('UnidadMedida'),
                 'Tmnda' => $x->post('Tmnda'),
+                'Temporada' => $x->post('Temporada'),
                 'Min' => $x->post('Min'),
                 'Max' => $x->post('Max'),
                 'ProveedorUno' => $x->post('ProveedorUno'),
@@ -214,6 +215,7 @@ class Articulos extends CI_Controller {
                 'Descripcion' => $x->post('Descripcion'), /* REQUIERE PERMISO */
                 'Grupo' => $x->post('Grupo'),
                 'Tmnda' => $x->post('Tmnda'),
+                'Temporada' => $x->post('Temporada'),
                 'Min' => $x->post('Min'),
                 'Max' => $x->post('Max'),
                 'ProveedorUno' => $x->post('ProveedorUno'),
@@ -247,10 +249,15 @@ class Articulos extends CI_Controller {
                     'preciodosant' => $precios_ant[0]->PrecioDos,
                     'preciotresant' => $precios_ant[0]->PrecioTres
                 );
-                $this->db->insert('articuloshistory', $datos_history);
+
+                if (floatval($p1) !== floatval($precios_ant[0]->PrecioUno) ||
+                        floatval($p2) !== floatval($precios_ant[0]->PrecioDos) ||
+                        floatval($p3) !== floatval($precios_ant[0]->PrecioTres)) {
+                    $this->db->insert('articuloshistory', $datos_history);
+                }
             }
-            $this->Articulos_model->onModificar($x->post('ID'), $datos);
-            $this->Articulos10_model->onModificar($x->post('ID'), $datos);
+            $this->Articulos_model->onModificar($x->post('Clave'), $datos);
+            $this->db->where('Clave', $x->post('Clave'))->update("articulos10", $datos);
 
             $precios = json_decode($this->input->post('Precios'));
             foreach ($precios as $k => $v) {

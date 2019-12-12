@@ -26,192 +26,201 @@
         </div>
     </div>
 </div>
-<div class="d-none animated fadeIn text-dark" id="pnlDatos">
-    <form id="frmNuevo">
-        <fieldset>
-            <!-- PRIMER CONTENEDOR-->
-            <div class="card  m-3 ">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4 float-left">
-                            <legend >Articulos</legend>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-8" align="right">
-                            <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
-                                <span class="fa fa-arrow-left" ></span> REGRESAR
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar">
-                                <span class="fa fa-trash fa-1x"></span> ELIMINAR
-                            </button>
-                            <button type="button" class="btn btn-raised btn-success btn-sm d-none" id="btnIgualaPrecios">
-                                <span class="fa fa-money-bill"></span> IGUALAR PRECIOS A MAQUILAS = MAQ-1
-                            </button>
-                            <button type="button" class="btn btn-raised btn-info btn-sm d-none" id="btnGeneraPreciosMaq">
-                                <span class="fa fa-cogs"></span> GENERAR PRECIO MAQUILAS = MAQ-1
-                            </button>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="d-none">
-                            <input type="text" id="ID" name="ID" class="form-control form-control-sm" >
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2">
-                            <label for="Clave" >Clave*</label>
-                            <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required="" placeholder="20180814">
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                            <label for="" >Tipo de articulo*</label>
-                            <select id="Departamento" name="Departamento" class="form-control form-control-sm required" required="">
-                                <option value=""></option>
-                                <option value="10">10 PIEL/FORRO</option>
-                                <option value="80">80 SUELA/PLANTA</option>
-                                <option value="90">90 PELETERIA</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <label for="" >Descripción*</label>
-                            <input type="text" class="form-control form-control-sm" id="Descripcion" name="Descripcion" required="" >
+<div class="d-none animated fadeIn text-dark" style="z-index: 99 !important" id="pnlDatos">
 
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-xl-2">
-                            <label for="" >Grupo*</label>
-                            <select id="Grupo" name="Grupo" class="form-control form-control-sm required" required="">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-xl-2">
-                            <label for="" >Tipo*</label>
-                            <select id="TipoArticulo" name="TipoArticulo" class="form-control form-control-sm required"  required="">
-                                <option value=""></option>
-                                <option value="0">0-PRODUCCIÓN</option>
-                                <option value="222">222-PROTOTIPO</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-xl-1">
-                            <label for="" >Unidad*</label>
-                            <select id="UnidadMedida" name="UnidadMedida" class="form-control form-control-sm required" required="">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-xl-1">
-                            <label for="" >Moneda*</label>
-                            <select id="Tmnda" name="Tmnda" class="form-control form-control-sm required" required="">
-                                <option value=""></option>
-                                <option value="1">1-Nacional</option>
-                                <option value="2">2-Dolar</option>
-                                <option value="3">3-Libra</option>
-                                <option value="4">4-Jen</option>
-                                <option value="5">5-Euro</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-xl-3">
-                            <label for="Min" >Min</label>
-                            <input type="text" class="form-control form-control-sm" id="Min" name="Min" >
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3 col-xl-3">
-                            <label for="Max" >Max</label>
-                            <input type="text" class="form-control form-control-sm" id="Max" name="Max" >
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3 d-none" align="center">
-                            <legend>Proveedores del Artículo</legend>
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-xl-4">
-                            <label for="Max" >Proveedor 1</label>
-                            <select id="ProveedorUno" name="ProveedorUno" class="form-control form-control-sm mb-2 required" required="">
-                                <option value=""></option>
-                            </select>
-                            <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioUno" name="PrecioUno"  placeholder="Precio pactado">
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-xl-4">
-                            <label for="Max" >Proveedor 2</label>
-                            <select id="ProveedorDos" name="ProveedorDos" class="form-control form-control-sm mb-2" required="">
-                                <option value=""></option>
-                            </select>
-                            <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioDos" name="PrecioDos"   placeholder="Precio pactado">
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-xl-4">
-                            <label for="Max" >Proveedor 3</label>
-                            <select id="ProveedorTres" name="ProveedorTres" class="form-control form-control-sm mb-2" required="">
-                                <option value=""></option>
-                            </select>
-                            <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioTres" name="PrecioTres"   placeholder="Precio pactado">
-                        </div>
-                        <div id="ProveedorUltimaCompra" class="col-12 col-sm-12 col-md-12 col-xl-12 d-none">
-                            <p>Proveedor U.C</p>
-                            <p class="text-info">* * * * *</p>
-                        </div>
-                    </div>
-                    <div class="row d-none">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3" align="center">
-                            <legend>Ubicación del Almacén</legend>
-                        </div>
-                        <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
-                            <label for="Max" >Proveedor 3</label>
-                            <input type="text" class="form-control form-control-sm" id="UbicacionUno" name="UbicacionUno" placeholder="UBICACION 1">
-                        </div>
-                        <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
-                            <input type="text" class="form-control form-control-sm" id="UbicacionDos" name="UbicacionDos"  placeholder="UBICACION 2">
-                        </div>
-                        <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
-                            <input type="text" class="form-control form-control-sm" id="UbicacionTres" name="UbicacionTres"  placeholder="UBICACION 3">
-                        </div>
-                        <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
-                            <input type="text" class="form-control form-control-sm" id="UbicacionCuatro" name="UbicacionCuatro"  placeholder="UBICACION 4">
-                        </div>
-                    </div>
-                    <div class="row pt-1">
-                        <div class="col-6 col-md-6 ">
-                            <h6 class="text-danger">Los campos con * son obligatorios</h6>
-                        </div>
-                    </div>
+    <!-- PRIMER CONTENEDOR-->
+    <div class="card  m-3 ">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 float-left">
+                    <legend >Articulos</legend>
+                </div>
+                <div class="col-12 col-sm-6 col-md-8" align="right">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
+                        <span class="fa fa-arrow-left" ></span> REGRESAR
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar">
+                        <span class="fa fa-trash fa-1x"></span> ELIMINAR
+                    </button>
+                    <button type="button" class="btn btn-raised btn-success btn-sm d-none" id="btnIgualaPrecios">
+                        <span class="fa fa-money-bill"></span> IGUALAR PRECIOS A MAQUILAS = MAQ-1
+                    </button>
+                    <button type="button" class="btn btn-raised btn-info btn-sm d-none" id="btnGeneraPreciosMaq">
+                        <span class="fa fa-cogs"></span> GENERAR PRECIO MAQUILAS = MAQ-1
+                    </button>
                 </div>
             </div>
+            <hr>
+            <form id="frmNuevo">
+                <div class="row">
+                    <div class="d-none">
+                        <input type="text" id="ID" name="ID" class="form-control form-control-sm" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2">
+                        <label for="Clave" >Clave*</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required="" placeholder="20180814">
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <label for="" >Tipo de articulo*</label>
+                        <select id="Departamento" name="Departamento" class="form-control form-control-sm required" required="">
+                            <option value=""></option>
+                            <option value="10">10 PIEL/FORRO</option>
+                            <option value="80">80 SUELA/PLANTA</option>
+                            <option value="90">90 PELETERIA</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <label for="" >Descripción*</label>
+                        <input type="text" class="form-control form-control-sm" id="Descripcion" name="Descripcion" required="" >
 
-        </fieldset>
-    </form>
-</div>
-<div class="card m-3 d-none animated fadeIn" id="pnlDatosDetalle">
-
-    <div class="card-body text-dark">
-        <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
-            <i class="fa fa-save"></i>
-        </button>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <label for="Maquila" >Maquila*</label>
-                <!--<input type="text" class="form-control form-control-sm" id="Maquila" name="Maquila" required placeholder="Maquila 1">-->
-                <select id="Maquila" name="Maquila" class="form-control form-control-sm" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
-                <label for="Precio" >Precio Maquila*</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" id="Precio" name="Precio" required placeholder="0.0">
-            </div>
-            <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 my-2 d-sm-block pt-3">
-                <button type="button" id="btnAgregarPrecio" class="btn btn-primary btn-sm d-sm-block "><span class="fa fa-plus"></span></button>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 table-responsive">
-                <table id="tblPrecioVentaParaMaquilas" class="table table-sm display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Maquila</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Estatus</th>
-                            <th scope="col">-</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-2">
+                        <label for="" >Grupo*</label>
+                        <select id="Grupo" name="Grupo" class="form-control form-control-sm required" required="">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-2">
+                        <label for="" >Tipo*</label>
+                        <select id="TipoArticulo" name="TipoArticulo" class="form-control form-control-sm required"  required="">
+                            <option value=""></option>
+                            <option value="0">0-PRODUCCIÓN</option>
+                            <option value="222">222-PROTOTIPO</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-1">
+                        <label for="" >Unidad*</label>
+                        <select id="UnidadMedida" name="UnidadMedida" class="form-control form-control-sm required" required="">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-1">
+                        <label for="" >Moneda*</label>
+                        <select id="Tmnda" name="Tmnda" class="form-control form-control-sm required" required="">
+                            <option value=""></option>
+                            <option value="1">1-Nacional</option>
+                            <option value="2">2-Dolar</option>
+                            <option value="3">3-Libra</option>
+                            <option value="4">4-Jen</option>
+                            <option value="5">5-Euro</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2 col-xl-1">
+                        <label for="Min" >Min</label>
+                        <input type="text" class="form-control form-control-sm" id="Min" name="Min" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2 col-xl-1">
+                        <label for="Max" >Max</label>
+                        <input type="text" class="form-control form-control-sm" id="Max" name="Max" >
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2 col-xl-2">
+                        <label for="" >Fecha Alta</label>
+                        <input type="text" class="form-control form-control-sm" readonly="" id="Registro">
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-2">
+                        <label for="" >Temporada</label>
+                        <select id="Temporada" name="Temporada" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option value="1">1-PRIMAVERA/VERANO</option>
+                            <option value="2">2-OTOÑO/INVIERNO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3 d-none" align="center">
+                        <legend>Proveedores del Artículo</legend>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                        <label for="Max" >Proveedor 1</label>
+                        <select id="ProveedorUno" name="ProveedorUno" class="form-control form-control-sm mb-2 required" required="">
+                            <option value=""></option>
+                        </select>
+                        <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioUno" name="PrecioUno"  placeholder="Precio pactado">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                        <label for="Max" >Proveedor 2</label>
+                        <select id="ProveedorDos" name="ProveedorDos" class="form-control form-control-sm mb-2" required="">
+                            <option value=""></option>
+                        </select>
+                        <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioDos" name="PrecioDos"   placeholder="Precio pactado">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+                        <label for="Max" >Proveedor 3</label>
+                        <select id="ProveedorTres" name="ProveedorTres" class="form-control form-control-sm mb-2" required="">
+                            <option value=""></option>
+                        </select>
+                        <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioTres" name="PrecioTres"   placeholder="Precio pactado">
+                    </div>
+                    <div id="ProveedorUltimaCompra" class="col-12 col-sm-12 col-md-12 col-xl-12 d-none">
+                        <p>Proveedor U.C</p>
+                        <p class="text-info">* * * * *</p>
+                    </div>
+                </div>
+                <div class="row d-none">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-3" align="center">
+                        <legend>Ubicación del Almacén</legend>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
+                        <label for="Max" >Proveedor 3</label>
+                        <input type="text" class="form-control form-control-sm" id="UbicacionUno" name="UbicacionUno" placeholder="UBICACION 1">
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
+                        <input type="text" class="form-control form-control-sm" id="UbicacionDos" name="UbicacionDos"  placeholder="UBICACION 2">
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
+                        <input type="text" class="form-control form-control-sm" id="UbicacionTres" name="UbicacionTres"  placeholder="UBICACION 3">
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-xl-3 mb-3">
+                        <input type="text" class="form-control form-control-sm" id="UbicacionCuatro" name="UbicacionCuatro"  placeholder="UBICACION 4">
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-6 col-md-6 ">
+                        <h6 class="text-danger">Los campos con * son obligatorios</h6>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-body text-dark d-none" id="pnlDatosDetalle">
+            <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
+                <i class="fa fa-save"></i>
+            </button>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label for="Maquila" >Maquila*</label>
+                    <!--<input type="text" class="form-control form-control-sm" id="Maquila" name="Maquila" required placeholder="Maquila 1">-->
+                    <select id="Maquila" name="Maquila" class="form-control form-control-sm" >
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                    <label for="Precio" >Precio Maquila*</label>
+                    <input type="text" class="form-control form-control-sm numbersOnly" id="Precio" name="Precio" placeholder="0.0">
+                </div>
+                <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 my-2 d-sm-block pt-3">
+                    <button type="button" id="btnAgregarPrecio" class="btn btn-primary btn-sm d-sm-block "><span class="fa fa-plus"></span></button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 table-responsive">
+                    <table id="tblPrecioVentaParaMaquilas" class="table table-sm display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Maquila</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Estatus</th>
+                                <th scope="col">-</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
+
 <script>
     var master_url = base_url + 'index.php/Articulos/';
     var tblArticulos = $('#tblArticulos');
@@ -246,6 +255,7 @@
         setFocusSelectToSelectOnChange('#Grupo', '#TipoArticulo', pnlDatos);
         setFocusSelectToSelectOnChange('#TipoArticulo', '#UnidadMedida', pnlDatos);
         setFocusSelectToSelectOnChange('#UnidadMedida', '#Tmnda', pnlDatos);
+        setFocusSelectToSelectOnChange('#Temporada', '#ProveedorUno', pnlDatos);
         setFocusSelectToInputOnChange('#Tmnda', '#Min', pnlDatos);
         setFocusSelectToInputOnChange('#ProveedorUno', '#PrecioUno', pnlDatos);
         setFocusSelectToInputOnChange('#ProveedorDos', '#PrecioDos', pnlDatos);
@@ -427,9 +437,9 @@
 //                        nuevo = false;
                         Articulos.ajax.reload();
 //                        PrecioVentaParaMaquilas.clear().draw();
-//                        pnlDatos.addClass("d-none");
-//                        pnlDatosDetalle.addClass('d-none');
-//                        pnlTablero.removeClass("d-none");
+                        pnlDatos.addClass("d-none");
+                        pnlDatosDetalle.addClass('d-none');
+                        pnlTablero.removeClass("d-none");
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                     }).always(function () {
@@ -748,6 +758,7 @@
                         pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
                     }
                 });
+                pnlDatos.find("#Registro").val(data[0].Registro);
                 btnIgualaPrecios.removeClass("d-none");
                 btnGeneraPreciosMaq.removeClass("d-none");
                 pnlTablero.addClass("d-none");
