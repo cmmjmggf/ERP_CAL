@@ -470,17 +470,9 @@
 
         Control.on('keydown focusout keyup', function (e) {
             onEnable(Cortador);
-            var dt = tblControlesSinAsignarAlDia.DataTable().column(1);
-            if ($(this).val() !== '') {
-                dt.search($(this).val()).draw();
-            } else {
-                dt.search('').draw();
-            }
-            if (e.keyCode === 13 && $(this).val() && $(this).val().length > 5) {
-                console.log('Buscando...');
+            ControlesSinAsignarAlDia.ajax.reload(function () {
                 getEstiloColorParesTxParPorControl($(this).val());
-                dt.search($(this).val()).draw();
-            }
+            });
         });
 
         Semana.on('keydown', function (e) {
@@ -513,12 +505,14 @@
                 "url": '<?= base_url('AsignaDiaSemACtrlParaPespuntePreliminar/getProgramacion') ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.ANIO = (Anio.val().trim());
-                    d.SEMANA = (Semana.val().trim());
-                    d.CORTADOR = (Cortador.val().trim());
-                    d.CONTROL = (Control.val().trim());
-                    d.ESTILO = (Estilo.val().trim());
-                    d.COLOR = (Color.val().trim());
+                    d.ANIO = Anio.val() ? Anio.val() : '';
+                    d.SEMANA = Semana.val() ? Semana.val() : '';
+                    d.DIA = Dia.val() ? Dia.val() : '';
+                    d.FRACCION = Fraccion.val() ? Fraccion.val() : '';
+                    d.CORTADOR = Cortador.val() ? Cortador.val() : '';
+                    d.CONTROL = Control.val() ? Control.val() : '';
+                    d.ESTILO = Estilo.val() ? Estilo.val() : '';
+                    d.COLOR = Color.val() ? Color.val() : '';
                 }
             },
             "columnDefs": [
@@ -574,7 +568,7 @@
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
-        }); 
+        });
     }
 
     function getFracciones() {

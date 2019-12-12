@@ -402,7 +402,7 @@
                 CortadorADSCPC[0].selectize.clear(true);
             }
             ControlesAsignadosAlDia.ajax.reload();
-        }).focusout(function(){
+        }).focusout(function () {
             onEnable(CortadorADSCPC);
         });
 
@@ -515,8 +515,7 @@
 //                    if (a.length > 0) {
 //                        var z = a[0];
 //                        Estilo.val(z.Estilo);
-//                ControlesSinAsignarAlDia.ajax.reload();
-                getEstiloColorParesTxParPorControl(Control.val());
+
 //                    }
 //                }).fail(function (x) {
 //                    getError(x);
@@ -524,6 +523,9 @@
 //
 //                });
             }
+            ControlesSinAsignarAlDia.ajax.reload(function () {
+                getEstiloColorParesTxParPorControl(Control.val());
+            });
         });
         Semana.on('keydown', function (e) {
             if (e.keyCode === 13) {

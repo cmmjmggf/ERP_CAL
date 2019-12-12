@@ -31,6 +31,7 @@ class AsignaDiaSemACtrlParaPespuntePreliminar_model extends CI_Model {
 
     public function getProgramacion() {
         try {
+            $x = $this->input->get();
             $styl = 'style=\"font-size: 100%;\"';
             $sp = "<span class=\"badge badge-pill badge-info\" {$styl}>";
             $spbf = "<span class=\"badge badge-pill badge-fusion\" {$styl}>";
@@ -39,15 +40,36 @@ class AsignaDiaSemACtrlParaPespuntePreliminar_model extends CI_Model {
             $spd = "<span class=\"badge badge-pill badge-dark\" {$styl}>";
             $spw = "<span class=\"badge badge-pill badge-warning\" {$styl}>";
             $spf = '</span>';
-            return $this->db->select("PR.ID, CONCAT('{$sps}',PR.numemp,'{$spf}') AS Emp, CONCAT('{$spw}',PR.control,'{$spf}') AS Control, "
-                                    . "PR.año AS Ano, CONCAT('{$spda}',PR.semana,'{$spf}') AS Sem, ELT(PR.diaprg,"
-                                    . "'{$sp}LUNES{$spf}','{$sp}MARTES{$spf}','{$sp}MIERCOLES{$spf}',"
-                                    . "'{$sp}JUEVES{$spf}','{$sp}VIERNES{$spf}','{$sp}SABADO{$spf}',"
-                                    . "'{$sp}DOMINGO{$spf}') AS Dia, "
-                                    . " CONCAT('{$spbf}',PR.frac,'{$spf}') AS Frac, PR.fecha AS Fecha, PR.estilo AS Estilo, "
-                                    . "PR.par AS Pares, PR.tiempo AS Tiempo, PR.precio AS Precio, "
-                                    . "PR.nomart", false)
-                            ->from("programacion AS PR")->where_in("PR.frac", array(90, 199, 290, 293, 295, 298, 299, 300, 301, 302, 303, 304, 305, 317, 322, 324, 333, 344, 349))->get()->result();
+            $this->db->select("PR.ID, CONCAT('{$sps}',PR.numemp,'{$spf}') AS Emp, CONCAT('{$spw}',PR.control,'{$spf}') AS Control, "
+                            . "PR.año AS Ano, CONCAT('{$spda}',PR.semana,'{$spf}') AS Sem, ELT(PR.diaprg,"
+                            . "'{$sp}LUNES{$spf}','{$sp}MARTES{$spf}','{$sp}MIERCOLES{$spf}',"
+                            . "'{$sp}JUEVES{$spf}','{$sp}VIERNES{$spf}','{$sp}SABADO{$spf}',"
+                            . "'{$sp}DOMINGO{$spf}') AS Dia, "
+                            . " CONCAT('{$spbf}',PR.frac,'{$spf}') AS Frac, PR.fecha AS Fecha, PR.estilo AS Estilo, "
+                            . "PR.par AS Pares, PR.tiempo AS Tiempo, PR.precio AS Precio, "
+                            . "PR.nomart", false)
+                    ->from("programacion AS PR")
+                    ->where_in("PR.frac", array(90, 199, 290, 293, 295, 298, 299, 300, 301, 302, 303, 304, 305, 317, 322, 324, 333, 344, 349));
+
+            if ($x['ANIO'] !== '') {
+                $this->db->where('PR.año', $x['ANIO']);
+            }
+            if ($x['SEMANA'] !== '') {
+                $this->db->where('PR.semana', $x['SEMANA']);
+            }
+            if ($x['DIA'] !== '') {
+                $this->db->where('PR.diaprg', $x['DIA']);
+            }
+            if ($x['FRACCION'] !== '') {
+                $this->db->where_in('PR.frac', explode(",", $x['FRACCION']));
+            }
+            if ($x['CORTADOR'] !== '') {
+                $this->db->where('PR.numemp', $x['CORTADOR']);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('PR.control', $x['CONTROL']);
+            }
+            return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
