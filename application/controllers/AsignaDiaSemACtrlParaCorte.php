@@ -133,6 +133,9 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             if ($x['DIA'] !== '') {
                 $this->db->where('PR.diaprg', $x['DIA']);
             }
+            if ($x['FRACCION'] !== '') {
+                $this->db->where_in('PR.frac', explode(",", $x['FRACCION']));
+            }
             if ($x['CORTADOR'] !== '') {
                 $this->db->where('PR.numemp', $x['CORTADOR']);
             }

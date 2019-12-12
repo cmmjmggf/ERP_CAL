@@ -35,6 +35,7 @@
         </div>
     </div>
 </div>
+
 <div id="mdlNuevaOpcionXModulo" class="modal">
     <div class="modal-dialog modal-dialog-centered  notdraggable" role="document">
         <div class="modal-content">
@@ -131,7 +132,7 @@
                 onOpenOverlay('');
                 var p = {
                     MODULO: ModuloXOpcion.val(), NOMBRE_OPCION: NombreOpcion.val(),
-                    ICONO: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
+                    ICONO_OPCION: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
                     ORDEN_OPCION: OrdenOpcion.val(), BOTON: mdlNuevaOpcionXModulo.find("#EsBoton")[0].checked ? 1 : 0,
                     CLASECSS: mdlNuevaOpcionXModulo.find("#ClaseCss").val()
                 };
@@ -169,7 +170,8 @@
         });
 
         mdlNuevaOpcionXModulo.on('shown.bs.modal', function () {
-            mdlNuevaOpcionXModulo.find("#NombreOpcion").focus().select();
+            getModulos();
+            mdlNuevaOpcionXModulo.find("#xModuloXOpcion").focus().select();
         });
 
         mdlNuevaOpcionXModulo.on('hidden.bs.modal', function () {
@@ -236,5 +238,18 @@
             mdlNuevoModulo.find("input").val('');
         });
     });
+
+    function getModulos() {
+        $.getJSON('<?php print base_url('ResourceManager/getModulosX'); ?>').done(function (a) {
+            onClearSelect(ModuloXOpcion);
+            $.each(a, function (k, v) {
+                ModuloXOpcion[0].selectize.addOption({text: v.Modulo, value: v.ID});
+            });
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
+    }
 
 </script>

@@ -43,6 +43,9 @@
                 <button id="btnLog" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="LOGS">
                     <span class="fa fa-align-justify"></span>
                 </button>
+                <button id="btnPedidoXAnoXMes" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="PEDIDOS POR MES AÑO">
+                    <span class="fa fa-exclamation"></span>
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -403,11 +406,17 @@
             btnAsignarSubItemsXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubItemsXItemXOpcionXModulo"),
             btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo = pnlTableroBody.find("#btnAsignarSubSubItemsXSubItemXItemXOpcionXModulo"),
             btnLog = pnlTableroBody.find("#btnLog"), mdlLogs = $("#mdlLogs"),
-            tblLogs = mdlLogs.find("#tblLogs"), Logs, UsuarioLog = mdlLogs.find("#UsuarioLog"), SUsuarioLog = mdlLogs.find("#SUsuarioLog");
+            tblLogs = mdlLogs.find("#tblLogs"), Logs, UsuarioLog = mdlLogs.find("#UsuarioLog"),
+            SUsuarioLog = mdlLogs.find("#SUsuarioLog"),
+            btnPedidoXAnoXMes = pnlTableroBody.find("#btnPedidoXAnoXMes");
 
     var usr = '<?php PRINT $this->session->ID; ?>';
     $(document).ready(function () {
         console.log(usr);
+
+        btnPedidoXAnoXMes.click(function () {
+            window.open('<?php print base_url('PedidoXMesAno'); ?>', '_blank');
+        });
 
         mdlLogs.on('shown.bs.modal', function () {
             Logs.ajax.reload(function () {
@@ -963,19 +972,8 @@
 
         /*MODULOS POR USUARIO*/
 
-//        $.getJSON('<?php print base_url('Accesos/getUsuarios') ?>').done(function (dx) {
-//            dx.forEach(function (v) {
 ////                mxu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-////                oxmu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-////                ixou[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-////                sixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-////                ssixiu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-//                $('#mdlCopiaAccesosUsuario').find('#UsuarioAsigna')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-//                $('#mdlCopiaAccesosUsuario').find('#UsuarioRecibe')[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
-//            });
-//        }).fail(function (x, y, z) {
-//            console.log(x.responseText);
-//        }).always(function () {
+
         mxu[0].selectize.setValue(usr);
 //        });
 
@@ -1475,6 +1473,5 @@
         cursor: pointer !important;
     }
 </style>
-<?php 
-
+<?php
 $this->load->view("vNuevasOpciones");

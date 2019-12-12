@@ -60,13 +60,21 @@
             </div>
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <label>Fracción</label>
-                <select type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm NotSelectize " maxlength="5" data-toggle="tooltip" data-placement="left" title="300: PESPUNTE GENERAL, 304: PRELIMINAR DE PESPUNTE"></select>
-            </div>
-            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="7">
+                <!--<select type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm NotSelectize " maxlength="5" data-toggle="tooltip" data-placement="left" title="300: PESPUNTE GENERAL, 304: PRELIMINAR DE PESPUNTE"></select>-->
+            </div> 
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                 <label>Cortador</label>
-                <select id="Cortador" name="Cortador" class="form-control form-control-sm">
-                </select>
-            </div>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="text" id="xCortador" name="xCortador" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-10">
+                        <select id="Cortador" name="Cortador" class="form-control form-control-sm">
+                        </select>
+                    </div>
+                </div> 
+            </div> 
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <label>Control</label>
@@ -185,7 +193,9 @@
 </div>
 <script>
     var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"), Dia = pnlTablero.find("#Dia"),
-            Semana = pnlTablero.find("#Semana"), Cortador = pnlTablero.find("#Cortador"),
+            Semana = pnlTablero.find("#Semana"),
+            xCortador = pnlTablero.find("#xCortador"),
+            Cortador = pnlTablero.find("#Cortador"),
             Fraccion = pnlTablero.find("#Fraccion"), Control = pnlTablero.find("#Control"),
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"), Pares = pnlTablero.find("#Pares"),
             Precio = pnlTablero.find("#Precio"), Tiempo = pnlTablero.find("#Tiempo"), btnGuardar = pnlTablero.find("#btnGuardar"),
@@ -199,13 +209,13 @@
             btnFraccionesXEstilos = pnlTablero.find("#btnFraccionesXEstilos");
     var Cortadores = pnlTablero.find("#Cortador"), mdlFracciones = $("#mdlFracciones");
     var dias = {
-        1: 'LUNES',
-        2: 'MARTES',
-        3: 'MIERCOLES',
-        4: 'JUEVES',
-        5: 'VIERNES',
-        6: 'SABADO',
-        7: 'DOMINGO'
+        4: 'LUNES',
+        5: 'MARTES',
+        6: 'MIERCOLES',
+        1: 'JUEVES',
+        2: 'VIERNES',
+        3: 'SABADO',
+        0: 'DOMINGO'
     };
     var c = {};
     var options = {
@@ -377,13 +387,36 @@
         });
 
         Cortador.change(function () {
-            var op = $(this).val();
-            var dt = tblControlesAsignadosAlDia.DataTable().column(1);
-            if (op) {
-                dt.search(op).draw();
+            if (Cortador.val()) {
+                xCortador.val(Cortador.val());
             } else {
-                dt.search('').draw();
+                xCortador.val('');
+                Cortador[0].selectize.enable();
+                Cortador[0].selectize.clear(true);
             }
+            ControlesAsignadosAlDia.ajax.reload();
+        });
+
+        xCortador.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xCortador.val()) {
+                    Cortador[0].selectize.setValue(xCortador.val());
+                    if (Cortador.val()) {
+                        onDisable(Cortador);
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CORTADOR, ESPECIFIQUE OTRO', function () {
+                            xCortador.focus().select();
+                        });
+                    }
+                } else {
+                    Cortador[0].selectize.enable();
+                    Cortador[0].selectize.clear(true);
+                }
+            } else {
+                Cortador[0].selectize.enable();
+                Cortador[0].selectize.clear(true);
+            }
+            ControlesAsignadosAlDia.ajax.reload();
         });
 
         btnAnadir.click(function () {
@@ -406,10 +439,10 @@
             onBeep(3);
             switch ($(this).attr('id')) {
                 case 'btnPespunte':
-                    Fraccion[0].selectize.setValue(300);
+                    Fraccion.val(300);
                     break;
                 case 'btnPreliminar':
-                    Fraccion[0].selectize.setValue(304);
+                    Fraccion.val(304);
                     break;
             }
             Fraccion.addClass('bounceIn animated');
@@ -436,31 +469,16 @@
         });
 
         Control.on('keydown focusout keyup', function (e) {
-            var dt = tblControlesSinAsignarAlDia.DataTable().column(1);
-            if ($(this).val() !== '') {
-                dt.search($(this).val()).draw();
-            } else {
-                dt.search('').draw();
-            }
-            if (e.keyCode === 13 && $(this).val() && $(this).val().length > 5) {
-                console.log('Buscando...');
+            onEnable(Cortador);
+            ControlesSinAsignarAlDia.ajax.reload(function () {
                 getEstiloColorParesTxParPorControl($(this).val());
-                dt.search($(this).val()).draw();
-            }
+            });
         });
 
-        Semana.on('keydown focusout keyup', function () {
-            var dt = tblControlesSinAsignarAlDia.DataTable().column(6);
-            if ($(this).val() !== '') {
-                dt.search($(this).val()).draw();
-            } else {
-                dt.search('').draw();
-            }
-        }).blur(function () {
-            if (Semana.val() !== '') {
-                tblControlesSinAsignarAlDia.DataTable().column(6).search(Semana.val()).draw();
-            } else {
-                tblControlesSinAsignarAlDia.DataTable().column(6).search('').draw();
+        Semana.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                ControlesSinAsignarAlDia.ajax.reload();
+                ControlesAsignadosAlDia.ajax.reload();
             }
         });
         btnRefrescar.trigger('click');
@@ -487,12 +505,14 @@
                 "url": '<?= base_url('AsignaDiaSemACtrlParaPespuntePreliminar/getProgramacion') ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.ANIO = (Anio.val().trim());
-                    d.SEMANA = (Semana.val().trim());
-                    d.CORTADOR = (Cortador.val().trim());
-                    d.CONTROL = (Control.val().trim());
-                    d.ESTILO = (Estilo.val().trim());
-                    d.COLOR = (Color.val().trim());
+                    d.ANIO = Anio.val() ? Anio.val() : '';
+                    d.SEMANA = Semana.val() ? Semana.val() : '';
+                    d.DIA = Dia.val() ? Dia.val() : '';
+                    d.FRACCION = Fraccion.val() ? Fraccion.val() : '';
+                    d.CORTADOR = Cortador.val() ? Cortador.val() : '';
+                    d.CONTROL = Control.val() ? Control.val() : '';
+                    d.ESTILO = Estilo.val() ? Estilo.val() : '';
+                    d.COLOR = Color.val() ? Color.val() : '';
                 }
             },
             "columnDefs": [
@@ -549,28 +569,27 @@
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
         });
-        getFracciones();
     }
 
     function getFracciones() {
-        Fraccion.selectize({
-            plugins: ['remove_button'],
-            maxItems: 2,
-            delimiter: ',',
-            persist: true,
-            create: false,
-            hideSelected: true
-        });
-        Fraccion[0].selectize.clear(true);
-        Fraccion[0].selectize.clearOptions();
-        $.getJSON('<?= base_url('AsignaDiaSemACtrlParaPespuntePreliminar/getFracciones') ?>').done(function (data) {
-            $.each(data, function (k, v) {
-                Fraccion[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
-            });
-        }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
+//        Fraccion.selectize({
+//            plugins: ['remove_button'],
+//            maxItems: 2,
+//            delimiter: ',',
+//            persist: true,
+//            create: false,
+//            hideSelected: true
+//        });
+//        Fraccion[0].selectize.clear(true);
+//        Fraccion[0].selectize.clearOptions();
+//        $.getJSON('<?= base_url('AsignaDiaSemACtrlParaPespuntePreliminar/getFracciones') ?>').done(function (data) {
+//            $.each(data, function (k, v) {
+//                Fraccion[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
+//            });
+//        }).fail(function (x) {
+//            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+//            console.log(x.responseText);
+//        });
     }
 
     function getEstiloColorParesTxParPorControl(e) {
