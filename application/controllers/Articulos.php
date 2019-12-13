@@ -66,6 +66,25 @@ class Articulos extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteHistoryPreciosFechas() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniHistory'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinRepHistory'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\reporteCambiosPreciosHistoryFechas.jasper');
+        $jc->setFilename('HISTORIAL_DE_PRECIOS_POR_FECHAS_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onVerificarArticulo() {
         try {
             print json_encode($this->db->query("select clave from articulos where clave = '{$this->input->get('Articulo')}' and estatus = 'ACTIVO' ")->result());

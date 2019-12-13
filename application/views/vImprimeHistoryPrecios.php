@@ -1,5 +1,5 @@
 <div class="modal " id="mdlImprimeHistoryPrecios"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Obtener Historial de Cambio de Precios p' Compra</h5>
@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmExplosion">
-                    <div class="row">
+                    <div class="row" id = "dXArticulo">
                         <div class="col-3">
                             <label>Artículo</label>
                             <input type="text" maxlength="6" class="form-control form-control-sm numbersOnly" id="ArticuloHistory" name="ArticuloHistory" >
@@ -20,7 +20,28 @@
                                 <option value=""></option>
                             </select>
                         </div>
+
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="chPorRangoFechas" name="chPorRangoFechas">
+                                <label class="custom-control-label text-info labelCheck" for="chPorRangoFechas">Imprimir X Rango de Fechas</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3 d-none" id="dXRangoFechas">
+                        <div class="col-6">
+                            <label>Del: </label>
+                            <input type="text" class="form-control form-control-sm date notEnter" id="FechaIniHistory" name="FechaIniHistory" >
+                        </div>
+                        <div class="col-6">
+                            <label>Hasta: </label>
+                            <input type="text" class="form-control form-control-sm date notEnter" id="FechaFinRepHistory" name="FechaFinRepHistory" >
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -40,8 +61,21 @@
             $.each(mdlImprimeHistoryPrecios.find("select"), function (k, v) {
                 mdlImprimeHistoryPrecios.find("select")[k].selectize.clear(true);
             });
+            mdlImprimeHistoryPrecios.find('#FechaIniHistory').val(getFirstDayMonth());
+            mdlImprimeHistoryPrecios.find('#FechaFinRepHistory').val(getToday());
             getArticulosHistory();
             mdlImprimeHistoryPrecios.find('#ArticuloHistory').focus();
+        });
+        mdlImprimeHistoryPrecios.find("#chPorRangoFechas").change(function () {
+            if (mdlImprimeHistoryPrecios.find("#chPorRangoFechas")[0].checked) {
+                mdlImprimeHistoryPrecios.find("#dXRangoFechas").removeClass('d-none');
+                mdlImprimeHistoryPrecios.find("#dXArticulo").addClass('d-none');
+                mdlImprimeHistoryPrecios.find('#FechaIniHistory').focus();
+            } else {
+                mdlImprimeHistoryPrecios.find("#dXArticulo").removeClass('d-none');
+                mdlImprimeHistoryPrecios.find("#dXRangoFechas").addClass('d-none');
+                mdlImprimeHistoryPrecios.find('#ArticuloHistory').focus();
+            }
         });
 
         mdlImprimeHistoryPrecios.find('#ArticuloHistory').keydown(function (e) {
@@ -75,8 +109,9 @@
             mdlImprimeHistoryPrecios.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlImprimeHistoryPrecios.find("#frmExplosion")[0]);
+            var reporte = mdlImprimeHistoryPrecios.find("#chPorRangoFechas")[0].checked ? 'onReporteHistoryPreciosFechas' : 'onReporteHistoryPrecios';
             $.ajax({
-                url: base_url + 'index.php/Articulos/onReporteHistoryPrecios',
+                url: base_url + 'index.php/Articulos/' + reporte,
                 type: "POST",
                 cache: false,
                 contentType: false,
@@ -94,11 +129,13 @@
                         text: "NO EXISTEN DATOS PARA EL HISTORIAL",
                         icon: "error"
                     }).then((action) => {
+                        mdlImprimeHistoryPrecios.find('#btnImprimir').attr('disabled', false);
                         mdlImprimeHistoryPrecios.find('#ArticuloHistory').focus();
                     });
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                mdlImprimeHistoryPrecios.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });
