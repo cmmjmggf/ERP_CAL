@@ -1631,6 +1631,7 @@ class AuxReportesClientes extends CI_Controller {
 
     public function getAgentesReporteAntiguedad($cte, $acte, $tp) {
         try {
+            $agt = $this->input->post('AgenteEdoCtaOchoDias');
             $this->db->query("SET sql_mode = '';");
             $query = "SELECT
                     Ag.Clave as numagente,
@@ -1641,8 +1642,18 @@ class AuxReportesClientes extends CI_Controller {
                     WHERE CC.status < 3
                     and CC.cliente BETWEEN $cte AND $acte
                     and CC.tipo = $tp
+                    ";
+
+            if ($agt !== '') {
+                $query .= "and C.Agente = $agt
                     group by Ag.Clave
                     order by abs(Ag.Clave) ";
+            } else {
+                $query .= "
+                    group by Ag.Clave
+                    order by abs(Ag.Clave) ";
+            }
+
             return $this->db->query($query)->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -1652,6 +1663,7 @@ class AuxReportesClientes extends CI_Controller {
     public function getClientesReporteAntiguedad($cte, $acte, $tp) {
         try {
             $tipo = $this->input->post('OrdenEdocta');
+            $agt = $this->input->post('AgenteEdoCtaOchoDias');
             $this->db->query("SET sql_mode = '';");
 
             $query = "SELECT
@@ -1669,12 +1681,20 @@ class AuxReportesClientes extends CI_Controller {
                                     WHERE CC.status < 3
                                     and CC.cliente BETWEEN $cte AND $acte
                                     and CC.tipo = $tp
-                                    group by CC.cliente ";
+                                     ";
 
-            if ($tipo === '1') {
-                $query .= " order by ifnull(C.RazonS,'AAA') asc";
-            } else if ($tipo === '2') {
-                $query .= " order by abs(Ag.Clave), C.RazonS asc";
+
+
+            if ($agt !== '') {
+                $query .= " and C.Agente = $agt group by CC.cliente order by C.RazonS asc";
+            } else {
+                if ($tipo === '1') {
+                    $query .= " group by CC.cliente order by ifnull(C.RazonS,'AAA') asc";
+                } else if ($tipo === '2') {
+                    $query .= " group by CC.cliente order by abs(Ag.Clave), C.RazonS asc";
+                } else if ($tipo === '3') {
+                    $query .= " group by CC.cliente order by abs(Ag.Clave), C.RazonS asc";
+                }
             }
 
             //print $query;
@@ -1686,6 +1706,7 @@ class AuxReportesClientes extends CI_Controller {
 
     public function getDoctosByClientesTpAntiguedad($cte, $acte, $tp) {
         try {
+            $agt = $this->input->post('AgenteEdoCtaOchoDias');
             $tipo = $this->input->post('OrdenEdocta');
             $query = "SELECT CAST(CC.cliente AS SIGNED ) AS ClaveNum,
                                     Ag.Clave as numagente,
@@ -1740,11 +1761,19 @@ class AuxReportesClientes extends CI_Controller {
                                         and CC.cliente BETWEEN $cte AND $acte
                                         and CC.tipo = $tp ";
 
-            if ($tipo === '1') {
-                $query .= " order by ifnull(C.RazonS,'AAA') asc, CC.fecha asc, CC.remicion asc ";
-            } else if ($tipo === '2') {
-                $query .= " order by CC.fecha asc, CC.remicion asc ";
+            if ($agt !== '') {
+                $query .= " and C.Agente = $agt order by CC.fecha asc, CC.remicion asc";
+            } else {
+                if ($tipo === '1') {
+                    $query .= " order by ifnull(C.RazonS,'AAA') asc, CC.fecha asc, CC.remicion asc ";
+                } else if ($tipo === '2') {
+                    $query .= " order by CC.fecha asc, CC.remicion asc ";
+                } else if ($tipo === '3') {
+                    $query .= " order by CC.fecha asc, CC.remicion asc ";
+                }
             }
+
+
             return $this->db->query($query)->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

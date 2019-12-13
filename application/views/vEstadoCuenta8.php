@@ -22,8 +22,9 @@
                             <label class="mb-1">Tp: <span class="badge badge-danger" style="font-size: 14px;">Nota: Para ver todo, dejar en blanco</span></label>
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="TpEdoCuentaOchoDias" name="TpEdoCuentaOchoDias" required="">
                         </div>
-                        <div class="col-10">
-                            <label class="mb-1">Orden <span class="badge badge-info" style="font-size: 14px;"> 1 Cliente, 2 Agente, 3 Agente/Ciudad</span></label>
+                        <div class="w-100"></div>
+                        <div class="col-9">
+                            <label class="mb-1"><span class="badge badge-info" style="font-size: 14px;"> 1 Cliente, 2 Agente, 3 Agente/Ciudad</span></label>
                             <select id="OrdenEdocta" name="OrdenEdocta" class="form-control form-control-sm mb-2 required" required="" >
                                 <option value=""></option>
                                 <option value="1">1 CLIENTE</option>
@@ -31,7 +32,10 @@
                                 <option value="3">3 AGENTE/CIUDAD</option>
                             </select>
                         </div>
-
+                        <div class="col-3">
+                            <label class="mb-1">Agente</label>
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="AgenteEdoCtaOchoDias" name="AgenteEdoCtaOchoDias" maxlength="2" required="">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -56,18 +60,7 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
-                        if (data.length > 0) {
-                            mdlEstadoCuenta8.find('#aClienteEdoCtaOchoDias').focus().select();
-                        } else {
-                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuenta8.find('#dClienteEdoCtaOchoDias').focus().val('');
-                            });
-                        }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    mdlEstadoCuenta8.find('#aClienteEdoCtaOchoDias').focus().select();
                 }
             }
         });
@@ -75,18 +68,7 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
-                        if (data.length > 0) {
-                            mdlEstadoCuenta8.find('#TpEdoCuentaOchoDias').focus().select();
-                        } else {
-                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuenta8.find('#aClienteEdoCtaOchoDias').focus().val('');
-                            });
-                        }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    mdlEstadoCuenta8.find('#TpEdoCuentaOchoDias').focus().select();
                 }
             }
         });
@@ -101,9 +83,31 @@
         });
         mdlEstadoCuenta8.find("#OrdenEdocta").change(function () {
             if ($(this).val()) {
-                mdlEstadoCuenta8.find("#btnImprimir").focus();
+                mdlEstadoCuenta8.find('#AgenteEdoCtaOchoDias').focus();
             }
         });
+        mdlEstadoCuenta8.find('#AgenteEdoCtaOchoDias').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtagt = $(this).val();
+                if (txtagt) {
+                    $.getJSON(base_url + 'ReportesClientesJasper/onVerificarAgente', {Agente: txtagt}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta8.find('#btnImprimir').focus();
+                        } else {
+                            swal('ERROR', 'EL AGENTE NO EXISTE', 'warning').then((value) => {
+                                mdlEstadoCuenta8.find('#AgenteEdoCtaOchoDias').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    mdlEstadoCuenta8.find('#btnImprimir').focus();
+                }
+            }
+        });
+
         mdlEstadoCuenta8.find('#btnImprimir').on("click", function () {
             onDisable(mdlEstadoCuenta8.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
