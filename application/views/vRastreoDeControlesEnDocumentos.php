@@ -25,16 +25,23 @@
                     <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <label>Cliente</label>
-                    <select id="Cliente" name="Cliente" class="form-control">
-                        <option></option>
-                        <?php
-                        foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
-                                ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                            print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                        }
-                        ?>
-                    </select>
+                    <label>Cliente</label> 
+                    <div class="row">
+                        <div class="col-3"> 
+                            <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm numbersOnly notdot" maxlength="15">
+                        </div>
+                        <div class="col-9">
+                            <select id="Cliente" name="Cliente" class="form-control">
+                                <option></option>
+                                <?php
+                                foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
+                                        ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                    print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -154,19 +161,26 @@
                         <div class="w-100"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Empleado</label>
-                            <select id="Empleado" name="Empleado" class="form-control">
-                                <option></option>
-                                <?php
-                                foreach ($this->db->select("E.Numero AS CLAVE, "
-                                                . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
-                                                . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
-                                                . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
-                                                . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
-                                        ->from("empleados AS E")->where('E.AltaBaja', 1)->get()->result() as $kk => $vv) {
-                                    print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
-                                }
-                                ?>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" id="xEmpleado" name="xEmpleado" class="form-control form-control-sm numbersOnly notdot" maxlength="8">
+                                </div>
+                                <div class="col-9">
+                                    <select id="Empleado" name="Empleado" class="form-control">
+                                        <option></option>
+                                        <?php
+                                        foreach ($this->db->select("E.Numero AS CLAVE, "
+                                                        . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
+                                                        . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
+                                                        . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
+                                                        . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
+                                                ->from("empleados AS E")->where_in('E.AltaBaja', array(1, 2))->get()->result() as $kk => $vv) {
+                                            print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
+                                        }
+                                        ?>
+                                    </select> 
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Fracción</label>
@@ -181,8 +195,12 @@
 <script>
     var pnlTablero = $("#pnlTablero"), Control = pnlTablero.find("#Control"),
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"),
-            Cliente = pnlTablero.find("#Cliente"), EstatusProduccion = pnlTablero.find("#EstatusProduccion"),
-            Empleado = pnlTablero.find("#Empleado"), Pares = pnlTablero.find("#Pares"),
+            xCliente = pnlTablero.find("#xCliente"),
+            Cliente = pnlTablero.find("#Cliente"),
+            EstatusProduccion = pnlTablero.find("#EstatusProduccion"),
+            xEmpleado = pnlTablero.find("#xEmpleado"),
+            Empleado = pnlTablero.find("#Empleado"),
+            Pares = pnlTablero.find("#Pares"),
             Fraccion = pnlTablero.find("#Fraccion"),
             FechasDelPedido, tblFechasDelPedido = pnlTablero.find("#tblFechasDelPedido"),
             FechasDeFacturacion, tblFechasDeFacturacion = pnlTablero.find("#tblFechasDeFacturacion"),
@@ -201,10 +219,77 @@
                 getInfoXControl(Control.val());
             }
         });
-        Empleado.on('change', function () {
-            onOpenOverlay('Buscando...');
+
+        Cliente.change(function () {
+            if (Cliente.val()) {
+                xCliente.val(Cliente.val());
+            } else {
+                xCliente.val('');
+                Cliente[0].selectize.enable();
+                Cliente[0].selectize.clear(true);
+            }
             RastreoDeControlesEnNomina.ajax.reload(function () {
-                onCloseOverlay();
+                HoldOn.close();
+            });
+        });
+
+        xCliente.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xCliente.val()) {
+                    Cliente[0].selectize.setValue(xCliente.val());
+                    if (Cliente.val()) {
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                            xCliente.focus().select();
+                        });
+                    }
+                } else {
+                    Cliente[0].selectize.enable();
+                    Cliente[0].selectize.clear(true);
+                }
+            } else {
+                Cliente[0].selectize.enable();
+                Cliente[0].selectize.clear(true);
+            }
+            RastreoDeControlesEnNomina.ajax.reload(function () {
+                HoldOn.close();
+            });
+        });
+
+
+        Empleado.change(function () {
+            if (Empleado.val()) {
+                xEmpleado.val(Empleado.val());
+            } else {
+                xEmpleado.val('');
+                Empleado[0].selectize.enable();
+                Empleado[0].selectize.clear(true);
+            }
+            RastreoDeControlesEnNomina.ajax.reload(function () {
+                HoldOn.close();
+            });
+        });
+
+        xEmpleado.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xEmpleado.val()) {
+                    Empleado[0].selectize.setValue(xEmpleado.val());
+                    if (Empleado.val()) {
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE EMPLEADO, ESPECIFIQUE OTRO', function () {
+                            xEmpleado.focus().select();
+                        });
+                    }
+                } else {
+                    Empleado[0].selectize.enable();
+                    Empleado[0].selectize.clear(true);
+                }
+            } else {
+                Empleado[0].selectize.enable();
+                Empleado[0].selectize.clear(true);
+            }
+            RastreoDeControlesEnNomina.ajax.reload(function () {
+                HoldOn.close();
             });
         });
         /*DATATABLES*/
@@ -247,7 +332,7 @@
             "scrollX": true
         });
         FechasDeFacturacion = tblFechasDeFacturacion.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFacturas'); ?>',
@@ -283,7 +368,7 @@
             "scrollX": true
         });
         FechasDevolucion = tblFechasDevolucion.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getDevoluciones'); ?>',
@@ -318,7 +403,7 @@
             "scrollX": true
         });
         FechasDeAvance = tblFechasDeAvance.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFechasDeAvance'); ?>',
@@ -355,7 +440,7 @@
             "autoWidth": true,
             ordering: true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 25,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -364,7 +449,7 @@
             "scrollX": true
         });
         RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
-            "dom": 'rit',
+            "dom": 'ritp',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getControlesEnNomina'); ?>',
@@ -389,11 +474,14 @@
             "autoWidth": true,
             ordering: true,
             "colReorder": true,
-            "displayLength": 99999999,
+            "displayLength": 25,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
+            "aaSorting": [
+                [3, 'DESC']
+            ],
             "scrollY": "250px",
             "scrollX": true
         });

@@ -81,7 +81,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('PX.Control', $x['CONTROL']);
             } else {
-                $this->db->where('PX.Control <> 0', null, false)->limit(5000);
+                $this->db->where('PX.Control <> 0', null, false)->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -101,7 +101,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('contped', $x['CONTROL']);
             } else {
-                $this->db->limit(99);
+                $this->db->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -128,7 +128,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                 $this->db->where('FPN.fraccion', $x['FRACCION']);
             }
             if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '' && $x['FRACCION'] === '') {
-                $this->db->limit(999);
+                $this->db->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -161,7 +161,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('F.cliente', $x['CLIENTE']);
             } else {
-                $this->db->limit(99);
+                $this->db->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -177,7 +177,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('D.cliente', $x['CLIENTE']);
             } else {
-                $this->db->limit(99);
+                $this->db->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {

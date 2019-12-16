@@ -10,19 +10,26 @@
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Maquila</label>
-                <select id="Maquila" name="Maquila" class="form-control">
-                    <option></option>
-                    <?php 
-                    foreach ($this->db->select("CAST(M.Clave AS SIGNED) AS CLAVE, "
-                                    . "CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
-                            ->from('maquilas AS M')
-                            ->where('M.Estatus', 'ACTIVO')
-                            ->order_by('CLAVE', 'ASC')
-                            ->get()->result() as $k => $v) {
-                        print "<option value=\"{$v->CLAVE}\">{$v->MAQUILA}</option>";
-                    }
-                    ?>
-                </select>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="text" id="xMaquila" name="xMaquila" class="form-control form-control-sm numbersOnly notdot" maxlength="3">
+                    </div>
+                    <div class="col-10">
+                        <select id="Maquila" name="Maquila" class="form-control">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select("CAST(M.Clave AS SIGNED) AS CLAVE, "
+                                            . "CONCAT(M.Clave,' ',M.Nombre) AS MAQUILA", false)
+                                    ->from('maquilas AS M')
+                                    ->where('M.Estatus', 'ACTIVO')
+                                    ->order_by('CLAVE', 'ASC')
+                                    ->get()->result() as $k => $v) {
+                                print "<option value=\"{$v->CLAVE}\">{$v->MAQUILA}</option>";
+                            }
+                            ?>
+                        </select>  
+                    </div>
+                </div> 
             </div>
             <div class="col-12 col-xs-12 col-sm-3 col-lg-3 col-xl-3">
                 <label>Documento</label>
@@ -111,7 +118,9 @@
     </div>
 </div>
 <script>
-    var pnlTablero = $("#pnlTablero"), Maquila = pnlTablero.find("#Maquila");
+    var pnlTablero = $("#pnlTablero"),
+            xMaquila = pnlTablero.find("#xMaquila");
+    Maquila = pnlTablero.find("#Maquila");
     var ControlesListosParaPespunte, tblControlesListosParaPespunte = pnlTablero.find("#tblControlesListosParaPespunte"),
             ControlesEntregados, tblControlesEntregados = pnlTablero.find("#tblControlesEntregados"),
             Estilo = pnlTablero.find("#Estilo"), Color = pnlTablero.find("#Color"),
@@ -122,17 +131,44 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-        Maquila[0].selectize.focus();
 
-        Maquila.on('change', function () {
-            HoldOn.open({
-                theme: 'sk-rect',
-                message: 'Espere...'
-            });
-            ControlesListosParaPespunte.ajax.reload(function () {
-                HoldOn.close();
-            });
+
+        Maquila.change(function () {
+            if (Maquila.val()) {
+                xMaquila.val(Maquila.val());
+                ControlesListosParaPespunte.ajax.reload(function () {
+                    HoldOn.close();
+                });
+            } else {
+                xMaquila.val('');
+                Maquila[0].selectize.enable();
+                Maquila[0].selectize.clear(true);
+            }
         });
+
+        xMaquila.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xMaquila.val()) {
+                    Maquila[0].selectize.setValue(xMaquila.val());
+                    if (Maquila.val()) {
+                        Maquila[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTA MAQUILA, ESPECIFIQUE OTRO', function () {
+                            xMaquila.focus().select();
+                        });
+                    }
+                } else {
+                    Maquila[0].selectize.enable();
+                    Maquila[0].selectize.clear(true);
+                }
+            } else {
+                Maquila[0].selectize.enable();
+                Maquila[0].selectize.clear(true);
+            }
+        });
+
+
+
 
         Frac.on('keydown', function (e) {
             if (Control.val() && e.keyCode === 13) {
@@ -162,6 +198,7 @@
         });
 
         btnAgregar.click(function () {
+            onEnable(Maquila);
             HoldOn.close();
             $.getJSON('<?php print base_url('AvancePespunteMaquila/onVerificarAvance') ?>', {
                 CONTROL: Control.val()
@@ -271,7 +308,8 @@
             "bSort": true,
             "scrollY": "250px",
             "scrollX": true,
-            createdRow: function (row, data, dataIndex) {
+            initComplete: function () {
+                xMaquila.focus().select();
             }
         };
         ControlesListosParaPespunte = tblControlesListosParaPespunte.DataTable(xoptions);
@@ -337,7 +375,7 @@
         }).always(function () {
             HoldOn.close();
         });
-    } 
+    }
 
     function onEliminarAvanceMaquila(id, ida) {
         swal({
