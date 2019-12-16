@@ -906,13 +906,13 @@
     }
 
 
-    $('input:not(.notEnter)').keyup(function () {
+    $('input:not(.notEnter):not(.notUpperCase)').keyup(function () {
         $(this).val($(this).val().toUpperCase());
     });
 
 
     function handleEnterDiv(divParent) {
-        $('input:not(.notEnter)').keyup(function () {
+        $('input:not(.notEnter):not(.notUpperCase)').keyup(function () {
             $(this).val($(this).val().toUpperCase());
         });
 
@@ -950,7 +950,7 @@
 
     function handleEnter() {
 
-        $('input:not(.notEnter)').keyup(function () {
+        $('input:not(.notEnter):not(.notUpperCase)').keyup(function () {
             $(this).val($(this).val().toUpperCase());
         });
 
@@ -1230,8 +1230,8 @@
     var opcion = "";
 
     function getMenu(m) {
-        getQuickMenu(2);
-        onComprobarModulos(2);
+        Z2V0UXVpY2tNZW51(2);
+        b25Db21wcm9iYXJNb2R1bG9z(2);
         $.post('<?php print base_url('menu_opciones_modulos'); ?>', {MOD: m}).done(function (data) {
             var dtm = JSON.parse(data);
             if (dtm.length > 0) {
@@ -1479,15 +1479,15 @@
     }
 
     var modulos_counter = 0;
-    function onMenuDisplay(e) {
+    function b25NZW51RGlzcGxheQ(e) {
         onOpenOverlay('Cargando...');
         window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 
-    function onComprobarModulos(type) {
+    function b25Db21wcm9iYXJNb2R1bG9z(type) {
         setTimeout(function () {
-            getQuickMenu(type);
-            onComprobarModulos(type);
+            Z2V0UXVpY2tNZW51(type);
+            b25Db21wcm9iYXJNb2R1bG9z(type);
         }, 600000);/*cada 10 min*/
     }
 
@@ -1512,9 +1512,9 @@
             }
         });
     }
-    function getQuickMenu(type) {
+    function Z2V0UXVpY2tNZW51(type) {
         var burl = '<?php print base_url(); ?>';
-        $.getJSON('<?php print base_url('menu_modulos'); ?>').done(function (data) {
+        $.getJSON('<?php print base_url('bWVudV9tb2R1bG9z'); ?>').done(function (data) {
             var modulo = "";
             if (modulos_counter === 0) {
                 if (data.length > 0) {
@@ -1522,7 +1522,7 @@
                     switch (type) {
                         case 1:
                             $.each(data, function (k, v) {
-                                modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="onMenuDisplay(\'' + v.Ref + '\');">';
+                                modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\');">';
                                 modulo += '<div class="card text-center">';
                                 modulo += '<div class="card-body">';
                                 modulo += '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>';
@@ -1644,6 +1644,10 @@
     }
 
     function onCampoInvalido(pnl, msj, fun) {
+        $.each($("body").find("select[multiple='multiple']:enabled"), function (k, v) {
+            $(v).addClass('campo_no_valido');
+            onDisable($(v));
+        });
         $.each($("body").find("select.selectized:enabled"), function (k, v) {
             $(v).addClass('campo_no_valido');
             onDisable($(v));
@@ -1701,7 +1705,11 @@
                 $(e).attr('disabled', false);
                 break;
             case "SELECT":
-                $(e)[0].selectize.enable();
+                if ($(e).hasClass('selectized')) {
+                    $(e)[0].selectize.enable();
+                } else {
+                    $(e).attr('disabled', false);
+                }
                 break;
             case "BUTTON":
                 $(e).attr('disabled', false);
@@ -1718,7 +1726,11 @@
                 $(e).attr('disabled', true);
                 break;
             case "SELECT":
-                $(e)[0].selectize.disable();
+                if ($(e).hasClass('selectized')) {
+                    $(e)[0].selectize.disable();
+                } else {
+                    $(e).attr('disabled', true);
+                }
                 break;
             case "BUTTON":
                 $(e).attr('disabled', true);
@@ -1736,10 +1748,14 @@
                 $(e).attr('disabled', tf);
                 break;
             case "SELECT":
-                if (tf) {
-                    $(e)[0].selectize.disable();
+                if ($(e).hasClass('selectized')) {
+                    if (tf) {
+                        $(e)[0].selectize.disable();
+                    } else {
+                        $(e)[0].selectize.enable();
+                    }
                 } else {
-                    $(e)[0].selectize.enable();
+                    $(e).attr('disabled', false);
                 }
                 break;
             case "BUTTON":
@@ -1758,7 +1774,11 @@
                 $(e).attr('disabled', false);
                 break;
             case "SELECT":
-                $(e)[0].selectize.enable();
+                if ($(e).hasClass('selectized')) {
+                    $(e)[0].selectize.enable();
+                } else {
+                    $(e).attr('disabled', false);
+                }
                 break;
             case "BUTTON":
                 $(e).attr('disabled', false);
@@ -1776,7 +1796,11 @@
                 $(e).attr('disabled', true);
                 break;
             case "SELECT":
-                $(e)[0].selectize.disable();
+                if ($(e).hasClass('selectized')) {
+                    $(e)[0].selectize.disable();
+                } else {
+                    $(e).attr('disabled', true);
+                }
                 break;
             case "BUTTON":
                 $(e).attr('disabled', true);

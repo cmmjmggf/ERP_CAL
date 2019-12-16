@@ -143,10 +143,10 @@
 
     /*Hacer todo el texto de los inputs mayusculas*/
 
-    input:not(.notEnter) {
+    input:not(.notEnter):not(.notUpperCase) {
         text-transform: uppercase;
     }
-    textarea:not(.notEnter)  {
+    textarea:not(.notEnter):not(.notUpperCase)  {
         text-transform: uppercase;
     }
 

@@ -98,7 +98,7 @@
 </style>
 <script>
     $(document).ready(function () {
-        getQuickMenu(1);
-        onComprobarModulos(1);
+        Z2V0UXVpY2tNZW51(1);
+        b25Db21wcm9iYXJNb2R1bG9z(1);
     });
 </script>

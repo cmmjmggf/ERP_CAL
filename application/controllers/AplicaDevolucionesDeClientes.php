@@ -376,7 +376,16 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         ->where('tipo', $x['TP'])->update('cartcliente');
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-STATUS)(TP-1)", "HA MODIFICADO EL ESTATUS({$status}) DE LA NDC({$x["NC"]})  DEL CLIENTE {$x["CLIENTE"]}.", $this->session);
                 /*                 * ********************** TimbrarNC.exe TODAVIA NO LO TENEMOS***************** */
+                print "\n*** TIMBRANDO NC {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
+                exec('schtasks /run /tn "Timbrar"  ');
+                exec('schtasks /delete /tn "Timbrar" /F ');
+                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE)(TIMBRADO)", "HA TIMBRADO LA NOTA DE CREDITO {$x['NC']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($total_final_con_iva, 4, ".", ",") . ", TP 1 (NC).", $this->session);
+
+
                 $this->onImprimirReporteNotaCreditoTp1Local($x['TP'], $x['NC'], $x['CLIENTE']);
+
+
                 $l = new Logs("APLICA DEV DE CLIENTES - NOTA DE CREDITO (RPT)(TP-1)", "IMPRIMIO UN REPORTE DE LA NDC({$x["NC"]}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final_con_iva, 2, ".", ",") . "   TP 1.", $this->session);
                 exit(0);
             } else {

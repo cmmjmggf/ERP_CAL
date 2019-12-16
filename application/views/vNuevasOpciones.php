@@ -9,35 +9,54 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-12 d-none">
+                        <input type="text" id="IDGM" name="IDGM" class="form-control d-none" readonly="">
+                    </div>
                     <div class="col-12">
                         <label>Nombre</label>
-                        <input type="text" id="NombreModulo" name="NombreModulo" class="form-control form-control-sm ">
+                        <input type="text" id="NombreModulo" name="NombreModulo" class="form-control form-control-sm notUpperCase">
                     </div>
                     <div class="col-6">
                         <label>Icono</label>
-                        <input type="text" id="NombreIcono" name="NombreIcono" class="form-control form-control-sm">                            
-                    </div>
-                    <div class="col-6 vista_previa justify-content-center text-center"> 
-                    </div>
+                        <input type="text" id="NombreIcono" name="NombreIcono" class="form-control form-control-sm notUpperCase">                            
+                    </div> 
                     <div class="col-6">
                         <label>Orden</label>
-                        <input type="text" id="Orden" name="Orden" class="form-control form-control-sm ">
+                        <input type="text" id="Orden" name="Orden" class="form-control form-control-sm numbersOnly " maxlength="2">
                     </div>
                     <div class="col-12">
                         <label>Referencia</label>
-                        <input type="text" id="ReferenciaModulo" name="ReferenciaModulo" class="form-control form-control-sm ">
+                        <input type="text" id="ReferenciaModulo" name="ReferenciaModulo" class="form-control form-control-sm notUpperCase">
+                    </div>
+                    <div class="col-12 my-2" align="right">
+                        <button type="button" class="btn btn-info" id="btnGuardarModulo"><span class="fa fa-save"></span> Guardar</button> 
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 mt-1">
+                        <div id="Modulos" class="table-responsive">
+                            <table id="tblModulos" class="table table-sm display nowrap " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Modulo</th> 
+                                        <th>Fecha</th>
+                                        <th>Icon</th>
+                                        <th>Ref</th>
+                                        <th>Order</th> 
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnGuardarModulo"><span class="fa fa-save"></span> Guardar</button> 
-            </div>
+            </div> 
         </div>
     </div>
 </div>
 
 <div id="mdlNuevaOpcionXModulo" class="modal">
-    <div class="modal-dialog modal-dialog-centered  notdraggable" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered  notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-puzzle-piece"></span> Nueva opción por módulo</h5>
@@ -47,11 +66,14 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-12 d-none">
+                        <input type="text" id="IDGMXO" name="IDGMXO" class="form-control d-none" readonly="">
+                    </div>
                     <div class="col-12">
                         <label>Modulo</label>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" id="xModuloXOpcion" name="xModuloXOpcion" class="form-control form-control-sm">
+                                <input type="text" id="xModuloXOpcion" name="xModuloXOpcion" maxlength="2" class="form-control form-control-sm numbersOnly">
                             </div>
                             <div class="col-8">
                                 <select id="ModuloXOpcion" name="ModuloXOpcion" class="form-control form-control-sm">
@@ -64,11 +86,11 @@
                     </div>
                     <div class="col-12">
                         <label>Nombre</label>
-                        <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm ">
+                        <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm notUpperCase">
                     </div>
                     <div class="col-6">
                         <label>Icono</label>
-                        <input type="text" id="NombreIconoOpcion" name="NombreIconoOpcion" class="form-control form-control-sm">                            
+                        <input type="text" id="NombreIconoOpcion" name="NombreIconoOpcion" class="form-control form-control-sm notUpperCase">                            
                     </div>
                     <div class="col-6 vista_previa justify-content-center text-center"> 
                     </div>
@@ -78,7 +100,7 @@
                     </div>
                     <div class="col-12">
                         <label>Referencia</label>
-                        <input type="text" id="ReferenciaOpcion" name="ReferenciaOpcion" class="form-control form-control-sm ">
+                        <input type="text" id="ReferenciaOpcion" name="ReferenciaOpcion" class="form-control form-control-sm notUpperCase">
                     </div>
                     <div class="col-4 mt-3"> 
                         <div class="custom-control custom-checkbox">
@@ -88,14 +110,35 @@
                     </div>
                     <div class="col-8">
                         <label>Clase(css)</label>
-                        <input type="text" id="ClaseCss" name="ClaseCss" placeholder="info,warning, success..." class="form-control form-control-sm " maxlength="999">
+                        <input type="text" id="ClaseCss" name="ClaseCss" placeholder="info,warning, success..." class="form-control form-control-sm notUpperCase" maxlength="999">
                     </div>
-
+                    <div class="col-12 my-2" align="right">
+                        <button type="button" class="btn btn-info" id="btnGuardarOpcionxModulo"><span class="fa fa-save"></span> Guardar</button> 
+                        <button type="button" class="btn btn-danger" id="btnCancelarOpcionxModulo"><span class="fa fa-trash"></span> Cancelar</button> 
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 mt-1">
+                        <div id="Opciones" class="table-responsive">
+                            <table id="tblOpciones" class="table table-sm display nowrap " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Modulo</th>
+                                        <th>Opción</th>
+                                        <th>Fecha</th>
+                                        <th>Icon</th>
+                                        <th>Ref</th>
+                                        <th>Order</th>
+                                        <th>Button</th>
+                                        <th>Class</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnGuardarOpcionxModulo"><span class="fa fa-save"></span> Guardar</button> 
-            </div>
+            </div> 
         </div>
     </div>
 </div>
@@ -107,6 +150,8 @@
             Orden = mdlNuevoModulo.find("#Orden"),
             ReferenciaModulo = mdlNuevoModulo.find("#ReferenciaModulo");
 
+    var tblModulos = mdlNuevoModulo.find("#tblModulos"), Modulos;
+
     var mdlNuevaOpcionXModulo = $("#mdlNuevaOpcionXModulo"), opciones_nuevo = $("#opciones_nuevo"),
             btnGuardarOpcionxModulo = mdlNuevaOpcionXModulo.find("#btnGuardarOpcionxModulo"),
             NombreOpcion = mdlNuevaOpcionXModulo.find("#NombreOpcion"),
@@ -116,11 +161,72 @@
             EsBoton = mdlNuevaOpcionXModulo.find("#EsBoton"),
             ClaseCss = mdlNuevaOpcionXModulo.find("#ClaseCss"),
             xModuloXOpcion = mdlNuevaOpcionXModulo.find("#xModuloXOpcion"),
-            ModuloXOpcion = mdlNuevaOpcionXModulo.find("#ModuloXOpcion");
+            ModuloXOpcion = mdlNuevaOpcionXModulo.find("#ModuloXOpcion"),
+            btnCancelarOpcionxModulo = mdlNuevaOpcionXModulo.find("#btnCancelarOpcionxModulo");
+
+    var tblOpciones = mdlNuevaOpcionXModulo.find("#tblOpciones"), OpcionesXModulo;
+    var nuevo = true;
 
     $(document).ready(function () {
-
+        handleEnterDiv(mdlNuevoModulo);
+        handleEnterDiv(mdlNuevaOpcionXModulo);
         /*OPCION*/
+
+        btnCancelarOpcionxModulo.click(function () {
+            onClearPanelInputSelect(mdlNuevaOpcionXModulo, function () {
+                OpcionesXModulo.ajax.reload();
+            });
+        });
+
+        NombreOpcion.on('keydown', function (e) {
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                onEnable(ModuloXOpcion);
+            }
+        });
+
+        ModuloXOpcion.change(function () {
+            onOpenOverlay('');
+            if (ModuloXOpcion.val()) {
+                xModuloXOpcion.val(ModuloXOpcion.val());
+                NombreOpcion.focus().select();
+            } else {
+                xModuloXOpcion.val('');
+                ModuloXOpcion[0].selectize.enable();
+                ModuloXOpcion[0].selectize.clear(true);
+            }
+            $.getJSON('<?php print base_url('ResourceManager/getUltimoOrden') ?>', {MODULO: ModuloXOpcion.val()}).done(function (a) {
+                if (a.length > 0) {
+                    OrdenOpcion.val(a[0].ULTIMO_ORDEN);
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+                OpcionesXModulo.ajax.reload();
+            });
+        });
+
+        xModuloXOpcion.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xModuloXOpcion.val()) {
+                    ModuloXOpcion[0].selectize.setValue(xModuloXOpcion.val());
+                    if (ModuloXOpcion.val()) {
+                        onDisable(ModuloXOpcion);
+                    } else {
+                        onCampoInvalido(mdlNuevaOpcionXModulo, 'NO EXISTE ESTE MODULO, ESPECIFIQUE OTRO', function () {
+                            xModuloXOpcion.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    ModuloXOpcion[0].selectize.enable();
+                    ModuloXOpcion[0].selectize.clear(true);
+                }
+            } else {
+                ModuloXOpcion[0].selectize.enable();
+                ModuloXOpcion[0].selectize.clear(true);
+            }
+        });
         NombreIconoOpcion.change(function () {
             if ($(this).val()) {
                 mdlNuevaOpcionXModulo.find(".vista_previa").html('<div class="mt-2"></div><span class="' + $(this).val() + ' fa-2x mt-2"></span>');
@@ -128,41 +234,76 @@
         });
 
         btnGuardarOpcionxModulo.click(function () {
-            if (NombreOpcion.val() && NombreIconoOpcion.val() && OrdenOpcion.val() && ReferenciaOpcion.val()) {
-                onOpenOverlay('');
-                var p = {
-                    MODULO: ModuloXOpcion.val(), NOMBRE_OPCION: NombreOpcion.val(),
-                    ICONO_OPCION: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
-                    ORDEN_OPCION: OrdenOpcion.val(), BOTON: mdlNuevaOpcionXModulo.find("#EsBoton")[0].checked ? 1 : 0,
-                    CLASECSS: mdlNuevaOpcionXModulo.find("#ClaseCss").val()
-                };
-                $.post('<?php print base_url('ResourceManager/onNuevaOpcionXModulo'); ?>', p).done(function (a) {
-                    console.log(a);
-                    var r = JSON.parse(a);
-                    console.log(r);
-                    iMsg("OPCION POR MODULO AGREGADA", "s", function () {
-                        onClearPanelInputSelect(mdlNuevaOpcionXModulo, function () {
-                            NombreOpcion.focus().select();
-                        });
-                    });
-                }).fail(function (x, y, z) {
-                    onError(x);
-                }).always(function () {
+
+            onOpenOverlay('');
+            var p = {
+                ID: mdlNuevaOpcionXModulo.find("#IDGMXO").val(),
+                NUEVO: nuevo ? 1 : 0,
+                MODULO: ModuloXOpcion.val(), NOMBRE_OPCION: NombreOpcion.val(),
+                ICONO_OPCION: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
+                ORDEN_OPCION: OrdenOpcion.val(), BOTON: mdlNuevaOpcionXModulo.find("#EsBoton")[0].checked ? 1 : 0,
+                CLASECSS: mdlNuevaOpcionXModulo.find("#ClaseCss").val()
+            };
+            if (!ModuloXOpcion.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UN MODULO", function () {
+                    xModuloXOpcion.focus().select();
                     onCloseOverlay();
                 });
-            } else {
-                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR TODO LOS PARAMETROS", function () {
-                    if (!NombreOpcion.val()) {
-                        NombreOpcion.focus().select();
-                    } else if (!NombreIconoOpcion.val()) {
-                        NombreIconoOpcion.focus().select();
-                    } else if (!Orden.val()) {
-                        Orden.focus().select();
-                    } else if (!ReferenciaOpcion.val()) {
-                        ReferenciaOpcion.focus().select();
-                    }
-                });
+                return;
             }
+            if (!NombreOpcion.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UN NOMBRE", function () {
+                    NombreOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!NombreIconoOpcion.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UN ICONO", function () {
+                    NombreIconoOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!ReferenciaOpcion.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UNA REFERENCIA", function () {
+                    ReferenciaOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!OrdenOpcion.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UN ORDEN", function () {
+                    OrdenOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!ClaseCss.val()) {
+                onCampoInvalido(mdlNuevaOpcionXModulo, "ES NECESARIO ESPECIFICAR UNA CLASE CSS", function () {
+                    ClaseCss.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+
+            $.post('<?php print base_url('ResourceManager/onGuardarOpcionXModulo'); ?>', p).done(function (a) {
+                console.log(a);
+                var r = JSON.parse(a);
+                console.log(r);
+                nuevo = true;
+                iMsg("OPCION POR MODULO GUARDADA", "s", function () {
+                    onClearPanelInputSelect(mdlNuevaOpcionXModulo, function () {
+                        xModuloXOpcion.focus().select();
+                    });
+                });
+            }).fail(function (x, y, z) {
+                onError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
+
+
         });
 
         opciones_nuevo.click(function () {
@@ -170,7 +311,9 @@
         });
 
         mdlNuevaOpcionXModulo.on('shown.bs.modal', function () {
-            getModulos();
+            nuevo = true;
+            getModulosX();
+            getOpcionesXModulos();
             mdlNuevaOpcionXModulo.find("#xModuloXOpcion").focus().select();
         });
 
@@ -190,21 +333,19 @@
             if (NombreModulo.val() && NombreIcono.val() && Orden.val() && ReferenciaModulo.val()) {
                 onOpenOverlay('');
                 var p = {
-                    MODULO: NombreModulo.val(),
-                    ICONO: NombreIcono.val(),
-                    REFERENCIA: ReferenciaModulo.val(),
-                    ORDEN: Orden.val()
+                    ID: mdlNuevoModulo.find("#IDGM").val(),
+                    NUEVO: nuevo ? 1 : 0,
+                    MODULO: NombreModulo.val(), ICONO: NombreIcono.val(),
+                    REFERENCIA: ReferenciaModulo.val(), ORDEN: Orden.val()
                 };
-                $.post('<?php print base_url('ResourceManager/onNuevoModulo'); ?>', p).done(function (a) {
+                $.post('<?php print base_url('ResourceManager/onGuardarModulo'); ?>', p).done(function (a) {
                     console.log(a);
-                    var r = JSON.parse(a);
-                    console.log(r);
-                    iMsg("MODULO AGREGADO", "s", function () {
-                        onClear(NombreModulo);
-                        onClear(NombreIcono);
-                        onClear(ReferenciaModulo);
-                        onClear(Orden);
-                        NombreModulo.focus().select();
+                    nuevo = true;
+                    iMsg("MODULO GUARDADO", "s", function () {
+                        onClearPanelInputSelect(mdlNuevoModulo, function () {
+                            NombreModulo.focus().select();
+                            getModulosGenerales();
+                        });
                     });
                 }).fail(function (x, y, z) {
                     onError(x);
@@ -231,7 +372,9 @@
         });
 
         mdlNuevoModulo.on('shown.bs.modal', function () {
+            nuevo = true;
             mdlNuevoModulo.find("#NombreModulo").focus().select();
+            getModulosGenerales();
         });
 
         mdlNuevoModulo.on('hidden.bs.modal', function () {
@@ -239,7 +382,121 @@
         });
     });
 
-    function getModulos() {
+
+    function getModulosGenerales() {
+        if ($.fn.DataTable.isDataTable('#tblModulos')) {
+            Modulos.ajax.reload();
+            return;
+        }
+        Modulos = tblModulos.DataTable({
+            dom: 'frtip', "ajax": {
+                "url": '<?php print base_url('ResourceManager/getModulosGenerales'); ?>',
+                "dataSrc": ""
+            },
+            "columns": [
+                {"data": "ID"},
+                {"data": "MODULO"},
+                {"data": "FECHA"}, {"data": "ICONO"},
+                {"data": "REF"}, {"data": "ORDEN"}
+            ],
+            "columnDefs": [
+                //ID
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 25,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": 250,
+            "scrollX": true,
+            responsive: false,
+            "aaSorting": [
+                [0, 'desc']/*ID*/
+            ],
+            initComplete: function () {
+            }
+        });
+
+        tblModulos.on('click', 'tr', function () {
+            nuevo = false;
+            var xxx = Modulos.row($(this)).data();
+            mdlNuevoModulo.find("#IDGM").val(xxx.ID);
+            NombreModulo.val(xxx.MODULO);
+            NombreIcono.val(xxx.ICONO);
+            Orden.val(xxx.ORDEN);
+            ReferenciaModulo.val(xxx.REF);
+        });
+    }
+    function getOpcionesXModulos() {
+        if ($.fn.DataTable.isDataTable('#tblOpciones')) {
+            OpcionesXModulo.ajax.reload();
+            return;
+        }
+        OpcionesXModulo = tblOpciones.DataTable({
+            dom: 'frtip', "ajax": {
+                "url": '<?php print base_url('ResourceManager/getOpcionesXModulos'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MODULO = ModuloXOpcion.val() ? ModuloXOpcion.val() : '';
+                }
+            },
+            "columns": [
+                {"data": "ID"},
+                {"data": "MODULO"}, {"data": "OPCION"},
+                {"data": "FECHA"}, {"data": "ICONO"},
+                {"data": "REF"}, {"data": "ORDEN"},
+                {"data": "BOTON"}, {"data": "CLASE"}
+            ],
+            "columnDefs": [
+                //ID
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 50,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": 300,
+            "scrollX": true,
+            responsive: false,
+            "aaSorting": [
+                [0, 'desc']/*ID*/
+            ],
+            initComplete: function () {
+            }
+        });
+
+        tblOpciones.on('click', 'tr', function () {
+            nuevo = false;
+            var xxx = OpcionesXModulo.row($(this)).data();
+            mdlNuevaOpcionXModulo.find("#IDGMXO").val(xxx.ID);
+            xModuloXOpcion.val(xxx.MODULO_ID);
+            ModuloXOpcion[0].selectize.setValue(xxx.MODULO_ID);
+            NombreOpcion.val(xxx.OPCION);
+            NombreIconoOpcion.val(xxx.ICONO);
+            ReferenciaOpcion.val(xxx.REF);
+            OrdenOpcion.val(xxx.ORDEN);
+            EsBoton[0].checked = parseInt(xxx.BOTON) === 0 ? false : true;
+            ClaseCss.val(xxx.CLASE);
+        });
+    }
+
+    function getModulosX() {
         $.getJSON('<?php print base_url('ResourceManager/getModulosX'); ?>').done(function (a) {
             onClearSelect(ModuloXOpcion);
             $.each(a, function (k, v) {

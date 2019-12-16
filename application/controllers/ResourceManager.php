@@ -13,20 +13,39 @@ class ResourceManager extends CI_Controller {
 
     public function getModulos() {
         try {
-            print json_encode($this->db->select("M.ID, M.Modulo, M.Fecha, M.Icon, M.Ref")->from("modulos AS M")
-                            ->join('modulosxusuario AS MXU', 'MXU.Modulo = M.ID', 'left')
-                            ->where('MXU.Usuario', $_SESSION["ID"])
-                            ->order_by('M.Order', 'ASC')->get()->result());
+            print json_encode($this->db->select("M.ID, M.Modulo, M.Fecha, M.Icon, M.Ref, M.Order")
+                                    ->from("modulos AS M")
+                                    ->order_by('M.Order', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
+
+    public function getOpcionesXModulos() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("OXM.ID, M.Modulo AS MODULO, OXM.Opcion AS OPCION, 
+                OXM.Fecha AS FECHA, OXM.Icon AS ICONO, OXM.Ref AS REF, 
+                OXM.Order AS ORDEN, OXM.Button AS BOTON, OXM.Class AS CLASE, M.ID MODULO_ID", false)
+                    ->from("opcionesxmodulo AS OXM")
+                    ->join('modulos AS M', 'M.ID = OXM.Modulo');
+            if ($x['MODULO'] !== '') {
+                $this->db->where('M.ID', $x['MODULO']);
+            }
+
+            $data = $this->db->order_by('M.Order', 'ASC')->get()->result();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getModulosX() {
         try {
-            print json_encode($this->db->select("M.ID, M.Modulo")->from("modulos AS M")
-                            ->join('modulosxusuario AS MXU', 'MXU.Modulo = M.ID', 'left')
-                            ->where('MXU.Usuario', $_SESSION["ID"])
-                            ->order_by('M.Order', 'ASC')->get()->result());
+            print json_encode($this->db->select("M.ID, M.Modulo, M.Fecha, M.Icon, M.Ref, M.Order")->from("modulos AS M")
+                                    ->join('modulosxusuario AS MXU', 'MXU.Modulo = M.ID', 'left')
+                                    ->where('MXU.Usuario', $_SESSION["ID"])
+                                    ->order_by('M.Order', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -96,39 +115,91 @@ class ResourceManager extends CI_Controller {
         }
     }
 
-    public function onNuevoModulo() {
+    public function onGuardarModulo() {
         try {
             $x = $this->input->post();
-            $this->db->insert("modulos",
-                    array("Modulo" => $x['MODULO'],
-                        "Fecha" => Date('d/m/Y'),
-                        "Icon" => $x['ICONO'],
-                        "Ref" => $x['REFERENCIA'],
-                        "Order" => $x['ORDEN']));
-            print json_encode(array("REGISTRO" => 1));
+//            var_dump($x);
+//            exit(0);
+            switch ($x['NUEVO']) {
+                case 0:
+                    $this->db->set('Modulo', $x['MODULO'])
+                            ->set('Icon', strtolower($x['ICONO']))
+                            ->set('Ref', $x['REFERENCIA'])
+                            ->set('Order', $x['ORDEN'])
+                            ->where('ID', $x['ID'])
+                            ->update('modulos');
+                    break;
+                case 1:
+                    $this->db->insert("modulos",
+                            array("Modulo" => $x['MODULO'],
+                                "Fecha" => Date('d/m/Y'),
+                                "Icon" => strtolower($x['ICONO']),
+                                "Ref" => $x['REFERENCIA'],
+                                "Order" => $x['ORDEN']));
+                    print json_encode(array("REGISTRO" => 1));
+                    break;
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function onNuevaOpcionXModulo() {
+    public function onGuardarOpcionXModulo() {
         try {
             $x = $this->input->post();
-            $this->db->insert("opcionesxmodulo",
-                    array(
-                        "Modulo" => $x['MODULO'],
-                        "Opcion" => $x['NOMBRE_OPCION'],
-                        "Fecha" => Date('d/m/Y'),
-                        "Icon" => $x['ICONO_OPCION'],
-                        "Ref" => $x['REFERENCIA_OPCION'],
-                        "Order" => $x['ORDEN_OPCION'],
-                        "Button" => $x['BOTON'],
-                        "Class" => $x['CLASECSS']));
-            print json_encode(array("REGISTRO" => 1));
+            switch (intval($x['NUEVO'])) {
+                case 0:
+                    $this->db->set('Modulo', $x['MODULO'])
+                            ->set('Icon', strtolower($x['ICONO']))
+                            ->set('Ref', $x['REFERENCIA'])
+                            ->set('Order', $x['ORDEN'])
+                            ->where('ID', $x['ID'])
+                            ->update('opcionesxmodulo');
+                    break;
+                case 1:
+                    $this->db->insert("opcionesxmodulo",
+                            array(
+                                "Modulo" => $x['MODULO'],
+                                "Opcion" => $x['NOMBRE_OPCION'],
+                                "Fecha" => Date('d/m/Y'),
+                                "Icon" => strtolower($x['ICONO_OPCION']),
+                                "Ref" => $x['REFERENCIA_OPCION'],
+                                "Order" => $x['ORDEN_OPCION'],
+                                "Button" => $x['BOTON'],
+                                "Class" => $x['CLASECSS']));
+                    print json_encode(array("REGISTRO" => 1));
+                    break;
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
- 
+
+    public function getUltimoOrden() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("(M.Order + 1) AS ULTIMO_ORDEN ", false)
+                    ->from("opcionesxmodulo AS M");
+            if ($x['MODULO'] !== '') {
+                $this->db->where("M.Modulo", $x['MODULO']);
+            }
+            $this->db->order_by("M.Order", "DESC")->limit(1);
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getModulosGenerales() {
+        try {
+            print json_encode($this->db->select("M.ID AS ID, M.Modulo AS MODULO, "
+                                            . "M.Fecha AS FECHA, M.Icon AS ICONO, "
+                                            . "M.Ref AS REF, M.Order AS ORDEN")
+                                    ->from("modulos AS M")
+                                    ->order_by('M.Order', 'ASC')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
 }

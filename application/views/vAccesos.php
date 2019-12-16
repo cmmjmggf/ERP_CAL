@@ -700,7 +700,7 @@
         ssixiu.change(function () {
             $("#subsubitems").html('');
             $("#subsubitems_to").html('');
-            $.getJSON('<?php print base_url('accesos_modulos_x_usuario'); ?>', {U: ssixiu.val()}).done(function (dx) {
+            $.getJSON('<?php print base_url('Accesos/getModulosXUsuario'); ?>', {U: ssixiu.val()}).done(function (dx) {
                 ssixim[0].selectize.clear(true);
                 ssixim[0].selectize.clearOptions();
                 $.each(dx, function (k, v) {
@@ -771,7 +771,7 @@
         sixio.change(function () {
             $("#subitems").html('');
             $("#subitems_to").html('');
-            $.getJSON('<?php print base_url('accesos_dropdown_items_x_opcion_x_modulo_x_usuario'); ?>', {U: sixiu.val(), M: sixim.val(), O: sixio.val()}).done(function (dx) {
+            $.getJSON('<?php print base_url('Accesos/getItemsConSubItemsXOpcionXModuloxUsuario'); ?>', {U: sixiu.val(), M: sixim.val(), O: sixio.val()}).done(function (dx) {
                 console.log(dx);
                 if (dx.length > 0) {
                     sixit[0].selectize.clear(true);
@@ -794,7 +794,7 @@
         sixim.change(function () {
             $("#subitems").html('');
             $("#subitems_to").html('');
-            $.getJSON('<?php print base_url('accesos_opciones_x_modulo_x_usuario'); ?>', {U: sixiu.val(), M: sixim.val()}).done(function (dx) {
+            $.getJSON('<?php print base_url('Accesos/getOpcionesXModuloxUsuario'); ?>', {U: sixiu.val(), M: sixim.val()}).done(function (dx) {
                 console.log(dx);
                 if (dx.length > 0) {
                     sixio[0].selectize.clear(true);
@@ -817,7 +817,7 @@
         sixiu.change(function () {
             $("#subitems").html('');
             $("#subitems_to").html('');
-            $.getJSON('<?php print base_url('accesos_modulos_x_usuario'); ?>', {U: sixiu.val()}).done(function (dx) {
+            $.getJSON('<?php print base_url('Accesos/getModulosXUsuario'); ?>', {U: sixiu.val()}).done(function (dx) {
                 sixim[0].selectize.clear(true);
                 sixim[0].selectize.clearOptions();
                 $.each(dx, function (k, v) {
@@ -955,7 +955,7 @@
         oxmu.change(function () {
             $("#opciones").html('');
             $("#opciones_to").html('');
-            $.getJSON('<?php print base_url('accesos_modulos_x_usuario'); ?>', {U: oxmu.val()}).done(function (dx) {
+            $.getJSON('<?php print base_url('Accesos/getModulosXUsuario'); ?>', {U: oxmu.val()}).done(function (dx) {
                 oxmm[0].selectize.clear(true);
                 oxmm[0].selectize.clearOptions();
                 $.each(dx, function (k, v) {
@@ -972,15 +972,12 @@
 
         /*MODULOS POR USUARIO*/
 
-////                mxu[0].selectize.addOption({text: v.ID + ' ' + v.USUARIO + ' (' + v.TIPO_ACCESO + ')', value: v.ID});
 
-        mxu[0].selectize.setValue(usr);
-//        });
-
-        $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {
+        $.getJSON('<?php print base_url('ResourceManager/getModulos') ?>').done(function (dx) {
             $.each(dx, function (k, v) {
                 $("#modulos").append('<option value="' + v.ID + '">' + v.Modulo + '</option>');
             });
+            mxu[0].selectize.setValue(usr);
         }).fail(function (x, y, z) {
             console.log(x.responseText);
         });
@@ -1027,7 +1024,7 @@
 
     /*MODULOS*/
     function getModulosXUsuario() {
-        $.getJSON('<?php print base_url('accesos_modulos_x_usuario'); ?>', {U: mxu.val()}).done(function (dx) {
+        $.getJSON('<?php print base_url('Accesos/getModulosXUsuario'); ?>', {U: mxu.val()}).done(function (dx) {
             if (dx.length > 0) {
                 var modulos_asignados = [];
                 $.each(dx, function (k, v) {
@@ -1085,7 +1082,7 @@
     function getModulos(action, ma) {
         var modulos = $("#modulos");
         modulos.html('');
-        $.getJSON('<?php print base_url('accesos_modulos') ?>').done(function (dx) {
+        $.getJSON('<?php print base_url('Accesos/getModulos') ?>').done(function (dx) {
             switch (action) {
                 case 1:
                     $("#modulos_to").html('');
