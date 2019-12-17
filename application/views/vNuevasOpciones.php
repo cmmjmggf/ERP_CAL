@@ -112,12 +112,18 @@
                         <label>Clase(css)</label>
                         <input type="text" id="ClaseCss" name="ClaseCss" placeholder="info,warning, success..." class="form-control form-control-sm notUpperCase" maxlength="999">
                     </div>
-                    <div class="col-12 my-2" align="right">
+                    <div class="w-100 my-1"></div>
+                    <div class="col-6 order-11" align="right">
                         <button type="button" class="btn btn-info" id="btnGuardarOpcionxModulo"><span class="fa fa-save"></span> Guardar</button> 
-                        <button type="button" class="btn btn-danger" id="btnCancelarOpcionxModulo"><span class="fa fa-trash"></span> Cancelar</button> 
+                        <button type="button" class="btn btn-danger" id="btnCancelarOpcionxModulo"><span class="fa fa-ban"></span> Cancelar</button> 
                     </div>
-                    <div class="w-100"></div>
-                    <div class="col-12 mt-1">
+                    <div class="col-6 order-10" align="left">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="onEliminarOpcionXModuloByID()">
+                            <span class="fa fa-trash"></span>
+                        </button>
+                    </div>
+                    <div class="w-100 my-1"></div>
+                    <div class="col-12 order-12 mt-1">
                         <div id="Opciones" class="table-responsive">
                             <table id="tblOpciones" class="table table-sm display nowrap " style="width:100%">
                                 <thead>
@@ -130,7 +136,7 @@
                                         <th>Ref</th>
                                         <th>Order</th>
                                         <th>Button</th>
-                                        <th>Class</th>
+                                        <th>Class</th> 
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -175,6 +181,9 @@
         btnCancelarOpcionxModulo.click(function () {
             onClearPanelInputSelect(mdlNuevaOpcionXModulo, function () {
                 OpcionesXModulo.ajax.reload();
+                xModuloXOpcion.focus().select();
+                nuevo = true;
+                rgistro = {};
             });
         });
 
@@ -194,7 +203,7 @@
                 ModuloXOpcion[0].selectize.enable();
                 ModuloXOpcion[0].selectize.clear(true);
             }
-            $.getJSON('<?php print base_url('ResourceManager/getUltimoOrden') ?>', {MODULO: ModuloXOpcion.val()}).done(function (a) {
+            $.getJSON('<?php print base_url('ResourceManager/getUltimoOrdenOXM') ?>', {MODULO: ModuloXOpcion.val()}).done(function (a) {
                 if (a.length > 0) {
                     OrdenOpcion.val(a[0].ULTIMO_ORDEN);
                 }
@@ -234,7 +243,7 @@
         });
 
         btnGuardarOpcionxModulo.click(function () {
-
+            onEnable(ModuloXOpcion);
             onOpenOverlay('');
             var p = {
                 ID: mdlNuevaOpcionXModulo.find("#IDGMXO").val(),
@@ -302,8 +311,6 @@
             }).always(function () {
                 onCloseOverlay();
             });
-
-
         });
 
         opciones_nuevo.click(function () {
@@ -400,7 +407,6 @@
                 {"data": "REF"}, {"data": "ORDEN"}
             ],
             "columnDefs": [
-                //ID
                 {
                     "targets": [0],
                     "visible": false,
@@ -484,6 +490,7 @@
         tblOpciones.on('click', 'tr', function () {
             nuevo = false;
             var xxx = OpcionesXModulo.row($(this)).data();
+            rgistro = xxx;
             mdlNuevaOpcionXModulo.find("#IDGMXO").val(xxx.ID);
             xModuloXOpcion.val(xxx.MODULO_ID);
             ModuloXOpcion[0].selectize.setValue(xxx.MODULO_ID);
@@ -509,4 +516,23 @@
         });
     }
 
+    var rgistro = {};
+    function onEliminarOpcionXModuloByID() {
+        console.log(rgistro, rgistro.length === undefined);
+        if (rgistro.length !== undefined) {
+            $.post('<?php print base_url('ResourceManager/onEliminarOpcionXModuloByID'); ?>',
+                    {ID: rgistro.ID}).done(function (a) {
+                onNotifyOldPCF('<span class="fa fa-check"></span>',
+                        'SE HA ELIMINADO LA OPCIÓN',
+                        'success', {from: "bottom", align: "center"}, function () {
+                            rgistro = {};
+                            xModuloXOpcion.focus().select();
+                });
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
+        }
+    }
 </script>

@@ -26,7 +26,8 @@ class ResourceManager extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("OXM.ID, M.Modulo AS MODULO, OXM.Opcion AS OPCION, 
                 OXM.Fecha AS FECHA, OXM.Icon AS ICONO, OXM.Ref AS REF, 
-                OXM.Order AS ORDEN, OXM.Button AS BOTON, OXM.Class AS CLASE, M.ID MODULO_ID", false)
+                OXM.Order AS ORDEN, OXM.Button AS BOTON, 
+                OXM.Class AS CLASE, M.ID MODULO_ID ", false)
                     ->from("opcionesxmodulo AS OXM")
                     ->join('modulos AS M', 'M.ID = OXM.Modulo');
             if ($x['MODULO'] !== '') {
@@ -150,9 +151,10 @@ class ResourceManager extends CI_Controller {
             switch (intval($x['NUEVO'])) {
                 case 0:
                     $this->db->set('Modulo', $x['MODULO'])
-                            ->set('Icon', strtolower($x['ICONO']))
-                            ->set('Ref', $x['REFERENCIA'])
-                            ->set('Order', $x['ORDEN'])
+                            ->set('Opcion', $x['NOMBRE_OPCION'])
+                            ->set('Icon', strtolower($x['ICONO_OPCION']))
+                            ->set('Ref', $x['REFERENCIA_OPCION'])
+                            ->set('Order', $x['ORDEN_OPCION'])
                             ->where('ID', $x['ID'])
                             ->update('opcionesxmodulo');
                     break;
@@ -175,7 +177,17 @@ class ResourceManager extends CI_Controller {
         }
     }
 
-    public function getUltimoOrden() {
+    public function getUltimoOrdenXM() {
+        try {
+            $this->db->select("(M.Order + 1) AS ULTIMO_ORDEN ", false)
+                    ->from("modulos AS M")->order_by("M.Order", "DESC")->limit(1);
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getUltimoOrdenOXM() {
         try {
             $x = $this->input->get();
             $this->db->select("(M.Order + 1) AS ULTIMO_ORDEN ", false)
@@ -197,6 +209,16 @@ class ResourceManager extends CI_Controller {
                                             . "M.Ref AS REF, M.Order AS ORDEN")
                                     ->from("modulos AS M")
                                     ->order_by('M.Order', 'ASC')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarOpcionXModuloByID() {
+        try {
+            $x = $this->input->post();
+            $this->db->query("DELETE FROM opcionesxmodulo WHERE ID = {$x['ID']}");
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

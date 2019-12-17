@@ -1,5 +1,4 @@
-<style>
-
+<style> 
     .sticky-top {
         position: -webkit-sticky;
         position: sticky;

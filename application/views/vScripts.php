@@ -394,6 +394,29 @@
             }
         });
     }
+
+    function onNotifyOldPCF(icon, message, type, placement_config, funcion) {
+        /* placement_config  = {from: "top", align: "center"}*/
+        $.notify({
+            icon: icon,
+            message: message
+        }, {
+            type: type,
+            z_index: 3031,
+            delay: 15000,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: placement_config,
+            animate: {
+                enter: 'animated bounceIn',
+                exit: 'animated fadeOutUp'
+            },
+            onClose: function () {
+                funcion();
+            }
+        });
+    }
+
     function onNotifyOldPCE(icon, message, type, from, align) {
         var placement_config = {from: from, align: align};
         $.notify({
@@ -1479,9 +1502,14 @@
     }
 
     var modulos_counter = 0;
-    function b25NZW51RGlzcGxheQ(e) {
-        onOpenOverlay('Cargando...');
-        window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
+    function b25NZW51RGlzcGxheQ(e, obj) { 
+        onOpenOverlay('Cargando...'); 
+        $(obj).removeClass("fadeIn");
+        $(obj).addClass("tada");
+        $(obj).on('animationend', function () {
+            $(obj).removeClass("tada");
+        }); 
+            window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 
     function b25Db21wcm9iYXJNb2R1bG9z(type) {
@@ -1522,7 +1550,7 @@
                     switch (type) {
                         case 1:
                             $.each(data, function (k, v) {
-                                modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\');">';
+                                modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
                                 modulo += '<div class="card text-center">';
                                 modulo += '<div class="card-body">';
                                 modulo += '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>';
@@ -1858,7 +1886,12 @@
                     $(v).val('');
                     break;
                 case "SELECT":
-                    $(v)[0].selectize.clear(true);
+                    if ($(v).hasClass('selectized')) {
+                        $(v)[0].selectize.enable();
+                        $(v)[0].selectize.clear(true);
+                    } else {
+                        $(v).attr('disabled', true);
+                    }
                     break;
             }
         });
@@ -1884,8 +1917,12 @@
                     onEnableDisable($(v), ed);
                     break;
                 case "SELECT":
-                    $(v)[0].selectize.clear(true);
-                    onEnableDisable($(v), ed);
+                    if ($(v).hasClass('selectized')) {
+                        $(v)[0].selectize.enable();
+                        $(v)[0].selectize.clear(true);
+                    } else {
+                        $(v).attr('disabled', false);
+                    }
                     break;
             }
         });
