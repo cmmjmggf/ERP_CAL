@@ -102,6 +102,7 @@
         });
 
         mdlCapturaClientePrioridad.find('#btnAceptar').on("click", function () {
+            onDisable(mdlCapturaClientePrioridad.find('#btnAceptar'));
             var cliente = mdlCapturaClientePrioridad.find("#Cliente").val();
             $.ajax({
                 url: base_url + 'index.php/PrioridadesPorCliente/onAgregarClientePrioridad',
@@ -110,11 +111,13 @@
                     Cliente: cliente
                 }
             }).done(function (data, x, jq) {
+                onEnable(mdlCapturaClientePrioridad.find('#btnAceptar'));
                 ClientesPrioridad.ajax.reload();
                 mdlCapturaClientePrioridad.find('#sCliente')[0].selectize.clear(true);
                 mdlCapturaClientePrioridad.find('#Cliente').val('').focus();
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlCapturaClientePrioridad.find('#btnAceptar'));
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x, y, z);
                 HoldOn.close();

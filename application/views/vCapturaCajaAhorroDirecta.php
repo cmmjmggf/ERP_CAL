@@ -10,13 +10,26 @@
             <div class="modal-body">
                 <form id="frmExplosion">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-10" >
                             <label>Empleado</label>
-                            <select id="Empleado" name="Empleado" class="form-control form-control-sm required">
-                                <option value=""></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="Empleado" name="Empleado" maxlength="6" required="">
+                                </div>
+                                <div class="col-9">
+                                    <select id="sEmpleado" name="sEmpleado" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
+                                        <option value=""></option>
+                                        <?php
+                                        foreach ($this->db->select("CAST(E.numero AS SIGNED ) AS Clave, CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Empleado ", false)
+                                                ->from('empleados AS E')->where_in('E.altabaja', '1')->order_by('Clave', 'ASC')->get()->result() as $k => $v) {
+                                            print "<option value='{$v->Clave}'>{$v->Empleado}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2">
                             <label>Importe</label>
                             <input type="text" maxlength="7" class="form-control form-control-sm numbersOnly" id="Importe" name="Importe" >
                         </div>
@@ -58,7 +71,10 @@
     var EmpleadosConAhorro;
 
     $(document).ready(function () {
-
+        mdlCapturaCajaAhorroDirecta.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
 
         btnVerEmpleados.click(function () {
             $.fancybox.open({
@@ -88,36 +104,64 @@
         });
 
         mdlCapturaCajaAhorroDirecta.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlCapturaCajaAhorroDirecta);
             validacionSelectPorContenedor(mdlCapturaCajaAhorroDirecta);
             mdlCapturaCajaAhorroDirecta.find("input").val("");
             $.each(mdlCapturaCajaAhorroDirecta.find("select"), function (k, v) {
                 mdlCapturaCajaAhorroDirecta.find("select")[k].selectize.clear(true);
             });
             getEmpleadosConAhorro();
-            getEmpleadosCajaAhorroSelect();
-            mdlCapturaCajaAhorroDirecta.find('#Empleado')[0].selectize.focus();
+            mdlCapturaCajaAhorroDirecta.find('#Empleado').focus();
         });
 
-        mdlCapturaCajaAhorroDirecta.find("#Empleado").change(function () {
+        mdlCapturaCajaAhorroDirecta.find('#Empleado').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+                    $.getJSON(base_url + 'index.php/Empleados/getEmpleadoByNumeroExt', {Numero: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlCapturaCajaAhorroDirecta.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            mdlCapturaCajaAhorroDirecta.find("#Importe").val(data[0].Ahorro).focus().select();
+                        } else {
+                            swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                mdlCapturaCajaAhorroDirecta.find('#sEmpleado')[0].selectize.clear(true);
+                                mdlCapturaCajaAhorroDirecta.find('#Importe').val('');
+                                mdlCapturaCajaAhorroDirecta.find('#Empleado').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        HoldOn.close();
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                }
+            }
+        });
+
+        mdlCapturaCajaAhorroDirecta.find("#sEmpleado").change(function () {
             if ($(this).val()) {
-                HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
+                mdlCapturaCajaAhorroDirecta.find('#Empleado').val($(this).val());
                 $.getJSON(base_url + 'index.php/Empleados/getEmpleadoByNumeroExt', {Numero: $(this).val()}).done(function (data) {
                     mdlCapturaCajaAhorroDirecta.find("#Importe").val(data[0].Ahorro).focus().select();
-                    HoldOn.close();
                 }).fail(function (x) {
-                    HoldOn.close();
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
             }
         });
 
-        mdlCapturaCajaAhorroDirecta.find('#btnImprimir').on("click", function () {
+        mdlCapturaCajaAhorroDirecta.find('#Importe').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+                    mdlCapturaCajaAhorroDirecta.find('#btnImprimir').focus();
+                }
+            }
+        });
 
+        mdlCapturaCajaAhorroDirecta.find('#btnImprimir').on("click", function () {
+            onDisable(mdlCapturaCajaAhorroDirecta.find('#btnImprimir'));
             var empleado = mdlCapturaCajaAhorroDirecta.find("#Empleado").val();
             var importe = mdlCapturaCajaAhorroDirecta.find("#Importe").val();
-            HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
             $.ajax({
                 url: base_url + 'index.php/Empleados/onModificarExt',
                 type: "POST",
@@ -126,25 +170,22 @@
                     Ahorro: importe
                 }
             }).done(function (data, x, jq) {
+                onEnable(mdlCapturaCajaAhorroDirecta.find('#btnImprimir'));
                 EmpleadosConAhorro.ajax.reload();
                 mdlCapturaCajaAhorroDirecta.find("input").val("");
                 $.each(mdlCapturaCajaAhorroDirecta.find("select"), function (k, v) {
                     mdlCapturaCajaAhorroDirecta.find("select")[k].selectize.clear(true);
                 });
-                HoldOn.close();
-                mdlCapturaCajaAhorroDirecta.find('#Empleado')[0].selectize.focus();
+                mdlCapturaCajaAhorroDirecta.find('#Empleado').focus();
             }).fail(function (x, y, z) {
+                onEnable(mdlCapturaCajaAhorroDirecta.find('#btnImprimir'));
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x, y, z);
                 HoldOn.close();
             });
         });
-
-
     });
-
     function getEmpleadosConAhorro() {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
         temp = 0;
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblEmpleadosConAhorro')) {
@@ -167,7 +208,7 @@
             language: lang,
             "autoWidth": true,
             "colReorder": false,
-            "displayLength": 50,
+            "displayLength": 450,
             scrollY: 240,
             "bLengthChange": false,
             "deferRender": true,
@@ -187,17 +228,4 @@
             $(this).addClass("success");
         });
     }
-
-    function getEmpleadosCajaAhorroSelect() {
-        $.getJSON(base_url + 'index.php/Empleados/getEmpleadosCajaAhorro', ).done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlCapturaCajaAhorroDirecta.find("#Empleado")[0].selectize.addOption({text: v.Clave + ' ' + v.Nombre, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
-
 </script>
