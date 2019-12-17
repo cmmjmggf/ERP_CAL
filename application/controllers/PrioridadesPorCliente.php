@@ -103,9 +103,36 @@ class PrioridadesPorCliente extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onVerificarCliente() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select * from clientesprioridad where cliente = '$Cliente' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarClienteAgregarPrioridad() {
+        try {
+            $Cliente = $this->input->get('Cliente');
+            print json_encode($this->db->query("select clave from clientes where clave = '$Cliente' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getClientesPrioridad() {
+        try {
+            print json_encode($this->db->query("select CP.cliente, (select razons from clientes where clave = CP.cliente ) as nomcliente from clientesprioridad CP order by abs(CP.cliente) asc  ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
-            print json_encode($this->PrioridadesPorCliente_model->getRecords());
+            $cliente = $this->input->post('Cliente');
+            print json_encode($this->PrioridadesPorCliente_model->getRecords($cliente));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -114,6 +141,20 @@ class PrioridadesPorCliente extends CI_Controller {
     public function getClientes() {
         try {
             print json_encode($this->PrioridadesPorCliente_model->getClientes());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAgregarClientePrioridad() {
+        try {
+            $cte = $this->input->post('Cliente');
+            $existe = $this->db->query("select cliente from clientesprioridad where cliente = $cte ")->result();
+            if (empty($existe)) {
+                $this->db->insert("clientesprioridad", array(
+                    'cliente' => $this->input->post('Cliente')
+                ));
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

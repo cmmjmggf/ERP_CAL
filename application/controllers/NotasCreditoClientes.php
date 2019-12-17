@@ -153,6 +153,10 @@ class NotasCreditoClientes extends CI_Controller {
             //Timbra e imprime
             if ($x['Tp'] === '1') {
                 /*                 * ********************** Timbrar.exe ***************** */
+                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['nc'] . '" ');
+                exec('schtasks /run /tn "Timbrar"  ');
+                exec('schtasks /delete /tn "Timbrar" /F ');
+
                 $this->onImprimirReporteNotaCreditoTp1Local($x['Tp'], $x['nc'], $x['Cliente']);
             } else {
                 $this->onImprimirReporteNotaCreditoTp2Local($x['Tp'], $x['nc'], $x['Cliente']);

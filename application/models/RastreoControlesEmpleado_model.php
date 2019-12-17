@@ -29,7 +29,7 @@ class RastreoControlesEmpleado_model extends CI_Model {
             } else if ($EMPLEADO !== '' && $ANIO !== '' && $SEMANA !== '') {
                 $this->db->where('OC.numeroempleado', $EMPLEADO)->where('OC.anio', $ANIO)->where('OC.semana', $SEMANA);
             } else {
-                $this->db->limit(9999);
+                $this->db->limit(500);
             }
             $query = $this->db->get();
             /*

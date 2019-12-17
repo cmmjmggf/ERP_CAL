@@ -10,6 +10,7 @@
                 </button>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                 <label for="" >Empleado</label>
@@ -65,12 +66,9 @@
     $(document).ready(function () {
 
         /*FUNCIONES INICIALES*/
-        validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToInputOnChange('#Empleado', '#Ano', pnlTablero);
         init();
-        handleEnterDiv(pnlTablero);
         pnlTablero.find("input").val("");
-        $(':input:text:enabled:visible:first').focus();
+        pnlTablero.find('#Empleado').focus();
 
         pnlTablero.find('#btnLimpiarFiltros').click(function () {
             pnlTablero.find("input").val("");
@@ -78,26 +76,19 @@
             $.each(pnlTablero.find("select"), function (k, v) {
                 pnlTablero.find("select")[k].selectize.clear(true);
             });
-            $(':input:text:enabled:visible:first').focus();
+            pnlTablero.find('#Empleado').focus();
         });
 
-        pnlTablero.find('#Empleado').keydown(function (e) {
+        pnlTablero.find('#Empleado').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtempl = $(this).val();
                 if (txtempl) {
-
                     $.getJSON(master_url + 'onVerificarEmpleado', {Empleado: txtempl}).done(function (data) {
                         if (data.length > 0) {
-                            HoldOn.open({
-                                theme: 'sk-rect',
-                                message: 'Cargando...'
-                            });
                             pnlTablero.find("#sEmpleado")[0].selectize.addItem(txtempl, true);
+                            pnlTablero.find("#Ano").focus().select();
                             Registros.ajax.reload(function () {
-                                HoldOn.close();
-                                pnlTablero.find("#Sem").focus().select();
                             });
-
                         } else {
                             swal('ERROR', 'EMPLEADO INEXISTENTE, DADO DE BAJA O NO ES DESTAJISTA', 'warning').then((value) => {
                                 pnlTablero.find('#sEmpleado')[0].selectize.clear(true);
@@ -112,68 +103,54 @@
             }
         });
 
-
         pnlTablero.find("#sEmpleado").change(function () {
             if ($(this).val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Cargando...'
-                });
                 pnlTablero.find('#Empleado').val($(this).val());
+                pnlTablero.find("#Ano").focus().select();
                 Registros.ajax.reload(function () {
-                    HoldOn.close();
+                });
+            }
+        });
+
+        pnlTablero.find("#Sem").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 1 || parseInt($(this).val()) > 52 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "SEMANA INCORRECTA",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlTablero.find("#Sem").val("");
+                        pnlTablero.find("#Sem").focus();
+                    });
+                } else {
                     pnlTablero.find("#Sem").focus().select();
-                });
+                    Registros.ajax.reload(function () {
+                    });
+                }
             }
         });
 
-        pnlTablero.find("#Sem").keyup(function (e) {
-            if ($(this).val()) {
-                Registros.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            }
-        });
-
-        pnlTablero.find("#Ano").keyup(function (e) {
-            if ($(this).val() && $(this).val().length > 3) {
-                Registros.ajax.reload(function () {
-                    HoldOn.close();
-                });
-            }
-        });
-
-        pnlTablero.find("#Sem").change(function () {
-            if (parseInt($(this).val()) < 1 || parseInt($(this).val()) > 52 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "SEMANA INCORRECTA",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Sem").val("");
-                    pnlTablero.find("#Sem").focus();
-                });
-            }
-        });
-
-        pnlTablero.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    pnlTablero.find("#Ano").val("");
-                    pnlTablero.find("#Ano").focus();
-                });
+        pnlTablero.find("#Ano").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    }).then((action) => {
+                        pnlTablero.find("#Ano").val("");
+                        pnlTablero.find("#Ano").focus();
+                    });
+                } else {
+                    pnlTablero.find("#Sem").focus().select();
+                    Registros.ajax.reload(function () {
+                    });
+                }
             }
         });
 
@@ -194,7 +171,7 @@
             tblRegistros.DataTable().destroy();
         }
         Registros = tblRegistros.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'frtp',
             buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
@@ -235,10 +212,11 @@
 
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 15,
+            "displayLength": 400,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
+            "scrollY": '400px',
             "bSort": true,
             "aaSorting": [
                 [1, 'asc']
@@ -273,7 +251,6 @@
             tblRegistros.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = Registros.row(this).data();
-
         });
     }
 

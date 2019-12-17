@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.968683328607413"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.5921068276149715"/>
+	<property name="ireport.x" value="351"/>
+	<property name="ireport.y" value="77"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -13,95 +13,81 @@
 	<parameter name="aSem" class="java.lang.Integer"/>
 	<parameter name="Ano" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT
-concat(P.Cliente,' - ',CTE.RazonS) AS Cliente,
-cast(P.Cliente AS SIGNED) AS ClaveCliente,
-CTE.RazonS AS NombreCliente,
-P.Clave,
-P.Control AS Control,
-P.Ano,
-P.Semana,
-P.Maquila,
-'' AS FechaProd,
-cast(P.Pares as decimal(4,2)) AS Pares,
-P.Estilo AS Estilo,
-P.ColorT AS ColorT,
-0 AS ClaveEstatus,
-'PREPROGRAMADO' AS EstatusProduccion,
-P.FechaPedido,
+		<![CDATA[select
+P.Clave, P.Control, P.cliente as ClaveCliente,
+(select razons from clientes where clave = P.cliente) as NombreCliente,
 P.FechaEntrega,
-DATEDIFF(CURRENT_DATE(), date_format(str_to_date(P.FechaEntrega, '%d/%m/%Y'), '%Y-%m-%d')) AS Dias,
-P.Observacion,
-concat(CTE.Transporte,' - ',TPT.Descripcion) AS Transporte,
-concat(AG.Clave,' - ',AG.Descripcion) AS Agente,
-CTE.DiasPlazo
-FROM pedidox P
-LEFT JOIN clientes CTE on CTE.Clave =  P.Cliente
-LEFT JOIN transportes TPT on TPT.Clave =  CTE.Transporte
-LEFT JOIN agentes AG on AG.Clave =  P.Agente
-WHERE P.Estatus = 'A'
-AND P.Control = 0
-AND P.Semana BETWEEN $P{dSem} AND $P{aSem}
-AND P.Ano = $P{Ano}
-
-UNION ALL
-
-SELECT
-concat(P.Cliente,' - ',CTE.RazonS) AS Cliente,
-cast(P.Cliente AS SIGNED) AS ClaveCliente,
-CTE.RazonS AS NombreCliente,
-P.Clave,
-P.Control AS Control,
-P.Ano,
-P.Semana,
-P.Maquila,
-str_to_date(C.FechaProgramacion, '%d/%m/%Y') AS FechaProd,
-cast(P.Pares as decimal(4,2)) AS Pares,
+(CASE
+WHEN P.stsavan = 0 THEN 0
+WHEN P.stsavan = 1 THEN 1
+WHEN P.stsavan = 2 THEN 2
+WHEN P.stsavan = 3 THEN 3
+WHEN P.stsavan = 33 THEN 4
+WHEN P.stsavan = 4 THEN 5
+WHEN P.stsavan = 40 THEN 6
+WHEN P.stsavan = 42 THEN 7
+WHEN P.stsavan = 44 THEN 8
+WHEN P.stsavan = 5 THEN 9
+WHEN P.stsavan = 55 THEN 10
+WHEN P.stsavan = 6 THEN 11
+WHEN P.stsavan = 7 THEN 12
+WHEN P.stsavan = 8 THEN 13
+WHEN P.stsavan = 9 THEN 14
+WHEN P.stsavan = 10 THEN 15
+WHEN P.stsavan = 11 THEN 16
+WHEN P.stsavan = 12 THEN 17
+WHEN P.stsavan = 13 THEN 18
+END)  AS stsavan,
+(case
+when (P.stsavan  = 0) then 'Pre-programado'
+when (P.stsavan  = 1) then 'Programado'
+when (P.stsavan = 2) then 'Corte'
+when (P.stsavan = 3) then 'Rayado'
+when (P.stsavan = 33) then 'Rebajado'
+when (P.stsavan = 4) then 'Foleado'
+when (P.stsavan = 40) then 'Entretelado'
+when (P.stsavan = 42) then 'Proceso Maq'
+when (P.stsavan = 44) then 'Alm-Corte'
+when (P.stsavan = 5) then 'Pespunte'
+when (P.stsavan = 55) then 'Ensuelado'
+when (P.stsavan = 6) then 'Alm-Pespu'
+when (P.stsavan = 7) then 'Tejido'
+when (P.stsavan = 8) then 'Alm-Tejido'
+when (P.stsavan = 9) then 'Montado'
+when (P.stsavan = 10) then 'Adorno'
+when (P.stsavan = 11) then 'Alm-Adorno'
+when (P.stsavan = 12) then 'Terminado'
+when (P.stsavan = 13) then 'Facturado'
+end) AS EstatusProduccion,
+P.stsavan as Avance,
+cast(P.Pares as decimal(6,2)) as Pares,
 P.Estilo AS Estilo,
-P.ColorT AS ColorT,
-ifnull(DEP.Clave,'1') AS ClaveEstatus,
-ifnull(C.EstatusProduccion,'PROGRAMADO') AS EstatusProduccion,
-P.FechaPedido,
-P.FechaEntrega,
-DATEDIFF(CURRENT_DATE(), date_format(str_to_date(P.FechaEntrega, '%d/%m/%Y'), '%Y-%m-%d')) AS Dias,
-P.Observacion,
-concat(CTE.Transporte,' - ',TPT.Descripcion) AS Transporte,
-concat(AG.Clave,' - ',AG.Descripcion) AS Agente,
-CTE.DiasPlazo
-FROM controles C
-left JOIN pedidox P  on C.Control =  P.Control
-LEFT JOIN clientes CTE on CTE.Clave =  P.Cliente
-left JOIN departamentos DEP ON DEP.Descripcion =  C.EstatusProduccion
-LEFT JOIN transportes TPT on TPT.Clave =  CTE.Transporte
-LEFT JOIN agentes AG on AG.Clave =  P.Agente
-WHERE cast(ifnull(DEP.Clave,'0') as signed) <= 240
+P.ColorT AS ColorT
+from pedidox P
+join clientesprioridad CP on P.Cliente = CP.Cliente
+where P.stsavan not in (0,13,14) and P.maquila  < 98
 and P.Semana BETWEEN $P{dSem} AND $P{aSem}
 AND P.Ano = $P{Ano}
-order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
+order by ClaveCliente ASC, abs(stsavan) ASC,  P.Control ASC;]]>
 	</queryString>
-	<field name="Cliente" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ClaveCliente" class="java.lang.Long">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="NombreCliente" class="java.lang.String"/>
 	<field name="Clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Ano" class="java.lang.String">
+	<field name="ClaveCliente" class="java.lang.String"/>
+	<field name="NombreCliente" class="java.lang.String"/>
+	<field name="FechaEntrega" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Semana" class="java.lang.String">
+	<field name="stsavan" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Maquila" class="java.lang.String">
+	<field name="EstatusProduccion" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FechaProd" class="java.lang.String"/>
+	<field name="Avance" class="java.lang.Integer"/>
 	<field name="Pares" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -109,31 +95,6 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ColorT" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ClaveEstatus" class="java.lang.String"/>
-	<field name="EstatusProduccion" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="FechaPedido" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="FechaEntrega" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Dias" class="java.lang.Long">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Observacion" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Transporte" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Agente" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="DiasPlazo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="Pares_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Depto" calculation="Sum">
@@ -157,17 +118,25 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 					<text><![CDATA[Cliente:]]></text>
 				</staticText>
 				<line>
-					<reportElement x="1" y="11" width="176" height="1" uuid="86de633d-092c-4c7d-9e14-c6eb9d0bd797"/>
+					<reportElement x="1" y="11" width="202" height="1" uuid="86de633d-092c-4c7d-9e14-c6eb9d0bd797"/>
 					<graphicElement>
 						<pen lineWidth="1.75"/>
 					</graphicElement>
 				</line>
 				<textField>
-					<reportElement x="46" y="0" width="157" height="11" uuid="c193b3ae-d67a-4257-8b87-e78c6a6a36c8"/>
+					<reportElement x="72" y="0" width="131" height="11" uuid="c193b3ae-d67a-4257-8b87-e78c6a6a36c8"/>
 					<textElement>
 						<font size="7"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{NombreCliente}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="46" y="0" width="26" height="11" uuid="26ef044c-6f97-4501-b4e0-e8a547c49064"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+						<paragraph rightIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ClaveCliente}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -195,7 +164,7 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 		</groupFooter>
 	</group>
 	<group name="Depto">
-		<groupExpression><![CDATA[$F{ClaveEstatus}]]></groupExpression>
+		<groupExpression><![CDATA[$F{stsavan}]]></groupExpression>
 		<groupFooter>
 			<band height="13">
 				<staticText>
@@ -365,13 +334,6 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="318" y="0" width="16" height="11" uuid="4336ca9b-0f8e-473b-95e4-6964df3873bc"/>
-				<textElement textAlignment="Right">
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ClaveEstatus}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="500" y="0" width="189" height="11" uuid="1fd154a7-dd76-4787-893e-1319b4cf49a9"/>
 				<textElement>
@@ -382,7 +344,7 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 			<textField>
 				<reportElement x="0" y="0" width="46" height="11" uuid="7e54f5fe-d525-4ad0-8de9-1214941b4452"/>
 				<textElement>
-					<font size="8" isBold="true"/>
+					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Clave}]]></textFieldExpression>
 			</textField>
@@ -401,11 +363,19 @@ order by ClaveCliente ASC, ClaveEstatus ASC, Estilo ASC, ColorT ASC;]]>
 				<textFieldExpression><![CDATA[$F{ClaveCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="339" y="0" width="88" height="11" uuid="b1409c37-9c23-41d7-b147-7a471f112e12"/>
+				<reportElement x="333" y="0" width="94" height="11" uuid="b1409c37-9c23-41d7-b147-7a471f112e12"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{EstatusProduccion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="318" y="0" width="15" height="11" uuid="7be41f89-eccf-4a51-9634-932882022e7e"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Avance}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
