@@ -151,6 +151,81 @@
         </div>
     </div>
 </div>
+
+<div id="mdlNuevoItemXOpcion" class="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered  notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-puzzle-piece"></span> Nuevo item por opción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 d-none">
+                        <input type="text" id="IDITEM" name="IDITEM" class="form-control d-none" readonly="">
+                    </div>
+                    <div class="col-12">
+                        <label>Opción</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xOpcion" name="xOpcion" autofocus="" maxlength="2" class="form-control form-control-sm numbersOnly">
+                            </div>
+                            <div class="col-8">
+                                <select id="Opcion" name="Opcion" class="form-control form-control-sm">
+                                </select> 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-12">
+                        <label>Nombre</label>
+                        <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm notUpperCase">
+                    </div>
+                    <div class="col-6">
+                        <label>Icono</label>
+                        <input type="text" id="NombreIconoOpcion" name="NombreIconoOpcion" class="form-control form-control-sm notUpperCase">                            
+                    </div>
+                    <div class="col-6 vista_previa justify-content-center text-center"> 
+                    </div>
+                    <div class="col-6">
+                        <label>Orden</label>
+                        <input type="text" id="OrdenOpcion" name="OrdenOpcion" class="form-control form-control-sm numbersOnly" maxlength="99">
+                    </div>
+                    <div class="col-12">
+                        <label>Referencia</label>
+                        <input type="text" id="ReferenciaOpcion" name="ReferenciaOpcion" class="form-control form-control-sm notUpperCase">
+                    </div>
+                    <div class="w-100 my-1"></div>
+                    <div class="col-12 order-12 mt-1">
+                        <div id="Items" class="table-responsive">
+                            <table id="tblItems" class="table table-sm display nowrap " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th> 
+                                        <th>Item</th>
+                                        <th>Opción</th>
+                                        <th>Fecha</th>
+                                        <th>Icon</th>
+                                        <th>Ref</th>
+                                        <th>Modal</th>
+                                        <th>Backdrop</th>
+                                        <th>Dropdown</th>
+                                        <th>Order</th>
+                                        <th>Function</th>
+                                        <th>Trigger</th> 
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
 <script>
     var mdlNuevoModulo = $("#mdlNuevoModulo"), modulo_nuevo = $("#modulo_nuevo"),
             btnGuardarModulo = mdlNuevoModulo.find("#btnGuardarModulo"),
@@ -175,11 +250,28 @@
             btnCancelarOpcionxModulo = mdlNuevaOpcionXModulo.find("#btnCancelarOpcionxModulo");
 
     var tblOpciones = mdlNuevaOpcionXModulo.find("#tblOpciones"), OpcionesXModulo;
+
+    var mdlNuevoItemXOpcion = $("#mdlNuevoItemXOpcion"), items_nuevo = $("#items_nuevo");
+
     var nuevo = true;
 
     $(document).ready(function () {
         handleEnterDiv(mdlNuevoModulo);
         handleEnterDiv(mdlNuevaOpcionXModulo);
+
+        /*ITEM*/
+        mdlNuevoItemXOpcion.on('shown.bs.modal', function () {
+            xOpcion.focus().select();
+        });
+
+        mdlNuevoItemXOpcion.on('hidden.bs.modal', function () {
+            onClearPanelInputSelectEnableDisable(mdlNuevoItemXOpcion, function () {});
+        });
+
+        items_nuevo.click(function () {
+            mdlNuevoItemXOpcion.modal('show');
+        });
+
         /*OPCION*/
 
         btnCancelarOpcionxModulo.click(function () {

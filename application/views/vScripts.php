@@ -1890,7 +1890,7 @@
                         $(v)[0].selectize.enable();
                         $(v)[0].selectize.clear(true);
                     } else {
-                        $(v).attr('disabled', true);
+                        $(v).attr('disabled', false);
                     }
                     break;
             }

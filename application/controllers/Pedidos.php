@@ -317,13 +317,15 @@ class Pedidos extends CI_Controller {
             $x = $this->input->post();
             $this->db->trans_begin();
 
+            $fecha = $x['FECHA_ENTREGA'];
+            $anio = substr($fecha, 6, 4);
             $p = array(
                 "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],
                 "Agente" => $x['AGENTE'], "FechaPedido" => $x['FECHA_PEDIDO'],
                 "FechaRecepcion" => $x['FECHA_RECEPCION'], "Usuario" => $_SESSION["USERNAME"],
                 "Estilo" => $x['ESTILO'], "Color" => $x['COLOR'],
                 "FechaEntrega" => $x['FECHA_ENTREGA'], "Maquila" => $x['MAQUILA'],
-                "Semana" => $x['SEMANA'], "Ano" => Date('Y'),
+                "Semana" => $x['SEMANA'], "Ano" => $anio,
                 "Recio" => $x['RECIO'], "Precio" => $x['PRECIO'],
                 "Observacion" => $x['OBSERVACION'],
                 "ObservacionDetalle" => $x['OBSERVACION_DETALLE'],
@@ -402,7 +404,7 @@ class Pedidos extends CI_Controller {
                     "Recibido" => ($v->Recibido !== '') ? $v->Recibido : NULL
                 );
                 $data["Estatus"] = 'A';
-                $data["Registro"] = Date('Y-m-d h:i:s');
+                $data["Registro"] = Date('Y-m-d 00:00:00');
                 $this->db->insert("pedidox", $data);
                 $this->onLog("AGREGO " . $v->Pares . " PARES AL PEDIDO $clave DEL ESTILO: " . $v->EstiloT . ", COLOR: " . $v->ColorT);
             }
@@ -457,7 +459,7 @@ class Pedidos extends CI_Controller {
                     "Recibido" => ($v->Recibido !== '') ? $v->Recibido : NULL
                 );
                 $data["Estatus"] = 'A';
-                $data["Registro"] = Date('Y-m-d h:i:s');
+                $data["Registro"] = Date('Y-m-d 00:00:00');
                 $this->db->insert("pedidox", $data);
                 $insert_id = $this->db->insert_id();
                 $l = new Logs("PEDIDOS", "ID({$insert_id}), AGREGO UN REGISTRO AL PEDIDO({$x['PEDIDO']}) DE {$x['PARES']} PARES DEL CLIENTE({$x['CLIENTE']}) (SERIE-{$x['SERIE']}), CON EL ESTILO-COLOR ({$x['ESTILO']} - {$x['COLOR']}).", $this->session);
@@ -490,7 +492,7 @@ class Pedidos extends CI_Controller {
                 "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
                 "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
                 "C21" => $x['C21'], "C22" => $x['C22'],
-                "Estatus" => 'A', "Registro" => Date('Y-m-d h:i:s'), "Recibido" => $x['RECIBIDO'],
+                "Estatus" => 'A', "Registro" => Date('Y-m-d 00:00:00'), "Recibido" => $x['RECIBIDO'],
                 "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
                 "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
                 "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
