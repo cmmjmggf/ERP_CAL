@@ -214,11 +214,21 @@ class ResourceManager extends CI_Controller {
         }
     }
 
+    public function onEliminarModuloByID() {
+        try {
+            $x = $this->input->post();
+//            var_dump($x);
+//            exit(0);
+            $this->db->query("DELETE FROM modulos WHERE ID = {$x['ID']}");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onEliminarOpcionXModuloByID() {
         try {
             $x = $this->input->post();
             $this->db->query("DELETE FROM opcionesxmodulo WHERE ID = {$x['ID']}");
-            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -28,11 +28,14 @@
                         <label>Referencia</label>
                         <input type="text" id="ReferenciaModulo" name="ReferenciaModulo" class="form-control form-control-sm notUpperCase">
                     </div>
-                    <div class="col-12 my-2" align="right">
+                    <div class="col-6 my-2 order-11" align="right">
                         <button type="button" class="btn btn-info" id="btnGuardarModulo"><span class="fa fa-save"></span> Guardar</button> 
                     </div>
+                    <div class="col-6 my-2 order-10" align="left">
+                        <button type="button" class="btn btn-danger" id="btnEliminarModulo"><span class="fa fa-trash"></span> Eliminar</button> 
+                    </div>
                     <div class="w-100"></div>
-                    <div class="col-12 mt-1">
+                    <div class="col-12 mt-1 order-12">
                         <div id="Modulos" class="table-responsive">
                             <table id="tblModulos" class="table table-sm display nowrap " style="width:100%">
                                 <thead>
@@ -151,6 +154,7 @@
 <script>
     var mdlNuevoModulo = $("#mdlNuevoModulo"), modulo_nuevo = $("#modulo_nuevo"),
             btnGuardarModulo = mdlNuevoModulo.find("#btnGuardarModulo"),
+            btnEliminarModulo = mdlNuevoModulo.find("#btnEliminarModulo"),
             NombreModulo = mdlNuevoModulo.find("#NombreModulo"),
             NombreIcono = mdlNuevoModulo.find("#NombreIcono"),
             Orden = mdlNuevoModulo.find("#Orden"),
@@ -336,6 +340,31 @@
             }
         });
 
+        btnEliminarModulo.click(function () {
+            console.log(rgistro, rgistro.ID, rgistro.ID !== undefined);
+            if (rgistro.ID !== undefined) {
+                $.post('<?php print base_url('ResourceManager/onEliminarModuloByID'); ?>',
+                        {ID: rgistro.ID}).done(function (a) {
+                    Modulos.ajax.reload();
+                    onClearPanelInputSelect(mdlNuevoModulo, function () {});
+                    onNotifyOldPCF('<span class="fa fa-check"></span>',
+                            'SE HA ELIMINADO EL MODULO',
+                            'success', {from: "top", align: "center"}, function () {
+                        rgistro = {};
+                        xModuloXOpcion.focus().select();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    getUltimoOrdenXM();
+                });
+            } else {
+                onCampoInvalido(mdlNuevoModulo, "DEBE DE SELECCIONAR UN REGISTRO", function () {
+                    rgistro = {};
+                });
+            }
+        });
+
         btnGuardarModulo.click(function () {
             if (NombreModulo.val() && NombreIcono.val() && Orden.val() && ReferenciaModulo.val()) {
                 onOpenOverlay('');
@@ -353,6 +382,7 @@
                             NombreModulo.focus().select();
                             getModulosGenerales();
                         });
+                        getUltimoOrdenXM();
                     });
                 }).fail(function (x, y, z) {
                     onError(x);
@@ -382,10 +412,12 @@
             nuevo = true;
             mdlNuevoModulo.find("#NombreModulo").focus().select();
             getModulosGenerales();
+            getUltimoOrdenXM();
         });
 
         mdlNuevoModulo.on('hidden.bs.modal', function () {
             mdlNuevoModulo.find("input").val('');
+            location.reload(true);
         });
     });
 
@@ -418,8 +450,7 @@
             "colReorder": true,
             "displayLength": 25,
             "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
+            "deferRender": true, "scrollCollapse": false,
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
@@ -434,6 +465,7 @@
         tblModulos.on('click', 'tr', function () {
             nuevo = false;
             var xxx = Modulos.row($(this)).data();
+            rgistro = xxx;
             mdlNuevoModulo.find("#IDGM").val(xxx.ID);
             NombreModulo.val(xxx.MODULO);
             NombreIcono.val(xxx.ICONO);
@@ -474,8 +506,7 @@
             "colReorder": true,
             "displayLength": 50,
             "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
+            "deferRender": true, "scrollCollapse": false,
             "bSort": true,
             "scrollY": 300,
             "scrollX": true,
@@ -525,14 +556,30 @@
                 onNotifyOldPCF('<span class="fa fa-check"></span>',
                         'SE HA ELIMINADO LA OPCIÓN',
                         'success', {from: "bottom", align: "center"}, function () {
-                            rgistro = {};
-                            xModuloXOpcion.focus().select();
+                    rgistro = {};
+                    xModuloXOpcion.focus().select();
                 });
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
 
             });
+        } else {
+            onCampoInvalido(mdlNuevaOpcionXModulo, "DEBE DE SELECCIONAR UN REGISTRO", function () {
+                rgistro = {};
+            });
         }
+    }
+
+    function getUltimoOrdenXM() {
+        $.getJSON('<?php print base_url('ResourceManager/getUltimoOrdenXM'); ?>').done(function (a) {
+            if (a.length > 0) {
+                Orden.val(a[0].ULTIMO_ORDEN);
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
