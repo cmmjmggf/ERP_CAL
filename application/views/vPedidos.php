@@ -116,10 +116,10 @@
                             <label for="FechaPedido" >Fec-Pedido*</label>
                             <input type="text" id="FechaPedido" name="FechaPedido" class="form-control form-control-sm date notEnter" required="">
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
+<!--                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
                             <label for="FechaEntrega" >Fec-Entrega*</label>
                             <input type="text" id="FechaEntrega" name="FechaEntrega" class="form-control form-control-sm date notEnter">
-                        </div>
+                        </div>-->
                         <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1">
                             <label for="FechaRecepcion" >Fec-Recep*</label>
                             <input type="text" id="FechaRecepcion" name="FechaRecepcion" class="form-control form-control-sm date notEnter" required="">
@@ -150,6 +150,10 @@
                             <select class="form-control form-control-sm NotSelectize selectNotEnter" id="sColor" name="sColor" required placeholder="">
                             </select>
                         </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
+                            <label for="FechaEntrega" >Fec-Entrega*</label>
+                            <input type="text" id="FechaEntrega" name="FechaEntrega" class="form-control form-control-sm date">
+                        </div>
                         <div class="col-12 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                             <label for="Maquila" >Maq*</label>
                             <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm numbersOnly" maxlength="2" placeholder="">
@@ -163,7 +167,7 @@
                             <label for="Recio" >Recio*</label>
                             <input type="text" id="Recio" name="Recio" class="form-control form-control-sm" maxlength="5">
                         </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                             <label for="ProduccionMaquilaSemana" >Prod. Maq/Sem*</label>
                             <div class="input-group">
                                 <input type="text" id="ProduccionMaquilaSemana" name="ProduccionMaquilaSemana" class="form-control form-control-sm" placeholder="0" disabled="">
@@ -741,7 +745,7 @@
                                 getError(x);
                             });
                             pnlDatos.find("#sColor")[0].selectize.addItem(color, false);
-                            pnlDatos.find("#Maquila").focus().select();
+                            pnlDatos.find("#FechaEntrega").focus().select();
                         } else {
                             swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
                                 pnlDatos.find('#Color').focus().val('');
@@ -876,7 +880,7 @@
                         window.open(data, '_blank');
                     } else {
                         $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#zoom=200#pagemode=thumbs',
                             type: 'iframe',
                             opts: {
                                 iframe: {
@@ -946,7 +950,7 @@
 
         btnNuevo.click(function () {
             nuevo = true;
-            pnlDatos.find("#FechaEntrega").prop('readonly', false);
+//            pnlDatos.find("#FechaEntrega").prop('readonly', false);
             pnlDatos.find("#Semana").prop('readonly', false);
             pnlDatos.find("#Recibido")[0].selectize.enable();
             pnlDatos.find("#Precio").prop('readonly', true);
@@ -976,7 +980,7 @@
             btnGuardar.prop("disabled", true);
             pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
-            pnlDatos.find("#FechaEntrega").prop('readonly', true);
+//            pnlDatos.find("#FechaEntrega").prop('readonly', true);
             pnlDatos.find("#Semana").prop('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
             Clave.prop('readonly', true);
@@ -1267,7 +1271,7 @@
             Clave.prop('readonly', true);
             pnlDatos.find("#FechaPedido").attr('readonly', true);
             pnlDatos.find("#FechaRecepcion").attr('readonly', true);
-            pnlDatos.find("#FechaEntrega").attr('readonly', true);
+//            pnlDatos.find("#FechaEntrega").attr('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
             pnlDatos.find("#PedidoxCliente")[0].selectize.disable();
             pnlDatos.find("#Agente")[0].selectize.disable();

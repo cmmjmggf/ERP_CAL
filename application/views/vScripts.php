@@ -403,7 +403,7 @@
         }, {
             type: type,
             z_index: 3031,
-            delay: 15000,
+            delay: 2000,
             newest_on_top: true,
             showProgressbar: false,
             placement: placement_config,
@@ -1890,7 +1890,7 @@
                         $(v)[0].selectize.enable();
                         $(v)[0].selectize.clear(true);
                     } else {
-                        $(v).attr('disabled', true);
+                        $(v).attr('disabled', false);
                     }
                     break;
             }

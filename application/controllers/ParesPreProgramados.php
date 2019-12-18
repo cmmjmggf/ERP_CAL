@@ -92,19 +92,19 @@ class ParesPreProgramados extends CI_Controller {
                             . 'A.Nombre AS AGENTE, '
                             . 'ES.Clave AS CLAVE_ESTADO, '
                             . 'ES.Descripcion AS ESTADO', false)
-                    ->from('pedidox AS P');
-            $this->db->join('clientes AS C', 'P.Cliente = C.Clave');
-            $this->db->join('agentes AS A', 'C.Agente = A.Clave');
-            $this->db->join('estados AS ES', 'C.Estado = ES.Clave');
-            $this->db->join('estilos AS E', 'P.Estilo = E.Clave');
-            $this->db->join('lineas AS L', 'E.Linea = L.Clave');
-            $this->db->where("P.Registro BETWEEN STR_TO_DATE('{$xx['FECHA']}', \"%d/%m/%Y\") "
-                    . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\") AND P.Ano ={$xx['ANIO']} ");
-            $this->db->where("P.Estatus = 'A'", null, false);
+                    ->from('pedidox AS P')
+                    ->join('clientes AS C', 'P.Cliente = C.Clave')
+                    ->join('agentes AS A', 'C.Agente = A.Clave')
+                    ->join('estados AS ES', 'C.Estado = ES.Clave')
+                    ->join('estilos AS E', 'P.Estilo = E.Clave')
+                    ->join('lineas AS L', 'E.Linea = L.Clave')
+                    ->where("P.Registro BETWEEN STR_TO_DATE('{$xx['FECHA']}', \"%d/%m/%Y\") "
+                            . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\") AND P.Ano ={$xx['ANIO']} ")
+                    ->where("P.Estatus = 'A'", null, false);
 
             $CLIENTES = $this->db->group_by('C.ID')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
 //            print $this->db->last_query();
-                
+
             $bordes = 0;
             $alto_celda = 4;
             $TIPO = $x->post('TIPO');
@@ -290,8 +290,8 @@ class ParesPreProgramados extends CI_Controller {
                         $x->post('LINEA'), $x->post('MAQUILA'),
                         $x->post('SEMANA'), $x->post('FECHA'),
                         $x->post('FECHAF'), $xx['ANIO']);
-                var_dump($PARES_PREPROGRAMADOS);
-                exit(0);
+//                var_dump($PARES_PREPROGRAMADOS);
+//                exit(0);
                 $bordes = 0;
                 $pdf->SetX(65);
                 foreach ($PARES_PREPROGRAMADOS as $kk => $vv) {
@@ -599,7 +599,7 @@ class ParesPreProgramados extends CI_Controller {
                 $pdf->setAlto(4);
                 $pdf->RowNoBorder(array(utf8_decode($v->MAQUILA)/* 0 */, utf8_decode($v->CAPACIDAD_PARES)/* 1 */));
                 $pdf->Line(10, $pdf->GetY(), 130.9, $pdf->GetY());
-                
+
                 $this->db->select('M.Clave AS CLAVE_MAQUILA, M.Nombre AS MAQUILA, '
                                 . 'M.CapacidadPares AS CAPACIDAD_PARES, P.Semana AS SEMANA, '
                                 . 'SUM(P.Pares) AS PARES, '
@@ -625,9 +625,8 @@ class ParesPreProgramados extends CI_Controller {
                 }
                 $this->db->where("P.Control = 0 AND P.stsavan NOT IN(13,14) OR P.Control IS NULL", null, false);
                 $PARES_PREPROGRAMADOS = $this->db->group_by(array('M.Nombre', 'P.Semana'))
-                        ->order_by('abs(P.Maquila)', 'ASC')
-                        ->order_by('abs(P.Semana)', 'ASC');
-
+                                ->order_by('abs(P.Maquila)', 'ASC')
+                                ->order_by('abs(P.Semana)', 'ASC')->get()->result();
 
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);

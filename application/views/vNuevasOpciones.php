@@ -28,11 +28,14 @@
                         <label>Referencia</label>
                         <input type="text" id="ReferenciaModulo" name="ReferenciaModulo" class="form-control form-control-sm notUpperCase">
                     </div>
-                    <div class="col-12 my-2" align="right">
+                    <div class="col-6 my-2 order-11" align="right">
                         <button type="button" class="btn btn-info" id="btnGuardarModulo"><span class="fa fa-save"></span> Guardar</button> 
                     </div>
+                    <div class="col-6 my-2 order-10" align="left">
+                        <button type="button" class="btn btn-danger" id="btnEliminarModulo"><span class="fa fa-trash"></span> Eliminar</button> 
+                    </div>
                     <div class="w-100"></div>
-                    <div class="col-12 mt-1">
+                    <div class="col-12 mt-1 order-12">
                         <div id="Modulos" class="table-responsive">
                             <table id="tblModulos" class="table table-sm display nowrap " style="width:100%">
                                 <thead>
@@ -148,9 +151,85 @@
         </div>
     </div>
 </div>
+
+<div id="mdlNuevoItemXOpcion" class="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered  notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-puzzle-piece"></span> Nuevo item por opción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 d-none">
+                        <input type="text" id="IDITEM" name="IDITEM" class="form-control d-none" readonly="">
+                    </div>
+                    <div class="col-12">
+                        <label>Opción</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xOpcion" name="xOpcion" autofocus="" maxlength="2" class="form-control form-control-sm numbersOnly">
+                            </div>
+                            <div class="col-8">
+                                <select id="Opcion" name="Opcion" class="form-control form-control-sm">
+                                </select> 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-12">
+                        <label>Nombre</label>
+                        <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm notUpperCase">
+                    </div>
+                    <div class="col-6">
+                        <label>Icono</label>
+                        <input type="text" id="NombreIconoOpcion" name="NombreIconoOpcion" class="form-control form-control-sm notUpperCase">                            
+                    </div>
+                    <div class="col-6 vista_previa justify-content-center text-center"> 
+                    </div>
+                    <div class="col-6">
+                        <label>Orden</label>
+                        <input type="text" id="OrdenOpcion" name="OrdenOpcion" class="form-control form-control-sm numbersOnly" maxlength="99">
+                    </div>
+                    <div class="col-12">
+                        <label>Referencia</label>
+                        <input type="text" id="ReferenciaOpcion" name="ReferenciaOpcion" class="form-control form-control-sm notUpperCase">
+                    </div>
+                    <div class="w-100 my-1"></div>
+                    <div class="col-12 order-12 mt-1">
+                        <div id="Items" class="table-responsive">
+                            <table id="tblItems" class="table table-sm display nowrap " style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th> 
+                                        <th>Item</th>
+                                        <th>Opción</th>
+                                        <th>Fecha</th>
+                                        <th>Icon</th>
+                                        <th>Ref</th>
+                                        <th>Modal</th>
+                                        <th>Backdrop</th>
+                                        <th>Dropdown</th>
+                                        <th>Order</th>
+                                        <th>Function</th>
+                                        <th>Trigger</th> 
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
 <script>
     var mdlNuevoModulo = $("#mdlNuevoModulo"), modulo_nuevo = $("#modulo_nuevo"),
             btnGuardarModulo = mdlNuevoModulo.find("#btnGuardarModulo"),
+            btnEliminarModulo = mdlNuevoModulo.find("#btnEliminarModulo"),
             NombreModulo = mdlNuevoModulo.find("#NombreModulo"),
             NombreIcono = mdlNuevoModulo.find("#NombreIcono"),
             Orden = mdlNuevoModulo.find("#Orden"),
@@ -171,11 +250,28 @@
             btnCancelarOpcionxModulo = mdlNuevaOpcionXModulo.find("#btnCancelarOpcionxModulo");
 
     var tblOpciones = mdlNuevaOpcionXModulo.find("#tblOpciones"), OpcionesXModulo;
+
+    var mdlNuevoItemXOpcion = $("#mdlNuevoItemXOpcion"), items_nuevo = $("#items_nuevo");
+
     var nuevo = true;
 
     $(document).ready(function () {
         handleEnterDiv(mdlNuevoModulo);
         handleEnterDiv(mdlNuevaOpcionXModulo);
+
+        /*ITEM*/
+        mdlNuevoItemXOpcion.on('shown.bs.modal', function () {
+            xOpcion.focus().select();
+        });
+
+        mdlNuevoItemXOpcion.on('hidden.bs.modal', function () {
+            onClearPanelInputSelectEnableDisable(mdlNuevoItemXOpcion, function () {});
+        });
+
+        items_nuevo.click(function () {
+            mdlNuevoItemXOpcion.modal('show');
+        });
+
         /*OPCION*/
 
         btnCancelarOpcionxModulo.click(function () {
@@ -336,6 +432,31 @@
             }
         });
 
+        btnEliminarModulo.click(function () {
+            console.log(rgistro, rgistro.ID, rgistro.ID !== undefined);
+            if (rgistro.ID !== undefined) {
+                $.post('<?php print base_url('ResourceManager/onEliminarModuloByID'); ?>',
+                        {ID: rgistro.ID}).done(function (a) {
+                    Modulos.ajax.reload();
+                    onClearPanelInputSelect(mdlNuevoModulo, function () {});
+                    onNotifyOldPCF('<span class="fa fa-check"></span>',
+                            'SE HA ELIMINADO EL MODULO',
+                            'success', {from: "top", align: "center"}, function () {
+                        rgistro = {};
+                        xModuloXOpcion.focus().select();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    getUltimoOrdenXM();
+                });
+            } else {
+                onCampoInvalido(mdlNuevoModulo, "DEBE DE SELECCIONAR UN REGISTRO", function () {
+                    rgistro = {};
+                });
+            }
+        });
+
         btnGuardarModulo.click(function () {
             if (NombreModulo.val() && NombreIcono.val() && Orden.val() && ReferenciaModulo.val()) {
                 onOpenOverlay('');
@@ -353,6 +474,7 @@
                             NombreModulo.focus().select();
                             getModulosGenerales();
                         });
+                        getUltimoOrdenXM();
                     });
                 }).fail(function (x, y, z) {
                     onError(x);
@@ -382,10 +504,12 @@
             nuevo = true;
             mdlNuevoModulo.find("#NombreModulo").focus().select();
             getModulosGenerales();
+            getUltimoOrdenXM();
         });
 
         mdlNuevoModulo.on('hidden.bs.modal', function () {
             mdlNuevoModulo.find("input").val('');
+            location.reload(true);
         });
     });
 
@@ -418,8 +542,7 @@
             "colReorder": true,
             "displayLength": 25,
             "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
+            "deferRender": true, "scrollCollapse": false,
             "bSort": true,
             "scrollY": 250,
             "scrollX": true,
@@ -434,6 +557,7 @@
         tblModulos.on('click', 'tr', function () {
             nuevo = false;
             var xxx = Modulos.row($(this)).data();
+            rgistro = xxx;
             mdlNuevoModulo.find("#IDGM").val(xxx.ID);
             NombreModulo.val(xxx.MODULO);
             NombreIcono.val(xxx.ICONO);
@@ -474,8 +598,7 @@
             "colReorder": true,
             "displayLength": 50,
             "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
+            "deferRender": true, "scrollCollapse": false,
             "bSort": true,
             "scrollY": 300,
             "scrollX": true,
@@ -525,14 +648,30 @@
                 onNotifyOldPCF('<span class="fa fa-check"></span>',
                         'SE HA ELIMINADO LA OPCIÓN',
                         'success', {from: "bottom", align: "center"}, function () {
-                            rgistro = {};
-                            xModuloXOpcion.focus().select();
+                    rgistro = {};
+                    xModuloXOpcion.focus().select();
                 });
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
 
             });
+        } else {
+            onCampoInvalido(mdlNuevaOpcionXModulo, "DEBE DE SELECCIONAR UN REGISTRO", function () {
+                rgistro = {};
+            });
         }
+    }
+
+    function getUltimoOrdenXM() {
+        $.getJSON('<?php print base_url('ResourceManager/getUltimoOrdenXM'); ?>').done(function (a) {
+            if (a.length > 0) {
+                Orden.val(a[0].ULTIMO_ORDEN);
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
