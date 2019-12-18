@@ -119,7 +119,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
             } else {
                 $this->db->where('ano', $Año)->where('semana', $Sem)->where('maquila', $Maq);
             }
-            $this->db->like('cliente', $Cliente);
+            $this->db->where('cliente', $Cliente);
             $this->db->where_in('Estatus', array('A', 'F'))->where('Control > 0', null, false)->order_by('Control', 'ASC');
 
 
@@ -182,13 +182,12 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
     public function getDatosReporteExcelPakar() {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select(" EC.control,
+            $this->db->select(" ECB.codbarr,
+                                ECB.nomprov,
                                 ECB.estilocte as estilo,
-                                ECB.catalogo as color,
+                                ECB.idart as color,
                                 ECB.color as piel,
-                                EC.suela,
-                                EC.punto,
-                                ECB.codbarr
+                                EC.punto
                                 FROM etiqcaja EC
                                 JOIN etiqcodbarr ECB on EC.estiped = ECB.estilo AND EC.combped = ECB.comb and EC.punto = ECB.talla and EC.cliente = ECB.cliente "
                     . "", false);

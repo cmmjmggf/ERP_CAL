@@ -356,7 +356,7 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                                         str_to_date(fechaentrega,'%d/%m/%Y') as bfechaentrega,
                                         cliente as bcliente,
                                         ID
-                                    from pedidox where ano =$Ano and maquila = $Maq and semana = $Sem and estatus <> 'C'
+                                    from pedidox where ano =$Ano and maquila = $Maq and semana = $Sem and stsavan in (0,14)
   ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

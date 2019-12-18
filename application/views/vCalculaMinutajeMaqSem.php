@@ -49,7 +49,7 @@
             </div>
             <div class="col-1">
                 <label class="">Pedido</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="8" id="Pedido" name="Pedido"   >
+                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="10" id="Pedido" name="Pedido"   >
             </div>
             <div class="col-1">
                 <label class="text-info">Min-Aprob</label>

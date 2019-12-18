@@ -17,7 +17,7 @@
                 <label>Proveedor</label>
                 <div class="row">
                     <div class="col-3">
-                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="5" required="">
+                        <input type="text" autocomplete="nope" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="5" required="">
                     </div>
                     <div class="col-9">
                         <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
