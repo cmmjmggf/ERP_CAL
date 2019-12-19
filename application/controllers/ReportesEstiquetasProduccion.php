@@ -94,7 +94,8 @@ class ReportesEstiquetasProduccion extends CI_Controller {
             $file = fopen('php://output', 'w');
             //Encabezados
             fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            $header = array("Codigo", "Marca", "Modelo", "Color", "Nombre Color", "Talla");
+            $header = array("Control", "Estilo", "Color", "Piel Color", "Suela", "Punto", "Codigo Barras");
+
             //Escribir CSV en memoria
             fputcsv($file, $header);
             //Obtener datos de la tabla de paso

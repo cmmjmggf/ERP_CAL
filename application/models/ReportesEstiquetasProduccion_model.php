@@ -182,14 +182,15 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
     public function getDatosReporteExcelPakar() {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select(" ECB.codbarr,
-                                ECB.nomprov,
+            $this->db->select(" EC.control,
                                 ECB.estilocte as estilo,
                                 ECB.idart as color,
                                 ECB.color as piel,
-                                EC.punto
+                                EC.suela,
+                                EC.punto,
+                                ECB.codbarr
                                 FROM etiqcaja EC
-                                JOIN etiqcodbarr ECB on EC.estiped = ECB.estilo AND EC.combped = ECB.comb and EC.punto = ECB.talla and EC.cliente = ECB.cliente "
+                                JOIN etiqcodbarr ECB on EC.estiped = ECB.estilo AND EC.combped = ECB.comb and EC.punto = ECB.talla and EC.cliente = ECB.cliente  "
                     . "", false);
 
             $query = $this->db->get();
