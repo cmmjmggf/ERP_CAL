@@ -512,14 +512,14 @@
                 {"data": "ID"}, /*0*/
                 {"data": "IdEstilo"}, /*1*/
                 {"data": "IdColor"}, /*2*/
-                {"data": "Pedido"}, /*3*/
-                {"data": "Cliente"}, /*4*/
+                {"data": "Pedido"}, /*3 3*/
+                {"data": "Cliente"}, /*4 2*/
                 {"data": "Estilo"}, /*5*/
                 {"data": "Color"}, /*6*/
                 {"data": "Serie"}, /*7*/
                 {"data": "Fecha Captura"}, /*8*/
                 {"data": "Fecha Pedido"}, /*9*/
-                {"data": "Fecha Entrega"}, /*10*/
+                {"data": "Fecha Entrega"}, /*10 1*/
                 {"data": "Pares"}, /*11*/
                 {"data": "Maq"}, /*12*/
                 {"data": "Semana"}, /*13*/
@@ -539,9 +539,9 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "bSort": true,
+            "bSort": false,
             "aaSorting": [
-                [0, 'desc']/*ID*/
+                [10, 'ASC'] 
             ],
             "createdRow": function (row, data, dataIndex, cells) {
                 console.log(data);

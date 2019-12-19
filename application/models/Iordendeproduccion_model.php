@@ -31,7 +31,7 @@ class Iordendeproduccion_model extends CI_Model {
                             . "CONCAT('$',PD.Precio) AS Precio , "
                             . "CONCAT('$',(PD.Precio * PD.Pares)) AS Importe, "
                             . "CONCAT('$',(PD.Precio * PD.Pares)) AS Descuento,"
-                            . "PD.FechaEntrega AS Entrega," 
+                            . "PD.FechaEntrega AS Entrega,"
                             . "CONCAT(S.PuntoInicial ,'/',S.PuntoFinal) AS Serie, "
                             . "PD.Ano AS Anio,"
                             . " CASE "
@@ -94,12 +94,6 @@ class Iordendeproduccion_model extends CI_Model {
             if ($CONTROL_INICIAL !== '' && $CONTROL_FINAL !== '') {
                 $this->db->where("OP.ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL", null, false);
             }
-//            if ($SEMANA !== '') {
-//                $this->db->where("OP.Semana", $SEMANA);
-//            }
-//            if ($ANO !== '') {
-//                $this->db->where("OP.Ano", $ANO);
-//            } 
             $this->db->order_by('ABS(OPD.Departamento)', 'ASC')->order_by('OPD.ArticuloT', 'ASC');
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -115,7 +109,7 @@ class Iordendeproduccion_model extends CI_Model {
                     ->join('estilos AS E', 'OP.Estilo = E.Clave', 'left')
                     ->join('colores AS C', 'OP.Color = C.Clave', 'left');
             if ($CONTROL_INICIAL !== '' && $CONTROL_FINAL !== '') {
-                $this->db->where("OP.ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL", null, false);
+                $this->db->where("OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}", null, false);
             }
 //            if ($SEMANA !== '') {
 //                $this->db->where("OP.Semana", $SEMANA);
@@ -135,14 +129,12 @@ class Iordendeproduccion_model extends CI_Model {
 
     public function getDepartamentosXOrdenDeProduccionEntreControles($CONTROL_INICIAL, $CONTROL_FINAL, $SEMANA, $ANO) {
         try {
-            $this->db->select("OPD.Departamento AS DEPARTAMENTO, OPD.DepartamentoT AS DEPARTAMENTOT", false)->from('ordendeproduccion AS OP')
-                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+            $this->db->select("OPD.Departamento AS DEPARTAMENTO, OPD.DepartamentoT AS DEPARTAMENTOT", false)
+                    ->from('ordendeproduccion AS OP')->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
             if ($CONTROL_INICIAL !== '' && $CONTROL_FINAL !== '') {
                 $this->db->where("OP.ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL", null, false);
             }
-            $this->db->group_by(array('Departamento'));
-            $this->db->order_by('ABS(OPD.Departamento)', 'ASC');
-            return $this->db->get()->result();
+            return $this->db->group_by(array('Departamento'))->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -16,7 +16,19 @@
                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <label>Al control</label>     
                         <input type="text" class="form-control form-control-sm numbersOnly" id="ControlFinalM" maxlength="10"  min="1" max="10" >
-                    </div> 
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <label>Año</label>     
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="IOPAnio" name="IOPAnio" autofocus maxlength="5" >
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <label>Semana</label>     
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="IOPSemana" name="IOPSemana"  maxlength="2" >
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <label>Día</label>     
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="IOPDia" name="IOPDia" maxlength="1" >
+                    </div>
                 </div>
             </div>
             <div class="modal-footer"> 
@@ -32,7 +44,11 @@
     var Controles;
     var tblControles = $('#tblControles'),
             mdlIOP = $("#mdlIOP"), btnGenerarM = mdlIOP.find("#btnGenerarM"),
-            ControlInicialM = mdlIOP.find("#ControlInicialM"), ControlFinalM = mdlIOP.find("#ControlFinalM");
+            IOPAnio = mdlIOP.find("#IOPAnio"),
+            IOPSemana = mdlIOP.find("#IOPSemana"),
+            IOPDia = mdlIOP.find("#IOPDia"),
+            ControlInicialM = mdlIOP.find("#ControlInicialM"),
+            ControlFinalM = mdlIOP.find("#ControlFinalM");
 
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
@@ -88,37 +104,26 @@
                     theme: 'sk-bounce',
                     message: 'GENERANDO...'
                 });
-                var params = {INICIO: ControlInicialM.val(), FIN: ControlFinalM.val(), SEMANA: '', ANIO: ''};
+                var params = {
+                    INICIO: ControlInicialM.val(),
+                    FIN: ControlFinalM.val(),
+                    SEMANA: IOPSemana.val() ? IOPSemana.val() : '',
+                    ANIO: IOPAnio.val() ? IOPAnio.val() : '',
+                    DIA: IOPDia.val() ? IOPDia.val() : ''};
                 $.post('<?php print base_url('IOrdenDeProduccion/getOrdenDeProduccion'); ?>', params).done(function (data) {
                     //check Apple device
-                    if (isAppleDevice() || isMobile) {
-                        window.open(data, '_blank');
+                    var dtm = JSON.parse(data);
+                    if (parseInt(dtm.PAGINAS) > 0) {
+                        if (isAppleDevice() || isMobile) {
+                            window.open(dtm.URL, '_blank');
+                        } else {
+                            onImprimirReporteFancyAFC(dtm.URL, function (a, b) {
+                                ControlInicialM.focus().select();
+                            });
+                        }
                     } else {
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
-                                }, afterClose: function () {
-                                    ControlInicialM.focus().select();
-                                },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "100%",
-                                        height: "100%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
-                                }
-                            }
+                        iMsg("LA BÚSQUEDA NO ARROJO NINGÚN RESULTADO, INTENTE CON OTROS DATOS", 'w', function () {
+                            ControlInicialM.focus().select();
                         });
                     }
                 }).fail(function (x, y, z) {

@@ -56,7 +56,7 @@ class CerrarProg extends CI_Controller {
                             . "PD.color AS \"Descripcion Color\", "
                             . "PD.Clave AS Pedido,"
                             . "PD.FechaPedido AS \"Fecha Pedido\","
-                            . "PD.FechaRecepcion AS \"Fecha Entrega\","
+                            . "PD.FechaEntrega AS \"Fecha Entrega\","
                             . "DATE_FORMAT(PD.Registro,\"%d/%m/%Y\") AS \"Fecha Captura\","
                             . "PD.Semana AS Semana,"
                             . "PD.Maquila AS Maq,"
@@ -76,8 +76,8 @@ class CerrarProg extends CI_Controller {
                             . "PD.Control AS Control,"
                             . "S.ID AS SerieID,"
                             . "PD.Clave AS ID_PEDIDO", false)->from('pedidox AS PD')
-                    ->join('series AS S', 'PD.Serie = S.Clave')
-                    ->where('PD.Control', 0);
+                    ->join('series AS S', 'PD.Serie = S.Clave');
+                   
             if ($x['ANIO'] !== '') {
                 $this->db->where('PD.Ano', $x['ANIO']);
             }
@@ -87,7 +87,7 @@ class CerrarProg extends CI_Controller {
             if ($x['SEMANA'] !== '') {
                 $this->db->where('PD.Semana', $x['SEMANA']);
             }
-            $this->db->order_by('PD.ID', 'DESC');
+            $this->db ->where('PD.Control = 0 ORDER BY str_to_date(PD.FechaEntrega,"%d/%m/%Y") ASC, PD.Cliente ASC,PD.Clave ASC',null,false);
             if ($x['MAQUILA'] === '' && $x['SEMANA'] === '') {
                 $this->db->limit(25);
             }
@@ -165,7 +165,7 @@ class CerrarProg extends CI_Controller {
                 case 1:
                     foreach ($controles as $k => $v) {
                         if ($v->Control == "" || $v->Control == 0) {
-                            $Y = substr(Date('Y'), 2);
+                            $Y = substr($x['ANIO'], 2);
                             $M = str_pad($v->Maquila, 2, '0', STR_PAD_LEFT);
                             $S = str_pad($v->Semana, 2, '0', STR_PAD_LEFT);
 
@@ -193,7 +193,7 @@ class CerrarProg extends CI_Controller {
 //                            exit(0);
                             $this->db->insert("controles", array(
                                 'Control' => $Y . $S . $M . $C,
-                                'FechaProgramacion' => Date('Y-m-d h:i:s'),
+                                'FechaProgramacion' => Date('Y-m-d 00:00:00'),
                                 'Estilo' => $v->Estilo, 'Color' => $v->Color,
                                 'Serie' => $v->Serie, 'Cliente' => $v->Cliente,
                                 'Pares' => $v->Pares, 'Pedido' => $v->Pedido,
@@ -204,8 +204,8 @@ class CerrarProg extends CI_Controller {
                             $Control = $Y . $S . $M . $C;
                             $this->db->set('Control', $Control)
                                     ->set('stsavan', 1)
-                                    ->set('FechaProduccion', Date('Y-m-d h:i:s'))
-                                    ->set('FechaProg', Date('Y-m-d h:i:s'))
+                                    ->set('FechaProduccion', Date('Y-m-d 00:00:00'))
+                                    ->set('FechaProg', Date('Y-m-d 00:00:00'))
                                     ->where('Estilo', $v->Estilo)
                                     ->where('Color', $v->Color)
                                     ->where('Serie', $v->Serie)

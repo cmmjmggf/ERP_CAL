@@ -69,14 +69,98 @@ class IOrdenDeProduccion extends CI_Controller {
             $FIN = $this->input->post('FIN');
             $SEMANA = $this->input->post('SEMANA');
             $ANO = $this->input->post('ANIO');
+            $DIA = $this->input->post('DIA');
+
             $pdf->AddFont('Calibri', '');
             $pdf->AddFont('Calibri', 'I');
             $pdf->AddFont('Calibri', 'B');
             $pdf->AddFont('Calibri', 'BI');
-            $CONTROLES = $this->iopm->getControlesXOrdenDeProduccionEntreControles($INICIO, $FIN, $SEMANA, $ANO);
+//            $CONTROLES = $this->iopm->getControlesXOrdenDeProduccionEntreControles(
+//                    $INICIO, $FIN, $SEMANA, $ANO);
+            $this->db->select("OP.Control, OP.ControlT, E.Foto AS FOTO, "
+                            . "E.Observaciones AS OBSERVACIONES_ESTILO, C.ObservacionesOrdenProduccion AS "
+                            . "OBSERVACIONES_COLOR", false)->from('ordendeproduccion AS OP')
+                    ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion')
+                    ->join('pedidox AS PE', 'OP.ControlT = PE.Control')
+                    ->join('colores AS C', 'OP.Color = C.Clave', 'left')
+                    ->join('estilos AS E', 'OP.Estilo = E.Clave', 'left');
+            if ($INICIO !== '' && $FIN !== '') {
+                $this->db->where("OP.ControlT BETWEEN {$INICIO} AND {$FIN}", null, false);
+            }
+            if ($SEMANA !== '') {
+                $this->db->where("OP.Semana", $SEMANA);
+            }
+            if ($ANO !== '') {
+                $this->db->where("OP.Ano", $ANO);
+            }
+            if ($DIA !== '') {
+                $this->db->where("PE.DiaProg", $DIA);
+            }
+            $CONTROLES = $this->db->where('E.Clave = C.Estilo', null, false)
+                            ->group_by(array('OP.ControlT'))
+                            ->order_by('ABS(OP.ControlT)', 'ASC')
+                            ->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
+            $REPORTE = array("PAGINAS" => 0/* NO */, "URL" => "");
+            if (count($CONTROLES) <= 0) {
+                print json_encode(array("PAGINAS" => 0, "URL" => ""));
+                exit(0);
+            }
+//            print "\n";
+//            print $this->db->last_query();
+//            print "\n";
+//            exit(0);
             foreach ($CONTROLES as $kc => $vc) {
-                $OP = $this->iopm->getOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
-                $DEPARTAMENTOS = $this->iopm->getDepartamentosXOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
+//                $OP = $this->iopm->getOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
+
+                $this->db->select("OP.Clave, OP.Cliente, OP.FechaEntrega, "
+                                . "OP.FechaPedido, OP.Control, OP.ControlT, OP.Pedido, OP.Linea, "
+                                . "OP.LineaT, OP.Recio, OP.Estilo, OP.EstiloT, OP.Color, "
+                                . "OP.ColorT, OP.Agente, OP.Transporte, OP.Piel1, OP.CantidadPiel1, "
+                                . "OP.Piel2, "
+                                . "IFNULL(OP.CantidadPiel2,0) AS CantidadPiel2, "
+                                . "CASE WHEN OP.Piel3 IS NULL THEN '' ELSE OP.Piel3 END AS Piel3,  "
+                                . "IFNULL(OP.CantidadPiel3,0) AS CantidadPiel3, OP.Piel4, "
+                                . "OP.CantidadPiel4, OP.Piel5, OP.CantidadPiel5, OP.Piel6, OP.CantidadPiel6, "
+                                . "OP.TotalPiel, OP.Forro1, OP.CantidadForro1, OP.Forro2, OP.CantidadForro2, "
+                                . "OP.Forro3, OP.CantidadForro3, OP.TotalForro, OP.Sintetico1, OP.CantidadSintetico1, "
+                                . "OP.Sintetico2, OP.CantidadSintetico2, OP.Sintetico3, OP.CantidadSintetico3, OP.TotalSintetico, "
+                                . "OP.Suela, OP.SuelaT, OP.Suaje, OP.SerieCorrida, "
+                                . "OP.S1, OP.S2, OP.S3, OP.S4, OP.S5, OP.S6, OP.S7, OP.S8, OP.S9, OP.S10, "
+                                . "OP.S11, OP.S12, OP.S13, OP.S14, OP.S15, OP.S16, OP.S17, OP.S18, OP.S19, OP.S20, "
+                                . "OP.S21, OP.S22, "
+                                . "OP.Horma, OP.Pares, "
+                                . "OP.C1, OP.C2, OP.C3, OP.C4, OP.C5, OP.C6, OP.C7, OP.C8, OP.C9, OP.C10, "
+                                . "OP.C11, OP.C12, OP.C13, OP.C14, OP.C15, OP.C16, OP.C17, OP.C18, OP.C19, OP.C20, "
+                                . "OP.C21, OP.C22,"
+                                . "OP.Observaciones,"
+                                . "OP.ObservacionesDetalle,"
+                                . "OP.EstatusProduccion, OPD.Departamento AS DEPARTAMENTO, "
+                                . "OPD.DepartamentoT AS DEPARTAMENTOT, OPD.PiezaT AS PIEZA, "
+                                . "OPD.ArticuloT AS ARTICULOT, OPD.PzXPar AS PZXPAR, "
+                                . "OPD.UnidadMedidaT AS UNIDAD, FORMAT(OPD.Cantidad,2) AS CANTIDAD, "
+                                . "(CASE "
+                                . "WHEN OPD.PiezaClasificacion = 1 THEN ' - 1ra' "
+                                . "WHEN OPD.PiezaClasificacion = 2 THEN ' - 2da' "
+                                . "WHEN OPD.PiezaClasificacion = 3 THEN ' - 3ra' "
+                                . " ELSE '' END) AS CLASIFICACION", false)
+                        ->from('ordendeproduccion AS OP')
+                        ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+                if ($vc->ControlT !== '' && $vc->ControlT !== '') {
+                    $this->db->where("OP.ControlT BETWEEN {$vc->ControlT} AND {$vc->ControlT}", null, false);
+                }
+                $OP = $this->db->order_by('ABS(OPD.Departamento)', 'ASC')->order_by('OPD.ArticuloT', 'ASC')->get()->result();
+
+//                $DEPARTAMENTOS = $this->iopm->getDepartamentosXOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
+
+                /*  DepartamentosXOrdenDeProduccionEntreControles */
+                $this->db->select("OPD.Departamento AS DEPARTAMENTO, OPD.DepartamentoT AS DEPARTAMENTOT", false)
+                        ->from('ordendeproduccion AS OP')->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion');
+                if ($vc->ControlT !== '' && $vc->ControlT !== '') {
+                    $this->db->where("OP.ControlT BETWEEN {$vc->ControlT} AND {$vc->ControlT}", null, false);
+                }
+                $DEPARTAMENTOS = $this->db->group_by(array('OPD.Departamento'))
+                                ->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
+
                 $P = $OP[0];
                 $pdf->setCliente($P->Clave . " " . $P->Cliente);
                 $pdf->setFechaEntrega($P->FechaEntrega);
@@ -365,7 +449,7 @@ class IOrdenDeProduccion extends CI_Controller {
 
             $pdf->Output($url);
             $l = new Logs("IMPRIME ORDEN DE PRODUCCIÓN", "GENERO UN REPORTE DE ORDEN DE PRODUCCIÓN DEL CONTROL {$INICIO} AL CONTROL {$FIN}.", $this->session);
-            print base_url() . $url;
+            print json_encode(array("PAGINAS" => 1/* NO */, "URL" => base_url() . $url));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
