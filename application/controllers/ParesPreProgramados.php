@@ -99,7 +99,7 @@ class ParesPreProgramados extends CI_Controller {
                     ->join('estilos AS E', 'P.Estilo = E.Clave')
                     ->join('lineas AS L', 'E.Linea = L.Clave')
                     ->where("P.Registro BETWEEN STR_TO_DATE('{$xx['FECHA']}', \"%d/%m/%Y\") "
-                            . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\") AND P.Ano ={$xx['ANIO']} ")
+                            . "AND STR_TO_DATE('{$xx['FECHAF']}', \"%d/%m/%Y\") ")
                     ->where("P.Estatus = 'A'", null, false);
 
             $CLIENTES = $this->db->group_by('C.ID')->order_by('ABS(C.Clave)', 'ASC')->get()->result();

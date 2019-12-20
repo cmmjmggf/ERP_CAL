@@ -28,7 +28,7 @@ WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN 
 WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO"
 END) AS AvanceT,P.DiaProg FROM pedidox AS P
 INNER JOIN estilos AS E ON P.Estilo = E.Clave INNER JOIN colores AS C ON P.Color = C.Clave AND P.Estilo = C.Estilo
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}]]>
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.stsavan NOT IN(13,14)  AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

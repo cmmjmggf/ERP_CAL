@@ -77,16 +77,15 @@
                 onObtenerElUltimoControl(this);
             });
 
-            ControlInicialM.keydown(function (e) {
-                console.log(e.keyCode)
+            ControlInicialM.keydown(function (e) { 
                 if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
                     btnGenerarM.prop("disabled", false);
                 } else {
                     btnGenerarM.prop("disabled", true);
                 }
             });
-            ControlFinalM.keydown(function (e) {
-                console.log(e.keyCode)
+            
+            ControlFinalM.keydown(function (e) { 
                 if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
                     btnGenerarM.prop("disabled", false);
                 } else {
@@ -96,6 +95,10 @@
 
             mdlIOP.on('shown.bs.modal', function () {
                 mdlIOP.find("#ControlInicialM").focus().select();
+            });
+
+            mdlIOP.on('hidden.bs.modal', function () {
+                onClearPanelInputSelect(mdlIOP, function () {});
             });
 
             btnGenerarM.click(function () {

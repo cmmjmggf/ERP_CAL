@@ -99,7 +99,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                                     CONCAT('{$ini}',(CASE WHEN S.T22 = 0 THEN '-' ELSE S.T22 END),'{$mid}',CASE WHEN P.C22 = 0 THEN '-' ELSE P.C22 END,'{$end}') AS T22,
                                     CONCAT('<button type=\"button\" class=\"btn btn-danger\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span></button>') AS ELIMINAR ", false)->
                     from("pedidox AS P")->join("series AS S", "P.Serie = S.Clave");
-            $this->db->where("P.Control <> 0 AND P.stsavan <> 14", null, false);
+            $this->db->where("P.Control <> 0 AND P.stsavan NOT IN(13, 14)", null, false);
             if ($CONTROL !== '' && $CONTROL !== "") {
                 $this->db->where("P.Control", $CONTROL);
             } else if ($CLIENTE !== '' && $CLIENTE !== "") {
@@ -110,6 +110,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->limit(10);
             }
             $dtm = $this->db->get()->result();
+//            print $this->db->last_query();
             print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

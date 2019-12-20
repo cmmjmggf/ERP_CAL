@@ -159,7 +159,7 @@ class ReasignarControles extends CI_Controller {
             $OBSERVACIONES = $x['OBSERVACIONES'];
             $OBSERVACIONES_ADICIONALES = $x['OBSERVACIONES_ADICIONALES'];
 
-            $Y = substr(Date('Y'), 2);
+            $Y = substr(Date('Y'), 2);/*EL AÑO NO CORRESPONDE AL CONTROL BUSCADO ES 2020 PERO EL AÑO MARCA 2019*/
 
             $this->db->trans_begin();
             $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
@@ -180,7 +180,7 @@ class ReasignarControles extends CI_Controller {
             /* AQUI SE OBTIENEN LOS PEDIDOS CON LA SEMANA ACTUAL, MAQUILA ACTUAL
              * ENTRE EL RANGO DE CONTROLES ESPECIFICADOS */
             $controles = $this->db->select("PD.*", false)->from('pedidox AS PD')
-                            ->where('PD.Ano', Date('Y'))->where('PD.Maquila', $MAQUILA_ASIGNADA)
+                             ->where('PD.Maquila', $MAQUILA_ASIGNADA)
                             ->where('PD.Semana', $SEMANA_ASIGNADA)
                             ->where("PD.Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}", null, false)
                             ->order_by('PD.Control', 'ASC')->get()->result();
@@ -192,6 +192,7 @@ class ReasignarControles extends CI_Controller {
                 $M = str_pad($MAQUILA_A_ASIGNAR, 2, '0', STR_PAD_LEFT);
                 $S = str_pad($SEMANA_A_ASIGNAR, 2, '0', STR_PAD_LEFT);
                 print "\n 2.count(*) AS EXISTE \n";
+                $Y = $v->Ano;
                 $EXISTEN_REGISTROS = $this->db->select('count(*) AS EXISTE', false)->from('controles AS C')
                                 ->where("C.Semana = ABS({$SEMANA_A_ASIGNAR}) "
                                         . "AND C.Maquila = ABS({$MAQUILA_A_ASIGNAR}) AND C.Ano = ABS({$Y})"
@@ -205,20 +206,19 @@ class ReasignarControles extends CI_Controller {
                                         . "AND C.Semana = ABS({$SEMANA_A_ASIGNAR}) "
                                         . "AND C.Ano = ABS({$Y})", null, false)
                                 ->order_by('C.Consecutivo', 'DESC')->limit(1)->get()->result();
-                print $this->db->last_query() . "\n";
-
+                print $this->db->last_query() . "\n"; 
                 $C = str_pad(((intval($EXISTEN_REGISTROS[0]->EXISTE) === 0) ? 1 : $MAXIMO_CONSECUTIVO[0]->MAX), 3, '0', STR_PAD_LEFT);
                 $C = ((intval($C) > 0) ? $C : str_pad($C, 3, '0', STR_PAD_LEFT));
                 $Control = $Y . $S . $M . $C;
 
                 print "\n 4.insert controles \n";
                 $this->db->insert("controles", array(
-                    'Control' => $Control, 'FechaProgramacion' => Date('Y-m-d h:i:s'),
+                    'Control' => $Control, 'FechaProgramacion' => Date('Y-m-d 00:00:00'),
                     'Estilo' => $v->Estilo, 'Color' => $v->Color, 'Serie' => $v->Serie,
                     'Cliente' => $v->Cliente, 'Pares' => $v->Pares, 'Pedido' => $v->Clave,
                     'PedidoDetalle' => $v->Clave, 'Estatus' => 'A',
                     'Departamento' => 1 /* 0|null|Inexistente - PEDIDO => 1 - PROGRAMADO */,
-                    'Ano' => $Y, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
+                    'Ano' => $v->Ano, 'Maquila' => $M, 'Semana' => $S, 'Consecutivo' => $C
                 ));
                 print $this->db->last_query() . "\n";
 
@@ -252,7 +252,8 @@ SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Esti
 //                        ->where('Clave', $v->Clave)->where('ID', $v->ID)
 //                        ->update('pedidox');
                 print "\n 5.1 Se cancela el control y se deja la copia \n";
-                $this->db->set('Estatus', 'I')->set('EstatusProduccion', 'CANCELADO')->set('DeptoProduccion', 270)->set('stsavan', 14)
+                $this->db->set('Estatus', 'I')->set('EstatusProduccion', 'CANCELADO')
+                        ->set('DeptoProduccion', 270)->set('stsavan', 14)
                         ->set('Observacion', $OBSERVACIONES)
                         ->set('ObservacionDetalle', $OBSERVACIONES_ADICIONALES)
                         ->where('Estilo', $v->Estilo)->where('Color', $v->Color)
@@ -274,11 +275,11 @@ SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Esti
                 if ($check_control[0]->EXISTE <= 0) {
                     $this->db->insert('avaprd', array(
                         'contped' => $Control,
-                        'status' => 1,
-                        'fec1' => Date('Y-m-d h:i:s')
+                        'status' => 0,
+                        'fec1' => Date('Y-m-d 00:00:00')
                     ));
                 } else {
-                    $this->db->set('fec1', Date('Y-m-d h:i:s'))
+                    $this->db->set('fec1', Date('Y-m-d 00:00:00'))
                             ->where('contped', $Control)
                             ->update('avaprd');
                 }

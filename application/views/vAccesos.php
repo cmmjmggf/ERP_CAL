@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                 <div class="row">
-                    <div class="col"    >
+                    <div class="col">
                         <h4 class="font-italic">MODULOS POR USUARIO</h4>
                         <hr>
                     </div>

@@ -34,7 +34,7 @@ E.Clave AS CLAVE, E.Descripcion AS ESTILOT, SUM(P.Pares) AS PARES,
 CAST(P.Pares AS SIGNED) AS PAREX
 FROM pedidox AS P
 INNER JOIN Estilos AS E ON P.Estilo = E.Clave
-WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
+WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}  AND P.stsavan NOT IN(13,14)
 AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}
 AND E.Herramental IS NOT NULL AND P.Estatus NOT IN ('F')
 GROUP BY E.Herramental, E.Clave

@@ -32,7 +32,7 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN lineas AS L ON E.Linea = L.Clave
 WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND
-P.Estatus NOT IN ('C')  AND P.control <> 0 AND P.control IS NOT NULL
+P.Estatus NOT IN ('C') AND P.stsavan NOT IN(13,14)  AND P.control <> 0 AND P.control IS NOT NULL
 GROUP BY L.Clave
 ORDER BY L.Clave ASC]]>
 	</queryString>

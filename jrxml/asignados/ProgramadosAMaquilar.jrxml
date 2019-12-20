@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProgramadosAMaquilar" language="groovy" pageWidth="939" pageHeight="595" orientation="Landscape" columnWidth="899" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7080b9f2-3217-4938-9b37-ac667bf78d05">
 	<property name="ireport.zoom" value="4.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="247"/>
+	<property name="ireport.y" value="141"/>
 	<parameter name="MAQUILA_INICIAL" class="java.lang.Integer"/>
 	<parameter name="MAQUILA_FINAL" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -34,7 +34,7 @@ E.MaqPlant4 AS MP4, (SELECT MP4.Descripcion FROM maquilasplantillas AS MP4 WHERE
 FROM pedidox AS P
 INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN colores AS C ON P.Estilo = C.Estilo AND P.Color = C.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}]]>
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO} AND P.stsavan NOT IN(13,14) ]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

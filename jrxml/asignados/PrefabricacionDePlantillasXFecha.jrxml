@@ -31,7 +31,7 @@ INNER JOIN fichatecnica AS FT ON P.Estilo = FT.Estilo AND P.Color = FT.Color
 INNER JOIN articulos AS A ON FT.Articulo = A.Clave
 INNER JOIN estilos AS E ON P.Estilo = E.Clave INNER JOIN lineas AS L ON E.Linea = L.Clave
 INNER JOIN series AS S ON P.Serie = S.Clave INNER JOIN colores AS C ON P.Color = C.Clave AND E.Clave = C.Estilo
-WHERE P.Control NOT IN(0) AND FT.Pieza = 1084 AND STR_TO_DATE(P.FechaEntrega, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHA_INICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHA_FINAL}, "%d/%m/%Y") ORDER BY A.Descripcion ASC ]]>
+WHERE P.Control NOT IN(0) AND P.stsavan NOT IN(13,14)  AND FT.Pieza = 1084 AND STR_TO_DATE(P.FechaEntrega, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHA_INICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHA_FINAL}, "%d/%m/%Y") ORDER BY A.Descripcion ASC]]>
 	</queryString>
 	<field name="Plantilla" class="java.lang.String"/>
 	<field name="Control" class="java.lang.String">

@@ -29,7 +29,7 @@ FROM pedidox AS P
 INNER JOIN maquilas AS M ON P.Maquila = M.Clave
 INNER JOIN clientes AS C ON C.Clave = P.Cliente
 WHERE CAST(P.Maquila AS UNSIGNED) BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND CAST(P.Semana AS UNSIGNED) BETWEEN  $P{SEMANAINICIO} AND $P{SEMANAFIN}
-AND P.Control <> 0 AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13) ORDER BY ABS(P.Maquila) ASC, ABS(P.Control) ASC]]>
+AND P.Control <> 0  AND P.stsavan NOT IN(13,14) AND P.Ano = $P{ANO} AND P.stsavan NOT IN(12,13) ORDER BY ABS(P.Maquila) ASC, ABS(P.Control) ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

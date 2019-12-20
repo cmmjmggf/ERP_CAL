@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Horizontal" language="groovy" columnCount="22" printOrder="Horizontal" pageWidth="595" pageHeight="2880" columnWidth="27" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3d0bcc01-f2d4-4310-80b4-f0e553e5cb74">
 	<property name="ireport.zoom" value="13.109994191499991"/>
-	<property name="ireport.x" value="100"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="MAQUILAINICIO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -27,7 +27,7 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN lineas AS L ON E.Linea = L.Clave
 WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}
-AND L.Clave = $P{LINEA} AND P.Estatus NOT IN ('C')  AND P.control <> 0 AND P.control IS NOT NULL
+AND L.Clave = $P{LINEA} AND P.Estatus NOT IN ('C') AND P.control <> 0 AND P.control IS NOT NULL  AND P.stsavan NOT IN(13,14)
 GROUP BY L.Clave,E.Clave
 ORDER BY L.Clave ASC]]>
 	</queryString>
