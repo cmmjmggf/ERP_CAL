@@ -978,7 +978,7 @@
             tblRegistros.DataTable().destroy();
         }
         Registros = tblRegistros.DataTable({
-            "dom": 'frtp', buttons: buttons,
+            "dom": 'frt', buttons: buttons,
             orderCellsTop: true,
             fixedHeader: true,
             "ajax": {
@@ -1008,12 +1008,12 @@
                 {"data": "bcliente"}
             ],
             "columnDefs": [
-                {
-                    "targets": [11],
-                    "render": function (data, type, row) {
-                        return  $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
+//                {
+//                    "targets": [11],
+//                    "render": function (data, type, row) {
+//                        return  $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                },
                 {
                     "targets": [14],
                     "visible": false,
@@ -1035,20 +1035,20 @@
                     "searchable": true
                 }
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            c.addClass('text-strong');
-                            break;
-                        case 1:
-                            c.addClass('text-info text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 0:
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 1:
+//                            c.addClass('text-info text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             select: true,
             keys: true,
             language: lang,
@@ -1056,7 +1056,7 @@
             "colReorder": true,
             "displayLength": 450,
             "scrollX": true,
-            "scrollY": 300,
+            "scrollY": 450,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -1223,7 +1223,7 @@
     }
 
     table tbody tr {
-        font-size: 0.75rem !important;
+        font-size: 0.68rem !important;
     }
 
     .verde {
@@ -1240,25 +1240,29 @@
 
     }
     label{
-        margin-top: 0.12rem;
+        margin-top: 0.0rem;
         margin-bottom: 0.0rem;
     }
 
     #frmCaptura input.form-control-sm,  #frmCaptura input.form-control {
         padding: 0.15rem 0.5rem;
-        margin-top:  0.04rem;
-        margin-bottom: 0.04rem;
+        margin-top:  0.00rem;
+        margin-bottom: 0.00rem;
         font-weight: bold;
         font-size: 0.75rem !important;
     }
 
 
     .slim{
+        height:15px;
         width: 100px !important;
+        font-size: 0.72rem !important;
     }
 
     .fat{
+        height:15px;
         width: 300px !important;
+        font-size: 0.72rem !important;
     }
 
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7,
@@ -1286,5 +1290,9 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
         user-select: none; /* Non-prefixed version, currently
                               supported by Chrome, Opera and Firefox */
+    }
+
+    td:hover {
+        font-size: 0.68rem !important;
     }
 </style>

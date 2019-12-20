@@ -1,5 +1,5 @@
 <div class="modal " id="mdlEtiCajaXCliente"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Etiquetas por Cliente</h5>
@@ -108,6 +108,8 @@
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                         console.log(x.responseText);
                     });
+                } else {
+                    mdlEtiCajaXCliente.find('#Ano').focus().select();
                 }
             }
         });

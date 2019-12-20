@@ -119,7 +119,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
             } else {
                 $this->db->where('ano', $Año)->where('semana', $Sem)->where('maquila', $Maq);
             }
-            $this->db->where('cliente', $Cliente);
+            $this->db->like('cliente', $Cliente);
             $this->db->where_in('Estatus', array('A', 'F'))->where('Control > 0', null, false)->order_by('Control', 'ASC');
 
 
