@@ -78,6 +78,9 @@
                         <tbody></tbody>
                     </table>
                 </div> 
+                <div class="col-12" align="center">
+                    <h4 class="font-weight-bold PARES_TOTALES text-danger">Pares</h4>
+                </div>
             </div>
         </div>
     </div>
@@ -270,11 +273,20 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "450px",
             "scrollX": true,
             initComplete: function () {
                 onCloseOverlay();
                 Estilo.focus();
+            },
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var prs = 0;
+                $.each(api.rows().data(), function (k, v) {
+                    prs = prs + parseInt(v.PARES);
+                });
+                //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                pnlTablero.find("h4.PARES_TOTALES").text(prs + ' PARES');
             }
         });
 

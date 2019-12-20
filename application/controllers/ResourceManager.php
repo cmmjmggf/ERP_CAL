@@ -234,4 +234,25 @@ class ResourceManager extends CI_Controller {
         }
     }
 
+    public function getItemsXOpcionesXModulos() {
+        try {
+            $span_ok = '<span class=\"fa fa-check\" style=\"color: #8BC34A !important;\"></span>';
+            $span_nook = '<span class=\"fa fa-times\" style=\"color: #F44336 !important;\"></span>';
+            print json_encode(
+                            $this->db->query("SELECT  A.ID, C.Modulo AS MODULO,  "
+                                    . "B.Opcion AS OPCION,  A.Item AS ITEM, A.Fecha AS FECHA,  "
+                                    . "A.Icon AS ICONOX, CONCAT('<span class=\"fa fa-',A.Icon,'\"></span>') AS ICONO,  A.Ref AS REF, "
+                                    . "(CASE WHEN A.Modal = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS MODAL, "
+                                    . "(CASE WHEN A.Backdrop = 'true' THEN '{$span_ok}' ELSE '{$span_nook}' END) AS BACKDROP, " 
+                                    . "(CASE WHEN A.Dropdown = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS DROPDOWN, " 
+                                    . "(CASE WHEN A.Function = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS FUNCION, " 
+                                    . "CONCAT('<span class=\"font-weight-bold\">',A.`Order`,'</span>') AS ORDEN, "
+                                    . "A.`Trigger` AS \"TRIGGER\" FROM itemsxopcion AS A "
+                                    . "INNER JOIN opcionesxmodulo AS B ON A.Opcion = B.ID "
+                                    . "INNER JOIN modulos AS C ON B.Modulo = C.ID ORDER BY C.ID ASC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

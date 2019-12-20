@@ -173,31 +173,38 @@
                                 <input type="text" id="xOpcion" name="xOpcion" autofocus="" maxlength="2" class="form-control form-control-sm numbersOnly">
                             </div>
                             <div class="col-8">
-                                <select id="Opcion" name="Opcion" class="form-control form-control-sm">
+                                <select id="Opciones" name="Opciones" class="form-control form-control-sm">
+                                    <option value=''></option>                                   
+                                    <?php
+                                    $opciones = $this->db->query("SELECT A.ID, B.Modulo, A.Opcion FROM opcionesxmodulo AS A INNER JOIN modulos AS B ON A.Modulo = B.ID")->result();
+                                    foreach ($opciones as $k => $v) {
+                                        print "<option value='{$v->ID}'>{$v->Opcion} ({$v->Modulo})</option>";
+                                    }
+                                    ?>
                                 </select> 
                             </div>
                         </div> 
                     </div>
                     <div class="col-12">
                         <label>Nombre</label>
-                        <input type="text" id="NombreOpcion" name="NombreOpcion" class="form-control form-control-sm notUpperCase">
+                        <input type="text" id="NombreItem" name="NombreItem" class="form-control form-control-sm notUpperCase">
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <label>Icono</label>
-                        <input type="text" id="NombreIconoOpcion" name="NombreIconoOpcion" class="form-control form-control-sm notUpperCase">                            
+                        <input type="text" id="NombreIconoItem" name="NombreIconoItem" class="form-control form-control-sm notUpperCase">                            
                     </div>
-                    <div class="col-6 vista_previa justify-content-center text-center"> 
+                    <div class="col-4 vista_previa justify-content-center text-center d-none"> 
+                    </div>
+                    <div class="col-2">
+                        <label>Orden</label>
+                        <input type="text" id="OrdenItem" name="OrdenItem" class="form-control form-control-sm numbersOnly" maxlength="99">
                     </div>
                     <div class="col-6">
-                        <label>Orden</label>
-                        <input type="text" id="OrdenOpcion" name="OrdenOpcion" class="form-control form-control-sm numbersOnly" maxlength="99">
-                    </div>
-                    <div class="col-12">
                         <label>Referencia</label>
-                        <input type="text" id="ReferenciaOpcion" name="ReferenciaOpcion" class="form-control form-control-sm notUpperCase">
+                        <input type="text" id="ReferenciaItem" name="ReferenciaItem" class="form-control form-control-sm notUpperCase">
                     </div>
                     <div class="w-100 mt-2"></div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" align="center">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                         <div class="form-group">
                             <span class="switch switch-lg">
                                 <input id="EsModal" name="EsModal"  type="checkbox" class="switch">
@@ -205,7 +212,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" align="center">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                         <div class="form-group">
                             <span class="switch switch-lg">
                                 <input id="TieneBackdrop" name="TieneBackdrop"  type="checkbox" class="switch">
@@ -213,7 +220,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" align="center">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                         <div class="form-group">
                             <span class="switch switch-lg">
                                 <input id="EsDropdown" name="EsDropdown"  type="checkbox" class="switch">
@@ -221,7 +228,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" align="center">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                         <div class="form-group">
                             <span class="switch switch-lg">
                                 <input id="EsFuncion" name="EsFuncion"  type="checkbox" class="switch">
@@ -231,28 +238,27 @@
                     </div>
                     <div class="col-12">
                         <label>Trigger</label>
-                        <textarea class="form-control" id="FuncionEjecutable" rows="3" cols="5">
-                        </textarea>
+                        <input type="text" maxlength="100" class="form-control form-control-sm" id="FuncionEjecutable" name="FuncionEjecutable">
                     </div>
-
-                    <div class="w-100 my-1"></div>
-
-                    <div class="w-100 my-1"></div>
+                    <div class="w-100 my-2"></div>
                     <div class="col-12 order-12 mt-1">
                         <div id="Items" class="table-responsive">
-                            <table id="tblItems" class="table table-sm display nowrap " style="width:100%">
+                            <table id="tblItems" class="table table-sm display nowrap table-striped " style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>ID</th> 
-                                        <th>Item</th>
+                                        <th>Módulo</th>
                                         <th>Opción</th>
+                                        <th>Item</th>
                                         <th>Fecha</th>
                                         <th>Icon</th>
+
                                         <th>Ref</th>
                                         <th>Modal</th>
                                         <th>Backdrop</th>
                                         <th>Dropdown</th>
                                         <th>Order</th>
+
                                         <th>Function</th>
                                         <th>Trigger</th> 
                                     </tr>
@@ -292,7 +298,21 @@
 
     var tblOpciones = mdlNuevaOpcionXModulo.find("#tblOpciones"), OpcionesXModulo;
 
-    var mdlNuevoItemXOpcion = $("#mdlNuevoItemXOpcion"), items_nuevo = $("#items_nuevo");
+    var mdlNuevoItemXOpcion = $("#mdlNuevoItemXOpcion"), items_nuevo = $("#items_nuevo"),
+            btnGuardarItemXOpcionxModulo = mdlNuevoItemXOpcion.find("#btnGuardarItemXOpcionxModulo"),
+            xOpcion = mdlNuevoItemXOpcion.find("#xOpcion"),
+            Opciones = mdlNuevoItemXOpcion.find("#Opciones"),
+            NombreItem = mdlNuevoItemXOpcion.find("#NombreItem"),
+            NombreIconoItem = mdlNuevoItemXOpcion.find("#NombreIconoItem"),
+            OrdenItem = mdlNuevoItemXOpcion.find("#OrdenItem"),
+            ReferenciaItem = mdlNuevoItemXOpcion.find("#ReferenciaItem"),
+            EsModal = mdlNuevoItemXOpcion.find("#EsModal"),
+            TieneBackdrop = mdlNuevoItemXOpcion.find("#TieneBackdrop"),
+            EsDropdown = mdlNuevoItemXOpcion.find("#EsDropdown"),
+            EsFuncion = mdlNuevoItemXOpcion.find("#EsFuncion"),
+            btnCancelarItemXOpcionxModulo = mdlNuevoItemXOpcion.find("#btnCancelarItemXOpcionxModulo");
+
+    var tblItems = mdlNuevoItemXOpcion.find("#tblItems"), ItemsXOpcionesXModulo;
 
     var nuevo = true;
 
@@ -303,6 +323,7 @@
         /*ITEM*/
         mdlNuevoItemXOpcion.on('shown.bs.modal', function () {
             xOpcion.focus().select();
+            getItemsXOpcionesXModulos();
         });
 
         mdlNuevoItemXOpcion.on('hidden.bs.modal', function () {
@@ -667,6 +688,68 @@
         });
     }
 
+
+    function getItemsXOpcionesXModulos() {
+        if ($.fn.DataTable.isDataTable('#tblItems')) {
+            ItemsXOpcionesXModulo.ajax.reload();
+            return;
+        }
+        ItemsXOpcionesXModulo = tblItems.DataTable({
+            dom: 'frtip', "ajax": {
+                "url": '<?php print base_url('ResourceManager/getItemsXOpcionesXModulos'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.MODULO = Opciones.val() ? Opciones.val() : '';
+                }
+            },
+            "columns": [
+                {"data": "ID"},
+                {"data": "MODULO"},
+                {"data": "OPCION"},
+                {"data": "ITEM"},
+                {"data": "FECHA"},
+
+                {"data": "ICONO"},
+                {"data": "REF"},
+                {"data": "MODAL"},
+                {"data": "BACKDROP"},
+
+                {"data": "DROPDOWN"},
+                {"data": "ORDEN"},
+                {"data": "FUNCION"},
+                {"data": "TRIGGER"}
+            ],
+            "columnDefs": [
+                //ID
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 50,
+            "bLengthChange": false,
+            "deferRender": true, "scrollCollapse": false,
+            "bSort": false,
+            "scrollY": 450,
+            "scrollX": true,
+            responsive: false,
+            "aaSorting": [
+                [0, 'desc']/*ID*/
+            ]
+        });
+
+        tblItems.on('click', 'tr', function () {
+            nuevo = false;
+            var xxx = ItemsXOpcionesXModulo.row($(this)).data();
+            rgistro = xxx;
+
+        });
+    }
+
     function getModulosX() {
         $.getJSON('<?php print base_url('ResourceManager/getModulosX'); ?>').done(function (a) {
             onClearSelect(ModuloXOpcion);
@@ -715,6 +798,8 @@
             onCloseOverlay();
         });
     }
+
+
 </script>
 <style>
 
