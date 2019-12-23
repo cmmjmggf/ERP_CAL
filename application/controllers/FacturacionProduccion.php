@@ -245,7 +245,7 @@ class FacturacionProduccion extends CI_Controller {
 //            }
             /*             * *CARTAFAC** */
             $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
-            $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
             $PARES = 0;
             $PARES = $FACTURA_PARES[0]->PARES;
             $this->db->insert("cartafac", array(
@@ -393,7 +393,7 @@ class FacturacionProduccion extends CI_Controller {
                     'DeptoProduccion' => $DeptoProduccion
                 ));
                 /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-                $this->db->set('fec13', Date('Y-m-d h:i:s'))->where('contped', $x['CONTROL'])
+                $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
                         ->update('avaprd');
                 $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
 
@@ -516,7 +516,7 @@ class FacturacionProduccion extends CI_Controller {
             $x = $this->input->get();
             print json_encode($this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
                                             . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
-                                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
+                                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura = '{$x['DOCUMENTO_FACTURA']}' ")
                                     ->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -525,6 +525,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getVistaPrevia() {
         try {
+            exit(0);
             $x = $this->input->post();
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();

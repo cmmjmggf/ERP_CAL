@@ -237,7 +237,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "detalle" => $r->detalle,
                     "clasif" => $r->clasif,
                     "cargoa" => $r->cargoa,
-                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                     "estilo" => $x["ESTILO"],
                     "comb" => $x["COLOR"],
                     "seriped" => $r->seriped,
@@ -289,9 +289,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "cliente" => $x["CLIENTE"],
                     "remicion" => $x["DOCUMENTO"],
                     "tipo" => $x["TP"],
-                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "fechadep" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                    "fechadep" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                    "fechacap" => $nueva_fecha->format('Y-m-d 00:00:00'),
                     "doctopa" => "{$v->conce}-NC{$x["NC"]}",
                     "importe" => $v->subtot,
                     "agente" => $cte[0]->Agente,
@@ -308,7 +308,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "cliente" => $x["CLIENTE"],
                     "numfac" => $x["DOCUMENTO"],
                     "tp" => $x["TP"], "orden" => 6,
-                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                     "hora" => $HORA, "cant" => $v->paredev,
                     "descripcion" => $v->conce,
                     "precio" => $v->precio,
@@ -332,15 +332,17 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 /* SI EL TP ES 1, SE AÑADE A LA NOTADE CREDITO UN */
             }/* END FOR */
 
-            $cartcliente = $this->db->query("SELECT * FROM cartcliente  AS N WHERE remicion = {$x['NC']} and cliente= {$x['CLIENTE']} and tipo= {$x['TP']}")->result();
+            $cartcliente = $this->db->query("SELECT * FROM cartcliente  AS N WHERE remicion = {$x['DOCUMENTO']} and cliente= {$x['CLIENTE']} and tipo= {$x['TP']}")->result();
+            print "\n" . $this->db->last_query() . "\n";
+            var_dump($cartcliente);
             if (intval($x["TP"]) === 1) {
                 $cartctepagos = array(
                     "cliente" => $x["CLIENTE"],
                     "remicion" => $x["DOCUMENTO"],
                     "tipo" => $x["TP"],
-                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "fechadep" => $nueva_fecha->format('Y-m-d h:i:s'),
-                    "fechacap" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                    "fechadep" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                    "fechacap" => $nueva_fecha->format('Y-m-d 00:00:00'),
                     "doctopa" => "IVA-NC{$x["NC"]}",
                     "importe" => $total_final * 0.16,
                     "agente" => $cte[0]->Agente,
@@ -361,9 +363,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $saldo_final = ($SALDO - $total_final_con_iva);
                 $this->db->set('saldo', $saldo_final)
                         ->set('pagos', ($PAGOS + $total_final_con_iva))
-                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['NC'])
+                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
-                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-SALDO-PAGOS)(TP-1)", "HA MODIFICADO EL SALDO DE LA NDC({$x["NC"]}) PARA LA FACTURA ({$x['FACTURA']}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final * 0.16, 2, ".", ",") . "   TP 1.", $this->session);
+                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-SALDO-PAGOS)(TP-1)", "HA MODIFICADO EL SALDO DE LA NDC({$x["NC"]}) PARA LA FACTURA ({$x['DOCUMENTO']}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final * 0.16, 2, ".", ",") . "   TP 1.", $this->session);
                 $status = 2;
                 if ($saldo_final <= 5) {
                     $status = 3;
@@ -372,26 +374,24 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     $status = 2;
                 }
                 $this->db->set('status', $status)
-                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['NC'])
+                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-STATUS)(TP-1)", "HA MODIFICADO EL ESTATUS({$status}) DE LA NDC({$x["NC"]})  DEL CLIENTE {$x["CLIENTE"]}.", $this->session);
                 /*                 * ********************** TimbrarNC.exe TODAVIA NO LO TENEMOS***************** */
-                print "\n*** TIMBRANDO NC {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
-                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
-                exec('schtasks /run /tn "Timbrar"  ');
-                exec('schtasks /delete /tn "Timbrar" /F ');
+                print "\n*** TIMBRANDO NC {$x['NC']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+//                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
+//                exec('schtasks /run /tn "Timbrar"  ');
+//                exec('schtasks /delete /tn "Timbrar" /F ');
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE)(TIMBRADO)", "HA TIMBRADO LA NOTA DE CREDITO {$x['NC']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($total_final_con_iva, 4, ".", ",") . ", TP 1 (NC).", $this->session);
 
-
-                $this->onImprimirReporteNotaCreditoTp1Local($x['TP'], $x['NC'], $x['CLIENTE']);
-
+                $ndc = new NotaDeCredito($x['TP'], $x['NC'], $x['CLIENTE']);
 
                 $l = new Logs("APLICA DEV DE CLIENTES - NOTA DE CREDITO (RPT)(TP-1)", "IMPRIMIO UN REPORTE DE LA NDC({$x["NC"]}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final_con_iva, 2, ".", ",") . "   TP 1.", $this->session);
                 exit(0);
             } else {
                 $saldo_final = ($SALDO - $total_final);
                 $this->db->set('saldo', $saldo_final)->set('pagos', ($PAGOS + $total_final))
-                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['NC'])
+                        ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
 
                 $l = new Logs("APLICA DEV DE CLIENTES - (CARTCLIENTE-SALDO-PAGOS) (TP-2)",
@@ -409,9 +409,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     $status = 2;
                 }
                 $this->db->set('status', $status)->where('cliente', $x['CLIENTE'])
-                        ->where('remicion', $x['NC'])->where('tipo', $x['TP'])
+                        ->where('remicion', $x['DOCUMENTO'])->where('tipo', $x['TP'])
                         ->update('cartcliente');
-                $this->onImprimirReporteNotaCreditoTp2Local($x['TP'], $x['NC'], $x['CLIENTE']);
+                $ndc = new NotaDeCredito($x['TP'], $x['NC'], $x['CLIENTE']);
                 $l = new Logs("APLICA DEV DE CLIENTES - NOTA DE CREDITO (RPT)(TP-2)", "IMPRIMIO UN REPORTE DE LA NDC({$x["NC"]}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final, 2, ".", ",") . "   TP 2.", $this->session);
                 exit(0);
             }

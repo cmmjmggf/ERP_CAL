@@ -54,7 +54,6 @@ class ResourceManager extends CI_Controller {
 
     public function getOpcionesXModulo() {
         try {
-//            print json_encode($this->rsm->getOpcionesXModulo($this->input->post('MOD')));
             $USUARIO_ID = $this->session->ID;
             $selects = "F.Usuario AS INDICADOR_USUARIO , H.Usuario AS USUARIO_ITEM, I.Usuario AS USUARIO_SUBITEM, J.Usuario AS USUARIO_SUBSUBITEM, "
                     . "`B`.`Order` AS OrderB, `C`.`Order` AS OrderC, `D`.`Order` AS OrderD, `E`.`Order` AS OrderE,`J`.`ID` AS `is_subsubitem`, `I`.`ID` AS `is_subitem`, `B`.`Opcion`, `B`.`Icon`, `B`.`Ref`, `B`.`Button`, `B`.`Class`, `C`.`Item`, `C`.`Icon` AS `IconItem`, `C`.`Ref` AS `RefItem`, `C`.`Modal` AS `ItemModal`, `C`.`Backdrop` AS `ItemBackdrop`, `C`.`Dropdown` AS `ItemDropdown`, (CASE WHEN C.Function IS NULL THEN 0 ELSE C.Function END) AS Function, `C`.`Trigger`, `D`.`SubItem` AS `SubItem`, `D`.`Icon` AS `IconSubItem`, `D`.`Ref` AS `RefSubItem`, `D`.`Modal` AS `SubItemModal`, `D`.`Backdrop` AS `SubItemBackdrop`, `D`.`Dropdown` AS `SubItemDropdown`, (CASE WHEN D.Function IS NULL THEN 0 ELSE D.Function END) AS FunctionSubItem, `D`.`Trigger` AS `TriggerSubItem`, `E`.`SubSubItem` AS `SubSubItem`, `E`.`Icon` AS `IconSubSubItem`, `E`.`Ref` AS `RefSubSubItem`, `E`.`Modal` AS `SubSubItemModal`, `E`.`Backdrop` AS `SubSubItemBackdrop`, J.Usuario AS PERTENECE_SUBSUBITEM";
@@ -202,6 +201,24 @@ class ResourceManager extends CI_Controller {
         }
     }
 
+    public function getUltimoOrdenIXOXM() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("(A.Order + 1) AS ULTIMO_ORDEN ", false)
+                    ->from("itemsxopcion AS A")->join("opcionesxmodulo AS B","A.Opcion = B.ID");
+            if ($x['MODULO'] !== '') {
+                $this->db->where("B.Modulo", $x['MODULO']);
+            }
+            if ($x['OPCION'] !== '') {
+                $this->db->where("A.Opcion", $x['OPCION']);
+            }
+            $this->db->order_by("A.Order", "DESC")->limit(1);
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getModulosGenerales() {
         try {
             print json_encode($this->db->select("M.ID AS ID, M.Modulo AS MODULO, "
@@ -236,20 +253,43 @@ class ResourceManager extends CI_Controller {
 
     public function getItemsXOpcionesXModulos() {
         try {
+            $x = $this->input->get();
             $span_ok = '<span class=\"fa fa-check\" style=\"color: #8BC34A !important;\"></span>';
             $span_nook = '<span class=\"fa fa-times\" style=\"color: #F44336 !important;\"></span>';
-            print json_encode(
-                            $this->db->query("SELECT  A.ID, C.Modulo AS MODULO,  "
-                                    . "B.Opcion AS OPCION,  A.Item AS ITEM, A.Fecha AS FECHA,  "
-                                    . "A.Icon AS ICONOX, CONCAT('<span class=\"fa fa-',A.Icon,'\"></span>') AS ICONO,  A.Ref AS REF, "
-                                    . "(CASE WHEN A.Modal = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS MODAL, "
-                                    . "(CASE WHEN A.Backdrop = 'true' THEN '{$span_ok}' ELSE '{$span_nook}' END) AS BACKDROP, " 
-                                    . "(CASE WHEN A.Dropdown = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS DROPDOWN, " 
-                                    . "(CASE WHEN A.Function = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS FUNCION, " 
-                                    . "CONCAT('<span class=\"font-weight-bold\">',A.`Order`,'</span>') AS ORDEN, "
-                                    . "A.`Trigger` AS \"TRIGGER\" FROM itemsxopcion AS A "
-                                    . "INNER JOIN opcionesxmodulo AS B ON A.Opcion = B.ID "
-                                    . "INNER JOIN modulos AS C ON B.Modulo = C.ID ORDER BY C.ID ASC")->result());
+
+            $this->db->select("A.ID, C.Modulo AS MODULO, B.Opcion AS OPCION, "
+                            . "A.Opcion AS OPCION_ID, A.Item AS ITEM, A.Fecha AS FECHA, "
+                            . "A.Icon AS ICONOX, CONCAT('') AS ICONO, A.Ref AS REF, "
+                            . "(CASE WHEN A.Modal = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS MODAL, A.Modal AS ESMODAL, "
+                            . "(CASE WHEN A.Backdrop = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END)AS BACKDROP, A.Backdrop AS TIENEBACKDROP, "
+                            . "(CASE WHEN A.Dropdown = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS DROPDOWN, A.Dropdown AS ESDROPDOWN, "
+                            . "(CASE WHEN A.Function = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS FUNCION, A.Function AS ESFUNCION, "
+                            . "CONCAT('<span class=\"font-weight-bold\">',A.`Order`,'</span>') AS ORDEN, A.`Trigger` AS \"TRIGGER\"", false)
+                    ->from("itemsxopcion AS A")->join("opcionesxmodulo AS B", "A.Opcion = B.ID")
+                    ->join("modulos AS C", "B.Modulo = C.ID");
+            if ($x['OPCION'] !== '') {
+                $this->db->where('B.ID', $x['OPCION']);
+            }
+            if ($x['MODULO'] !== '') {
+                $this->db->where('C.ID', $x['MODULO']);
+            }
+            $data = $this->db->order_by('C.ID', 'ASC')->get()->result();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getOpcionesXModuloX() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("A.ID, B.Modulo, A.Opcion", false)->from("opcionesxmodulo AS A")
+                    ->join("modulos AS B", "A.Modulo = B.ID");
+            if ($x['MODULO'] !== '') {
+                $this->db->where("B.ID", $x['MODULO']);
+            }
+            $data = $this->db->order_by("B.ID", "ASC")->get()->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

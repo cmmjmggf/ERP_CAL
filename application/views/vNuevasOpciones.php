@@ -167,20 +167,26 @@
                         <input type="text" id="IDITEM" name="IDITEM" class="form-control d-none" readonly="">
                     </div>
                     <div class="col-12">
+                        <label>Modulo</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xModuloXOpcionXItem" name="xModuloXOpcionXItem" maxlength="2" class="form-control form-control-sm numbersOnly">
+                            </div>
+                            <div class="col-8">
+                                <select id="ModuloXOpcionXItem" name="ModuloXOpcionXItem" class="form-control form-control-sm">
+                                </select> 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-12">
                         <label>Opción</label>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" id="xOpcion" name="xOpcion" autofocus="" maxlength="2" class="form-control form-control-sm numbersOnly">
+                                <input type="text" id="xOpcionesXItem" name="xOpcionesXItem" autofocus="" maxlength="2" class="form-control form-control-sm numbersOnly">
                             </div>
                             <div class="col-8">
-                                <select id="Opciones" name="Opciones" class="form-control form-control-sm">
-                                    <option value=''></option>                                   
-                                    <?php
-                                    $opciones = $this->db->query("SELECT A.ID, B.Modulo, A.Opcion FROM opcionesxmodulo AS A INNER JOIN modulos AS B ON A.Modulo = B.ID")->result();
-                                    foreach ($opciones as $k => $v) {
-                                        print "<option value='{$v->ID}'>{$v->Opcion} ({$v->Modulo})</option>";
-                                    }
-                                    ?>
+                                <select id="OpcionesXItem" name="OpcionesXItem" class="form-control form-control-sm">
+                                    <option value=''></option>       
                                 </select> 
                             </div>
                         </div> 
@@ -238,9 +244,19 @@
                     </div>
                     <div class="col-12">
                         <label>Trigger</label>
-                        <input type="text" maxlength="100" class="form-control form-control-sm" id="FuncionEjecutable" name="FuncionEjecutable">
+                        <input type="text" maxlength="100" class="form-control form-control-sm notUpperCase" id="FuncionEjecutable" name="FuncionEjecutable">
                     </div>
-                    <div class="w-100 my-2"></div>
+                    <div class="w-100 my-1"></div>
+                    <div class="col-6 order-11" align="right">
+                        <button type="button" class="btn btn-info" id="btnGuardarItemXOpcionxModulo"><span class="fa fa-save"></span> Guardar</button> 
+                        <button type="button" class="btn btn-danger" id="btnCancelarItemXOpcionxModulo"><span class="fa fa-ban"></span> Cancelar</button> 
+                    </div>
+                    <div class="col-6 order-10" align="left">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="onEliminarItemXOpcionXModuloByID()">
+                            <span class="fa fa-trash"></span>
+                        </button>
+                    </div>
+                    <div class="w-100 my-1"></div>
                     <div class="col-12 order-12 mt-1">
                         <div id="Items" class="table-responsive">
                             <table id="tblItems" class="table table-sm display nowrap table-striped " style="width:100%">
@@ -299,9 +315,10 @@
     var tblOpciones = mdlNuevaOpcionXModulo.find("#tblOpciones"), OpcionesXModulo;
 
     var mdlNuevoItemXOpcion = $("#mdlNuevoItemXOpcion"), items_nuevo = $("#items_nuevo"),
-            btnGuardarItemXOpcionxModulo = mdlNuevoItemXOpcion.find("#btnGuardarItemXOpcionxModulo"),
-            xOpcion = mdlNuevoItemXOpcion.find("#xOpcion"),
-            Opciones = mdlNuevoItemXOpcion.find("#Opciones"),
+            xModuloXOpcionXItem = mdlNuevoItemXOpcion.find("#xModuloXOpcionXItem"),
+            ModuloXOpcionXItem = mdlNuevoItemXOpcion.find("#ModuloXOpcionXItem"),
+            xOpcionesXItem = mdlNuevoItemXOpcion.find("#xOpcionesXItem"),
+            OpcionesXItem = mdlNuevoItemXOpcion.find("#OpcionesXItem"),
             NombreItem = mdlNuevoItemXOpcion.find("#NombreItem"),
             NombreIconoItem = mdlNuevoItemXOpcion.find("#NombreIconoItem"),
             OrdenItem = mdlNuevoItemXOpcion.find("#OrdenItem"),
@@ -310,6 +327,8 @@
             TieneBackdrop = mdlNuevoItemXOpcion.find("#TieneBackdrop"),
             EsDropdown = mdlNuevoItemXOpcion.find("#EsDropdown"),
             EsFuncion = mdlNuevoItemXOpcion.find("#EsFuncion"),
+            FuncionEjecutable = mdlNuevoItemXOpcion.find("#FuncionEjecutable"),
+            btnGuardarItemXOpcionxModulo = mdlNuevoItemXOpcion.find("#btnGuardarItemXOpcionxModulo"),
             btnCancelarItemXOpcionxModulo = mdlNuevoItemXOpcion.find("#btnCancelarItemXOpcionxModulo");
 
     var tblItems = mdlNuevoItemXOpcion.find("#tblItems"), ItemsXOpcionesXModulo;
@@ -319,10 +338,99 @@
     $(document).ready(function () {
         handleEnterDiv(mdlNuevoModulo);
         handleEnterDiv(mdlNuevaOpcionXModulo);
+        handleEnterDiv(mdlNuevoItemXOpcion);
 
         /*ITEM*/
+
+
+        OpcionesXItem.change(function () {
+            onOpenOverlay('');
+            if (OpcionesXItem.val()) {
+                console.log(OpcionesXItem.val());
+                xOpcionesXItem.val(OpcionesXItem.val());
+                NombreItem.focus().select();
+            } else {
+                xOpcionesXItem.val('');
+                OpcionesXItem[0].selectize.enable();
+                OpcionesXItem[0].selectize.clear(true);
+            }
+            $.getJSON('<?php print base_url('ResourceManager/getUltimoOrdenIXOXM') ?>',
+                    {MODULO: ModuloXOpcionXItem.val() ? ModuloXOpcionXItem.val() : '',
+                        OPCION: OpcionesXItem.val() ? OpcionesXItem.val() : ''}).done(function (a) {
+                if (a.length > 0) {
+                    OrdenItem.val(a[0].ULTIMO_ORDEN);
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+                getItemsXOpcionesXModulos();
+            });
+        });
+
+        xOpcionesXItem.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xOpcionesXItem.val()) {
+                    OpcionesXItem[0].selectize.setValue(xOpcionesXItem.val());
+                    if (OpcionesXItem.val()) {
+                    } else {
+                        onCampoInvalido(mdlNuevoItemXOpcion, 'NO EXISTE ESTA OPCIÓN, ESPECIFIQUE OTRA', function () {
+                            xOpcionesXItem.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    OpcionesXItem[0].selectize.enable();
+                    OpcionesXItem[0].selectize.clear(true);
+                }
+            } else {
+                OpcionesXItem[0].selectize.enable();
+                OpcionesXItem[0].selectize.clear(true);
+            }
+        });
+
+        ModuloXOpcionXItem.change(function () {
+            onOpenOverlay('');
+            if (ModuloXOpcionXItem.val()) {
+                xModuloXOpcionXItem.val(ModuloXOpcionXItem.val());
+                onClear(xOpcionesXItem);
+                onClear(OpcionesXItem);
+                xOpcionesXItem.focus().select();
+            } else {
+                xModuloXOpcionXItem.val('');
+                ModuloXOpcionXItem[0].selectize.enable();
+                ModuloXOpcionXItem[0].selectize.clear(true);
+            }
+            getItemsXOpcionesXModulos();
+            onCloseOverlay();
+        });
+
+        xModuloXOpcionXItem.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xModuloXOpcionXItem.val()) {
+                    ModuloXOpcionXItem[0].selectize.setValue(xModuloXOpcionXItem.val());
+                    if (ModuloXOpcionXItem.val()) {
+                        getOpcionesXModuloX(OpcionesXItem, ModuloXOpcionXItem);
+                    } else {
+                        onCampoInvalido(mdlNuevoItemXOpcion, 'NO EXISTE ESTE MODULO, ESPECIFIQUE OTRO', function () {
+                            xModuloXOpcionXItem.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    ModuloXOpcionXItem[0].selectize.enable();
+                    ModuloXOpcionXItem[0].selectize.clear(true);
+                }
+            } else {
+                ModuloXOpcionXItem[0].selectize.enable();
+                ModuloXOpcionXItem[0].selectize.clear(true);
+            }
+        });
+
         mdlNuevoItemXOpcion.on('shown.bs.modal', function () {
-            xOpcion.focus().select();
+            nuevo = true;
+            getModulosX(ModuloXOpcionXItem);
+            xModuloXOpcionXItem.focus().select();
             getItemsXOpcionesXModulos();
         });
 
@@ -333,6 +441,88 @@
         items_nuevo.click(function () {
             mdlNuevoItemXOpcion.modal('show');
         });
+
+        btnCancelarItemXOpcionxModulo.click(function () {
+            onClearPanelInputSelect(mdlNuevoItemXOpcion, function () {
+                getItemsXOpcionesXModulos();
+                xOpcionesXItem.focus().select();
+                nuevo = true;
+                rgistro = {};
+            });
+        });
+
+
+        btnGuardarItemXOpcionxModulo.click(function () {
+            onEnable(ModuloXOpcion);
+            onOpenOverlay('');
+            var p = {
+                ID: mdlNuevoItemXOpcion.find("#IDGMXO").val(),
+                NUEVO: nuevo ? 1 : 0,
+                MODULO: ModuloXOpcion.val(), NOMBRE_OPCION: NombreOpcion.val(),
+                ICONO_OPCION: NombreIconoOpcion.val(), REFERENCIA_OPCION: ReferenciaOpcion.val(),
+                ORDEN_OPCION: OrdenOpcion.val(), BOTON: mdlNuevoItemXOpcion.find("#EsBoton")[0].checked ? 1 : 0,
+                CLASECSS: mdlNuevoItemXOpcion.find("#ClaseCss").val()
+            };
+            if (!ModuloXOpcion.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UN MODULO", function () {
+                    xModuloXOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!NombreOpcion.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UN NOMBRE", function () {
+                    NombreOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!NombreIconoOpcion.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UN ICONO", function () {
+                    NombreIconoOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!ReferenciaOpcion.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UNA REFERENCIA", function () {
+                    ReferenciaOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!OrdenOpcion.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UN ORDEN", function () {
+                    OrdenOpcion.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+            if (!ClaseCss.val()) {
+                onCampoInvalido(mdlNuevoItemXOpcion, "ES NECESARIO ESPECIFICAR UNA CLASE CSS", function () {
+                    ClaseCss.focus().select();
+                    onCloseOverlay();
+                });
+                return;
+            }
+
+            $.post('<?php print base_url('ResourceManager/onGuardarItemXOpcionXModulo'); ?>', p).done(function (a) {
+                console.log(a);
+                var r = JSON.parse(a);
+                console.log(r);
+                nuevo = true;
+                iMsg("ITEM POR OPCIÓN GUARDADA", "s", function () {
+                    onClearPanelInputSelect(mdlNuevoItemXOpcion, function () {
+                        xOpcionesXItem.focus().select();
+                    });
+                });
+            }).fail(function (x, y, z) {
+                onError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
+        });
+        /*FIN ITEMS*/
 
         /*OPCION*/
 
@@ -394,6 +584,7 @@
                 ModuloXOpcion[0].selectize.clear(true);
             }
         });
+
         NombreIconoOpcion.change(function () {
             if ($(this).val()) {
                 mdlNuevaOpcionXModulo.find(".vista_previa").html('<div class="mt-2"></div><span class="' + $(this).val() + ' fa-2x mt-2"></span>');
@@ -477,7 +668,7 @@
 
         mdlNuevaOpcionXModulo.on('shown.bs.modal', function () {
             nuevo = true;
-            getModulosX();
+            getModulosX(ModuloXOpcion);
             getOpcionesXModulos();
             mdlNuevaOpcionXModulo.find("#xModuloXOpcion").focus().select();
         });
@@ -690,8 +881,11 @@
 
 
     function getItemsXOpcionesXModulos() {
+        onOpenOverlay('...');
         if ($.fn.DataTable.isDataTable('#tblItems')) {
-            ItemsXOpcionesXModulo.ajax.reload();
+            ItemsXOpcionesXModulo.ajax.reload(function () {
+                onCloseOverlay();
+            });
             return;
         }
         ItemsXOpcionesXModulo = tblItems.DataTable({
@@ -699,7 +893,8 @@
                 "url": '<?php print base_url('ResourceManager/getItemsXOpcionesXModulos'); ?>',
                 "dataSrc": "",
                 "data": function (d) {
-                    d.MODULO = Opciones.val() ? Opciones.val() : '';
+                    d.MODULO = ModuloXOpcionXItem.val() ? ModuloXOpcionXItem.val() : '';
+                    d.OPCION = OpcionesXItem.val() ? OpcionesXItem.val() : '';
                 }
             },
             "columns": [
@@ -709,7 +904,7 @@
                 {"data": "ITEM"},
                 {"data": "FECHA"},
 
-                {"data": "ICONO"},
+                {"data": "ICONO"},/*5*/
                 {"data": "REF"},
                 {"data": "MODAL"},
                 {"data": "BACKDROP"},
@@ -725,6 +920,12 @@
                     "targets": [0],
                     "visible": false,
                     "searchable": false
+                },
+                //ID
+                {
+                    "targets": [1],
+                    "visible": false,
+                    "searchable": false
                 }],
             language: lang,
             select: true,
@@ -733,28 +934,87 @@
             "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true, "scrollCollapse": false,
-            "bSort": false,
+            "bSort": true,
             "scrollY": 450,
             "scrollX": true,
             responsive: false,
             "aaSorting": [
-                [0, 'desc']/*ID*/
-            ]
+                [10, 'DESC']/*ID*/
+            ],
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+                api.column(1, {page: 'current'}).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                                '<tr class="group"><td colspan="12">' + group + '</td></tr>'
+                                );
+                        last = group;
+                    }
+                });
+            }
         });
+        onCloseOverlay();
 
         tblItems.on('click', 'tr', function () {
             nuevo = false;
             var xxx = ItemsXOpcionesXModulo.row($(this)).data();
             rgistro = xxx;
+            console.log(xxx);
+            pnlTablero.find("#IDITEM").val(xxx.ID);
+            xOpcionesXItem.val(xxx.OPCION_ID);
+            OpcionesXItem[0].selectize.setValue(xxx.OPCION_ID);
+            NombreItem.val(xxx.ITEM);
+            NombreIconoItem.val(xxx.ICONOX);
+            OrdenItem.val(xxx.ICONOX);
+            ReferenciaItem.val(xxx.REF);
+            if (parseInt(xxx.ESMODAL) === 1) {
+                EsModal[0].checked = true;
+            } else {
+                EsModal[0].checked = false;
+            }
+
+            if (parseInt(xxx.TIENEBACKDROP) === 1) {
+                TieneBackdrop[0].checked = true;
+            } else {
+                TieneBackdrop[0].checked = false;
+            }
+            if (parseInt(xxx.ESDROPDOWN) > 0) {
+                EsDropdown[0].checked = true;
+            } else {
+                EsDropdown[0].checked = false;
+            }
+            if (parseInt(xxx.ESFUNCION) > 0) {
+                EsFuncion[0].checked = true;
+            } else {
+                EsFuncion[0].checked = false;
+            }
+            FuncionEjecutable.val(xxx.TRIGGER);
+        });
+    }
+
+    function getModulosX(componente) {
+        $.getJSON('<?php print base_url('ResourceManager/getModulosX'); ?>').done(function (a) {
+            onClearSelect(componente);
+            $.each(a, function (k, v) {
+                componente[0].selectize.addOption({text: v.Modulo, value: v.ID});
+            });
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
 
         });
     }
 
-    function getModulosX() {
-        $.getJSON('<?php print base_url('ResourceManager/getModulosX'); ?>').done(function (a) {
-            onClearSelect(ModuloXOpcion);
+
+    function getOpcionesXModuloX(componente, modulo) {
+        $.getJSON('<?php print base_url('ResourceManager/getOpcionesXModuloX'); ?>', {
+            MODULO: modulo.val() ? modulo.val() : ''
+        }).done(function (a) {
+            onClearSelect(componente);
             $.each(a, function (k, v) {
-                ModuloXOpcion[0].selectize.addOption({text: v.Modulo, value: v.ID});
+                componente[0].selectize.addOption({text: v.Opcion, value: v.ID});
             });
         }).fail(function (x) {
             getError(x);

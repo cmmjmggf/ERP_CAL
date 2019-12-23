@@ -1370,7 +1370,7 @@
                                                                     break;
                                                                 case 1:
                                                                     if (vvv.IsSubItem !== null) {
-                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + vvv.SubItemBackdrop + '\'><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
+                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + (vvv.SubItemBackdrop === 1 ? 'true' : 'false') + '\'><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
                                                                     }
                                                                     break;
                                                             }
@@ -1391,7 +1391,7 @@
                                                                             opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
                                                                             break;
                                                                         case 1:
-                                                                            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + vss.SubSubItemBackdrop + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + ' *</a>';
+                                                                            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + (vss.SubSubItemBackdrop === 1 ? 'true' : 'false') + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + ' *</a>';
                                                                             break;
                                                                     }
                                                                 });
@@ -1502,14 +1502,14 @@
     }
 
     var modulos_counter = 0;
-    function b25NZW51RGlzcGxheQ(e, obj) { 
-        onOpenOverlay('Cargando...'); 
+    function b25NZW51RGlzcGxheQ(e, obj) {
+        onOpenOverlay('Cargando...');
         $(obj).removeClass("fadeIn");
-        $(obj).addClass("tada");
+        $(obj).addClass("animated-infinite bounceinfinite");
         $(obj).on('animationend', function () {
-            $(obj).removeClass("tada");
-        }); 
-            window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
+            $(obj).removeClass("animated-infinite bounceinfinite");
+        });
+        window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 
     function b25Db21wcm9iYXJNb2R1bG9z(type) {
@@ -1839,8 +1839,9 @@
 
     function onClear(e) {
         var text_tags = ["P", "SPAN", "H1", "H2", "H3", "H4", "H5", "H6",
-            "BUTTON", "TD", "TH", "DIV", "LEGEND", "OPTION"];
-        if (text_tags !== -1) {
+            "BUTTON", "TD", "TH", "DIV", "LEGEND", "OPTION"]; 
+        
+        if (text_tags.indexOf(e[0].tagName) !== -1) {
             $(e).text('');
             return;
         }

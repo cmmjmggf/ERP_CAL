@@ -1055,7 +1055,8 @@
                     ClienteFactura[0].selectize.enable();
                     Documento.attr('readonly', false);
                     TPFactura.attr('disabled', false);
-                    getVistaPreviaDocumentoCerrado(function () {
+//                    getVistaPreviaDocumentoCerrado(function () {
+                    iMsg("SE HA CERRADO EL DOCUMENTO", "s", function () {
                         nuevo = true;
                         pnlTablero.find("input").val('');
                         $.each(pnlTablero.find("select"), function (k, v) {

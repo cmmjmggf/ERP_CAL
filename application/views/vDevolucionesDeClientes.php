@@ -815,11 +815,11 @@
                         console.log($(this).val(), pnlTablero.find("#CF" + index).val());
                         console.log(parseInt($(this).val()) <= parseInt(pnlTablero.find("#CF" + index).val()));
                     } else {
-                        onDisable(btnAcepta);
-                        onCampoInvalido(pnlTablero, 'LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', function () {
-                            pnlTablero.find("#PDF" + index).focus().select();
-
-                        });
+//                        onDisable(btnAcepta);
+//                        onCampoInvalido(pnlTablero, 'LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', function () {
+//                            pnlTablero.find("#PDF" + index).focus().select();
+//
+//                        });
                     }
                 }
             } else {
@@ -1051,10 +1051,8 @@
                     } else {
                         pnlTablero.find("#PDF" + i).attr('disabled', true);
                     }
-                }
-                if (prs === 1) {
-                    pnlTablero.find("#PDF" + indice).focus().select();
-                }
+                } 
+                    pnlTablero.find("#PDF" + indice).focus().select(); 
             } else {
                 Control.focus().select();
             }

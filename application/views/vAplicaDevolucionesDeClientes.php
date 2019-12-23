@@ -349,7 +349,7 @@
             });
             var p = {
                 CLIENTE: ClienteDevolucion.val(),
-                DOCUMENTO: NotaCredito.val(),
+                DOCUMENTO: AplicaDevolucion.val(),
                 APLICA: AplicaDevolucion.val(),
                 NC: NotaCredito.val(),
                 TP: TP.val(),
@@ -388,7 +388,7 @@
             onEnable(TP);
             var p = {
                 CLIENTE: ClienteDevolucion.val(),
-                DOCUMENTO: NotaCredito.val(),
+                DOCUMENTO: AplicaDevolucion.val(),
                 APLICA: AplicaDevolucion.val(),
                 NC: NotaCredito.val(),
                 TP: TP.val(),
