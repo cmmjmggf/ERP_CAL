@@ -230,8 +230,10 @@ class NotaDeCredito {
             $total = number_format(2271.28, 6, ".", "");
             $uuid = '870BE2C8-92B9-4019-BA08-1977F9A3A1B5';
 
+
             $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$uuid&re=$rfc_emi&rr=$rfc_rec&tt=$total&fe=TW9+rA==";
-            $pdf->Image(QRcode::png(urlencode($qr)), 165, $pdf->GetY() - 40, 40, null, "png");
+            $pdf->Image(base_url() . "NotasCreditoClientes/getQR?code=" . urlencode($qr), 165, $pdf->GetY() - 40, 40, null, "png");
+
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Clientes';

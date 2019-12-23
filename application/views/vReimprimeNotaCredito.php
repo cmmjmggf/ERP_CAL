@@ -170,16 +170,15 @@
             var tp = mdlReimprimeNotaCredito.find("#Tp").val();
             var folio = mdlReimprimeNotaCredito.find("#NotaCredito").val();
             var cte = mdlReimprimeNotaCredito.find("#Cliente").val();
-            var reporte = (tp === '1') ? 'onImprimirReporteNotaCreditoTp1' : 'onImprimirReporteNotaCreditoTp2';
-            onImprimirReporteNotaCredito(tp, folio, cte, reporte);
+            onImprimirReporteNotaCredito(tp, folio, cte);
         });
 
     });
 
 
-    function onImprimirReporteNotaCredito(tp, folio, cte, reporte) {
+    function onImprimirReporteNotaCredito(tp, folio, cte) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-        $.post(base_url + 'index.php/NotasCreditoClientes/' + reporte, {
+        $.post(base_url + 'index.php/NotasCreditoClientes/ReimprimirNC', {
             Tp: tp,
             Folio: folio,
             Cliente: cte
