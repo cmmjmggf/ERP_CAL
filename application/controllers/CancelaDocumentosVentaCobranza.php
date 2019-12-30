@@ -3,6 +3,7 @@
 /* NO TOCAR */
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class CancelaDocumentosVentaCobranza extends CI_Controller {
@@ -10,7 +11,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->helper('jaspercommand_helper')->helper('file');
+        $this->load->library('session')->helper('jaspercommand_helper')->helper('file')->helper('Notacreditoclientes_helper')->helper('file')->helper('nc_helper');
     }
 
     public function index() {
@@ -281,6 +282,8 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     //Timbramos la nota de crédito
                     //Se manda llamar el exe de timbrado
                     /*                     * ************ TimbrarNC.exe $NC $Cliente *********** */
+                } else {
+                    $nc2 = new NotaDeCredito($Tp, $NC, $Cliente);
                 }
             }
         } catch (Exception $exc) {

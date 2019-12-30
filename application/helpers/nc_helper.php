@@ -273,14 +273,15 @@ class NotaDeCredito {
                                         nc.cliente, ct.RazonS, ct.RFC, ct.Agente, ag.Descripcion as nomagente, ct.Direccion, ct.Colonia, nc.numfac,
                                         ct.Ciudad, ct.Estado, edo.Descripcion as nomestado, ct.CodigoPostal,
                                         nc.cant, nc.descripcion, nc.precio, nc.subtot,
-                                        nc.concepto, nc.defecto, df.Descripcion as nomdefecto, nc.detalle, dt.Descripcion as nomdetalle,
+                                        nc.concepto, nc.defecto,
+                                        (select Descripcion from defectos where clave= nc.defecto) as nomdefecto,
+                                        nc.detalle,
+					(select Descripcion from defectos where clave= nc.defecto) as nomdefecto,
                                         nc.monletra
                                         FROM notcred nc
                                         join clientes ct on ct.clave= nc.cliente
                                         join agentes ag on ag.clave= ct.agente
                                         join estados edo on edo.clave= ct.estado
-                                        left join defectos df on df.clave= nc.defecto
-                                        left join defectosdetalle dt on dt.clave= nc.detalle
                                         where nc.cliente= $Cliente
                                         and nc.tp = $Tp
                                         and nc.nc = $Folio ")->result();
@@ -353,84 +354,6 @@ class NotaDeCredito {
             $pdf->SetFont('Calibri', '', 8);
             $pdf->SetX(5);
             $pdf->Cell(150, 4, utf8_decode($Documento[0]->concepto), 0/* BORDE */, 1, 'L');
-
-
-            $pdf->SetY($pdf->GetY() + 2);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->Cell(60, 4, utf8_decode('La reproducción no autorizada de este comprobante constituye un delito en los términos de las disposiciones fiscales.'), 0/* BORDE */, 1, 'L');
-
-            /* Regimen fiscal */
-            $pdf->SetY($pdf->GetY() + 7);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->Cell(60, 3, utf8_decode('601 General de Ley Personas Morales'), 0/* BORDE */, 1, 'L');
-
-            /* Datos CFDI Timbrado TITULOS  */
-            $pdf->SetY($pdf->GetY() + 4);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(60, 3, utf8_decode('Folio Fiscal/UUID:'), 0/* BORDE */, 0, 'L');
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('Fecha Timbrado:'), 0/* BORDE */, 0, 'L');
-
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('Certificado SAT:'), 0/* BORDE */, 0, 'L');
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('Certificado del Emisor:'), 0/* BORDE */, 1, 'L');
-
-            /* Datos CFDI Timbrado DATOS  */
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->Cell(60, 3, utf8_decode('870BE2C8-92B9-4019-BA08-1977F9A3A1B5' . ' ' . '3.3'), 0/* BORDE */, 0, 'L');
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('24/07/2019 05:50:03 p.m.'), 0/* BORDE */, 0, 'L');
-
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('00001000000404594081'), 0/* BORDE */, 0, 'L');
-
-            $pdf->SetX($pdf->GetX());
-            $pdf->Cell(40, 3, utf8_decode('00001000000401998453'), 0/* BORDE */, 1, 'L');
-
-            /* SELLOS */
-            $pdf->SetY($pdf->GetY() + 2);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(60, 3, utf8_decode('Sello Digital CFD:'), 0/* BORDE */, 1, 'L');
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->MultiCell(160, 3, utf8_decode('g2jKdXkSg4TFMrfoNHO/XwDQndbdnEmMYl+y/Hnx6D6MzLG6HUayhNMIsUdgYwmSx66487IJmelShtSnRs8fPtehkmxuRcmtAmV1HMrgfyVFnluh0NHY4qJjdwGNG+n15+9jkoYrvb3qHT5UzdQ0QRS7a7BVI1+xY4K4OqVf5gX19qqj6p451tQxO2hXLqO0KhMK/uoTpc1LeAT2pvFZSXT5bRyOOTyE2/dpEi3pHBQS/I1rx1qzKtXhjzPgPSm'), 0/* BORDE */, 'J');
-
-            $pdf->SetY($pdf->GetY() + 2);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(60, 3, utf8_decode('Sello Digital SAT:'), 0/* BORDE */, 1, 'L');
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->MultiCell(160, 3, utf8_decode('OJkUGTrTiA61UiGTz/UxwgnWBijRx4jN24xvdFEQOcUP9duBXdOSBqz1JrD2ym7ycdbPohCgjsznF1IjdD6+LM1lmtGAPhnLTx+9nMt5YUqCK9/+cZpAyQVgoeP64X0vw/L86vilJ8svacBTsEdw3dYe9ztn5pf5qksmlfA29Wdqmy7Pe7LZ1Xg2lPCHWPI5GLqs1+U34bhXC3vIbAu4UCMKPizX8WyOGgtjpHDy0Uu4oWYZIbgxbd2cbqm2XfZ'), 0/* BORDE */, 'J');
-
-            $pdf->SetY($pdf->GetY() + 2);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 8);
-            $pdf->Cell(60, 3, utf8_decode('Cadena Original del Complemento de Certificación Digital del SAT:'), 0/* BORDE */, 1, 'L');
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', '', 8);
-            $pdf->MultiCell(160, 3, utf8_decode('||1.1|3ddac28e-f737-4907-90b7-f596d982c759|2019-07-03t12:28:02z|g2jkdxksg4tfmrfonho/xwdqndbdnemmyl+y/hnx6d6mzlg6huayhnmisudgywmsx66487ijmelshtsnrs8fptehkmxurcmtamv1hmrgfyvfnluh0nhy4qjjdwgng+n15+9jkoyrvb3qht5uzdq0qrs7a7bvi1+xy4k4oqvf5gx19qqj6p451tqxo2hxlqo0khmk/uotpc1leat2pvfzsxt5bryootye2/dpei3phbqs/i1rx1qzktxhjzpgpsm|00001000000404477432||'), 0/* BORDE */, 'J');
-
-            /* QR Codigo */
-            $rfc_emi = 'CLO070608J19';
-            $rfc_rec = 'DCO161130PG7';
-            $total = number_format(2271.28, 6, ".", "");
-            $uuid = '870BE2C8-92B9-4019-BA08-1977F9A3A1B5';
-
-            $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$uuid&re=$rfc_emi&rr=$rfc_rec&tt=$total&fe=TW9+rA==";
-            $pdf->Image(base_url() . "NotasCreditoClientes/getQR?code=" . urlencode($qr), 165, $pdf->GetY() - 40, 40, null, "png");
-
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Clientes';

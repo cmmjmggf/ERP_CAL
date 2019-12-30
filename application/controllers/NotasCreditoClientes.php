@@ -150,13 +150,13 @@ class NotasCreditoClientes extends CI_Controller {
                         set cp.numfol = datediff(cp.fecha, cc.fecha)
                         where cp.numfol = 0 ";
             $this->db->query($sql2);
-            //Timbra e imprime
+            //  ********** Timbra e imprime
             if ($x['Tp'] === '1') {
-                /*                 * ********************** Timbrar.exe ***************** */
+//                /*                 * ********************** Timbrar.exe ***************** */
 //                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['nc'] . '" ');
 //                exec('schtasks /run /tn "Timbrar"  ');
 //                exec('schtasks /delete /tn "Timbrar" /F ');
-                $nc1 = new NotaDeCredito($x['Tp'], $x['nc'], $x['Cliente']);
+//                $nc1 = new NotaDeCredito($x['Tp'], $x['nc'], $x['Cliente']);
             } else {
                 $nc2 = new NotaDeCredito($x['Tp'], $x['nc'], $x['Cliente']);
             }

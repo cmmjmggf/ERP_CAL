@@ -536,8 +536,15 @@
                             fechacap: pnlTablero.find('#fechacap').val()
                         }).done(function (data) {
                             console.log(data);
-
-                            if (data.length > 0) {
+                            if (pnlTablero.find("#Tp").val() === '1') {
+                                /*Aquí imprime cuando ya timbremos nosotros*/
+                                pnlTablero.find("#dDefecto").addClass('d-none');
+                                pnlTablero.find("#dDetalle").addClass('d-none');
+                                pnlTablero.find("#Defecto").removeClass('required');
+                                pnlTablero.find("#DetalleDefecto").removeClass('required');
+                                onNotifyOld('fa fa-check', 'NOTA DE CRÉDITO CERRADA', 'success');
+                                init();
+                            } else {
                                 onImprimirReporteFancyAFC(data, function (a, b) {
                                     pnlTablero.find("#dDefecto").addClass('d-none');
                                     pnlTablero.find("#dDetalle").addClass('d-none');
@@ -545,12 +552,6 @@
                                     pnlTablero.find("#DetalleDefecto").removeClass('required');
                                     onNotifyOld('fa fa-check', 'NOTA DE CRÉDITO CERRADA', 'success');
                                     init();
-                                });
-                            } else {
-                                swal({
-                                    title: "ATENCIÓN",
-                                    text: "NO EXISTEN REGISTROS",
-                                    icon: "error"
                                 });
                             }
                             HoldOn.close();

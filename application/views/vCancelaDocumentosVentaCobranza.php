@@ -239,9 +239,9 @@
                                 });
                             } else {
                                 swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
-                                    var tp = pnlTablero.find("#Tp").val();
-                                    var reporte = (tp === '1') ? 'onImprimirReporteNotaCreditoTp1' : 'onImprimirReporteNotaCreditoTp2';
-                                    onImprimirReporteNotaCredito(tp, pnlTablero.find("#NC").val(), pnlTablero.find("#Cliente").val(), reporte);
+                                    onImprimirReporteFancyAFC(data, function (a, b) {
+                                        init();
+                                    });
                                 });
                             }
                             onCloseOverlay();
@@ -257,31 +257,6 @@
             }
         });
     });
-    function onImprimirReporteNotaCredito(tp, folio, cte, reporte) {
-        HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-        $.post(base_url + 'index.php/NotasCreditoClientes/' + reporte, {
-            Tp: tp,
-            Folio: folio,
-            Cliente: cte
-        }).done(function (data, x, jq) {
-            console.log(data);
-            if (data.length > 0) {
-                onImprimirReporteFancyAFC(data, function (a, b) {
-                    init();
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "NO EXISTEN REGISTROS",
-                    icon: "error"
-                });
-            }
-            HoldOn.close();
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-            HoldOn.close();
-        });
-    }
     function init() {
         /*FUNCIONES INICIALES*/
 
