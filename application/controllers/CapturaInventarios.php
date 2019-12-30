@@ -714,7 +714,7 @@ class CapturaInventarios extends CI_Controller {
         if (!empty($Grupos)) {
             $pdf = new PDF_CostoInv('P', 'mm', array(215.9, 279.4));
             $pdf->setMes($Mes);
-            $pdf->SetAutoPageBreak(true, 5);
+            $pdf->SetAutoPageBreak(true, 3.5);
             $pdf->AddPage();
 
             $GT_Existencia = 0;
@@ -724,14 +724,14 @@ class CapturaInventarios extends CI_Controller {
 
                 $pdf->SetX(5);
                 $pdf->SetLineWidth(0.5);
-                $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->Cell(10, 4, 'Grupo:', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 7.5);
+                $pdf->Cell(10, 3.5, 'Grupo:', 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(15);
-                $pdf->SetFont('Calibri', '', 8);
-                $pdf->Cell(40, 4, utf8_decode($G->Clave) . '  ' . utf8_decode($G->Nombre), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 7.5);
+                $pdf->Cell(40, 3.5, utf8_decode($G->Clave) . '  ' . utf8_decode($G->Nombre), 'B'/* BORDE */, 1, 'L');
 
                 $pdf->SetLineWidth(0.2);
-                $pdf->SetFont('Calibri', '', 8);
+                $pdf->SetFont('Calibri', '', 7.5);
                 $T_Existencia = 0;
                 $T_Costo = 0;
 
@@ -742,7 +742,7 @@ class CapturaInventarios extends CI_Controller {
                         $Total_Costo = $D->Existencia * $D->Costo;
                         $pdf->Row(array(
                             utf8_decode($D->ClaveArt),
-                            mb_strimwidth(utf8_decode($D->Articulo), 0, 60, ""),
+                            mb_strimwidth(utf8_decode($D->Articulo), 0, 50, ""),
                             utf8_decode($D->Unidad),
                             '$' . number_format($D->Costo, 2, ".", ","),
                             number_format($D->Existencia, 2, ".", ","),
@@ -757,7 +757,7 @@ class CapturaInventarios extends CI_Controller {
                     }
                 }
                 $pdf->SetX(85);
-                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetFont('Calibri', 'B', 7.5);
                 $pdf->Cell(25, 4, 'Total costeo por Grupo:', 0/* BORDE */, 0, 'L');
 
                 $pdf->Row(array(
@@ -771,7 +771,7 @@ class CapturaInventarios extends CI_Controller {
             }
 
             $pdf->SetX(85);
-            $pdf->SetFont('Calibri', 'B', 8);
+            $pdf->SetFont('Calibri', 'B', 7.5);
             $pdf->Cell(25, 4, 'Total costeo general:', 0/* BORDE */, 0, 'L');
 
             $pdf->Row(array(

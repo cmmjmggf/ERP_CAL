@@ -292,7 +292,7 @@ class PDF_CostoInv extends FPDF {
         $anchos = array(15/* 0 */, 70/* 1 */, 12/* 2 */, 25/* 3 */, 25/* 4 */, 25/* 5 */);
         $aligns = array('R', 'L', 'C', 'R', 'R', 'R');
 
-        $this->SetY(20);
+        $this->SetY(17);
         $this->SetX(15);
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
@@ -329,7 +329,7 @@ class PDF_CostoInv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 4 * $nb;
+        $h = 3.5 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
@@ -347,7 +347,7 @@ class PDF_CostoInv extends FPDF {
             //Draw the border
             //$this->Rect($x, $y, $w, $h);
             //Print the text
-            $this->MultiCell($w, 4, $data[$i], $border, $a);
+            $this->MultiCell($w, 3.5, $data[$i], $border, $a);
             //Put the position to the right of the cell
             $this->SetXY($x + $w, $y);
         }
