@@ -9,84 +9,81 @@
             </div>
         </div>
         <div class="card-block">
-            <div class="table-responsive" id="tblRegistros"></div>
+            <div class="" id="tblRegistros"></div>
         </div>
     </div>
 </div>
 <!--GUARDAR-->
-<div class="card border-0 m-3  d-none" id="pnlDatos">
+<div class="card border-0 m-3 d-none" id="pnlPrincipal">
     <div class="card-body text-dark">
-        <form id="frmNuevo">
-            <div class="row">
-                <div class="col-md-4 float-left">
-                    <legend class="float-left">Semanas <strong id="lAno"></strong></legend>
+        <div class="d-none" id="pnlDatos">
+            <form id="frmNuevo">
+                <div class="row">
+                    <div class="col-md-4 float-left">
+                        <legend class="float-left">Semanas <strong id="lAno"></strong></legend>
+                    </div>
+                    <div class="col-md-4 float-right">
+
+                    </div>
+                    <div class="col-md-4 float-right" align="right">
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelar"><span class="fa fa-arrow-left"></span> REGRESAR </button>
+                        <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar" ><span class="fa fa-trash"></span> ELIMINAR</button>
+                    </div>
                 </div>
-                <div class="col-md-4 float-right">
+                <div class="row" id="ControlesEncabezado">
+                    <div class="d-none">
+                        <input type="text" class="" id="ID" name="ID" >
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="Ano">Año*</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" id="Ano" name="Ano" required >
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="Sem">Fecha Inicio*</label>
+                        <input type="text" class="form-control form-control-sm notEnter" id="FechaIni" name="FechaIni" required >
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button"  class="btn btn-primary btn-sm mt-4" id="btnGenerarSemanas" >
+                            <i class="fa fa-plus"></i> GENERAR SEMANAS
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm mt-4" id="btnGuardar" >
+                            <i class="fa fa-save"></i> GUARDAR
+                        </button>
+                    </div>
+
 
                 </div>
-                <div class="col-md-4 float-right" align="right">
-                    <button type="button" class="btn btn-secondary btn-sm" id="btnCancelar"><span class="fa fa-arrow-left"></span> REGRESAR </button>
-                    <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar" ><span class="fa fa-trash"></span> ELIMINAR</button>
+            </form>
+        </div>
+        <hr>
+        <!--AGREGAR EXTRA-->
+        <div class="d-none" id="ControlesAgregarExtras">
+            <div class="row" >
+                <div class="col-sm-3">
+                    <label for="Sem">Semana*</label>
+                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Semana" name="Sem" required >
                 </div>
-            </div>
-            <div class="row" id="ControlesEncabezado">
-                <div class="d-none">
-                    <input type="text" class="" id="ID" name="ID" >
-                </div>
-                <div class="col-sm-4">
-                    <label for="Ano">Año*</label>
-                    <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" id="Ano" name="Ano" required >
-                </div>
-
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <label for="Sem">Fecha Inicio*</label>
-                    <input type="text" class="form-control form-control-sm notEnter" id="FechaIni" name="FechaIni" required >
+                    <input type="text" class="form-control form-control-sm notEnter" id="FechaI" name="FechaIni" required >
                 </div>
-                <div class="col-sm-4">
-                    <button type="button"  class="btn btn-primary btn-sm mt-4" id="btnGenerarSemanas" data-toggle="tooltip" data-placement="top" title="Generar Semanas" >
+                <div class="col-sm-3">
+                    <label for="Sem">Fecha Fin*</label>
+                    <input type="text" class="form-control form-control-sm notEnter" id="FechaF" name="FechaFin" required >
+                </div>
+                <div class="col-sm-3">
+                    <br>
+                    <button type="button"  class="btn btn-primary btn-sm" id="btnAgregarSemExtra" data-toggle="tooltip" data-placement="top" title="Agregar Semanas Extra" >
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
-                <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
-                    <i class="fa fa-save"></i>
-                </button>
-
-            </div>
-        </form>
-    </div>
-</div>
-
-<!--AGREGAR EXTRA-->
-<div class="card border-0 m-3 d-none" id="ControlesAgregarExtras">
-    <div class="card-body text-dark">
-        <div class="row" >
-            <div class="col-sm-3">
-                <label for="Sem">Semana*</label>
-                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="Semana" name="Sem" required >
-            </div>
-            <div class="col-sm-3">
-                <label for="Sem">Fecha Inicio*</label>
-                <input type="text" class="form-control form-control-sm notEnter" id="FechaI" name="FechaIni" required >
-            </div>
-            <div class="col-sm-3">
-                <label for="Sem">Fecha Fin*</label>
-                <input type="text" class="form-control form-control-sm notEnter" id="FechaF" name="FechaFin" required >
-            </div>
-            <div class="col-sm-3">
-                <br>
-                <button type="button"  class="btn btn-primary btn-sm" id="btnAgregarSemExtra" data-toggle="tooltip" data-placement="top" title="Agregar Semanas Extra" >
-                    <i class="fa fa-plus"></i>
-                </button>
             </div>
         </div>
-    </div>
-</div>
-
-<!--DETALLE-->
-<div class="card d-none m-3" id="pnlDatosDetalle">
-    <div class="card-body" >
-        <!--DETALLE NUEVO-->
-        <div class="row" >
+        <hr>
+        <!--DETALLE-->
+        <div class="d-none" id="pnlDatosDetalle">
+            <!--DETALLE NUEVO-->
             <div class="table-responsive" id="RegistrosDetalle">
                 <table id="tblDetalle" class="table table-sm" width="100%">
                     <thead>
@@ -102,11 +99,8 @@
                 </table>
 
             </div>
-
-        </div>
-        <!--FIN DETALLE NUEVO-->
-        <!--DETALLE EDITAR-->
-        <div class="row">
+            <!--FIN DETALLE NUEVO-->
+            <!--DETALLE EDITAR-->
             <div class="table-responsive d-none" id="RegistrosDetalleE">
                 <table id="tblRegistrosDetalle" class="table table-sm" width="100%">
                     <thead>
@@ -120,13 +114,14 @@
                     </tbody>
                 </table>
             </div>
+            <!--FIN DETALLE EDITAR-->
         </div>
-        <!--FIN DETALLE EDITAR-->
     </div>
 </div>
 <!--SCRIPT-->
 <script>
     var master_url = base_url + 'index.php/Semanas/';
+    var pnlPrincipal = $("#pnlPrincipal");
     var pnlDatos = $("#pnlDatos");
     var pnlDatosDetalle = $("#pnlDatosDetalle");
     var pnlTablero = $("#pnlTablero");
@@ -316,7 +311,7 @@
             if ($.fn.DataTable.isDataTable('#tblRegistrosDetalle')) {
                 RegistrosDetalleE.clear().draw();
             }
-
+            pnlPrincipal.removeClass('d-none');
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
             pnlDatosDetalle.removeClass('d-none');
@@ -336,6 +331,7 @@
             pnlTablero.removeClass("d-none");
             pnlDatosDetalle.addClass('d-none');
             pnlDatos.addClass('d-none');
+            pnlPrincipal.addClass('d-none');
             nuevo = true;
         });
         btnAgregarSemExtra.click(function () {
@@ -402,6 +398,7 @@
 
                             pnlDatos.addClass("d-none");
                             pnlDatosDetalle.addClass("d-none");
+                            pnlPrincipal.addClass('d-none');
                             pnlTablero.removeClass("d-none");
                             $('#ControlesAgregarExtras').addClass("d-none");
                             getRecords();
@@ -501,6 +498,7 @@
                             pnlDatos.find('#lAno').text(dtm.Ano);
                             getSemanasNominaByAno(temp);
                             pnlDatosDetalle.removeClass('d-none');
+                            pnlPrincipal.removeClass('d-none');
                             $('#ControlesEncabezado').addClass("d-none");
                             $('#RegistrosDetalle').addClass("d-none");
                             $('#RegistrosDetalleE').removeClass("d-none");
@@ -587,4 +585,13 @@
 
 
 
-
+<style>
+    .slim{
+        height:17px;
+        width: 100px !important;
+        font-size: 0.74rem !important;
+    }
+    #pnlDatosDetalle table tbody tr  {
+        font-size: 0.72rem !important;
+    }
+</style>

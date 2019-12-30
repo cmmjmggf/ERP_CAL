@@ -5,22 +5,32 @@
                 <legend class="float-left">Fichas Técnicas</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
+                <button type="button" class="btn btn-primary" id="btnNuevo"><span class="fa fa-plus"></span> CAPTURA NUEVA F.T.</button>
             </div>
         </div>
+        <hr>
         <div class="card-block">
-            <div class="table-responsive" id="FichaTecnica">
-                <table id="tblFichaTecnica" class="table table-sm display " style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>EstiloId</th>
-                            <th>ColorId</th>
-                            <th>Estilo</th>
-                            <th>Color</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <div class="row">
+                <div class="col-1" >
+                    <label for="" >Estilo</label>
+                    <input type="text" class="form-control form-control-sm " maxlength="7"  id="bEstilo" name="bEstilo"   >
+                </div>
+                <div class="col-4" >
+                    <label>Color</label>
+                    <div class="row">
+                        <div class="col-3">
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="bColor" name="bColor" maxlength="2" required="">
+                        </div>
+                        <div class="col-9">
+                            <select id="sbColor" name="sbColor" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3" >
+                    <button type="button" class="btn btn-info btn-sm mt-4" id="btnBuscarFT">ACEPTAR</button>
+                </div>
             </div>
         </div>
     </div>
@@ -50,7 +60,7 @@
                 </div>
 
             </div>
-
+            <hr>
             <div class=" row">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center my-2">
                     <button type="button" class="btn btn-info-blue btn-sm my-1" id="btnColor" >
@@ -100,17 +110,24 @@
                     </button>
                 </div>
 
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4">
-                    <label for="Estilo">Estilo*</label>
-                    <select class="form-control form-control-sm required " id="Estilo" name="Estilo" required>
-                    </select>
+                <div class="col-1" >
+                    <label for="" >Estilo</label>
+                    <input type="text" class="form-control form-control-sm " maxlength="7"  id="Estilo" name="Estilo"   >
                 </div>
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4">
-                    <label for="Color">Color*</label>
-                    <select class="form-control form-control-sm required " id="Color" name="Color" required>
-                    </select>
+                <div class="col-4" >
+                    <label>Color</label>
+                    <div class="row">
+                        <div class="col-3">
+                            <input type="text" class="form-control form-control-sm  numbersOnly " id="Color" name="Color" maxlength="2" required="">
+                        </div>
+                        <div class="col-9">
+                            <select id="sColor" name="sColor" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="col-2">
                     <label for="FechaAlta">Fecha de alta</label>
                     <input type="text" class="form-control form-control-sm notEnter" id="FechaAlta" name="FechaAlta"  >
                 </div>
@@ -154,7 +171,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <button type="button" id="btnAgregar" class="btn btn-primary mt-4"><span class="fa fa-save"></span></button>
+                            <button type="button" id="btnAgregar" class="btn btn-primary mt-4"><span class="fa fa-check"></span> ACEPTAR</button>
                         </div>
                     </div>
                 </div>
@@ -301,8 +318,6 @@
 
     var tblFichaTecnicaDetalle = pnlDetalle.find('#tblFichaTecnicaDetalle');
     var FichaTecnicaDetalle;
-    var tblFichaTecnica = $('#tblFichaTecnica');
-    var FichaTecnica;
     var mdlEditarArticulo = $('#mdlEditarArticulo');
     var btnEditarRenglon = mdlEditarArticulo.find('#btnEditarRenglon');
     var FechaAlta = pnlDatos.find("#FechaAlta");
@@ -363,11 +378,7 @@
                     message: 'Trabajando en ello... por favor espere'
                 });
                 $.post('<?php print base_url('FichaTecnica/getFichaTecnicaFija'); ?>', {ESTILO: Estilo.val(), COLOR: Color.val()}).done(function (a) {
-                    var dtm = {
-                        EstiloId: Estilo.val(),
-                        ColorId: Color.val()
-                    };
-                    getFichaTecnicaByEstiloByColor(dtm);
+                    getFichaTecnicaByEstiloByColor(Estilo.val(), Color.val());
                     btnAdicionaMaterialFijo.attr('disabled', true);
                     swal('ATENCIÓN', 'SE HA GUARDADO LA FICHA TECNICA CON LOS MATERIALES FIJOS', 'success').then((value) => {
                         pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
@@ -403,21 +414,6 @@
                         console.info('done!');
                     },
                     afterClose: function () {
-                        HoldOn.open({
-                            theme: 'sk-rect',
-                            message: 'Espere...'
-                        });
-                        $.when($.getJSON(master_url + 'getEstilos').done(function (data, x, jq) {
-                            pnlDatos.find("#Estilo")[0].selectize.clear(true);
-                            $.each(data, function (k, v) {
-                                pnlDatos.find("#Estilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-                            });
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                        })).done(function (a) {
-                            HoldOn.close();
-                            onNotifyOld('<span><span>', 'SE HAN ACTUALIZADO LOS ESTILOS', 'info');
-                        });
                     },
                     iframe: {
                         // Iframe template
@@ -524,8 +520,7 @@
             load: Selectizer.loadOptions
         });
         validacionSelectPorContenedor(pnlDatos);
-        setFocusSelectToSelectOnChange('#Estilo', '#Color', pnlDatos);
-        setFocusSelectToInputOnChange('#Color', '#FechaAlta', pnlDatos);
+        setFocusSelectToInputOnChange('#sColor', '#FechaAlta', pnlDatos);
         setFocusSelectToSelectOnChange('#Pieza', '#Articulo', pnlDatos);
         setFocusSelectToInputOnChange('#Articulo', '#PzXPar', pnlDatos);
         pnlDatos.find("#FechaAlta").inputmask({alias: "date"});
@@ -548,23 +543,71 @@
                 });
             }
         });
-        pnlDatos.find("[name='Estilo']").change(function () {
-            if (nuevo) {
-                pnlDatos.find("[name='Color']")[0].selectize.clear(true);
-                pnlDatos.find("[name='Color']")[0].selectize.clearOptions();
-                temp = $(this).val();
-                getColoresXEstilo($(this).val());
-                getFotoXEstilo($(this).val());
+        pnlDatos.find("[name='Estilo']").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var estilo = $(this).val();
+                if (estilo) {
+                    if (nuevo) {
+                        $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {Clave: estilo}).done(function (data, x, jq) {
+                            if (data.length > 0) {
+
+
+                                pnlDatos.find("[name='sColor']")[0].selectize.clear(true);
+                                pnlDatos.find("[name='sColor']")[0].selectize.clearOptions();
+                                temp = estilo;
+                                getColoresXEstilo(estilo);
+                                getFotoXEstilo(estilo);
+                            } else {
+                                swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                                    pnlDatos.find("[name='Estilo']").val('').focus();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                        });
+                    }
+                }
             }
         });
-        pnlDatos.find("[name='Color']").change(function () {
-            if (nuevo) {
-                onComprobarExisteEstiloColor(pnlDatos.find("[name='Estilo']").val(), $(this).val());
-                btnAdicionaMaterialFijo.attr('disabled', true);
-            } else {
-                btnAdicionaMaterialFijo.attr('disabled', false);
+
+        pnlDatos.find("#Color").keydown(function (e) {
+            if (e.keyCode === 13) {
+                var Color = $(this).val();
+                var Estilo = pnlDatos.find("#Estilo").val();
+                if (Color) {
+                    $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarEstiloColor', {Color: Color, Estilo: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            pnlDatos.find("#sColor")[0].selectize.addItem(Color, true);
+                            if (nuevo) {
+                                onComprobarExisteEstiloColor(Estilo, Color);
+                                btnAdicionaMaterialFijo.attr('disabled', true);
+                            } else {
+                                btnAdicionaMaterialFijo.attr('disabled', false);
+                            }
+                        } else {
+                            swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
+                                pnlDatos.find('#Color').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
             }
         });
+        pnlDatos.find("#sColor").change(function () {
+            var color = $(this).val();
+            if (color) {
+                pnlDatos.find("#Color").val(color);
+                if (nuevo) {
+                    onComprobarExisteEstiloColor(pnlDatos.find("[name='Estilo']").val(), color);
+                    btnAdicionaMaterialFijo.attr('disabled', true);
+                } else {
+                    btnAdicionaMaterialFijo.attr('disabled', false);
+                }
+            }
+        });
+
         btnEliminar.click(function () {
             if (temp !== 0 && temp !== undefined && temp > 0) {
                 swal({
@@ -578,7 +621,6 @@
                     if (action) {
                         $.post(master_url + 'onEliminar', {ID: temp}).done(function (data, x, jq) {
                             onNotify('<span class="fa fa-exclamation fa-lg"></span>', 'REIGISTRO ELIMINADO', 'danger');
-                            getRecords();
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         }).always(function () {
@@ -591,24 +633,34 @@
             }
         });
         btnNuevo.click(function () {
-            onBeep(1);
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass('d-none');
             pnlDatos.find("input").val("");
             pnlControlesDetalle.find("input").val("");
             pnlControlesDetalle.removeClass('d-none');
             pnlDetalle.find("#tblFichaTecnicaDetalle tbody").html('');
-            Estilo[0].selectize.enable();
-            Color[0].selectize.enable();
+            Estilo.attr('readonly', false);
+            Color.attr('readonly', false);
+            pnlDatos.find("[name='sColor']")[0].selectize.enable();
+
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
-            $(':input:text:enabled:visible:first').focus();
+            pnlDatos.find("#Estilo").focus();
             nuevo = true;
             if ($.fn.DataTable.isDataTable('#tblFichaTecnicaDetalle')) {
                 FichaTecnicaDetalle.clear().draw();
             }
-            pnlDatos.find("#Estilo")[0].selectize.focus();
+
+            btnEliminarFT.removeClass('d-none');
+            btnAgregar.removeClass('d-none');
+            btnAdicionaMaterialFijo.removeClass('d-none');
+            btnSuplePZAFT.removeClass('d-none');
+            btnSupleMaFT.removeClass('d-none');
+            btnSupleMaXLinFTLinea.removeClass('d-none');
+            btnActualizaConsumoEstiloFT.removeClass('d-none');
+            btnArtConsumoXEstiloColor.removeClass('d-none');
+            btnAdicionaMatXLin.removeClass('d-none');
             pnlDatos.find("#FechaAlta").prop("readonly", false);
             FechaAlta.val(hoy);
         });
@@ -617,6 +669,7 @@
             pnlDatos.addClass('d-none');
             pnlDetalle.addClass('d-none');
             validaSelect = false;
+            pnlTablero.find("#bEstilo").focus().select();
         });
         btnEditarRenglon.click(function () {
             isValid('mdlEditarArticulo');
@@ -639,19 +692,90 @@
                 });
             }
         });
-        getRecords();
-        getEstilos();
+
         getPiezas();
         getArticulos();
-        handleEnterDiv(pnlTablero);
+
+        pnlTablero.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        pnlDatos.find("select").selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+
+        pnlTablero.find('#bEstilo').focus();
         handleEnterDiv(pnlDatos);
         handleEnterDiv(pnlControlesDetalle);
         handleEnterDiv(mdlEditarArticulo);
 
+        pnlTablero.find("#bEstilo").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Estilo = $(this).val();
+                if (Estilo) {
+                    $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {Clave: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sbColor")[0].selectize.clear(true);
+                            pnlTablero.find("#sbColor")[0].selectize.clearOptions();
+                            getColoresXEstiloIni(Estilo);
+                            pnlTablero.find("#bColor").focus().select();
+                        } else {
+                            swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#bEstilo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+
+        pnlTablero.find("#bColor").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Color = $(this).val();
+                var Estilo = pnlTablero.find("#bEstilo").val();
+                if (Color) {
+                    $.getJSON(base_url + 'index.php/FichaTecnicaCompra/onComprobarEstiloColor', {Color: Color, Estilo: Estilo}).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            pnlTablero.find("#sbColor")[0].selectize.addItem(Color, true);
+                            pnlTablero.find("#btnBuscarFT").focus();
+                        } else {
+                            swal('ERROR', 'EL COLOR NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#bColor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+        pnlTablero.find("#sbColor").change(function () {
+            if ($(this).val()) {
+                pnlTablero.find("#bColor").val($(this).val());
+                pnlTablero.find("#btnBuscarFT").focus();
+            }
+        });
+
+        pnlTablero.find("#btnBuscarFT").click(function () {
+            var estilo = pnlTablero.find("#bEstilo").val();
+            var color = pnlTablero.find("#bColor").val();
+            getFichaTecnicaByEstiloByColor(estilo, color);
+        });
 
     });
 
-
+    function getColoresXEstiloIni(Estilo) {
+        $.getJSON(base_url + 'index.php/FichaTecnicaCompra/getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                pnlTablero.find("#sbColor")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        });
+    }
     function getFichaTecnicaDetalleByID(Estilo, Color) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblFichaTecnicaDetalle')) {
@@ -759,7 +883,7 @@
             "scrollCollapse": true,
             "bSort": true,
             "keys": true,
-            order: [[10, 'asc']],
+            order: [[10, 'asc'], [3, 'asc']],
             rowGroup: {
                 endRender: function (rows, group) {
                     var stc = $.number(rows.data().pluck('Consumo').reduce(function (a, b) {
@@ -805,92 +929,39 @@
     function onEliminarArticuloFijo(e) {
         FichaTecnicaDetalle.row(e).remove();
     }
-    function getRecords() {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
-        temp = 0;
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblFichaTecnica')) {
-            tblFichaTecnica.DataTable().destroy();
-        }
-        FichaTecnica = tblFichaTecnica.DataTable({
-            "dom": 'Bfrtip',
-            buttons: buttons,
-            "ajax": {
-                "url": master_url + 'getRecords',
-                "dataType": "json",
-                "type": 'POST',
-                "dataSrc": ""
-            },
-            "columns": [
-                {"data": "EstiloId"},
-                {"data": "ColorId"},
-                {"data": "Estilo"},
-                {"data": "Color"}
-            ],
-            "columnDefs": [
-                {
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [1],
-                    "visible": false,
-                    "searchable": false
-                }],
-            language: lang,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 20,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            keys: true,
-            "bSort": true,
-            "aaSorting": [
-                [0, 'desc']/*ID*/
-            ],
-            "initComplete": function (x, y) {
-                HoldOn.close();
-            }
-        });
-        $('#tblFichaTecnica_filter input[type=search]').focus();
-        tblFichaTecnica.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            nuevo = false;
-            tblFichaTecnica.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = FichaTecnica.row(this).data();
-            getFichaTecnicaByEstiloByColor(dtm);
-        });
-    }
 
-    function getFichaTecnicaByEstiloByColor(dtm) {
-        $.getJSON(master_url + 'getFichaTecnicaByEstiloByColor', {Estilo: dtm.EstiloId, Color: dtm.ColorId}).done(function (data, x, jq) {
-            pnlDatos.find("input").val("");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
-            });
-            Estilo[0].selectize.disable();
-            Color[0].selectize.disable();
-            pnlDatos.find("#FechaAlta").prop("readonly", true);
-            $.getJSON(master_url + 'getColoresXEstilo', {Estilo: dtm.EstiloId}).done(function (data, x, jq) {
-                $.each(data, function (k, v) {
-                    pnlDatos.find("[name='Color']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+
+    function getFichaTecnicaByEstiloByColor(estilo, color) {
+        $.getJSON(master_url + 'getFichaTecnicaByEstiloByColor', {Estilo: estilo, Color: color}).done(function (data, x, jq) {
+            if (data.length > 0) {
+                pnlDatos.find("input").val("");
+                $.each(pnlDatos.find("select"), function (k, v) {
+                    pnlDatos.find("select")[k].selectize.clear(true);
                 });
-                pnlDatos.find("[name='Color']")[0].selectize.addItem(dtm.ColorId, true);
-            }).fail(function (x, y, z) {
-                getError(x);
-            }).always(function () {
-            });
-            pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
-            onVerificarEstiloCerradoCostos(dtm.EstiloId, dtm.ColorId);
-            getFotoXEstilo(dtm.EstiloId);
-            pnlTablero.addClass("d-none");
-            pnlDetalle.removeClass('d-none');
-            pnlControlesDetalle.removeClass('d-none');
-            pnlDatos.removeClass('d-none');
-            pnlControlesDetalle.find("[name='Pieza']")[0].selectize.focus();
+                Estilo.attr('readonly', true);
+                Color.attr('readonly', true);
+                pnlDatos.find("[name='sColor']")[0].selectize.disable();
+                pnlDatos.find("#FechaAlta").prop("readonly", true);
+                $.getJSON(master_url + 'getColoresXEstilo', {Estilo: estilo}).done(function (data, x, jq) {
+                    $.each(data, function (k, v) {
+                        pnlDatos.find("[name='sColor']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                    });
+                    pnlDatos.find("[name='sColor']")[0].selectize.addItem(color, true);
+                }).fail(function (x, y, z) {
+                    getError(x);
+                }).always(function () {
+                });
+                pnlDatos.find("#Estilo").val(data[0].Estilo);
+                pnlDatos.find("#Color").val(data[0].Color);
+                pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
+                onVerificarEstiloCerradoCostos(estilo, color);
+
+            } else {
+                swal('ATENCIÓN', 'ESTILO NO TIENE FICHA TÉCNICA CAPTURADA, CAPTURE UNA NUEVA', 'warning').then((value) => {
+                    //Acciones
+                    btnNuevo.focus();
+                });
+            }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
@@ -914,9 +985,17 @@
                     btnAdicionaMatXLin.addClass('d-none');
                     swal('ESTILO BLOQUEADO', 'PARA MODIFICAR SU FICHA TÉCNICA, CONSULTE AL ING. MARCOS O LA SRA. LAURA CUEVAS PARA DESBLOQUEARLO', 'warning').then((value) => {
                         //Acciones
+                        getFotoXEstilo(estilo);
+                        pnlTablero.addClass("d-none");
+                        pnlDetalle.removeClass('d-none');
+                        pnlControlesDetalle.addClass('d-none');
+                        pnlDatos.removeClass('d-none');
+
+                        getFichaTecnicaDetalleByID(estilo, color);
+
                     });
                 } else {
-                    getFichaTecnicaDetalleByID(estilo, color);
+
                     btnEliminarFT.removeClass('d-none');
                     btnAgregar.removeClass('d-none');
                     btnAdicionaMaterialFijo.removeClass('d-none');
@@ -926,17 +1005,15 @@
                     btnActualizaConsumoEstiloFT.removeClass('d-none');
                     btnArtConsumoXEstiloColor.removeClass('d-none');
                     btnAdicionaMatXLin.removeClass('d-none');
+
+                    getFotoXEstilo(estilo);
+                    pnlTablero.addClass("d-none");
+                    pnlDetalle.removeClass('d-none');
+                    pnlControlesDetalle.removeClass('d-none');
+                    pnlDatos.removeClass('d-none');
+                    getFichaTecnicaDetalleByID(estilo, color);
                 }
             }
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-    }
-    function getEstilos() {
-        $.getJSON(master_url + 'getEstilos').done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                pnlDatos.find("#Estilo")[0].selectize.addOption({text: v.Estilo, value: v.Clave});
-            });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });
@@ -965,14 +1042,14 @@
     }
 
     function getColoresXEstilo(Estilo) {
-        $.getJSON(master_url + 'getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
+        $.getJSON(base_url + 'index.php/FichaTecnicaCompra/getColoresXEstilo', {Estilo: Estilo}).done(function (data, x, jq) {
             $.each(data, function (k, v) {
-                pnlDatos.find("[name='Color']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                pnlDatos.find("[name='sColor']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
-            pnlDatos.find("#Color")[0].selectize.focus();
+            pnlDatos.find("#Color").focus();
         });
     }
 
@@ -981,8 +1058,6 @@
             if (data.length > 0) {
                 var dtm = data[0];
                 var vp = pnlDetalle.find("#VistaPrevia");
-
-
                 var esf = '<?php print base_url('uploads/Estilos/esf.jpg'); ?>';
                 $.ajax({
                     url: base_url + dtm.Foto,
@@ -1006,10 +1081,6 @@
                         }
                     }
                 });
-
-
-
-
             }
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1020,14 +1091,22 @@
     function onComprobarExisteEstiloColor(Estilo, Color) {
         $.getJSON(master_url + 'onComprobarExisteEstiloColor', {Estilo: Estilo, Color: Color}).done(function (data, x, jq) {
             if (parseInt(data[0].EXISTE) > 0) {
-                onNotify('<span class="fa fa-exclamation fa-lg"></span>', 'EL ESTILO YA HA SIDO CAPTURADO', 'danger');
-                pnlDatos.find("[name='Estilo']")[0].selectize.clear();
-                //pnlDatos.find("[name='Color']")[0].selectize.focus();
-                btnAdicionaMaterialFijo.attr('disabled', true);
+                swal('ATENCIÓN', 'EL ESTILO YA HA SIDO CAPTURADO', 'warning').then((value) => {
+                    pnlDatos.find("[name='Estilo']").val('');
+                    pnlDatos.find("[name='Color']").val('');
+                    pnlDatos.find("[name='sColor']")[0].selectize.clear(true);
+                    btnAdicionaMaterialFijo.attr('disabled', true);
+                    pnlDatos.find("[name='Estilo']").focus();
+
+                });
+
             } else {
                 btnAdicionaMaterialFijo.attr('disabled', false);
                 getFotoXEstilo(Estilo);
+                pnlDatos.find("[name='Pieza']")[0].selectize.focus();
+                pnlDatos.find("[name='Pieza']")[0].selectize.open();
             }
+
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
@@ -1075,11 +1154,11 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     if (nuevo) {
-                        Estilo[0].selectize.disable();
-                        Color[0].selectize.disable();
+                        Estilo.attr('readonly', true);
+                        Color.attr('readonly', true);
+                        pnlDatos.find("[name='sColor']")[0].selectize.disable();
                         pnlDetalle.removeClass('d-none');
                         nuevo = false;
-                        FichaTecnica.ajax.reload();
                         getFichaTecnicaDetalleByID(Estilo.val(), Color.val());
                     } else {
                         FichaTecnicaDetalle.ajax.reload();
@@ -1164,5 +1243,8 @@
         color: #fff;
         background-color: #3F51B5 !important;
         border-color: #3F51B5 !important;
+    }
+    table tbody tr  {
+        font-size: 0.70rem !important;
     }
 </style>

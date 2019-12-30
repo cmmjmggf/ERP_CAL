@@ -108,7 +108,7 @@ class SemanasNomina_model extends CI_Model {
     public function getSemanasNominaByAno($Ano) {
         try {
             $this->db->select(""
-                    . "CONCAT('<input type=''text'' id=''#Sem'' onkeypress= ''validate(event, this.value);'' class=''form-control form-control-sm numbersOnly'' onpaste= ''return false;''  value=''', U.Sem ,''' onchange=''onModificarSemanaXID(this.value,',U.ID ,')'' />') AS 'NoSem',  "
+                    . "CONCAT('<input type=''text'' id=''#Sem'' onkeypress= ''validate(event, this.value);'' class=''form-control form-control-sm numbersOnly slim'' onpaste= ''return false;''  value=''', U.Sem ,''' onchange=''onModificarSemanaXID(this.value,',U.ID ,')'' />') AS 'NoSem',  "
                     . "U.FechaIni AS 'FechaInicio', "
                     . "U.FechaFin AS 'FechaFin' "
                     . " ", false);

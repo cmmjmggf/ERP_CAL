@@ -52,7 +52,7 @@ class FichaTecnicaCompra extends CI_Controller {
                                     ->from('colores AS C')
                                     ->where('C.Estilo', $this->input->get('Estilo'))
                                     ->where('C.Estatus', 'ACTIVO')
-                                    ->order_by('ID', 'ASC')
+                                    ->order_by('Descripcion', 'ASC')
                                     ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
