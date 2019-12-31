@@ -51,7 +51,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
 
             $UUID = '';
             if ($Tp === '1') {
-                $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
+                $UUID = $this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Docto and Tipo = 'I' ")->result()[0]->uuid;
             }
             if ($Tipo === '1') {//PRODUCCIÓN, SACA LO QUE HABIA EN FACTURACIÓN PARA REGRESARLO A TERMINADO Y QUE SE PUEDAN VOLVER A FACTURAR
                 $Facturacion = $this->db->query("select * from facturacion where factura = $Docto and cliente = $Cliente and tp = $Tp ")->result();

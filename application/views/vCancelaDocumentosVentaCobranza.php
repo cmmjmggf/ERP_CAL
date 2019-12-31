@@ -239,9 +239,13 @@
                                 });
                             } else {
                                 swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
-                                    onImprimirReporteFancyAFC(data, function (a, b) {
+                                    if (pnlTablero.find("#Tp").val() === '1') {
                                         init();
-                                    });
+                                    } else {
+                                        onImprimirReporteFancyAFC(data, function (a, b) {
+                                            init();
+                                        });
+                                    }
                                 });
                             }
                             onCloseOverlay();

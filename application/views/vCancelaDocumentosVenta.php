@@ -219,9 +219,13 @@
                                 });
                             } else {
                                 swal('CANCELACIÓN CORRECTA', 'El documento se ha cancelado correctamente', 'success').then((value) => {
-                                    var tp = pnlTablero.find("#Tp").val();
-                                    var reporte = (tp === '1') ? 'onImprimirReporteNotaCreditoTp1' : 'onImprimirReporteNotaCreditoTp2';
-                                    onImprimirReporteNotaCredito(tp, pnlTablero.find("#NC").val(), pnlTablero.find("#Cliente").val(), reporte);
+                                    if (pnlTablero.find("#Tp").val() === '1') {
+                                        init();
+                                    } else {
+                                        onImprimirReporteFancyAFC(data, function (a, b) {
+                                            init();
+                                        });
+                                    }
                                 });
                             }
                         }).fail(function (x, y, z) {

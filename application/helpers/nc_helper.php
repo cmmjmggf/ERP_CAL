@@ -75,7 +75,7 @@ class NotaDeCredito {
                                         join clientes ct on ct.clave= nc.cliente
                                         join agentes ag on ag.clave= ct.agente
                                         join estados edo on edo.clave= ct.estado
-                                        join comprobantes c on c.Numero = nc.nc
+                                        join comprobantes c on c.Folio = nc.nc and c.tipo = 'E'
                                         where nc.cliente= $Cliente
                                         and nc.tp = $Tp
                                         and nc.nc = $Folio ")->result();
@@ -110,7 +110,7 @@ class NotaDeCredito {
                 $pdf->SetX(5);
                 $pdf->Cell(20, 3, number_format($D->cant, 2, ".", ","), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(20, 3, utf8_decode('9999'), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(20, 3, utf8_decode('DPPP'), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
                 $pdf->Cell(80, 3, utf8_decode($D->descripcion), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
@@ -124,9 +124,9 @@ class NotaDeCredito {
 
                 $pdf->SetFont('Calibri', 'B', 6.5);
                 $pdf->SetX(5);
-                $pdf->Cell(50, 3, utf8_decode('Clave Producto:' . ' ' . '53111802 Sandalias para mujer'), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(50, 3, utf8_decode('Clave Producto:' . ' ' . '84111506 Servicios de Facturación'), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(40, 3, utf8_decode('Clave Unidad: PR Par'), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(40, 3, utf8_decode('Clave Unidad: ACT Actividad'), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
                 $pdf->SetFont('Calibri', '', 6.5);
                 $pdf->Cell(50, 3, utf8_decode($D->uuid_aplica), 0/* BORDE */, 0, 'R');

@@ -62,7 +62,7 @@
             if (e.keyCode === 13) {
                 var tp = parseInt($(this).val());
                 if (tp === 1 || tp === 2) {
-                    mdlReimprimeNotaCredito.find('#Cliente').focus();
+                    mdlReimprimeNotaCredito.find('#Cliente').focus().select();
                 } else {
                     swal({
                         title: "ATENCIÓN",

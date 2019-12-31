@@ -1,4 +1,4 @@
-<style> 
+<style>
     .sticky-top {
         position: -webkit-sticky;
         position: sticky;
@@ -420,50 +420,54 @@
             background-size: 36px 36px !important;
     }
 
-    .blinkb{ 
+    .blinkb{
         border: 2px solid #ffffff;
         border-radius: 5px;
         -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
-        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        animation: myfirst 1.5s linear 0.5s infinite alternate;
         box-shadow: 0 0px 12px  #03A9F4;
     }
 
     /* Safari 4.0 - 8.0 */
-    @-webkit-keyframes myfirst { 
-        25%  { 
-            border-color:  #007bff; 
+    @-webkit-keyframes myfirst {
+        25%  {
+            border-color:  #007bff;
         }
-        50%  {  
-            border-color:  #ffffff; 
+        50%  {
+            border-color:  #ffffff;
         }
-        75%  {  
-            border-color:  #007bff; 
+        75%  {
+            border-color:  #007bff;
         }
-        100% {  
-            border-color:  #ffffff; 
+        100% {
+            border-color:  #ffffff;
         }
     }
 
     /* Standard syntax */
     @keyframes myfirst {
-        0%   { 
-            border-color:  #007bff; 
+        0%   {
+            border-color:  #007bff;
         }
-        25%  { 
-            border-color:  #ffffff; 
+        25%  {
+            border-color:  #ffffff;
         }
-        50%  { 
-            border-color:  #007bff; 
+        50%  {
+            border-color:  #007bff;
         }
         75%  {
-            border-color:  #ffffff; 
+            border-color:  #ffffff;
         }
         100% {
-            border-color:  #007bff; 
+            border-color:  #007bff;
         }
-    } 
+    }
     .modal-content{
-        border: 2px solid #263238 !important;          
+        border: 2px solid #263238 !important;
         filter: drop-shadow(0 0 0.75rem #000);
+    }
+
+    table tbody tr  {
+        font-size: 0.72rem !important;
     }
 </style>

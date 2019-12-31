@@ -64,7 +64,7 @@ class CancelaDocumentosVenta extends CI_Controller {
 
                     if ($Timbrada === '0') {//Traemos el UUID
                         if ($Tp === '1') {
-                            $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
+                            $UUID = $this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Docto and Tipo = 'I' ")->result()[0]->uuid;
                         }
                     }
 
@@ -137,7 +137,7 @@ class CancelaDocumentosVenta extends CI_Controller {
 
                     if ($Timbrada === '0') {//Traemos el UUID
                         if ($Tp === '1') {
-                            $UUID = $this->db->query("SELECT uuid FROM cfdifa  WHERE factura = $Docto and numero = $Tp ")->result()[0]->uuid;
+                            $UUID = $this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Docto and Tipo = 'I' ")->result()[0]->uuid;
                         }
                     }
 
@@ -279,12 +279,9 @@ class CancelaDocumentosVenta extends CI_Controller {
                 }
 
                 if ($Tp === '1') {
-                    //Timbramos la nota de crédito
-                    //Se manda llamar el exe de timbrado
-                    /*                     * ************ TimbrarNC.exe *********** */
                     if ($Timbrada === '0') {//Se ejecuta la cancelación en el SAT de la factura
                         //Verificamos que la factura esté realizada en el sistema
-                        $CfdiFa = $this->db->query("SELECT uuid FROM cfdifa WHERE factura = $Docto ")->result();
+                        $CfdiFa = $this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Docto and Tipo = 'I' ")->result();
 
                         if (empty($CfdiFa)) {
                             //Existe error en la generacion de la factura electronica
@@ -294,10 +291,9 @@ class CancelaDocumentosVenta extends CI_Controller {
                         } else {
                             $UUID = $CfdiFa[0]->uuid;
                             //Se ejecuta el programa de cancelación en el SAT
-                            //------------Aqui se ejecuta el cancelarSAT.exe----------
-                            //Editamos el acuse con la fecha de hoy
-                            $FechaHoy = Date('d/m/Y');
-                            $this->db->query("update cfdifa set acuse = '$FechaHoy' where factura = $Docto ");
+                            exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $Docto . ',I,S"');
+                            exec('schtasks /run /tn "Timbrar"  ');
+                            exec('schtasks /delete /tn "Timbrar" /F ');
                         }
                     }
                 }

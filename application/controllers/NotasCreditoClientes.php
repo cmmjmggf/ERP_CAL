@@ -217,7 +217,7 @@ class NotasCreditoClientes extends CI_Controller {
         try {
             $Remicion = $this->input->get('Remicion');
             $Tp = $this->input->get('Tp');
-            print json_encode($this->db->query("select uuid from cfdifa where Factura = $Remicion and numero = $Tp ")->result());
+            print json_encode($this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Remicion and Tipo = 'I'  ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

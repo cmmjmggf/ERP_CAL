@@ -163,8 +163,8 @@ class PagosConCincoDescuento extends CI_Controller {
             $Factura = $this->input->get('Factura');
             $tp = $this->input->get('Tp');
             print json_encode($this->db->query("select uuid "
-                                    . "from cfdifa "
-                                    . "where factura = $Factura and numero = $tp ")->result());
+                                    . "from comprobantes "
+                                    . "where Folio = $Factura and Tipo = 'I' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

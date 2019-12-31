@@ -449,19 +449,19 @@
                 {"data": "doctopa"},
                 {"data": "dias"}
             ],
-//            "columnDefs": [
-//                {
-//                    "targets": [0, 1],
-//                    "visible": false,
-//                    "searchable": true
-//                },
+            "columnDefs": [
+                {
+                    "targets": [0, 1],
+                    "visible": false,
+                    "searchable": true
+                },
 //                {
 //                    "targets": [4],
 //                    "render": function (data, type, row) {
 //                        return '$' + $.number(parseFloat(data), 2, '.', ',');
 //                    }
 //                }
-//            ],
+            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,

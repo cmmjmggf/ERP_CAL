@@ -515,6 +515,7 @@
         });
         btnCerrarNotaCredito.click(function () {
             var cliente = pnlTablero.find("#Cliente").val();
+            var totalconsinivaletra = (pnlTablero.find("#Tp").val() === '1') ? totalFinal * 1.16 : totalFinal;
             if (cliente !== '' && notcred > 0) {
                 swal({
                     buttons: ["Cancelar", "Aceptar"],
@@ -531,7 +532,7 @@
                             Cliente: pnlTablero.find("#Cliente").val(),
                             nc: notcred,
                             total: parseFloat(totalFinal).toFixed(2),
-                            totalletra: NumeroALetras(parseFloat(totalFinal).toFixed(2)),
+                            totalletra: NumeroALetras(parseFloat(totalconsinivaletra).toFixed(2)),
                             agente: txtagente,
                             fechacap: pnlTablero.find('#fechacap').val()
                         }).done(function (data) {
