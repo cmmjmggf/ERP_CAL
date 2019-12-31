@@ -81,7 +81,8 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
     public function getUUID() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT CFDI.uuid AS UUID FROM cfdifa AS CFDI WHERE CFDI.Factura = '{$x['DOCUMENTO']}'")->result());
+//            print json_encode($this->db->query("SELECT CFDI.uuid AS UUID FROM cfdifa AS CFDI WHERE CFDI.Factura = '{$x['DOCUMENTO']}'")->result());
+           print json_encode($this->db->query("SELECT CFDI.UUID AS UUID FROM comprobantes AS CFDI WHERE CFDI.Folio = '{$x['DOCUMENTO']}' AND CFDI.Tipo = 'I'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -89,8 +90,9 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
     public function getFacturaXNumero() {
         try {
-            print json_encode($this->db->query("SELECT * FROM cfdifa AS F WHERE F.Factura LIKE '{$this->input->get('FACTURA')}' AND F.numero = {$this->input->get('TP')}")->result());
-        } catch (Exception $exc) {
+//            print json_encode($this->db->query("SELECT * FROM cfdifa AS F WHERE F.Factura LIKE '{$this->input->get('FACTURA')}' AND F.numero = {$this->input->get('TP')}")->result());
+             print json_encode($this->db->query("SELECT CFDI.* AS UUID FROM comprobantes AS CFDI WHERE CFDI.Folio = '{$this->input->get('FACTURA')}' AND CFDI.Tipo = 'I'")->result());
+     } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }

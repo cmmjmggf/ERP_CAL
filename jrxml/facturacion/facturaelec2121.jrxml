@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec2121" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
 	<property name="ireport.zoom" value="1.8150000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="191"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -10,7 +10,6 @@
 	<parameter name="qrCode" class="java.lang.String"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<parameter name="certificado" class="java.lang.String"/>
-	<parameter name="RFC" class="java.lang.String"/>
 	<parameter name="rfctel" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT   CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD,
@@ -39,7 +38,7 @@ CT.NumeroDeProveedor AS NUMERODEPROVEEDOR_TIENDA, "" AS OBSERVACION,
 F.cantidad AS CANTIDAD, F.descripcion AS DESCRIPCION, F.claveproducto AS CLAVE_PRODUCTO, F.noidentificado AS NOIDENTIFICADO
 FROM facturadetalle AS F
 INNER JOIN clientes AS C ON   C.Clave = 2121
-LEFT JOIN cfdifa AS CFDI ON CFDI.Factura = F.numfac
+LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.numfac
 INNER JOIN consignatarios AS CT ON  CT.Cliente  = 2121 AND F.tienda = CT.Clave
 WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121;]]>
 	</queryString>
