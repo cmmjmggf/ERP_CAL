@@ -118,7 +118,8 @@ class PagosDeClientes extends CI_Controller {
     public function getUUID() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT CFDI.uuid AS UUID FROM cfdifa AS CFDI WHERE CFDI.Factura = '{$x['DOCUMENTO']}'")->result());
+//            print json_encode($this->db->query("SELECT CFDI.uuid AS UUID FROM cfdifa AS CFDI WHERE CFDI.Factura = '{$x['DOCUMENTO']}'")->result());
+           print json_encode($this->db->query("SELECT CFDI.UUID AS UUID FROM comprobantes AS CFDI WHERE CFDI.Folio = '{$x['DOCUMENTO']}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

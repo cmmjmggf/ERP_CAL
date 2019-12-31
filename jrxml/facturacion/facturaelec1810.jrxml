@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec1810" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="5.856400000000006"/>
-	<property name="ireport.x" value="2350"/>
-	<property name="ireport.y" value="500"/>
+	<property name="ireport.zoom" value="1.6963904734899404"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -52,7 +52,7 @@ END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOr
 F.pareped AS CANTIDAD,  F.hora AS HORA
 FROM facturacion AS F
 INNER JOIN clientes AS C ON   C.Clave = $P{CLIENTE}
-LEFT JOIN cfdifa AS CFDI ON CFDI.Factura = F.factura
+LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura
 WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIENTE};]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">

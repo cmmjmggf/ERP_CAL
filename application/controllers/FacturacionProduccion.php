@@ -530,10 +530,21 @@ class FacturacionProduccion extends CI_Controller {
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
 
-            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
-                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
-                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
+//            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
+//                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
+//                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
+//                    ->result();
+
+            $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
+                            . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
+                            . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
+                            . "C.EmisorRfc, C.ReceptorRfc, C.EmisorNombre, C.ReceptorNombre, "
+                            . "C.FormaPago, C.MetodoPago, C.UsoCfdi, C.Moneda, C.TipoCambio, "
+                            . "C.CertificadoSAT, C.CertificadoCFD, C.FechaTimbrado, C.CadenaOriginal, "
+                            . "C.selloSAT, C.selloCFD, C.CfdiTimbrado, C.Periodo "
+                            . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
                     ->result();
+
             $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
                             . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
 
@@ -547,7 +558,8 @@ class FacturacionProduccion extends CI_Controller {
 
                 $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
             } else {
-                $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE";
+                $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE  (QR ERROR)";
+                exit(0);
             }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -559,6 +571,7 @@ class FacturacionProduccion extends CI_Controller {
                     $pr["empresa"] = $this->session->EMPRESA_RAZON;
                     BREAK;
             }
+            $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
             switch (intval($x["TP"])) {
                 case 1:
                     switch (intval($x['CLIENTE'])) {
@@ -568,7 +581,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MÉXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2121.jasper');
@@ -583,7 +596,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -600,7 +613,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -616,7 +629,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -632,7 +645,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -648,7 +661,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -661,7 +674,10 @@ class FacturacionProduccion extends CI_Controller {
                         case 2212:
                             /* COORDINADORA DE FOMENTO AL COMERCIO EXTERIOR DEL ESTADO DE GUANAJUATO  = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                            $jc->setParametros($pr);
+                            $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
@@ -674,7 +690,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -690,7 +706,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -706,7 +722,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -720,7 +736,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -734,7 +750,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -748,7 +764,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -762,7 +778,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -776,7 +792,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -790,7 +806,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -804,7 +820,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -820,7 +836,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2332.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -834,7 +850,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
@@ -849,7 +865,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -862,7 +878,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["certificado"] = '00001000000201352796';
+                            $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec3.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));

@@ -204,16 +204,21 @@ class ResourceManager extends CI_Controller {
     public function getUltimoOrdenIXOXM() {
         try {
             $x = $this->input->get();
-            $this->db->select("(A.Order + 1) AS ULTIMO_ORDEN ", false)
-                    ->from("itemsxopcion AS A")->join("opcionesxmodulo AS B","A.Opcion = B.ID");
+            $this->db->select("IFNULL((A.Order + 1),1) AS ULTIMO_ORDEN ", false)
+                    ->from("itemsxopcion AS A")->join("opcionesxmodulo AS B", "A.Opcion = B.ID");
             if ($x['MODULO'] !== '') {
                 $this->db->where("B.Modulo", $x['MODULO']);
             }
             if ($x['OPCION'] !== '') {
                 $this->db->where("A.Opcion", $x['OPCION']);
             }
-            $this->db->order_by("A.Order", "DESC")->limit(1);
-            print json_encode($this->db->get()->result());
+            $data = $this->db->order_by("A.Order", "DESC")->limit(1)->get()->result();
+
+            if (isset($data[0]->ULTIMO_ORDEN)) {
+                print json_encode($data);
+            } else {
+                print json_encode(array(array("ULTIMO_ORDEN" => "1")));
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -257,7 +262,7 @@ class ResourceManager extends CI_Controller {
             $span_ok = '<span class=\"fa fa-check\" style=\"color: #8BC34A !important;\"></span>';
             $span_nook = '<span class=\"fa fa-times\" style=\"color: #F44336 !important;\"></span>';
 
-            $this->db->select("A.ID, C.Modulo AS MODULO, B.Opcion AS OPCION, "
+            $this->db->select("A.ID, C.ID AS MODULO_ID, C.Modulo AS MODULO, B.Opcion AS OPCION, "
                             . "A.Opcion AS OPCION_ID, A.Item AS ITEM, A.Fecha AS FECHA, "
                             . "A.Icon AS ICONOX, CONCAT('') AS ICONO, A.Ref AS REF, "
                             . "(CASE WHEN A.Modal = 1 THEN '{$span_ok}' ELSE '{$span_nook}' END) AS MODAL, A.Modal AS ESMODAL, "

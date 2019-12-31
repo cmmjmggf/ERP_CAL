@@ -52,7 +52,7 @@ END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOr
 F.pareped AS CANTIDAD,  F.hora AS HORA
 FROM facturacion AS F
 INNER JOIN clientes AS C ON   C.Clave = $P{CLIENTE}
-LEFT JOIN cfdifa AS CFDI ON CFDI.Factura = F.factura
+LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura
 WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIENTE};]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">

@@ -904,7 +904,7 @@
                 {"data": "ITEM"},
                 {"data": "FECHA"},
 
-                {"data": "ICONO"},/*5*/
+                {"data": "ICONO"}, /*5*/
                 {"data": "REF"},
                 {"data": "MODAL"},
                 {"data": "BACKDROP"},
@@ -934,7 +934,7 @@
             "displayLength": 50,
             "bLengthChange": false,
             "deferRender": true, "scrollCollapse": false,
-            "bSort": true,
+            "bSort": false,
             "scrollY": 450,
             "scrollX": true,
             responsive: false,
@@ -963,8 +963,25 @@
             rgistro = xxx;
             console.log(xxx);
             pnlTablero.find("#IDITEM").val(xxx.ID);
+            xModuloXOpcionXItem.val(xxx.MODULO_ID);
+            ModuloXOpcionXItem[0].selectize.setValue(xxx.MODULO_ID);
+//            EMACS6
+//            suma = (a) => (b) => a + b;
+
             xOpcionesXItem.val(xxx.OPCION_ID);
-            OpcionesXItem[0].selectize.setValue(xxx.OPCION_ID);
+            $.getJSON('<?php print base_url('ResourceManager/getOpcionesXModuloX'); ?>', {
+                MODULO: ModuloXOpcionXItem.val() ? ModuloXOpcionXItem.val() : ''
+            }).done(function (a) {
+                onClearSelect(OpcionesXItem);
+                $.each(a, function (k, v) {
+                    OpcionesXItem[0].selectize.addOption({text: v.Opcion, value: v.ID});
+                });
+                OpcionesXItem[0].selectize.setValue(xxx.OPCION_ID);
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
             NombreItem.val(xxx.ITEM);
             NombreIconoItem.val(xxx.ICONOX);
             OrdenItem.val(xxx.ICONOX);
@@ -1007,7 +1024,10 @@
         });
     }
 
-
+    function setOpcionesXModuloX(xxx) {
+        console.log("xxx", xxx);
+        OpcionesXItem[0].selectize.setValue(xxx.OPCION_ID);
+    }
     function getOpcionesXModuloX(componente, modulo) {
         $.getJSON('<?php print base_url('ResourceManager/getOpcionesXModuloX'); ?>', {
             MODULO: modulo.val() ? modulo.val() : ''
