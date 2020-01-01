@@ -28,7 +28,7 @@ WHEN C.FormaPago = 99 THEN "99"
 END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio
  = F.factura
-WHERE F.factura = $P{factura};]]>
+WHERE F.factura = $P{factura}  AND CFDI.Tipo  ='I';]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

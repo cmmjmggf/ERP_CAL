@@ -72,7 +72,7 @@ C.NombreP AS NOMBRE_CLIENTE
 
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave
 INNER JOIN estilos AS E ON F.estilo = E.Clave INNER JOIN series AS S ON E.Serie = S.Clave
-WHERE F.factura LIKE CONCAT('',$P{factura},'') AND F.tp = 2]]>
+WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 	</queryString>
 	<field name="LISTA_PRECIO" class="java.lang.String"/>
 	<field name="CLIENTE" class="java.lang.String">

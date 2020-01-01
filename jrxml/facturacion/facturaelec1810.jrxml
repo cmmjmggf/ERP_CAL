@@ -53,7 +53,7 @@ F.pareped AS CANTIDAD,  F.hora AS HORA
 FROM facturacion AS F
 INNER JOIN clientes AS C ON   C.Clave = $P{CLIENTE}
 LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura
-WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIENTE};]]>
+WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIENTE}  AND CFDI.Tipo  ='I';]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

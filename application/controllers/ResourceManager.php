@@ -300,4 +300,36 @@ class ResourceManager extends CI_Controller {
         }
     }
 
+    public function onGuardarItemXOpcionXModulo() {
+        try {
+            exit(0);
+            $x = $this->input->post();
+            switch (intval($x['NUEVO'])) {
+                case 0:
+                    $this->db->set('Modulo', $x['MODULO'])
+                            ->set('Opcion', $x['NOMBRE_OPCION'])
+                            ->set('Icon', strtolower($x['ICONO_OPCION']))
+                            ->set('Ref', $x['REFERENCIA_OPCION'])
+                            ->set('Order', $x['ORDEN_OPCION'])
+                            ->where('ID', $x['ID'])
+                            ->update('itemsxopcion');
+                    break;
+                case 1:
+                    $this->db->insert("itemsxopcion",
+                            array(
+                                "Modulo" => $x['MODULO'],
+                                "Opcion" => $x['NOMBRE_OPCION'],
+                                "Fecha" => Date('d/m/Y'),
+                                "Icon" => strtolower($x['ICONO_OPCION']),
+                                "Ref" => $x['REFERENCIA_OPCION'],
+                                "Order" => $x['ORDEN_OPCION'],
+                                "Button" => $x['BOTON'],
+                                "Class" => $x['CLASECSS']));
+                    print json_encode(array("REGISTRO" => 1));
+                    break;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

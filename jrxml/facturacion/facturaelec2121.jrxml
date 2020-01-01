@@ -40,7 +40,7 @@ FROM facturadetalle AS F
 INNER JOIN clientes AS C ON   C.Clave = 2121
 LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.numfac
 INNER JOIN consignatarios AS CT ON  CT.Cliente  = 2121 AND F.tienda = CT.Clave
-WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121;]]>
+WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121  AND CFDI.Tipo  ='I';]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
