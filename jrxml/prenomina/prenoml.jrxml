@@ -45,7 +45,7 @@ IFNULL(PNL.salario,0) + IFNULL(PNL.salariod,0) + IFNULL(PNL.horext,0) + IFNULL(P
 ) AS NETO
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Activos = 1
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO}
 ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
