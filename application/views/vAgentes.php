@@ -365,22 +365,20 @@
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
                 if (!nuevo) {
-                    if (AgentesDetalle.data().count()) {
-                        var rangos = [];
-                        $.each(tblAgentesDetalle.find("tbody tr"), function (k, v) {
-                            var r = AgentesDetalle.row($(this)).data();
-                            if (r[3] === 'N') {
-                                rangos.push({
-                                    Dias: r[2],
-                                    A: r[3],
-                                    Porcentaje: r[4]
-                                });
-                            }
-                        });
-                        frm.append('Rangos', JSON.stringify(rangos));
-                    }
+                    var rangos = [];
+                    $.each(tblAgentesDetalle.find("tbody tr"), function (k, v) {
+                        var r = AgentesDetalle.row($(this)).data();
+                        if (r[5] === 'N') {
+                            rangos.push({
+                                Dias: r[2],
+                                A: r[3],
+                                Porcentaje: r[4]
+                            });
+                        }
+                    });
+                    frm.append('Rangos', JSON.stringify(rangos));
                     $.ajax({
-                        url: master_url + 'onModificar',
+                        url: '<?php print base_url('Agentes/onModificar'); ?>',
                         type: "POST",
                         cache: false,
                         contentType: false,
@@ -389,8 +387,9 @@
                     }).done(function (data, x, jq) {
                         swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
                         nuevo = false;
-                        Agentes.ajax.reload();
                         Agentes.clear().draw();
+                        AgentesDetalle.clear().draw();
+                        Agentes.ajax.reload();
                         pnlDatos.addClass("d-none");
                         pnlDatosDetalle.addClass('d-none');
                         pnlTablero.removeClass("d-none");
@@ -413,7 +412,7 @@
                         frm.append('Rangos', JSON.stringify(rangos));
                     }
                     $.ajax({
-                        url: master_url + 'onAgregar',
+                        url: '<?php print base_url('Agentes/onAgregar'); ?>',
                         type: "POST",
                         cache: false,
                         contentType: false,
@@ -457,7 +456,7 @@
             }).then((value) => {
                 switch (value) {
                     case "eliminar":
-                        $.post(master_url + 'onEliminar', {ID: temp}).done(function () {
+                        $.post('<?php print base_url('Agentes/onEliminar'); ?>', {ID: temp}).done(function () {
                             swal('ATENCIÓN', 'SE HA ELIMINADO EL REGISTRO', 'success');
                             Agentes.clear().draw();
                             pnlDatos.addClass("d-none");
@@ -592,7 +591,7 @@
             "dom": 'Bfrtip',
             buttons: buttons,
             "ajax": {
-                "url": master_url + 'getRecords',
+                "url": '<?php print base_url('Agentes/getRecords'); ?>',
                 "dataSrc": ""
             },
             "columns": [
@@ -623,6 +622,7 @@
         });
         $('#tblAgentes_filter input[type=search]').focus();
         tblAgentes.find('tbody').on('click', 'tr', function () {
+            AgentesDetalle.clear().draw();
             HoldOn.open({
                 theme: 'sk-cube',
                 message: 'CARGANDO...'
@@ -632,7 +632,7 @@
             $(this).addClass("success");
             var dtm = Agentes.row(this).data();
             temp = parseInt(dtm.ID);
-            $.getJSON(master_url + 'getAgenteByID', {ID: temp}).done(function (data) {
+            $.getJSON('<?php print base_url('Agentes/getAgenteByID'); ?>', {ID: temp}).done(function (data) {
                 pnlDatos.find("input").val("");
                 $.each(pnlDatos.find("select"), function (k, v) {
                     pnlDatos.find("select")[k].selectize.clear(true);
@@ -649,7 +649,7 @@
                 pnlDatosDetalle.removeClass('d-none');
                 pnlDatos.find('#Nombre').focus().select();
                 /*DETALLE*/
-                $.getJSON(master_url + 'getDetalleByID', {ID: dtm.Clave}).done(function (data) {
+                $.getJSON('<?php print base_url('Agentes/getDetalleByID'); ?>', {ID: dtm.Clave}).done(function (data) {
                     if (data.length > 0) {
                         $.each(data, function (k, v) {
                             AgentesDetalle.row.add([v.ID, v.Agente, v.Dias, v.A, v.Porcentaje, 'A', '<button type="button" class="btn btn-danger" onclick="onEliminarDetalle(this)"><span class="fa fa-trash"></span></button>']).draw(false);
@@ -676,12 +676,20 @@
         switch (r[5]) {
             case "N":
                 AgentesDetalle.row($(e).parents('tr')).remove().draw();
+                onNotifyOldPCF('<span class="fa fa-check"></span>',
+                        'SE HA ELIMINADO EL REGISTRO DE LA TABLA',
+                        'success', {from: "top", align: "center"}, function () {
+                });
                 console.log('Eliminado de la tabla');
                 break;
             case "A":
                 console.log(r);
-                $.post(master_url + 'onEliminarDetalle', {ID: r[1]}).done(function () {
+                $.post('<?php print base_url('Agentes/onEliminarDetalle'); ?>', {ID: r[0]}).done(function () {
                     AgentesDetalle.row($(e).parents('tr')).remove().draw();
+                    onNotifyOldPCF('<span class="fa fa-check"></span>',
+                            'SE HA ELIMINADO EL REGISTRO COMPLETAMENTE',
+                            'success', {from: "top", align: "center"}, function () {
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 });
@@ -691,7 +699,7 @@
     }
 
     function getID() {
-        $.getJSON(master_url + 'getID').done(function (data, x, jq) {
+        $.getJSON('<?php print base_url('Agentes/getID'); ?>').done(function (data, x, jq) {
             if (data.length > 0) {
                 var ID = $.isNumeric(data[0].CLAVE) ? parseInt(data[0].CLAVE) + 1 : 1;
                 pnlDatos.find("#Clave").val(ID);

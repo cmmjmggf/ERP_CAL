@@ -118,15 +118,23 @@ class Agentes extends CI_Controller {
     public function onModificar() {
         try {
             $x = $this->input;
+            $xxx = $this->input->post();
             $data = array();
-            foreach ($this->input->post() as $key => $v) {
+            foreach ($xxx as $key => $v) {
                 if ($v !== '') {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
             unset($data["ID"]);
             unset($data["Rangos"]);
-            $this->Agentes_model->onModificar($x->post('ID'), $data);
+            $this->Agentes_model->onModificar($xxx['ID'], $data);
+            $rangos = json_decode($xxx['Rangos']);
+            foreach ($rangos as $k => $v) {
+                $check_agente = $this->db->query("SELECT COUNT(*) AS EXISTE FROM agentesporcentajes AS AP WHERE AP.Agente = {$xxx['Clave']} AND AP.Dias = '{$v->Dias}' AND AP.A = '{$v->A}' AND AP.Porcentaje = {$v->Porcentaje}")->result();
+                if (intval($check_agente[0]->EXISTE) === 0) {
+                    $this->db->insert('agentesporcentajes', array('Agente' => $xxx['Clave'], 'Dias' => $v->Dias, 'A' => $v->A, 'Porcentaje' => $v->Porcentaje));
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
