@@ -72,8 +72,9 @@
             </div>
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <label>Fracción</label>
-                <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="7">
-
+               <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="7">
+<!--                <select id="Fraccion" name="Fraccion" class="form-control form-control-sm" multiple="">
+                </select>-->
                 <input type="text" id="FraccionesSeleccionadas" class="form-control-sm d-none" readonly="">
                 <button type="button" class="btn btn-primary d-none" id="btnFraccionCheck">Obtener</button>
             </div>
@@ -436,7 +437,7 @@
         });
         btnGuardar.click(function () {
             var FRACCIONES = [];
-            $.each(Fraccion.val(), function (k, v) {
+            $.each(Fraccion.val().split(","), function (k, v) {
                 FRACCIONES.push({
                     FRACCIONES: v
                 });
@@ -477,7 +478,7 @@
                     FraccionesSeleccionadas.val(99);
                     break;
                 case 'btnAmbas':
-                    Fraccion.val("99, 100");
+                    Fraccion.val("99,100");
                     FraccionesSeleccionadas.val("99,100");
                     break;
             }
@@ -521,11 +522,12 @@
 //                    getError(x);
 //                }).always(function () {
 //
-//                });
+//                });.
+
+                ControlesSinAsignarAlDia.ajax.reload(function () {
+                    getEstiloColorParesTxParPorControl(Control.val());
+                });
             }
-            ControlesSinAsignarAlDia.ajax.reload(function () {
-                getEstiloColorParesTxParPorControl(Control.val());
-            });
         });
         Semana.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -644,12 +646,12 @@
     }
 
     function getEstiloColorParesTxParPorControl(e) {
-        HoldOn.open({
-            theme: 'sk-bounce',
-            message: 'Por favor espere un momento...'
-        });
+//        HoldOn.open({
+//            theme: 'sk-bounce',
+//            message: 'Por favor espere un momento...'
+//        });
         var FRACCIONES = [];
-        $.each(Fraccion.val(), function (k, v) {
+        $.each(Fraccion.val().split(","), function (k, v) {
             FRACCIONES.push({
                 FRACCIONES: v
             });
@@ -705,7 +707,7 @@
                 Estilo.val() && Color.val() && Pesos.val() &&
                 Articulo.val() && ClaveArticulo.val()) {
             var FRACCIONES = [];
-            $.each(Fraccion.val(), function (k, v) {
+            $.each(Fraccion.val().split(","), function (k, v) {
                 FRACCIONES.push({
                     FRACCIONES: v
                 });

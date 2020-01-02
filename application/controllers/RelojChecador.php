@@ -26,14 +26,26 @@ class RelojChecador extends CI_Controller {
         try {
             $fecha = Date('Y-m-d');
             $x = $this->input->post();
-            $Entrada_Salida = $this->ASM->onComprobarEntrada($x['Numero'], $fecha);
+//            $Entrada_Salida = $this->ASM->onComprobarEntrada($x['Numero'], $fecha);
+            $Entrada_Salida = $this->db->select("A.numemp AS Numero, A.nomemp AS Empleado, "
+                                    . "A.numdep AS DEPARTAMENTO, "
+                                    . "A.nomdep AS DEPARTAMENTOT, "
+                                    . "A.fecalta AS FECHAALTA, "
+                                    . "A.ampm AS AMPM, "
+                                    . "A.turno AS TURNO, A.hora AS HORA, "
+                                    . "A.semana AS SEMANA, A.año AS ANO, A.reg", false)
+                            ->from('relojchecador AS A')
+                            ->join('empleados AS E', 'E.Numero = A.numemp', 'left')
+                            ->where('A.numemp', $x['Numero'])
+                            ->where('A.fecalta  >= \'' . $fecha . '\'')
+                            ->order_by('A.ID', 'DESC')->limit(4)->get()->result();
             $info_empleado = $this->ASM->getInformacionPorEmpleado($x['Numero']);
             $dtm = json_decode(json_encode($info_empleado), FALSE);
 
             if (count($dtm) > 0) {
                 $es = array(
                     'numemp' => $x['Numero'],
-                    'fecalta' => Date('Y-m-d H:i:s'),
+                    'fecalta' => Date('Y-m-d 00:00:00'),
                     'hora' => Date('H:i:s'),
                     'nomemp' => $dtm[0]->Empleado,
                     'numdep' => $dtm[0]->DEPTO,

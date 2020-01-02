@@ -78,7 +78,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                             "numcon" => 1 /* 1 SALARIO */, "tpcon" => 1 /* PERCEPCION */,
                             "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL,
-                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "imported" => 0, "fecha" => Date('Y-m-d 00:00:00'),
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
@@ -167,7 +167,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                             "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 2 /* PERCEPCION */,
                             "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
-                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "imported" => 0, "fecha" => Date('Y-m-d 00:00:00'),
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
@@ -201,7 +201,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                             "numcon" => 1 /* 1 SALARIO */, "tpcon" => 1 /* PERCEPCION */,
                             "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL,
-                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "imported" => 0, "fecha" => Date('Y-m-d 00:00:00'),
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
@@ -260,7 +260,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                             "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 2 /* PERCEPCION */,
                             "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
-                            "imported" => 0, "fecha" => Date('Y-m-d h:i:s'),
+                            "imported" => 0, "fecha" => Date('Y-m-d 00:00:00'),
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
@@ -335,7 +335,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 70 /* 70 CAJADEAHORRO */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Ahorro, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->Ahorro, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -356,7 +356,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 50 /* 1 SALARIO */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Infonavit, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->Infonavit, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -377,7 +377,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 80 /* 1 SALARIO */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Comida, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->Comida, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -397,7 +397,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 85 /* 85 FUNERAL */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Funeral, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->Funeral, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -418,7 +418,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 55 /* 55 IMSS */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->IMSS, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->IMSS, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -440,7 +440,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 60 /* 60 FIERABONO */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $importe_fierabono, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $importe_fierabono, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -461,7 +461,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 95 /* 95 FONACOT */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->Fonacot, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->Fonacot, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -482,7 +482,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 82 /* 82 ISR */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->ISR, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->ISR, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -504,7 +504,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 76 /* 76 UNIFORMES/TIENDAS */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $importe_zapatostiendas, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $importe_zapatostiendas, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -529,7 +529,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 }
 //                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
                 $this->db->insert('prestamospag', array(
-                    "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d h:i:s'),
+                    "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d 00:00:00'),
                     "preemp" => $v->PressAcum, "aboemp" => $v->{"AbonoPres"}, "saldoemp" => $SALDO_FINAL_PRESTAMO,
                     "interes" => 0, "status" => 2
                 ));
@@ -538,7 +538,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                     "numcon" => 65 /* 65 PRESTAMO C-AH */, "tpcon" => 0 /* 1 = PERCECION */,
                     "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d h:i:s'),
+                    "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
@@ -824,7 +824,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "tpcond" => 0,
                     "importe" => $total_vacaciones,
                     "imported" => $sueldin,
-                    "fecha" => Date('Y-m-d h:i:s'),
+                    "fecha" => Date('Y-m-d 00:00:00'),
                     "registro" => 0,
                     "status" => 1,
                     "tpomov" => 0,
@@ -975,7 +975,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "numcon" => 27, "tpcon" => 1,
                     "importe" => $total_aguinaldo,
                     "imported" => $SUELDO_FINAL,
-                    "fecha" => Date('Y-m-d h:i:s'),
+                    "fecha" => Date('Y-m-d 00:00:00'),
                     "status" => 1, "tpomov" => 0));
                 /* AGREGAR A PRENOMINAL */
                 $this->db->insert('prenominal', array(
