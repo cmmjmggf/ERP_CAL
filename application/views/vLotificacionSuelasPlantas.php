@@ -75,6 +75,7 @@
             });
             handleEnterDiv(mdlLotificacionSuelasPlantas);
             //onImprimirReporteLotifSuelas();
+            getSuelasPlantasLotif();
             mdlLotificacionSuelasPlantas.find('#Ano').focus();
         });
         mdlLotificacionSuelasPlantas.find('#btnImprimir').on("click", function () {
@@ -353,7 +354,7 @@
             console.log(x.responseText);
         });
     }
-    function getSuelasPlantas() {
+    function getSuelasPlantasLotif() {
         mdlLotificacionSuelasPlantas.find("#Articulo")[0].selectize.clear(true);
         mdlLotificacionSuelasPlantas.find("#Articulo")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/Articulos/getSuelasPlantas').done(function (data) {

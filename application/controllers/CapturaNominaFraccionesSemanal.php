@@ -162,7 +162,6 @@ class CapturaNominaFraccionesSemanal extends CI_Controller {
                 $parametros["emp"] = $this->input->post('Empleado');
                 $parametros["sem"] = $this->input->post('Sem');
                 $parametros["ano"] = $this->input->post('Ano');
-                $parametros["fraccion"] = $this->input->post('Fraccion');
                 $jc->setJasperurl("jrxml\destajos\destajoNominaXEmpleadoSem.jasper");
                 $jc->setParametros($parametros);
                 $jc->setFilename('REPORTE_DESTAJO_SEM_' . Date('h_i_s'));

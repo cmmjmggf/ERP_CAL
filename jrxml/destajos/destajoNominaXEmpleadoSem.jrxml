@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="4.3464492614141275"/>
-	<property name="ireport.x" value="567"/>
-	<property name="ireport.y" value="35"/>
+	<property name="ireport.zoom" value="1.6757443455841607"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -12,7 +12,6 @@
 	<parameter name="emp" class="java.lang.String"/>
 	<parameter name="sem" class="java.lang.String"/>
 	<parameter name="ano" class="java.lang.String"/>
-	<parameter name="fraccion" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
 FPN.numeroempleado as numemp,
@@ -29,7 +28,7 @@ FPN.subtot
 from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 join fracciones F on F.Clave = FPN.numfrac
-where FPN.semana = $P{sem} and FPN.anio = $P{ano} and FPN.numeroempleado = $P{emp} and numfrac = $P{fraccion}
+where FPN.semana = $P{sem} and FPN.anio = $P{ano} and FPN.numeroempleado = $P{emp}
 order by FPN.fecha asc, FPN.numfrac asc, FPN.control asc]]>
 	</queryString>
 	<field name="numemp" class="java.lang.Integer"/>

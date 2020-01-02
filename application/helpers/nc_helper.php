@@ -276,7 +276,7 @@ class NotaDeCredito {
                                         nc.concepto, nc.defecto,
                                         (select Descripcion from defectos where clave= nc.defecto) as nomdefecto,
                                         nc.detalle,
-					(select Descripcion from defectos where clave= nc.defecto) as nomdefecto,
+					(select Descripcion from defectosdetalle where clave= nc.detalle) as nomdetalle,
                                         nc.monletra
                                         FROM notcred nc
                                         join clientes ct on ct.clave= nc.cliente
@@ -314,7 +314,7 @@ class NotaDeCredito {
                 $pdf->SetX(5);
                 $pdf->Cell(20, 3, number_format($D->cant, 2, ".", ","), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
-                $pdf->Cell(20, 3, utf8_decode('9999'), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(20, 3, utf8_decode('S-NC-INT'), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
                 $pdf->Cell(80, 3, utf8_decode($D->descripcion), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
@@ -325,6 +325,24 @@ class NotaDeCredito {
                 $pdf->Cell(20, 3, '$' . number_format('0', 2, ".", ","), 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
                 $pdf->Cell(25, 3, '$' . number_format($D->subtot, 2, ".", ","), 0/* BORDE */, 1, 'R');
+
+
+                $pdf->SetFont('Calibri', 'B', 6.5);
+                $pdf->SetX(5);
+                $pdf->Cell(50, 3, utf8_decode($D->nomdefecto), 0/* BORDE */, 0, 'L');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(40, 3, utf8_decode($D->nomdetalle), 0/* BORDE */, 0, 'L');
+                $pdf->SetX($pdf->GetX());
+                $pdf->SetFont('Calibri', '', 6.5);
+                $pdf->Cell(50, 3, '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(20, 3, '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(15, 3, '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->SetFont('Calibri', 'B', 6.5);
+                $pdf->Cell(30, 3, '', 0/* BORDE */, 1, 'L');
+
 
                 $pdf->Line(5, $pdf->GetY(), 210, $pdf->GetY());
                 $TP_IMPORTE += $D->subtot;

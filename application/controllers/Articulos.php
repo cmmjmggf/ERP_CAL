@@ -218,7 +218,7 @@ class Articulos extends CI_Controller {
 
             $precios = json_decode($this->input->post('Precios'));
             foreach ($precios as $k => $v) {
-                $precio = array('Articulo' => $ID, 'Maquila' => $v->Maquila, 'Precio' => $v->Precio, 'Estatus' => 'ACTIVO');
+                $precio = array('Articulo' => $ID, 'Maquila' => $v->Maquila, 'Precio' => $v->Precio, 'Estatus' => 'A');
                 $this->db->insert('preciosmaquilas', $precio);
             }
         } catch (Exception $exc) {
@@ -286,7 +286,7 @@ class Articulos extends CI_Controller {
 
                 if (intval($check_precio_maquila[0]->EXISTE) === 0) {
                     $this->db->insert('preciosmaquilas', array('Articulo' => $x->post('Clave'), 'Maquila' => $v->Maquila,
-                        'Precio' => $v->Precio, 'Estatus' => 'ACTIVO'));
+                        'Precio' => $v->Precio, 'Estatus' => 'A'));
                 }
             }
         } catch (Exception $exc) {

@@ -1190,7 +1190,7 @@ FROM costomanoobratemp CMT
                 from relojchecador RC
                 join empleados E on E.Numero = RC.numemp
                 left join departamentos D on D.Clave = E.DepartamentoFisico
-                where RC.semana = $sem and RC.año = 2019 and E.DepartamentoFisico like '%$depto%'
+                where RC.semana = $sem and RC.año = $ano and E.DepartamentoFisico like '%$depto%'
                 order by clavedepto asc,RC.nomemp asc, RC.fecalta asc, RC.turno asc  ";
         $Movimientos = $this->db->query($query2)->result();
 

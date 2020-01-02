@@ -81,7 +81,7 @@
                             <thead>
                                 <tr>
                                     <th class="d-none">tipo</th>
-                                    <th class="d-none">doc</th>
+                                    <th>doc</th>
                                     <th>Fec-Capt</th>
                                     <th>Fec-Dep</th>
                                     <th>Importe</th>
@@ -451,7 +451,7 @@
             ],
             "columnDefs": [
                 {
-                    "targets": [0, 1],
+                    "targets": [0],
                     "visible": false,
                     "searchable": true
                 },

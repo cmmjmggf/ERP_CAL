@@ -87,13 +87,13 @@
                 <div class="row">
                     <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-6" >
                         <label for="" >Defecto</label>
-                        <select id="Defecto" name="Defecto" class="form-control form-control-sm required" >
+                        <select id="Defecto" name="Defecto" class="form-control form-control-sm " >
                             <option value=""></option>
                         </select>
                     </div>
                     <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-6" >
                         <label for="" >Detalle</label>
-                        <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm required">
+                        <select id="DetalleDefecto" name="DetalleDefecto" class="form-control form-control-sm ">
                             <option value=""></option>
                         </select>
                     </div>
@@ -451,8 +451,18 @@
                 pnlTablero.find("#DetalleDefecto")[0].selectize.focus();
             }
         });
+        pnlTablero.find('.selectize-control').find('input#Defecto-selectized').on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                pnlTablero.find("#DetalleDefecto")[0].selectize.focus();
+            }
+        });
         pnlTablero.find("#DetalleDefecto").change(function () {
             if ($(this).val()) {
+                pnlTablero.find("#Primera").focus();
+            }
+        });
+        pnlTablero.find('.selectize-control').find('input#DetalleDefecto-selectized').on('keypress', function (e) {
+            if (e.keyCode === 13) {
                 pnlTablero.find("#Primera").focus();
             }
         });
