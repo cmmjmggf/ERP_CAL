@@ -51,7 +51,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 FROM articulos A
                 JOIN movarticulos_fabrica MA ON MA.Articulo = A.Clave
                 JOIN unidades U ON U.Clave = A.UnidadMedida
-                JOIN preciosmaquilas PM ON PM.Articulo = MA.Articulo AND PM.Maquila = '1'
+                JOIN preciosmaquilas PM ON PM.Articulo = MA.Articulo AND PM.Maquila = '$Maq'
                 WHERE MA.TipoMov = 'SDV'
                 AND MA.Ano = '$Ano'
                 AND MA.Sem = '$Sem'
@@ -75,7 +75,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 FROM articulos A
                 JOIN movarticulos MA ON MA.Articulo = A.Clave
                 JOIN unidades U ON U.Clave = A.UnidadMedida
-                JOIN preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = '1'
+                JOIN preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = '$Maq'
                 WHERE MA.TipoMov IN('SXM', 'SPR', 'SXP', 'SXC', 'EDV')
                 AND MA.Ano = '$Ano'
                 AND MA.Sem = '$Sem'
@@ -101,7 +101,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 PM.Precio
                 FROM `pedidox` `PE`
                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
-                JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='1'
+                JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='$Maq'
                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
                 JOIN `maquilas` `MA` ON `MA`.`Clave` = '$Maq'
