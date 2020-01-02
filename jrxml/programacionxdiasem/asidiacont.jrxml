@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asidiacont" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
 	<property name="ireport.zoom" value="2.5657905911535597"/>
-	<property name="ireport.x" value="983"/>
+	<property name="ireport.x" value="973"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
 	<parameter name="DIA" class="java.lang.Integer"/>
@@ -56,8 +56,9 @@ FROM
      INNER JOIN `estilos` estilos ON colores.`Estilo` = estilos.`Clave`
      INNER JOIN `lineas` lineas ON estilos.`Linea` = lineas.`Clave`
 WHERE pedidox.`stsavan` NOT IN(13,14) AND pedidox.Semana = $P{SEMANA}
-AND pedidox.Ano = $P{ANO} AND programacion.diaprg = $P{DIA}
-ORDER BY series.`Clave` ASC,empleados.`Numero` ASC]]>
+AND pedidox.Ano = $P{ANO} AND programacion.diaprg = $P{DIA} AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA}
+ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;
+]]>
 	</queryString>
 	<field name="empleados_Numero" class="java.lang.Integer"/>
 	<field name="programacion_numemp" class="java.lang.Integer"/>

@@ -188,7 +188,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "status" => 1, "tpomov" => 0
                         ));
                     }
-                } else if ($FijoDestajoAmbos === 3 && intval($ASISTENCIAS) > 0) {
+                } else 
+                if ($FijoDestajoAmbos === 3 && intval($ASISTENCIAS) > 0) {
                     /* 3 FIJO Y DESTAJO */
                     /* 3.0 FIJO */
                     $SUELDO_FINAL = 0;

@@ -28,7 +28,7 @@
 
 FROM ordendeproduccion AS O INNER JOIN  ordendeproducciond AS ordendeproducciond ON O.ID = ordendeproducciond.OrdenDeProduccion
 INNER JOIN programacion AS programacion ON programacion.control = O.ControlT INNER JOIN empleados AS empleados ON programacion.numemp = empleados.Numero  INNER JOIN `grupos` grupos ON ordendeproducciond.`Grupo` = grupos.`Clave`
-WHERE O.Semana = $P{SEMANA} AND programacion.semana = $P{SEMANA}
+WHERE O.Semana = $P{SEMANA} AND programacion.semana = $P{SEMANA}  AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA}
  AND programacion.diaprg = $P{DIA}
 GROUP BY  ordendeproducciond.`Grupo`, programacion.numemp,ordendeproducciond.Articulo
 ORDER BY ABS(ordendeproducciond.`Grupo`) ASC ,ABS(ordendeproducciond.Articulo) ASC]]>

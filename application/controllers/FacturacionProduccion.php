@@ -50,7 +50,7 @@ class FacturacionProduccion extends CI_Controller {
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                     . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, P.EstiloT AS ESTILO_TEXT "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}'")->result());
+                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -132,9 +132,9 @@ class FacturacionProduccion extends CI_Controller {
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14));
             }
-            if ($xxx['CLIENTE'] !== '') {
-                $this->db->where("P.Cliente", $xxx['CLIENTE']);
-            }
+//            if ($xxx['CLIENTE'] !== '') {
+//                $this->db->where("P.Cliente", $xxx['CLIENTE']);
+//            }
             if ($xxx['CONTROL'] !== '') {
                 $this->db->where("P.Control", $xxx['CONTROL']);
             }
@@ -143,6 +143,9 @@ class FacturacionProduccion extends CI_Controller {
             }
             if ($xxx['ESTILO'] !== '') {
                 $this->db->where("P.Control", $xxx['ESTILO']);
+            }
+            if ($xxx['CONTROL'] === '') {
+                $this->db->limit(100);
             }
             $this->db->order_by("P.FechaRecepcion", "DESC");
             print json_encode($this->db->get()->result());
@@ -524,8 +527,7 @@ class FacturacionProduccion extends CI_Controller {
     }
 
     public function getVistaPrevia() {
-        try {
-            exit(0);
+        try { 
             $x = $this->input->post();
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();

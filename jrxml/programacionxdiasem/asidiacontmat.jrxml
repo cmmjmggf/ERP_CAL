@@ -28,7 +28,7 @@ FROM ordendeproduccion AS O INNER JOIN  ordendeproducciond AS ordendeproducciond
 INNER JOIN programacion AS programacion ON programacion.control = O.ControlT INNER JOIN empleados AS empleados ON programacion.numemp = empleados.Numero
 WHERE O.Semana = $P{SEMANA} AND programacion.semana = $P{SEMANA} AND ordendeproducciond.`Grupo` IN(1,12,15,16,17,18,2,30,31,34,40,41,50,9)
  AND programacion.diaprg = $P{DIA}
- AND programacion.`frac` < 300
+ AND programacion.`frac` < 300  AND programacion.año = $P{ANO}  AND programacion.semana = $P{SEMANA}
 GROUP BY programacion.numemp,ordendeproducciond.Articulo
 ORDER BY ABS(programacion.numemp) ASC, ABS(ordendeproducciond.`Grupo`) ASC, ABS(ordendeproducciond.Articulo) ASC]]>
 	</queryString>

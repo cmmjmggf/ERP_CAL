@@ -24,6 +24,9 @@ class Avance extends CI_Controller {
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vAvance')->view('vFooter');
                     break;
+                case 'SUPERVISION':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vAvance')->view('vFooter');
+                    break;
                 default:
                     header("Location: " . base_url());
                     break;

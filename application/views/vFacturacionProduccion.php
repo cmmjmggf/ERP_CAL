@@ -1728,17 +1728,18 @@
                 CONTROL: Control.val() ? Control.val() : '',
                 CLIENTE: ClienteClave.val() ? ClienteClave.val() : ''
             }).done(function (abcd) {
-                if (abcd.length > 0) {
-                    if (abcd[0].CLIENTE === clientesito) {
-                        control_pertenece_a_cliente = true;
-                    } else {
-                        onBeep(2);
-                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
-                            onResetCampos();
-                            Control.focus().select();
-                        });
-                    }
-                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
+                control_pertenece_a_cliente = true;
+//                if (abcd.length > 0) {
+//                    if (abcd[0].CLIENTE === clientesito) {
+//                        control_pertenece_a_cliente = true;
+//                    } else {
+//                        onBeep(2);
+//                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
+//                            onResetCampos();
+//                            Control.focus().select();
+//                        });
+//                    }
+//                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
                             CONTROL: Control.val() ? Control.val() : ''
                         }).done(function (aa) {
@@ -1855,15 +1856,15 @@
                         }).always(function () {
                             onCloseOverlay();
                         });
-                    }
-                } else {
-                    onBeep(2);
-                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
-                        onResetCampos();
-                        Control.focus().select();
-                    });
-                    return;
-                }
+//                    }
+//                } else {
+//                    onBeep(2);
+//                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
+//                        onResetCampos();
+//                        Control.focus().select();
+//                    });
+//                    return;
+//                }
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
