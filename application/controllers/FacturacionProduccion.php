@@ -120,7 +120,8 @@ class FacturacionProduccion extends CI_Controller {
         try {
             $xxx = $this->input->get();
             $this->db->select("P.ID, P.Control AS CONTROL, 
-                                P.Clave AS PEDIDO, P.Cliente AS CLIENTE, 
+                                P.Clave AS PEDIDO, 
+                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE , 
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
@@ -181,9 +182,16 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('tp', $x['TP_DOCTO'])
                     ->where('staped', 1)->update('facturacion');
 
-            $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            if (intval($x['TP_DOCTO']) === 1) {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
 
-            $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+            } else {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.subtot) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}")->result();
+
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}")->result();
+            }
+
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
 
@@ -248,7 +256,11 @@ class FacturacionProduccion extends CI_Controller {
 //            }
             /*             * *CARTAFAC** */
             $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
-            $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            if (intval($x['TP_DOCTO']) === 1) {
+                $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            } else {
+                $FACTURA_PARES = $this->db->query("SELECT SUM(F.pareped) AS PARES FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
+            }
             $PARES = 0;
             $PARES = $FACTURA_PARES[0]->PARES;
             $this->db->insert("cartafac", array(
@@ -298,7 +310,7 @@ class FacturacionProduccion extends CI_Controller {
                 'tp' => $x['TP_DOCTO'],
                 'cliente' => $x['CLIENTE'],
                 'contped' => $x['CONTROL'],
-                'fecha' => "$anio-$mes-$dia $hora",
+                'fecha' => "$anio-$mes-$dia 00:00:00",
                 'hora' => Date('d/m/Y'),
                 'corrida' => $x['SERIE'],
                 'pareped' => $x['PARES_A_FACTURAR'],
@@ -442,7 +454,7 @@ class FacturacionProduccion extends CI_Controller {
                             . "FD.par16, FD.par17, FD.par18, FD.par19, FD.par20, "
                             . "FD.par21, FD.par22 "
                             . "FROM facturaciondif AS FD "
-                            . "WHERE FD.contped LIKE '{$x['CONTROL']}'")->result();
+                            . "WHERE FD.contped = '{$x['CONTROL']}'")->result();
 
             if (intval($existe_en_facdetalle[0]->EXISTE) > 0) {
                 for ($ii = 1; $ii < 23; $ii++) {
@@ -527,7 +539,7 @@ class FacturacionProduccion extends CI_Controller {
     }
 
     public function getVistaPrevia() {
-        try { 
+        try {
             $x = $this->input->post();
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();

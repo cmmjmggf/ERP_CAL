@@ -43,14 +43,14 @@ class GeneraNominaDeSemana extends CI_Controller {
             /* ELIMINAR EN PRENOMINA */
 //            $pn = $this->db->query("SELECT * FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
 //            print_r($pn);
-            $this->db->query("$DF prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro  <> 999");
+            $this->db->query("DELETE FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro  <> 999");
             /* ELIMINAR EN PRENOMINAL */
 //            $pnl = $this->db->query("SELECT * FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
 //            print_r($pnl);
-            $this->db->query("$DF prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999");
+            $this->db->query("DELETE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999");
 
             /* ELIMINAR EN PRESTAMOSPAG */
-            $this->db->query("$DF prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
+            $this->db->query("DELETE FROM prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
 
             $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
 
@@ -284,6 +284,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         ));
                     }
                 }
+                
                 /* CALCULAR SI TIENE O NO CAJA DE AHORRO */
                 $this->onCajaDeAhorro($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
                 /* CALCULAR SI TIENE O NO INFONAVIT */

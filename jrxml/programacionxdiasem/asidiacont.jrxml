@@ -55,10 +55,8 @@ FROM
      INNER JOIN `series` series ON pedidox.`Serie` = series.`Clave`
      INNER JOIN `estilos` estilos ON colores.`Estilo` = estilos.`Clave`
      INNER JOIN `lineas` lineas ON estilos.`Linea` = lineas.`Clave`
-WHERE pedidox.`stsavan` NOT IN(13,14) AND pedidox.Semana = $P{SEMANA}
-AND pedidox.Ano = $P{ANO} AND programacion.diaprg = $P{DIA} AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA}
-ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;
-]]>
+WHERE pedidox.`stsavan` NOT IN(13,14) AND   programacion.diaprg = $P{DIA} AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA}
+ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;]]>
 	</queryString>
 	<field name="empleados_Numero" class="java.lang.Integer"/>
 	<field name="programacion_numemp" class="java.lang.Integer"/>
