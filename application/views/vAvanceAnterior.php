@@ -18,7 +18,19 @@
                         <div class="col-5">
                             <label>Departamento</label>
                             <select id="DeptoAvance" name="DeptoAvance" class="form-control form-control-sm required">
-                                <option value=""></option>
+                                <option value="33">33-Rebajado</option>
+                                <option value="4">4-Foleado</option>
+                                <option value="40">40-Entretelado</option>
+                                <option value="42">42-Proceso Maquila</option>
+                                <option value="44">44-Alm Corte</option>
+                                <option value="5">5-Pespunte</option>
+                                <option value="55">55-Ensuelado</option>
+                                <option value="6">6-Alm Pespunte</option>
+                                <option value="7">7-Tejido</option>
+                                <option value="8">8-Alm Tejido</option>
+                                <option value="9">9-Montado</option>
+                                <option value="10">10-Adorno</option>
+                                <option value="11">11-Alm-Adorno</option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-2 col-xl-3">
@@ -73,18 +85,18 @@
                 mdlAvanceAnterior.find("select")[k].selectize.clear(true);
             });
             mdlAvanceAnterior.find("#FechaAvance").val(getToday()).focus().select();
-            getDepartamentosAvanceAnterior();
+
         });
         mdlAvanceAnterior.find('#btnAceptar').click(function () {
             isValid('mdlAvanceAnterior');
             if (valido) {
                 if (mdlAvanceAnterior.find('#ControlAvance').val()) {
                     var deptoAvance = parseInt(mdlAvanceAnterior.find('#DeptoAvance').val());
-                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControl', {
+                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControlAvanAnterior', {
                         Control: mdlAvanceAnterior.find('#ControlAvance').val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-                            if (data[0].Depto === '270' && data[0].Depto !== '') {
+                            if (data[0].stsavan === '14') {
                                 swal({
                                     title: "CONTROL CANCELADO POR EL CLIENTE",
                                     text: "****MOTIVO EXTEMPORANEO****",
@@ -96,7 +108,7 @@
                                         mdlAvanceAnterior.find('#ControlAvance').val('').focus();
                                     }
                                 });
-                            } else if (data[0].Depto === '260') {
+                            } else if (data[0].stsavan === '13') {
                                 swal({
                                     title: "CONTROL YA FACTURADO",
                                     text: "****El número de control ya ha sido facturado****",
@@ -108,7 +120,7 @@
                                         mdlAvanceAnterior.find('#ControlAvance').val('').focus();
                                     }
                                 });
-                            } else if (data[0].Depto === '240') {
+                            } else if (data[0].Depto === '12') {
                                 swal({
                                     title: "CONTROL YA ESTÁ EN PRODUCTO TERMINADO",
                                     text: "****El número de control ya ha sido avanzado a prod. Terminado****",
@@ -121,33 +133,33 @@
                                     }
                                 });
                             } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
-                                var deptoActual = parseInt(data[0].Depto);
-                                if (deptoAvance === 30 && deptoActual === 20) {
-                                    agregarAvance(data, 'fec33', '33');
-                                } else if (deptoAvance === 40 && deptoActual === 30) {
-                                    agregarAvance(data, 'fec4', '4');
-                                } else if (deptoAvance === 90 && deptoActual === 40) {
-                                    agregarAvance(data, 'fec40', '40');
-                                } else if (deptoAvance === 100 && deptoActual === 90) {
-                                    agregarAvance(data, 'fec42', '42');
-                                } else if (deptoAvance === 105 && deptoActual === 100) {
-                                    agregarAvance(data, 'fec44', '44');
-                                } else if (deptoAvance === 110 && deptoActual === 105) {
-                                    agregarAvance(data, 'fec5', '5');
-                                } else if (deptoAvance === 130 && deptoActual === 120) {
-                                    agregarAvance(data, 'fec6', '6');
-                                } else if (deptoAvance === 140 && deptoActual === 130) {
-                                    agregarAvance(data, 'fec55', '55');
-                                } else if (deptoAvance === 150 && deptoActual === 140) {
-                                    agregarAvance(data, 'fec7', '7');
-                                } else if (deptoAvance === 160 && deptoActual === 150) {
-                                    agregarAvance(data, 'fec8', '8');
-                                } else if (deptoAvance === 180 && deptoActual === 160) {
-                                    agregarAvance(data, 'fec9', '9');
-                                } else if (deptoAvance === 210 && deptoActual === 180) {
-                                    agregarAvance(data, 'fec10', '10');
-                                } else if (deptoAvance === 230 && deptoActual === 210) {
-                                    agregarAvance(data, 'fec11', '11');
+                                var deptoActual = parseInt(data[0].stsavan);
+                                if (deptoAvance === 33 && deptoActual === 3) {
+                                    agregarAvance(data, 'fec33', '30', 'REBAJADO Y PERFORADO');
+                                } else if (deptoAvance === 4 && deptoActual === 33) {
+                                    agregarAvance(data, 'fec40', '40', 'FOLEADO');
+                                } else if (deptoAvance === 40 && deptoActual === 4) {
+                                    agregarAvance(data, 'fec40', '90', 'ENTRETELADO');
+                                } else if (deptoAvance === 42 && deptoActual === 40) {
+                                    agregarAvance(data, 'fec42', '100', 'MAQUILA');
+                                } else if (deptoAvance === 44 && deptoActual === 42) {
+                                    agregarAvance(data, 'fec44', '105', 'ALMACEN CORTE');
+                                } else if (deptoAvance === 5 && deptoActual === 44) {
+                                    agregarAvance(data, 'fec5', '110', 'PESPUNTE');
+                                } else if (deptoAvance === 55 && deptoActual === 5) {
+                                    agregarAvance(data, 'fec55', '140', 'ENSUELADO');
+                                } else if (deptoAvance === 6 && deptoActual === 55) {
+                                    agregarAvance(data, 'fec6', '130', 'ALMACEN PESPUNTE');
+                                } else if (deptoAvance === 7 && deptoActual === 6) {
+                                    agregarAvance(data, 'fec7', '150', 'TEJIDO');
+                                } else if (deptoAvance === 8 && deptoActual === 7) {
+                                    agregarAvance(data, 'fec8', '160', 'ALMACEN TEJIDO');
+                                } else if (deptoAvance === 9 && deptoActual === 8) {
+                                    agregarAvance(data, 'fec9', '180', 'MONTADO "A"');
+                                } else if (deptoAvance === 10 && deptoActual === 9) {
+                                    agregarAvance(data, 'fec10', '210', 'ADORNO "A"');
+                                } else if (deptoAvance === 11 && deptoActual === 10) {
+                                    agregarAvance(data, 'fec11', '230', 'ALMACEN ADORNO');
                                 } else {
                                     mdlAvanceAnterior.find("#EstatusProduccionAvance").html('');
                                     mdlAvanceAnterior.find("#EstiloAvance").val("");
@@ -276,11 +288,11 @@
             if (e.keyCode === 13)
                 if ($(this).val()) {
                     var deptoAvance = parseInt(mdlAvanceAnterior.find('#DeptoAvance').val());
-                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControl', {
+                    $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControlAvanAnterior', {
                         Control: $(this).val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-                            if (data[0].Depto === '270' && data[0].Depto !== '') {
+                            if (data[0].stsavan === '14') {
                                 swal({
                                     title: "CONTROL CANCELADO POR EL CLIENTE",
                                     text: "****MOTIVO EXTEMPORANEO****",
@@ -292,7 +304,7 @@
                                         mdlAvanceAnterior.find('#ControlAvance').val('').focus();
                                     }
                                 });
-                            } else if (data[0].Depto === '260') {
+                            } else if (data[0].stsavan === '13') {
                                 swal({
                                     title: "CONTROL YA FACTURADO",
                                     text: "****El número de control ya ha sido facturado****",
@@ -304,7 +316,7 @@
                                         mdlAvanceAnterior.find('#ControlAvance').val('').focus();
                                     }
                                 });
-                            } else if (data[0].Depto === '240') {
+                            } else if (data[0].stsavan === '12') {
                                 swal({
                                     title: "CONTROL YA ESTÁ EN PRODUCTO TERMINADO",
                                     text: "****El número de control ya ha sido avanzado a prod. Terminado****",
@@ -317,32 +329,32 @@
                                     }
                                 });
                             } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
-                                var deptoActual = parseInt(data[0].Depto);
-                                if (deptoAvance === 30 && deptoActual === 20) {
+                                var deptoActual = parseInt(data[0].stsavan);
+                                if (deptoAvance === 33 && deptoActual === 3) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 40 && deptoActual === 30) {
+                                } else if (deptoAvance === 4 && deptoActual === 33) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 90 && deptoActual === 40) {
+                                } else if (deptoAvance === 40 && deptoActual === 4) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 100 && deptoActual === 90) {
+                                } else if (deptoAvance === 42 && deptoActual === 40) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 105 && deptoActual === 100) {
+                                } else if (deptoAvance === 44 && deptoActual === 42) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 110 && deptoActual === 105) {
+                                } else if (deptoAvance === 5 && deptoActual === 44) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 130 && deptoActual === 120) {
+                                } else if (deptoAvance === 55 && deptoActual === 5) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 140 && deptoActual === 130) {
+                                } else if (deptoAvance === 6 && deptoActual === 55) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 150 && deptoActual === 140) {
+                                } else if (deptoAvance === 7 && deptoActual === 6) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 160 && deptoActual === 150) {
+                                } else if (deptoAvance === 8 && deptoActual === 7) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 180 && deptoActual === 160) {
+                                } else if (deptoAvance === 9 && deptoActual === 8) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 210 && deptoActual === 180) {
+                                } else if (deptoAvance === 10 && deptoActual === 9) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 230 && deptoActual === 210) {
+                                } else if (deptoAvance === 11 && deptoActual === 10) {
                                     concuerdaAvance(data);
                                 } else {
                                     mdlAvanceAnterior.find("#EstatusProduccionAvance").html('');
@@ -393,20 +405,20 @@
         });
     });
 
-    function agregarAvance(data, campoavaprd, stsavaprd) {
+    function agregarAvance(data, campoavaprd, depto, nomdepto) {
 //inserta nuevo
-        var nombre_depto = mdlAvanceAnterior.find("#DeptoAvance option:selected").text().split('-').pop();
+        //var nombre_depto = mdlAvanceAnterior.find("#DeptoAvance option:selected").text().split('-').pop();
         var frm = new FormData(mdlAvanceAnterior.find("#frmCapturaAvaAnt")[0]);
         frm.append('Fecha', mdlAvanceAnterior.find("#FechaAvance").val());
-        frm.append('DeptoClave', mdlAvanceAnterior.find("#DeptoAvance").val());
-        frm.append('DeptoNombre', nombre_depto);
+        frm.append('DeptoClave', depto);
+        frm.append('DeptoNombre', nomdepto);
         frm.append('Docto', mdlAvanceAnterior.find("#DoctoAvance").val());
         frm.append('Control', mdlAvanceAnterior.find("#ControlAvance").val());
         frm.append('Estilo', data[0].Estilo);
         frm.append('Color', data[0].Color);
         frm.append('Pares', data[0].Pares);
         frm.append('Campo', campoavaprd);
-        frm.append('stsavaprd', stsavaprd);
+        frm.append('stsavaprd', mdlAvanceAnterior.find("#DeptoAvance").val());
         $.ajax(base_url + 'index.php/CapturaFraccionesParaNomina/onAgregarAvanceAnt', {
             type: "POST",
             cache: false,
@@ -427,23 +439,11 @@
     }
 
     function concuerdaAvance(data) {
-        mdlAvanceAnterior.find("#EstatusProduccionAvance").html(data[0].Depto + '  ' + data[0].DeptoT);
+        mdlAvanceAnterior.find("#EstatusProduccionAvance").html(data[0].stsavan);
         mdlAvanceAnterior.find("#EstiloAvance").val(data[0].Estilo);
         mdlAvanceAnterior.find("#ColorAvance").val(data[0].Color);
         mdlAvanceAnterior.find("#ParesAvance").val(data[0].Pares);
         mdlAvanceAnterior.find("#btnAceptar").focus();
-    }
-
-    function getDepartamentosAvanceAnterior() {
-        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getDepartamentosAvanceAnterior', ).done(function (data, x, jq) {
-            $.each(data, function (k, v) {
-                mdlAvanceAnterior.find("#DeptoAvance")[0].selectize.addOption({text: v.Departamento, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
-            HoldOn.close();
-        });
     }
 
 

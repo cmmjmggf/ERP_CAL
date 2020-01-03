@@ -33,6 +33,26 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
         }
     }
 
+    public function onImprimirReportePedidosXEntregarFecha() {
+        try {
+            $Cliente = $this->input->post('Cliente');
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["cliente"] = $Cliente;
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\clientes\PedidosClientePorEntregar.jasper');
+            $jc->setFilename('CTE_PEDIDOS_X_ENTREGAR' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarCliente() {
         try {
             $Cliente = $this->input->get('Cliente');

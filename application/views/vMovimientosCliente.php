@@ -28,10 +28,6 @@
                     <option value=""></option>
                 </select>
             </div>
-            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
-                <label>Tp</label>
-                <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" maxlength="1" required="">
-            </div>
             <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2" >
                 <label>Doc.</label>
                 <input type="text" class="form-control form-control-sm  " id="Doc" name="Doc" maxlength="15" required>
@@ -141,7 +137,7 @@
 
                             pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
                             getRecords(txtcte);
-                            pnlTablero.find("#Tp").focus();
+                            pnlTablero.find("#Doc").focus();
                         } else {
                             swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
                                 pnlTablero.find("#sCliente")[0].selectize.clear(true);
@@ -158,31 +154,22 @@
 
         pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
-                pnlTablero.find("#Tp").val('');
                 pnlTablero.find("#Doc").val('');
-                getPagos($(this).val(), '', '');
+                getPagos($(this).val(), '');
                 MovimientosClientes.column(1).search('').draw();
 
                 pnlTablero.find("#Cliente").val($(this).val());
                 getRecords($(this).val());
-                pnlTablero.find("#Tp").focus();
-            }
-        });
-
-        pnlTablero.find("#Tp").on('keyup', function (e) {
-            if (e.keyCode === 13) {
-                if ($(this).val()) {
-                    onVerificarTp($(this));
-                }
+                pnlTablero.find("#Doc").focus();
             }
         });
         pnlTablero.find("#Doc").on('keyup', function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     MovimientosClientes.column(1).search('^' + $(this).val() + '$', true, false).draw();
-                    getPagos(pnlTablero.find("#Cliente").val(), $(this).val(), pnlTablero.find("#Tp").val());
+                    getPagos(pnlTablero.find("#Cliente").val(), $(this).val());
                 } else {
-                    getPagos(pnlTablero.find("#Cliente").val(), '', '');
+                    getPagos(pnlTablero.find("#Cliente").val(), '');
                     MovimientosClientes.column(1).search('').draw();
                 }
             }
@@ -253,7 +240,7 @@
                     }
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    onImprimirReporteFancy(data);
+                    onImprimirReporteFancyArray(JSON.parse(data));
                     HoldOn.close();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
@@ -291,26 +278,6 @@
             console.log(x.responseText);
         });
     }
-    function onVerificarTp(v) {
-        var tp = parseInt($(v).val());
-        if (tp === 1 || tp === 2) {
-            MovimientosClientes.column(6).search(tp).draw();
-            pnlTablero.find("#Doc").focus();
-
-        } else {
-            swal({
-                title: "ATENCIÓN",
-                text: "EL TP SÓLO PUEDE SER 1 Ó 2",
-                icon: "error",
-                closeOnClickOutside: false,
-                closeOnEsc: false
-            }).then((action) => {
-                $(v).val('').focus();
-            });
-        }
-    }
-
-
 
     function getRecords(cliente) {
         HoldOn.open({
@@ -424,7 +391,7 @@
 
     }
 
-    function getPagos(cliente, doc, tp) {
+    function getPagos(cliente, doc) {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblPagosClientes')) {
             tblPagosClientes.DataTable().destroy();
@@ -435,7 +402,7 @@
             "ajax": {
                 "url": master_url + 'getPagos',
                 "dataSrc": "",
-                "data": {Cliente: cliente, Doc: doc, Tp: tp},
+                "data": {Cliente: cliente, Doc: doc},
                 "type": "POST"
             },
             "columns": [

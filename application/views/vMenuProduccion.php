@@ -42,7 +42,7 @@ $vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalA
     'vEtiTrazabilidad', 'vEtiCajasXCliente', 'vEtiZapica', 'vEstatusPedidoXGrupoAgente',
     'vFichaTecnicaCompra', 'vMaterialAnoSemMaqDesgloseControlEstilo', 'vCostoManoObraGeneral',
     'vIOrdenDeProduccion', 'vCopyFTaFT', 'vOrdenDeProduccion', 'vReasignarControles', 'vParesAsignadosXTiempos',
-    'vMaterialSemanaProduccionEstilo', 'vControlesADiasDeVencimientoXCliente', 'vGeneraPreciosMaquilas');
+    'vMaterialSemanaProduccionEstilo', 'vControlesADiasDeVencimientoXCliente', 'vGeneraPreciosMaquilas', 'vAvanceAnterior');
 foreach ($vs as $v) {
     $this->load->view($v);
 }

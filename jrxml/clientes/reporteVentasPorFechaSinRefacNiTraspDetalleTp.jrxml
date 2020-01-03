@@ -17,7 +17,7 @@
 	<queryString>
 		<![CDATA[select
 case when
-(select nc from cartcliente where remicion = fa.factura and cliente = fa.cliente and tipo = fa.tp) = 999 then 'ANTICIPO' else ''
+(select nc from cartcliente where remicion = fa.factura and cliente = fa.cliente and tipo = fa.tp limit 1) = 999 then 'ANTICIPO' else ''
 end as anticipo,
 fa.cliente,
 ct.RazonS as nomcliente,
@@ -46,8 +46,7 @@ ELSE fa.tp LIKE '%%'
 end
 and fa.fecha between $P{fechaIni} and $P{fechaFin}
 group by fa.factura
-order by fa.factura asc
-]]>
+order by fa.factura asc]]>
 	</queryString>
 	<field name="anticipo" class="java.lang.String"/>
 	<field name="cliente" class="java.lang.Integer">

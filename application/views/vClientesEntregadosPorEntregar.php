@@ -6,6 +6,9 @@
 
             </div>
             <div class="col-sm-9" align="right">
+                <button type="button" class="btn btn-info btn-sm " id="btnImprimePedidosXEntregar" >
+                    <span class="fa fa-search" ></span> PEDIDOS X ENTREGAR POR MAQ-SEM-FECHA
+                </button>
                 <button type="button" class="btn btn-success btn-sm " id="btnVerMovimientos" >
                     <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
                 </button>
@@ -172,6 +175,28 @@
         });
 
         /*Botones*/
+
+        pnlTablero.find("#btnImprimePedidosXEntregar").click(function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            if (pnlTablero.find('#Cliente').val()) {
+                $.post(base_url + 'index.php/ClientesEntregadosPorEntregar/onImprimirReportePedidosXEntregarFecha', {
+                    Cliente: pnlTablero.find('#Cliente').val()
+                }).done(function (data, x, jq) {
+                    HoldOn.close();
+                    console.log(data);
+                    onImprimirReporteFancy(data);
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                    HoldOn.close();
+                });
+            } else {
+                swal('ERROR', 'SELECCIONA UN CLIENTE', 'warning').then((value) => {
+                    HoldOn.close();
+                    pnlTablero.find('#Cliente').focus();
+                });
+            }
+        });
+
         pnlTablero.find("#btnVerMovimientos").click(function () {
             $.fancybox.open({
                 src: base_url + '/MovimientosCliente',

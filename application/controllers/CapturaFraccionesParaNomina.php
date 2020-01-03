@@ -175,6 +175,15 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         }
     }
 
+    public function getControlAvanAnterior() {
+        try {
+            $control = $this->input->get('Control');
+            print json_encode($this->db->query("select * from pedidox where control =  $control ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getSemanaByFecha() {
         try {
             print json_encode($this->SemanasNomina_model->getSemanaByFecha($this->input->get('Fecha')));
@@ -295,7 +304,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                 'Fecha' => Date('d/m/Y'),
                 'Hora' => Date('h:i:s a')
             ));
-            $this->db->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('controles');
+            $this->db->set('Departamento', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('controles');
             $this->db->set('stsavan', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('pedidox');
             $this->db->set('almpesp', $x->post('Docto'))->set('status', $x->post('stsavaprd'))->set($x->post('Campo'), $nuevaFecha)->where('contped', $x->post('Control'))->update('avaprd');
         } catch (Exception $exc) {

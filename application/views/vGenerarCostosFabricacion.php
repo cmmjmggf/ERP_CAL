@@ -22,7 +22,7 @@
                 <button type="button" class="btn btn-warning btn-sm " id="btnVerColores" >
                     <span class="fa fa-search" ></span> COLORES
                 </button>
-                <button type="button" class="btn btn-success btn-sm " id="btnGeneraCostos" >
+                <button type="button" class="btn btn-success btn-sm " id="btnGeneraCostosFabric" >
                     <span class="fa fa-dollar-sign" ></span> GENERA COSTOS
                 </button>
             </div>
@@ -193,7 +193,7 @@
     var pnlTablero = $("#pnlTablero");
     var pnlDetalle = $("#pnlDetalle");
     var btnNuevo = $("#btnNuevo");
-    var btnGeneraCostos = $("#btnGeneraCostos");
+    var btnGeneraCostosFabric = $("#btnGeneraCostosFabric");
     var btnCapturarGastos = $("#btnCapturarGastos");
 
 
@@ -324,7 +324,7 @@
         });
         getRecords();
         handleEnter();
-        btnGeneraCostos.click(function () {
+        btnGeneraCostosFabric.click(function () {
 
             swal({
                 title: "¿Estás seguro?",
@@ -778,7 +778,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 </style>
 
 <style>

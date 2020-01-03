@@ -42,7 +42,7 @@ pe.Estilo,
 pe.ColorT,
 cast(pe.Pares as signed) as pares,
 cast(pe.ParesFacturados as signed) as paresFacturados,
-pe.Pares - pe.ParesFacturados as saldo,
+pe.Pares - ifnull(pe.ParesFacturados,0) as saldo,
 pe.Registro as fecped,
 pe.FechaEntrega as fecent,
 av.fec12 as fecterm,
@@ -54,7 +54,7 @@ join agentes ag on ag.clave = ct.agente
 left join avaprd av on av.contped = pe.Control
 where pe.stsavan = 12
 and pe.Maquila = '98'
-and (pe.Pares - pe.ParesFacturados) > 0
+and (pe.Pares - ifnull(pe.ParesFacturados,0)) > 0
 order by abs(numagente), abs(numcte),pe.Estilo, pe.ColorT  asc;]]>
 	</queryString>
 	<field name="numagente" class="java.lang.String"/>
