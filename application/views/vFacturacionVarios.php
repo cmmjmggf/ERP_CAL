@@ -235,6 +235,9 @@
                     </thead>
                     <tbody></tbody>
                 </table>    
+            </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
+                <h4 class="font-weight-bold text-danger font-italic cantidad_facturada">CANTIDAD 0</h4>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1" align="right">
                 <h4 class="font-weight-bold text-danger font-italic">SUBTOTAL</h4>
@@ -401,6 +404,7 @@
                 busy = true;
             }
 
+            modo = 2;
             ClienteFactura[0].selectize.enable();
             console.log(DetalleDocumento.rows().count(), ",", DetalleDocumento.data().count());
             onOpenOverlay('Espere un momento por favor...');
@@ -443,6 +447,7 @@
         PrevisualizarDocto.click(function () {
             if (ClienteFactura.val() && Documento.val()) {
                 onOpenOverlay('');
+                modo = 1;
                 getVistaPrevia();
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', function () {
@@ -461,10 +466,10 @@
 
         Estilo.change(function () {
             if (Estilo.val()) {
-                ClienteClave.val(Estilo.val());
+                xEstilo.val(Estilo.val());
                 onObtenerCodigoSatXEstilo();
             } else {
-                ClienteClave.val('');
+                xEstilo.val('');
                 Estilo[0].selectize.enable();
                 Estilo[0].selectize.clear(true);
             }
@@ -540,11 +545,14 @@
             /*validar encabezado*/
 
             ClienteClave.attr("disabled", false);
-            $.each(pnlTablero.find("select"), function (k, v) {
-                pnlTablero.find("select")[k].selectize.clear(true);
-            });
-
-            return;
+            onEnable(ClienteFactura);
+            onEnable(Estilo);
+            onEnable(TPFactura);
+            onEnable(TMNDAFactura);
+            onEnable(Documento);
+            onEnable(FechaFactura);
+            console.log(ClienteFactura.val(), TPFactura.val(), TMNDAFactura.val()
+                    , Documento.val(), FechaFactura.val());
             $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
                     {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
                         FACTURA: Documento.val()
@@ -584,7 +592,7 @@
                                 PRODUCTO_SAT: ProductoSAT.val(),
                                 REFERENCIA: ReferenciaFacturacion.val()
                             };
-                            if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val() && Talla.val()) {
+                            if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val()) {
                                 onOpenOverlay('Guardando...');
 //                                if (nuevo) {
                                 $.post('<?php print base_url('FacturacionVarios/onGuardar') ?>', p).done(function (a) {
@@ -596,8 +604,7 @@
                                     Subtotal.val('');
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
-                                    Pedido.val('');
-                                    Observaciones.val('');
+                                    Pedido.val(''); 
                                     pnlTablero.find("#cNoIva")[0].checked = false;
                                     pnlTablero.find("#cTimbrar")[0].checked = false;
                                     pnlTablero.find("#cPorAnticipo")[0].checked = false;
@@ -772,7 +779,20 @@
             "scrollCollapse": false,
             "bSort": true,
             "scrollY": 200,
-            "scrollX": true
+            "scrollX": true,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var prs = 0;
+                console.log(api.rows().data());
+                $.each(api.rows().data(), function (k, v) {
+                    prs = prs + parseInt(v[6]);
+                });
+                //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                pnlTablero.find("h4.cantidad_facturada").text('CANTIDAD  ' + prs);
+            }
+            , initComplete: function () {
+                ClienteClave.focus();
+            }
         });
         getDocumentosXCliente();
         getDetalleDocumento();
@@ -990,7 +1010,7 @@
         if (ClienteFactura.val() && TPFactura.val()
                 && TMNDAFactura.val() && Documento.val()
                 && FechaFactura.val()) {
-            xClienteFactura.attr('disabled', true);
+            ClienteClave.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
             TPFactura.attr('disabled', true);
             TMNDAFactura.attr('disabled', true);
@@ -1188,15 +1208,17 @@
         pnlTablero.find(".ReferenciaFactura").text(txtreferen11 + "" + txtreferen10);
         ReferenciaFacturacion.val(txtreferen11 + "" + txtreferen10);
     }
-
+    var modo = 0;
     function  getVistaPrevia() {
         $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
             CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
             DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : '',
-            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : '',
+            MODO: modo
         }).done(function (data, x, jq) {
             onBeep(1);
             onImprimirReporteFancy(data);
+            onCloseOverlay();
         }).fail(function (x, y, z) {
             swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
         }).always(function () {

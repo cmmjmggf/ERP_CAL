@@ -59,6 +59,7 @@ class PrestamosEmpleados extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('P.numemp', $x['EMPLEADO']);
             }
+            $this->db->where("YEAR(P.fechapre)", Date('Y'));
             if ($x['EMPLEADO'] === '') {
                 $this->db->limit(25);
             }
@@ -119,7 +120,22 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getPrestamosPagos() {
         try {
-            print json_encode($this->pem->getPrestamosPagos($this->input->get('EMPLEADO')));
+//            print json_encode($this->pem->getPrestamosPagos($this->input->get('EMPLEADO')));
+            $EMPLEADO = $this->input->get('EMPLEADO');
+            $this->db->select("PP.ID AS ID, PP.numemp AS EMPLEADO, PP.año, "
+                            . "PP.sem AS SEM, DATE_FORMAT(PP.fecha,\"%d/%m/%Y\") AS FECHA, PP.preemp, "
+                            . "PP.aboemp AS ABONO, PP.saldoemp, PP.interes AS INTERES, "
+                            . "PP.status AS ESTATUS")
+                    ->from("prestamospag AS PP");
+            if ($EMPLEADO !== '') {
+                $this->db->where('PP.numemp', $EMPLEADO);
+            }
+            $this->db->where('YEAR(PP.fecha)', Date('Y'));
+            $this->db->order_by('PP.fecha', 'DESC');
+            if ($EMPLEADO === '') {
+                $this->db->limit(20);
+            }
+            print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

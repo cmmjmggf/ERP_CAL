@@ -23,6 +23,9 @@ class FacturacionVarios extends CI_Controller {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
                 case 'CLIENTES':
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
@@ -37,6 +40,7 @@ class FacturacionVarios extends CI_Controller {
     public function onGuardar() {
         try {
             $x = $this->input->post();
+//            exit(0);
             $CodigoBarras = "";
             $Descripcion = "";
             $FECHA_FACTURA = str_replace('/', '-', $this->input->post('FECHA'));
@@ -48,7 +52,7 @@ class FacturacionVarios extends CI_Controller {
                 "contped" => 0,
                 "fecha" => $FECHIN,
                 "hora" => Date("d/m/Y"),
-                "corrida" => $x["TALLA"],
+                "corrida" => $x["TALLA"] === '' ? 0 : $x["TALLA"],
                 "pareped" => $x["CANTIDAD"],
                 "estilo" => strtoupper(substr($x["ESTILO"] . " " . $x["CONCEPTO"], 0, 199)),
                 "combin" => 99,
@@ -156,8 +160,8 @@ class FacturacionVarios extends CI_Controller {
             $x = $this->input->post();
             $FECHA_FACTURA = str_replace('/', '-', $this->input->post('FECHA'));
             $FECHIN = date("Y-m-d", strtotime($FECHA_FACTURA));
-            $importe_saldo_final = 0;
-            $importe_saldo_final = (intval($x["TIPO_MONEDA"]) === 1) ? $x["IMPORTE"] : floatval($x["IMPORTE"]) * floatval($x["TIPO_CAMBIO"]);
+            $TOTAL = 0;
+            $TOTAL = (intval($x["TIPO_MONEDA"]) === 1) ? $x["IMPORTE"] : floatval($x["IMPORTE"]) * floatval($x["TIPO_CAMBIO"]);
             $facturacion = $this->db->query("SELECT F.pareped AS PARES, F.subtot AS SUBTOTAL, F.iva AS IVA FROM facturacion AS F WHERE F.factura = {$x["FACTURA"]} AND F.cliente = {$x["CLIENTE"]}")->result();
             $total_pares = 0;
             $total_facturado_iva = 0;
@@ -174,13 +178,44 @@ class FacturacionVarios extends CI_Controller {
 //                print "PARES:  {$total_pares}; SUBTOTAL: {$subtotal_facturado}; IVA : {$total_facturado_iva}; TOTAL: {$total_facturado}";
             }
             $this->db->trans_begin();
-
+            if (intval($x['TIPO']) === 1) {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TIPO']}")->result();
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TIPO']}")->result();
+            } else {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.subtot) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TIPO']}")->result();
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TIPO']}")->result();
+            }
+            $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
+            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+            switch (intval($x['MONEDA'])) {
+                case 1:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL = $IMPORTE_TOTAL_CON_IVA;
+                            break;
+                        case 2:
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (intval($x['TP_DOCTO'])) {
+                        case 1:
+                            $TOTAL *= $x['TIPO_DE_CAMBIO'];
+                            $TOTAL *= 0.16;
+                            break;
+                        case 2:
+                            $TOTAL = $IMPORTE_TOTAL_SIN_IVA * $x['TIPO_DE_CAMBIO'];
+                            break;
+                    }
+                    break;
+            }
             $this->db->insert('cartcliente', array(
                 "cliente" => $x["CLIENTE"], "remicion" => $x["FACTURA"],
-                "fecha" => $FECHIN, "importe" => $importe_saldo_final,
+                "fecha" => $FECHIN, "importe" => $TOTAL,
                 "tipo" => $x["TIPO"], "numpol" => NULL,
                 "numcia" => NULL, "status" => 1,
-                "pagos" => 0, "saldo" => $importe_saldo_final,
+                "pagos" => 0, "saldo" => $TOTAL,
                 "comiesp" => NULL, "tcamb" => $x["TIPO_CAMBIO"],
                 "tmnda" => (intval($x["TIPO_MONEDA"]) === 1) ? 1111 : $x["TIPO_MONEDA"],
                 "stscont" => NULL, "nc" => (intval($x["TIMBRAR"]) === 1) ? 0 : 999,
@@ -271,7 +306,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '' && $x["FACTURA"] !== '') {
                 $this->db->where('F.cliente', $x["CLIENTE"])->where('F.factura', $x["FACTURA"]);
             } else {
-                $this->db->order_by('F.fecha', 'DESC')->limit(25);
+                $this->db->order_by('F.fecha', 'DESC')->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -288,7 +323,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('CC.cliente', $x["CLIENTE"]);
             } else {
-                $this->db->order_by('CC.fecha', 'DESC')->limit(25);
+                $this->db->order_by('CC.fecha', 'DESC')->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -300,7 +335,8 @@ class FacturacionVarios extends CI_Controller {
         try {
             $x = $this->input->post();
 
-            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave = '{$x['CLIENTE']}' LIMIT 1")->result();
+            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C "
+                            . "WHERE C.Clave = '{$x['CLIENTE']}' LIMIT 1")->result();
 
 //            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
 //                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
@@ -310,7 +346,8 @@ class FacturacionVarios extends CI_Controller {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $pr = array();
-            if (intval($x['TP']) === 1) {
+            $CERTIFICADO_CFD = "";
+            if (intval($x['TP']) === 1 && intval($x['MODO']) === 2) {
                 $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
                                 . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
                                 . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
@@ -322,7 +359,7 @@ class FacturacionVarios extends CI_Controller {
                         ->result();
 
                 $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
-                                . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+                                . "WHERE F.factura = '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
 
                 $rfc_emi = $this->session->EMPRESA_RFC;
                 $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
@@ -345,6 +382,12 @@ class FacturacionVarios extends CI_Controller {
                         BREAK;
                 }
                 $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
+            }
+            switch (intval($x["TP"])) {
+                case 1:
+                    $pr["logo"] = base_url() . $this->session->LOGO;
+                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                    BREAK;
             }
             switch (intval($x["TP"])) {
                 case 1:
@@ -638,7 +681,7 @@ class FacturacionVarios extends CI_Controller {
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl("jrxml\facturacion\facturaelec3.jasper");
-                            $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_333" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             break;

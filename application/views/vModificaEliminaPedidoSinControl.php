@@ -373,7 +373,10 @@
         }).then((willDelete) => {
             if (willDelete) {
                 var dt = PedidoDetalle.row($(r).parents('tr')).data();
-                $.post('<?php print base_url('ModificaEliminaPedidoSinControl/onEliminar'); ?>', {ID: dt[0]}).done(function (data) {
+                console.log(dt.PDID);
+                $.post('<?php print base_url('ModificaEliminaPedidoSinControl/onEliminar'); ?>', {
+                    ID: dt.PDID
+                }).done(function (data) {
                     PedidoDetalle.row($(r).parents('tr')).remove().draw();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);

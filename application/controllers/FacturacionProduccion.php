@@ -183,13 +183,13 @@ class FacturacionProduccion extends CI_Controller {
                     ->where('staped', 1)->update('facturacion');
 
             if (intval($x['TP_DOCTO']) === 1) {
-                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
 
-                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
             } else {
-                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.subtot) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}")->result();
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.subtot) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
 
-                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}")->result();
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
             }
 
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
@@ -551,7 +551,13 @@ class FacturacionProduccion extends CI_Controller {
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $pr = array();
-            if (intval($x['TP']) === 1) {
+            $CERTIFICADO_CFD = "";
+            $EXISTE_EN_COMPROBANTES = $this->db->query("SELECT  count(*) AS EXISTE  "
+                            . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")->result();
+
+            if (intval($x['TP']) === 1 && $EXISTE_EN_COMPROBANTES[0]->EXISTE > 0) {
+                $pr["logo"] = base_url() . $this->session->LOGO;
+                $pr["empresa"] = $this->session->EMPRESA_RAZON;
                 $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
                                 . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
                                 . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
@@ -590,6 +596,8 @@ class FacturacionProduccion extends CI_Controller {
             }
             switch (intval($x["TP"])) {
                 case 1:
+                    $pr["logo"] = base_url() . $this->session->LOGO;
+                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
                     switch (intval($x['CLIENTE'])) {
                         case 2121:
                             /* COPPEL - OK */
@@ -747,15 +755,15 @@ class FacturacionProduccion extends CI_Controller {
                             exit(0);
                             break;
                         case 1755:
-                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            ;                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1755.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_1755_39_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             exit(0);
@@ -908,7 +916,7 @@ class FacturacionProduccion extends CI_Controller {
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                    $jc->setFilename("remisionva1_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                     $jc->setDocumentformat('pdf');
                     PRINT $jc->getReport();
                     exit(0);

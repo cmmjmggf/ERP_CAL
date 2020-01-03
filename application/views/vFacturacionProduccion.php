@@ -546,7 +546,10 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
+                <h4 class="font-weight-bold text-danger font-italic pares_totales_facturados">PARES 0</h4>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
                 <h3 class="font-weight-bold text-danger font-italic">SUBTOTAL</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
@@ -1055,40 +1058,43 @@
                     ClienteFactura[0].selectize.enable();
                     Documento.attr('readonly', false);
                     TPFactura.attr('disabled', false);
-//                    getVistaPreviaDocumentoCerrado(function () {
-                    iMsg("SE HA CERRADO EL DOCUMENTO", "s", function () {
-                        nuevo = true;
-                        pnlTablero.find("input").val('');
-                        $.each(pnlTablero.find("select"), function (k, v) {
-                            pnlTablero.find("select")[k].selectize.clear(true);
+                    getVistaPreviaDocumentoCerrado(function () {
+                        iMsg("SE HA CERRADO EL DOCUMENTO", "s", function () {
+                            nuevo = true;
+                            pnlTablero.find("input").val('');
+                            $.each(pnlTablero.find("select"), function (k, v) {
+                                pnlTablero.find("select")[k].selectize.clear(true);
+                            });
+                            ParesFacturados.rows().remove().draw(false);
+                            pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalivafacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalfacturadohead").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            TotalLetra.find("span").text('');
+                            pnlTablero.find(".totalfacturadoenletrapie").text('');
+                            pnlTablero.find(".totalfacturadoenletrapieDLLS").text('');
+                            btnCierraDocto.attr('disabled', true);
+                            btnFacturaXAnticipoDeProducto.attr('disabled', false);
+                            btnControlInCompleto.attr('disabled', true);
+                            btnControlCompleto.attr('disabled', true);
+                            btnVistaPreviaF.attr('disabled', true);
+                            FechaFactura.attr('readonly', false);
+                            Documento.attr('readonly', false);
+                            FCAFactura.attr('readonly', false);
+                            PAGFactura.attr('readonly', false);
+                            TMNDAFactura.attr('readonly', false);
+                            ClienteFactura[0].selectize.enable();
+                            TPFactura.attr('disabled', false);
+                            ClienteClave.focus().select();
+                            FechaFactura.val(Hoy);
+                            ClienteClave.focus().select();
                         });
-                        ParesFacturados.rows().remove().draw(false);
-                        pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(0, 2, '.', ','));
-                        pnlTablero.find(".totalivafacturadopie").text('$' + $.number(0, 2, '.', ','));
-                        pnlTablero.find(".totalfacturadohead").text('$' + $.number(0, 2, '.', ','));
-                        pnlTablero.find(".totalfacturadopie").text('$' + $.number(0, 2, '.', ','));
-                        TotalLetra.find("span").text('');
-                        pnlTablero.find(".totalfacturadoenletrapie").text('');
-                        pnlTablero.find(".totalfacturadoenletrapieDLLS").text('');
-                        btnCierraDocto.attr('disabled', true);
-                        btnFacturaXAnticipoDeProducto.attr('disabled', false);
-                        btnControlInCompleto.attr('disabled', true);
-                        btnControlCompleto.attr('disabled', true);
-                        btnVistaPreviaF.attr('disabled', true);
-                        FechaFactura.attr('readonly', false);
-                        Documento.attr('readonly', false);
-                        FCAFactura.attr('readonly', false);
-                        PAGFactura.attr('readonly', false);
-                        TMNDAFactura.attr('readonly', false);
-                        ClienteFactura[0].selectize.enable();
-                        TPFactura.attr('disabled', false);
-                        ClienteClave.focus().select();
-                        FechaFactura.val(Hoy);
-                        ClienteClave.focus().select();
                     });
+                    onCloseOverlay();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
+                    onCloseOverlay();
                 });
             } else {
                 onCampoInvalido(pnlTablero, 'LOS SIGUIENTES CAMPOS SON REQUERIDOS', function () {
@@ -1551,6 +1557,16 @@
             "scrollX": true,
             initComplete: function () {
                 onCloseOverlay();
+            },
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var prs = 0;
+                console.log(api.rows().data());
+                $.each(api.rows().data(), function (k, v) {
+                    prs = prs + parseInt(v[5]);
+                });
+                //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                pnlTablero.find("h4.pares_totales_facturados").text('PARES  ' + prs);
             }
         });
     });
@@ -1740,30 +1756,30 @@
 //                        });
 //                    }
 //                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
-                        $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
-                            CONTROL: Control.val() ? Control.val() : ''
-                        }).done(function (aa) {
-                            var abc = aa[0];
-                            if (abc !== undefined) {
-                                if (control_pertenece_a_cliente) {
-                                    for (var i = 1; i < 23; i++) {
-                                        var ccc = 0;
-                                        if (i < 10) {
-                                            ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
-                                            pnlTablero.find(`#CF${i}`).val(ccc);
-                                        } else {
-                                            ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
-                                            pnlTablero.find(`#CF${i}`).val(ccc);
-                                        }
-                                    }
+                $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
+                    CONTROL: Control.val() ? Control.val() : ''
+                }).done(function (aa) {
+                    var abc = aa[0];
+                    if (abc !== undefined) {
+                        if (control_pertenece_a_cliente) {
+                            for (var i = 1; i < 23; i++) {
+                                var ccc = 0;
+                                if (i < 10) {
+                                    ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
+                                    pnlTablero.find(`#CF${i}`).val(ccc);
+                                } else {
+                                    ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
+                                    pnlTablero.find(`#CF${i}`).val(ccc);
                                 }
                             }
-                            if (control_pertenece_a_cliente) {
-                                $.getJSON('<?php print base_url('FacturacionProduccion/getInfoXControl'); ?>', {
-                                    CONTROL: Control.val()
-                                }).done(function (a) {
-                                    if (a.length > 0) {
-                                        var xx = a[0];
+                        }
+                    }
+                    if (control_pertenece_a_cliente) {
+                        $.getJSON('<?php print base_url('FacturacionProduccion/getInfoXControl'); ?>', {
+                            CONTROL: Control.val()
+                        }).done(function (a) {
+                            if (a.length > 0) {
+                                var xx = a[0];
 //                                        if (parseInt(xx.stsavan) === 13) {
 //                                            for (var i = 1; i < 21; i++) { 
 //                                                    pnlTablero.find(`#CF${i}`).val(''); 
@@ -1773,89 +1789,89 @@
 //                                            });
 //                                            return;
 //                                        }
-                                        Corrida.val(xx.Serie);
-                                        var t = 0;
-                                        for (var i = 1; i < 23; i++) {
-                                            if (parseInt(xx["T" + i]) > 0) {
-                                                pnlTablero.find("#T" + i).val(xx["T" + i]);
-                                                pnlTablero.find("span.T" + i).text(xx["T" + i]);
-                                                pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
-                                                pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
-                                                pnlTablero.find(`#C${i}`).val(parseFloat(xx["C" + i]) > 0 ? xx["C" + i] : "");
-                                                var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
-                                                pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : ""));
-                                                pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
-                                                pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
-                                                t += parseInt(xx["C" + i]);
-                                                TotalParesEntrega.val(t);
-                                                TotalParesEntregaAF.val(t);
+                                Corrida.val(xx.Serie);
+                                var t = 0;
+                                for (var i = 1; i < 23; i++) {
+                                    if (parseInt(xx["T" + i]) > 0) {
+                                        pnlTablero.find("#T" + i).val(xx["T" + i]);
+                                        pnlTablero.find("span.T" + i).text(xx["T" + i]);
+                                        pnlTablero.find("#T" + i).attr("title", xx["T" + i]);
+                                        pnlTablero.find("#T" + i).attr("data-original-title", xx["T" + i]);
+                                        pnlTablero.find(`#C${i}`).val(parseFloat(xx["C" + i]) > 0 ? xx["C" + i] : "");
+                                        var cf = (parseInt(pnlTablero.find("#CF" + i).val()) > 0 ? parseInt(pnlTablero.find("#CF" + i).val()) : 0);
+                                        pnlTablero.find("#CAF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : ""));
+                                        pnlTablero.find("#C" + i).attr("title", xx["C" + i]);
+                                        pnlTablero.find("#C" + i).attr("data-original-title", xx["C" + i]);
+                                        t += parseInt(xx["C" + i]);
+                                        TotalParesEntrega.val(t);
+                                        TotalParesEntregaAF.val(t);
 
-                                                var pares = pnlTablero.find(`#C${i}`),
-                                                        pares_a_facturar = pnlTablero.find(`#CAF${i}`);
-                                                if (parseFloat(pares.val()) > 0) {
-                                                    onEnable(pares_a_facturar);
-                                                } else {
-                                                    onDisable(pares_a_facturar);
-                                                }
-                                            }
+                                        var pares = pnlTablero.find(`#C${i}`),
+                                                pares_a_facturar = pnlTablero.find(`#CAF${i}`);
+                                        if (parseFloat(pares.val()) > 0) {
+                                            onEnable(pares_a_facturar);
+                                        } else {
+                                            onDisable(pares_a_facturar);
                                         }
-                                        getTotalPares();
-                                        /*OBTENER CODIGO DEL SAT X ESTILO*/
-                                        FolioFactura.val(xx.CLAVE_PEDIDO);
-                                        CorridaFacturacion.val(xx.SERIET);
-                                        EstiloFacturacion.val(xx.ESTILOT);
-                                        EstiloTFacturacion.val(xx.ESTILO_TEXT);
-                                        ColorFacturacion.val(xx.COLORT);
-                                        ColorClaveFacturacion.val(xx.COLOR_CLAVE);
-                                        PrecioFacturacion.val(xx.PRECIO);
-                                        CajasFacturacion.val(1);
-                                        CajasFacturacion.focus().select();
-                                        onObtenerCodigoSatXEstilo();
-                                        var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
-                                        var stt = parseFloat(xx.Precio) * prs;
-                                        SubtotalFacturacion.val(stt);
-                                        switch (parseInt(TPFactura.val())) {
-                                            case 1:
-                                                SubtotalFacturacionIVA.val(stt * 0.16);
-                                                TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
-                                                break;
-                                            case 2:
-                                                SubtotalFacturacionIVA.val(stt);
-                                                TotalLetra.find("span").text(NumeroALetras(stt));
-                                                break;
-                                        }
-                                        //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
-
-                                        pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
-                                        EstatusControl.val(xx.ESTATUS);
-                                        btnFacturaXAnticipoDeProducto.attr('disabled', false);
-                                        btnControlInCompleto.attr('disabled', false);
-                                        btnControlCompleto.attr('disabled', false);
-                                    } else {
-                                        Control.focus().select();
-                                        btnFacturaXAnticipoDeProducto.attr('disabled', true);
-                                        btnControlInCompleto.attr('disabled', true);
-                                        btnControlCompleto.attr('disabled', true);
                                     }
-                                }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                    onCloseOverlay();
-                                });
+                                }
+                                getTotalPares();
+                                /*OBTENER CODIGO DEL SAT X ESTILO*/
+                                FolioFactura.val(xx.CLAVE_PEDIDO);
+                                CorridaFacturacion.val(xx.SERIET);
+                                EstiloFacturacion.val(xx.ESTILOT);
+                                EstiloTFacturacion.val(xx.ESTILO_TEXT);
+                                ColorFacturacion.val(xx.COLORT);
+                                ColorClaveFacturacion.val(xx.COLOR_CLAVE);
+                                PrecioFacturacion.val(xx.PRECIO);
+                                CajasFacturacion.val(1);
+                                CajasFacturacion.focus().select();
+                                onObtenerCodigoSatXEstilo();
+                                var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
+                                var stt = parseFloat(xx.Precio) * prs;
+                                SubtotalFacturacion.val(stt);
+                                switch (parseInt(TPFactura.val())) {
+                                    case 1:
+                                        SubtotalFacturacionIVA.val(stt * 0.16);
+                                        TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
+                                        break;
+                                    case 2:
+                                        SubtotalFacturacionIVA.val(stt);
+                                        TotalLetra.find("span").text(NumeroALetras(stt));
+                                        break;
+                                }
+                                //                                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(stt));
+
+                                pnlTablero.find("#cCST")[0].checked = (xx.ESTATUS === 'PRODUCTO TERMINADO');
+                                EstatusControl.val(xx.ESTATUS);
+                                btnFacturaXAnticipoDeProducto.attr('disabled', false);
+                                btnControlInCompleto.attr('disabled', false);
+                                btnControlCompleto.attr('disabled', false);
                             } else {
-                                onResetCampos();
-                                onCampoInvalido(pnlTablero, ' * ESTE CONTROL NO PERTENECE A ESTE CLIENTE * ', function () {
-                                    Control.focus().select();
-                                    btnFacturaXAnticipoDeProducto.attr('disabled', true);
-                                    btnControlInCompleto.attr('disabled', true);
-                                    btnControlCompleto.attr('disabled', true);
-                                });
+                                Control.focus().select();
+                                btnFacturaXAnticipoDeProducto.attr('disabled', true);
+                                btnControlInCompleto.attr('disabled', true);
+                                btnControlCompleto.attr('disabled', true);
                             }
                         }).fail(function (x) {
                             getError(x);
                         }).always(function () {
                             onCloseOverlay();
                         });
+                    } else {
+                        onResetCampos();
+                        onCampoInvalido(pnlTablero, ' * ESTE CONTROL NO PERTENECE A ESTE CLIENTE * ', function () {
+                            Control.focus().select();
+                            btnFacturaXAnticipoDeProducto.attr('disabled', true);
+                            btnControlInCompleto.attr('disabled', true);
+                            btnControlCompleto.attr('disabled', true);
+                        });
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
+                });
 //                    }
 //                } else {
 //                    onBeep(2);
@@ -2042,8 +2058,7 @@
             CorridaFacturacion.val('');
             PrecioFacturacion.val('');
             SubtotalFacturacion.val('');
-            SubtotalFacturacionIVA.val('');
-            ObservacionFacturacion.val('');
+            SubtotalFacturacionIVA.val(''); 
             ParesFacturadosFacturacion.val('');
             btnCierraDocto.attr('disabled', false);
             btnFacturaXAnticipoDeProducto.attr('disabled', true);

@@ -57,7 +57,7 @@ INNER JOIN articulos A ON FT.Articulo = A.Clave
 INNER JOIN series S ON P.Serie = S.Clave
 INNER JOIN estilos AS E ON  FT.Estilo = E.Clave
 INNER JOIN lineas AS L ON  E.Linea = L.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 12 AND P.stsavan NOT IN(12,13);]]>
+WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 12 AND P.stsavan NOT IN(12,13) ORDER BY L.Descripcion ASC,A.Descripcion ASC;]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

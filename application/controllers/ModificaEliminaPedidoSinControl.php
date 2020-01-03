@@ -108,7 +108,9 @@ class ModificaEliminaPedidoSinControl extends CI_Controller {
 
     public function onEliminar() {
         try {
+            var_dump($this->input->post());
             $this->db->where('ID', $this->input->post('ID'))->delete('pedidox');
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec39" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.3660269107301524"/>
+	<property name="ireport.zoom" value="4.715895382000044"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="616"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -25,9 +25,8 @@ WHEN C.FormaPago = 28 THEN "28"
 WHEN C.FormaPago = 29 THEN "29"
 WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
-END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID
-FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura
-WHERE F.factura  = $P{factura}  AND CFDI.Tipo  ='I';]]>
+END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID, UPPER(F.obs) AS OBSERVACIONES
+FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura AND CFDI.Tipo='I' WHERE F.factura  = $P{factura};]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -158,6 +157,9 @@ WHERE F.factura  = $P{factura}  AND CFDI.Tipo  ='I';]]>
 	<field name="UUID" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="OBSERVACIONES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="subtot_1" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
@@ -166,6 +168,9 @@ WHERE F.factura  = $P{factura}  AND CFDI.Tipo  ='I';]]>
 	</variable>
 	<variable name="subtot_3" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
+	</variable>
+	<variable name="pareped_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{pareped}]]></variableExpression>
 	</variable>
 	<columnHeader>
 		<band height="127" splitType="Stretch">
@@ -514,6 +519,31 @@ WHERE F.factura  = $P{factura}  AND CFDI.Tipo  ='I';]]>
 				<reportElement x="482" y="30" width="90" height="15" uuid="61e372d8-5ee8-4847-9a04-f276602ea9ba"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{subtot_3} * 1.16]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="18" width="382" height="35" uuid="195a4729-a084-4427-86ca-dac888e9cec7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBSERVACIONES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="43" y="0" width="31" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="c279f017-a317-47f4-8eec-edc880563254"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="0" width="43" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="2c2112b5-5113-4361-a969-c4d4edd9bc3c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pareped_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

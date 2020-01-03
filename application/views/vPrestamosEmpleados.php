@@ -606,7 +606,9 @@
                     pnlTablero.find("#TotalAbonos").val(abonos);
                     pnlTablero.find("#TotalAbonosParrafo").text('$' + $.number(parseFloat(abonos), 2, '.', ','));
                     var saldo = parseFloat(pnlTablero.find("#TotalPrestamos").val()) - parseFloat(abonos);
-
+                    if (saldo < 0) {
+                        saldo = 0;
+                    }
                     pnlTablero.find("#SaldoMovimientosParrafo").text('$' + $.number(parseFloat(saldo), 2, '.', ','));
                 },
                 initComplete: function () {

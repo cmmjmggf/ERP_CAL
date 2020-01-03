@@ -419,7 +419,7 @@ P.Maquila AS MAQUILA
                         $this->db->set('stsavan', 33)->set('EstatusProduccion', 'REBAJADO')
                                 ->set('DeptoProduccion', 30)->where('Control', $xXx['CONTROL'])
                                 ->update('pedidox');
-                        $this->db->set('fec33', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])
+                        $this->db->set('fec33', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])
                                 ->update('avaprd');
                         $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
                         $data = array(
@@ -428,7 +428,7 @@ P.Maquila AS MAQUILA
                             "control" => $xXx['CONTROL'],
                             "estilo" => $xXx['ESTILO'],
                             "pares" => $xXx['PARES'],
-                            "fecha" => Date('Y-m-d h:i:s'),
+                            "fecha" => Date('Y-m-d 00:00:00'),
                             "semana" => $xXx['SEMANA'],
                             "depto" => $xXx['DEPTOACTUAL'],
                             "anio" => Date('Y'));
@@ -472,7 +472,7 @@ P.Maquila AS MAQUILA
                         $this->db->set('stsavan', 4)->set('EstatusProduccion', 'FOLEADO')
                                 ->set('DeptoProduccion', 40)->where('Control', $xXx['CONTROL'])
                                 ->update('pedidox');
-                        $this->db->set('fec4', Date('Y-m-d h:i:s'))
+                        $this->db->set('fec4', Date('Y-m-d 00:00:00'))
                                 ->where('contped', $xXx['CONTROL'])
                                 ->update('avaprd');
 
@@ -508,7 +508,7 @@ P.Maquila AS MAQUILA
                 $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
                         ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
                         ->update('pedidox');
-                $this->db->set('fec44', Date('Y-m-d h:i:s'))
+                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])
                         ->update('avaprd');
                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
@@ -536,7 +536,7 @@ P.Maquila AS MAQUILA
                 $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
                         ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
                         ->update('pedidox');
-                $this->db->set('fec44', Date('Y-m-d h:i:s'))
+                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])
                         ->update('avaprd');
                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
@@ -553,7 +553,7 @@ P.Maquila AS MAQUILA
                         ->set('EstatusProduccion', 'PESPUNTE')
                         ->set('DeptoProduccion', 110)
                         ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])->set("fec5", Date('Y-m-d h:i:s'))
+                $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])->set("fec5", Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE.", $this->session);
                 exit(0);
@@ -606,7 +606,7 @@ P.Maquila AS MAQUILA
                                     ->set('EstatusProduccion', 'ENSUELADO')
                                     ->set('DeptoProduccion', 140)
                                     ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 55)->set("fec55", Date('Y-m-d h:i:s'))
+                            $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))
                                     ->where('contped', $xXx['CONTROL'])->update('avaprd');
 
                             /* PAGAR FRACCION */
@@ -636,7 +636,7 @@ P.Maquila AS MAQUILA
                                     ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
                                     ->set('DeptoProduccion', 130)
                                     ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d h:i:s'))
+                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
                                     ->where('contped', $xXx['CONTROL'])->update('avaprd');
 
                             /* PAGAR FRACCION */
@@ -660,7 +660,7 @@ P.Maquila AS MAQUILA
                         ->where('Control', $xXx['CONTROL'])->update('controles');
                 $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
                         ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set("status", 7)->set("fec7", Date('Y-m-d h:i:s'))
+                $this->db->set("status", 7)->set("fec7", Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
                 $ID = $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
@@ -717,7 +717,7 @@ P.Maquila AS MAQUILA
                                 ->where('Control', $xXx['CONTROL'])->update('controles');
                         $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')
                                 ->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                        $this->db->set("status", 8)->set("fec8", Date('Y-m-d h:i:s'))
+                        $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))
                                 ->where('contped', $xXx['CONTROL'])->update('avaprd');
                         $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO.", $this->session);
                         exit(0);
@@ -755,7 +755,7 @@ P.Maquila AS MAQUILA
                 $this->db->set('stsavan', 9)->set('EstatusProduccion', 'MONTADO A')
                         ->set('DeptoProduccion', 180)->where('Control', $xXx['CONTROL'])
                         ->update('pedidox');
-                $this->db->set('fec9', Date('Y-m-d h:i:s'))
+                $this->db->set('fec9', Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])
                         ->update('avaprd');
                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - MONTADO A.", $this->session);
@@ -786,7 +786,7 @@ P.Maquila AS MAQUILA
                                 $this->db->set('stsavan', 10)->set('EstatusProduccion', 'ADORNO A')
                                         ->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])
                                         ->update('pedidox');
-                                $this->db->set('fec10', Date('Y-m-d h:i:s'))
+                                $this->db->set('fec10', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
                                 exit(0);
@@ -826,7 +826,7 @@ P.Maquila AS MAQUILA
                                 $this->db->set('stsavan', 11)->set('EstatusProduccion', 'ALMACEN ADORNO')
                                         ->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])
                                         ->update('pedidox');
-                                $this->db->set('fec11', Date('Y-m-d h:i:s'))
+                                $this->db->set('fec11', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
                                 exit(0);
@@ -876,7 +876,7 @@ P.Maquila AS MAQUILA
                 "control" => $xXx['CONTROL'],
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
-                "fecha" => Date('Y-m-d h:i:s'),
+                "fecha" => Date('Y-m-d 00:00:00'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
@@ -912,7 +912,7 @@ P.Maquila AS MAQUILA
                 "control" => $xXx['CONTROL'],
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
-                "fecha" => Date('Y-m-d h:i:s'),
+                "fecha" => Date('Y-m-d 00:00:00'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
@@ -955,7 +955,7 @@ P.Maquila AS MAQUILA
                     ->where('Control', $Control)
                     ->update('controles');
 
-            $this->db->set('fec42', Date('Y-m-d h:i:s'))
+            $this->db->set('fec42', Date('Y-m-d 00:00:00'))
                     ->where('contped', $Control)
                     ->update('avaprd');
         } catch (Exception $exc) {

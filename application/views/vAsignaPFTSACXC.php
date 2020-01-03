@@ -828,6 +828,7 @@
                 "data": function (d) {
                     d.CORTADOR = CortadorClave.val() ? CortadorClave.val() : '';
                     d.PIFO = PielForro.val() ? PielForro.val() : '';
+                    d.CONTROL = mdlRetornaMaterial.find("#Control").val() ? mdlRetornaMaterial.find("#Control").val() : '';
                 }
             },
             "columns": [
@@ -885,8 +886,7 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             });
-        } else {
-            tblRegresos.DataTable().column(2).search('').draw();
+        } else { 
             Regresos.ajax.reload();
         }
     }

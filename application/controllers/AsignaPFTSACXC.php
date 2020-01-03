@@ -81,8 +81,14 @@ class AsignaPFTSACXC extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
                             . "A.Estilo, A.Color, A.Pares, A.Articulo, A.Descripcion AS ArticuloT, "
-                            . "A.Abono AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
+                            . "(CASE WHEN A.Abono = 0 THEN A.Cargo ELSE A.Abono END) AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
                     ->from("asignapftsacxc AS A");
+            
+            
+            
+//            $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
+//                            . "A.Estilo, A.Color, A.Pares, A.Articulo, CONCAT(A.Descripcion) AS ArticuloT, "
+//                            . "A.Cargo AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
             if ($x['PIFO'] !== '') {
                 $PIFO = intval($x['PIFO']);
                 $FRACCION = 100;
@@ -106,6 +112,9 @@ class AsignaPFTSACXC extends CI_Controller {
                 }
                 $this->db->where('A.Fraccion', $FRACCION);
                 $this->db->where('A.TipoMov', $PIFO);
+            }
+            if ($x['CONTROL'] !== '') {
+                $this->db->where("A.Control", $x['CONTROL']);
             }
             $this->db->order_by('A.ID', 'DESC')->order_by('A.Semana', 'DESC');
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
@@ -351,7 +360,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'Descripcion' => $x['ARTICULOT'],
                         'Fecha' => Date('d/m/Y'),
                         'Explosion' => $x['EXPLOSION'],
-                        'Cargo' => $x['EXPLOSION'],
+                        'Cargo' => $x['ENTREGA'],
                         'Abono' => $x['ENTREGA'],
                         'Devolucion' => 0,
                         'Maquila' => $MAQUILA_CONTROL,
@@ -466,7 +475,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 }
             }
             $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
-            if ($x['REGRESO'] > 0) {
+            if ($x['REGRESO'] >= 0) {
                 $datos = array(
                     'Articulo' => $x['ARTICULO'],
                     'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
