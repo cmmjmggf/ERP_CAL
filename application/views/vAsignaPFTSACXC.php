@@ -426,8 +426,7 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-        handleEnterDiv(mdlRetornaMaterial);
-        Cortador[0].selectize.disable();
+        handleEnterDiv(mdlRetornaMaterial); 
         Semana.on('keydown', function (e) {
             Pieles.ajax.reload();
             Forros.ajax.reload();

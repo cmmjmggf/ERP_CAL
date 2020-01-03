@@ -548,44 +548,46 @@ class FacturacionProduccion extends CI_Controller {
 //                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
 //                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
 //                    ->result();
-
-            $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
-                            . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
-                            . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
-                            . "C.EmisorRfc, C.ReceptorRfc, C.EmisorNombre, C.ReceptorNombre, "
-                            . "C.FormaPago, C.MetodoPago, C.UsoCfdi, C.Moneda, C.TipoCambio, "
-                            . "C.CertificadoSAT, C.CertificadoCFD, C.FechaTimbrado, C.CadenaOriginal, "
-                            . "C.selloSAT, C.selloCFD, C.CfdiTimbrado, C.Periodo "
-                            . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
-                    ->result();
-
-            $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
-                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
-
-            $rfc_emi = $this->session->EMPRESA_RFC;
-            $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
-
-            if (!empty($dtm)) {
-                $cfdi = $dtm[0];
-                $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
-                $UUID = $cfdi->uuid;
-
-                $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
-            } else {
-                $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE  (QR ERROR)";
-                exit(0);
-            }
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $qr_url = QRcode::png($qr, 'rpt/qr.png');
             $pr = array();
-            switch (intval($x["TP"])) {
-                case 1:
-                    $pr["logo"] = base_url() . $this->session->LOGO;
-                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
-                    BREAK;
+            if (intval($x['TP']) === 1) {
+                $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
+                                . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
+                                . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
+                                . "C.EmisorRfc, C.ReceptorRfc, C.EmisorNombre, C.ReceptorNombre, "
+                                . "C.FormaPago, C.MetodoPago, C.UsoCfdi, C.Moneda, C.TipoCambio, "
+                                . "C.CertificadoSAT, C.CertificadoCFD, C.FechaTimbrado, C.CadenaOriginal, "
+                                . "C.selloSAT, C.selloCFD, C.CfdiTimbrado, C.Periodo "
+                                . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
+                        ->result();
+
+
+                $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
+                                . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+
+                $rfc_emi = $this->session->EMPRESA_RFC;
+                $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
+
+                if (!empty($dtm)) {
+                    $cfdi = $dtm[0];
+                    $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
+                    $UUID = $cfdi->uuid;
+
+                    $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+                } else {
+                    $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE  (QR ERROR)";
+                    exit(0);
+                }
+                $qr_url = QRcode::png($qr, 'rpt/qr.png');
+                switch (intval($x["TP"])) {
+                    case 1:
+                        $pr["logo"] = base_url() . $this->session->LOGO;
+                        $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                        BREAK;
+                }
+                $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
             }
-            $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
             switch (intval($x["TP"])) {
                 case 1:
                     switch (intval($x['CLIENTE'])) {
