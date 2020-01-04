@@ -415,7 +415,7 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                     'semana' => $x->post('Semana'),
                     'diaprg' => $x->post('DIA'),
                     'frac' => $x->post('FRACCION'),
-                    'fecha' => Date('Y-m-d h:i:s'),
+                    'fecha' => Date('Y-m-d 00:00:00'),
                     'estilo' => $x->post('Estilo'),
                     'par' => $x->post('Pares'),
                     'tiempo' => $r->TIEMPO,

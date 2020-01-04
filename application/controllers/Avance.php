@@ -377,10 +377,12 @@ P.Maquila AS MAQUILA
             if ($frac !== '') {
                 $frac = intval($x->post('FRACCION'));
             }
+            /*depto ES EL DEPARTAMENTO AL QUE SE QUIERE MOVER, depto_actual ES EL DEPARTAMENTO DONDE ESTA ACTUALMENTE*/
             $depto = intval($x->post('DEPTO'));
             $depto_actual = intval($x->post('AVANCEDEPTOACTUAL'));
             $PROCESO_MAQUILA = intval($x->post('PROCESO_MAQUILA'));
-
+//            var_dump($xXx);
+//            exit(0);
             if ($depto === 33 && $depto_actual === 3 && $frac === 102 ||
                     $depto === 33 && $depto_actual === 3 && $frac === 93 ||
                     $depto === 33 && $depto_actual === 3 && $frac === 113) {
@@ -486,7 +488,10 @@ P.Maquila AS MAQUILA
                 }
                 exit(0);
             }
-
+            if($depto===42){
+                
+                exit(0);
+            }
             if ($depto_actual === 42 && $PROCESO_MAQUILA >= 1) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],

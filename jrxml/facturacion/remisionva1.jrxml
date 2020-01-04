@@ -400,8 +400,8 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			<band height="32">
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="0" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="458487fc-be82-4e58-be8f-df31c546eb33"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{pareped_1}]]></textFieldExpression>
@@ -1233,7 +1233,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Favor  de enviar su ficha  de deposito vía Whatsapp  477-7671811]]></text>
+				<text><![CDATA[Favor  de enviar su ficha  de deposito vía Whatsapp  477-767 18 11]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="1" y="26" width="45" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6d31024e-9316-4577-9a6c-75eefcf384ae"/>

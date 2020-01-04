@@ -93,7 +93,7 @@
                         $F = Date('d/m/Y');
                         $YYYY = Date('Y');
                         $SP = $this->db->select('SP.Sem AS Semana, SP.FechaIni AS FEINI, SP.FechaFin AS FEFI', false)
-                                        ->from('semanasproduccion AS SP')
+                                        ->from('semanasnomina AS SP')
                                         ->where("STR_TO_DATE('{$F}', \"%d/%m/%Y\") "
                                                 . "BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") "
                                                 . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") AND SP.Ano = {$YYYY}")

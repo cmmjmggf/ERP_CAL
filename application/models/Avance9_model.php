@@ -60,7 +60,7 @@ class Avance9_model extends CI_Model {
     public function getSemanaByFecha($fecha) {
         try {
             $this->db->select("U.Sem, '{$fecha}' AS Fecha", false)
-                    ->from('semanasproduccion AS U')
+                    ->from('semanasnomina AS U')
                     ->where("STR_TO_DATE(\"{$fecha}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")");
             $query = $this->db->get();
             /*

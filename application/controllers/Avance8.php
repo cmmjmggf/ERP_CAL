@@ -191,7 +191,7 @@ class Avance8 extends CI_Controller {
 //                                    ->where_in('E.DepartamentoFisico', array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */))
 //                                    ->get()->result());
 
-            $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
+            $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60,120,140,70, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
             $this->db->select("CONCAT(E.PrimerNombre,' ',"
@@ -201,7 +201,7 @@ class Avance8 extends CI_Controller {
                             . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
-                    ->where_in('E.AltaBaja', array(1));
+                    ->where_in('E.AltaBaja', array(1,2));
             if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
                 $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
             } else {
@@ -248,7 +248,8 @@ class Avance8 extends CI_Controller {
     public function getPagosXEmpleadoXSemana() {
         try {
             $x = $this->input->get();
-            $a = "IFNULL((SELECT FORMAT(SUM(fpn.subtot),2) FROM fracpagnomina AS fpn WHERE dayofweek(fpn.fecha)";
+            $ANIO = Date('Y');
+            $a = "IFNULL((SELECT FORMAT(SUM(fpn.subtot),2) FROM fracpagnomina AS fpn WHERE dayofweek(fpn.fecha)  ";
             $b = "AND fpn.numeroempleado = '{$x['EMPLEADO']}' AND fpn.Semana = {$x['SEMANA']} GROUP BY dayofweek(fpn.fecha)),0)";
             print json_encode($this->db->select("{$a}= 2 {$b} AS LUNES,"
                                             . "{$a} = 3 {$b} AS MARTES,"

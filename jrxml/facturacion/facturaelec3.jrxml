@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec3" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.3660269107301524"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="6.904542428786266"/>
+	<property name="ireport.x" value="188"/>
+	<property name="ireport.y" value="1433"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -25,7 +25,7 @@ WHEN C.FormaPago = 28 THEN "28"
 WHEN C.FormaPago = 29 THEN "29"
 WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
-END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID
+END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID, F.obs AS OBSERVACIONES
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura  AND CFDI.Tipo  ='I' WHERE F.factura =$P{factura};]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
@@ -157,6 +157,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 	<field name="UUID" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="OBSERVACIONES" class="java.lang.String"/>
 	<variable name="subtot_1" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
@@ -165,6 +166,9 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 	</variable>
 	<variable name="subtot_3" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
+	</variable>
+	<variable name="pareped_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{pareped}]]></variableExpression>
 	</variable>
 	<columnHeader>
 		<band height="127" splitType="Stretch">
@@ -422,7 +426,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<staticText>
 				<reportElement x="44" y="-1" width="35" height="13" forecolor="#333333" uuid="d752a75f-01ec-4269-b0d6-4bdfef5f1647"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -513,6 +517,28 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 				<reportElement x="482" y="30" width="90" height="15" uuid="61e372d8-5ee8-4847-9a04-f276602ea9ba"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{subtot_3} * 1.16]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="45" y="0" width="31" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="82b7bcb9-3b70-44b3-ba30-494adb9f6113"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="0" width="45" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="2da01396-d67b-4f0c-a94a-3ca46929454f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pareped_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="15" width="382" height="38" uuid="8500e047-9617-4ceb-a07c-95d8058d6120"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{OBSERVACIONES}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
@@ -694,7 +720,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 				</textElement>
 				<textFieldExpression><![CDATA[$F{METODO_DE_PAGO}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="58" y="34" width="424" height="12" uuid="d9ffee3c-207f-41b7-8c8c-5b5bd3b4f531"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
@@ -717,7 +743,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 				</textElement>
 				<textFieldExpression><![CDATA[$F{UUID}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="58" y="46" width="424" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0ac79157-cf43-4288-8b3d-67ad618c20e8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
