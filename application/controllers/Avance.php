@@ -377,7 +377,7 @@ P.Maquila AS MAQUILA
             if ($frac !== '') {
                 $frac = intval($x->post('FRACCION'));
             }
-            /*depto ES EL DEPARTAMENTO AL QUE SE QUIERE MOVER, depto_actual ES EL DEPARTAMENTO DONDE ESTA ACTUALMENTE*/
+            /* depto ES EL DEPARTAMENTO AL QUE SE QUIERE MOVER, depto_actual ES EL DEPARTAMENTO DONDE ESTA ACTUALMENTE */
             $depto = intval($x->post('DEPTO'));
             $depto_actual = intval($x->post('AVANCEDEPTOACTUAL'));
             $PROCESO_MAQUILA = intval($x->post('PROCESO_MAQUILA'));
@@ -488,10 +488,43 @@ P.Maquila AS MAQUILA
                 }
                 exit(0);
             }
-            if($depto===42){
-                
+            
+            
+            /*
+             * ES PORQUE ESTAN EN ENTRETELADO, PERO NO LLEVAN ENTRETELADO, PERO LOS MUEVEN DE A "PROCESO MAQUILA PARA PODER AVANZAR"
+             * 
+                42 = MAQUILA "A" 44 = ALMACEN DE CORTE
+             *              */
+            if ($depto === 42 && $depto_actual === 40) {
+                /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
+                $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
+                        ->where('Control', $xXx['CONTROL'])
+                        ->update('controles');
+                $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
+                        ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec42', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])->update('avaprd');
                 exit(0);
             }
+            /*
+                42 = MAQUILA "A" 44 = ALMACEN DE CORTE
+             *              */
+            if ($depto === 44 && $depto_actual === 42) {
+                /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
+                $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                        ->where('Control', $xXx['CONTROL'])
+                        ->update('controles');
+                $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
+                        ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
+                        ->where('contped', $xXx['CONTROL'])
+                        ->update('avaprd');
+                exit(0);
+            }
+
+
+
             if ($depto_actual === 42 && $PROCESO_MAQUILA >= 1) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
@@ -521,7 +554,8 @@ P.Maquila AS MAQUILA
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 
+                    && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
                     'FechaAProduccion' => Date('d/m/Y'),
