@@ -117,10 +117,11 @@
                     processData: false,
                     data: frm
                 }).done(function (data, x, jq) {
+                    mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                     console.log(data);
                     if (data.length > 0) {
                         onImprimirReporteFancyAFC(data, function (a, b) {
-                            mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
+                            mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                         });
                     } else {
                         swal({
@@ -128,11 +129,13 @@
                             text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                             icon: "error"
                         }).then((action) => {
+                            mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                             mdlKardexPorArticulo.find('#Articulo')[0].selectize.focus();
                         });
                     }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
+                    mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                     console.log(x, y, z);
                     HoldOn.close();
                 });
@@ -142,6 +145,7 @@
                     text: "DEBES DE SELECCIONAR UN ARTÍCULO",
                     icon: "error"
                 }).then((action) => {
+                    mdlKardexPorArticulo.find('#btnImprimir').attr('disabled', false);
                     mdlKardexPorArticulo.find('#Articulo')[0].selectize.focus();
                 });
             }

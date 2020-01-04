@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estadvdedi" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
-	<property name="ireport.zoom" value="2.5657905911535366"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estadvdedi" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
+	<property name="ireport.zoom" value="1.4483218986834416"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="FECHA_INICIAL" class="java.lang.String"/>
@@ -41,11 +41,10 @@ WHEN D.stafac = 1 THEN "Fp"
 WHEN D.stafac = 2 THEN "Fc"
 END)
 AS ESTATUS_FACTURA, C.Agente AS AGENTE_CLIENTE
-
 FROM devolucionnp as D INNER JOIN clientes AS C ON D.cliente = C.Clave
-INNER JOIN pedidox AS P ON D.cliente = P.Cliente AND D.comb = P.Color AND D.estilo = P.Estilo AND D.control = P.Control
+INNER JOIN pedidox AS P ON D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
-AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")) AND YEAR(str_to_date($P{FECHA_FINAL},"%d/%m/%Y")) ORDER BY ABS(D.ctenvo) ASC,ABS(D.defecto) ASC,ABS(D.detalle) ASC, D.fecha DESC;]]>
+ORDER BY ABS(D.ctenvo) ASC,ABS(D.defecto) ASC,ABS(D.detalle) ASC, D.fecha DESC;]]>
 	</queryString>
 	<field name="PRECIO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

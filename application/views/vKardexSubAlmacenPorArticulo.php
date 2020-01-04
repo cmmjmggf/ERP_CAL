@@ -82,6 +82,7 @@
                             mdlKardexSubAlmacen.find('#btnImprimir').focus();
                         } else {
                             swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
                                 mdlKardexSubAlmacen.find("#sArticulo")[0].selectize.clear(true);
                                 mdlKardexSubAlmacen.find('#Articulo').focus().val('');
                             });
@@ -118,6 +119,7 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
+                    mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
                     if (data.length > 0) {
                         onImprimirReporteFancyAFC(data, function (a, b) {
                             mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
@@ -128,11 +130,13 @@
                             text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                             icon: "error"
                         }).then((action) => {
+                            mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
                             mdlKardexSubAlmacen.find('#Articulo').focus();
                         });
                     }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
+                    mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
                     console.log(x, y, z);
                     HoldOn.close();
                 });
@@ -142,6 +146,7 @@
                     text: "DEBES DE SELECCIONAR UN ARTÍCULO",
                     icon: "error"
                 }).then((action) => {
+                    mdlKardexSubAlmacen.find('#btnImprimir').attr('disabled', false);
                     mdlKardexSubAlmacen.find('#Articulo').focus();
                 });
             }

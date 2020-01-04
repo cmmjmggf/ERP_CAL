@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estadvcli" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
-	<property name="ireport.zoom" value="2.7320538214602865"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estadvcli" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
+	<property name="ireport.zoom" value="1.542173157718129"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -42,10 +42,11 @@ WHEN D.stafac = 2 THEN "Fc"
 END)
 AS ESTATUS_FACTURA
 
-FROM devolucionnp as D INNER JOIN clientes AS C ON D.cliente = C.Clave
-INNER JOIN pedidox AS P ON D.cliente = P.Cliente AND D.comb = P.Color AND D.estilo = P.Estilo AND D.control = P.Control
+FROM devolucionnp as D
+INNER JOIN clientes AS C ON D.cliente = C.Clave
+INNER JOIN pedidox AS P ON D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
-AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")) AND YEAR(str_to_date($P{FECHA_FINAL},"%d/%m/%Y")) AND D.cargoa = 2 ORDER BY ABS(D.cliente) ASC, D.fecha DESC;]]>
+ORDER BY ABS(D.cliente) ASC, D.fecha DESC;]]>
 	</queryString>
 	<field name="PRECIO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -156,8 +157,8 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 					<text><![CDATA[Total pares por cliente]]></text>
 				</staticText>
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="398" y="0" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c1dffe95-2b2e-4726-a09f-0b8b0b955824"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<reportElement mode="Transparent" x="398" y="0" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c1dffe95-2b2e-4726-a09f-0b8b0b955824"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -384,7 +385,7 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 				<textFieldExpression><![CDATA[$F{COLOR_CLAVE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="-1" y="0" width="28" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="28128c58-5b4e-417f-936c-35ac88b80a77"/>
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="-1" y="0" width="28" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="28128c58-5b4e-417f-936c-35ac88b80a77"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -392,7 +393,7 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 				<textFieldExpression><![CDATA[$F{DEFECTO_CLAVE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="99" y="0" width="28" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="68981d52-fa81-4568-b5c4-773289e12c08"/>
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="99" y="0" width="28" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="68981d52-fa81-4568-b5c4-773289e12c08"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -411,7 +412,7 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 				<reportElement x="-1" y="10" width="555" height="1" uuid="13a4c56f-a28b-4d06-bd45-16d04e437d3b"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="27" y="0" width="72" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="58fa8217-2d46-475e-acd7-9f16bc3d94fc"/>
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="27" y="0" width="72" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="58fa8217-2d46-475e-acd7-9f16bc3d94fc"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -419,7 +420,7 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 				<textFieldExpression><![CDATA[$F{DEFECTO_DOS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="127" y="0" width="77" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="3e2f3f28-a437-4ad0-a78e-4fda435172cc"/>
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="127" y="0" width="77" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="3e2f3f28-a437-4ad0-a78e-4fda435172cc"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -485,8 +486,8 @@ AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"
 				<text><![CDATA[Total general en pares]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="398" y="0" width="49" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="11f21415-54ae-42bc-9095-d04e21326e61"/>
-				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="398" y="0" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="11f21415-54ae-42bc-9095-d04e21326e61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

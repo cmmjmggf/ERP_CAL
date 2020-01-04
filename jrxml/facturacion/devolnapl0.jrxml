@@ -34,9 +34,9 @@ D.detalle AS DETALLE_CLAVE,
 D.staapl AS STATUS_APLICADA, D.cargoa AS CARGO_A, (D.paredev * P.Precio) AS VTA_PARES, 90 AS DEVO, (90 * D.paredev) AS DEV_PARES_NOVNTA,
 ((D.paredev * P.Precio) - (90 * D.paredev)) AS DIFER, D.maq AS MAQUILA, D.maq AS MAQUILA_CLAVE, (SELECT M.Nombre FROM maquilas AS M WHERE M.Clave = D.maq LIMIT 1) AS MAQUILA_DES
 FROM devolucionnp as D INNER JOIN clientes AS C ON D.cliente = C.Clave
-INNER JOIN pedidox AS P ON D.cliente = P.Cliente AND D.comb = P.Color AND D.estilo = P.Estilo AND D.control = P.Control
+INNER JOIN pedidox AS P ON D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
-AND D.control = P.Control AND P.Ano BETWEEN YEAR(str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")) AND  YEAR(str_to_date($P{FECHA_FINAL},"%d/%m/%Y")) AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
+AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 	</queryString>
 	<field name="PRECIO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

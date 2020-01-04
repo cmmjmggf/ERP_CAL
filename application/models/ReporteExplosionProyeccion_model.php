@@ -88,7 +88,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                 WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
                                 AND PE.Semana = $Semana
-                                AND `PE`.`Ano` = '2019'
+                                AND `PE`.`Ano` = '$Ano'
                                 AND case
                                 when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
                                 when $TipoE = '80' then `A`.`Grupo` IN('3', '50', '52')
