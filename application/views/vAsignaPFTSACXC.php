@@ -279,8 +279,7 @@
                         <input type="text" id="CortadorClave" autofocus="" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
-
-                        <select id="Cortador" name="Cortador" class="form-control form-control-sm">
+                        <select id="Cortador" name="Cortador" class="form-control form-control-sm selectNotEnter notEnter">
                             <option></option>
                         </select>
                     </div>
@@ -426,7 +425,7 @@
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-        handleEnterDiv(mdlRetornaMaterial); 
+        handleEnterDiv(mdlRetornaMaterial);
         Semana.on('keydown', function (e) {
             Pieles.ajax.reload();
             Forros.ajax.reload();
@@ -478,6 +477,7 @@
 
         CortadorClave.on('keydown', function (e) {
             if (e.keyCode === 13 && CortadorClave.val()) {
+                onDisable(Cortador);
                 Cortador[0].selectize.setValue(CortadorClave.val());
                 if (Cortador.val() === '') {
                     iMsg("DEBE DE ESPECIFICAR UN CORTADOR VALIDO", 'w', function () {
@@ -487,6 +487,7 @@
             }
 
         });
+
         mdlRetornaMaterial.on('hidden.bs.modal', function () {
             mdlRetornaMaterial.find("input").val("");
             $.each(mdlRetornaMaterial.find("select"), function (k, v) {
@@ -512,16 +513,20 @@
         mdlRetornaMaterial.find("#PielForro").change(function () {
             if ($(this).val() !== '') {
                 mdlRetornaMaterial.find("#Control").focus();
-                tblRegresos.DataTable().column(11).search($(this).val()).draw();
+                Regresos.ajax.reload();
+//                tblRegresos.DataTable().column(11).search($(this).val()).draw();
             } else {
-                tblRegresos.DataTable().column(11).search('').draw();
+                Regresos.ajax.reload();
+//                tblRegresos.DataTable().column(11).search('').draw();
             }
         }).blur(function () {
             if (mdlRetornaMaterial.find("#PielForro").val() !== '') {
                 mdlRetornaMaterial.find("#Control").focus();
-                tblRegresos.DataTable().column(11).search(mdlRetornaMaterial.find("#PielForro").val()).draw();
+                Regresos.ajax.reload();
+//                tblRegresos.DataTable().column(11).search(mdlRetornaMaterial.find("#PielForro").val()).draw();
             } else {
-                tblRegresos.DataTable().column(11).search('').draw();
+                Regresos.ajax.reload();
+//                tblRegresos.DataTable().column(11).search('').draw();
             }
         });
         MatMalo.keydown(function (e) {
@@ -529,7 +534,10 @@
                 btnAceptar.focus();
             }
         });
+
         btnAceptar.click(function () {
+            onEnable(Cortador);
+            onDisable(btnAceptar);
             if (mdlRetornaMaterial.find("#Entrego").val() !== '' || mdlRetornaMaterial.find("#Regreso").val() !== '') {
                 onDevolverPielForro();
             } else {
@@ -886,7 +894,7 @@
             }).fail(function (x, y, z) {
                 console.log(x, y, z);
             });
-        } else { 
+        } else {
             Regresos.ajax.reload();
         }
     }
@@ -1227,11 +1235,12 @@
                 PRECIO: mdlRetornaMaterial.find("#Precio").val()
             }).done(function (data) {
                 console.log(data);
-                Regresos.ajax.reload();
-                ControlesAsignados.ajax.reload();
                 swal('ATENCIÓN', 'SE HA RETORNADO MATERIAL', 'success').then((value) => {
-                    CortadorClave.val('');
                     CortadorClave.focus().select();
+                    onEnable(Cortador);
+                    onEnable(btnAceptar);
+                    Regresos.ajax.reload();
+                    ControlesAsignados.ajax.reload();
                 });
             }).fail(function (x, y, z) {
                 console.log(x.responseText, y, z);

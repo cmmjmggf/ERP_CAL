@@ -500,6 +500,7 @@ class AsignaPFTSACXC extends CI_Controller {
             }
             $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
             if ($x['REGRESO'] >= 0) {
+//                $EXISTE = $this->db->query("SELECT * FROM movarticulos_fabrica AS A WHERE A.TipoMov = 'EPR'")
                 $datos = array(
                     'Articulo' => $x['ARTICULO'],
                     'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,

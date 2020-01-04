@@ -72,11 +72,14 @@ class Avance9 extends CI_Controller {
                     default:
 //                        EN LA ORDEN DE PRODUCCIÓN NO VIENE FORRO PERO SI SINTETICO, EL SINTETICO LO METEN COMO FORRO.
 //                        SINTETICO
-                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
-                    
-                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
-                                ->where("A.Fraccion", 99)->where("FXE.Fraccion", $x['FR'])
-                                ->where("A.Control", 99)->where('A.Control', $x['CR']);
+//                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
+//                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
+//                                ->where("FXE.Fraccion", $x['FR'])
+//                                ->where("A.Control", $x['CR']);
+                        $this->db->select(" O.Pares, O.Sintetico1, O.CantidadSintetico1,O.TotalSintetico,
+                            FXE.CostoMO, (O.Pares * FXE.CostoMO) AS TOTAL, 99 AS FRACCION",false)
+                            ->from("ordendeproduccion AS O")->join("`fraccionesxestilo` as `FXE`","O.Estilo = `FXE`.`Estilo`")
+                            ->where("O.ControlT IN('{$x['CR']}') AND FXE.Fraccion = 99",null,false);
                         break;
                 }
                 $data = $this->db->get()->result();

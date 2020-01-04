@@ -940,7 +940,7 @@
         });
 
 
-        divParent.on('keydown', 'input, select, textarea:not(.notEnter)', function (e) {
+        divParent.on('keydown', 'input:not(.notEnter), select:not(.notEnter), textarea:not(.notEnter)', function (e) {
             var self = $(this)
                     , form = self.parents('body')
                     , focusable

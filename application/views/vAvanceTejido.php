@@ -35,7 +35,7 @@
             <div class="col-6 col-xs-6 col-sm-12 col-lg-2 col-xl-2">
                 <label>Documento</label>
                 <input type="text" id="Documento" name="Documento" class="form-control form-control-sm notEnter selectNotEnter">
-            </div>
+            </div> 
             <div class="col-6 col-xs-6 col-sm-2 col-lg-2 col-xl-2">
                 <label>Control</label>
                 <input type="text" id="Control" name="Control" class="form-control form-control-sm">

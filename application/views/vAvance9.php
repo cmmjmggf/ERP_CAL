@@ -236,9 +236,7 @@
                     console.log('avance 2');
                     onAgregarAvanceSinFraccion();
                 }
-            } else {
-                Estilo.val('');
-                Pares.val('');
+            } else {  
                 SigAvance.val('');
                 pnlTablero.find(".estilo_control").text('-');
                 pnlTablero.find(".pares_control").text('-');
@@ -438,24 +436,21 @@
             fra = [];
             if (pnlTablero.find("#chk96")[0].checked) {
                 fra.push({
-                    NUMERO_FRACCION: 96,
-                    DESCRIPCION: "CORTE MUESTRAS"
+                    NUMERO_FRACCION: 96
                 });
             }
             if (pnlTablero.find("#chk99")[0].checked) {
                 fra.push({
-                    NUMERO_FRACCION: 99,
-                    DESCRIPCION: "CORTE FORRO"
+                    NUMERO_FRACCION: 99
                 });
             }
             if (pnlTablero.find("#chk100")[0].checked) {
                 fra.push({
-                    NUMERO_FRACCION: 100,
-                    DESCRIPCION: "CORTE PIEL"
+                    NUMERO_FRACCION: 100
                 });
             }
             $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
-                    {CR: Control.val(), FR: fra, DEPTO: Departamento.val()}).done(function (data) {
+                    {CR: Control.val(), FR: JSON.stringify(fra), DEPTO: Departamento.val()}).done(function (data) {
                 if (data.length > 0) {
                     var r = data[0];
                     Estilo.val(r.Estilo);
@@ -499,7 +494,6 @@
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
                 ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
                         Control.focus().select();
-                        Estilo.val('');
                         Pares.val('');
                         SigAvance.val('');
                         pnlTablero.find(".estilo_control").text('-');
