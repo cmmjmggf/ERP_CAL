@@ -1223,7 +1223,7 @@
     }
 
     table tbody tr {
-        font-size: 0.68rem !important;
+        font-size: 0.7rem !important;
     }
 
     .verde {
@@ -1255,7 +1255,7 @@
 
     .slim{
         height:15px;
-        width: 100px !important;
+        width: 90px !important;
         font-size: 0.72rem !important;
     }
 

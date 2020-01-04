@@ -203,7 +203,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-4 col-xl-4">
                 <label for="">Banco</label>
-                <select id="Banco" name="Banco" class="form-control form-control-sm selectNotEnter"></select>
+                <select id="Banco" name="Banco" class="form-control form-control-sm selectNotEnter NotSelectize"></select>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-2 col-xl-2">
                 <label for="">Cuenta</label>
@@ -348,25 +348,26 @@
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
 
-        ImporteUno.on('keydown keyup', function (e) {
-            if (e.keyCode === 13) {
+        ImporteUno.on('keypress', function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
                 onRecalcularSaldoActual(1);
+                RefUno.focus();
             }
         });
 
-        ImporteDos.on('keydown keyup', function (e) {
+        ImporteDos.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 onRecalcularSaldoActual(2);
             }
         });
 
-        ImporteTres.on('keydown keyup', function (e) {
+        ImporteTres.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 onRecalcularSaldoActual(3);
             }
         });
 
-        ImporteCuatro.on('keydown keyup', function (e) {
+        ImporteCuatro.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 onRecalcularSaldoActual(4);
             }
@@ -392,21 +393,21 @@
             getDescuentoXCliente(ClientePDC, MovUno, RefUno);
         });
 
-        RefTres.on('keydown keyup', function (e) {
+        RefTres.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 MovCuatro[0].selectize.focus();
             }
         });
 
-        RefDos.on('keydown keyup', function (e) {
+        RefDos.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 MovTres[0].selectize.focus();
             }
         });
 
-        RefUno.on('keydown keyup', function (e) {
+        RefUno.on('keypress', function (e) {
             if (RefUno.val() && e.keyCode === 13) {
-                MovDos[0].selectize.focus();
+                Banco.focus();
             }
         });
 
@@ -489,6 +490,8 @@
                                 /*TERMINAR PROCESO */
                                 pnlTablero.find("input:not(#DepositoPDC):not(#Agente)").val('');
                                 Banco.empty();
+                                TPPDC[0].selectize.clear(true);
+                                DepositoPDC.val('');
                                 MovUno[0].selectize.clear(true);
                                 MovDos[0].selectize.clear(true);
                                 MovTres[0].selectize.clear(true);
@@ -538,6 +541,7 @@
                         .done(function (a) {
                             if (a.length > 0) {
                                 Cuenta.val(a[0].CTACHEQUE);
+                                btnAceptaPagos.focus();
                             }
                         }).fail(function (x) {
                     getError(x);
@@ -549,7 +553,7 @@
             }
         });
 
-        DoctoPDC.on('keydown keyup', function (e) {
+        DoctoPDC.on('keypress', function (e) {
             if (e.keyCode === 13 && $(this).val()) {
                 onNotifyOld('', 'OBTENIENDO INFORMACIÓN DEL DOCUMENTO...', 'info');
                 $.getJSON('<?php print base_url('PagosDeClientes/getDatosDelDocumentoConSaldo'); ?>', {DOCUMENTO: DoctoPDC.val()})
@@ -563,7 +567,7 @@
                                 TPPDC[0].selectize.setValue(a[0].TIPO);
                                 Dias.val(a[0].DIAS);
 
-                                getBancos(a[0].TIPO);
+                                getBancosPagos(a[0].TIPO);
                                 /*OBTENER UUID*/
                                 $.getJSON('<?php print base_url('PagosDeClientes/getUUID'); ?>', {DOCUMENTO: DoctoPDC.val()}).done(function (a) {
                                     console.log(a);
@@ -595,11 +599,18 @@
             }
         });
 
-        DepositoPDC.on('keydown', function (e) {
-            if (e.keyCode === 13) {
+        DepositoPDC.on('keypress', function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
                 SaldoDelDeposito.val(DepositoPDC.val());
+                DoctoPDC.focus().select();
             } else {
                 SaldoDelDeposito.val(DepositoPDC.val());
+            }
+        });
+
+        CapturaPDC.on('keypress', function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                MovUno[0].selectize.focus();
             }
         });
 
@@ -730,6 +741,7 @@
                 }
             }
         });
+
         sClientePDC.change(function (e) {
             if ($(this).val()) {
                 HoldOn.open({
@@ -907,7 +919,7 @@
         });
     }
 
-    function getBancos(tp) {
+    function getBancosPagos(tp) {
         $.getJSON('<?php print base_url('PagosDeClientes/getBancos') ?>', {Tp: tp})
                 .done(function (a) {
                     Banco.append($("<option />").val('').text(''));

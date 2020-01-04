@@ -90,7 +90,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                 if (!empty($CartCliente)) {
                     $importe = $CartCliente[0]->importe;
                     //Cancelamos el documento den la cartera de clientes, estatus 4= cancelado
-                    $this->db->query("update cartcliente set saldo = 0, status = 4 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
+                    $this->db->query("update cartcliente set saldo = 0, status = 4, factura = 1 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
 
                     //Agrega la nc para saldar el doc en CartClientePagos
                     $this->db->insert("cartctepagos", array(
@@ -163,7 +163,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                 if (!empty($CartCliente)) {
                     $importe = $CartCliente[0]->importe;
                     //Cancelamos el documento den la cartera de clientes, estatus 4= cancelado
-                    $this->db->query("update cartcliente set saldo = 0, status = 4 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
+                    $this->db->query("update cartcliente set saldo = 0, status = 4, factura= 1 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
 
                     //Agrega la nc para saldar el doc en CartClientePagos
                     $this->db->insert("cartctepagos", array(
@@ -212,7 +212,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                 if (!empty($CartCliente)) {
                     $importe = $CartCliente[0]->importe;
                     //Cancelamos el documento den la cartera de clientes, estatus 4= cancelado
-                    $this->db->query("update cartcliente set saldo = 0, status = 4 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
+                    $this->db->query("update cartcliente set saldo = 0, status = 4, factura=1 where remicion = $Docto and cliente = $Cliente and tipo = $Tp ");
 
                     //Agrega la nc para saldar el doc en CartClientePagos
                     $this->db->insert("cartctepagos", array(
@@ -234,14 +234,16 @@ class CancelaDocumentosVenta extends CI_Controller {
                         'uuid' => ($Tp === '1') ? $UUID : 0
                     ));
                     //Agrega la nota de credito
-                    $this->db->insert("canfacvta", array(
-                        'cliente' => $Cliente,
-                        'docto' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
-                        'tp' => $Tp,
-                        'motivo' => $Concepto,
-                        'Nc' => $NC
-                    ));
+                    if ($Timbrada === '0') {
+                        $this->db->insert("canfacvta", array(
+                            'cliente' => $Cliente,
+                            'docto' => $Docto,
+                            'fecha' => Date('Y-m-d H:i:s'),
+                            'tp' => $Tp,
+                            'motivo' => $Concepto,
+                            'Nc' => $NC
+                        ));
+                    }
                 }
             }
             //Después de cancelar la factura, afectar pedidos o devolucioes y el documento en cartera, datos del pago
@@ -257,25 +259,27 @@ class CancelaDocumentosVenta extends CI_Controller {
                     $combin = $v->combin;
                     $monletra = $v->monletra;
                     //Agrega la nc que va a respaldar la cancelacion del documento ante el sat
-                    $this->db->insert("notcred", array(
-                        'nc' => $NC,
-                        'cliente' => $Cliente,
-                        'numfac' => $Docto,
-                        'tp' => $Tp,
-                        'orden' => 10,
-                        'fecha' => Date('Y-m-d H:i:s'),
-                        'hora' => Date('h:i:s A'),
-                        'cant' => $pares,
-                        'descripcion' => $contped . "-" . $estilo . "-" . $combin,
-                        'precio' => $precto,
-                        'subtot' => $subtot,
-                        'concepto' => $Concepto,
-                        'monletra' => $monletra,
-                        'defecto' => 0,
-                        'detalle' => 0,
-                        'status' => ($Tp === '1') ? 0 : 2,
-                        'uuid' => ($Tp === '1') ? $UUID : 0
-                    ));
+                    if ($Timbrada === '0') {
+                        $this->db->insert("notcred", array(
+                            'nc' => $NC,
+                            'cliente' => $Cliente,
+                            'numfac' => $Docto,
+                            'tp' => $Tp,
+                            'orden' => 10,
+                            'fecha' => Date('Y-m-d H:i:s'),
+                            'hora' => Date('h:i:s A'),
+                            'cant' => $pares,
+                            'descripcion' => $contped . "-" . $estilo . "-" . $combin,
+                            'precio' => $precto,
+                            'subtot' => $subtot,
+                            'concepto' => $Concepto,
+                            'monletra' => $monletra,
+                            'defecto' => 0,
+                            'detalle' => 0,
+                            'status' => ($Tp === '1') ? 0 : 2,
+                            'uuid' => ($Tp === '1') ? $UUID : 0
+                        ));
+                    }
                 }
 
                 if ($Tp === '1') {

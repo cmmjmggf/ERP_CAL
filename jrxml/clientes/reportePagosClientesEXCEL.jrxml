@@ -58,7 +58,7 @@ join cartcliente cc on cp.cliente = cc.cliente and cp.tipo = cc.tipo and cp.remi
 join clientes ct on cp.cliente = ct.clave
 join agentes ag on ag.clave = ct.agente
 where cp.tipo like concat('%',$P{tp},'%')
-and cp.fecha between $P{fechaIni} and $P{fechaFin}
+and cp.fechacap between $P{fechaIni} and $P{fechaFin}
 and cc.status < 4
 group by cp.tipo, cp.cliente, cp.remicion
 order by abs(ct.Agente), nomcliente asc]]>

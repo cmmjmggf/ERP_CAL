@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR</h5>
-                    </div> 
+                    </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
                         <label>Cliente</label>
                         <div class="row">
@@ -24,7 +24,7 @@
                                     ?>
                                 </select>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Fecha</label>
@@ -46,12 +46,12 @@
                                     <option value="4">4 Muestras y prototipos</option>
                                 </select>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Cargo</label>
                         <div class="row">
-                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;">
                                 <input type="text" id="xCargo" name="xCargo" class="form-control numbersOnly" maxlength="1">
                             </div>
                             <div class="col-9">
@@ -59,7 +59,7 @@
                                     <option></option>
                                     <option value="0">0 No</option>
                                     <option value="1">1 Proveedor</option>
-                                    <option value="2">2 Maquila</option> 
+                                    <option value="2">2 Maquila</option>
                                 </select>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Depto</label>
                         <div class="row">
-                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;">
                                 <input type="text" id="xDepartamento" name="xDepartamento" class="form-control numbersOnly" maxlength="3">
                             </div>
                             <div class="col-9">
@@ -85,7 +85,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Defecto</label>
                         <div class="row">
-                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;">
                                 <input type="text" id="xDefecto" name="xDefecto" class="form-control numbersOnly" maxlength="4">
                             </div>
                             <div class="col-9">
@@ -103,7 +103,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Detalle</label>
                         <div class="row">
-                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;"> 
+                            <div class="col-3" style="padding-right: 10px; padding-left: 10px;">
                                 <input type="text" id="xDetalleDefecto" name="xDetalleDefecto" class="form-control numbersOnly" maxlength="4">
                             </div>
                             <div class="col-9">
@@ -148,7 +148,7 @@
                             <th scope="col">Estilo</th><!--6--><!--1-->
                             <th scope="col">Color</th><!--7--><!--2-->
                             <th scope="col">Precio</th><!--8--><!--3-->
-                            <th scope="col">ST</th><!--9--><!--4-->  
+                            <th scope="col">ST</th><!--9--><!--4-->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -162,11 +162,11 @@
 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control" disabled="" class="form-control form-control-sm numbersOnly"> 
-                <input type="text" id="TP" name="TP" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
-                <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
-                <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
-                <input type="text" id="MAQUILA" name="MAQUILA" readonly="" class="d-none form-control form-control-sm numbersOnly"> 
+                <input type="text" id="Control" name="Control" disabled="" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="TP" name="TP" readonly="" class="d-none form-control form-control-sm numbersOnly">
+                <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly">
+                <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly">
+                <input type="text" id="MAQUILA" name="MAQUILA" readonly="" class="d-none form-control form-control-sm numbersOnly">
                 <button type="button" class="btn btn-info btn-block mt-1" id="btnControlCompleto" name="btnControlCompleto" disabled="">
                     <span class="fa fa-bolt"></span>  Ctrl /Completo
                 </button>
@@ -182,9 +182,9 @@
                                 for ($index = 1; $index < 23; $index++) {
                                     print "<td align='center'><span class=\"T{$index}\">-</span></td>";
                                 }
-                                ?>                        
-                                <td></td> 
-                            </tr>  
+                                ?>
+                                <td></td>
+                            </tr>
                             <tr class="rCapturaCantidades" id="rCantidades">
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
@@ -204,7 +204,7 @@
                                 }
                                 ?>
                                 <td class="font-weight-bold">
-                                    <input type="text" style="width: 45px;" id="TotalParesEntregaF" 
+                                    <input type="text" style="width: 45px;" id="TotalParesEntregaF"
                                            class="form-control form-control-sm  style-pares" readonly="" data-toggle="tooltip" data-placement="right" title="0">
                                 </td>
                             </tr>
@@ -229,15 +229,15 @@
                 <label>Motivo</label>
                 <input type="text" id="Motivo" name="Motivo" placeholder="Escriba el motivo por el cual se devuelve..." class="form-control form-control-sm" maxlength="500">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 mt-4"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 mt-4">
                 <span class="text-danger font-weight-bold color_t">-</span>
                 <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly=""  maxlength="500">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-4"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mt-4">
                 <span class="text-danger font-weight-bold estilo_t">-</span>
                 <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm d-none" readonly="" maxlength="500">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 mt-4"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 mt-4">
                 <span class="text-danger font-weight-bold color_clave">-</span>
                 <input type="text" id="ColorClave" name="ColorClave" class="form-control form-control-sm d-none" readonly=""  maxlength="15">
             </div>
@@ -255,12 +255,12 @@
                             <th scope="col">Det</th><!--6--><!--1-->
                             <th scope="col">Cla</th><!--7--><!--2-->
                             <th scope="col">Cargo</th><!--8--><!--3-->
-                            <th scope="col">Maq</th><!--9--><!--4--> 
-                            <th scope="col">Fecha</th><!--10--><!--5--> 
-                            <th scope="col">Tp</th><!--11--><!--6--> 
-                            <th scope="col">Concepto</th><!--12--><!--7--> 
-                            <th scope="col">Pre-dev</th><!--13--><!--8--> 
-                            <th scope="col">Pre-ceg</th><!--14--><!--9--> 
+                            <th scope="col">Maq</th><!--9--><!--4-->
+                            <th scope="col">Fecha</th><!--10--><!--5-->
+                            <th scope="col">Tp</th><!--11--><!--6-->
+                            <th scope="col">Concepto</th><!--12--><!--7-->
+                            <th scope="col">Pre-dev</th><!--13--><!--8-->
+                            <th scope="col">Pre-ceg</th><!--14--><!--9-->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -288,11 +288,11 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-ban"></span>  Detalle</button>
                     </div>
-                    <div class="w-100 my-1"></div> 
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
+                    <div class="w-100 my-1"></div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center">
                         <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center"> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center">
                         <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-search"></span> Rastreo est/cte</button>
                     </div>
                 </div>
@@ -318,7 +318,7 @@
                         <h4>Nota capture fechas y oprima enter</h4>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <label>De la fecha</label> 
+                        <label>De la fecha</label>
                         <input type="text" id="DeLaFechaDev" name="DeLaFechaDev" class="form-control form-control-sm date notEnter">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -332,7 +332,7 @@
                                     <div class="custom-control custom-radio">
                                         <input type="radio" id="rNormalDev" name="Reporte" class="custom-control-input" valor="1">
                                         <label class="custom-control-label text-info" for="rNormalDev">Normal</label>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="custom-control custom-radio">
@@ -423,6 +423,8 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
 
+        handleEnterDiv(mdlReportesDevoluciones);
+
         xDetalleDefecto.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xDetalleDefecto.val()) {
@@ -443,7 +445,7 @@
                 DetalleDefecto[0].selectize.clear(true);
             }
         });
-        
+
         DetalleDefecto.change(function () {
             if (DetalleDefecto.val()) {
                 xDetalleDefecto.val(DetalleDefecto.val());
@@ -612,7 +614,7 @@
         ClienteDevolucion.click(function () {
             ClienteDevolucion[0].selectize.enable();
         });
-        
+
         ClienteDevolucion.change(function () {
             if (ClienteDevolucion.val()) {
                 xClienteDevolucion.val(ClienteDevolucion.val());
@@ -1051,8 +1053,8 @@
                     } else {
                         pnlTablero.find("#PDF" + i).attr('disabled', true);
                     }
-                } 
-                    pnlTablero.find("#PDF" + indice).focus().select(); 
+                }
+                pnlTablero.find("#PDF" + indice).focus().select();
             } else {
                 Control.focus().select();
             }
@@ -1168,7 +1170,7 @@
 </script>
 <style>
     .style-pares{
-        width: 35px  !important; 
+        width: 35px  !important;
         padding-left: 2px !important;
         padding-right: 2px !important;
         text-align: center !important;
