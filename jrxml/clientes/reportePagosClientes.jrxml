@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.357947691000056"/>
-	<property name="ireport.x" value="22"/>
+	<property name="ireport.zoom" value="1.9487171000000472"/>
+	<property name="ireport.x" value="120"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -29,15 +29,15 @@
 ag.clave as numagente, ag.Descripcion as nomagente,
  cp.cliente, ct.RazonS as nomcliente, ct.TelOficina,
 group_concat(cp.doctopa) as ref, cp.tipo, cp.remicion, cc.fecha as fechadoc, cp.fecha as fechapago,
-(select sum(importe) from cartctepagos where mov in(1,11) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoDeposito,
+(select sum(importe) from cartctepagos where mov in(1,11) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoDeposito,
 null impoAlDia,
-(select sum(importe) from cartctepagos where mov in(3) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoPosfe,
-(select sum(importe) from cartctepagos where mov in(2) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoEfectivo,
-(select sum(importe) from cartctepagos where mov in(5) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoDesc,
-(select sum(importe) from cartctepagos where mov in(6) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoPesosDev,
-(select sum(paredev) from devctes where aplica = cp.remicion and cliente = cp.cliente and tp = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as paresDev,
-(select sum(importe) from cartctepagos where mov in(7) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoDifPrecio,
-(select sum(importe) from cartctepagos where mov in(9,10) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoOtros,
+(select sum(importe) from cartctepagos where mov in(3) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoPosfe,
+(select sum(importe) from cartctepagos where mov in(2) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoEfectivo,
+(select sum(importe) from cartctepagos where mov in(5) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoDesc,
+(select sum(importe) from cartctepagos where mov in(6) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoPesosDev,
+(select sum(paredev) from devctes where aplica = cp.remicion and cliente = cp.cliente and tp = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as paresDev,
+(select sum(importe) from cartctepagos where mov in(7) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoDifPrecio,
+(select sum(importe) from cartctepagos where mov in(9,10) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoOtros,
 sum(cp.importe) as importe,
 cc.saldo,
 (select sum(pareped) from facturacion where factura = cp.remicion and cliente = cp.cliente and tp = cp.tipo ) as paresFac,
@@ -48,7 +48,7 @@ join cartcliente cc on cp.cliente = cc.cliente and cp.tipo = cc.tipo and cp.remi
 join clientes ct on cp.cliente = ct.clave
 join agentes ag on ag.clave = ct.agente
 where cp.tipo like concat('%',$P{tp},'%')
-and cp.fecha between $P{fechaIni} and $P{fechaFin}
+and cp.fechacap between $P{fechaIni} and $P{fechaFin}
 and cc.status < 4
 group by cp.tipo, cp.cliente, cp.remicion
 order by abs(ct.Agente), nomcliente asc]]>

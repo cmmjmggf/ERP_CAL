@@ -74,7 +74,7 @@
                 <input type="text" class="form-control form-control-sm numbersOnly captura disabledForms" id="CantidadRecibida" name="CantidadRecibida" maxlength="9" >
             </div>
             <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-2 mt-4">
-                <button type="button" class="btn btn-primary btn-sm captura disabledForms" id="btnActualizaCantidad" data-toggle="tooltip" data-placement="right" title="Actualizar Cantidad">
+                <button type="button" class="btn btn-primary btn-sm captura disabledForms" id="btnActualizaCantidad">
                     <i class="fa fa-check"></i> ACEPTAR
                 </button>
                 <button type="button" class="btn btn-success btn-sm d-none" id="btnCerrarCompra">
@@ -554,7 +554,7 @@
             "scrollY": 400,
             "bSort": true,
             "aaSorting": [
-                [1, 'asc'], [2, 'asc'], [3, 'desc']
+                [1, 'asc'], [2, 'asc'], [4, 'asc']
             ],
 //            "createdRow": function (row, data, index) {
 //                $.each($(row).find("td"), function (k, v) {

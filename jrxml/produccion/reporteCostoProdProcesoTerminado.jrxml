@@ -631,6 +631,7 @@ order by Depto asc, E.Linea asc, PE.Control asc;]]>
 	</columnHeader>
 	<detail>
 		<band height="9" splitType="Stretch">
+			<printWhenExpression><![CDATA[($V{Pares_1}-$V{ParesFacturados_1})>0]]></printWhenExpression>
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="30" y="8" width="445" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
 				<graphicElement>

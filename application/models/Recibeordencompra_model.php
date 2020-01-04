@@ -32,6 +32,7 @@ class Recibeordencompra_model extends CI_Model {
             $this->db->where_in('OC.Estatus', array('PENDIENTE', 'ACTIVA'));
             $this->db->where('OC.Folio', $Folio);
             $this->db->where('OC.Tp', $Tp);
+            $this->db->order_by('A.Descripcion', 'ASC');
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

@@ -142,7 +142,7 @@
             HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
             var frm = new FormData(mdlGeneraNominaBanco.find("#frmCaptura")[0]);
             $.ajax({
-                url: base_url + 'index.php/ReportesNominaJasper/onReporteNominaBanco',
+                url: base_url + 'index.php/ReportesNominaJasper/onReporteNominaBancoDispersion',
                 type: "POST",
                 cache: false,
                 contentType: false,
