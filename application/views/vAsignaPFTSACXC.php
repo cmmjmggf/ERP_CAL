@@ -1116,7 +1116,6 @@
                 console.log(data);
                 swal('ATENCIÓN', 'SE HA ENTREGADO ' + Entregar.val() + ' DEL MATERIAL SOLICITADO, EN LA SEMANA ' + Semana.val() + ' PARA LA FRACCIÓN "' + Fraccion.val(), 'success').then((value) => {
 
-                    Control.val('');
                     Fraccion.val('');
                     ClaveArticulo.val('');
                     Articulo.val('');
@@ -1128,7 +1127,7 @@
                     onBuscarX(9, '');
                     onBuscarX(10, '');
                     ControlesAsignados.ajax.reload();
-                    Semana.focus().select();
+                    Fraccion.focus().select();
                     tipo_consumo = 0;
                 });
             }).fail(function (x, y, z) {

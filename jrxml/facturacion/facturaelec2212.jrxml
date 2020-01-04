@@ -25,7 +25,7 @@ WHEN C.FormaPago = 28 THEN "28"
 WHEN C.FormaPago = 29 THEN "29"
 WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
-END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID
+END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID, F.obs AS OBSERVACIONES
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio
  = F.factura
 WHERE F.factura = $P{factura}  AND CFDI.Tipo  ='I';]]>
@@ -159,6 +159,7 @@ WHERE F.factura = $P{factura}  AND CFDI.Tipo  ='I';]]>
 	<field name="UUID" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="OBSERVACIONES" class="java.lang.String"/>
 	<variable name="subtot_1" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
@@ -167,6 +168,9 @@ WHERE F.factura = $P{factura}  AND CFDI.Tipo  ='I';]]>
 	</variable>
 	<variable name="subtot_3" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
+	</variable>
+	<variable name="pareped_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{pareped}]]></variableExpression>
 	</variable>
 	<columnHeader>
 		<band height="150" splitType="Stretch">
@@ -538,6 +542,10 @@ WHERE F.factura = $P{factura}  AND CFDI.Tipo  ='I';]]>
 				<reportElement x="482" y="30" width="90" height="15" uuid="61e372d8-5ee8-4847-9a04-f276602ea9ba"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{subtot_3} * 1.16]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="45" height="20" uuid="acb5273e-784e-4d31-94bc-9ab4362ddf65"/>
+				<textFieldExpression><![CDATA[$V{pareped_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

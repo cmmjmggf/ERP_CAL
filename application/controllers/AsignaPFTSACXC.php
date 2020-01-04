@@ -328,7 +328,31 @@ class AsignaPFTSACXC extends CI_Controller {
 //                exit(0);
                 /* EXISTE LA POSIBILIDAD DE QUE LA FRACCION SEA DIFERENTE Y QUE HAGA UN NUEVO REGISTRO */
                 if (count($DT) > 0) {
-                    $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))->where('ID', $DT[0]->ID)->update('asignapftsacxc');
+                    $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))
+                            ->set('Abono', ( $DT[0]->Abono + $x['ENTREGA']))
+                            ->where('ID', $DT[0]->ID)->update('asignapftsacxc');
+                    
+                    $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                                    ->from("preciosmaquilas AS PM")
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
+                                    ->where("PM.Maquila", 1)->get()->result();
+                    $datos = array(
+                        'Articulo' => $x['ARTICULO'],
+                        'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                        'CantidadMov' => $x['ENTREGA'],
+                        'FechaMov' => Date('d/m/Y'),
+                        'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
+                        'TipoMov' => 'SPR', /* SXP = SALIDA A PRODUCCION */
+                        'DocMov' => $x['CONTROL'],
+                        'Tp' => '',
+                        'Maq' => $CONTROL_SEMANA_MAQUILA->MAQUILA,
+                        'Sem' => $x['SEMANA'],
+                        'Ano' => $Ano,
+                        'OrdenCompra' => NULL,
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                    );
+                    $this->db->insert("movarticulos_fabrica", $datos);
+                    exit(0);
                 } else {
 //                    $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
                     /* MAQUILA UNO FIJO */

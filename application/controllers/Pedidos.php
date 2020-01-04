@@ -545,15 +545,17 @@ class Pedidos extends CI_Controller {
                                     CONCAT(A.Clave, \" - \", A.Nombre) AS AgenteT, P.Observacion AS Obs, T.Descripcion AS Transporte, C.Observaciones AS OBSCLIENTE,
                                     S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11,
                                     S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22", false)
-                            ->from('pedidox AS P')
-                            ->join('series AS S', 'P.Serie = S.Clave')->join('clientes AS C', 'P.Cliente = C.Clave')
-                            ->join('estados AS E', 'C.Estado = E.Clave', 'left')->join('agentes AS A', 'P.Agente = A.Clave', 'left')
-                            ->join('transportes AS T', 'C.Transporte = T.Clave', 'left')
-                            ->where('P.Clave', $IDX)
-                            ->where('P.Cliente', $CLIENTE)
-                            ->where_not_in('P.stsavan', 14)
-                            ->order_by('P.ID', 'ASC')
-                            ->get()->result();
+                    ->from('pedidox AS P')
+                    ->join('series AS S', 'P.Serie = S.Clave')->join('clientes AS C', 'P.Cliente = C.Clave')
+                    ->join('estados AS E', 'C.Estado = E.Clave', 'left')->join('agentes AS A', 'P.Agente = A.Clave', 'left')
+                    ->join('transportes AS T', 'C.Transporte = T.Clave', 'left');
+            if ($IDX !== '') {
+                $this->db->where('P.Clave', $IDX);
+            }
+            $this->db->where('P.Cliente', $CLIENTE)
+                    ->where_not_in('P.stsavan', 14)
+                    ->order_by('P.ID', 'ASC')
+                    ->get()->result();
 
 //            $Series = $this->pem->getSerieXPedido($IDX, $CLIENTE);
 

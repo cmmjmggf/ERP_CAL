@@ -488,12 +488,12 @@ P.Maquila AS MAQUILA
                 }
                 exit(0);
             }
-            
-            
+
+
             /*
              * ES PORQUE ESTAN EN ENTRETELADO, PERO NO LLEVAN ENTRETELADO, PERO LOS MUEVEN DE A "PROCESO MAQUILA PARA PODER AVANZAR"
              * 
-                42 = MAQUILA "A" 44 = ALMACEN DE CORTE
+              42 = MAQUILA "A" 44 = ALMACEN DE CORTE
              *              */
             if ($depto === 42 && $depto_actual === 40) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
@@ -507,7 +507,7 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
             /*
-                42 = MAQUILA "A" 44 = ALMACEN DE CORTE
+              42 = MAQUILA "A" 44 = ALMACEN DE CORTE
              *              */
             if ($depto === 44 && $depto_actual === 42) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
@@ -531,7 +531,7 @@ P.Maquila AS MAQUILA
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 105,
                     'DepartamentoT' => 'ALMACEN CORTE',
-                    'FechaAvance' => Date('d/m/Y'),
+                    'FechaAvance' => Date('Y-m-d 00:00:00'),
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
@@ -554,14 +554,13 @@ P.Maquila AS MAQUILA
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 
-                    && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 105,
                     'DepartamentoT' => 'ALMACEN CORTE',
-                    'FechaAvance' => Date('d/m/Y'),
+                    'FechaAvance' => Date('Y-m-d 00:00:00'),
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
@@ -582,8 +581,34 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            /* 5 PESPUNTE Y STSAVAN 44 ALM-CORTE */
-            if ($depto === 5 && $depto_actual === 44) {
+            /* 5 PESPUNTE Y STSAVAN 42 MAQUILA */
+//            if ($depto === 5 && $depto_actual === 42){
+//                /* 42 MAQUILA DE CORTE A 5 PESPUNTE */
+//                $this->db->set('EstatusProduccion', 'PESPUNTE')
+//                        ->set('DeptoProduccion', 110)
+//                        ->where('Control', $xXx['CONTROL'])->update('controles');
+//                $this->db->set('stsavan', 5)
+//                        ->set('EstatusProduccion', 'PESPUNTE')
+//                        ->set('DeptoProduccion', 110)
+//                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+//                $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])->set("fec5", Date('Y-m-d 00:00:00'))
+//                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+//                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE.", $this->session);
+//                exit(0);
+//            }
+            if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 996 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 994 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 995 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 999 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 998 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1001 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1002 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1000 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 903 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 902 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 901 || 
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 900) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $this->db->set('EstatusProduccion', 'PESPUNTE')
                         ->set('DeptoProduccion', 110)
@@ -706,7 +731,7 @@ P.Maquila AS MAQUILA
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 150,
                     'DepartamentoT' => 'TEJIDO',
-                    'FechaAvance' => Date('d/m/Y')/* FECHA AVANCE */,
+                    'FechaAvance' => Date('Y-m-d 00:00:00')/* FECHA AVANCE */,
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
@@ -745,7 +770,7 @@ P.Maquila AS MAQUILA
                             'FechaAProduccion' => Date('d/m/Y'),
                             'Departamento' => 160,
                             'DepartamentoT' => 'ALMACEN TEJIDO',
-                            'FechaAvance' => Date('d/m/Y'),
+                            'FechaAvance' => Date('Y-m-d 00:00:00'),
                             'Estatus' => 'A',
                             'Usuario' => $_SESSION["ID"],
                             'Fecha' => Date('d/m/Y'),
@@ -781,7 +806,7 @@ P.Maquila AS MAQUILA
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 180,
                     'DepartamentoT' => 'MONTADO A',
-                    'FechaAvance' => Date('d/m/Y'),
+                    'FechaAvance' => Date('Y-m-d 00:00:00'),
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
@@ -900,7 +925,7 @@ P.Maquila AS MAQUILA
                 'FechaAProduccion' => Date('d/m/Y'),
                 'Departamento' => $depto_avance,
                 'DepartamentoT' => $depto_avance_txt,
-                'FechaAvance' => Date('d/m/Y'),
+                'FechaAvance' => Date('Y-m-d 00:00:00'),
                 'Estatus' => 'A',
                 'Usuario' => $_SESSION["ID"],
                 'Fecha' => Date('d/m/Y'),

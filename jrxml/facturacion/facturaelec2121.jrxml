@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec2121" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.8150000000000008"/>
+	<property name="ireport.zoom" value="3.215383215000003"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="360"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -132,6 +132,9 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121  AND CFDI.Ti
 	</variable>
 	<variable name="SUBTOTAL_3" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
+	</variable>
+	<variable name="CANTIDAD_1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD}]]></variableExpression>
 	</variable>
 	<columnHeader>
 		<band height="202" splitType="Stretch">
@@ -644,7 +647,7 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121  AND CFDI.Ti
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="0" width="45" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="33db4b7c-125e-4a36-b579-7df8ad8ec06b"/>
+				<reportElement mode="Transparent" x="0" y="15" width="45" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="33db4b7c-125e-4a36-b579-7df8ad8ec06b"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -652,7 +655,7 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121  AND CFDI.Ti
 				<text><![CDATA[Obs.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="44" y="0" width="338" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="8c9995f7-b88e-48f3-80c5-1a521354020d"/>
+				<reportElement mode="Transparent" x="44" y="15" width="338" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="8c9995f7-b88e-48f3-80c5-1a521354020d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -709,6 +712,14 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121  AND CFDI.Ti
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="0" width="45" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8e7e52d1-3428-48d0-942d-0200ead776d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CANTIDAD_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>

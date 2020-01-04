@@ -1,7 +1,10 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4">
+                <button type="button" id="btnNuevoTejido" name="btnNuevoTejido" class="btn btn-success btn-sm m-2">
+                    <span class="fa fa-star"></span> NUEVO
+                </button>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-4 col-lg-4 text-center">
                 <h3 class="font-weight-bold" style="margin-bottom: 0px;">Avance a tejido</h3>
@@ -39,7 +42,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                 <label>Frac</label>
-                <input type="text" id="Frac" name="Frac" class="form-control form-control-sm numeric"  data-toggle="tooltip" data-placement="top" title="401 TEJIDA A MANO | 402	TEJIDA A MANO MUESTRA |
+                <input type="text" id="Frac" name="Frac" class="form-control form-control-sm numeric notEnter"  data-toggle="tooltip" data-placement="top" title="401 TEJIDA A MANO | 402	TEJIDA A MANO MUESTRA |
                        403	TEJIDA MAQUINA 1 |
                        404	TEJIDA MAQUINA  2 |
                        405	TEJIDO DE FLORETA">
@@ -133,7 +136,9 @@
     var xChofer = pnlTablero.find("#xChofer"), Chofer = pnlTablero.find("#Chofer"),
             xTejedora = pnlTablero.find("#xTejedora"),
             Tejedora = pnlTablero.find("#Tejedora"),
-            Estilo = pnlTablero.find("#Estilo"), Control = pnlTablero.find("#Control");
+            Estilo = pnlTablero.find("#Estilo"), Control = pnlTablero.find("#Control"),
+            btnNuevoTejido = pnlTablero.find("#btnNuevoTejido");
+
     var ControlesListosParaTejido, tblControlesListosParaTejido = pnlTablero.find("#tblControlesListosParaTejido"),
             ControlesEntregados, tblControlesEntregados = pnlTablero.find("#tblControlesEntregados"),
             Color = pnlTablero.find("#Color"),
@@ -145,6 +150,29 @@
 
     $(document).ready(function () {
         getUltimoDocumento();
+
+        btnNuevoTejido.click(function () {
+            btnImprimirVale.attr('disabled', false);
+            pnlTablero.find("input").val("");
+            $.each(pnlTablero.find("select"), function (k, v) {
+                pnlTablero.find("select")[k].selectize.clear(true);
+            });
+            getUltimoDocumento();
+            Fecha.val('<?php print Date('d/m/Y'); ?>');
+            $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
+                FECHA: Fecha.val()
+            }).done(function (d) {
+                var s = JSON.parse(d);
+                if (s.length > 0) {
+                    Semana.val(s[0].SEMANA);
+                }
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
+            Frac.val(401);
+            xChofer.focus();
+        });
+
         Fecha.val('<?php print Date('d/m/Y'); ?>');
         $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
             FECHA: Fecha.val()
@@ -242,6 +270,7 @@
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         });
+                        Frac.val(401);
                         xChofer.focus();
                     });
                 }).fail(function (x, y, z) {
@@ -311,11 +340,12 @@
                                 console.log(a);
                                 onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA GENERADO UN AVANCE', 'success', {from: "bottom", align: "center"});
                                 Control.val('');
-                                Estilo[0].selectize.clear(true);
+                                Estilo.val('');
                                 Color[0].selectize.clear(true);
                                 Pares.val('');
                                 pnlTablero.find("#Ava").val('');
                                 Control.focus().select();
+                                ControlesEntregados.ajax.reload();
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
@@ -564,8 +594,7 @@
             if (a.length > 0) {
                 if (parseInt(a[0].EXISTE) > 0) {
                     swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL', 'warning').then((value) => {
-                        Control.focus().select();
-                        Frac.val('');
+                        Control.focus().select(); 
                         Estilo.val('');
                         Color[0].selectize.clear(true);
                         Pares.val('');
@@ -615,6 +644,7 @@
         }).fail(function (x) {
             getError(x);
         }).always(function () {
+            Frac.val(401);
         });
     }
 

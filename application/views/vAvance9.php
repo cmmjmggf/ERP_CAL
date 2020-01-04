@@ -435,7 +435,27 @@
             });
             var fra = pnlTablero.find("#chk99")[0].checked ? 99 : (pnlTablero.find("#chk100")[0].checked ? 100 : (pnlTablero.find("#chk96")[0] ? 96 : ''));
             /*COMPROBAR EL RETORNO DE MATERIAL*/
-            $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>', {CR: Control.val(), FR: fra, DEPTO: Departamento.val()}).done(function (data) {
+            fra = [];
+            if (pnlTablero.find("#chk96")[0].checked) {
+                fra.push({
+                    NUMERO_FRACCION: 96,
+                    DESCRIPCION: "CORTE MUESTRAS"
+                });
+            }
+            if (pnlTablero.find("#chk99")[0].checked) {
+                fra.push({
+                    NUMERO_FRACCION: 99,
+                    DESCRIPCION: "CORTE FORRO"
+                });
+            }
+            if (pnlTablero.find("#chk100")[0].checked) {
+                fra.push({
+                    NUMERO_FRACCION: 100,
+                    DESCRIPCION: "CORTE PIEL"
+                });
+            }
+            $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
+                    {CR: Control.val(), FR: fra, DEPTO: Departamento.val()}).done(function (data) {
                 if (data.length > 0) {
                     var r = data[0];
                     Estilo.val(r.Estilo);
@@ -475,7 +495,9 @@
                         HoldOn.close();
                     });
                 } else {
-                    swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                    swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
+                ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
+                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
                         Control.focus().select();
                         Estilo.val('');
                         Pares.val('');

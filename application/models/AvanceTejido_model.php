@@ -73,7 +73,7 @@ class AvanceTejido_model extends CI_Model {
         try {
             return $this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
                             ->from('empleados AS E')
-                            ->where('E.AltaBaja', 1)->where('E.Puesto', 'TEJEDORA')
+                            ->where('E.AltaBaja', 1)->where_in('E.Puesto', array('TEJEDOR','TEJEDORA'))
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

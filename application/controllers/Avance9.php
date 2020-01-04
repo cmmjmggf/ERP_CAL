@@ -48,7 +48,7 @@ class Avance9 extends CI_Controller {
 //            print json_encode($this->axepn->getSemanaByFecha(Date('d/m/Y')));
             $fecha = Date('d/m/Y');
             $this->db->select("U.Sem, '{$fecha}' AS Fecha", false)
-                    ->from('semanasproduccion AS U')
+                    ->from('semanasnomina AS U')
                     ->where("STR_TO_DATE(\"{$fecha}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")");
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -60,12 +60,30 @@ class Avance9 extends CI_Controller {
         try {
             $x = $this->input->get();
             if ($x['FR'] !== '') {
-                $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
-                        ->from('asignapftsacxc AS A')
-                        ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo');
-                $this->db->where("A.Fraccion", $x['FR'])->where("FXE.Fraccion", $x['FR']);
-                $this->db->where("A.Control", $x['CR'])->limit(1);
-                print json_encode($this->db->get()->result());
+                switch (intval($x['FR'])) {
+                    case 99:
+                        //FORRO
+                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
+                                ->from('asignapftsacxc AS A')
+                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
+                                ->where("A.Fraccion", $x['FR'])->where("FXE.Fraccion", $x['FR'])
+                                ->where("A.Control", $x['CR'])->limit(1);
+                        break;
+                    default:
+//                        EN LA ORDEN DE PRODUCCIÓN NO VIENE FORRO PERO SI SINTETICO, EL SINTETICO LO METEN COMO FORRO.
+//                        SINTETICO
+                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
+                    
+                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
+                                ->where("A.Fraccion", 99)->where("FXE.Fraccion", $x['FR'])
+                                ->where("A.Control", 99)->where('A.Control', $x['CR']);
+                        break;
+                }
+                $data = $this->db->get()->result();
+
+
+//                print $this->db->last_query();
+                print json_encode($data);
             } else {
 //                $this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, "
 //                                . "FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, "
@@ -75,7 +93,8 @@ class Avance9 extends CI_Controller {
                 $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, "
                                 . "FXE.Fraccion AS Fraccion, F.Descripcion AS FRACCION_DES ", false)
                         ->from("asignapftsacxc AS A")
-                        ->join("fraccionesxestilo AS FXE", "A.Estilo = FXE.Estilo")->join("fracciones AS F", "FXE.Fraccion = F.Clave");
+                        ->join("fraccionesxestilo AS FXE", "A.Estilo = FXE.Estilo")
+                        ->join("fracciones AS F", "FXE.Fraccion = F.Clave");
                 $this->db->where('A.Control', $x['CR']);
                 switch (intval($x['DEPTO'])) {
                     case 80:
@@ -357,7 +376,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 20,
                                 'DepartamentoT' => 'RAYADO',
-                                'FechaAvance' => Date('d/m/Y'),
+                                'FechaAvance' => Date('Y-m-d 00:00:00'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -441,7 +460,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 30,
                                 'DepartamentoT' => 'REBAJADO',
-                                'FechaAvance' => Date('d/m/Y'),
+                                'FechaAvance' => Date('Y-m-d 00:00:00'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -495,7 +514,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 40,
                                 'DepartamentoT' => 'FOLEADO',
-                                'FechaAvance' => Date('d/m/Y'),
+                                'FechaAvance' => Date('Y-m-d 00:00:00'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -541,7 +560,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 90,
                                 'DepartamentoT' => 'ENTRETELADO',
-                                'FechaAvance' => Date('d/m/Y'),
+                                'FechaAvance' => Date('Y-m-d 00:00:00'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -672,7 +691,7 @@ class Avance9 extends CI_Controller {
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 30,
                     'DepartamentoT' => 'REBAJADO',
-                    'FechaAvance' => Date('d/m/Y'),
+                    'FechaAvance' => Date('Y-m-d 00:00:00'),
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),

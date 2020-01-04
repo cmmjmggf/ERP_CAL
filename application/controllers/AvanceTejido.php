@@ -226,7 +226,7 @@ class AvanceTejido extends CI_Controller {
                     'nomcho' => $xXx['CHOFER'],
                     'numtej' => $xXx['NUM_TEJEDORA'],
                     'nomtej' => $xXx['TEJEDORA'],
-                    'fechapre' => $nueva_fecha->format('Y-m-d h:i:s'),
+                    'fechapre' => $nueva_fecha->format('Y-m-d 00:00:00'),
                     'control' => $xXx['CONTROL'],
                     'estilo' => $xXx['ESTILO'],
                     'color' => $xXx['COLOR'],
@@ -254,7 +254,7 @@ class AvanceTejido extends CI_Controller {
                     'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('d/m/Y'),
+                    'Fecha' => Date('Y-m-d 00:00:00'),
                     'Hora' => Date('h:i:s a'),
                     'Fraccion' => $xXx['FRACCION']
                 ));
@@ -269,7 +269,7 @@ class AvanceTejido extends CI_Controller {
                     'pares' => $x->post('PARES'),
                     'subtot' => (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO)),
                     'status' => 0,
-                    'fecha' => $nueva_fecha->format('Y-m-d h:i:s'),
+                    'fecha' => $nueva_fecha->format('Y-m-d 00:00:00'),
                     'semana' => $x->post('SEMANA'),
                     'depto' => 150,
                     'registro' => 0,
@@ -286,7 +286,7 @@ class AvanceTejido extends CI_Controller {
                         ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])
                         ->update('pedidox');
                 /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-                $this->db->set('fec7', Date('Y-m-d h:i:s'))->where('contped', $xXx['CONTROL'])->update('avaprd');
+                $this->db->set('fec7', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])->update('avaprd');
                 $l = new Logs("Avance tejido", "HA AVANZO EL CONTROL {$xXx['CONTROL']} A TEJIDO CON LA FRACCION {$xXx['FRACCION']}.", $this->session);
             }
         } catch (Exception $exc) {

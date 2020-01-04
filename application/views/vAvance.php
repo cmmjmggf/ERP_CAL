@@ -27,9 +27,9 @@
             <!--SECCION UNO-->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                     <h4 style="color: #c1850c !important;" class="usuario_logued font-weight-bold">
-                         <?php print $_SESSION['USERNAME']; ?>
-                     </h4>
+                    <h4 style="color: #c1850c !important;" class="usuario_logued font-weight-bold">
+                        <?php print $_SESSION['USERNAME']; ?>
+                    </h4>
                     <input type="text" id="usuario" name="usuario" class="form-control form-control-sm d-none">
                 </div>
                 <div class="w-100"></div>
@@ -84,7 +84,7 @@
                             <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -700,6 +700,7 @@
 //                getDeptoActualXControl();
                 $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
                     console.log("CONTROL", a);
+                    onCloseOverlay();
                     if (a.length > 0) {
 
                         ProcesoMaquila.attr('disabled', false);
@@ -715,7 +716,7 @@
                         AvanceDeptoActual.val(rr.ESTATUS_PRODUCCION);
                         pnlTablero.find(".estatus_de_avance").text(rr.ESTATUS_PRODUCCION_TEXT);
                         if (parseInt(Departamento.val()) === parseInt(rr.ESTATUS_PRODUCCION)) {
-                            iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE', 'w', function () {
+                            iMsg('EL DEPARTAMENTO ACTUAL NO CONCUERDA CON EL AVANCE: ' + rr.ESTATUS_PRODUCCION_TEXT, 'w', function () {
                                 Control.focus().select();
                             });
                             return;
@@ -776,9 +777,18 @@
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
                             }
+                            if (xDepartamento === 44 && stsavan === 42) {
+                                Empleado.focus().select();
+                                onEnable(btnAceptar);
+                            }
                             if (xDepartamento === 5 && stsavan === 44) {
                                 Empleado.focus().select();
+                                onEnable(btnAceptar);
                             }
+//                            if (xDepartamento === 5 && stsavan === 42) {
+//                                Empleado.focus().select();
+//                                onEnable(btnAceptar);
+//                            }
                             if (xDepartamento === 55 && stsavan === 5) {
                                 Empleado.focus().select();
                                 if (parseInt(rr.MAQUILA) === 98) {
@@ -849,6 +859,7 @@
                         }
                     }
                 }).fail(function (x, y, z) {
+                    onCloseOverlay();
                     getError(x);
                 }).always(function () {
                     onCloseOverlay();
