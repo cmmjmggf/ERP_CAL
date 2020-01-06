@@ -512,7 +512,7 @@ class Pedidos extends CI_Controller {
                 "DeptoProduccion" => NULL
             );
             $this->db->insert('pedidox', $p);
-            
+
             $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
                 INNER JOIN colores AS C ON E.Clave = C.Estilo 
                 WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};");
@@ -523,7 +523,7 @@ class Pedidos extends CI_Controller {
                     ->where("Color", $x['COLOR'])->where("Semana", $x['SEMANA'])
                     ->where("Ano", Date('Y'))->where("Maquila", $x['MAQUILA'])
                     ->update("pedidox");
-            
+
             $insert_id = $this->db->insert_id();
             $l = new Logs("PEDIDOS", "ID({$insert_id}), AGREGO UN REGISTRO AL PEDIDO({$x['PEDIDO']}) DE {$x['PARES']} PARES DEL CLIENTE({$x['CLIENTE']}) (SERIE-{$x['SERIE']}), CON EL ESTILO-COLOR ({$x['ESTILO']} - {$x['COLOR']}).", $this->session);
 
@@ -835,7 +835,14 @@ class Pedidos extends CI_Controller {
 
                         /* SEGUNDO DETALLE (SUELA) */
                         $suela = array();
-                        $suelin = $this->pem->getSuelaByArticulo($v->Estilo, $v->Color);
+//                        $suelin = $this->pem->getSuelaByArticulo($v->Estilo, $v->Color);
+                        $suelin = $this->db->select("A.Clave, A.Descripcion AS Suela", false)
+                                        ->from('fichatecnica as FT')
+                                        ->join('articulos AS A', 'FT.Articulo = A.Clave AND A.Grupo = 3')
+                                        ->where('FT.Estilo', $v->Estilo)
+                                        ->where('FT.Color', $v->Color)
+                                        ->limit(1)->get()->result();
+
                         $pdf->SetAligns(array('L', 'L', 'L', 'L'));
                         $pdf->SetWidths(array(198.5, 72.5));
                         $pdf->SetX($posi[0]);
