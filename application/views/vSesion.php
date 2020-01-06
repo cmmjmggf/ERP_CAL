@@ -62,8 +62,9 @@
     <div class="card-body" style="padding: 15px;">
         <div class="row" style="padding: 15px;">
             <div class="col-12 text-center mb-4">
-                <span class="fa fa-user-lock fa-2x"></span>
-                <h4 class="mb-3">CONTROL DE ACCESO</h4>
+                <!--<span class="fa fa-user-lock fa-2x"></span>-->
+                <span class="fa fa-key fa-2x"></span> 
+                <h4 class="m-3">CONTROL DE ACCESO</h4>
             </div>
             <div class="col-12">
                 <input type="email" id="Usuario" name="Usuario" class="form-control not-form-small" placeholder="Usuario" required autofocus="">
@@ -74,7 +75,7 @@
         </div>
     </div>
     <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
-        INGRESAR 
+        <span class="fa fa-fa-user-lock"></span> INGRESAR  
     </div>
     <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
 </div>

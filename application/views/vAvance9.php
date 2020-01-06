@@ -363,6 +363,7 @@
                         );
             }
         };
+        /*'Avance9/getFraccionesPagoNomina/$1'*/
         xoptions.ajax = {
             "url": '<?php print base_url('obtener_avances_pago_nomina/1'); ?>',
             "dataSrc": "",
