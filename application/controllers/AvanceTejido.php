@@ -254,7 +254,7 @@ class AvanceTejido extends CI_Controller {
                     'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('Y-m-d 00:00:00'),
+                    'Fecha' => Date('d/m/Y'),
                     'Hora' => Date('h:i:s a'),
                     'Fraccion' => $xXx['FRACCION']
                 ));

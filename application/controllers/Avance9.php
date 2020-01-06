@@ -59,15 +59,54 @@ class Avance9 extends CI_Controller {
     public function onComprobarRetornoDeMaterialXControl() {
         try {
             $x = $this->input->get();
-            if ($x['FR'] !== '') {
+            if ($x['FR'] !== '' && intval($x['DEPTO']) === 10) {
+                $FRACCIONES = json_decode($x['FR']);
+                $TIENE_LAS_FRACCIONES_99_Y_100 = 0;
+                foreach ($FRACCIONES as $k => $v) {
+                    switch (intval($v->NUMERO_FRACCION)) {
+                        case 96:
+                            $TIENE_LAS_FRACCIONES_99_Y_100 += 1;
+                            break;
+                        case 99:
+                            $TIENE_LAS_FRACCIONES_99_Y_100 += 1;
+                            break;
+                        case 100:
+                            $TIENE_LAS_FRACCIONES_99_Y_100 += 1;
+                            break;
+                    }
+                }
+                if ($TIENE_LAS_FRACCIONES_99_Y_100 > 0) {
+                    $data = $this->db->select("P.Estilo, P.Pares, F.CostoMO, "
+                                            . "(P.Pares*F.CostoMO) AS TOTAL, {$v->NUMERO_FRACCION} AS Fraccion", false)
+                                    ->from("pedidox AS P")->join('fraccionesxestilo as F', 'P.Estilo = F.Estilo')
+                                    ->where_in("F.Fraccion", 99, 100, 96)
+                                    ->where("P.Control", $x['CR'])->limit(1)->get()->result();
+                    print json_encode($data);
+                } else {
+                    print json_encode(array("MENSAJE" => "CONTROL INEXISTENTE O NO TIENE LAS FRACCIONES 99,100 O 96(MUESTRA)"));
+                }
+
+                exit(0);
+
+                
+                
+                /*05/01/2020 LO QUITE PORQUE NO FUNCIONA*/
+                
+                
+                
                 switch (intval($x['FR'])) {
                     case 99:
-                        //FORRO
-                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
-                                ->from('asignapftsacxc AS A')
-                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
-                                ->where("A.Fraccion", $x['FR'])->where("FXE.Fraccion", $x['FR'])
-                                ->where("A.Control", $x['CR'])->limit(1);
+                        //FORRO O SINTETICO, SE METE COMO 99 EL SINTETICO
+//                        $this->db->select("A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion", false)
+//                                ->from('asignapftsacxc AS A')
+//                                ->join('fraccionesxestilo as FXE', 'A.Estilo = FXE.Estilo')
+//                                ->where("A.Fraccion", $x['FR'])->where("FXE.Fraccion", $x['FR'])
+//                                ->where("A.Control", $x['CR'])->limit(1);
+
+                        $this->db->select("P.Estilo, P.Pares, F.CostoMO, (P.Pares*F.CostoMO) AS TOTAL, 99 AS Fraccion", false)
+                                ->from("pedidox AS P")->join('fraccionesxestilo as F', 'P.Estilo = F.Estilo')
+                                ->where("F.Fraccion", 99)
+                                ->where("P.Control", $x['CR'])->limit(1);
                         break;
                     default:
 //                        EN LA ORDEN DE PRODUCCIÓN NO VIENE FORRO PERO SI SINTETICO, EL SINTETICO LO METEN COMO FORRO.
@@ -77,17 +116,18 @@ class Avance9 extends CI_Controller {
 //                                ->where("FXE.Fraccion", $x['FR'])
 //                                ->where("A.Control", $x['CR']);
                         $this->db->select(" O.Pares, O.Sintetico1, O.CantidadSintetico1,O.TotalSintetico,
-                            FXE.CostoMO, (O.Pares * FXE.CostoMO) AS TOTAL, 99 AS FRACCION",false)
-                            ->from("ordendeproduccion AS O")->join("`fraccionesxestilo` as `FXE`","O.Estilo = `FXE`.`Estilo`")
-                            ->where("O.ControlT IN('{$x['CR']}') AND FXE.Fraccion = 99",null,false);
+                            FXE.CostoMO, (O.Pares * FXE.CostoMO) AS TOTAL, 99 AS FRACCION", false)
+                                ->from("ordendeproduccion AS O")->join("`fraccionesxestilo` as `FXE`", "O.Estilo = `FXE`.`Estilo`")
+                                ->where("O.ControlT IN('{$x['CR']}') AND FXE.Fraccion = 99", null, false);
                         break;
                 }
                 $data = $this->db->get()->result();
-
-
 //                print $this->db->last_query();
                 print json_encode($data);
+                exit(0);
             } else {
+                /* AQUI YA ES CUANDO PASO POR CORTE Y ESTA EN RAYADO, SE REVISA POR DEPTO PARA PONERLE LA FRACCIÓN */
+
 //                $this->db->select("FE.ID, FE.Estilo, FE.FechaAlta, FE.Fraccion, FE.CostoMO, "
 //                                . "FE.CostoVTA, FE.AfectaCostoVTA, FE.Estatus, F.ID AS FID, "
 //                                . "F.Clave AS FCLAVE, F.Descripcion AS FRACCIONDES, "
@@ -262,9 +302,11 @@ class Avance9 extends CI_Controller {
                 $this->db->where('FACN.numeroempleado', $x['EMPLEADO']);
             }
             if ($x['EMPLEADO'] === '') {
-                $this->db->limit(99);
+                $this->db->limit(5);
             }
-            print json_encode($this->db->get()->result());
+            $DATA = $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($DATA);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -329,8 +371,20 @@ class Avance9 extends CI_Controller {
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
 //exit(0);
+                $NUMERO_ENTERO_FRACCION = intval($v->NUMERO_FRACCION);
 
-                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, A.Fraccion AS Fraccion FROM asignapftsacxc AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE A.Fraccion = {$v->NUMERO_FRACCION} AND FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();
+//                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL, "
+//                        . "A.Fraccion AS Fraccion FROM asignapftsacxc AS A "
+//                        . "INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo "
+//                        . "WHERE A.Fraccion = {$v->NUMERO_FRACCION} AND FXE.Fraccion = {$v->NUMERO_FRACCION} "
+//                        . "AND A.Control = {$xXx['CONTROL']}")->result();
+
+                $PRECIO_FRACCION_CONTROL = $this->db->select("P.Estilo, P.Pares, F.CostoMO, "
+                                        . "(P.Pares*F.CostoMO) AS TOTAL, {$NUMERO_ENTERO_FRACCION} AS Fraccion", false)
+                                ->from("pedidox AS P")->join('fraccionesxestilo as F', 'P.Estilo = F.Estilo')
+                                ->where("F.Fraccion", $NUMERO_ENTERO_FRACCION)
+                                ->where("P.Control", $xXx['CONTROL'])->get()->result();
+
                 $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                 $data = array(
                     "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
@@ -379,7 +433,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 20,
                                 'DepartamentoT' => 'RAYADO',
-                                'FechaAvance' => Date('Y-m-d 00:00:00'),
+                                'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -428,10 +482,11 @@ class Avance9 extends CI_Controller {
                 } else {
                     /* EL CORTADOR NO HA REGRESADO MATERIAL O EL ALMACENISTA NO HA REGISTRADO EL RETORNO DEL MATERIAL */
                     print '[{"AVANZO":"0","RETORNO":"NO", "MESSAGE":"NUMERO DE FRACCION O EMPLEADO INCORRECTOS  - LOOP FOREACH"}]';
+                    exit(0);
                 }
             }// *** FIN FOREACH DE FRACCIONES JSON ***
             /* SI NO ESPECIFICO FRACCIONES ES PARA RAYADO => REBAJADO */
-            if (count($FRACCIONES) <= 0) {
+            if (count($FRACCIONES) <= 0 && intval($xXx['DEPARTAMENTO']) !== 10) {
                 switch (intval($xXx['DEPARTAMENTO'])) {
                     case 40:
                         $FRACCION = 60;
@@ -463,7 +518,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 30,
                                 'DepartamentoT' => 'REBAJADO',
-                                'FechaAvance' => Date('Y-m-d 00:00:00'),
+                                'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -517,7 +572,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 40,
                                 'DepartamentoT' => 'FOLEADO',
-                                'FechaAvance' => Date('Y-m-d 00:00:00'),
+                                'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -563,7 +618,7 @@ class Avance9 extends CI_Controller {
                                 'FechaAProduccion' => Date('d/m/Y'),
                                 'Departamento' => 90,
                                 'DepartamentoT' => 'ENTRETELADO',
-                                'FechaAvance' => Date('Y-m-d 00:00:00'),
+                                'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
@@ -593,6 +648,10 @@ class Avance9 extends CI_Controller {
                         break;
                 }
             } else {
+                if (intval($xXx['DEPARTAMENTO']) === 10) {
+                    PRINT json_encode(array("AVANZO" => 0, "DEPTO" => 10));
+                    exit(0);
+                }
                 if (count($FRACCIONES) > 1) {
                     $msj .= "]";
                 }
@@ -694,7 +753,7 @@ class Avance9 extends CI_Controller {
                     'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 30,
                     'DepartamentoT' => 'REBAJADO',
-                    'FechaAvance' => Date('Y-m-d 00:00:00'),
+                    'FechaAvance' => Date('d/m/Y'),
                     'Estatus' => 'A',
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),

@@ -236,7 +236,7 @@
                     console.log('avance 2');
                     onAgregarAvanceSinFraccion();
                 }
-            } else {  
+            } else {
                 SigAvance.val('');
                 pnlTablero.find(".estilo_control").text('-');
                 pnlTablero.find(".pares_control").text('-');
@@ -396,7 +396,7 @@
                             getPagosXEmpleadoXSemana();
                         }).fail(function (x, y, z) {
                             console.log(x.responseText);
-                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE 1', 'error');
                         }).always(function () {
 
                         });
@@ -419,7 +419,7 @@
                     }
                 }).fail(function (x, y, z) {
             console.log(x.responseText);
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE 2', 'error');
         }).always(function () {
             HoldOn.close();
         });
@@ -451,13 +451,23 @@
             }
             $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
                     {CR: Control.val(), FR: JSON.stringify(fra), DEPTO: Departamento.val()}).done(function (data) {
+                if (data[0].MENSAJE !== undefined) {
+                    swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
+                ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
+                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                        Control.focus().select();
+                    });
+                    return;
+                }
                 if (data.length > 0) {
                     var r = data[0];
                     Estilo.val(r.Estilo);
                     Pares.val(r.Pares);
                     ManoDeOB.val(r.CostoMO);
+
                     pnlTablero.find(".estilo_control").text(r.Estilo);
                     pnlTablero.find(".pares_control").text(r.Pares);
+
                     $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                         if (data.length > 0) {
                             SigAvance.val(data[0].Departamento);
@@ -479,13 +489,14 @@
                             tf = tf.toString();
                             tf = tf.slice(0, (tf.indexOf(".")) + 3);
                             DiasPagoDeNomina.find("#txtTotal").val(tf);
+                            getPagosXEmpleadoXSemana();
                             if (type) {
                                 onAvanzar();
                             }
                         }
                     }).fail(function (x, y, z) {
                         console.log(x.responseText);
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE 3', 'error');
                     }).always(function () {
                         HoldOn.close();
                     });
@@ -503,7 +514,7 @@
                 }
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE 4', 'error');
             }).always(function () {
                 HoldOn.close();
             });
@@ -555,9 +566,10 @@
                                 }
                             }).fail(function (x, y, z) {
                                 console.log(x.responseText);
-                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
+                                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE 5', 'error');
                             }).always(function () {
                                 HoldOn.close();
+                                getPagosXEmpleadoXSemana();
                             });
                         }
                     }).fail(function (x, y, z) {
@@ -644,7 +656,8 @@
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n * AVANCE NOMINA * \n", data);
-            var dt = JSON.parse(data), avanzo = 0;
+            var dt = JSON.parse(data);
+            var avanzo = 0;
 
             if (fracciones.length >= 1) {
                 $.each(dt, function (k, v) {
@@ -671,12 +684,20 @@
                         }
                         return false;
                     } else {
-                        onBeep(2);
-                        Avance.ajax.reload();
-                        swal('ATENCIÓN', '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE.', 'warning').then((value) => {
+                        if (parseInt(v.AVANZO) === 0) { 
+                            onCampoInvalido(pnlTablero, 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true)
+                                Avance.ajax.reload();
+                            });
+                            return;
+                        }
+                        onCampoInvalido(pnlTablero, '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', function () {
                             Control.focus().select();
-                            btnAceptar.attr('disabled', true)
+                            btnAceptar.attr('disabled', true);
+                            Avance.ajax.reload();
                         });
+
                     }
                 });
             }
