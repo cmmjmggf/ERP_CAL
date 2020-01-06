@@ -88,12 +88,12 @@ class Avance9 extends CI_Controller {
 
                 exit(0);
 
-                
-                
-                /*05/01/2020 LO QUITE PORQUE NO FUNCIONA*/
-                
-                
-                
+
+
+                /* 05/01/2020 LO QUITE PORQUE NO FUNCIONA */
+
+
+
                 switch (intval($x['FR'])) {
                     case 99:
                         //FORRO O SINTETICO, SE METE COMO 99 EL SINTETICO
@@ -587,6 +587,25 @@ class Avance9 extends CI_Controller {
 
                             /* ACTUALIZA A 40 FOLEADO, stsavan 40 */
                             $this->onAvanzarXControl($xXx['CONTROL'], 'FOLEADO', 40, 4);
+
+                            /* 80 CONTAR TAREA */
+                            $FRACCION  = 80;
+                            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
+                                            ->from('fracpagnomina AS F')
+                                            ->where('F.control', $xXx['CONTROL'])
+                                            ->where('F.numfrac', $FRACCION)
+                                            ->get()->result();
+                            if ($check_fraccion[0]->EXISTE <= 0) {
+                                $data["fraccion"] = $FRACCION;
+                                $data["numfrac"] = $FRACCION;
+                                /* FILTRADO POR FRACCION 102 RAYADO */
+                                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$FRACCION}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                                $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                                $data["preciofrac"] = $PXFC;
+                                $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
+                                /* PAGAR LA FRACCION 102 AL EMPLEADO */
+                                $this->db->insert('fracpagnomina', $data);
+                            }
                             print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A FOLEADO - SWITCH 80"}';
                         }
                         exit(0);
