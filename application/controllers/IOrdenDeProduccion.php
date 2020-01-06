@@ -105,10 +105,10 @@ class IOrdenDeProduccion extends CI_Controller {
                 print json_encode(array("PAGINAS" => 0, "URL" => ""));
                 exit(0);
             }
-//            print "\n";
-//            print $this->db->last_query();
-//            print "\n";
-//            exit(0);
+            print "\n";
+            print $this->db->last_query();
+            print "\n";
+            exit(0);
             foreach ($CONTROLES as $kc => $vc) {
 //                $OP = $this->iopm->getOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
 

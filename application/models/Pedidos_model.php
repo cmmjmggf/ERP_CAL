@@ -108,13 +108,13 @@ class Pedidos_model extends CI_Model {
         }
     }
 
-    public function getSuelaByArticulo($Art) {
+    public function getSuelaByArticulo($Estilo, $Color) {
         try {
             return $this->db->select("A.Clave, A.Descripcion AS Suela", false)
                             ->from('fichatecnica as FT')
-                            ->join('articulos AS A', 'FT.Articulo = A.Clave')
-                            ->where('FT.Estilo', $Art)
-                            ->where('A.Grupo', 3)
+                            ->join('articulos AS A', 'FT.Articulo = A.Clave AND A.Grupo = 3')
+                            ->where('FT.Estilo', $Estilo)
+                            ->where('FT.Color', $Color) 
                             ->limit(1)
                             ->get()->result();
         } catch (Exception $exc) {

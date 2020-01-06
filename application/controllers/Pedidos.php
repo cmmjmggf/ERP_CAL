@@ -63,7 +63,7 @@ class Pedidos extends CI_Controller {
             $x = $this->input->get();
             $ESTILO = $x['Estilo'];
             $Color = $x['Color'];
-            print json_encode($this->db->query("SELECT E.Descripcion AS Color FROM colores AS E  WHERE E.Estilo= '$ESTILO' and clave = $Color ")->result());
+            print json_encode($this->db->query("SELECT C.Descripcion AS Color FROM colores AS C  WHERE C.Estilo= '{$ESTILO}' AND C.Clave = {$Color} ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -344,6 +344,18 @@ class Pedidos extends CI_Controller {
                 "DeptoProduccion" => NULL, "stsavan" => 0
             );
             $this->db->insert('pedidox', $p);
+
+            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
+                INNER JOIN colores AS C ON E.Clave = C.Estilo 
+                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};");
+
+            $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)
+                    ->where("Clave", $x['PEDIDO'])->where("Cliente", $x['CLIENTE'])
+                    ->where("Agente", $x['AGENTE'])->where("Estilo", $x['ESTILO'])
+                    ->where("Color", $x['COLOR'])->where("Semana", $x['SEMANA'])
+                    ->where("Ano", $anio)->where("Maquila", $x['MAQUILA'])
+                    ->update("pedidox");
+
             $insert_id = $this->db->insert_id();
             $l = new Logs("PEDIDOS", "AGREGO UN REGISTRO AL PEDIDO({$insert_id}) {$x['PEDIDO']} DE {$x['PARES']} PARES, CON EL ESTILO-COLOR {$x['ESTILO']} {$x['COLOR']}.", $this->session);
 
@@ -500,6 +512,18 @@ class Pedidos extends CI_Controller {
                 "DeptoProduccion" => NULL
             );
             $this->db->insert('pedidox', $p);
+            
+            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
+                INNER JOIN colores AS C ON E.Clave = C.Estilo 
+                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};");
+
+            $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)
+                    ->where("Clave", $x['PEDIDO'])->where("Cliente", $x['CLIENTE'])
+                    ->where("Agente", $x['AGENTE'])->where("Estilo", $x['ESTILO'])
+                    ->where("Color", $x['COLOR'])->where("Semana", $x['SEMANA'])
+                    ->where("Ano", Date('Y'))->where("Maquila", $x['MAQUILA'])
+                    ->update("pedidox");
+            
             $insert_id = $this->db->insert_id();
             $l = new Logs("PEDIDOS", "ID({$insert_id}), AGREGO UN REGISTRO AL PEDIDO({$x['PEDIDO']}) DE {$x['PARES']} PARES DEL CLIENTE({$x['CLIENTE']}) (SERIE-{$x['SERIE']}), CON EL ESTILO-COLOR ({$x['ESTILO']} - {$x['COLOR']}).", $this->session);
 
@@ -535,7 +559,7 @@ class Pedidos extends CI_Controller {
             $IDX = $this->input->post('ID');
             $CLIENTE = $this->input->post('CLIENTE');
 //            $Pedido = $this->pem->getPedidoByID($IDX, $CLIENTE);
-            $Pedido = $this->db->select("P.ID as PDID, P.Clave, P.Cliente, P.Agente, P.FechaPedido, P.FechaRecepcion, P.Usuario, P.Estatus, P.Registro,
+            $this->db->select("P.ID as PDID, P.Clave, P.Cliente, P.Agente, P.FechaPedido, P.FechaRecepcion, P.Usuario, P.Estatus, P.Registro,
                                     P.Clave, P.Estilo,P.EstiloT, P.Color, P.ColorT,P.FechaEntrega, P.Maquila, P.Semana, P.Ano, P.Recio, P.Precio,
                                     P.Observacion AS OBSTITULO, P.ObservacionDetalle AS OBSCONTENIDO, P.Serie, P.Control,
                                     P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, P.C11,
@@ -552,11 +576,13 @@ class Pedidos extends CI_Controller {
             if ($IDX !== '') {
                 $this->db->where('P.Clave', $IDX);
             }
-            $this->db->where('P.Cliente', $CLIENTE)
-                    ->where_not_in('P.stsavan', 14)
-                    ->order_by('P.ID', 'ASC')
-                    ->get()->result();
-
+            $Pedido = $this->db->where('P.Cliente', $CLIENTE)
+                            ->where_not_in('P.stsavan', 14)
+                            ->order_by('P.ID', 'ASC')
+                            ->get()->result();
+//            print "\n";
+//            print $this->db->last_query();
+//            print "\n";
 //            $Series = $this->pem->getSerieXPedido($IDX, $CLIENTE);
 
             $this->db->query("set sql_mode=''");
@@ -782,7 +808,7 @@ class Pedidos extends CI_Controller {
                         $pdf->SetX($posi[0]);
                         $pdf->SetFont('Calibri', '', 7.5);
                         $row = array();
-                        $estilo_color = $v->Estilo . " - " . $v->ColorT;
+                        $estilo_color = $v->Estilo . " - {$v->Color} {$v->ColorT}";
                         array_push($row, $estilo_color, $v->Maquila, $v->Semana, $v->Recio, $v->Pares); //4
                         for ($index = 1; $index <= 22; $index++) {
                             array_push($row, ( $v->{"C$index"} !== '0') ? $v->{"C$index"} : '-'); //5
@@ -809,7 +835,7 @@ class Pedidos extends CI_Controller {
 
                         /* SEGUNDO DETALLE (SUELA) */
                         $suela = array();
-                        $suelin = $this->pem->getSuelaByArticulo($v->Estilo);
+                        $suelin = $this->pem->getSuelaByArticulo($v->Estilo, $v->Color);
                         $pdf->SetAligns(array('L', 'L', 'L', 'L'));
                         $pdf->SetWidths(array(198.5, 72.5));
                         $pdf->SetX($posi[0]);
