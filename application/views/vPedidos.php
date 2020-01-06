@@ -504,6 +504,7 @@
         });
 
         btnAcepta.click(function () {
+            onDisable(btnAcepta);
             if (Clave.val() && PedidoxCliente.val() && Agente.val() && FechaPedido.val()
                     && FechaEntrega.val() && FechaRecepcion.val()) {
                 onOpenOverlay('Guardando...');
@@ -558,6 +559,7 @@
                         onCloseOverlay();
                     });
                 }
+                onEnable(btnAcepta);
             } else {
                 swal('ATENCIÓN', 'DEBE DE DEFINIR UNA CLAVE DEL PEDIDO Y UN CLIENTE', 'warning').then((value) => {
                     Clave.focus().select();

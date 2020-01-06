@@ -191,7 +191,7 @@ class Avance8 extends CI_Controller {
 //                                    ->where_in('E.DepartamentoFisico', array(20, 30, 40/* PREL-CORTE */, 60, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */))
 //                                    ->get()->result());
 
-            $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60,120,140,70, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
+            $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60, 120, 140, 70, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
             $this->db->select("CONCAT(E.PrimerNombre,' ',"
@@ -201,7 +201,7 @@ class Avance8 extends CI_Controller {
                             . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
-                    ->where_in('E.AltaBaja', array(1,2));
+                    ->where_in('E.AltaBaja', array(1, 2));
             if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
                 $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
             } else {
@@ -298,7 +298,7 @@ class Avance8 extends CI_Controller {
                         "control" => $xXx['CONTROL'],
                         "estilo" => $xXx['ESTILO'],
                         "pares" => $xXx['PARES'],
-                        "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                        "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                         "semana" => $xXx['SEMANA'],
                         "depto" => $xXx['DEPARTAMENTO'],
                         "anio" => $xXx['ANIO']);
@@ -344,7 +344,7 @@ class Avance8 extends CI_Controller {
                                 $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
                                         ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
                                         ->update('pedidox');
-                                $this->db->set('fec44', Date('Y-m-d h:i:s'))
+                                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
                             } else {
@@ -370,7 +370,7 @@ class Avance8 extends CI_Controller {
                                 $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
                                         ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
                                         ->update('pedidox');
-                                $this->db->set('fec42', Date('Y-m-d h:i:s'))
+                                $this->db->set('fec42', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
                             }
@@ -400,7 +400,7 @@ class Avance8 extends CI_Controller {
                                     ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
                                     ->set('DeptoProduccion', 130)
                                     ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d h:i:s'))
+                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
                                     ->where('contped', $xXx['CONTROL'])->update('avaprd');
 
                             break;
@@ -409,7 +409,28 @@ class Avance8 extends CI_Controller {
                     /* PAGAR FRACCIONES */
                     $data["fraccion"] = $v->NUMERO_FRACCION;
                     $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                    $this->db->insert('fracpagnomina', $data);
+                    if (intval($v->NUMERO_FRACCION) === 60) {
+                        $avance = array(
+                            'Control' => $xXx['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 70,
+                            'DepartamentoT' => 'PREL-CORTE',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => $v->NUMERO_FRACCION
+                        );
+                        $this->db->insert('avance', $avance);
+                        $id = $this->db->insert_id();
+                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                        $this->db->insert('fracpagnomina', $data);
+                    } else {
+                        if ((floatval($xXx['PARES']) * floatval($PXFC)) > 0) {
+                            $this->db->insert('fracpagnomina', $data);
+                        }
+                    }
 //                    print json_encode(array("AVANZO" => 1, "STEP" => 1));
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {

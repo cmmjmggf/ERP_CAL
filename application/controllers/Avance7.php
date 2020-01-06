@@ -107,7 +107,7 @@ class Avance7 extends CI_Controller {
         try {
 //            print json_encode($this->avm->onComprobarDeptoXEmpleado($this->input->get('EMPLEADO')));
             $xXx = $this->input->get();
-            $DEPTOS_FISICOS = array(20/* RAYADO */, 30/* REBAJADO */, 40/* FOLEADO */);
+            $DEPTOS_FISICOS = array(20/* RAYADO */, 30/* REBAJADO */, 40/* FOLEADO */,70);
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
 
             $this->db->select("CONCAT(E.PrimerNombre,' ',"

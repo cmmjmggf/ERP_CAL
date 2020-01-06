@@ -44,7 +44,7 @@ class FacturacionVarios extends CI_Controller {
             $CodigoBarras = "";
             $Descripcion = "";
             $FECHA_FACTURA = str_replace('/', '-', $this->input->post('FECHA'));
-            $FECHIN = date("Y-m-d h:i:s", strtotime($FECHA_FACTURA));
+            $FECHIN = date("Y-m-d 00:00:00", strtotime($FECHA_FACTURA));
             $FECHA_REGISTRO = $this->db->insert('facturacion', array(
                 "factura" => $x["FACTURA"],
                 "tp" => $x["TP"],

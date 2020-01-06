@@ -594,7 +594,8 @@ class Avance9 extends CI_Controller {
                     case 30:
                         /* 30 REBAJADO => 90 ENTRETELADO */
                         $FRACCION = 103;
-                        if (intval($xXx['NUMERO_EMPLEADO']) === 49) {
+                        if (intval($xXx['NUMERO_EMPLEADO']) === 1894 ||
+                                intval($xXx['NUMERO_EMPLEADO']) === 49) {
                             /* REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
                             $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                             ->from('fracpagnomina AS F')

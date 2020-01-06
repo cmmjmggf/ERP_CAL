@@ -218,6 +218,18 @@
                             </div>
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk75" description="TROQUELAR CORTE" fraccion="75">
+                                    <label class="custom-control-label" for="chk75">75 Troquelar corte</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk71" description="TROQUELAR MUESTRA" fraccion="71">
+                                    <label class="custom-control-label" for="chk71">71 Troquelar muestra</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk607" description="ARMAR PLANTILLA ADORNO" fraccion="607">
                                     <label class="custom-control-label" for="chk607">607 Armar plantilla adorno</label>
                                 </div>
@@ -540,12 +552,12 @@
             if (Control.val()) {
                 $.getJSON('<?php print base_url('Avance8/onComprobarFraccionXEstilo'); ?>',
                         {CONTROL: Control.val(), FRACCIONES: JSON.stringify(fracciones)}).done(function (a) {
-                    console.log(a, a.FRACCIONES_VALIDAS, fracciones.length);
-                    if (parseInt(a.FRACCIONES_VALIDAS) < fracciones.length) {
-                        iMsg(a.FALTAN + ' DE LAS FRACCIONES SELECCIONADAS NO CORRESPONDEN A ESTE ESTILO', 'w', function () {
-                            Control.focus().select();
-                        });
-                    } else {
+//                    console.log(a, a.FRACCIONES_VALIDAS, fracciones.length);
+//                    if (parseInt(a.FRACCIONES_VALIDAS) < fracciones.length) {
+//                        iMsg(a.FALTAN + ' DE LAS FRACCIONES SELECCIONADAS NO CORRESPONDEN A ESTE ESTILO', 'w', function () {
+//                            Control.focus().select();
+//                        });
+//                    } else {
                         Estilo.val(a.ESTILO);
                         Pares.val(a.PARES);
                         pnlTablero.find(".estilo_control").text(a.ESTILO);
@@ -562,7 +574,7 @@
                             }
                         });
 
-                    }
+//                    }
 //                    if (a.length > 0) {
 //                        var r = a[0];
 //                        Estilo.val(r.Estilo);

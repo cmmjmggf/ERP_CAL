@@ -381,6 +381,8 @@ P.Maquila AS MAQUILA
             $depto = intval($x->post('DEPTO'));
             $depto_actual = intval($x->post('AVANCEDEPTOACTUAL'));
             $PROCESO_MAQUILA = intval($x->post('PROCESO_MAQUILA'));
+//            var_dump($PROCESO_MAQUILA);
+//            EXIT(0);
 //            var_dump($xXx);
 //            exit(0);
             if ($depto === 33 && $depto_actual === 3 && $frac === 102 ||
@@ -495,7 +497,7 @@ P.Maquila AS MAQUILA
              * 
               42 = MAQUILA "A" 44 = ALMACEN DE CORTE
              *              */
-            if ($depto === 42 && $depto_actual === 40) {
+            if ($depto === 42 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
                         ->where('Control', $xXx['CONTROL'])
@@ -554,7 +556,8 @@ P.Maquila AS MAQUILA
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 
+                    && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
                     'FechaAProduccion' => Date('d/m/Y'),
