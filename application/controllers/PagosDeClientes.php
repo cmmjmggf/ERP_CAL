@@ -85,7 +85,7 @@ class PagosDeClientes extends CI_Controller {
     public function getDatosDelDocumentoConSaldo() {
         try {
             $x = $this->input->get();
-            $documento = $this->db->query("SELECT CC.cliente AS CLIENTE, CC.importe AS IMPORTE, CC.pagos AS PAGOS, CC.Fecha AS FECHA, CC.saldo AS SALDO,CC.tipo AS TIPO, DATEDIFF(NOW(),fecha) AS DIAS FROM cartcliente AS CC WHERE CC.remicion LIKE '{$x['DOCUMENTO']}'")->result();
+            $documento = $this->db->query("SELECT CC.cliente AS CLIENTE, CC.importe AS IMPORTE, CC.pagos AS PAGOS, date_format(CC.Fecha,'%d/%m/%Y') AS FECHA, CC.saldo AS SALDO,CC.tipo AS TIPO, DATEDIFF(NOW(),fecha) AS DIAS FROM cartcliente AS CC WHERE CC.remicion LIKE '{$x['DOCUMENTO']}'")->result();
             print json_encode($documento);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -119,7 +119,7 @@ class PagosDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
 //            print json_encode($this->db->query("SELECT CFDI.uuid AS UUID FROM cfdifa AS CFDI WHERE CFDI.Factura = '{$x['DOCUMENTO']}'")->result());
-           print json_encode($this->db->query("SELECT CFDI.UUID AS UUID FROM comprobantes AS CFDI WHERE CFDI.Folio = '{$x['DOCUMENTO']}'")->result());
+            print json_encode($this->db->query("SELECT CFDI.UUID AS UUID FROM comprobantes AS CFDI WHERE CFDI.Folio = '{$x['DOCUMENTO']}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -137,7 +137,7 @@ class PagosDeClientes extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* FACTURA */,
-                        "fecha" => $FECHA_FINAL,
+                        "fecha" => Date('Y-m-d'),
                         "importe" => $TOTAL_FINAL_CON_IVA,
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
@@ -163,7 +163,7 @@ class PagosDeClientes extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* REMISION */,
-                        "fecha" => $FECHA_FINAL,
+                        "fecha" => Date('Y-m-d'),
                         "importe" => $x['IMPORTE'],
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
@@ -187,7 +187,7 @@ class PagosDeClientes extends CI_Controller {
             }
             if (intval($x['MOVIMIENTO']) === 3) {
                 $this->db->insert('chequeposf', array('cliente' => $x['CLIENTE'],
-                    'remicion' => $x['NUMERO'], 'fecha' => $FECHA_FINAL,
+                    'remicion' => $x['NUMERO'], 'fecha' => Date('Y-m-d'),
                     "fechadep" => $FECHA_FINAL, 'importe' => $x['IMPORTE'],
                     'tipo' => 1, 'status' => 1, 'doctopa' => $x['DOCUMENTO']));
             }
@@ -226,8 +226,12 @@ class PagosDeClientes extends CI_Controller {
     public function onModificaSaldoXDocumento() {
         try {
             $x = $this->input->post();
+
+            $estatus = (floatval($x['NUEVO_SALDO']) > 1) ? 2 : 3;
+
             $this->db->set('saldo', $x['NUEVO_SALDO'])
                     ->set('pagos', $x['NUEVO_PAGADO'])
+                    ->set('status', $estatus)
                     ->where('cliente', $x['CLIENTE'])
                     ->where('remicion', $x['REMISION'])
                     ->update('cartcliente');

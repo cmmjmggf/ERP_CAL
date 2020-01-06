@@ -98,9 +98,9 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         'cliente' => $Cliente,
                         'remicion' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
-                        'fechacap' => Date('Y-m-d H:i:s'),
-                        'fechadep' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
+                        'fechacap' => Date('Y-m-d'),
+                        'fechadep' => Date('Y-m-d'),
                         'importe' => $importe,
                         'tipo' => $Tp,
                         'mov' => 10,
@@ -117,7 +117,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("canfacvta", array(
                         'cliente' => $Cliente,
                         'docto' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
                         'tp' => $Tp,
                         'motivo' => $Concepto,
                         'Nc' => $NC
@@ -167,9 +167,9 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         'cliente' => $Cliente,
                         'remicion' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
-                        'fechacap' => Date('Y-m-d H:i:s'),
-                        'fechadep' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
+                        'fechacap' => Date('Y-m-d'),
+                        'fechadep' => Date('Y-m-d'),
                         'importe' => $importe,
                         'tipo' => $Tp,
                         'mov' => 10,
@@ -186,7 +186,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("canfacvta", array(
                         'cliente' => $Cliente,
                         'docto' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
                         'tp' => $Tp,
                         'motivo' => $Concepto,
                         'Nc' => $NC
@@ -216,9 +216,9 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("cartctepagos", array(
                         'cliente' => $Cliente,
                         'remicion' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
-                        'fechacap' => Date('Y-m-d H:i:s'),
-                        'fechadep' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
+                        'fechacap' => Date('Y-m-d'),
+                        'fechadep' => Date('Y-m-d'),
                         'importe' => $importe,
                         'tipo' => $Tp,
                         'mov' => 10,
@@ -235,7 +235,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                     $this->db->insert("canfacvta", array(
                         'cliente' => $Cliente,
                         'docto' => $Docto,
-                        'fecha' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
                         'tp' => $Tp,
                         'motivo' => $Concepto,
                         'Nc' => $NC
@@ -261,7 +261,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                         'numfac' => $Docto,
                         'tp' => $Tp,
                         'orden' => 10,
-                        'fecha' => Date('Y-m-d H:i:s'),
+                        'fecha' => Date('Y-m-d'),
                         'hora' => Date('h:i:s A'),
                         'cant' => $pares,
                         'descripcion' => $contped . "-" . $estilo . "-" . $combin,

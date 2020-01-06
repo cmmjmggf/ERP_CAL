@@ -51,12 +51,11 @@ limit 1 ),'Z NO EXISTE SUELA EN FICHA TEC') AS Suela,
 S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22,
 PE.C1, PE.C2, PE.C3, PE.C4, PE.C5, PE.C6, PE.C7, PE.C8, PE.C9, PE.C10, PE.C11, PE.C12, PE.C13, PE.C14, PE.C15, PE.C16, PE.C17, PE.C18, PE.C19, PE.C20, PE.C21, PE.C22
 from pedidox PE
-join controles C ON  PE.Control = C.Control
 join series S on S.Clave = PE.Serie
 WHERE cast(PE.Maquila as signed) BETWEEN $P{maq} AND $P{amaq}
 AND cast(PE.Semana as signed) BETWEEN $P{sem} AND $P{asem}
 AND PE.Ano = $P{ano}
-AND PE.Estatus = 'A'
+AND PE.stsavan not in(14,13)
 order by Suela ASC, PE.Control ASC]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">

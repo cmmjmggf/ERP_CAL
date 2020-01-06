@@ -145,9 +145,8 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
 
-        pnlTablero.find('#Control').keyup(function (e) {
+        pnlTablero.find('#Control').keypress(function (e) {
             if (e.keyCode === 13 && $(this).val()) {
                 $.getJSON(master_url + 'getOrdenProduccion', {
                     Control: $(this).val()
@@ -159,6 +158,7 @@
 
                         pnlTablero.find('#EstatusProduccion').text(data[0].EstatusProduccion);
                         getRecords(pnlTablero.find('#Control').val());
+                        pnlTablero.find('#Control').focus().select();
                     } else { //Si el control no existe
                         swal({
                             title: "ATENCIÓN",
@@ -289,7 +289,7 @@
     tr.group-end td{
         background-color: #FFF !important;
         color: #000!important;
-    } 
+    }
 
     td span.badge{
         font-size: 100% !important;

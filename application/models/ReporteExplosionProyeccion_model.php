@@ -84,7 +84,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
                                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
                                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
-                                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                                JOIN `maquilas` `MA` ON `MA`.`Clave` = PE.Maquila
                                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                 WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
                                 AND PE.Semana = $Semana

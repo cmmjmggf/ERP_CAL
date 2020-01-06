@@ -94,17 +94,17 @@ class RecibeOrdenCompra extends CI_Controller {
                         $can = $v->Cantidad;
                         $Can_rec = $v->Cantidad_Rec;
                         $ID = $v->ID;
-                        if ($Can_rec === '0' || $Can_rec === 0) {
+                        if (floatval($Can_rec) === 0) {
                             $datos = array(
                                 'Estatus' => 'ACTIVA'
                             );
                             $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                        } else if ($can > $Can_rec) {
+                        } else if (floatval($can) > floatval($Can_rec)) {
                             $datos = array(
                                 'Estatus' => 'PENDIENTE'
                             );
                             $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                        } else if ($Can_rec >= $can) {
+                        } else if (floatval($Can_rec) >= floatval($can)) {
                             $datos = array(
                                 'Estatus' => 'RECIBIDA'
                             );
@@ -120,17 +120,17 @@ class RecibeOrdenCompra extends CI_Controller {
                     $can = $v->Cantidad;
                     $Can_rec = $v->Cantidad_Rec;
                     $ID = $v->ID;
-                    if ($Can_rec === '0' || $Can_rec === 0) {
+                    if (floatval($Can_rec) === 0) {
                         $datos = array(
                             'Estatus' => 'ACTIVA'
                         );
                         $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                    } else if ($can > $Can_rec) {
+                    } else if (floatval($can) > floatval($Can_rec)) {
                         $datos = array(
                             'Estatus' => 'PENDIENTE'
                         );
                         $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                    } else if ($Can_rec >= $can) {
+                    } else if (floatval($Can_rec) >= floatval($can)) {
                         $datos = array(
                             'Estatus' => 'RECIBIDA'
                         );
@@ -200,9 +200,9 @@ class RecibeOrdenCompra extends CI_Controller {
                 'Proveedor' => $c_cart_p->Proveedor,
                 'Doc' => $c_cart_p->Doc,
                 'FechaDoc' => $c_cart_p->FechaDoc,
-                'ImporteDoc' => ($c_cart_p->Tp === '1') ? $Importe * 1.16 : $Importe,
+                'ImporteDoc' => ($c_cart_p->Tp === '1') ? floatval($Importe) * 1.16 : floatval($Importe),
                 'Pagos_Doc' => 0,
-                'Saldo_Doc' => ($c_cart_p->Tp === '1') ? $Importe * 1.16 : $Importe,
+                'Saldo_Doc' => ($c_cart_p->Tp === '1') ? floatval($Importe) * 1.16 : floatval($Importe),
                 'Estatus' => 'SIN PAGAR',
                 'Tp' => $c_cart_p->Tp,
                 'Moneda' => 'MXN',
@@ -260,6 +260,7 @@ class RecibeOrdenCompra extends CI_Controller {
                 'Factura' => $x->post('Factura'),
                 'FechaFactura' => $x->post('FechaFactura')
             );
+            //Actualiza orden de compra
             $this->Recibeordencompra_model->onModificarCantidadRecibidaByArtByOCByTp($x->post('Articulo'), $x->post('OC'), $x->post('TpOrdenCompra'), $datos);
 
             $datosCompra = array(
@@ -280,6 +281,7 @@ class RecibeOrdenCompra extends CI_Controller {
                 'Estatus' => 'BORRADOR',
                 'Registro' => date("d/m/Y")
             );
+            //Agrega registro en compras
             $this->Recibeordencompra_model->onAgregar($datosCompra);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

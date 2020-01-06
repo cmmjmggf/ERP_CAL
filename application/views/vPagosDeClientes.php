@@ -350,8 +350,14 @@
 
         ImporteUno.on('keypress', function (e) {
             if (e.keyCode === 13 && $(this).val()) {
-                onRecalcularSaldoActual(1);
-                RefUno.focus();
+                if (parseFloat(ImporteUno.val()) > parseFloat(SaldoPDC.val())) {
+                    swal('ATENCIÓN', 'EL IMPORTE SUPERA AL SALDO DEL DOCUMENTO', 'warning').then((value) => {
+                        ImporteUno.val('').focus().select();
+                    });
+                } else {
+                    onRecalcularSaldoActual(1);
+                    RefUno.focus();
+                }
             }
         });
 
@@ -439,7 +445,7 @@
                             AGENTE: AgentePDC.val(),
                             NUMERO_RF: DoctoPDC.val(),
                             TP: parseInt(TPPDC.val()),
-                            FECHA: FechaPDC.val(),
+                            FECHA: CapturaPDC.val(),
                             TIPO: TPPDC.val(),
                             MOVIMIENTO: MovUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
                             IMPORTE: ImporteUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
@@ -488,10 +494,22 @@
                             }).done(function (a) {
                                 console.log(a);
                                 /*TERMINAR PROCESO */
-                                pnlTablero.find("input:not(#DepositoPDC):not(#Agente)").val('');
+                                //Recalcula el saldo final del deposito
+                                var depos = parseFloat((ImporteUno.val() !== '') ? ImporteUno.val() : 0) +
+                                        parseFloat((ImporteDos.val() !== '') ? ImporteDos.val() : 0) +
+                                        parseFloat((ImporteTres.val() !== '') ? ImporteTres.val() : 0) +
+                                        parseFloat((ImporteCuatro.val() !== '') ? ImporteCuatro.val() : 0)
+
+                                var nuevo_saldo = SaldoDelDeposito.val() - depos;
+
+
+
+                                pnlTablero.find("input:not(#DepositoPDC):not(#Agente):not(#SaldoDelDeposito):not(#ClientePDC):not(#CapturaPDC)").val('');
+
+
+
                                 Banco.empty();
                                 TPPDC[0].selectize.clear(true);
-                                DepositoPDC.val('');
                                 MovUno[0].selectize.clear(true);
                                 MovDos[0].selectize.clear(true);
                                 MovTres[0].selectize.clear(true);
@@ -506,7 +524,15 @@
                                 } else {
                                     DocumentosConSaldoXClientes.ajax.reload();
                                 }
-                                DoctoPDC.focus().select();
+
+                                //Pinta nuevo saldo del deposito inicial y si no pone el cursor en el nuevo deposito
+                                if (parseInt(nuevo_saldo) > 0) {
+                                    SaldoDelDeposito.val(nuevo_saldo);
+                                    DoctoPDC.val('').focus().select();
+                                } else {
+                                    DepositoPDC.val('').focus();
+                                }
+
                                 onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
                             }).fail(function (x) {
                                 getError(x);
@@ -566,7 +592,7 @@
                                 SaldoPDC.val(a[0].SALDO);
                                 TPPDC[0].selectize.setValue(a[0].TIPO);
                                 Dias.val(a[0].DIAS);
-
+                                FechaPDC.val(a[0].FECHA);
                                 getBancosPagos(a[0].TIPO);
                                 /*OBTENER UUID*/
                                 $.getJSON('<?php print base_url('PagosDeClientes/getUUID'); ?>', {DOCUMENTO: DoctoPDC.val()}).done(function (a) {
@@ -614,7 +640,6 @@
             }
         });
 
-        FechaPDC.val(FechaActual);
         CapturaPDC.val(FechaActual);
         DepositoFecha.val(FechaActual);
 
@@ -628,7 +653,7 @@
                             $.getJSON('<?php print base_url('PagosDeClientes/onVerificarCliente'); ?>', {Cliente: txtcte}).done(function (data) {
                                 if (data.length > 0) {
                                     onOpenOverlay('Por favor espere...');
-                                    pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+                                    pnlTablero.find("input:not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
 
 
                                     MovUno[0].selectize.clear(true);
@@ -650,7 +675,7 @@
                                             .done(function (a) {
                                                 if (a.length > 0) {
                                                     AgentePDC.val(a[0].AGENTE);
-                                                    DepositoPDC.focus().select();
+                                                    DepositoPDC.focus();
                                                 }
                                             }).fail(function (x) {
                                         getError(x);
@@ -698,7 +723,7 @@
                                 theme: 'sk-rect',
                                 message: 'Por favor espere...'
                             });
-                            pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+                            pnlTablero.find("input:not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
 
 
                             MovUno[0].selectize.clear(true);
@@ -749,7 +774,7 @@
                     message: 'Por favor espere...'
                 });
                 ClientePDC.val(sClientePDC.val());
-                pnlTablero.find("input:not(#FechaPDC):not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
+                pnlTablero.find("input:not(#CapturaPDC):not(#DepositoFecha):not(#ClientePDC)").val('');
                 MovUno[0].selectize.clear(true);
                 MovDos[0].selectize.clear(true);
                 MovTres[0].selectize.clear(true);
@@ -901,7 +926,7 @@
             "scrollY": "150px",
             "bSort": true,
             "aaSorting": [
-                [0, 'desc']/*ID*/
+                [1, 'asc']/*ID*/
             ],
             initComplete: function (a, b) {
                 HoldOn.close();
@@ -973,7 +998,7 @@
         total_de_pagos += ImporteTres.val() ? parseFloat(ImporteTres.val()) : 0;
         total_de_pagos += ImporteCuatro.val() ? parseFloat(ImporteCuatro.val()) : 0;
         saldo_final = saldo - total_de_pagos;
-        SaldoActual.val(saldo_final);
+        SaldoActual.val(parseFloat(saldo_final).toFixed(2));
     }
 
     function getImporteSinIva(e) {

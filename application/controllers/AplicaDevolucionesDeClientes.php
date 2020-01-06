@@ -361,7 +361,10 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $total_final_con_iva = ($total_final * 1.16);
 
                 $saldo_final = ($SALDO - $total_final_con_iva);
-                $this->db->set('saldo', $saldo_final)
+
+                $estatus = (floatval($saldo_final) > 1) ? 2 : 3;
+                $this->db->set('status', $estatus)
+                        ->set('saldo', $saldo_final)
                         ->set('pagos', ($PAGOS + $total_final_con_iva))
                         ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
@@ -390,7 +393,10 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 exit(0);
             } else {
                 $saldo_final = ($SALDO - $total_final);
-                $this->db->set('saldo', $saldo_final)->set('pagos', ($PAGOS + $total_final))
+                $estatus = (floatval($saldo_final) > 1) ? 2 : 3;
+
+                $this->db->set('status', $estatus)
+                        ->set('saldo', $saldo_final)->set('pagos', ($PAGOS + $total_final))
                         ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
 

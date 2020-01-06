@@ -63,7 +63,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
                                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
                                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
-                                JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                                JOIN `maquilas` `MA` ON `MA`.`Clave` = PE.Maquila
                                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                 AND cast(PE.Semana as signed) = $Sem
                                 AND `PE`.`Ano` = '$Ano'
@@ -94,7 +94,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             EXPL.Control as ControlT, EXPL.Pedido, EXPL.FechaEntrega, EXPL.Estilo, EXPL.Cliente as Clave,
                             (select razons from clientes where clave = EXPL.Cliente) as Cliente,
                             EXPL.Semana, EXPL.Maquila,
-                            sum(EXPL.Explosion) as Cantidad, EXPL.Pares
+                            sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as Pares
                             from (
 
                             SELECT
@@ -117,7 +117,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
                             JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
                             JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
-                            JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
+                            JOIN `maquilas` `MA` ON `MA`.`Clave` = PE.Maquila
                             AND cast(PE.Semana as signed) BETWEEN $dSem AND $aSem
                             AND `PE`.`Ano` = '$Ano'
                             AND FT.Articulo = '$Articulo'
@@ -129,7 +129,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
 
                             ) as EXPL
 
-                            group by EXPL.Control
+                            group by EXPL.Control,EXPL.Estilo
                             order by EXPL.Control asc ", false);
             $query = $this->db->get();
             /*
