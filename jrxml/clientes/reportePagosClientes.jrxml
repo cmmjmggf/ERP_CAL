@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.4641000000000357"/>
+	<property name="ireport.zoom" value="1.948717100000048"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -220,7 +220,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 						<pen lineWidth="2.5"/>
 					</graphicElement>
 				</line>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="250" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="463820d0-3de2-4c73-b06f-89ea8567e0d0"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -228,7 +228,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoDeposito_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="328" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b04a7eea-77b4-4025-9907-9f3a75978c27"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -236,7 +236,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoPosfe_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="367" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d8e3d376-b638-4c60-8d76-7e16819712fd"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -244,7 +244,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoEfectivo_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="407" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ad700ae1-059c-46b2-a3ff-e84db3a3d3c2"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -268,7 +268,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{nomagente}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="461" y="1" width="38" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="994b65d7-3007-422f-a1d0-089ec184d5be"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -284,7 +284,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{paresDev_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="515" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="cab0b5d9-28a6-4aaf-a10f-7d0d459a6ec3"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -292,7 +292,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoDifPrecio_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="555" y="1" width="48" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9fe444a2-8b66-47f4-a43f-d7dc1d261410"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -300,7 +300,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoOtros_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="604" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ba02879f-d6a3-469a-81d8-73c9aded5142"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -308,7 +308,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{importe_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="644" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2e47fc6a-1f10-4e08-ad7d-e09c8c3a6ca9">
 						<printWhenExpression><![CDATA[$V{saldo_2} > 0]]></printWhenExpression>
 					</reportElement>
@@ -399,7 +399,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{TelOficina}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="250" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="6ee0e4e6-2bd5-4f2a-9a44-f31fd884dc41"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -407,7 +407,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoDeposito_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="328" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="350c674e-2123-4153-8ffe-1bbdd3edb0ff"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -415,7 +415,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoPosfe_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="367" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="7d35fafe-0b9b-4c96-b84a-68634bcb65cf"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -423,7 +423,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoEfectivo_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="407" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="e2548734-e503-48b2-b149-bad079bd3765"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -431,7 +431,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoDesc_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="461" y="0" width="38" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5214e87e-d973-469c-b203-92242133e167"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -447,7 +447,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{paresDev_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="515" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b39317ca-7074-4946-8292-85196d732d32"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -455,7 +455,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoDifPrecio_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="555" y="0" width="48" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="22c0555b-2c0e-4e1e-9f34-0bbacc0c0e78"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -463,7 +463,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{impoOtros_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="604" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a3a085d4-2f74-440f-adb8-c2bced826c77"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -471,7 +471,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{importe_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="644" y="0" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5ccc0dcc-a40c-4ca8-9f67-28a242e69d1f">
 						<printWhenExpression><![CDATA[$V{saldo_1} >0]]></printWhenExpression>
 					</reportElement>
@@ -835,7 +835,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remicion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="250" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="494a21c0-6f24-42a2-a45d-7c3c31fe3931"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -869,7 +869,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="289" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="84d6c9b2-db9b-4a70-99b0-563368524e6a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -883,7 +883,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="328" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="6fe1f133-c6db-4068-a535-cb0e93f20b0a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -897,7 +897,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="367" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="9780d5f7-1b9a-46cf-a6fc-d119e142fc9a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -918,7 +918,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{impoDesc}*100/$F{impoFactura}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="407" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="562b417d-17e0-4002-97db-75f8730a015f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -932,7 +932,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="461" y="0" width="38" height="10" isPrintInFirstWholeBand="true" uuid="2104aed2-71ac-4a80-95c0-ae19b2725206"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -959,7 +959,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="515" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="4f32ccd6-2fe9-4637-94ae-313d7e81455a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -973,7 +973,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="555" y="0" width="48" height="10" isPrintInFirstWholeBand="true" uuid="78d532da-7cda-494b-bc0d-f28cc30540bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
@@ -987,7 +987,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="604" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="b08628b7-fac5-4c96-bfed-a55e7e6ae5a4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
@@ -1001,7 +1001,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="644" y="0" width="39" height="10" isPrintInFirstWholeBand="true" uuid="9e095961-0dbd-4e4c-9d9b-1031a1c110e2">
 					<printWhenExpression><![CDATA[$F{saldo} > 0]]></printWhenExpression>
 				</reportElement>
@@ -1063,7 +1063,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 					<pen lineWidth="2.5"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="250" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="3848105c-c3ed-44e4-a92a-8423b5b3fdfd"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1071,7 +1071,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoDeposito_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="328" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="fd00eddb-fa49-447e-8de2-279ff2314eb8"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1079,7 +1079,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoPosfe_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="367" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f352f53b-5cd5-4ee2-af76-e4cc8e9badd2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1087,7 +1087,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoEfectivo_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="407" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="80b57e01-c3d1-4757-b265-2d3c5b1289a0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1095,7 +1095,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoDesc_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="461" y="1" width="38" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="93a0e83b-63b3-4f63-b6e1-fc2bf009ec85"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1111,7 +1111,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{paresDev_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="515" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="46600a30-3261-472e-9674-3e9a731bdcbc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1119,7 +1119,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoDifPrecio_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="555" y="1" width="48" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="fed1f4b8-1e65-4fd7-8069-e02c8c20ba4f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1127,7 +1127,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impoOtros_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="604" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="20849487-9f90-4350-a09c-93dc9780d9c7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1135,7 +1135,7 @@ order by abs(ct.Agente), nomcliente asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{importe_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="644" y="1" width="39" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="64399b25-f265-478d-a0d6-bc1c438fb652"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

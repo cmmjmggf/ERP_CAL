@@ -922,10 +922,12 @@
     }
 
     function getExt(filename) {
-        var dot_pos = filename.lastIndexOf(".");
-        if (dot_pos === -1)
-            return "";
-        return filename.substr(dot_pos + 1).toLowerCase();
+        if (filename !== null) {
+            var dot_pos = filename.lastIndexOf(".");
+            if (dot_pos === -1)
+                return "";
+            return filename.substr(dot_pos + 1).toLowerCase();
+        }
     }
 
 

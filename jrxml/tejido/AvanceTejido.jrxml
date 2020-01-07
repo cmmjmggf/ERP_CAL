@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="712" pageHeight="792" columnWidth="339" columnSpacing="10" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.8660295208389335"/>
+	<property name="ireport.zoom" value="1.4019755979255697"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -341,7 +341,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 		</band>
 	</detail>
 	<summary>
-		<band height="102" splitType="Stretch">
+		<band height="74" splitType="Stretch">
 			<staticText>
 				<reportElement style="Column header" x="134" y="0" width="111" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
 				<textElement verticalAlignment="Middle">
@@ -364,7 +364,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$V{PARES_1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="61" width="120" height="12" uuid="e50c2459-1931-4b88-98fb-b08f47ac9f2c"/>
+				<reportElement x="20" y="49" width="120" height="12" uuid="e50c2459-1931-4b88-98fb-b08f47ac9f2c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -374,7 +374,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[ENTREGO P' TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="61" width="120" height="12" uuid="3a64b427-fad5-4fe8-b661-8c4fe4014077"/>
+				<reportElement x="200" y="49" width="120" height="12" uuid="3a64b427-fad5-4fe8-b661-8c4fe4014077"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -384,7 +384,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[RECIBIO P' TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="370" y="61" width="120" height="12" uuid="1ae584be-785d-4452-9332-4aff00b188d0"/>
+				<reportElement x="370" y="49" width="120" height="12" uuid="1ae584be-785d-4452-9332-4aff00b188d0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -394,7 +394,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[ENTREGO YA TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="550" y="61" width="120" height="12" uuid="0ddd1a18-51af-4c94-9abd-651336700958"/>
+				<reportElement x="550" y="49" width="120" height="12" uuid="0ddd1a18-51af-4c94-9abd-651336700958"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -404,28 +404,28 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[RECIBIO YA TEJIDA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="73" width="150" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
+				<reportElement x="5" y="61" width="150" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CHOFERT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="73" width="120" height="11" uuid="422081f3-5688-4277-bf28-9491bd4175e7"/>
+				<reportElement x="200" y="61" width="120" height="11" uuid="422081f3-5688-4277-bf28-9491bd4175e7"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEJEDORAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="370" y="73" width="120" height="11" uuid="343b75ee-f69c-46fa-9c43-109eafa9d735"/>
+				<reportElement x="370" y="61" width="120" height="11" uuid="343b75ee-f69c-46fa-9c43-109eafa9d735"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEJEDORAT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="550" y="73" width="120" height="11" uuid="5f59fb0a-7834-47cb-8f95-e0c74a2012fd"/>
+				<reportElement x="550" y="61" width="120" height="11" uuid="5f59fb0a-7834-47cb-8f95-e0c74a2012fd"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
