@@ -93,9 +93,10 @@
                 $.post('<?php print base_url('OrdenDeProduccion/onAgregarAOrdenDeProduccion'); ?>',
                         {MAQUILA: MaquilaOP.val(), SEMANA: SemanaOP.val(), ANO: AnoOP.val()}
                 ).done(function (data) {
-                    var nordenes = parseInt(data);
+                    var r = JSON.parse(data[0]);
+                    var nordenes = parseInt(r.ORDENES);
                     if (nordenes > 0) {
-                        swal('ATENCIÓN', 'SE HAN CREADO ' + nordenes + ' ORDENES DE PRODUCCION DE LA MAQUILA ' + MaquilaOP.val() + ', SEMANA ' + SemanaOP.val() + ', AÑO ' + AnoOP.val(), 'success').then((value) => {
+                        swal('ATENCIÓN', 'SE HAN CREADO ' + nordenes + ' ORDENES DE PRODUCCION DE LA MAQUILA ' + MaquilaOP.val() + ', SEMANA ' + SemanaOP.val() + ', AÑO ' + AnoOP.val()+'. DEL CONTROL '+r.CONTROLES_INICIAL+' AL CONTROL '+r.CONTROLES_FINAL, 'success').then((value) => {
                             MaquilaOP.focus().select();
                         });
                     } else {

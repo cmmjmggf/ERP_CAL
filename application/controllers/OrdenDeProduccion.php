@@ -129,6 +129,13 @@ class OrdenDeProduccion extends CI_Controller {
         try {
             $x = $this->input->post();
             $ANIO_CT = substr($x["ANO"], 2, 2);
+
+            $MAQUILA_SOL = $x['MAQUILA'];
+            $SEM_SOL = $x['SEMANA'];
+
+            $CONTROL_INICIAL_FINAL = $this->db->query("SELECT (SELECT P.Control FROM pedidox AS P WHERE P.Maquila = {$MAQUILA_SOL} AND P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) ASC LIMIT 1 ) AS CONTROL_INICIAL,
+(SELECT P.Control FROM pedidox AS P WHERE P.Maquila = {$MAQUILA_SOL} AND P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) DESC LIMIT 1 ) AS CONTROL_FINAL;")->result();
+
             $PEDIDO_DETALLE = $this->db->select("P.Clave AS CLAVE_PEDIDO, P.Cliente CLAVE_CLIENTE, "
                                     . "IFNULL(C.RazonS,\"Z FALTA AGREGAR EL CLIENTE\") AS CLIENTE, "
                                     . "P.FechaPedido AS FECHA_PEDIDO, "
@@ -379,7 +386,12 @@ class OrdenDeProduccion extends CI_Controller {
                             ->update('controles');
                 }
             }
-            print count($PEDIDO_DETALLE);
+//            print count($PEDIDO_DETALLE);
+            print json_encode(
+                            array("ORDENES" => count($PEDIDO_DETALLE),
+                                "CONTROLES_INICIAL" => ($CONTROL_INICIAL_FINAL[0]->CONTROL_INICIAL),
+                                "CONTROLES_FINAL" => ($CONTROL_INICIAL_FINAL[0]->CONTROL_FINAL)
+            ));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

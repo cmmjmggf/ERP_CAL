@@ -55,7 +55,7 @@ class DiaFestivo extends CI_Controller {
                 $pn['tpcond'] = 0;
                 $pn['importe'] = $v->SUELDO;
                 $pn['imported'] = 0;
-                $pn['fecha'] = Date('d/m/Y h:i:s');
+                $pn['fecha'] = Date('d/m/Y 00:00:00');
                 $pn['registro'] = 999;
                 $pn['status'] = 1;
                 $pn['tpomov'] = 1;

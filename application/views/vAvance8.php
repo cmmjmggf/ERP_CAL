@@ -240,6 +240,12 @@
                                     <label class="custom-control-label" for="chk606">606 Armar plant.ad.muest</label>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk301" description="PESPUNTAR PLANTILLA" fraccion="301">
+                                    <label class="custom-control-label" for="chk301">301 Pespuntar plantilla</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
