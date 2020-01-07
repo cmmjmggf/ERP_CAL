@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asidiacontmat" language="groovy" pageWidth="595" pageHeight="840" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="1.927716447147658"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.3325369010486683"/>
+	<property name="ireport.x" value="382"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
 	<parameter name="DIA" class="java.lang.Integer"/>
@@ -84,7 +84,7 @@ ORDER BY ABS(C.numemp) ASC, ABS(AA.`Grupo`) ASC, ABS(AA.Articulo) ASC ;]]>
 				<staticText>
 					<reportElement mode="Transparent" x="352" y="0" width="74" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="eb96ff76-ac90-4b9e-bf22-794eb0dcc2af"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[Total por empleado]]></text>

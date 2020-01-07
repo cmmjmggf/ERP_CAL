@@ -44,7 +44,11 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN colores AS C ON P.Color = C.Clave AND P.Estilo = C.Estilo
 LEFT JOIN estilostiempox AS ETX ON E.Clave = ETX.estilo
 WHERE P.Semprog = $P{SEMANA}
-AND P.Anioprog = $P{ANO} AND P.Estatus IN ('A','F') AND P.stsavan NOT IN(13,14) AND P.DiaProg = $P{DIA}]]>
+AND P.Anioprog = $P{ANO} AND P.Estatus IN ('A','F') AND P.stsavan NOT IN(13,14) AND
+(CASE WHEN $P{DIA} > 0 THEN  P.DiaProg = $P{DIA} END)
+
+
+]]>
 	</queryString>
 	<field name="Linea" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

@@ -606,6 +606,7 @@ class Avance9 extends CI_Controller {
                             /* PAGAR LA FRACCION 102 AL EMPLEADO */
                             $this->db->insert('fracpagnomina', $data);
                         }
+                        print json_encode(array("AVANZO" => 1));
                         exit(0);
                         break;
                     case 30:

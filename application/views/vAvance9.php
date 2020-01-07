@@ -494,6 +494,12 @@
                             if (type) {
                                 onAvanzar();
                             }
+                        } else {
+                            swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
+                ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
+                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                Control.focus().select(); 
+                            });
                         }
                     }).fail(function (x, y, z) {
                         console.log(x.responseText);
@@ -657,9 +663,12 @@
         AVANO.FRACCIONES = JSON.stringify(fracciones);
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n * AVANCE NOMINA * \n", data);
+            Avance.ajax.reload(function () {
+                Control.focus().select();
+            });
+
             var dt = JSON.parse(data);
             var avanzo = 0;
-
             if (fracciones.length >= 1) {
                 $.each(dt, function (k, v) {
                     console.log(k, v);
@@ -685,7 +694,7 @@
                         }
                         return false;
                     } else {
-                        if (parseInt(v.AVANZO) === 0) { 
+                        if (parseInt(v.AVANZO) === 0) {
                             onCampoInvalido(pnlTablero, 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', function () {
                                 Control.focus().select();
                                 btnAceptar.attr('disabled', true)
@@ -702,6 +711,7 @@
                     }
                 });
             }
+
             if ($.isNumeric(dt.AVANZO)) {
                 if (parseInt(dt.AVANZO) === 1) {
                     Avance.ajax.reload();

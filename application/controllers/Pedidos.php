@@ -347,7 +347,7 @@ class Pedidos extends CI_Controller {
 
             $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
                 INNER JOIN colores AS C ON E.Clave = C.Estilo 
-                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};");
+                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};")->result();
 
             $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)
                     ->where("Clave", $x['PEDIDO'])->where("Cliente", $x['CLIENTE'])
@@ -515,7 +515,7 @@ class Pedidos extends CI_Controller {
 
             $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
                 INNER JOIN colores AS C ON E.Clave = C.Estilo 
-                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};");
+                WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};")->result();
 
             $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)
                     ->where("Clave", $x['PEDIDO'])->where("Cliente", $x['CLIENTE'])
