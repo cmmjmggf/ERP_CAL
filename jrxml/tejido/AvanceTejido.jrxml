@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="712" pageHeight="792" columnWidth="339" columnSpacing="10" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.4019755979255697"/>
+	<property name="ireport.zoom" value="1.40197559792557"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -78,51 +78,51 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="66" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="52" width="50" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<reportElement style="Column header" x="0" y="50" width="50" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Control]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="49" y="52" width="50" height="11" forecolor="#000000" uuid="aa269f95-77d2-4a12-b14b-382b3d81cb61"/>
+				<reportElement style="Column header" x="49" y="50" width="50" height="11" forecolor="#000000" uuid="aa269f95-77d2-4a12-b14b-382b3d81cb61"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="98" y="52" width="50" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
+				<reportElement style="Column header" x="98" y="50" width="50" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Color]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="246" y="53" width="50" height="11" forecolor="#000000" uuid="047457e9-d28c-4676-a2a1-6e5409b83134"/>
+				<reportElement style="Column header" x="245" y="51" width="42" height="11" forecolor="#000000" uuid="047457e9-d28c-4676-a2a1-6e5409b83134"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="295" y="53" width="50" height="11" forecolor="#000000" uuid="37b7b08d-3077-4086-9564-38f36b13aef1"/>
+				<reportElement style="Column header" x="287" y="51" width="48" height="11" forecolor="#000000" uuid="37b7b08d-3077-4086-9564-38f36b13aef1"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="626" y="21" width="47" height="12" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
+				<reportElement isPrintRepeatedValues="false" x="625" y="16" width="47" height="12" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="569" y="21" width="55" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<reportElement x="568" y="16" width="55" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
 				<textElement textAlignment="Left">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -143,14 +143,14 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[Documento]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="672" y="21" width="16" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
+				<reportElement x="671" y="16" width="16" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
 				<textElement textAlignment="Left">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="64" width="345" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="61" width="345" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
 				<graphicElement>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
@@ -160,28 +160,28 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="75" y="3" width="172" height="14" isPrintInFirstWholeBand="true" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<reportElement isPrintRepeatedValues="false" x="75" y="1" width="172" height="14" isPrintInFirstWholeBand="true" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
 				<textElement>
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="75" y="14" width="172" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="75" y="12" width="172" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Controles entregados a tejida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="537" y="21" width="32" height="12" uuid="33b1d0cf-7b73-46d2-8204-db39c1b767bb"/>
+				<reportElement x="536" y="16" width="32" height="12" uuid="33b1d0cf-7b73-46d2-8204-db39c1b767bb"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="537" y="40" width="90" height="11" uuid="18b9ffbe-1b03-4f19-afda-ec576b9e4cc2"/>
+				<reportElement x="537" y="30" width="90" height="11" uuid="18b9ffbe-1b03-4f19-afda-ec576b9e4cc2"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -193,7 +193,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[Semana nomina]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="75" y="28" width="43" height="11" isPrintInFirstWholeBand="true" uuid="a68c6924-70b8-4f49-8501-78f1309911f3"/>
+				<reportElement isPrintRepeatedValues="false" x="75" y="26" width="43" height="11" isPrintInFirstWholeBand="true" uuid="a68c6924-70b8-4f49-8501-78f1309911f3"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -205,7 +205,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[Chofer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="75" y="39" width="43" height="11" isPrintInFirstWholeBand="true" uuid="336f773d-2751-44f9-94e0-3d29331a8277"/>
+				<reportElement isPrintRepeatedValues="false" x="75" y="37" width="43" height="11" isPrintInFirstWholeBand="true" uuid="336f773d-2751-44f9-94e0-3d29331a8277"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -217,7 +217,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[Tejedor(a)]]></text>
 			</staticText>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="144" y="28" width="195" height="11" isPrintInFirstWholeBand="true" uuid="28c62af3-9c09-4349-b9ec-5d4daa024f97"/>
+				<reportElement isPrintRepeatedValues="false" x="144" y="26" width="195" height="11" isPrintInFirstWholeBand="true" uuid="28c62af3-9c09-4349-b9ec-5d4daa024f97"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -229,7 +229,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$F{CHOFERT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="144" y="39" width="195" height="11" isPrintInFirstWholeBand="true" uuid="89f6e840-21c0-425b-aa77-874ec4305f8b"/>
+				<reportElement isPrintRepeatedValues="false" x="144" y="37" width="195" height="11" isPrintInFirstWholeBand="true" uuid="89f6e840-21c0-425b-aa77-874ec4305f8b"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -253,7 +253,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$F{DOCTO}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="626" y="40" width="61" height="11" uuid="b95f9210-c12a-4699-b54a-0c2ccb788c6e"/>
+				<reportElement x="626" y="30" width="61" height="11" uuid="b95f9210-c12a-4699-b54a-0c2ccb788c6e"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -265,7 +265,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$F{SEMANA_NOMINA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="118" y="28" width="26" height="11" isPrintInFirstWholeBand="true" uuid="455eb1a0-b6f1-4314-b4b5-675b14f147bf"/>
+				<reportElement isPrintRepeatedValues="false" x="118" y="26" width="26" height="11" isPrintInFirstWholeBand="true" uuid="455eb1a0-b6f1-4314-b4b5-675b14f147bf"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -276,7 +276,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$F{CHOFER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="118" y="39" width="26" height="11" isPrintInFirstWholeBand="true" uuid="b65ce845-acb0-438b-82aa-afdf4aa1fb0d"/>
+				<reportElement isPrintRepeatedValues="false" x="118" y="37" width="26" height="11" isPrintInFirstWholeBand="true" uuid="b65ce845-acb0-438b-82aa-afdf4aa1fb0d"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -318,21 +318,21 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="147" y="0" width="100" height="11" uuid="8d942e5d-6e3b-46ab-9e8c-7eef6b97e835"/>
+				<reportElement x="147" y="0" width="98" height="11" uuid="8d942e5d-6e3b-46ab-9e8c-7eef6b97e835"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLORT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="246" y="0" width="50" height="11" uuid="91b6e700-38e6-4d94-a764-149d829f5534"/>
+				<reportElement x="245" y="0" width="42" height="11" uuid="91b6e700-38e6-4d94-a764-149d829f5534"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="295" y="0" width="50" height="11" uuid="3b5bbe4d-bd7c-4efc-beb8-44dcb38a608e"/>
+				<reportElement x="287" y="0" width="48" height="11" uuid="3b5bbe4d-bd7c-4efc-beb8-44dcb38a608e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -341,7 +341,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 		</band>
 	</detail>
 	<summary>
-		<band height="74" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
 				<reportElement style="Column header" x="134" y="0" width="111" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
 				<textElement verticalAlignment="Middle">
@@ -357,14 +357,14 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[Total pares general:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="245" y="0" width="55" height="12" uuid="5c92cdd2-5256-4a21-a2bb-bd8360c7f7ee"/>
+				<reportElement x="245" y="0" width="42" height="12" uuid="5c92cdd2-5256-4a21-a2bb-bd8360c7f7ee"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PARES_1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="49" width="120" height="12" uuid="e50c2459-1931-4b88-98fb-b08f47ac9f2c"/>
+				<reportElement x="20" y="43" width="120" height="12" uuid="e50c2459-1931-4b88-98fb-b08f47ac9f2c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -374,7 +374,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[ENTREGO P' TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="49" width="120" height="12" uuid="3a64b427-fad5-4fe8-b661-8c4fe4014077"/>
+				<reportElement x="200" y="43" width="120" height="12" uuid="3a64b427-fad5-4fe8-b661-8c4fe4014077"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -384,7 +384,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[RECIBIO P' TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="370" y="49" width="120" height="12" uuid="1ae584be-785d-4452-9332-4aff00b188d0"/>
+				<reportElement x="370" y="43" width="120" height="12" uuid="1ae584be-785d-4452-9332-4aff00b188d0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -394,7 +394,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[ENTREGO YA TEJIDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="550" y="49" width="120" height="12" uuid="0ddd1a18-51af-4c94-9abd-651336700958"/>
+				<reportElement x="550" y="43" width="120" height="12" uuid="0ddd1a18-51af-4c94-9abd-651336700958"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -404,35 +404,35 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<text><![CDATA[RECIBIO YA TEJIDA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="61" width="150" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
+				<reportElement x="5" y="55" width="150" height="11" uuid="2d2dee61-6b74-4f77-b427-928fc76d90be"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CHOFERT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="61" width="120" height="11" uuid="422081f3-5688-4277-bf28-9491bd4175e7"/>
+				<reportElement x="200" y="55" width="120" height="11" uuid="422081f3-5688-4277-bf28-9491bd4175e7"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEJEDORAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="370" y="61" width="120" height="11" uuid="343b75ee-f69c-46fa-9c43-109eafa9d735"/>
+				<reportElement x="370" y="55" width="120" height="11" uuid="343b75ee-f69c-46fa-9c43-109eafa9d735"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEJEDORAT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="550" y="61" width="120" height="11" uuid="5f59fb0a-7834-47cb-8f95-e0c74a2012fd"/>
+				<reportElement x="550" y="55" width="120" height="11" uuid="5f59fb0a-7834-47cb-8f95-e0c74a2012fd"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Nombre y firma de quien recibe]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="245" y="12" width="55" height="12" uuid="64520921-72bb-466d-97df-9d83836e9f7b"/>
+				<reportElement x="245" y="12" width="42" height="12" uuid="64520921-72bb-466d-97df-9d83836e9f7b"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>

@@ -61,21 +61,21 @@ class FacturacionProduccion extends CI_Controller {
             /* OBTENGO LAS DIFERENCIAS Y EL CLIENTE DE ESTE CONTROL PORQUE NO SE PUEDE FACTURAR UN CONTROL A UN CLIENTE AL QUE YA SE ELIGIO */
             $facturacion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturaciondif AS F WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result();
 //            if (intval($facturacion_existe[0]->EXISTE) > 0) {
-//                print json_encode($this->db->query(" F.cliente, 
+//                print json_encode($this->db->query(" F.cliente,
 //SUM(F.par01) AS par01, SUM(F.par02) AS par02, SUM(F.par03) AS par03, SUM(F.par04) AS par04, SUM(F.par05) AS par05,
-//SUM(F.par06) AS par06, SUM(F.par07) AS par07, SUM(F.par08) AS par08, SUM(F.par09) AS par09, SUM(F.par10) AS par10, 
-//SUM(F.par11) AS par11, SUM(F.par12) AS par12, SUM(F.par13) AS par13, SUM(F.par14) AS par14, SUM(F.par15) AS par15, 
-//SUM(F.par16) AS par16, SUM(F.par17) AS par17, SUM(F.par18) AS par18, SUM(F.par19) AS par19, SUM(F.par20) AS par20, 
-//SUM(F.par21) AS par21, SUM(F.par22) AS par22  
-//FROM facturacion AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
+//SUM(F.par06) AS par06, SUM(F.par07) AS par07, SUM(F.par08) AS par08, SUM(F.par09) AS par09, SUM(F.par10) AS par10,
+//SUM(F.par11) AS par11, SUM(F.par12) AS par12, SUM(F.par13) AS par13, SUM(F.par14) AS par14, SUM(F.par15) AS par15,
+//SUM(F.par16) AS par16, SUM(F.par17) AS par17, SUM(F.par18) AS par18, SUM(F.par19) AS par19, SUM(F.par20) AS par20,
+//SUM(F.par21) AS par21, SUM(F.par22) AS par22
+//FROM facturacion AS F  INNER JOIN pedidox AS P ON F.contped = P.Control
 //                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
-            print json_encode($this->db->query("SELECT 
-                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05, 
-                                        F.par06, F.par07, F.par08, F.par09, F.par10, 
-                                        F.par11, F.par12, F.par13, F.par14, F.par15, 
-                                        F.par16, F.par17, F.par18, F.par19, F.par20, 
-                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE 
-                                        FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control  
+            print json_encode($this->db->query("SELECT
+                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
+                                        F.par06, F.par07, F.par08, F.par09, F.par10,
+                                        F.par11, F.par12, F.par13, F.par14, F.par15,
+                                        F.par16, F.par17, F.par18, F.par19, F.par20,
+                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
+                                        FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control
                 WHERE F.contped = '{$this->input->get('CONTROL')}' LIMIT 1")->result());
 //            }
         } catch (Exception $exc) {
@@ -119,12 +119,12 @@ class FacturacionProduccion extends CI_Controller {
     public function getPedidosXFacturar() {
         try {
             $xxx = $this->input->get();
-            $this->db->select("P.ID, P.Control AS CONTROL, 
-                                P.Clave AS PEDIDO, 
-                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE , 
-                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA, 
-                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES, 
-                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA, 
+            $this->db->select("P.ID, P.Control AS CONTROL,
+                                P.Clave AS PEDIDO,
+                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE ,
+                                P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
+                                P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES,
+                                0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA,
                                 P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
                     ->from("pedidox AS P")
                     ->where_not_in("P.Control", array(0, 1));
@@ -164,7 +164,7 @@ class FacturacionProduccion extends CI_Controller {
             $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
 
 //            foreach ($this->db->query("SELECT * FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']} AND F.staped = 1")->result() AS $k => $v) {
-//                
+//
 //            }
 
             $this->db->set('hora', $HORA)
@@ -195,7 +195,7 @@ class FacturacionProduccion extends CI_Controller {
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
 
-            /* MONEDAS 
+            /* MONEDAS
              * 1 = PESOS
              * 2 = DOLARES
              */
@@ -399,17 +399,17 @@ class FacturacionProduccion extends CI_Controller {
                 $EstatusProduccion = 'FACTURADO';
                 $DeptoProduccion = 260;
                 /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
-                $this->db->set('EstatusProduccion', $EstatusProduccion)
-                        ->set('DeptoProduccion', $DeptoProduccion)
-                        ->where('Control', $x['CONTROL'])->update('controles');
-                /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
-                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
-                    'EstatusProduccion' => $EstatusProduccion,
-                    'DeptoProduccion' => $DeptoProduccion
-                ));
-                /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-                $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
-                        ->update('avaprd');
+//                $this->db->set('EstatusProduccion', $EstatusProduccion)
+//                        ->set('DeptoProduccion', $DeptoProduccion)
+//                        ->where('Control', $x['CONTROL'])->update('controles');
+//                /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+//                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
+//                    'EstatusProduccion' => $EstatusProduccion,
+//                    'DeptoProduccion' => $DeptoProduccion
+//                ));
+//                /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+//                $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
+//                        ->update('avaprd');
                 $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
 
 
@@ -913,7 +913,7 @@ class FacturacionProduccion extends CI_Controller {
                     }
                     break;
                 case 2:
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA']; 
+                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
                     $jc->setFilename("remisionva1_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -946,21 +946,21 @@ class FacturacionProduccion extends CI_Controller {
     public function getFacturaXFolio() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT F.ID,(C.Descuento *100) AS DESCUENTO, 
-            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +  
-            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +  
+            print json_encode($this->db->query("SELECT F.ID,(C.Descuento *100) AS DESCUENTO,
+            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
+            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
             F.par21 +  F.par22) AS PARES_FACTURADOS,
-            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL, 
-            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA, 
-            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, 
-            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10, 
-            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20, 
-            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra, 
-            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente, 
-            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, 
-            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS, 
-            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION 
-            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
+            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL,
+            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA,
+            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR,
+            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10,
+            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20,
+            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
+            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente,
+            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom,
+            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS,
+            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
+            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
                                     . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
         } catch (Exception $exc) {
@@ -970,7 +970,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getParesDevueltos() {
         try {
-            
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1008,7 +1008,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
 
     public function onControlSinTerminar() {
         try {
-            
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

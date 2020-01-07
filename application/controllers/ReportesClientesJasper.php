@@ -242,7 +242,7 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
         //Marca las comisiones pagadas
-        $comicion = Date('y-m-d'); /* 170905 */
+        $comicion = Date('y-m-d'); /* 170905  Dia actual */
         if ($chMarcaComPagadas === '1') {
             $this->db->query("update cartctepagos set pagada = $comicion  "
                     . " WHERE agente= $agente and tipo= $tipo and pagada = 0 and mov <> 10   ");
