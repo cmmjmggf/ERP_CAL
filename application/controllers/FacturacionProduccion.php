@@ -396,23 +396,28 @@ class FacturacionProduccion extends CI_Controller {
                 'staped' => (($saldopares == 0) ? 99 : 98)
             );
             if ($saldopares === 0) {
-                $EstatusProduccion = 'FACTURADO';
-                $DeptoProduccion = 260;
-                /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
-//                $this->db->set('EstatusProduccion', $EstatusProduccion)
-//                        ->set('DeptoProduccion', $DeptoProduccion)
-//                        ->where('Control', $x['CONTROL'])->update('controles');
-//                /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
-//                $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
-//                    'EstatusProduccion' => $EstatusProduccion,
-//                    'DeptoProduccion' => $DeptoProduccion
-//                ));
-//                /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
-//                $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
-//                        ->update('avaprd');
-                $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
 
 
+                //Validar clientes permitidos para facturar por adelantado
+
+                $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782);
+                if (!in_array($x['CLIENTE'], $people)) {
+                    $EstatusProduccion = 'FACTURADO';
+                    $DeptoProduccion = 260;
+                    /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+                    $this->db->set('EstatusProduccion', $EstatusProduccion)
+                            ->set('DeptoProduccion', $DeptoProduccion)
+                            ->where('Control', $x['CONTROL'])->update('controles');
+                    /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                    $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
+                        'EstatusProduccion' => $EstatusProduccion,
+                        'DeptoProduccion' => $DeptoProduccion
+                    ));
+                    /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+                    $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
+                            ->update('avaprd');
+                    $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
+                }
 
                 $control = $this->db->query("SELECT P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, "
                                 . "P.C11, P.C12, P.C13, P.C14, P.C15, P.C16, P.C17, P.C18, P.C19, P.C20, "
