@@ -62,7 +62,8 @@ class PagosProveedores extends CI_Controller {
         try {
             $Tp = $this->input->get('Tp');
             $Banco = $this->input->get('Banco');
-            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+//            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+            print json_encode($this->db->query("select clave from bancos where clave = '$Banco' and estatus = 'ACTIVO' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -79,7 +80,9 @@ class PagosProveedores extends CI_Controller {
 
     public function getBancos() {
         try {
-            print json_encode($this->PagosProveedores_model->getBancos($this->input->get('Tp')));
+//            print json_encode($this->PagosProveedores_model->getBancos($this->input->get('Tp')));
+            print json_encode($this->db->select("G.Clave AS ID, CONCAT(IFNULL(G.Nombre,'')) AS Banco", false)
+                            ->from("bancos AS G")->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

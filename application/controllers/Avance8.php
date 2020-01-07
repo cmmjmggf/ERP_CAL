@@ -432,6 +432,13 @@ class Avance8 extends CI_Controller {
                             print json_encode(array("AVANZO" => 2, "STEP" => 1));
                             exit(0);
                             break;
+                        case 130:
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            $this->db->insert('fracpagnomina', $data);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                            exit(0);
+                            break;
                     }
 
                     /* PAGAR FRACCIONES */

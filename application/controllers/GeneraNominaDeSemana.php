@@ -297,7 +297,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             $this->db->set('pares', $PARES_TRABAJADOS)->set('salario', $SUELDO_FINAL_DESTAJO)
                                     ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                     ->where('numemp', $v->Numero)->update('prenominal');
-                            $this->db->set('pares', $PARES_TRABAJADOS) 
+                            $this->db->set('pares', $PARES_TRABAJADOS)
                                     ->set('salariod', $SUELDO_FINAL_DESTAJO)
                                     ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                     ->where('numemp', $v->Numero)->update('prenominal');

@@ -776,7 +776,9 @@
                             /*GUSTAVO*/
                             if (xDepartamento === 42 && stsavan === 40) {
                                 Fraccion.val('');
-//                                FraccionS[0].selectize.setValue(60);
+                                onClear(FraccionS);
+                                ProcesoMaquila.focus().select();
+                                onEnable(btnAceptar);
                             }
                             if (xDepartamento === 44 && stsavan === 42) {
                                 Empleado.focus().select();

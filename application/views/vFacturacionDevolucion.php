@@ -1228,6 +1228,23 @@
                 if (ClienteFactura.val()) {
                     if (Control.val() && e.keyCode === 13) {
                         onOpenOverlay('Buscando...');
+                        $.getJSON('<?php print base_url('FacturacionDevolucion/getPedidosXFacturarXControl') ?>',
+                                {
+                                    CONTROL: Control.val()
+                                }).done(function (a) {
+                            var xxx = a[0];
+                            Clave_Devolucion.val(xxx.ID);
+                            Control.val(xxx.CONTROL);
+                            EstiloFacturacion.val(xxx.ESTILO);
+                            ColorFacturacion.val(xxx.COLORT);
+                            ColorClaveFacturacion.val(xxx.COLOR);
+                            CajasFacturacion.val(1);
+                            CajasFacturacion.focus().select();
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+
+                        });
                         getInfoXControl();
                     }
                 } else {

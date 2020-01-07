@@ -1,3 +1,6 @@
+<?php
+var_dump($this->session);
+?>
 <div class="card m-3 animated fadeIn d-none" id="pnlTablero">
     <div class="card-body">
         <div class="row">
@@ -116,10 +119,10 @@
                             <label for="FechaPedido" >Fec-Pedido*</label>
                             <input type="text" id="FechaPedido" name="FechaPedido" class="form-control form-control-sm date notEnter" required="">
                         </div>
-<!--                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
-                            <label for="FechaEntrega" >Fec-Entrega*</label>
-                            <input type="text" id="FechaEntrega" name="FechaEntrega" class="form-control form-control-sm date notEnter">
-                        </div>-->
+                        <!--                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-1">
+                                                    <label for="FechaEntrega" >Fec-Entrega*</label>
+                                                    <input type="text" id="FechaEntrega" name="FechaEntrega" class="form-control form-control-sm date notEnter">
+                                                </div>-->
                         <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1">
                             <label for="FechaRecepcion" >Fec-Recep*</label>
                             <input type="text" id="FechaRecepcion" name="FechaRecepcion" class="form-control form-control-sm date notEnter" required="">
@@ -352,6 +355,7 @@
             FechaRecepcion = pnlDatos.find('#FechaRecepcion'), Recibido = pnlDatos.find('#Recibido'),
             Recio = pnlDatos.find('#Recio'), Serie = pnlDatos.find('#Serie'), Observacion = pnlDatos.find('#Observacion'),
             ObservacionDetalle = pnlDatos.find('#ObservacionDetalle'), btnNuevoX = $("#btnNuevoX");
+    var MaquilaDefault = pnlTablero.find("#Maquila");
 
     var nuevo = false;
     var _animate_ = {enter: 'animated fadeInLeft', exit: 'animated fadeOutDown'}, _placement_ = {from: "bottom", align: "left"};
@@ -493,7 +497,7 @@
     };
 
     $.fn.dataTable.ext.errMode = 'throw';
-
+    var Usuario = <?php print $this->session->ID ?>;
     var nomEstilo, nomColor;
     $(document).ready(function () {
         init();
@@ -951,6 +955,10 @@
 
 
         btnNuevo.click(function () {
+
+            if (Usuario === 7) {
+                Maquila.val(98);
+            }
             nuevo = true;
 //            pnlDatos.find("#FechaEntrega").prop('readonly', false);
             pnlDatos.find("#Semana").prop('readonly', false);
@@ -979,6 +987,9 @@
         });
 
         btnCancelar.click(function () {
+            if (Usuario === 7) {
+                Maquila.val(98);
+            }
             btnGuardar.prop("disabled", true);
             pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
@@ -1098,6 +1109,9 @@
                 initComplete: function (x, y) {
                     HoldOn.close();
                     pnlTablero.find('#ClientePedido')[0].selectize.focus();
+                    if (Usuario === 7) {
+                        Maquila.val(98);
+                    }
                 }
             });
             tblPedidos.find('tbody').on('click', 'tr', function () {

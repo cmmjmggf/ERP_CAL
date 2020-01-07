@@ -18,6 +18,9 @@ class FacturacionDevolucion extends CI_Controller {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
                 case 'CLIENTES':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
@@ -158,6 +161,29 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
         }
     }
 
+    public function getPedidosXFacturarXControl() {
+        try {
+            $xxx = $this->input->get();
+            $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
+                D.cargoa AS CARGOA, 
+                D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
+                D.par06 AS P6, D.par07 AS P7, D.par08 AS P8, D.par09 AS P9, D.par10 AS P10, 
+                D.par11 AS P11, D.par12 AS P12, D.par13 AS P13, D.par14 AS P14, D.par15 AS P15, 
+                D.par16 AS P16, D.par17 AS P17, D.par18 AS P18, D.par19 AS P19, D.par20 AS P20, 
+                D.par21 AS P21, D.par22 AS P22,
+                (D.par01 +  D.par02 +  D.par03 +   D.par04 +  D.par05  +  
+                D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
+                D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
+                D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
+                D.par21 +  D.par22 ) AS PARES_TOTALES
+                FROM devolucionnp AS D WHERE  D.control = {$xxx['CONTROL']} LIMIT 1")->result();
+            print json_encode($dt);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onCerrarDocto() {
         try {
             $x = $this->input->post();
@@ -284,17 +310,11 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $nueva_fecha->setDate($anio, $mes, $dia);
             $hora = Date('h:i:s');
             $f = array(
-                'factura' => $x['FACTURA'],
-                'tp' => $x['TP_DOCTO'],
-                'cliente' => $x['CLIENTE'],
-                'contped' => $x['CONTROL'],
-                'fecha' => "$anio-$mes-$dia $hora",
-                'hora' => Date('d/m/Y'),
-                'corrida' => $x['SERIE'],
-                'pareped' => $x['PARES_A_FACTURAR'],
-                'estilo' => $x['ESTILO'],
-                'combin' => $x['COLOR']
-            );
+                'factura' => $x['FACTURA'], 'tp' => $x['TP_DOCTO'],
+                'cliente' => $x['CLIENTE'], 'contped' => $x['CONTROL'],
+                'fecha' => "$anio-$mes-$dia $hora", 'hora' => Date('d/m/Y'),
+                'corrida' => $x['SERIE'], 'pareped' => $x['PARES_A_FACTURAR'],
+                'estilo' => $x['ESTILO'], 'combin' => $x['COLOR']);
             for ($i = 1; $i < 23; $i++) {
                 if ($i < 10) {
                     $f["par0$i"] = $x["CAF$i"];
@@ -444,350 +464,409 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
 
     public function getVistaPrevia() {
         try {
+//            $x = $this->input->post();
+//
+//            $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
+//
+////            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
+////                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
+////                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
+////                    ->result();
+//            $dtm = $this->db->query("SELECT 
+//A.Comprobante, A.Tipo, A.Version, A.Serie, A.Folio, A.StatusUUID, A.Numero, A.FechaCancelacion, A.UUID AS UUID, A.Fecha, A.SubTotal, A.Descuento, A.Total, 
+//A.EmisorRfc, A.ReceptorRfc, A.EmisorNombre, A.ReceptorNombre, A.FormaPago, A.MetodoPago, A.UsoCfdi, A.Moneda, A.TipoCambio, A.CertificadoSAT, A.CertificadoCFD, 
+//A.FechaTimbrado, A.CadenaOriginal, A.selloSAT, A.selloCFD, A.CfdiTimbrado, A.Periodo FROM comprobantes AS A WHERE A.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
+//                    ->result();
+//            $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
+//                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+//            $cfdi = $dtm[0];
+//            $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
+//            $UUID = $cfdi->UUID;
+//            $rfc_emi = $this->session->EMPRESA_RFC;
+//            $rfc_rec = $rfc_cliente[0]->RFC;
+//
+//            $CERTIFICADO = $cfdi->CertificadoCFD;
+//
+//            $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+//
+//            $jc = new JasperCommand();
+//            $jc->setFolder('rpt/' . $this->session->USERNAME);
+//            $qr_url = QRcode::png($qr, 'rpt/qr.png');
+//            $pr = array();
+//            $pr["logo"] = base_url() . $this->session->LOGO;
+//            $pr["empresa"] = $this->session->EMPRESA_RAZON;
             $x = $this->input->post();
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
-
-//            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
-//                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
-//                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
-//                    ->result();
-            $dtm = $this->db->query("SELECT 
-A.Comprobante, A.Tipo, A.Version, A.Serie, A.Folio, A.StatusUUID, A.Numero, A.FechaCancelacion, A.UUID AS UUID, A.Fecha, A.SubTotal, A.Descuento, A.Total, 
-A.EmisorRfc, A.ReceptorRfc, A.EmisorNombre, A.ReceptorNombre, A.FormaPago, A.MetodoPago, A.UsoCfdi, A.Moneda, A.TipoCambio, A.CertificadoSAT, A.CertificadoCFD, 
-A.FechaTimbrado, A.CadenaOriginal, A.selloSAT, A.selloCFD, A.CfdiTimbrado, A.Periodo FROM comprobantes AS A WHERE A.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
-                    ->result();
-            $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
-                            . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
-            $cfdi = $dtm[0];
-            $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
-            $UUID = $cfdi->UUID;
-            $rfc_emi = $this->session->EMPRESA_RFC;
-            $rfc_rec = $rfc_cliente[0]->RFC;
-
-            $CERTIFICADO = $cfdi->CertificadoCFD;
-
-            $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
-
+                
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $qr_url = QRcode::png($qr, 'rpt/qr.png');
             $pr = array();
-            $pr["logo"] = base_url() . $this->session->LOGO;
-            $pr["empresa"] = $this->session->EMPRESA_RAZON;
+            $CERTIFICADO_CFD = "";
+            $EXISTE_EN_COMPROBANTES = $this->db->query("SELECT  count(*) AS EXISTE  "
+                            . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")->result();
 
-            switch (intval($x['CLIENTE'])) {
-                case 2121:
-                    /* COPPEL */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec2121.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 1810:
-                    /* ZAPATERIAS COBAN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 1445:
+            if (intval($x['TP']) === 1 && $EXISTE_EN_COMPROBANTES[0]->EXISTE > 0) {
+                $pr["logo"] = base_url() . $this->session->LOGO;
+                $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
+                                . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
+                                . "C.UUID AS uuid, C.Fecha, C.SubTotal, C.Descuento, C.Total, "
+                                . "C.EmisorRfc, C.ReceptorRfc, C.EmisorNombre, C.ReceptorNombre, "
+                                . "C.FormaPago, C.MetodoPago, C.UsoCfdi, C.Moneda, C.TipoCambio, "
+                                . "C.CertificadoSAT, C.CertificadoCFD, C.FechaTimbrado, C.CadenaOriginal, "
+                                . "C.selloSAT, C.selloCFD, C.CfdiTimbrado, C.Periodo "
+                                . "FROM comprobantes AS C WHERE C.Folio = '{$x['DOCUMENTO_FACTURA']}' ")
+                        ->result();
+                $total_factura = $this->db->query("SELECT round(((SUM(F.subtot)) * 1.16),2) AS TOTAL FROM facturacion AS F "
+                                . "WHERE F.factura LIKE '{$x['DOCUMENTO_FACTURA']}' AND F.tp = {$x['TP']} LIMIT 1")->result();
+
+                $rfc_emi = $this->session->EMPRESA_RFC;
+                $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
+
+                if (!empty($dtm)) {
+                    $cfdi = $dtm[0];
+                    $TOTAL_FOR = number_format($total_factura[0]->TOTAL, 6, ".", "");
+                    $UUID = $cfdi->uuid;
+
+                    $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
+                } else {
+                    $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE  (QR ERROR)";
+                    exit(0);
+                }
+                $qr_url = QRcode::png($qr, 'rpt/qr.png');
+                switch (intval($x["TP"])) {
+                    case 1:
+                        $pr["logo"] = base_url() . $this->session->LOGO;
+                        $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                        BREAK;
+                }
+                $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
+            }
+            switch (intval($x["TP"])) {
+                case 1:
+                    switch (intval($x['CLIENTE'])) {
+                        case 2121:
+                            /* COPPEL */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2121.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 1810:
+                            /* ZAPATERIAS COBAN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 1445:
 //                    print "AQUI 1445";
-                    /* ELECTROLAB MEDIC, S.A. DE C.V.  = SI HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2394:
-                    /* INVERSIONES CENTROAMERICANAS INCEN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2432:
-                    /* CONFIANDO, SOCIEDAD ANONIMA = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2434:
-                    /* PIELES FINAS, SOCIEDAD ANONIMA  = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2212:
-                    /* COORDINADORA DE FOMENTO AL COMERCIO EXTERIOR DEL ESTADO DE GUANAJUATO  = NO HAY RESULTADOS 28/08/2019 */
-                    
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}"; 
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2415:
-                    /* IMPORTADORA SOES, S.A.   = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
+                            /* ELECTROLAB MEDIC, S.A. DE C.V.  = SI HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2394:
+                            /* INVERSIONES CENTROAMERICANAS INCEN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2432:
+                            /* CONFIANDO, SOCIEDAD ANONIMA = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2434:
+                            /* PIELES FINAS, SOCIEDAD ANONIMA  = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2212:
+                            /* COORDINADORA DE FOMENTO AL COMERCIO EXTERIOR DEL ESTADO DE GUANAJUATO  = NO HAY RESULTADOS 28/08/2019 */
 
-                    break;
-                case 2428:
-                    /* INTERNACIONAL DE CALZADO, SOCIEDAD ANONIMA    = NO HAY RESULTADOS 28/08/2019 */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 39:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 1755:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2361:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2415:
+                            /* IMPORTADORA SOES, S.A.   = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
 
-                    break;
-                case 1782:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 696:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
+                            break;
+                        case 2428:
+                            /* INTERNACIONAL DE CALZADO, SOCIEDAD ANONIMA    = NO HAY RESULTADOS 28/08/2019 */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 39:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 1755:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2361:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
 
-                    break;
-                case 100:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
+                            break;
+                        case 1782:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 696:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+
+                            break;
+                        case 100:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2285:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2228:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2228.jasper');
+                            $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2228:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $this->getReporteXNumero($x, $jc, "facturaelec2228");
+                            break;
+                        case 2332:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $jc->setParametros($pr);
+                            $this->getReporteXNumero($x, $jc, "facturaelec2332");
+                            break;
+                        case 2343:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $this->getReporteXNumero($x, $jc, "facturaelec2343");
+                            break;
+                        case 1967:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO;
+                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["CLIENTE"] = $x['CLIENTE'];
+                            $jc->setParametros($pr);
+                            $this->getReporteXNumero($x, $jc, "facturaelec2212");
+                            break;
+                        default :
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl("jrxml\facturacion\facturaelec3.jasper");
+                            $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                    }
+                case 2:
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
                     $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                    $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
+                    $jc->setFilename("remisionva1_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                     $jc->setDocumentformat('pdf');
                     PRINT $jc->getReport();
-                    break;
-                case 2285:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2228:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl('jrxml\facturacion\facturaelec2228.jasper');
-                    $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
-                    break;
-                case 2228:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $this->getReporteXNumero($x, $jc, "facturaelec2228");
-                    break;
-                case 2332:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}"; 
-                    $jc->setParametros($pr);
-                    $this->getReporteXNumero($x, $jc, "facturaelec2332");
-                    break;
-                case 2343:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $this->getReporteXNumero($x, $jc, "facturaelec2343");
-                    break;
-                case 1967:
-                    /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
-                    $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                    $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                    $pr["qrCode"] = base_url('rpt/qr.png');
-                    $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                    $pr["certificado"] = $CERTIFICADO;
-                    $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
-                    $pr["CLIENTE"] = $x['CLIENTE'];
-                    $jc->setParametros($pr);
-                    $this->getReporteXNumero($x, $jc, "facturaelec2212");
-                    break;
-                default :
-                    $jc->setParametros($pr);
-                    $jc->setJasperurl("jrxml\facturacion\facturaelec3.jasper");
-                    $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
+                    exit(0);
                     break;
             }
         } catch (Exception $exc) {

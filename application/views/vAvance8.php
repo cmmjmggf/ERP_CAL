@@ -264,6 +264,12 @@
                                     <label class="custom-control-label" for="chk74">74 Cotejar piel y forro</label>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk130" description="RAYAR PLANTILLA" fraccion="130">
+                                    <label class="custom-control-label" for="chk130">130 Rayar plantilla</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
