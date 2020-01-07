@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
-        <span class="fa fa-fa-user-lock"></span> INGRESAR  
+        <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span> 
     </div>
     <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
 </div>

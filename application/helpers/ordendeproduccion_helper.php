@@ -910,15 +910,14 @@ class PDF extends FPDF {
         $this->SetX($pos[3]);
         $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */);
         $this->Cell(42.5, 6, "", 0/* BORDE */, 1, 'C', 0);
-        $this->SetFont('Calibri', 'B', 8);
+        $this->SetFont('Calibri', 'B', 9.5);
 
         /* ESTILO */
-        $this->SetX($pos[0]);
+        $this->SetX($pos[0]); 
         if (strlen($this->getEstilo()) < 30) {
-            $this->Cell(70, $alto_celda, utf8_decode("Estilo  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
-        } else {
-            $this->SetFont('Calibri', 'B', 6.5);
-            $this->Cell(70, $alto_celda, utf8_decode("Estilo  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
+            $this->Cell(70, $alto_celda, utf8_decode("ESTILO  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
+        } else { 
+            $this->Cell(70, $alto_celda, utf8_decode("ESTILO  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
         }
         $this->SetFont('Calibri', 'B', 8);
         /* AGENTE */

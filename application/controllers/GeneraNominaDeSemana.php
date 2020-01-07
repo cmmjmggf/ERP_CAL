@@ -214,11 +214,6 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 $SUELDO_FINAL_DESTAJO = 0;
                             }
                         }
-
-
-
-
-
                         //              Numero, DEPTO, DEPTOF, CELULA_MONTADO_ADORNO_PEGADO
                         //                991	190	190	CELULA  MONTADO "B"
                         //                992	210	210	CELULA  ADORNO "A"
@@ -297,7 +292,14 @@ class GeneraNominaDeSemana extends CI_Controller {
                                     ->set('salariod', $SUELDO_FINAL_DESTAJO)
                                     ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                     ->where('numemp', $v->Numero)->update('prenominal');
-                        }
+                        } else
+                        if (intval($v->FijoDestajoAmbos) === 3 && floatval($v->CelulaPorcentaje) <= 0) {
+                            $this->db->set('pares', $PARES_TRABAJADOS)
+                                    ->set('salario', $SUELDO_FINAL_DESTAJO)
+                                    ->set('salariod', $SUELDO_FINAL_DESTAJO)
+                                    ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                    ->where('numemp', $v->Numero)->update('prenominal');
+                        } 
                     } else {
                         if (intval($v->FijoDestajoAmbos) === 1) {
                             $this->db->insert('prenominal', array(
@@ -309,6 +311,15 @@ class GeneraNominaDeSemana extends CI_Controller {
                             ));
                         }
                         if (intval($v->FijoDestajoAmbos) === 2) {
+                            $this->db->insert('prenominal', array(
+                                "pares" => $PARES_TRABAJADOS,
+                                "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
+                                "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                                "salariod" => $SUELDO_FINAL_DESTAJO, "depto" => $v->DepartamentoFisico,
+                                "status" => 1, "tpomov" => 0
+                            ));
+                        }
+                        if (intval($v->FijoDestajoAmbos) === 3) {
                             $this->db->insert('prenominal', array(
                                 "pares" => $PARES_TRABAJADOS,
                                 "numsem" => $x['SEMANA'], "año" => $x['ANIO'],

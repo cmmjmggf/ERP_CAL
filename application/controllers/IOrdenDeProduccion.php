@@ -168,7 +168,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $pdf->setControl($P->ControlT);
                 $pdf->setFechaPedido($P->FechaPedido);
                 $pdf->setPedido($P->Pedido);
-                $pdf->setEstilo($P->Estilo . " - " . $P->Color . " - " . $P->ColorT);
+                $pdf->setEstilo($P->Estilo . "  -  " . $P->Color . " " . $P->ColorT);
                 $pdf->setAgente($P->Agente);
                 $pdf->setTrasp($P->Transporte);
                 $pdf->setSuela($P->SuelaT);

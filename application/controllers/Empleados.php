@@ -87,6 +87,7 @@ class Empleados extends CI_Controller {
 
     public function onAgregar() {
         try {
+            $xxx = $this->input->post();
             $data = array();
             foreach ($this->input->post() as $key => $v) {
                 if ($v !== '') {
@@ -114,7 +115,7 @@ class Empleados extends CI_Controller {
             $data["Registro"] = Date('d/m/Y h:i:s a');
             $data["Estatus"] = 'ACTIVO';
 
-            var_dump($data);
+//            var_dump($data);
 
             $ID = $this->Empleados_model->onAgregar($data);
             $Foto = $this->input->post('Foto');
@@ -156,6 +157,7 @@ class Empleados extends CI_Controller {
     public function onModificar() {
         try {
             $x = $this->input;
+            $xxx = $this->input->post();
             $data = array();
             foreach ($this->input->post() as $key => $v) {
                 //print "$key  = $v \n";
@@ -198,8 +200,8 @@ class Empleados extends CI_Controller {
                         if (!file_exists(utf8_decode($URL_DOC . '/' . $ID))) {
                             mkdir(utf8_decode($URL_DOC . '/' . $ID), 0777, true);
                         }
-                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . '/' . utf8_decode($_FILES["Foto"]["name"]))) {
-                            $img = $master_url . $_FILES["Foto"]["name"];
+                        if (move_uploaded_file($_FILES["Foto"]["tmp_name"], $URL_DOC . '/' . $xxx['ID'] . '/' . utf8_decode($_FILES["Foto"]["name"]))) {
+                            $img = $master_url . "{$xxx['ID']}/" . $_FILES["Foto"]["name"];
                             $this->load->library('image_lib');
                             $config['image_library'] = 'gd2';
                             $config['source_image'] = $img;
