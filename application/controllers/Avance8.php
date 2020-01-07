@@ -434,7 +434,7 @@ class Avance8 extends CI_Controller {
 //                    print json_encode(array("AVANZO" => 1, "STEP" => 1));
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
-//                    print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                    print json_encode(array("AVANZO" => 2, "STEP" => 1));
                 }
             }
             print json_encode($AVANCES);
