@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.9686833286074217"/>
-	<property name="ireport.x" value="258"/>
+	<property name="ireport.zoom" value="1.8433187801425766"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -39,7 +39,7 @@ left join colores C on C.Clave = CT.color and C.estilo = CT.estilo
 join pedidox PE on PE.control = CT.control
 left join clientes CTE on CTE.clave = PE.Cliente
 where CT.fecha between str_to_date($P{fechaIni},'%d/%m/%Y') and str_to_date($P{fechaFin},'%d/%m/%Y')
-order by maq asc, CT.docto asc, sem asc, CT.control;]]>
+order by maq asc, abs(CT.docto) asc, sem asc, CT.control;]]>
 	</queryString>
 	<field name="maq" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -276,7 +276,7 @@ order by maq asc, CT.docto asc, sem asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="167" y="44" width="34" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<reportElement style="Column header" x="163" y="44" width="34" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -357,7 +357,7 @@ order by maq asc, CT.docto asc, sem asc, CT.control;]]>
 				<textFieldExpression><![CDATA[$P{fechaFin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="202" y="44" width="23" height="11" forecolor="#000000" uuid="c9dff90b-f813-49a8-8ae5-c65e45301818"/>
+				<reportElement style="Column header" x="198" y="44" width="28" height="11" forecolor="#000000" uuid="c9dff90b-f813-49a8-8ae5-c65e45301818"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -450,14 +450,14 @@ order by maq asc, CT.docto asc, sem asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="167" y="0" width="34" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<reportElement x="163" y="0" width="34" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="202" y="0" width="23" height="10" uuid="a18d6528-7385-4ad9-85f9-34c7d3d55d8b"/>
+				<reportElement x="198" y="0" width="28" height="10" uuid="a18d6528-7385-4ad9-85f9-34c7d3d55d8b"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
@@ -498,14 +498,14 @@ order by maq asc, CT.docto asc, sem asc, CT.control;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yy">
 				<reportElement x="367" y="0" width="35" height="10" uuid="b234775f-978c-4483-af5b-d0b2d0537442"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yy">
 				<reportElement x="402" y="0" width="35" height="10" uuid="b83f04cf-1ac5-4cf1-b39c-0ee8b19ad546"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>

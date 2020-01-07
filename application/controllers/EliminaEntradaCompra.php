@@ -93,12 +93,12 @@ class EliminaEntradaCompra extends CI_Controller {
                 $can = $v->Cantidad;
                 $Can_rec = $v->Cantidad_Rec;
                 $ID = $v->ID;
-                if ($Can_rec === '0' || $Can_rec === 0) {
+                if (floatval($Can_rec) === 0) {
                     $datos = array(
                         'Estatus' => 'ACTIVA'
                     );
                     $this->EliminaEntradaCompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                } else if ($can > $Can_rec) {
+                } else if (floatval($can) > floatval($Can_rec)) {
                     $datos = array(
                         'Estatus' => 'PENDIENTE'
                     );

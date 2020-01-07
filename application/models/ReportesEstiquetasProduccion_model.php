@@ -161,7 +161,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
         try {
             $this->db->query("set sql_mode=''");
             $this->db->select("ECB.estilocte as estilo, ECB.color as color, '' as c3, ECB.idart, ECB.nomprov,
-                            '' as c6, EC.control, EC.punto,ECB.codbarr,'Clave Proveedor 1219' AS ClaveProv,'' as c11,
+                            '' as c6, EC.control, EC.punto, convert(ECB.codbarr as signed) as codbarr ,'Clave Proveedor 1219' AS ClaveProv,'' as c11,
                             EC.recio as Pedido,ECB.catalogo FROM etiqcaja EC
                             JOIN etiqcodbarr ECB on EC.estiped = ECB.estilo AND EC.combped = ECB.comb
                             AND EC.punto = ECB.talla and EC.cliente = ECB.cliente ", false);

@@ -44,13 +44,12 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select PE.Control, PE.Estilo, PE.ColorT, PE.Pares,
-ifnull((SELECT A.Descripcion AS Suela from fichatecnica FT
-join articulos A  on  FT.Articulo = A.Clave
-where FT.Estilo = PE.Estilo  and FT.Color = PE.Color AND A.Grupo= $P{grupo}
-limit 1 ),'Z NO EXISTE SUELA EN FICHA TEC') AS Suela,
+ifnull(a.Descripcion,'Z NO EXISTE SUELA EN FICHA TEC') AS Suela,
 S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, S.T21, S.T22,
 PE.C1, PE.C2, PE.C3, PE.C4, PE.C5, PE.C6, PE.C7, PE.C8, PE.C9, PE.C10, PE.C11, PE.C12, PE.C13, PE.C14, PE.C15, PE.C16, PE.C17, PE.C18, PE.C19, PE.C20, PE.C21, PE.C22
 from pedidox PE
+join fichatecnica ft on ft.Estilo = PE.Estilo and ft.Color = PE.Color
+join articulos a on ft.Articulo = a.Clave and a.Grupo = $P{grupo}
 join series S on S.Clave = PE.Serie
 WHERE cast(PE.Maquila as signed) BETWEEN $P{maq} AND $P{amaq}
 AND cast(PE.Semana as signed) BETWEEN $P{sem} AND $P{asem}

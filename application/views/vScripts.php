@@ -940,7 +940,7 @@
         });
 
 
-        divParent.on('keydown', 'input:not(.notEnter), select:not(.notEnter), textarea:not(.notEnter)', function (e) {
+        divParent.on('keydown', 'input, select, textarea:not(.notEnter)', function (e) {
             var self = $(this)
                     , form = self.parents('body')
                     , focusable
@@ -1839,8 +1839,8 @@
 
     function onClear(e) {
         var text_tags = ["P", "SPAN", "H1", "H2", "H3", "H4", "H5", "H6",
-            "BUTTON", "TD", "TH", "DIV", "LEGEND", "OPTION"]; 
-        
+            "BUTTON", "TD", "TH", "DIV", "LEGEND", "OPTION"];
+
         if (text_tags.indexOf(e[0].tagName) !== -1) {
             $(e).text('');
             return;

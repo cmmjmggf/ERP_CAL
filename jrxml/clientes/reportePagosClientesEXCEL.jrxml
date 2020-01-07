@@ -38,7 +38,7 @@
 		<![CDATA[select
 ag.clave as numagente, ag.Descripcion as nomagente,
  cp.cliente, ct.RazonS as nomcliente, ct.TelOficina,
-group_concat(cp.doctopa) as ref, cp.tipo, cp.remicion, cc.fecha as fechadoc, cp.fecha as fechapago,
+group_concat(cp.doctopa) as ref, cp.tipo, cp.remicion, cc.fecha as fechadoc, cp.fechadep as fechapago,
 (select sum(importe) from cartctepagos where mov in(1,11) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoDeposito,
 null impoAlDia,
 (select sum(importe) from cartctepagos where mov in(3) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fecha between $P{fechaIni} and $P{fechaFin}) as impoPosfe,

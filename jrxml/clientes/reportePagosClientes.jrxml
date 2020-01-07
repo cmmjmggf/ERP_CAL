@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.797498335832503"/>
-	<property name="ireport.x" value="1817"/>
+	<property name="ireport.zoom" value="1.4641000000000357"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -28,7 +28,7 @@
 		<![CDATA[select
 ag.clave as numagente, ag.Descripcion as nomagente,
  cp.cliente, ct.RazonS as nomcliente, ct.TelOficina,
-group_concat(cp.doctopa) as ref, cp.tipo, cp.remicion, cc.fecha as fechadoc, cp.fecha as fechapago,
+group_concat(cp.doctopa) as ref, cp.tipo, cp.remicion, cc.fecha as fechadoc, cp.fechadep as fechapago,
 (select sum(importe) from cartctepagos where mov in(1,11) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoDeposito,
 null impoAlDia,
 (select sum(importe) from cartctepagos where mov in(3) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and fechacap between $P{fechaIni} and $P{fechaFin}) as impoPosfe,

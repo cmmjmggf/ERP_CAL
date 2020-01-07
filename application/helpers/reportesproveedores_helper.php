@@ -665,7 +665,7 @@ class PDFAntiguedadProv extends FPDF {
         $this->SetY(18);
         $this->SetX(5);
 
-        $this->Cell(20, 3.5, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
+        $this->Cell(17, 3.5, utf8_decode('Proveedor'), 'B'/* BORDE */, 0, 'L');
 
 //        $this->SetX(5);
 //        $this->Cell(24, 3.5, '', 1/* BORDE */, 0, 'C');
@@ -691,7 +691,7 @@ class PDFAntiguedadProv extends FPDF {
 
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(5/* 1 */, 10/* 2 */, 12/* 3 */, 18/* 4 */, 18/* 5 */, 18/* 6 */, 7/* 7 */,
+        $anchos = array(5/* 1 */, 12/* 2 */, 12/* 3 */, 18/* 4 */, 18/* 5 */, 18/* 6 */, 7/* 7 */,
             18/* 8 */,
             18/* 9 */,
             18/* 10 */,
@@ -751,7 +751,7 @@ class PDFAntiguedadProv extends FPDF {
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(25);
+        $this->SetX(22);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {
@@ -782,7 +782,7 @@ class PDFAntiguedadProv extends FPDF {
         $this->CheckPageBreak($h);
 
         //Se pone para que depues de insertar una pagina establezca la posicion en X = 5
-        $this->SetX(25);
+        $this->SetX(22);
 
         //Draw the cells of the row
         for ($i = 0; $i < count($data); $i++) {

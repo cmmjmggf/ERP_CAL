@@ -47,6 +47,47 @@ class RecibeOrdenCompra extends CI_Controller {
         }
     }
 
+    public function getEntradaCompra() {
+        try {
+            $tp = $this->input->get('Tp');
+            $doc = $this->input->get('Doc');
+            $prov = $this->input->get('Prov');
+
+            print json_encode($this->db->query("SELECT "
+                                    . "C.ID, "
+                                    . "C.articulo, "
+                                    . "(select art.descripcion from articulos art where art.clave = C.articulo ) as nomart, "
+                                    . " C.Cantidad, "
+                                    . "C.Precio, "
+                                    . "C.Subtotal,"
+                                    . 'CONCAT(\'<span class="fa fa-trash fa-lg text-danger" onclick="onEliminarDetalleByID(\',C.ID,\')">\',\'</span>\') AS Eliminar '
+                                    . "FROM compras C where C.tp = {$tp} and C.Doc = {$doc} and C.Proveedor = {$prov} and C.estatus = 'BORRADOR' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarDetalleByID() {
+        try {
+            $id_art_compra = $this->input->post('ID');
+            $Compras = $this->db->query("select * from compras where ID = $id_art_compra ")->result()[0];
+
+            $sql = "UPDATE ordencompra OC "
+                    . "SET OC.CantidadRecibida =  ifnull(OC.CantidadRecibida,0) - {$Compras->Cantidad} , "
+                    . "OC.Factura = '' , "
+                    . "OC.FechaFactura = '' "
+                    . "WHERE OC.Tp = '{$Compras->TpOrdenCompra}' "
+                    . "AND OC.Folio = '{$Compras->OrdenCompra}' "
+                    . "AND OC.Proveedor = '{$Compras->Proveedor}' "
+                    . "AND OC.Articulo = '{$Compras->Articulo}' ";
+            $this->db->query($sql);
+            $sql2 = "delete from compras where ID = $id_art_compra ";
+            $this->db->query($sql2);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getOrdenCompra() {
         try {
             print json_encode($this->Recibeordencompra_model->getOrdenCompra($this->input->get('Folio'), $this->input->get('Tp')));

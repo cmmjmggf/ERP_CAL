@@ -853,8 +853,14 @@
                 pnlTablero.find("#tejida2").val(toFormattedNumber(datosParamFijos.tejida));
                 pnlTablero.find("#flete2").val(toFormattedNumber(datosParamFijos.flete));
 
-                var txtctopro = parseFloat(datosParamFijos.matpri) + parseFloat(datosParamFijos.maob) +
-                        parseFloat(datosParamFijos.tejida) + parseFloat(txttol) + parseFloat(datosParamFijos.mextr);
+                var tejido = (isNaN(parseFloat(datosParamFijos.tejida))) ? 0 : parseFloat(datosParamFijos.tejida);
+
+                var txtctopro = parseFloat(datosParamFijos.matpri) +
+                        parseFloat(datosParamFijos.maob) +
+                        parseFloat(tejido) +
+                        parseFloat(txttol) +
+                        parseFloat(datosParamFijos.mextr);
+
                 pnlTablero.find("#costoProd").val(toFormattedNumber(txtctopro));
 
                 pnlTablero.find("#gfabri2").val(toFormattedNumber(datosParamFijos.gfabri));
@@ -940,8 +946,10 @@
                 pnlTablero.find("#tejida22").val(toFormattedNumber(datosParamFijos.tejida));
 
 
+                var tejido2 = (isNaN(parseFloat(datosParamFijos.tejida))) ? 0 : parseFloat(datosParamFijos.tejida);
+
                 var txtctopro1 = parseFloat(datosParamFijos.preaut) - parseFloat(datosParamFijos.matpri) - parseFloat(datosParamFijos.mextr) - parseFloat(datosParamFijos.maob) -
-                        parseFloat(datosParamFijos.tejida) - parseFloat(txttol);
+                        parseFloat(tejido) - parseFloat(txttol);
 
                 pnlTablero.find("#costoProd2").val(toFormattedNumber(txtctopro1));
 

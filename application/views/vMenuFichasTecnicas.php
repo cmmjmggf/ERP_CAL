@@ -44,9 +44,9 @@
         });
     }
 
-    function onLoad360VP() { 
-          $.fancybox.open({
-            src: '<?php print base_url('FichaTecnicaEstilos');?>',
+    function onLoad360VP() {
+        $.fancybox.open({
+            src: '<?php print base_url('FichaTecnicaEstilos'); ?>',
             type: 'iframe',
             opts: {
                 afterShow: function (instance, current) {
@@ -78,4 +78,6 @@ $this->load->view('vAdicionaMaterialXLinea')->view('vCopyFTaFT')
         ->view('vEliminaFichaTecnica')
         ->view('vFichaTecnicaCompra')->view('vReporteCorteHiloTejer')
         ->view('vReporteParesPreAsignados')->view('vEtiTrazabilidad')
+        ->view('vIOrdenDeProduccion')->view('vOrdenDeProduccion')
         ->view('vEtiZapica')->view('vMaterialSemanaProduccionEstilo')->view('vEstilosFotos');
+

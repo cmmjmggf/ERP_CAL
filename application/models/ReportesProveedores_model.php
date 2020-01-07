@@ -207,12 +207,13 @@ class ReportesProveedores_model extends CI_Model {
                                     . "CP.Tp,"
                                     . "CP.Doc, "
                                     . "date_format(str_to_date(CP.FechaDoc,'%d/%m/%Y'),'%d/%m/%y') AS FechaDoc, "
+                                    . "str_to_date(CP.FechaDoc,'%d/%m/%Y') as FechaOrd,"
                                     . "CP.ImporteDoc, "
                                     . "CP.Pagos_Doc,"
                                     . "CP.Saldo_Doc,"
                                     . 'IFNULL(DATEDIFF(CURDATE(), STR_TO_DATE(CP.FechaDoc , "%d/%m/%Y" )),\'\') AS Dias,'
                                     . "
-CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 0
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) >= 0
 			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 8
 	THEN CP.Saldo_Doc END AS 'UNO',
 
@@ -255,7 +256,8 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
                             ->where("CP.Saldo_Doc > 1 ", null, false)
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
                             ->order_by("ClaveNum", 'ASC')
-                            ->order_by("Dias", 'DESC')
+                            ->order_by("FechaOrd", 'ASC')
+                            ->order_by("abs(Dias)", 'DESC')
                             ->order_by("CP.Doc", 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {

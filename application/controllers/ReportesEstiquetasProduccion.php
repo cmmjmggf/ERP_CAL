@@ -106,7 +106,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                 //Se meten los datos del arreglo en el excel
                 fputcsv($file, array_map(function($v) {
                             //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
-                            return $v . "\r";
+                            return $v;
                         }, $line));
             }
             //Cerramos el archivo
@@ -191,7 +191,7 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                 //Se meten los datos del arreglo en el excel
                 fputcsv($file, array_map(function($v) {
                             //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
-                            return $v . "\r";
+                            return $v;
                         }, $line));
             }
             //Cerramos el archivo

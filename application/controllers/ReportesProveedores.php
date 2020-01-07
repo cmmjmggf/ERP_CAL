@@ -367,10 +367,10 @@ class ReportesProveedores extends CI_Controller {
                 foreach ($Doctos as $key => $D) {
 
                     if ($G->ClaveNum === $D->ClaveNum) {
-                        $pdf->SetX(25);
+                        $pdf->SetX(22);
                         $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(10, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 6, ""), 'B'/* BORDE */, 0, 'C');
+                        $pdf->Cell(12, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 8, ""), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
                         $pdf->SetX($pdf->GetX());
@@ -428,9 +428,9 @@ class ReportesProveedores extends CI_Controller {
                         $GTOTAL_9 += $D->NUEVE;
                     }
                 }
-                $pdf->SetX(25);
+                $pdf->SetX(22);
                 $pdf->SetFont('Calibri', 'B', 7.5);
-                $pdf->Cell(27, 3.5, utf8_decode('TOTAL POR PROVEEDOR: '), 0/* BORDE */, 0, 'L');
+                $pdf->Cell(29, 3.5, utf8_decode('TOTAL POR PROVEEDOR: '), 0/* BORDE */, 0, 'L');
                 $pdf->SetX($pdf->GetX());
                 $pdf->Cell(18, 3.5, mb_strimwidth('$' . number_format($TP_IMPORTE, 2, ".", ","), 0, 14, ""), 0/* BORDE */, 0, 'R');
                 $pdf->SetX($pdf->GetX());
