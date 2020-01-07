@@ -622,6 +622,7 @@
         } else {
             swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FRACCIÓN', 'error').then((value) => {
                 Control.focus().select();
+                getPagosXEmpleadoXSemana();
             });
         }
     }

@@ -36,17 +36,26 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
                             . "date_format(FPN.fecha,'%d/%m/%Y') as fecha, FPN.semana, FPN.pares, cast(FPN.subtot as decimal(10,2)) as subtot "
                             . "")
                     ->from("fracpagnomina FPN")
-                    ->join("fracciones F", 'on F.Clave = FPN.numfrac ')
-                    ->like('FPN.control', $Control)
-                    ->like('FPN.anio', $Ano)
-                    ->like('FPN.semana', $Sem)
-                    ->like('FPN.numeroempleado', $Empleado, 'after')->limit(900);
+                    ->join("fracciones F", 'on F.Clave = FPN.numfrac ');
+            if ($Control !== '') {
+                $this->db->where('FPN.control', $Control);
+            }
+            if ($Ano !== '') {
+                $this->db->where('FPN.anio', $Ano);
+            }
+            if ($Sem !== '') {
+                $this->db->where('FPN.semana', $Sem);
+            }
+            if ($Empleado !== '') {
+                $this->db->where('FPN.numeroempleado', $Empleado);
+            }
+            $this->db->limit(900);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
              */
             $str = $this->db->last_query();
-            //print $str;
+//            print $str;
             $data = $query->result();
             return $data;
         } catch (Exception $exc) {

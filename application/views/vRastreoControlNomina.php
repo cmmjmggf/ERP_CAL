@@ -1,5 +1,5 @@
 <div class="modal " id="mdlRastreoControlNomina"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Rastreo de controles ya capturados en nómina</h5>
@@ -163,10 +163,10 @@
         mdlRastreoControlNomina.find("#ControlRastreo").keydown(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val();
-                    var contRastreo = $(this).val();
-                    var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val();
-                    var empRastreo = mdlRastreoControlNomina.find("#EmpleadoRastreo").val();
+                    var semRastreo = mdlRastreoControlNomina.find("#SemRastreo").val() ? mdlRastreoControlNomina.find("#SemRastreo").val() : '';
+                    var contRastreo = $(this).val() ? $(this).val() : '';
+                    var anoRastreo = mdlRastreoControlNomina.find("#AnoRastreo").val() ? mdlRastreoControlNomina.find("#AnoRastreo").val() : '';
+                    var empRastreo = mdlRastreoControlNomina.find("#EmpleadoRastreo").val() ? mdlRastreoControlNomina.find("#EmpleadoRastreo").val() : '';
 
                     $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getControl', {
                         Control: $(this).val()
