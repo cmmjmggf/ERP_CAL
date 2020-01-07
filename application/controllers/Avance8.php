@@ -404,6 +404,34 @@ class Avance8 extends CI_Controller {
                                     ->where('contped', $xXx['CONTROL'])->update('avaprd');
 
                             break;
+                        case 301:
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            $this->db->insert('fracpagnomina', $data);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                            exit(0);
+                            break;
+                        case 24:
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            $this->db->insert('fracpagnomina', $data);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                            exit(0);
+                            break;
+                        case 325:
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            $this->db->insert('fracpagnomina', $data);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                            exit(0);
+                            break;
+                        case 74:
+                            $data["fraccion"] = $v->NUMERO_FRACCION;
+                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            $this->db->insert('fracpagnomina', $data);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                            exit(0);
+                            break;
                     }
 
                     /* PAGAR FRACCIONES */
@@ -426,6 +454,8 @@ class Avance8 extends CI_Controller {
                         $id = $this->db->insert_id();
                         $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                         $this->db->insert('fracpagnomina', $data);
+                        print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                        exit(0);
                     } else {
                         if ((floatval($xXx['PARES']) * floatval($PXFC)) > 0) {
                             $this->db->insert('fracpagnomina', $data);
@@ -435,6 +465,7 @@ class Avance8 extends CI_Controller {
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
                     print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                    exit(0);
                 }
             }
             print json_encode($AVANCES);

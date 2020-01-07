@@ -773,9 +773,10 @@
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
                             }
+                            /*GUSTAVO*/
                             if (xDepartamento === 42 && stsavan === 40) {
-                                Fraccion.val(60);
-                                FraccionS[0].selectize.setValue(60);
+                                Fraccion.val('');
+//                                FraccionS[0].selectize.setValue(60);
                             }
                             if (xDepartamento === 44 && stsavan === 42) {
                                 Empleado.focus().select();

@@ -193,7 +193,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
                             $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA}  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                             $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                        } else if (intval($v->Celula) > 0 && intval($v->Celula) === 101  && floatval($v->CelulaPorcentaje) > 0) {
+                        } else if (intval($v->Celula) > 0 && intval($v->Celula) === 101 && floatval($v->CelulaPorcentaje) > 0) {
                             $fraccion_pespunte = 304;
                             $SUELDO_CELULA_PESPUNTE = $this->db->query("SELECT SUM(F.subtot) AS SUBTOTAL FROM fracpagnomina AS F WHERE F.semana = {$x['SEMANA']} AND F.fraccion = {$fraccion_pespunte} AND F.anio = {$x['ANIO']} AND F.depto = {$v->DepartamentoFisico} AND F.maquila = 101 ")->result();
                             $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE  FPN.fraccion = {$fraccion_pespunte} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}  AND FPN.depto = {$v->DepartamentoFisico}  AND FPN.maquila = 101 ")->result();
@@ -203,7 +203,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             } else {
                                 $SUELDO_FINAL_DESTAJO = 0;
                             }
-                        } else if (intval($v->Celula) > 0 &&  intval($v->Celula) === 107 && floatval($v->CelulaPorcentaje) > 0) {
+                        } else if (intval($v->Celula) > 0 && intval($v->Celula) === 107 && floatval($v->CelulaPorcentaje) > 0) {
                             $fraccion_pespunte = 304;
                             $SUELDO_CELULA_PESPUNTE = $this->db->query("SELECT SUM(F.subtot) AS SUBTOTAL FROM fracpagnomina AS F WHERE F.semana = {$x['SEMANA']} AND F.fraccion = {$fraccion_pespunte} AND F.anio = {$x['ANIO']} AND F.depto = {$v->DepartamentoFisico} AND F.maquila = 107")->result();
                             $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE  FPN.fraccion = {$fraccion_pespunte} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']} AND FPN.maquila = 107 AND FPN.depto = {$v->DepartamentoFisico}")->result();
@@ -294,12 +294,14 @@ class GeneraNominaDeSemana extends CI_Controller {
                                     ->where('numemp', $v->Numero)->update('prenominal');
                         } else
                         if (intval($v->FijoDestajoAmbos) === 3 && floatval($v->CelulaPorcentaje) <= 0) {
-                            $this->db->set('pares', $PARES_TRABAJADOS)
-                                    ->set('salario', $SUELDO_FINAL_DESTAJO)
+                            $this->db->set('pares', $PARES_TRABAJADOS)->set('salario', $SUELDO_FINAL_DESTAJO)
+                                    ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
+                                    ->where('numemp', $v->Numero)->update('prenominal');
+                            $this->db->set('pares', $PARES_TRABAJADOS) 
                                     ->set('salariod', $SUELDO_FINAL_DESTAJO)
                                     ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                     ->where('numemp', $v->Numero)->update('prenominal');
-                        } 
+                        }
                     } else {
                         if (intval($v->FijoDestajoAmbos) === 1) {
                             $this->db->insert('prenominal', array(

@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="modal-footer"> 
-                <button type="button" class="btn btn-info" id="btnGenerarM" disabled=""><span class="fa fa-check"></span> Aceptar</button>
+                <button type="button" class="btn btn-info" id="btnGenerarM"><span class="fa fa-check"></span> Aceptar</button>
             </div>
         </div>
     </div>
@@ -77,20 +77,12 @@
                 onObtenerElUltimoControl(this);
             });
 
-            ControlInicialM.keydown(function (e) { 
-                if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
-                    btnGenerarM.prop("disabled", false);
-                } else {
-                    btnGenerarM.prop("disabled", true);
-                }
+            ControlInicialM.keydown(function (e) {
+                btnGenerarM.prop("disabled", false);
             });
-            
-            ControlFinalM.keydown(function (e) { 
-                if (ControlInicialM.val() && ControlFinalM.val() && e.keyCode === 13) {
-                    btnGenerarM.prop("disabled", false);
-                } else {
-                    btnGenerarM.prop("disabled", true);
-                }
+
+            ControlFinalM.keydown(function (e) {
+                btnGenerarM.prop("disabled", false);
             });
 
             mdlIOP.on('shown.bs.modal', function () {
@@ -108,8 +100,8 @@
                     message: 'GENERANDO...'
                 });
                 var params = {
-                    INICIO: ControlInicialM.val(),
-                    FIN: ControlFinalM.val(),
+                    INICIO: ControlInicialM.val() ? ControlInicialM.val() : '',
+                    FIN: ControlFinalM.val() ? ControlFinalM.val() : '',
                     SEMANA: IOPSemana.val() ? IOPSemana.val() : '',
                     ANIO: IOPAnio.val() ? IOPAnio.val() : '',
                     DIA: IOPDia.val() ? IOPDia.val() : ''};
@@ -133,7 +125,7 @@
                     console.log(x.responseText);
                     swal('ATENCION', 'HA OCURRIDO UN ERROR AL OBTENER EL REPORTE, REVISE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
-                    HoldOn.close();
+                    HoldOn.close(); 
                     btnGenerarM.attr("disabled", false);
                 });
             });

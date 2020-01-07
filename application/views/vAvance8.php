@@ -246,6 +246,24 @@
                                     <label class="custom-control-label" for="chk301">301 Pespuntar plantilla</label>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk24" description="DOMAR CHINELA" fraccion="24">
+                                    <label class="custom-control-label" for="chk24">24 Domar chinela</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk325" description="EMPALMAR MALLA A CHINELA" fraccion="325">
+                                    <label class="custom-control-label" for="chk325">325 Empalmar malla a chinela</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk74" description="COTEJAR PIEL Y FORRO" fraccion="74">
+                                    <label class="custom-control-label" for="chk74">74 Cotejar piel y forro</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -313,7 +331,7 @@
                             <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
                             <div class="w-100"></div>
                             <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
-                         </div>
+                        </div>
                     </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 d-none">
                         <div class="row">
@@ -473,6 +491,7 @@
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
                 }).always(function () {
                     HoldOn.close();
+                    getPagosXEmpleadoXSemana();
                 });
             }
         });
@@ -564,21 +583,21 @@
 //                            Control.focus().select();
 //                        });
 //                    } else {
-                        Estilo.val(a.ESTILO);
-                        Pares.val(a.PARES);
-                        pnlTablero.find(".estilo_control").text(a.ESTILO);
-                        pnlTablero.find(".pares_control").text(a.PARES);
-                        $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>',
-                                {C: Control.val()}).done(function (data) {
-                            var x = data[0];
-                            if (data.length > 0) {
-                                SigAvance.val(x.Departamento);
-                                EstatusAvance.val(x.DepartamentoT);
-                                estatus_de_avance.text(x.DepartamentoT);
-                                pnlTablero.find(".avance_control").text(x.Departamento);
-                                onAvanzar();
-                            }
-                        });
+                    Estilo.val(a.ESTILO);
+                    Pares.val(a.PARES);
+                    pnlTablero.find(".estilo_control").text(a.ESTILO);
+                    pnlTablero.find(".pares_control").text(a.PARES);
+                    $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>',
+                            {C: Control.val()}).done(function (data) {
+                        var x = data[0];
+                        if (data.length > 0) {
+                            SigAvance.val(x.Departamento);
+                            EstatusAvance.val(x.DepartamentoT);
+                            estatus_de_avance.text(x.DepartamentoT);
+                            pnlTablero.find(".avance_control").text(x.Departamento);
+                            onAvanzar();
+                        }
+                    });
 
 //                    }
 //                    if (a.length > 0) {
@@ -815,27 +834,33 @@
         AVANO.FRACCIONES = JSON.stringify(fracciones);
 
         $.post('<?php print base_url('Avance8/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (c) {
+            getPagosXEmpleadoXSemana();
             var dt = JSON.parse(c);
             if (c !== undefined && c.length > 0) {
                 if (dt.AVANZO > 0) {
                     onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
                     onClearMO();
-                    Control.focus().select();
+                    Avance.ajax.reload(function () {
+                        Control.val('');
+                        Control.focus().select();
+                        getPagosXEmpleadoXSemana();
+                    });
                     onBeep(5);
                 } else {
                     onBeep(2);
-                    Avance.ajax.reload();
                     swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
                         onClearMO();
-                        Control.val('');
-                        Control.focus().select();
+                        Avance.ajax.reload(function () {
+                            Control.val('');
+                            Control.focus().select();
+                            getPagosXEmpleadoXSemana();
+                        });
                     });
                 }
             }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
         }).always(function () {
-            Avance.ajax.reload();
             getPagosXEmpleadoXSemana();
         });
     }
@@ -850,7 +875,7 @@
             SigAvance.val(r.DEPTOAVANCE);
             pnlTablero.find(".estilo_control").text(r.ESTILO);
             pnlTablero.find(".pares_control").text(r.PARES);
-            pnlTablero.find(".avance_control").text(r.DEPTOAVANCE); 
+            pnlTablero.find(".avance_control").text(r.DEPTOAVANCE);
             estatus_de_avance.text(r.ESTATUS_PRODUCCION);
             f();
         });

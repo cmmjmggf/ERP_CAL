@@ -100,6 +100,9 @@ class IOrdenDeProduccion extends CI_Controller {
                             ->group_by(array('OP.ControlT'))
                             ->order_by('ABS(OP.ControlT)', 'ASC')
                             ->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
+//            print "\n";
+//            print $this->db->last_query();
+//            print "\n";
             $REPORTE = array("PAGINAS" => 0/* NO */, "URL" => "");
             if (count($CONTROLES) <= 0) {
                 print json_encode(array("PAGINAS" => 0, "URL" => ""));

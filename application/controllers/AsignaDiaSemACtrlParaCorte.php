@@ -388,6 +388,13 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                     'nomart' => $TIEMPO_PRECIO_ARTICULO_X_FRACCION[0]->ARTICULO
                 );
                 $this->db->insert('programacion', $data);
+                $this->db->set('DiaProg', $x['DIA'])
+                        ->set('SemProg', $x['SEMANA'])
+                        ->set('AnioProg',$x['ANIO'])
+                        ->set('FechaProg', Date('Y-m-d'))
+                        ->set('HoraProg', Date('h:i:s'))
+                        ->where('Control', $x['CONTROL'])
+                        ->update('pedidox');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
