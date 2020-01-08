@@ -373,7 +373,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
                 'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
                 'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                'descripcion' => $x['ESTILOT'], 'Precio' => $x['PRECIO'],
+                'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
                 'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
                 'control' => $x['CONTROL'], 'iva' => $x['IVA'],
                 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
