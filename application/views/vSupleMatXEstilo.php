@@ -1,5 +1,5 @@
 <div class="modal animated fadeIn" id="mdlArticuloYConsumoXEstiloColor">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-retweet"></span> Suple consumo x estilo, pieza y material</h5>
@@ -9,9 +9,16 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-6"> 
                         <label>Estilo</label>
-                        <select id="EstiloConsumo" name="EstiloConsumo" class="form-control"></select>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xEstiloConsumo" name="xEstiloConsumo" autofocus="" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-8">
+                                <select id="EstiloConsumo" name="EstiloConsumo" class="form-control"></select>
+                            </div>
+                        </div> 
                     </div>
                     <div class="col-4">
                         <label>Pieza</label>
@@ -76,7 +83,7 @@
             DetalleFTConsumo;
 
     $(document).ready(function () {
-        
+
         btnSupleConsumo.click(function () {
             if (EstiloConsumo.val() && PiezaConsumo.val() &&
                     MaterialConsumo.val() && ConsumoXLineaEstiloColor.val() &&
@@ -178,7 +185,6 @@
 
         mdlArticuloYConsumoXEstiloColor.on('shown.bs.modal', function () {
             btnSupleConsumo.attr('disabled', true);
-
             EstiloConsumo[0].selectize.clear(true);
             PiezaConsumo[0].selectize.clear(true);
             MaterialConsumo[0].selectize.clear(true);
@@ -186,6 +192,7 @@
             if ($.fn.DataTable.isDataTable('#tblDetalleFTConsumo')) {
                 DetalleFTConsumo.ajax.reload(function () {
                     HoldOn.close();
+                    mdlArticuloYConsumoXEstiloColor.find("#xEstiloConsumo").focus().select();
                 });
             } else {
                 var coldefs = [
@@ -236,6 +243,7 @@
                         [0, 'desc']
                     ],
                     initComplete: function () {
+                        mdlArticuloYConsumoXEstiloColor.find("#xEstiloConsumo").focus().select();
                     }
                 });
 

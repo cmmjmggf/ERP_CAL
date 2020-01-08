@@ -372,7 +372,7 @@ class FichaTecnica extends CI_Controller {
             if ($MATERIAL !== '') {
                 $this->db->where('FT.Articulo', $MATERIAL);
             } else {
-                $this->db->limit(2000);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -400,7 +400,7 @@ class FichaTecnica extends CI_Controller {
                 $this->db->where('FT.Articulo', $MATERIAL);
             }
             if ($LINEA === '' && $MATERIAL === '') {
-                $this->db->limit(2000);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -432,7 +432,7 @@ class FichaTecnica extends CI_Controller {
                 $this->db->where('FT.Articulo', $MATERIAL);
             }
             if ($ESTILO === '' && $PIEZA === '' && $MATERIAL === '') {
-                $this->db->limit(2000);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -456,7 +456,7 @@ class FichaTecnica extends CI_Controller {
                 $this->db->where('E.Linea', $LINEA);
             }
             if ($LINEA === '') {
-                $this->db->limit(2000);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -637,7 +637,7 @@ class FichaTecnica extends CI_Controller {
             }
             $dbx->group_by(array('FT.Estilo', 'FT.Color'));
             if ($LINEA === '') {
-                $dbx->limit(2000);
+                $dbx->limit(10);
             }
             $result = $dbx->get()->result();
             foreach ($result as $k => $v) {

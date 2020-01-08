@@ -1,6 +1,6 @@
 
 <div class="modal animated fadeIn" id="mdlSupleMaterialEnFTXLinea">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable"  role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-retweet"></span> Suple material en ficha tecnica x linea</h5>

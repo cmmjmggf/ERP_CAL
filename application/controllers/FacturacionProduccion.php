@@ -902,6 +902,19 @@ class FacturacionProduccion extends CI_Controller {
                             PRINT $jc->getReport();
                             exit(0);
                             break;
+                        case 2422:
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO_CFD;
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2422.jasper');
+                            $jc->setFilename("facturaelec39_2422_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            exit(0);
+                            break;
                         default :
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");

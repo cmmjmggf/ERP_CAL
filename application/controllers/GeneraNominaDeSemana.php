@@ -389,7 +389,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                         /* 3.4.3  FINALMENTE EL SUBTOTAL GENERADO POR ESA CELULA
                          * SE MULTIPLICA POR EL PORCENTAJE DEL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                    } else {
+                    } 
+                    else {
                         /* 3.5 EL SUELDO FINAL CORRESPONDE AL SUBTOTAL DE FRACPAGNOMINA,
                          * EN CASO DE NO PERTENECER A NINGUNA CELULA SOLO SE LE PAGA LO QUE HIZO
                          * Y REGISTRO DENTRO DEL SISTEMA */
@@ -408,13 +409,15 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
+                    }else{
+                        
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
                     $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         /* POR LO REGULAR SALEN LOS QUE ESTAN EN FIJODESTAJOAMBOS EN #3 */
-                        $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL_DESTAJO)
+                        $this->db->set('pares', 0)->set('salariod', $SUELDO_FINAL_DESTAJO)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                 ->where('numemp', $v->Numero)->update('prenominal');
                     } else {
