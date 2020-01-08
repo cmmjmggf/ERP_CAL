@@ -178,6 +178,9 @@
                     </div> 
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
+            <div class="col-12 text-center">
+                <span class="text-danger font-weight-bold font-italic">9 9 9 9 9 9</span>
+            </div>
         </div>
     </div>
 </div>
@@ -348,7 +351,7 @@
             {"data": "ID"}/*0*/, {"data": "FECHA"}/*1*/,
             {"data": "CONTROL"}/*2*/, {"data": "ESTILO"},
             {"data": "FRAC"}, {"data": "PARES"},
-            {"data": "PRECIO"}, {"data": "SUBTOTAL"}
+            {"data": "PRECIO"}, {"data": "SUBTOTAL_SPAN"}
         ];
         var coldefs = [
             {
@@ -898,5 +901,30 @@
         font-weight: bold !important;
         border: solid 1px #1f2f98 !important;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
+    }
+    .text-success{
+        color: #9aa531 !important;
+    }
+    .text-info{
+        color: #2196F3 !important;
+    }
+    .text-black{
+        color: #000 !important;
+        color: #c1850c  !important;
+        font-weight: bold !important;
+    }
+    
+    tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black{
+        color: #fff !important;
+        font-weight: bold !important;
+    }
+
+    table tbody tr:hover { 
+        color: #fff !important;
+    }
+
+    table tbody tr:hover td{
+        background-color: #0375d8 !important; 
+        font-weight: bold !important;
     }
 </style>

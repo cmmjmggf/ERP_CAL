@@ -279,10 +279,19 @@ class Avance9 extends CI_Controller {
         try {
             $url = $this->uri;
             $x = $this->input->get();
+            $SPAN_100 = "<span class='font-weight-bold text-success'>100</span>";
+            $SPAN_99 = "<span class='font-weight-bold text-info'>99</span>";
             $this->db->select("FACN.ID, FACN.numeroempleado, FACN.maquila, "
                             . "FACN.control AS CONTROL, FACN.estilo AS ESTILO, "
-                            . "FACN.numfrac AS FRAC, FACN.preciofrac AS PRECIO, "
-                            . "FACN.pares AS PARES, CONCAT('$',FORMAT(FACN.subtot,2)) AS SUBTOTAL, "
+                            . "(CASE "
+                            . "WHEN FACN.numfrac = 100 THEN \"$SPAN_100\" "
+                            . "WHEN FACN.numfrac = 99 THEN \"$SPAN_99\" "
+                            . "ELSE FACN.numfrac "
+                            . "END) AS FRAC, "
+                            . "FACN.preciofrac AS PRECIO, "
+                            . "FACN.pares AS PARES, "
+                            . "CONCAT('$',FORMAT(FACN.subtot,2)) AS SUBTOTAL, "
+                            . "CONCAT('<span class=\"text-black\">$',FORMAT(FACN.subtot,2),'</span>') AS SUBTOTAL_SPAN, "
                             . "FACN.status, DATE_FORMAT(FACN.fecha, \"%d/%m/%Y\") AS FECHA, "
                             . "FACN.semana AS SEMANA, FACN.depto AS DEPARTAMENTO, "
                             . "FACN.registro, FACN.anio, FACN.avance_id", false)
@@ -320,6 +329,10 @@ class Avance9 extends CI_Controller {
             if ($x['FRACCION_FILTRO'] !== '') {
                 $this->db->where('FACN.numfrac', $x['FRACCION_FILTRO']);
             }
+            $this->db
+                    ->order_by('ABS(FACN.ID)', 'DESC')
+                    ->order_by('ABS(FACN.anio)', 'DESC')
+                    ->order_by('ABS(FACN.semana)', 'DESC');
             if ($x['EMPLEADO'] === '') {
                 $this->db->limit(5);
             }

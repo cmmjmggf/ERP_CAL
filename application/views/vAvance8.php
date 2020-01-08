@@ -392,6 +392,9 @@
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
+            <div class="col-12 text-center">
+                <span class="text-danger font-weight-bold font-italic">8 8 8 8 8 8</span>
+            </div>
         </div>
     </div>
 </div>
@@ -561,7 +564,7 @@
             {"data": "ID"}/*0*/, {"data": "FECHA"}/*1*/,
             {"data": "CONTROL"}/*2*/, {"data": "ESTILO"},
             {"data": "FRAC"}, {"data": "PARES"},
-            {"data": "PRECIO"}, {"data": "SUBTOTAL"}
+            {"data": "PRECIO"}, {"data": "SUBTOTAL_SPAN"}
         ];
         var coldefs = [
             {
@@ -600,9 +603,8 @@
                 };
                 $.each(api.rows().data(), function (k, v) {
                     r += parseFloat(intVal(v.SUBTOTAL));
-                    prs += parseInt(v.PARES);
+                    prs += parseInt(v.PARES); 
                 });
-
                 $(api.column(5).footer()).html(
                         '<span class="font-weight-bold">' + prs + ' pares</span>');
                 $(api.column(7).footer()).html(
@@ -1116,5 +1118,30 @@
         background: -ms-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
         background: linear-gradient(to bottom, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94b447', endColorstr='#5d6e1e', GradientType=0 );
+    }
+    .text-success{
+        color: #9aa531 !important;
+    }
+    .text-info{
+        color: #2196F3 !important;
+    }
+    .text-black{
+        color: #000 !important;
+        color: #c1850c  !important;
+        font-weight: bold !important;
+    }
+    
+    tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black{
+        color: #fff !important;
+        font-weight: bold !important;
+    }
+
+    table tbody tr:hover { 
+        color: #fff !important;
+    }
+
+    table tbody tr:hover td{
+        background-color: #0375d8 !important; 
+        font-weight: bold !important;
     }
 </style>

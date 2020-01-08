@@ -224,10 +224,16 @@ class Avance8 extends CI_Controller {
         try {
             $url = $this->uri;
             $x = $this->input->get();
+
+            $SPAN_397 = "<span class='font-weight-bold text-success'>397</span>";
             $this->db->select("F.ID, F.numeroempleado, F.maquila, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, "
-                            . "F.numfrac AS FRAC, F.preciofrac AS PRECIO, "
+                            . "(CASE "
+                            . "WHEN F.numfrac = 397 THEN \"$SPAN_397\" "
+                            . "ELSE F.numfrac END) AS FRAC, "
+                            . "F.preciofrac AS PRECIO, "
                             . "F.pares AS PARES, CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL, "
+                            . "CONCAT('<span class=\"text-black\">$',FORMAT(F.subtot,2),'</span>') AS SUBTOTAL_SPAN, "
                             . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
                             . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
                             . "F.registro, F.anio, F.avance_id", false)
@@ -245,9 +251,12 @@ class Avance8 extends CI_Controller {
             if ($x['FRACCION_FILTRO'] !== '') {
                 $this->db->where('F.numfrac', $x['FRACCION_FILTRO']);
             }
-            $this->db->order_by('ABS(F.semana)', 'DESC');
+            $this->db
+                    ->order_by('ABS(F.ID)', 'DESC')
+                    ->order_by('ABS(F.anio)', 'DESC')
+                    ->order_by('ABS(F.semana)', 'DESC');
             if ($x['EMPLEADO'] === '') {
-                $this->db->limit(25);
+                $this->db->limit(10);
             }
             $dtm = $this->db->get()->result();
 //            print $this->db->last_query();
