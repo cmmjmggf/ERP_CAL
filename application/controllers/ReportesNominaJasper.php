@@ -1657,7 +1657,7 @@ FROM costomanoobratemp CMT
 
                 //Si es prestamos consultamos la tabla para obtener el acumulado
                 if ($tipoReporte === '1') {
-                    $query_prestamos = "SELECT ifnull(sum(preemp),0) as preemp FROM prestamos  WHERE numemp  = $numemp ";
+                    $query_prestamos = "SELECT ifnull(sum(preemp),0) as preemp FROM prestamos  WHERE numemp  = $numemp and year(fechapre) = year(now()) ";
                     $PrestamoAcum = $this->db->query($query_prestamos)->result()[0]->preemp;
                 }
 

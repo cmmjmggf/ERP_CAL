@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePago" language="groovy" pageWidth="1187" pageHeight="991" orientation="Landscape" columnWidth="1147" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="1.996500000000013"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.9230756500000195"/>
+	<property name="ireport.x" value="38"/>
+	<property name="ireport.y" value="48"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -17,9 +17,10 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.Control,  P.Estilo,  L.Clave AS CLAVE_LINEA, L.Descripcion AS LINEAT,
-A.Descripcion AS Esponja
-, P.Pares, P.EstatusProduccion AS Avance,
+		<![CDATA[select
+P.Control,  P.Estilo,  L.Clave AS CLAVE_LINEA, L.Descripcion AS LINEAT,
+P.Pares, P.EstatusProduccion AS Avance,
+(select Descripcion from articulos where clave = ft.Articulo) as Esponja,
 (CASE WHEN P.C1 = 0 THEN 0 ELSE P.C1 END) AS C1,
 (CASE WHEN P.C2 = 0 THEN 0 ELSE P.C2 END) AS C2,
 (CASE WHEN P.C3 = 0 THEN 0 ELSE P.C3 END) AS C3,
@@ -50,14 +51,15 @@ S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, S.T11, S.T12, S.T13
 P.Serie,
 CAST(P.Pares AS SIGNED) AS ParesCount,
 C.RazonS AS CLIENTE
-FROM pedidox as P
-INNER JOIN clientes AS C ON P.Cliente = C.Clave
-INNER JOIN fichatecnica AS FT ON FT.Estilo = P.Estilo AND FT.Color = P.Color AND FT.Pieza = '1030'
-INNER JOIN articulos A ON FT.Articulo = A.Clave
-INNER JOIN series S ON P.Serie = S.Clave
-INNER JOIN estilos AS E ON  FT.Estilo = E.Clave
-INNER JOIN lineas AS L ON  E.Linea = L.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 12 AND P.stsavan NOT IN(12,13) ORDER BY L.Descripcion ASC, A.Descripcion ASC;]]>
+from pedidox P
+join fichatecnica ft on ft.estilo = P.Estilo and ft.color = P.Color and ft.pieza = 1030
+join clientes AS C ON P.Cliente = C.Clave
+join series S ON P.Serie = S.Clave
+join estilos AS E ON  P.Estilo = E.Clave
+join lineas AS L ON  E.Linea = L.Clave
+WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}
+AND P.stsavan IN (42, 1, 10, 11, 2, 3, 33, 4, 40, 44, 5, 55, 6, 7, 8, 9)
+ORDER BY abs(P.Serie) ,abs(CLAVE_LINEA) ASC, P.Estilo ASC, abs(P.Color) ASC;]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -67,11 +69,11 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 	</field>
 	<field name="CLAVE_LINEA" class="java.lang.String"/>
 	<field name="LINEAT" class="java.lang.String"/>
-	<field name="Esponja" class="java.lang.String"/>
 	<field name="Pares" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Avance" class="java.lang.String"/>
+	<field name="Esponja" class="java.lang.String"/>
 	<field name="C1" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -353,7 +355,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 	<variable name="T22_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{T22}]]></variableExpression>
 	</variable>
-	<group name="Serie" keepTogether="true">
+	<group name="Serie" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{Serie}]]></groupExpression>
 		<groupHeader>
 			<band height="13">
@@ -675,14 +677,14 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textField>
 					<reportElement x="0" y="0" width="57" height="12" uuid="e26788de-f2ea-461c-8418-f276e52d2452"/>
 					<textElement textAlignment="Center">
-						<font size="8"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CLAVE_LINEA}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="57" y="0" width="465" height="12" uuid="140d3f13-c55d-478f-bf6c-2a8361824475"/>
 					<textElement>
-						<font size="8"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{LINEAT}]]></textFieldExpression>
 				</textField>
@@ -1049,7 +1051,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="269" y="0" width="253" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="55bba92c-e0cd-46f4-9c36-c0212639dfc1"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1264,14 +1266,14 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="419" y="0" width="103" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="4902f5ea-e44a-4684-bb28-ed8c26cc897f"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="SansSerif" size="9" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total pares]]></text>
 			</staticText>
 			<textField>
 				<reportElement mode="Transparent" x="522" y="0" width="41" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8df53e87-0cbf-4ad0-b83b-47314c1581d8"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{ParesCount_2}]]></textFieldExpression>
