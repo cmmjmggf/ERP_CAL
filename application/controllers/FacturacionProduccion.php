@@ -104,11 +104,11 @@ class FacturacionProduccion extends CI_Controller {
             switch (intval($this->input->get('TP'))) {
                 case 1:
                     print json_encode(
-                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD ORDER BY FD.numfac DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD WHERE FD.tp = {$this->input->get('TP')}  ORDER BY FD.numfac DESC LIMIT 1")->result());
                     break;
                 case 2:
                     print json_encode(
-                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = 2 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = {$this->input->get('TP')} AND CC.factura <> 4 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
                     break;
             }
         } catch (Exception $exc) {

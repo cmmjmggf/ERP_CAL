@@ -281,12 +281,13 @@ class Avance9 extends CI_Controller {
             $x = $this->input->get();
             $SPAN_100 = "<span class='font-weight-bold text-success'>100</span>";
             $SPAN_99 = "<span class='font-weight-bold text-info'>99</span>";
-            $SPAN_96 = "<span class='font-weight-bold text-info'>99</span>";
+            $SPAN_96 = "<span class='font-weight-bold' style='color: #ef1000 !important;'>96</span>";
             $this->db->select("FACN.ID, FACN.numeroempleado, FACN.maquila, "
                             . "FACN.control AS CONTROL, FACN.estilo AS ESTILO, "
                             . "(CASE "
                             . "WHEN FACN.numfrac = 100 THEN \"$SPAN_100\" "
                             . "WHEN FACN.numfrac = 99 THEN \"$SPAN_99\" "
+                            . "WHEN FACN.numfrac = 96 THEN \"$SPAN_96\" "
                             . "ELSE FACN.numfrac "
                             . "END) AS FRAC, "
                             . "FACN.preciofrac AS PRECIO, "
