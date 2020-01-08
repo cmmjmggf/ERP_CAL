@@ -76,7 +76,7 @@ class CancelaEntradasSalidas extends CI_Controller {
         try {
             $x = $this->input;
             $this->CancelaEntradasSalidas_model->onCancelarDoctos($x->post('DocMov'), $x->post('Maq'), $x->post('Sem'), $x->post('Ano'));
-            if (intval($x->post('Maq')) === 97) {
+            if (intval($x->post('Maq')) === 97 || intval($x->post('Maq')) === 98) {
                 $this->CancelaEntradasSalidas_model->onCancelarDoctosFabrica($x->post('DocMov'), $x->post('Maq'), $x->post('Sem'), $x->post('Ano'));
             }
         } catch (Exception $exc) {

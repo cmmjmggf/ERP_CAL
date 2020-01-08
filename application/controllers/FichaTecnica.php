@@ -265,7 +265,9 @@ class FichaTecnica extends CI_Controller {
             $PZA = $this->input->get('PZA');
             $MATERIAL = $this->input->get('MATERIAL');
             print json_encode(
-                            $this->db->query("SELECT COUNT(*) AS MATERIALES_A_SUPLIR FROM (SELECT FT.ID FROM fichatecnica AS FT INNER JOIN estilos AS E ON FT.Estilo = E.Clave  WHERE FT.Articulo = $MATERIAL AND FT.Pieza = $PZA AND E.Clave = $ESTILO GROUP BY FT.Estilo, FT.Color) AS MATERIALES_A_SUPLIR;")->result());
+                            $this->db->query("SELECT COUNT(*) AS MATERIALES_A_SUPLIR FROM "
+                                    . " (SELECT FT.ID FROM fichatecnica AS FT INNER JOIN estilos AS E ON FT.Estilo = E.Clave  "
+                                    . " WHERE FT.Articulo = $MATERIAL AND FT.Pieza = $PZA AND E.Clave = '$ESTILO' GROUP BY FT.Estilo, FT.Color) AS MATERIALES_A_SUPLIR;")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -319,10 +321,10 @@ class FichaTecnica extends CI_Controller {
 
     public function onSuplirConsumos() {
         try {
-            $ESTILO = $this->input->get('ESTILO');
-            $PZA = $this->input->get('PZA');
-            $MATERIAL = $this->input->get('MATERIAL');
-            $NUEVOCONSUMO = $this->input->get('NUEVOCONSUMO');
+            $ESTILO = $this->input->post('ESTILO');
+            $PZA = $this->input->post('PIEZA');
+            $MATERIAL = $this->input->post('MATERIAL');
+            $NUEVOCONSUMO = $this->input->post('NUEVOCONSUMO');
 
             $this->db->set('Consumo', $NUEVOCONSUMO)
                     ->where('Estilo', $ESTILO)

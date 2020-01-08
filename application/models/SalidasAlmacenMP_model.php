@@ -64,7 +64,7 @@ class SalidasAlmacenMP_model extends CI_Model {
 
     public function getDatosByArticulo($Mat, $Maq, $d1, $d2, $d3) {
         try {
-            $Maquila = ($Maq === '97') ? 1 : $Maq;
+            $Maquila = ($Maq === '97' || $Maq === '98') ? 1 : $Maq;
             $this->db->select("PM.Precio, U.Descripcion AS Unidad, M.grupo "
                             . "")
                     ->from("articulos AS M")

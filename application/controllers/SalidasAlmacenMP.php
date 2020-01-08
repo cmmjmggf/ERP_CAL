@@ -143,16 +143,16 @@ class SalidasAlmacenMP extends CI_Controller {
                 'Ano' => $x->post('Ano'),
                 'Maq' => '1', /* entrada de maquila 1 */
                 'Sem' => $x->post('Sem'),
-                'OrdenCompra' => '',
+                'OrdenCompra' => ($maq === 98) ? 98 : '',
                 'Subtotal' => $x->post('Subtotal'),
             );
 
 
-            if ($maq < 96 || $maq === 98) {
+            if ($maq < 96) {
                 $this->SalidasAlmacenMP_model->onAgregar($datos);
             }
 
-            if ($maq === 97) {
+            if ($maq === 97 || $maq === 98) {
                 $this->SalidasAlmacenMP_model->onAgregar($datos);
                 $this->SalidasAlmacenMP_model->onAgregarSubAlmacen($datosEntradaMovArtFabrica);
             }

@@ -1026,13 +1026,13 @@ class AuxReportesClientes extends CI_Controller {
 
 
         $Clientes = $this->getClientesReporteAntiguedad($Cte, $aCte, $Tp);
-        $Doctos = $this->getDoctosByClientesTpAntiguedad($Cte, $aCte, $Tp);
+        $Doctos = $this->getDoctosByClientesTpAntiguedad815($Cte, $aCte, $Tp);
         $Agentes = $this->getAgentesReporteAntiguedad($Cte, $aCte, $Tp);
 
 
         if (!empty($Agentes)) {
 
-            $pdf = new PDFAntiguedadCliente('L', 'mm', array(215.9, 279.4));
+            $pdf = new PDFAntiguedadCliente815('L', 'mm', array(215.9, 279.4));
             $pdf->Cliente = $Cte;
             $pdf->Acliente = $aCte;
 
@@ -1050,8 +1050,6 @@ class AuxReportesClientes extends CI_Controller {
             $GTOTAL_5 = 0;
             $GTOTAL_6 = 0;
             $GTOTAL_7 = 0;
-            $GTOTAL_8 = 0;
-            $GTOTAL_9 = 0;
             $GPares = 0;
 
 
@@ -1060,7 +1058,7 @@ class AuxReportesClientes extends CI_Controller {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetLineWidth(0.5);
-                $pdf->Cell(110, 5, utf8_decode('Agente: ' . $A->numagente . ' ' . $A->nomagente), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(98, 5, utf8_decode('Agente: ' . $A->numagente . ' ' . $A->nomagente), 'B'/* BORDE */, 1, 'L');
 
 
                 $TPA_IMPORTE = 0;
@@ -1074,8 +1072,6 @@ class AuxReportesClientes extends CI_Controller {
                 $TOTALA_5 = 0;
                 $TOTALA_6 = 0;
                 $TOTALA_7 = 0;
-                $TOTALA_8 = 0;
-                $TOTALA_9 = 0;
                 $ParesA = 0;
 
                 foreach ($Clientes as $key => $G) {
@@ -1099,8 +1095,6 @@ class AuxReportesClientes extends CI_Controller {
                         $TOTAL_5 = 0;
                         $TOTAL_6 = 0;
                         $TOTAL_7 = 0;
-                        $TOTAL_8 = 0;
-                        $TOTAL_9 = 0;
                         $Pares = 0;
                         foreach ($Doctos as $key => $D) {
 
@@ -1137,11 +1131,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->SIETE > 0) ? '$' . number_format($D->SIETE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->OCHO > 0) ? '$' . number_format($D->OCHO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                                $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                                $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'C');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
@@ -1159,8 +1149,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $TOTAL_5 += $D->CINCO;
                                 $TOTAL_6 += $D->SEIS;
                                 $TOTAL_7 += $D->SIETE;
-                                $TOTAL_8 += $D->OCHO;
-                                $TOTAL_9 += $D->NUEVE;
                                 $TOTALA_1 += $D->UNO;
                                 $TOTALA_2 += $D->DOS;
                                 $TOTALA_3 += $D->TRES;
@@ -1168,8 +1156,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $TOTALA_5 += $D->CINCO;
                                 $TOTALA_6 += $D->SEIS;
                                 $TOTALA_7 += $D->SIETE;
-                                $TOTALA_8 += $D->OCHO;
-                                $TOTALA_9 += $D->NUEVE;
                                 $GTOTAL_1 += $D->UNO;
                                 $GTOTAL_2 += $D->DOS;
                                 $GTOTAL_3 += $D->TRES;
@@ -1177,8 +1163,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $GTOTAL_5 += $D->CINCO;
                                 $GTOTAL_6 += $D->SEIS;
                                 $GTOTAL_7 += $D->SIETE;
-                                $GTOTAL_8 += $D->OCHO;
-                                $GTOTAL_9 += $D->NUEVE;
                                 $Pares += $D->pares;
                                 $ParesA += $D->pares;
                                 $GPares += $D->pares;
@@ -1210,11 +1194,7 @@ class AuxReportesClientes extends CI_Controller {
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($TOTAL_7 > 0) ? mb_strimwidth('$' . number_format($TOTAL_7, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($TOTAL_8 > 0) ? mb_strimwidth('$' . number_format($TOTAL_8, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
-                        $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($TOTAL_9 > 0) ? mb_strimwidth('$' . number_format($TOTAL_9, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
-                        $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, ($Pares > 0) ? $Pares : '', 0/* BORDE */, 1, 'R');
+                        $pdf->Cell(9, 3.5, ($Pares > 0) ? $Pares : '', 0/* BORDE */, 1, 'C');
                     }
                 }
                 $pdf->SetX(5);
@@ -1236,9 +1216,7 @@ class AuxReportesClientes extends CI_Controller {
                     ($TOTALA_5 > 0) ? mb_strimwidth('$' . number_format($TOTALA_5, 2, ".", ","), 0, 14, "") : '',
                     ($TOTALA_6 > 0) ? mb_strimwidth('$' . number_format($TOTALA_6, 2, ".", ","), 0, 14, "") : '',
                     ($TOTALA_7 > 0) ? mb_strimwidth('$' . number_format($TOTALA_7, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTALA_8 > 0) ? mb_strimwidth('$' . number_format($TOTALA_8, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTALA_9 > 0) ? mb_strimwidth('$' . number_format($TOTALA_9, 2, ".", ","), 0, 14, "") : '',
-                    ($ParesA > 0) ? $ParesA : '',
+                    ($ParesA > 0) ? $ParesA : ''
                 ));
                 $pdf->SetLineWidth(0.8);
                 $pdf->Line(5, $pdf->GetY(), 274.9, $pdf->GetY());
@@ -1266,9 +1244,7 @@ class AuxReportesClientes extends CI_Controller {
                 ($GTOTAL_5 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_5, 2, ".", ","), 0, 14, "") : '',
                 ($GTOTAL_6 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_6, 2, ".", ","), 0, 14, "") : '',
                 ($GTOTAL_7 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_7, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_8 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_8, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_9 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_9, 2, ".", ","), 0, 14, "") : '',
-                ($GPares > 0) ? $GPares : '',
+                ($GPares > 0) ? $GPares : ''
             ));
 
 
@@ -1297,13 +1273,13 @@ class AuxReportesClientes extends CI_Controller {
 
 
         $Clientes = $this->getClientesReporteAntiguedad($Cte, $aCte, $Tp);
-        $Doctos = $this->getDoctosByClientesTpAntiguedad($Cte, $aCte, $Tp);
+        $Doctos = $this->getDoctosByClientesTpAntiguedad815($Cte, $aCte, $Tp);
         $Agentes = $this->getAgentesReporteAntiguedad($Cte, $aCte, $Tp);
 
 
         if (!empty($Agentes)) {
 
-            $pdf = new PDFAntiguedadCliente('L', 'mm', array(215.9, 279.4));
+            $pdf = new PDFAntiguedadCliente815('L', 'mm', array(215.9, 279.4));
             $pdf->Cliente = $Cte;
             $pdf->Acliente = $aCte;
 
@@ -1321,8 +1297,6 @@ class AuxReportesClientes extends CI_Controller {
             $GTOTAL_5 = 0;
             $GTOTAL_6 = 0;
             $GTOTAL_7 = 0;
-            $GTOTAL_8 = 0;
-            $GTOTAL_9 = 0;
             $GPares = 0;
 
 
@@ -1331,7 +1305,7 @@ class AuxReportesClientes extends CI_Controller {
                 $pdf->SetX(5);
                 $pdf->SetFont('Calibri', 'B', 8);
                 $pdf->SetLineWidth(0.5);
-                $pdf->Cell(110, 5, utf8_decode('Agente: ' . $A->numagente . ' ' . $A->nomagente), 'B'/* BORDE */, 1, 'L');
+                $pdf->Cell(98, 5, utf8_decode('Agente: ' . $A->numagente . ' ' . $A->nomagente), 'B'/* BORDE */, 1, 'L');
 
 
                 $TPA_IMPORTE = 0;
@@ -1345,8 +1319,6 @@ class AuxReportesClientes extends CI_Controller {
                 $TOTALA_5 = 0;
                 $TOTALA_6 = 0;
                 $TOTALA_7 = 0;
-                $TOTALA_8 = 0;
-                $TOTALA_9 = 0;
                 $ParesA = 0;
 
                 foreach ($Clientes as $key => $G) {
@@ -1370,8 +1342,6 @@ class AuxReportesClientes extends CI_Controller {
                         $TOTAL_5 = 0;
                         $TOTAL_6 = 0;
                         $TOTAL_7 = 0;
-                        $TOTAL_8 = 0;
-                        $TOTAL_9 = 0;
                         $Pares = 0;
                         foreach ($Doctos as $key => $D) {
 
@@ -1408,11 +1378,7 @@ class AuxReportesClientes extends CI_Controller {
                                 $pdf->SetX($pdf->GetX());
                                 $pdf->Cell(18, 3.5, ($D->SIETE > 0) ? '$' . number_format($D->SIETE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
                                 $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->OCHO > 0) ? '$' . number_format($D->OCHO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                                $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
-                                $pdf->SetX($pdf->GetX());
-                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'R');
+                                $pdf->Cell(9, 3.5, ($D->pares > 0) ? $D->pares : '', 'B'/* BORDE */, 1, 'C');
 
                                 $TP_IMPORTE += $D->ImporteDoc;
                                 $TP_PAGOS += $D->Pagos_Doc;
@@ -1430,8 +1396,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $TOTAL_5 += $D->CINCO;
                                 $TOTAL_6 += $D->SEIS;
                                 $TOTAL_7 += $D->SIETE;
-                                $TOTAL_8 += $D->OCHO;
-                                $TOTAL_9 += $D->NUEVE;
                                 $TOTALA_1 += $D->UNO;
                                 $TOTALA_2 += $D->DOS;
                                 $TOTALA_3 += $D->TRES;
@@ -1439,8 +1403,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $TOTALA_5 += $D->CINCO;
                                 $TOTALA_6 += $D->SEIS;
                                 $TOTALA_7 += $D->SIETE;
-                                $TOTALA_8 += $D->OCHO;
-                                $TOTALA_9 += $D->NUEVE;
                                 $GTOTAL_1 += $D->UNO;
                                 $GTOTAL_2 += $D->DOS;
                                 $GTOTAL_3 += $D->TRES;
@@ -1448,8 +1410,6 @@ class AuxReportesClientes extends CI_Controller {
                                 $GTOTAL_5 += $D->CINCO;
                                 $GTOTAL_6 += $D->SEIS;
                                 $GTOTAL_7 += $D->SIETE;
-                                $GTOTAL_8 += $D->OCHO;
-                                $GTOTAL_9 += $D->NUEVE;
                                 $Pares += $D->pares;
                                 $ParesA += $D->pares;
                                 $GPares += $D->pares;
@@ -1481,11 +1441,7 @@ class AuxReportesClientes extends CI_Controller {
                         $pdf->SetX($pdf->GetX());
                         $pdf->Cell(18, 3.5, ($TOTAL_7 > 0) ? mb_strimwidth('$' . number_format($TOTAL_7, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
                         $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($TOTAL_8 > 0) ? mb_strimwidth('$' . number_format($TOTAL_8, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
-                        $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(18, 3.5, ($TOTAL_9 > 0) ? mb_strimwidth('$' . number_format($TOTAL_9, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
-                        $pdf->SetX($pdf->GetX());
-                        $pdf->Cell(9, 3.5, ($Pares > 0) ? $Pares : '', 0/* BORDE */, 1, 'R');
+                        $pdf->Cell(9, 3.5, ($Pares > 0) ? $Pares : '', 0/* BORDE */, 1, 'C');
                     }
                 }
                 $pdf->SetX(5);
@@ -1507,8 +1463,6 @@ class AuxReportesClientes extends CI_Controller {
                     ($TOTALA_5 > 0) ? mb_strimwidth('$' . number_format($TOTALA_5, 2, ".", ","), 0, 14, "") : '',
                     ($TOTALA_6 > 0) ? mb_strimwidth('$' . number_format($TOTALA_6, 2, ".", ","), 0, 14, "") : '',
                     ($TOTALA_7 > 0) ? mb_strimwidth('$' . number_format($TOTALA_7, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTALA_8 > 0) ? mb_strimwidth('$' . number_format($TOTALA_8, 2, ".", ","), 0, 14, "") : '',
-                    ($TOTALA_9 > 0) ? mb_strimwidth('$' . number_format($TOTALA_9, 2, ".", ","), 0, 14, "") : '',
                     ($ParesA > 0) ? $ParesA : '',
                 ));
                 $pdf->SetLineWidth(0.8);
@@ -1537,10 +1491,9 @@ class AuxReportesClientes extends CI_Controller {
                 ($GTOTAL_5 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_5, 2, ".", ","), 0, 14, "") : '',
                 ($GTOTAL_6 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_6, 2, ".", ","), 0, 14, "") : '',
                 ($GTOTAL_7 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_7, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_8 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_8, 2, ".", ","), 0, 14, "") : '',
-                ($GTOTAL_9 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_9, 2, ".", ","), 0, 14, "") : '',
                 ($GPares > 0) ? $GPares : '',
             ));
+
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Clientes/Tp2';
@@ -1754,6 +1707,76 @@ class AuxReportesClientes extends CI_Controller {
 
                                     CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 60
                                             THEN CC.saldo END AS 'NUEVE'
+                                        FROM cartcliente AS CC
+                                        JOIN clientes AS C ON C.Clave =  CC.cliente
+                                        join agentes Ag on Ag.Clave = C.Agente
+                                        WHERE CC.status < 3
+                                        and CC.cliente BETWEEN $cte AND $acte
+                                        and CC.tipo = $tp ";
+
+            if ($agt !== '') {
+                $query .= " and C.Agente = $agt order by CC.fecha asc, CC.remicion asc";
+            } else {
+                if ($tipo === '1') {
+                    $query .= " order by ifnull(C.RazonS,'AAA') asc, CC.fecha asc, CC.remicion asc ";
+                } else if ($tipo === '2') {
+                    $query .= " order by CC.fecha asc, CC.remicion asc ";
+                } else if ($tipo === '3') {
+                    $query .= " order by CC.fecha asc, CC.remicion asc ";
+                }
+            }
+
+
+            return $this->db->query($query)->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getDoctosByClientesTpAntiguedad815($cte, $acte, $tp) {
+        try {
+            $agt = $this->input->post('AgenteEdoCtaOchoDias');
+            $tipo = $this->input->post('OrdenEdocta');
+            $query = "SELECT CAST(CC.cliente AS SIGNED ) AS ClaveNum,
+                                    Ag.Clave as numagente,
+                                    Ag.Nombre as nomagente,
+                                    CC.tipo as Tp,
+                                    CC.remicion as Doc,
+                                    date_format(CC.fecha,'%d/%m/%y') as FechaDoc,
+                                    date_format(date_add(CC.fecha,INTERVAL C.DiasPlazo DAY),'%d/%m/%y') as FechaVen,
+                                    CC.importe as ImporteDoc,
+                                    CC.pagos as Pagos_Doc,
+                                    CC.saldo as Saldo_Doc,
+                                    IFNULL(DATEDIFF(CURDATE(), CC.fecha),'') AS Dias,
+                                    (select sum(pareped) from facturacion where tp = CC.tipo and cliente = CC.cliente and factura = CC.remicion)as pares,
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) >= 0
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 16
+                                            THEN CC.saldo END AS 'UNO',
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 15
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 31
+                                            THEN CC.saldo END AS 'DOS',
+
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 30
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 38
+                                            THEN CC.saldo END AS 'TRES',
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 37
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 46
+                                            THEN CC.saldo END AS 'CUATRO',
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 45
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 61
+                                            THEN CC.saldo END AS 'CINCO',
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 60
+                                                            AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 91
+                                            THEN CC.saldo END AS 'SEIS',
+
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 90
+                                            THEN CC.saldo END AS 'SIETE'
                                         FROM cartcliente AS CC
                                         JOIN clientes AS C ON C.Clave =  CC.cliente
                                         join agentes Ag on Ag.Clave = C.Agente
