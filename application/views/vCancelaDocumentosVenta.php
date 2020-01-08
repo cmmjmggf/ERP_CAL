@@ -78,20 +78,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-1" >
-                        <label>N.C.</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" id="NC" name="NC" readonly="" required="">
-                    </div>
-
-                    <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-2" >
-                        <label></label>
-                        <div class="custom-control custom-checkbox  ">
-                            <input type="checkbox" class="custom-control-input" id="sTimbradaSat">
-                            <label class="custom-control-label text-info labelCheck" for="sTimbradaSat">Factura No Timbrada</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-8 col-sm-7 col-md-7 col-lg-4 col-xl-4" >
                         <label>Concepto</label>
                         <input type="text" class="form-control form-control-sm " id="Concepto" name="Concepto" maxlength="50" required="" >
@@ -193,8 +179,6 @@
                         var frm = new FormData(pnlTablero.find("#frmCapturaCancelaDctoVta")[0]);
                         var tipo = $("input[name='CancelaDocsVentas']:checked").attr('tipo');
                         frm.append('Tipo', tipo);
-                        var timbrada = pnlTablero.find("#sTimbradaSat")[0].checked ? '1' : '0';
-                        frm.append('Timbrada', timbrada);
                         $.ajax({
                             url: master_url + 'onCancelarDocto',
                             type: "POST",
@@ -208,7 +192,6 @@
                                 swal('ATENCIÓN', 'EL DOCUMENTO YA FUE CANCELADO', 'warning').then((value) => {
                                     pnlTablero.find('#Doc').val('');
                                     pnlTablero.find("#Tp").val('');
-                                    pnlTablero.find("#NC").val('');
                                     pnlTablero.find("#Concepto").val('');
                                     pnlTablero.find("#sDoc")[0].selectize.clear(true);
                                     pnlTablero.find("#sDoc")[0].selectize.focus();
@@ -304,7 +287,6 @@
                     swal('ATENCIÓN', 'DOCUMENTO CON PAGOS, IMPOSIBLE MODIFICAR', 'warning').then((value) => {
                         pnlTablero.find('#Doc').val('');
                         pnlTablero.find("#Tp").val('');
-                        pnlTablero.find("#NC").val('');
                         pnlTablero.find("#sDoc")[0].selectize.clear(true);
                         pnlTablero.find("#sDoc")[0].selectize.focus();
                         pnlTablero.find("#sDoc")[0].selectize.open();
@@ -316,30 +298,12 @@
                         swal('ATENCIÓN', 'DOCUMENTO FUERA DEL MES, IMPOSIBLE CANCELAR', 'warning').then((value) => {
                             pnlTablero.find('#Doc').val('');
                             pnlTablero.find("#Tp").val('');
-                            pnlTablero.find("#NC").val('');
                             pnlTablero.find("#sDoc")[0].selectize.clear(true);
                             pnlTablero.find("#sDoc")[0].selectize.focus();
                             pnlTablero.find("#sDoc")[0].selectize.open();
                         });
                         return;
-                    } else {//Si los meses son iguales procede la cancelación y agregar el folio de la NC
-                        $.getJSON(master_url + 'getFolioNCFiscal').done(function (data) {
-                            if (data.length > 0) {
-                                pnlTablero.find('#NC').val(data[0].nc);
-                            } else {
-                                pnlTablero.find('#NC').val(1);
-                            }
-                        });
                     }
-                }
-                if (parseInt(tipo) === 2) {
-                    $.getJSON(master_url + 'getFolioNC').done(function (data) {
-                        if (data.length > 0) {
-                            pnlTablero.find('#NC').val(data[0].nc);
-                        } else {
-                            pnlTablero.find('#NC').val(1);
-                        }
-                    });
                 }
                 //Verifica si tiene pagos anticipados
                 $.getJSON(master_url + 'onVerificarExistenPagos', {
@@ -351,7 +315,6 @@
                         swal('ATENCIÓN', 'NO ES POSIBLE CANCELAR EL DOCUMENTO, TIENE PAGOS ANTICIPADOS', 'warning').then((value) => {
                             pnlTablero.find('#Doc').val('');
                             pnlTablero.find("#Tp").val('');
-                            pnlTablero.find("#NC").val('');
                             pnlTablero.find("#sDoc")[0].selectize.clear(true);
                             pnlTablero.find("#sDoc")[0].selectize.focus();
                             pnlTablero.find("#sDoc")[0].selectize.open();
