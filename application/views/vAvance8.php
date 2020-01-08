@@ -22,7 +22,16 @@
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
-                <h4>FRACCIONES DE ESTE EMPLEADO</h4>
+                <div class="row">
+                    <div class="col-2">
+                    </div>
+                    <div class="col-8">
+                        <h6>FRACCIONES DE ESTE EMPLEADO</h6>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                </div>
+
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -39,7 +48,33 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table> 
+                <div class="row" align="center">
+                    <div class="col-2">
+                        <label>Año</label>
+                        <input type="text" id="AnoFiltro" name="AnoFiltro" maxlength="4" class="form-control form-control-sm numbersOnly selectNotEnter noBorders">
+                    </div> 
+                    <div class="col-2">
+                        <label>Semana</label>
+                        <input type="text" id="SemanaFiltro" name="SemanaFiltro" maxlength="2" class="form-control form-control-sm  numbersOnly selectNotEnter noBorders">
+                    </div> 
+                    <div class="col-2">
+                        <label>Fraccion</label>
+                        <input type="text" id="FraccionFiltro" name="FraccionFiltro" maxlength="4" class="form-control numbersOnly form-control-sm selectNotEnter noBorders">
+                    </div>
+                </div>
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -414,15 +449,17 @@
 
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
-
+                pnlTablero.find("#SemanaFiltro").val('');
+                pnlTablero.find("#FraccionFiltro").val('');
                 getInfoXControl(onAgregarAvance);
-            } else {
-                Estilo.val('');
-                Pares.val('');
-                SigAvance.val('');
-                DiasPagoDeNomina.find("input").val(0);
-                DiasPagoDeNomina.find("#txtTotal").val(0);
             }
+//            else {
+//                Estilo.val('');
+//                Pares.val('');
+//                SigAvance.val('');
+//                DiasPagoDeNomina.find("input").val(0);
+//                DiasPagoDeNomina.find("#txtTotal").val(0);
+//            }
         });
 
         pnlTablero.find("input[type='checkbox']").change(function () {
@@ -463,6 +500,12 @@
                 $.post('<?php print base_url('Avance8/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()})
                         .done(function (data) {
                             var dt = JSON.parse(data);
+                            if (dt.NOEXISTE !== undefined) {
+                                onCampoInvalido(pnlTablero, 'ESTE EMPLEADO NO ES APTO PARA DAR AVANCES O ESTA DADO DE BAJA', function () {
+                                    NumeroDeEmpleado.focus().select();
+                                });
+                                return;
+                            }
                             if (dt.length > 0) {
                                 var r = dt[0];
                                 GeneraAvance.val(r.GENERA_AVANCE);
@@ -543,7 +586,28 @@
             "bSort": true,
             "scrollY": "490px",
             "scrollX": true,
-            createdRow: function (row, data, dataIndex) {
+            initComplete: function () {
+                pnlTablero.find("#AnoFiltro").val(<?php print Date('Y'); ?>);
+            },
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var r = 0, prs = 0;
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+                $.each(api.rows().data(), function (k, v) {
+                    r += parseFloat(intVal(v.SUBTOTAL));
+                    prs += parseInt(v.PARES);
+                });
+
+                $(api.column(5).footer()).html(
+                        '<span class="font-weight-bold">' + prs + ' pares</span>');
+                $(api.column(7).footer()).html(
+                        '<span class="font-weight-bold">$' +
+                        $.number(r, 2, '.', ',') + '</span>');
             }
         };
         xoptions.ajax = {
@@ -551,12 +615,43 @@
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
-                d.SEMANA = Semana.val() ? Semana.val() : '';
+                d.ANO_FILTRO = pnlTablero.find("#AnoFiltro").val() ? pnlTablero.find("#AnoFiltro").val() : '';
+                d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : (Semana.val() ? Semana.val() : '');
+                d.FRACCION_FILTRO = pnlTablero.find("#FraccionFiltro").val() ? pnlTablero.find("#FraccionFiltro").val() : '';
                 d.FRACCIONES = "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606";
             }
         };
         $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
+
+        pnlTablero.find("#AnoFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('Buscando...');
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#AnoFiltro").focus().select();
+                    onCloseOverlay();
+                });
+            }
+        });
+        
+        pnlTablero.find("#SemanaFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('Buscando...');
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#SemanaFiltro").focus().select();
+                    onCloseOverlay();
+                });
+            }
+        });
+
+        pnlTablero.find("#FraccionFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#FraccionFiltro").focus().select();
+                    onCloseOverlay();
+                });
+            }
+        });
     });
 
     function onAgregarAvance() {
@@ -893,7 +988,9 @@
     }
     function getPagosXEmpleadoXSemana() {
         $.getJSON('<?php print base_url('Avance8/getPagosXEmpleadoXSemana'); ?>',
-                {EMPLEADO: NumeroDeEmpleado.val(), SEMANA: Semana.val(), FRACCIONES: "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606"}).done(function (a) {
+                {EMPLEADO: NumeroDeEmpleado.val(),
+                    SEMANA: Semana.val() ? Semana.val() : (pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : ''),
+                    FRACCIONES: "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606"}).done(function (a) {
             if (a.length > 0) {
                 var b = a[0];
                 var tt = 0;

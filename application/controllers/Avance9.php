@@ -290,18 +290,32 @@ class Avance9 extends CI_Controller {
             switch ($url->segment(2)) {
                 case 1:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "96,99,100"));
-                    $this->db->where("FACN.numfrac IN(80,96,99,100,102,60,103,299,300) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    if ($x['SEMANA_FILTRO'] !== '') {
+                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,60,103,299,300)", null, false);
+                    } else {
+                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,60,103,299,300) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    }
                     break;
                 case 2:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"));
-                    $this->db->where("FACN.numfrac IN(51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    if ($x['SEMANA_FILTRO'] !== '') {
+                        $this->db->where("FACN.numfrac IN(51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337)", null, false);
+                    } else {
+                        $this->db->where("FACN.numfrac IN(51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+                    }
                     break;
             }
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('FACN.numeroempleado', $x['EMPLEADO']);
             }
-            if ($x['SEMANA_FILTRO'] !== '') {
+            if ($x['SEMANA'] !== '' && $x['SEMANA_FILTRO'] === '') {
+                $this->db->where('FACN.semana', $x['SEMANA']);
+            }
+            if ($x['SEMANA_FILTRO'] !== '' && $x['SEMANA'] !== '') {
                 $this->db->where('FACN.semana', $x['SEMANA_FILTRO']);
+            }
+            if ($x['ANO_FILTRO'] !== '') {
+                $this->db->where('FACN.anio', $x['ANO_FILTRO']);
             }
             if ($x['FRACCION_FILTRO'] !== '') {
                 $this->db->where('FACN.numfrac', $x['FRACCION_FILTRO']);

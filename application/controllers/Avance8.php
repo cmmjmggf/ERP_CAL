@@ -193,7 +193,13 @@ class Avance8 extends CI_Controller {
 
             $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60, 120, 140, 70, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
+            $EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
+            if ($EXISTE[0]->EXISTE <= 0) {
+                print json_encode(array("NOEXISTE" => 0, "EMPLEADO" => $xXx["EMPLEADO"]));
+                exit(0);
+            }
             $ES_SUPERVISOR = $this->db->query("SELECT E.DepartamentoFisico AS DEPTO FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
+
             $this->db->select("CONCAT(E.PrimerNombre,' ',"
                             . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
                             . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
@@ -230,8 +236,14 @@ class Avance8 extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }
-            if ($x['SEMANA'] !== '') {
-                $this->db->where('F.semana', $x['SEMANA']);
+            if ($x['ANO_FILTRO'] !== '') {
+                $this->db->where('FACN.anio', $x['ANO_FILTRO']);
+            }
+            if ($x['SEMANA_FILTRO'] !== '') {
+                $this->db->where('F.semana', $x['SEMANA_FILTRO']);
+            }
+            if ($x['FRACCION_FILTRO'] !== '') {
+                $this->db->where('F.numfrac', $x['FRACCION_FILTRO']);
             }
             $this->db->order_by('ABS(F.semana)', 'DESC');
             if ($x['EMPLEADO'] === '') {

@@ -24,18 +24,9 @@
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                 <div class="row justify-content-center" align="center">
-                    <div class="col-2">
-                        <label>Semana</label>
-                        <input type="text" id="SemanaFiltro" name="SemanaFiltro" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-8">
-                        <span onclick="onActualizarAvances();" class="fa fa-retweet fa-lg text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
-                        <h6> FRACCIONES DE ESTE EMPLEADO</h6>
-                    </div>
-                    <div class="col-2">
-                        <label>Fraccion</label>
-                        <input type="text" id="FraccionFiltro" name="FraccionFiltro" class="form-control form-control-sm">
-                    </div>
+                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-lg text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
+                    <h6> FRACCIONES DE ESTE EMPLEADO</h6>
+
                 </div>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
@@ -68,6 +59,20 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div class="row" align="center">
+                    <div class="col-2">
+                        <label>Año</label>
+                        <input type="text" id="AnoFiltro" name="AnoFiltro" maxlength="4" class="form-control form-control-sm numbersOnly selectNotEnter noBorders">
+                    </div> 
+                    <div class="col-2">
+                        <label>Semana</label>
+                        <input type="text" id="SemanaFiltro" name="SemanaFiltro" maxlength="2" class="form-control form-control-sm  numbersOnly selectNotEnter noBorders">
+                    </div> 
+                    <div class="col-2">
+                        <label>Fraccion</label>
+                        <input type="text" id="FraccionFiltro" name="FraccionFiltro" maxlength="4" class="form-control numbersOnly form-control-sm selectNotEnter noBorders">
+                    </div>
+                </div>
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -239,6 +244,8 @@
 
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
+                pnlTablero.find("#SemanaFiltro").val('');
+                pnlTablero.find("#FraccionFiltro").val('');
                 if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
                     console.log('avance 1');
                     onAgregarAvance(true);
@@ -262,15 +269,33 @@
             }
         });
 
+        pnlTablero.find("#AnoFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('Buscando...');
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#AnoFiltro").focus().select();
+                    onCloseOverlay();
+                });
+            }
+        });
+
         pnlTablero.find("#SemanaFiltro").on('keydown', function (e) {
             if (e.keyCode === 13) {
-                Avance.ajax.reload();
+                onOpenOverlay('Buscando...');
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#SemanaFiltro").focus().select();
+                    onCloseOverlay();
+                });
             }
         });
 
         pnlTablero.find("#FraccionFiltro").on('keydown', function (e) {
             if (e.keyCode === 13) {
-                Avance.ajax.reload();
+                onOpenOverlay('Buscando...');
+                Avance.ajax.reload(function () {
+                    pnlTablero.find("#FraccionFiltro").focus().select();
+                    onCloseOverlay();
+                });
             }
         });
 
@@ -351,39 +376,29 @@
             "aaSorting": [
                 [0, 'desc']
             ],
-            createdRow: function (row, data, dataIndex) {
+            initComplete: function () {
+                pnlTablero.find("#AnoFiltro").val(<?php print Date('Y'); ?>);
             },
-            "footerCallback": function (row, data, start, end, display) {
-                var api = this.api(), data;
 
-                // Remove the formatting to get integer data for summation
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var r = 0, prs = 0;
                 var intVal = function (i) {
                     return typeof i === 'string' ?
                             i.replace(/[\$,]/g, '') * 1 :
                             typeof i === 'number' ?
                             i : 0;
                 };
+                $.each(api.rows().data(), function (k, v) {
+                    r += parseFloat(intVal(v.SUBTOTAL));
+                    prs += parseInt(v.PARES);
+                });
 
-                // Total over all pages
-                total = api
-                        .column(7)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                // Total over this page
-                pageTotal = api
-                        .column(7, {page: 'current'})
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                // Update footer
+                $(api.column(5).footer()).html(
+                        '<span class="font-weight-bold">' + prs + ' pares</span>');
                 $(api.column(7).footer()).html(
-                        '$' + $.number(pageTotal, 2, '.', ',') + ' ( $' + $.number(total, 2, '.', ',') + ' total)'
-                        );
+                        '<span class="font-weight-bold">$' +
+                        $.number(r, 2, '.', ',') + '</span>');
             }
         };
         /*'Avance9/getFraccionesPagoNomina/$1'*/
@@ -392,7 +407,9 @@
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
-                d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : (Semana.val() ? Semana.val() : '');
+                d.SEMANA = Semana.val() ? Semana.val() : '';
+                d.ANO_FILTRO = pnlTablero.find("#AnoFiltro").val() ? pnlTablero.find("#AnoFiltro").val() : '';
+                d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : '';
                 d.FRACCION_FILTRO = pnlTablero.find("#FraccionFiltro").val() ? pnlTablero.find("#FraccionFiltro").val() : '';
                 d.FRACCIONES = "96,99,100,102";
             }
