@@ -556,8 +556,7 @@ P.Maquila AS MAQUILA
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 
-                    && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
                     'FechaAProduccion' => Date('d/m/Y'),
@@ -599,18 +598,18 @@ P.Maquila AS MAQUILA
 //                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE.", $this->session);
 //                exit(0);
 //            }
-            if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 996 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 994 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 995 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 999 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 998 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1001 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1002 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1000 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 903 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 902 || 
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 901 || 
+            if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 996 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 994 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 995 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 999 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 998 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1001 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1002 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1000 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 903 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 902 ||
+                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 901 ||
                     $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 900) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $this->db->set('EstatusProduccion', 'PESPUNTE')
@@ -627,6 +626,30 @@ P.Maquila AS MAQUILA
             }
             /* 55 ENSUELADO */
             /* 55 ENSUELADO Y STSAVAN 5 PESPUNTE */
+
+            if (
+                    intval($xXx['EMPLEADO']) === 899 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 995 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 994 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 996 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 997 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 998 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 999 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 1000 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 1001 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 1002 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 900 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 903 && $frac === 300 ||
+                    intval($xXx['EMPLEADO']) === 904 && $frac === 300) {
+                $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
+                if (intval($check_fraccion[0]->EXISTE) === 0) {
+                    $this->onPagarFraccionSinAvance($xXx, $frac);
+                }
+                exit(0);
+            }
+
             if ($depto === 55 && $depto_actual === 5 && $frac === 300 ||
                     $depto === 55 && $depto_actual === 5 && $frac === 303 ||
                     $depto === 55 && $depto_actual === 5 && $frac === 298 ||
@@ -685,6 +708,8 @@ P.Maquila AS MAQUILA
                             $this->onPagarFraccionSinAvance($xXx, $frac);
                             break;
                     }
+                } else {
+                    $this->onPagarFraccionSinAvance($xXx, $frac);
                 }
                 exit(0);
             }
