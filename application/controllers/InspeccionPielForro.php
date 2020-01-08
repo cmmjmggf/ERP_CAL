@@ -77,7 +77,7 @@ class InspeccionPielForro extends CI_Controller {
                 'Segunda' => $x->post('Segunda'),
                 'Tercera' => $x->post('Tercera'),
                 'Cuarta' => $x->post('Cuarta'),
-                'FechaMov' => Date('d/m/Y H:i:s'),
+                'FechaMov' => Date('d/m/Y'),
                 'Estatus' => 'BORRADOR'
             );
             //AGREGA EN NOTAS DE CREDITO

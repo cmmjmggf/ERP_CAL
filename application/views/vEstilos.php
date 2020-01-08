@@ -35,7 +35,7 @@
 </div>
 <div class="card m-3 d-none animated fadeIn" id="pnlDatos">
     <div class="card-body text-dark">
-        <form id="frmNuevo">
+        <form id="frmNuevoEstilo">
             <fieldset>
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 float-left">
@@ -332,8 +332,8 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        handleEnter();
-
+        handleEnterDiv(pnlDatos);
+        handleEnterDiv(pnlTablero);
         validacionSelectPorContenedor(pnlDatos);
         setFocusSelectToSelectOnChange('#Linea', '#Horma', pnlDatos);
         setFocusSelectToSelectOnChange('#Horma', '#Genero', pnlDatos);
@@ -416,7 +416,7 @@
             if (foto) {
                 isValid('pnlDatos');
                 if (valido) {
-                    var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                    var frm = new FormData(pnlDatos.find("#frmNuevoEstilo")[0]);
                     if (!nuevo) {
                         $.ajax({
                             url: master_url + 'onModificar',
@@ -530,6 +530,28 @@
         btnCancelar.click(function () {
             pnlTablero.removeClass("d-none");
             pnlDatos.addClass("d-none");
+            $('#tblEstilos_filter input[type=search]').focus().select();
+        });
+
+        pnlTablero.find("#tblEstilos_filter").find('input[type="search"]').on('keydown', function (e) {
+            if ($(this).val() && e.keyCode === 13) {
+                getInfoEstilo($(this).val());
+            }
+        });
+
+        tblEstilos.find('tbody').on('click', 'tr', function () {
+            var dtm = Estilos.row(this).data();
+            var estilo = parseInt(dtm.ID);
+            getInfoEstilo(estilo);
+        });
+
+        Estilos.columns().every(function () {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
         });
     });
 
@@ -590,18 +612,19 @@
         });
 
         $('#tblEstilos_filter input[type=search]').focus();
+    }
+    function getInfoEstilo(temp) {
+        HoldOn.open({
+            theme: 'sk-cube',
+            message: 'CARGANDO...'
+        });
+        nuevo = false;
+        tblEstilos.find("tbody tr").removeClass("success");
+        $(this).addClass("success");
 
-        tblEstilos.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({
-                theme: 'sk-cube',
-                message: 'CARGANDO...'
-            });
-            nuevo = false;
-            tblEstilos.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = Estilos.row(this).data();
-            temp = parseInt(dtm.ID);
-            $.getJSON(master_url + 'getEstiloByID', {ID: temp}).done(function (data) {
+
+        $.getJSON(master_url + 'getEstiloByID', {ID: temp}).done(function (data) {
+            if (data.length > 0) {
                 var dtm = data[0];
                 pnlDatos.find("input").val("");
                 $.each(pnlDatos.find("select"), function (k, v) {
@@ -651,27 +674,15 @@
                 pnlDatos.find("#Clave").addClass('disabledForms');
                 pnlDatos.find("#Descripcion").focus().select();
                 pnlDatos.find('#dFechaBaja').removeClass('d-none');
+            }
 
 
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
 
-            }).always(function () {
-                HoldOn.close();
-            });
+        }).always(function () {
+            HoldOn.close();
         });
-
-        Estilos.columns().every(function () {
-            var that = this;
-            $('input', this.footer()).on('keyup change', function () {
-                if (that.search() !== this.value) {
-                    that.search(this.value).draw();
-                }
-            });
-        });
-
-
-
     }
     function getTemporadas() {
         $.ajax({

@@ -39,16 +39,19 @@
                             <th>Tp</th>
                             <th>O.C.</th>
                             <th>Prov</th>
-                            <th>Fecha</th>
+                            <th>Fec</th>
+                            <th>Fec-Ent</th>
+                            <th>Fec-Fac</th>
                             <th>Artículo</th>
-                            <th>Cantidad</th>
-                            <th>Recibida</th>
+                            <th>Cant</th>
+                            <th>Recibi</th>
                             <th>Precio</th>
-                            <th>SubTotal</th>
+                            <th>Subt</th>
                             <th>Sem</th>
                             <th>Maq</th>
-                            <th>Grupo</th>
+                            <th>Gpo</th>
                             <th>ID</th>
+                            <th>Sts</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -212,6 +215,8 @@
                 {"data": "Folio"},
                 {"data": "Proveedor"},
                 {"data": "FechaOrden"},
+                {"data": "FechaEntrega"},
+                {"data": "FechaFactura"},
                 {"data": "Articulo"},
                 {"data": "Cantidad"},
                 {"data": "CantidadRecibida"},
@@ -220,7 +225,8 @@
                 {"data": "Sem"},
                 {"data": "Maq"},
                 {"data": "Grupo"},
-                {"data": "ID"}
+                {"data": "ID"},
+                {"data": "Estatus"}
 
             ],
 
@@ -246,19 +252,19 @@
                     "searchable": true
                 },
                 {
-                    "targets": [10],
+                    "targets": [12],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
                 },
                 {
-                    "targets": [11],
+                    "targets": [13],
                     "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
                 },
                 {
-                    "targets": [15],
+                    "targets": [17],
                     "visible": false,
                     "searchable": true
                 }
@@ -275,8 +281,8 @@
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     return $('<tr>')
-                            .append('<td></td><td></td><td></td><td>Totales: </td>')
-                            .append('<td>' + stc + '</td><td>' + stcr + '</td><td></td><td>$' + stp + '</td><td></td><td></td><td></td></tr>');
+                            .append('<td></td><td></td><td></td><td></td><td></td><td>Totales: </td>')
+                            .append('<td>' + stc + '</td><td>' + stcr + '</td><td></td><td>$' + stp + '</td><td></td><td></td><td></td><td></td></tr>');
                 },
                 dataSrc: "GruposT"
             },
@@ -297,19 +303,19 @@
                     var c = $(v);
                     var index = parseInt(k);
                     switch (index) {
-                        case 1:
+                        case 3:
                             /*FECHA ORDEN*/
                             c.addClass('text-strong');
                             break;
-                        case 3:
+                        case 5:
                             /*FECHA ENTREGA*/
                             c.addClass('text-success text-strong');
                             break;
-                        case 4:
+                        case 7:
                             /*fecha conf*/
                             c.addClass('text-info text-strong');
                             break;
-                        case 5:
+                        case 8:
                             /*fecha conf*/
                             c.addClass('text-warning text-strong');
                             break;

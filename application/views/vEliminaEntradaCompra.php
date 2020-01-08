@@ -158,6 +158,7 @@
                             Proveedor: prov,
                             Doc: doc
                         }).done(function (data) {
+                            console.log(data);
                             btnGuardar.attr('disabled', false);
                             swal({
                                 title: "DOCUMENTO ELIMINADO",

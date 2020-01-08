@@ -351,7 +351,7 @@ class AuxReportesClientesDos extends CI_Controller {
                                     CC.saldo as Saldo_Doc,
                                     IFNULL(DATEDIFF(CURDATE(), CC.fecha),'') AS Dias,
                                     (select sum(pareped) from facturacion where tp = CC.tipo and cliente = CC.cliente and factura = CC.remicion)as pares,
-                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 0
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) >= 0
                                                             AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 8
                                             THEN CC.saldo END AS 'UNO',
 

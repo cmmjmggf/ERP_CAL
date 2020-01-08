@@ -132,25 +132,15 @@ class RecibeOrdenCompra extends CI_Controller {
                     $Cantidades = $this->Recibeordencompra_model->getCantidadesParaEstatus($v['Tp'], $v['OC']);
 
                     foreach ($Cantidades as $key => $v) {
-                        $can = $v->Cantidad;
-                        $Can_rec = $v->Cantidad_Rec;
                         $ID = $v->ID;
-                        if (floatval($Can_rec) === 0) {
-                            $datos = array(
-                                'Estatus' => 'ACTIVA'
-                            );
-                            $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                        } else if (floatval($can) > floatval($Can_rec)) {
-                            $datos = array(
-                                'Estatus' => 'PENDIENTE'
-                            );
-                            $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                        } else if (floatval($Can_rec) >= floatval($can)) {
-                            $datos = array(
-                                'Estatus' => 'RECIBIDA'
-                            );
-                            $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                        }
+                        $sql_upd = "UPDATE ordencompra SET estatus = CASE
+                                   WHEN CantidadRecibida = 0 THEN 'ACTIVA'
+                                   WHEN Cantidad > CantidadRecibida THEN 'PENDIENTE'
+                                   WHEN CantidadRecibida >= Cantidad THEN 'RECIBIDA'
+                                   END
+                               WHERE id  = $ID ";
+                        //print $sql_upd . "\n";
+                        $this->db->query($sql_upd);
                     }
                 }
             } else { //Si no se agregaron porque se capturó desde el detalle o desde un borrador
@@ -158,25 +148,15 @@ class RecibeOrdenCompra extends CI_Controller {
                 $Cantidades = $this->Recibeordencompra_model->getCantidadesParaEstatus($this->input->post('Tp'), $this->input->post('Folio'));
 
                 foreach ($Cantidades as $key => $v) {
-                    $can = $v->Cantidad;
-                    $Can_rec = $v->Cantidad_Rec;
                     $ID = $v->ID;
-                    if (floatval($Can_rec) === 0) {
-                        $datos = array(
-                            'Estatus' => 'ACTIVA'
-                        );
-                        $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                    } else if (floatval($can) > floatval($Can_rec)) {
-                        $datos = array(
-                            'Estatus' => 'PENDIENTE'
-                        );
-                        $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                    } else if (floatval($Can_rec) >= floatval($can)) {
-                        $datos = array(
-                            'Estatus' => 'RECIBIDA'
-                        );
-                        $this->Recibeordencompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                    }
+                    $sql_upd = "UPDATE ordencompra SET estatus = CASE
+                                   WHEN CantidadRecibida = 0 THEN 'ACTIVA'
+                                   WHEN Cantidad > CantidadRecibida THEN 'PENDIENTE'
+                                   WHEN CantidadRecibida >= Cantidad THEN 'RECIBIDA'
+                                   END
+                               WHERE id  = $ID ";
+                    //print $sql_upd . "\n";
+                    $this->db->query($sql_upd);
                 }
             }
 

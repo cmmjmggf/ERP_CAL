@@ -14,7 +14,7 @@
                         <input type="text" class="form-control form-control-sm numbersOnly" id="MaquilaOP" maxlength="4" onkeyup="onChecarMaquilaValida(this)">
                     </div>
                     <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        <label>Semana</label>     
+                        <label>Semana</label>
                         <input type="text" class="form-control form-control-sm numbersOnly" id="SemanaOP" maxlength="2"  min="1" max="52" onkeyup="onChecarSemanaValida(this)">
                     </div>
                     <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnAceptaOP"><span class="fa fa-check"></span> Acepta</button> 
+                <button type="button" class="btn btn-info" id="btnAceptaOP"><span class="fa fa-check"></span> Acepta</button>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
             }).focusout(function () {
                 getTotalParesXMaquilaXSemanaXAno();
             });
-            
+
             mdlGeneraOrdenDeProduccion.on('hidden.bs.modal', function () {
                 btnAceptaOP.attr('disabled', true);
                 AnoOP.val((new Date()).getFullYear());
@@ -93,10 +93,11 @@
                 $.post('<?php print base_url('OrdenDeProduccion/onAgregarAOrdenDeProduccion'); ?>',
                         {MAQUILA: MaquilaOP.val(), SEMANA: SemanaOP.val(), ANO: AnoOP.val()}
                 ).done(function (data) {
+                    HoldOn.close();
                     var r = JSON.parse(data[0]);
                     var nordenes = parseInt(r.ORDENES);
                     if (nordenes > 0) {
-                        swal('ATENCIÓN', 'SE HAN CREADO ' + nordenes + ' ORDENES DE PRODUCCION DE LA MAQUILA ' + MaquilaOP.val() + ', SEMANA ' + SemanaOP.val() + ', AÑO ' + AnoOP.val()+'. DEL CONTROL '+r.CONTROLES_INICIAL+' AL CONTROL '+r.CONTROLES_FINAL, 'success').then((value) => {
+                        swal('ATENCIÓN', 'SE HAN CREADO ' + nordenes + ' ORDENES DE PRODUCCION DE LA MAQUILA ' + MaquilaOP.val() + ', SEMANA ' + SemanaOP.val() + ', AÑO ' + AnoOP.val() + '. DEL CONTROL ' + r.CONTROLES_INICIAL + ' AL CONTROL ' + r.CONTROLES_FINAL, 'success').then((value) => {
                             MaquilaOP.focus().select();
                         });
                     } else {
@@ -105,6 +106,7 @@
                         });
                     }
                 }).fail(function (x, y, z) {
+                    HoldOn.close();
                     getError(x);
                     MaquilaOP.focus().select();
                 }).always(function () {

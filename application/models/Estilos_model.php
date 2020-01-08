@@ -44,7 +44,7 @@ class Estilos_model extends CI_Model {
 
     public function getEstiloByID($IDX) {
         try {
-            return $this->db->select("E.*")->from("estilos AS E")->where("E.Estatus", "ACTIVO")->where("E.ID", $IDX)->get()->result();
+            return $this->db->select("E.*")->from("estilos AS E")->where("E.Estatus", "ACTIVO")->where("E.Clave", $IDX)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -80,36 +80,32 @@ class EliminaEntradaCompra extends CI_Controller {
             $Compra = $this->EliminaEntradaCompra_model->getCompra($this->input->post('Doc'), $this->input->post('Tp'), $this->input->post('Proveedor'));
 
             foreach ($Compra as $key => $v) {
+                $cant = $v->Cantidad;
+                $sql = "UPDATE ordencompra OC "
+                        . "SET OC.CantidadRecibida =  (ifnull(OC.CantidadRecibida,0) - $cant) , "
+                        . "OC.Factura = '' , "
+                        . "OC.FechaFactura = '' "
+                        . "WHERE OC.Tp = '{$v->TpOrdenCompra}' "
+                        . "AND OC.Folio = '{$v->OrdenCompra}' "
+                        . "AND OC.Proveedor = '{$this->input->post('Proveedor')}' "
+                        . "AND OC.Articulo = '{$v->Articulo}' ";
 
-                $this->EliminaEntradaCompra_model->onActualizarCantidadesOrdenCompra(
-                        $this->input->post('Doc'), $v->TpOrdenCompra, $v->OrdenCompra, $this->input->post('Proveedor'), $v->Articulo, $v->Cantidad
-                );
+                $this->db->query($sql);
+
+                //Actualiza estatus orden de compra dependiendo de lo que elimina
+                $sql_upd = "UPDATE ordencompra SET estatus = CASE
+                                   WHEN CantidadRecibida = 0 THEN 'ACTIVA'
+                                   WHEN Cantidad > CantidadRecibida THEN 'PENDIENTE'
+                                   WHEN CantidadRecibida >= Cantidad THEN 'RECIBIDA'
+                                   END
+                               WHERE Tp = '{$v->TpOrdenCompra}' "
+                        . "AND Folio = '{$v->OrdenCompra}' "
+                        . "AND Proveedor = '{$this->input->post('Proveedor')}' "
+                        . "AND Articulo = '{$v->Articulo}' ";
+
+                $this->db->query($sql_upd);
             }
 
-            //Actualiza estatus orden de compra dependiendo de lo que elimina
-            $Cantidades = $this->EliminaEntradaCompra_model->getCantidadesParaEstatus($Compra[0]->TpOrdenCompra, $Compra[0]->OrdenCompra);
-
-            foreach ($Cantidades as $key => $v) {
-                $can = $v->Cantidad;
-                $Can_rec = $v->Cantidad_Rec;
-                $ID = $v->ID;
-                if (floatval($Can_rec) === 0) {
-                    $datos = array(
-                        'Estatus' => 'ACTIVA'
-                    );
-                    $this->EliminaEntradaCompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                } else if (floatval($can) > floatval($Can_rec)) {
-                    $datos = array(
-                        'Estatus' => 'PENDIENTE'
-                    );
-                    $this->EliminaEntradaCompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                } else {
-                    $datos = array(
-                        'Estatus' => 'RECIBIDA'
-                    );
-                    $this->EliminaEntradaCompra_model->onModificarEstatusOrdenCompra($ID, $datos);
-                }
-            }
 
             //Eliminamos compra
             $this->EliminaEntradaCompra_model->onEliminarCompra($this->input->post('Doc'), $this->input->post('Tp'), $this->input->post('Proveedor'));

@@ -363,7 +363,15 @@
                             btnAceptar.attr('disabled', false);
                             f1 = f1 + 1;
                             if (f1 === f2) {
-                                onImprimirValeEntrada(doc);
+                                //onImprimirValeEntrada(doc);
+                                total_pares = 0;
+                                pares_pedido = 0;
+                                pnlTablero.find('input').val('');
+                                pnlTablero.find("#FechaMov").val(getToday());
+                                pnlTablero.find('#MaquilaRecibe').html('');
+                                pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
+                                pnlTablero.find('#Control').focus();
+                                HoldOn.close();
                             }
                         }).fail(function (x, y, z) {
                             btnAceptar.attr('disabled', false);
@@ -447,8 +455,8 @@
                 });
                 pnlTablero.find('#MaquilaRecibe').text(data[0].EntregaMat);
                 pnlTablero.find('#rCantidades').find('#TotalParesEntrega').val(data[0].Pares);
-
-                pnlTablero.find('#rCantidades input[type="text"]:first-child:enabled:eq(0)').focus().select();
+                pnlTablero.find('#btnAceptar').focus();
+                //pnlTablero.find('#rCantidades input[type="text"]:first-child:enabled:eq(0)').focus().select();
 
                 //Consultar Ficha Tecnica para traer cabecero
                 $.getJSON(master_url + 'getCabeceroFichaTecnica', {

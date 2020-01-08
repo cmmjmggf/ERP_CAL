@@ -24,6 +24,8 @@ class MaterialRecibido_model extends CI_Model {
                             . "CONCAT('[Ord_Compra: ',OC.Folio,']----->    Prov. ',OC.Proveedor,' ',P.NombreI) "
                             . "END AS GruposT, "
                             . "OC.FechaOrden, "
+                            . "OC.FechaEntrega, "
+                            . "OC.FechaFactura, "
                             . "CONCAT(A.Clave,' ',A.Descripcion) AS Articulo, "
                             . "OC.Cantidad, "
                             . "OC.CantidadRecibida, "
@@ -33,17 +35,18 @@ class MaterialRecibido_model extends CI_Model {
                             . "OC.Maq, "
                             . "CONCAT(G.Clave,'-',G.Nombre) AS Grupo,"
                             . "OC.Ano,"
-                            . "OC.Tipo  "
+                            . "OC.Tipo, "
+                            . "OC.Estatus  "
                             . "", false)
                     ->from("ordencompra AS OC")
-                    ->join("proveedores P", 'ON P.Clave = OC.Proveedor', 'left')
-                    ->join("articulos A", 'ON A.Clave = OC.Articulo', 'left')
-                    ->join("grupos G", 'ON G.Clave =  A.Grupo', 'left')
-                    ->join("unidades U", 'ON U.Clave =  A.UnidadMedida', 'left')
+                    ->join("proveedores P", 'ON P.Clave = OC.Proveedor')
+                    ->join("articulos A", 'ON A.Clave = OC.Articulo')
+                    ->join("grupos G", 'ON G.Clave =  A.Grupo')
+                    ->join("unidades U", 'ON U.Clave =  A.UnidadMedida')
                     ->where('OC.Ano', $Ano)
                     ->where('OC.Tp', $Tp)
                     ->where('OC.Tipo', $Tipo)
-                    ->where_in('OC.Estatus', array('ACTIVA', 'PENDIENTE', 'RECIBIDA'));
+                    ->where_in('OC.Estatus', array('ACTIVA', 'PENDIENTE', 'RECIBIDA', 'CANCELADA'));
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

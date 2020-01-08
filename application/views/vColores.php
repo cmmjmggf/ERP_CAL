@@ -5,6 +5,10 @@
                 <legend class="float-left">Colores</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
+
+                <a class="btn btn-info btn-sm"  href="#" data-toggle="modal" data-target="#mdlSeleccionaEstiloColorParaEfectoVenta">
+                    <i class="fa fa-check-square"></i> Clasifica Estilo p' Precio-Vta
+                </a>
                 <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
             </div>
         </div>
@@ -408,3 +412,6 @@
         border-radius: 50%;
     }
 </style>
+
+<?php
+$this->load->view('vSeleccionaEstiloColorParaEfectoVenta');

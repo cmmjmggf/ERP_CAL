@@ -1525,6 +1525,7 @@ class AuxReportesClientes extends CI_Controller {
                 '',
                 '',
                 '',
+                '',
                 mb_strimwidth('$' . number_format($TP_IMPORTE_G, 2, ".", ","), 0, 14, ""),
                 mb_strimwidth('$' . number_format($TP_PAGOS_G, 2, ".", ","), 0, 14, ""),
                 mb_strimwidth('$' . number_format($TP_SALDO_G, 2, ".", ","), 0, 14, ""),
@@ -1540,7 +1541,6 @@ class AuxReportesClientes extends CI_Controller {
                 ($GTOTAL_9 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_9, 2, ".", ","), 0, 14, "") : '',
                 ($GPares > 0) ? $GPares : '',
             ));
-
 
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Clientes/Tp2';
@@ -1720,7 +1720,7 @@ class AuxReportesClientes extends CI_Controller {
                                     CC.saldo as Saldo_Doc,
                                     IFNULL(DATEDIFF(CURDATE(), CC.fecha),'') AS Dias,
                                     (select sum(pareped) from facturacion where tp = CC.tipo and cliente = CC.cliente and factura = CC.remicion)as pares,
-                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) > 0
+                                    CASE WHEN DATEDIFF(CURRENT_DATE(), CC.fecha) >= 0
                                                             AND  DATEDIFF(CURRENT_DATE(), CC.fecha) < 8
                                             THEN CC.saldo END AS 'UNO',
 

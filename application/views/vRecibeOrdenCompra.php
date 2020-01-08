@@ -479,6 +479,7 @@
                                 Tp: dtm.Tp,
                                 OC: oc
                             });
+                            pnlTablero.find('#Encabezado').find('.captura').addClass('disabledForms');
                             btnAgregarOC.removeClass('d-none');
                             btnCerrarCompra.removeClass('d-none');
                             onNotifyOld('fa fa-check', 'CANTIDAD ACTUALIZADA', 'info');

@@ -56,12 +56,12 @@
                     <div class="d-none">
                         <input type="text" id="ID" name="ID" class="form-control form-control-sm" >
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2">
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-1">
                         <label for="Clave" >Clave*</label>
                         <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required="" placeholder="20180814">
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                        <label for="" >Tipo de articulo*</label>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-xl-2">
+                        <label for="" >Depto*</label>
                         <select id="Departamento" name="Departamento" class="form-control form-control-sm required" required="">
                             <option value=""></option>
                             <option value="10">10 PIEL/FORRO</option>
@@ -88,13 +88,14 @@
                             <option value="222">222-PROTOTIPO</option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-xl-1">
+                    <div class="w-100"></div>
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-2">
                         <label for="" >Unidad*</label>
                         <select id="UnidadMedida" name="UnidadMedida" class="form-control form-control-sm required" required="">
                             <option value=""></option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-xl-1">
+                    <div class="col-12 col-sm-6 col-md-3 col-xl-2">
                         <label for="" >Moneda*</label>
                         <select id="Tmnda" name="Tmnda" class="form-control form-control-sm required" required="">
                             <option value=""></option>
@@ -180,41 +181,42 @@
                     </div>
                 </div>
             </form>
-        </div>
-        <div class="card-body text-dark d-none" id="pnlDatosDetalle">
-            <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
-                <i class="fa fa-save"></i>
-            </button>
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <label for="Maquila" >Maquila*</label>
-                    <!--<input type="text" class="form-control form-control-sm" id="Maquila" name="Maquila" required placeholder="Maquila 1">-->
-                    <select id="Maquila" name="Maquila" class="form-control form-control-sm" >
-                        <option value=""></option>
-                    </select>
-                </div>
-                <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
-                    <label for="Precio" >Precio Maquila*</label>
-                    <input type="text" class="form-control form-control-sm numbersOnly" id="Precio" name="Precio" placeholder="0.0">
-                </div>
-                <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 my-2 d-sm-block pt-3">
-                    <button type="button" id="btnAgregarPrecio" class="btn btn-primary btn-sm d-sm-block "><span class="fa fa-plus"></span></button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 table-responsive">
-                    <table id="tblPrecioVentaParaMaquilas" class="table table-sm display" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Maquila</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Estatus</th>
-                                <th scope="col">-</th>
-                                <th scope="col">Maquila</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+
+            <div class="d-none" id="pnlDatosDetalle">
+                <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
+                    <i class="fa fa-save"></i>
+                </button>
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <label for="Maquila" >Maquila</label>
+                        <!--<input type="text" class="form-control form-control-sm" id="Maquila" name="Maquila" required placeholder="Maquila 1">-->
+                        <select id="Maquila" name="Maquila" class="form-control form-control-sm" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-1">
+                        <label for="Precio" >Precio</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="Precio" name="Precio" placeholder="0.0">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 my-2 d-sm-block pt-3">
+                        <button type="button" id="btnAgregarPrecio" class="btn btn-primary btn-sm d-sm-block "><span class="fa fa-plus"></span></button>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 table-responsive">
+                        <table id="tblPrecioVentaParaMaquilas" class="table table-sm display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Maquila</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Estatus</th>
+                                    <th scope="col">-</th>
+                                    <th scope="col">Maquila</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,9 +381,10 @@
                             Maquila.find("option:selected").text(),
                             $.number(Precio.val(), 2, '.', ','),
                             'NUEVO',
-                            btn,Maquila.val()]).draw(false);
+                            btn, Maquila.val()]).draw(false);
 
                         Precio.val('');
+                        btnGuardar.trigger('click');
                         btnIgualaPrecios.removeClass("d-none");
                         btnGeneraPreciosMaq.removeClass("d-none");
                         Maquila[0].selectize.focus();
@@ -436,11 +439,11 @@
                         console.log(data);
 //                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
 //                        nuevo = false;
-                        Articulos.ajax.reload();
 //                        PrecioVentaParaMaquilas.clear().draw();
-                        pnlDatos.addClass("d-none");
-                        pnlDatosDetalle.addClass('d-none');
-                        pnlTablero.removeClass("d-none");
+                        onNotifyOld('fa fa-check', 'SE HAN GUARDADO LOS CAMBIOS', 'success')
+                        //pnlDatos.addClass("d-none");
+                        //pnlDatosDetalle.addClass('d-none');
+                        //pnlTablero.removeClass("d-none");
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                     }).always(function () {
@@ -462,13 +465,12 @@
                         Articulos.ajax.reload();
                         swal({
                             title: "ATENCIÓN",
-                            text: "ARTÍCULO GUARDADO",
+                            text: "ARTÍCULO GUARDADO, CAPTURE LOS PRECIOS PARA VENTA A MAQUILAS",
                             icon: "success",
                             closeOnClickOutside: false,
-                            closeOnEsc: false,
-                            buttons: false,
-                            timer: 1200
+                            closeOnEsc: false
                         }).then((action) => {
+                            ClaveArticulo = pnlDatos.find('#Clave').val();
                             pnlDatosDetalle.find('#Maquila')[0].selectize.focus();
                         });
                     }).fail(function (x, y, z) {
@@ -782,6 +784,7 @@
                 var user = '<?php print $_SESSION["USERNAME"]; ?>';
 
                 if (user === 'ARABAR') {
+                    pnlDatos.find("#UnidadMedida")[0].selectize.enable();
                     pnlDatos.find("#PrecioUno").prop("readonly", false);
                     pnlDatos.find("#PrecioDos").prop("readonly", false);
                     pnlDatos.find("#PrecioTres").prop("readonly", false);
@@ -808,7 +811,7 @@
         $.getJSON(master_url + 'getDetalleByID', {ID: IDX}).done(function (data) {
             if (data.length > 0) {
                 $.each(data, function (k, v) {
-                    PrecioVentaParaMaquilas.row.add([v.ID, v.Maquila, v.Precio, v.Estatus, v.ClaveMaquila, '<button type="button" class="btn btn-danger" onclick="onEliminarDetalle(' + v.ID + ',this)"><span class="fa fa-trash"></span></button>',v.Maquila]).draw(false);
+                    PrecioVentaParaMaquilas.row.add([v.ID, v.Maquila, v.Precio, v.Estatus, v.ClaveMaquila, '<button type="button" class="btn btn-danger" onclick="onEliminarDetalle(' + v.ID + ',this)"><span class="fa fa-trash"></span></button>', v.Maquila]).draw(false);
                 });
             }
         }).fail(function (x, y, z) {
