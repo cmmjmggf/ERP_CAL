@@ -897,15 +897,50 @@
                     REFERENCIA: ReferenciaFacturacion.val()
                 };
                 $.post('<?php print base_url('FacturacionDevolucion/onCerrarDocto') ?>', p).done(function (abc) {
-                    iMsg('SE HA CERRADO EL DOCTO', 's', function () {
-                        btnCierraDocto.attr('disabled', true);
-                        ClienteFactura[0].selectize.enable();
-                        TPFactura.attr('disabled', false);
-                        FechaFactura.attr('readonly', false);
-                        FAPEORCOFactura.attr('readonly', false);
-                        FCAFactura.attr('readonly', false);
-                        PAGFactura.attr('readonly', false);
-                        TMNDAFactura.attr('readonly', false);
+                    ClienteFactura[0].selectize.enable();
+                    Documento.attr('readonly', false);
+                    TPFactura.attr('disabled', false);
+                    getVistaPreviaDocumentoCerrado(function () {
+                        iMsg('SE HA CERRADO EL DOCTO', 's', function () {
+                            btnCierraDocto.attr('disabled', true);
+                            ClienteFactura[0].selectize.enable();
+                            TPFactura.attr('disabled', false);
+                            FechaFactura.attr('readonly', false);
+                            FAPEORCOFactura.attr('readonly', false);
+                            FCAFactura.attr('readonly', false);
+                            PAGFactura.attr('readonly', false);
+                            TMNDAFactura.attr('readonly', false);
+                            
+                            
+                            nuevo = true;
+                            pnlTablero.find("input").val('');
+                            $.each(pnlTablero.find("select"), function (k, v) {
+                                pnlTablero.find("select")[k].selectize.clear(true);
+                            });
+                            ParesFacturados.rows().remove().draw(false);
+                            pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalivafacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalfacturadohead").text('$' + $.number(0, 2, '.', ','));
+                            pnlTablero.find(".totalfacturadopie").text('$' + $.number(0, 2, '.', ','));
+                            TotalLetra.find("span").text('');
+                            pnlTablero.find(".totalfacturadoenletrapie").text('');
+                            pnlTablero.find(".totalfacturadoenletrapieDLLS").text('');
+                            btnCierraDocto.attr('disabled', true);
+                            btnFacturaXAnticipoDeProducto.attr('disabled', false);
+                            btnControlInCompleto.attr('disabled', true);
+                            btnControlCompleto.attr('disabled', true);
+                            btnVistaPreviaF.attr('disabled', true);
+                            FechaFactura.attr('readonly', false);
+                            Documento.attr('readonly', false);
+                            FCAFactura.attr('readonly', false);
+                            PAGFactura.attr('readonly', false);
+                            TMNDAFactura.attr('readonly', false);
+                            ClienteFactura[0].selectize.enable();
+                            TPFactura.attr('disabled', false);
+                            ClienteClave.focus().select();
+                            FechaFactura.val(Hoy);
+                            ClienteClave.focus().select();
+                        });
                     });
                 }).fail(function (x) {
                     getError(x);

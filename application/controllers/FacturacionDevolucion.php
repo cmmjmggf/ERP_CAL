@@ -257,11 +257,11 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
 
             if (intval($x['TP_DOCTO']) === 1) {
-                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
-                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
-                exec('schtasks /run /tn "Timbrar"  ');
-                exec('schtasks /delete /tn "Timbrar" /F ');
-                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
+//                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+//                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
+//                exec('schtasks /run /tn "Timbrar"  ');
+//                exec('schtasks /delete /tn "Timbrar" /F ');
+//                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
             }
             /*             * *CARTAFAC** */
             $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
