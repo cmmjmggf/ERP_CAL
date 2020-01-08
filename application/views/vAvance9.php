@@ -731,27 +731,40 @@
                             } else {
                                 onBeep(2);
                                 Avance.ajax.reload();
-                                swal('ATENCIÓN', '1 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning').then((value) => {
+                                onNotifyOldPCF('', '1 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE (DEPTO 80)', 'warning', {from: "bottom", align: "center"}, function () {
                                     Control.focus().select();
-                                    btnAceptar.attr('disabled', true)
+                                    btnAceptar.attr('disabled', true);
                                 });
+                                return;
                             }
                         }
                         return false;
                     } else {
                         if (parseInt(v.AVANZO) === 0) {
-                            onCampoInvalido(pnlTablero, 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', function () {
+
+                            onNotifyOldPCF('', '3 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', 'warning', {from: "bottom", align: "center"}, function () {
                                 Control.focus().select();
                                 btnAceptar.attr('disabled', true)
                                 Avance.ajax.reload();
                             });
                             return;
+//                            onCampoInvalido(pnlTablero, 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', function () {
+//                                Control.focus().select();
+//                                btnAceptar.attr('disabled', true)
+//                                Avance.ajax.reload();
+//                            });
                         }
-                        onCampoInvalido(pnlTablero, '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', function () {
+                        onNotifyOldPCF('', '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', 'warning', {from: "bottom", align: "center"}, function () {
                             Control.focus().select();
                             btnAceptar.attr('disabled', true);
                             Avance.ajax.reload();
                         });
+                        return;
+//                        onCampoInvalido(pnlTablero, '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', function () {
+//                            Control.focus().select();
+//                            btnAceptar.attr('disabled', true);
+//                            Avance.ajax.reload();
+//                        });
 
                     }
                 });
@@ -913,7 +926,7 @@
         color: #c1850c  !important;
         font-weight: bold !important;
     }
-    
+
     tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black{
         color: #fff !important;
         font-weight: bold !important;

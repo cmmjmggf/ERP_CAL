@@ -281,6 +281,7 @@ class Avance9 extends CI_Controller {
             $x = $this->input->get();
             $SPAN_100 = "<span class='font-weight-bold text-success'>100</span>";
             $SPAN_99 = "<span class='font-weight-bold text-info'>99</span>";
+            $SPAN_96 = "<span class='font-weight-bold text-info'>99</span>";
             $this->db->select("FACN.ID, FACN.numeroempleado, FACN.maquila, "
                             . "FACN.control AS CONTROL, FACN.estilo AS ESTILO, "
                             . "(CASE "
@@ -369,6 +370,8 @@ class Avance9 extends CI_Controller {
         try {
             $x = $this->input;
             $xXx = $this->input->post();
+
+
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
             $MAQUILA = ($this->getMaquilaXControl($xXx['CONTROL']));
             $MAQUILA_MUESTRA = intval($MAQUILA->MAQUILA) === 98 ? 98 : intval($MAQUILA->MAQUILA);
@@ -459,7 +462,8 @@ class Avance9 extends CI_Controller {
                     /* CORTE = > RAYADO */
                     if ($check_avance[0]->EXISTE <= 0) {
                         $id = 0;
-                        if (intval($v->NUMERO_FRACCION) === 100) {
+                        if (intval($v->NUMERO_FRACCION) === 100 ||
+                                intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98) {
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
                                 'FechaAProduccion' => Date('d/m/Y'),
@@ -488,12 +492,18 @@ class Avance9 extends CI_Controller {
                         if ($check_fraccion[0]->EXISTE <= 0) {
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
 
-                            if (intval($v->NUMERO_FRACCION) === 100) {
+                            if (intval($v->NUMERO_FRACCION) === 100 && $MAQUILA_MUESTRA !== 98) {
                                 $this->db->insert('fracpagnomina', $data);
                                 $l = new Logs("AVANCE 9 - FRACCION 100", "LE PAGO LA FRACCION 100 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
                                 $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
                             }
-                            if (intval($v->NUMERO_FRACCION) === 99) {
+                            if (intval($v->NUMERO_FRACCION) === 99 && $MAQUILA_MUESTRA !== 98) {
+                                $data["avance_id"] = NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
+                                $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                            }
+                            if (intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98) {
                                 $data["avance_id"] = NULL;
                                 $this->db->insert('fracpagnomina', $data);
                                 $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
