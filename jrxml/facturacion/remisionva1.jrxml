@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="7.0000000000000995"/>
-	<property name="ireport.x" value="111"/>
-	<property name="ireport.y" value="696"/>
+	<property name="ireport.zoom" value="5.785123966942235"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="627"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs,
+		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, UPPER(F.obs) AS obs,
 (CASE
 WHEN C.FormaPago = 0 THEN "00"
 WHEN C.FormaPago = 1 THEN "01"
@@ -409,7 +409,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 				<textField>
 					<reportElement mode="Transparent" x="63" y="0" width="408" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="9e757a0c-32d7-445d-ac27-3eaf6a8206a7"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MONEDA_LETRA}]]></textFieldExpression>
@@ -424,7 +424,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 				<textField pattern="#,##0.00">
 					<reportElement x="555" y="0" width="60" height="13" uuid="bfe7d765-40ae-4933-af88-4de715cd5768"/>
 					<textElement textAlignment="Right">
-						<font size="8"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{subtot_4}]]></textFieldExpression>
 				</textField>
@@ -801,7 +801,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			<textField>
 				<reportElement mode="Transparent" x="478" y="0" width="36" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="7da803b0-bf8e-4b51-9ccb-913e41d05d20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
@@ -812,7 +812,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="554" y="0" width="61" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtot}]]></textFieldExpression>
@@ -820,7 +820,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="514" y="0" width="40" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PRECIO}]]></textFieldExpression>
@@ -1030,9 +1030,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="403" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="40c7144b-45eb-4bb8-972f-8a7604c41391"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1041,9 +1038,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="418" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2642fd15-6e23-4813-9626-f8cc442820b1"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1052,9 +1046,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="433" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3016b664-e49b-4df2-bc6f-67be596b4fc2"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1063,9 +1054,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="448" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="80f60660-6e95-4729-8d93-af97127a807a"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1074,9 +1062,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="463" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c342bccf-863d-43cc-992f-f27491548c72"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1187,36 +1172,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			</line>
 			<line>
 				<reportElement x="387" y="-1" width="1" height="13" uuid="614191fa-6ab6-43a5-af31-135b4d9aeb96"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="417" y="-1" width="1" height="13" uuid="d8856f3f-17ad-4434-9d99-ed9f6a45afc4"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="432" y="-1" width="1" height="13" uuid="caf7e3c9-15d8-4072-8b11-79c57328ef80"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="447" y="-1" width="1" height="13" uuid="45187443-646f-4d81-b9c8-a62e1736d408"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="462" y="-1" width="1" height="13" uuid="54339041-152c-4e34-96c7-73eaa70eeb09"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="477" y="-1" width="1" height="13" uuid="055c35bb-8c31-46dd-939b-2d0067e7b721"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>

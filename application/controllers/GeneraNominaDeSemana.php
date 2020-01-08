@@ -691,7 +691,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "depto" => $v->DepartamentoFisico
                 ));
                 $this->db->set('precaha', $v->{"AbonoPres"})->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
