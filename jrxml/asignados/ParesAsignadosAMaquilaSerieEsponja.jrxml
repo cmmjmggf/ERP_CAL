@@ -52,12 +52,12 @@ CAST(P.Pares AS SIGNED) AS ParesCount,
 C.RazonS AS CLIENTE
 FROM pedidox as P
 INNER JOIN clientes AS C ON P.Cliente = C.Clave
-INNER JOIN fichatecnica AS FT ON FT.Estilo = P.Estilo AND FT.Color = P.Color
+INNER JOIN fichatecnica AS FT ON FT.Estilo = P.Estilo AND FT.Color = P.Color AND FT.Pieza = '1030'
 INNER JOIN articulos A ON FT.Articulo = A.Clave
 INNER JOIN series S ON P.Serie = S.Clave
 INNER JOIN estilos AS E ON  FT.Estilo = E.Clave
 INNER JOIN lineas AS L ON  E.Linea = L.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 12 AND P.stsavan NOT IN(12,13) ORDER BY L.Descripcion ASC,A.Descripcion ASC;]]>
+WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND A.Grupo = 12 AND P.stsavan NOT IN(12,13) ORDER BY L.Descripcion ASC, A.Descripcion ASC;]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -1052,7 +1052,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="269" y="0" width="253" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="55bba92c-e0cd-46f4-9c36-c0212639dfc1"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Esponja}]]></textFieldExpression>
