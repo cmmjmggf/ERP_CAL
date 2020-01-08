@@ -24,8 +24,18 @@
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
                 <div class="row justify-content-center" align="center">
-                    <span onclick="onActualizarAvances();" class="fa fa-retweet fa-2x text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
-                    <h5> FRACCIONES DE ESTE EMPLEADO</h5>
+                    <div class="col-2">
+                        <label>Semana</label>
+                        <input type="text" id="SemanaFiltro" name="SemanaFiltro" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-8">
+                        <span onclick="onActualizarAvances();" class="fa fa-retweet fa-lg text-info text-shadow" style="cursor: pointer;" class="btn btn-warning"  data-toggle="tooltip" data-placement="top" title="Actualizar"></span>
+                        <h6> FRACCIONES DE ESTE EMPLEADO</h6>
+                    </div>
+                    <div class="col-2">
+                        <label>Fraccion</label>
+                        <input type="text" id="FraccionFiltro" name="FraccionFiltro" class="form-control form-control-sm">
+                    </div>
                 </div>
                 <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                     <thead>
@@ -252,6 +262,19 @@
             }
         });
 
+        pnlTablero.find("#SemanaFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                Avance.ajax.reload();
+            }
+        });
+
+        pnlTablero.find("#FraccionFiltro").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                Avance.ajax.reload();
+            }
+        });
+
+
         NumeroDeEmpleado.on('keydown', function (e) {
             if (e.keyCode === 13 && NumeroDeEmpleado.val()) {
                 btnAceptar.attr('disabled', false);
@@ -369,6 +392,8 @@
             "dataSrc": "",
             "data": function (d) {
                 d.EMPLEADO = NumeroDeEmpleado.val() ? NumeroDeEmpleado.val() : '';
+                d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : (Semana.val() ? Semana.val() : '');
+                d.FRACCION_FILTRO = pnlTablero.find("#FraccionFiltro").val() ? pnlTablero.find("#FraccionFiltro").val() : '';
                 d.FRACCIONES = "96,99,100,102";
             }
         };
@@ -498,7 +523,7 @@
                             swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
                 ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
-                                Control.focus().select(); 
+                                Control.focus().select();
                             });
                         }
                     }).fail(function (x, y, z) {

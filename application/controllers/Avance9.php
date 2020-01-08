@@ -300,6 +300,12 @@ class Avance9 extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('FACN.numeroempleado', $x['EMPLEADO']);
             }
+            if ($x['SEMANA_FILTRO'] !== '') {
+                $this->db->where('FACN.semana', $x['SEMANA_FILTRO']);
+            }
+            if ($x['FRACCION_FILTRO'] !== '') {
+                $this->db->where('FACN.numfrac', $x['FRACCION_FILTRO']);
+            }
             if ($x['EMPLEADO'] === '') {
                 $this->db->limit(5);
             }

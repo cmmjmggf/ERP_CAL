@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="2.2304157239725275"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="7.0000000000000995"/>
+	<property name="ireport.x" value="111"/>
+	<property name="ireport.y" value="696"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.NombreP) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs,
+		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs,
 (CASE
 WHEN C.FormaPago = 0 THEN "00"
 WHEN C.FormaPago = 1 THEN "01"
@@ -790,7 +790,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="31" height="12" uuid="286fb789-a183-4fc9-8631-33747e1d6b8d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">

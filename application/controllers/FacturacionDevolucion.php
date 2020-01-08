@@ -247,7 +247,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             PRINT "\n*** IMPORTE TOTAL ***\n";
             $this->db->insert('cartcliente', array(
                 'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
-                'fecha' => "{$anio}-{$mes}-{$dia} $hora", 'importe' => $TOTAL,
+                'fecha' => "{$anio}-{$mes}-{$dia} 00:00:00", 'importe' => $TOTAL,
                 'tipo' => $x['TP_DOCTO'],
                 'status' => 1, 'pagos' => 0,
                 'saldo' => $TOTAL, 'comiesp' => 1,
