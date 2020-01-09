@@ -1,8 +1,8 @@
-<div class="modal " id="mdlAvanceProduccionSemanaDia"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal " id="mdlAvanceProduccionSemanaDia"  >
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reporte Avance Semana/Día</h5>
+                <h5 class="modal-title"><span class="fa fa-file"></span> Reporte Avance Semana/Día</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

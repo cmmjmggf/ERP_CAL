@@ -39,7 +39,7 @@ class RelojChecador extends CI_Controller {
                             ->where('A.numemp', $x['Numero'])
                             ->where('A.fecalta  >= \'' . $fecha . '\'')
                             ->order_by('A.ID', 'DESC')->limit(4)->get()->result();
-            $info_empleado = $this->ASM->getInformacionPorEmpleado($x['Numero']);
+            $info_empleado = $this->ASM->getInformacionPorEmpleado(intval($x['Numero']));
             $dtm = json_decode(json_encode($info_empleado), FALSE);
 
             if (count($dtm) > 0) {

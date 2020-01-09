@@ -95,6 +95,27 @@
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
     }
+
+    /* effect-shine */
+    @-webkit-keyframes bounce {
+        0% { transform: translateY(-20px)  }
+        50% { transform: translateY(5px) }
+        100% { transform: translateY(-20px) }
+    }
+
+    @keyframes bounce {
+        0% { transform: translateY(-20px)  }
+        50% { transform: translateY(5px) }
+        100% { transform: translateY(-20px) }
+    }
+
+    .bounce-infinite {
+        -webkit-animation: bounce 0.65s infinite ease-in-out;
+        -o-animation: bounce 0.65s infinite ease-in-out;
+        -ms-animation: bounce 0.65s infinite ease-in-out; 
+        -moz-animation: bounce 0.65s infinite ease-in-out; 
+        animation: bounce 0.65s infinite ease-in-out;
+    }
 </style>
 <script>
     $(document).ready(function () {

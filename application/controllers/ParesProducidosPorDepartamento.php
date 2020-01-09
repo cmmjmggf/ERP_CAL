@@ -71,6 +71,22 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                 /*FOLEADO*/
                 $parametros["DEPARTAMENTO"] = 4;
                 break;
+            case 60:
+                /*LASER*/
+                $parametros["DEPARTAMENTO"] = 42;
+                break;
+            case 90:
+                /*ENTRETELADO*/
+                $parametros["DEPARTAMENTO"] = 40;
+                break;
+            case 105:
+                /*ALM-CORTE*/
+                $parametros["DEPARTAMENTO"] = 44;
+                break;
+            case 110:
+                /*ADORNO*/
+                $parametros["DEPARTAMENTO"] = 5;
+                break;
             case 130:
                 /*ALM-PESPUNTE*/
                 $parametros["DEPARTAMENTO"] = 6;
@@ -79,13 +95,29 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                 /*ENSUELADO*/
                 $parametros["DEPARTAMENTO"] = 55;
                 break;
-            case 90:
-                /*ENTRETELADO*/
-                $parametros["DEPARTAMENTO"] = 8;
+            case 150:
+                /*ENSUELADO*/
+                $parametros["DEPARTAMENTO"] = 7;
                 break;
             case 160:
                 /*ALM-TEJIDO*/
                 $parametros["DEPARTAMENTO"] = 8;
+                break;
+            case 180:
+                /*MONTADO*/
+                $parametros["DEPARTAMENTO"] = 9;
+                break;
+            case 180:
+                /*MONTADO*/
+                $parametros["DEPARTAMENTO"] = 9;
+                break;
+            case 210:
+                /*ADORNO*/
+                $parametros["DEPARTAMENTO"] = 10;
+                break;
+            case 230:
+                /*ADORNO*/
+                $parametros["DEPARTAMENTO"] = 10;
                 break;
         }
         $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');

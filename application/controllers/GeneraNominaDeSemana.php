@@ -45,11 +45,11 @@ class GeneraNominaDeSemana extends CI_Controller {
             /* ELIMINAR EN PRENOMINA */
 //            $pn = $this->db->query("SELECT * FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
 //            print_r($pn);
-            $this->db->query("DELETE FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro  <> 999");
+            $this->db->query("DELETE FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro  <> 999  AND status = 1");
             /* ELIMINAR EN PRENOMINAL */
 //            $pnl = $this->db->query("SELECT * FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro = 999")->result();
 //            print_r($pnl);
-            $this->db->query("DELETE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999");
+            $this->db->query("DELETE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999 AND status = 1");
 
             /* ELIMINAR EN PRESTAMOSPAG */
             $this->db->query("DELETE FROM prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
@@ -488,7 +488,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 ));
 //                ID, numsem, año, numemp, cajhao
                 $this->db->set('cajhao', $v->Ahorro)->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->where('status', $v->Numero)->update('prenominal');
             } else {
                 $this->db->set('cajhao', 0)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)

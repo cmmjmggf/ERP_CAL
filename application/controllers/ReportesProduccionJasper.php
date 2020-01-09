@@ -573,7 +573,7 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["ano"] = $this->input->post('Ano');
         $parametros["sem"] = $this->input->post('Sem');
         $parametros["maq"] = $this->input->post('Maq');
-        $parametros["dia"] = $this->input->post('Dia');
+        $parametros["dia"] = strlen($this->input->post('Dia')) > 0 ? $this->input->post('Dia') : '';
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\avancePorDeptoSemDia.jasper');
         $jc->setFilename('REPORTE_AVANCE_DEPTO_DIA_' . Date('h_i_s'));

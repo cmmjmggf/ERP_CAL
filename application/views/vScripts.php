@@ -1506,11 +1506,8 @@
     var modulos_counter = 0;
     function b25NZW51RGlzcGxheQ(e, obj) {
         onOpenOverlay('Cargando...');
-        $(obj).removeClass("fadeIn");
-        $(obj).addClass("animated-infinite bounceinfinite");
-        $(obj).on('animationend', function () {
-            $(obj).removeClass("animated-infinite bounceinfinite");
-        });
+        $(obj).addClass("bounce-infinite");
+        
         window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 
@@ -1558,7 +1555,7 @@
                                 modulo += '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>';
                                 modulo += '</div>';
                                 modulo += '<div class="card-footer">';
-                                modulo += '<h5>' + v.Modulo + '</h5>';
+                                modulo += '<h5>' + v.Modulo + '</h5>'; 
                                 modulo += '</div>';
                                 modulo += '</div>';
                                 modulo += '</div>';

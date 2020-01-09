@@ -64,7 +64,7 @@
                     <label class="btn btn-indigo">
                         <input type="radio" name="btnLaser" id="btnLaser" autocomplete="off" depto="60"> LASER
                     </label>
-                    <label class="btn btn-indigo">
+                    <label class="btn btn-indigo d-none">
                         <input type="radio" name="btnTodos" id="btnTodos" autocomplete="off"> TODOS
                     </label>
                 </div>
