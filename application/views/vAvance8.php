@@ -160,13 +160,7 @@
                                     <input type="checkbox" class="custom-control-input" id="chk62" description="SERIGRAFIA FORRO" fraccion="62">
                                     <label class="custom-control-label" for="chk62">62 Serigrafia forro</label>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk24" description="DOMAR" fraccion="24">
-                                    <label class="custom-control-label" for="chk24">24 Domar</label>
-                                </div>
-                            </div>
+                            </div> 
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk78" description="LIMPIA LASER" fraccion="78">
@@ -920,6 +914,46 @@
                 DESCRIPCION: "TROQUELAR PLANTILLA"
             });
         }
+        if (pnlTablero.find("#chk75")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 75,
+                DESCRIPCION: "TROQUELAR CORTE"
+            });
+        }
+        if (pnlTablero.find("#chk301")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 301,
+                DESCRIPCION: "PESPUNTAR PLANTILLA"
+            });
+        }
+        if (pnlTablero.find("#chk24")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 24,
+                DESCRIPCION: "DOMAR CHINELA"
+            });
+        }
+        if (pnlTablero.find("#chk325")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 325,
+                DESCRIPCION: "EMPALMAR MALLA A CHINELA"
+            });
+        }
+        if (pnlTablero.find("#chk74")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 74,
+                DESCRIPCION: "COTEJAR PIEL Y FORRO"
+            });
+        }
+        if (pnlTablero.find("#chk130")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 130,
+                DESCRIPCION: "RAYAR PLANTILLA"
+            });
+        }
+        
+        
+        
+        
         /*AVANZA EL CONTROL A ENTRETELADO A ALMACEN DE CORTE*/
         if (pnlTablero.find("#chk51")[0].checked) {
             fracciones.push({

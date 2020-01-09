@@ -317,8 +317,14 @@ class Avance8 extends CI_Controller {
                                 ->where('F.control', $xXx['CONTROL'])
                                 ->where('F.numfrac', $v->NUMERO_FRACCION)
                                 ->get()->result();
+                $check_fraccion_fxe = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('fraccionesxestilo AS F')
+                                ->where('F.Estilo', $xXx['ESTILO'])
+                                ->where('F.Fraccion', $v->NUMERO_FRACCION)
+                                ->get()->result();
+
 //                print $this->db->last_query();
-                if ($check_fraccion[0]->EXISTE <= 0) {
+                if ($check_fraccion[0]->EXISTE <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
                     $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL FROM pedidox AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE  FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();
                     $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                     $nueva_fecha = new DateTime();
@@ -340,147 +346,141 @@ class Avance8 extends CI_Controller {
                     $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                     /* SOLO FRACCION 51 ENTRETELADO Y 397 ENSUELADO */
                     $id = 0;
-                    switch (intval($x['NUMERO_FRACCION'])) {
-                        case 51:
-                            /* 51 = ENTRETELADO */
-                            /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
-                            $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
-                                                    . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
-                                                    . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
-                                                    . '(CASE WHEN E.MaqPlant4 IS NULL THEN 0 ELSE E.MaqPlant4 END) AS MP4', false)
-                                            ->from('estilos AS E')->like('E.Clave', $xXx['ESTILO'])->get()->result();
-                            /* SI NO TIENE NINGUNA MAQUILA O ESTA EN ZERO O NULO */
-                            if (intval($check_maquila[0]->MP1) === 0 &&
-                                    intval($check_maquila[0]->MP2) === 0 &&
-                                    intval($check_maquila[0]->MP3) === 0 &&
-                                    intval($check_maquila[0]->MP4) === 0) {
-                                /* ACTUALIZA A 105 ALMACEN CORTE, stsavan 44 */
+                    if (intval($v->NUMERO_FRACCION) !== 60) {
+                        switch (intval($x['NUMERO_FRACCION'])) {
+                            case 51:
+                                /* 51 = ENTRETELADO */
+                                /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
+                                $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
+                                                        . '(CASE WHEN E.MaqPlant2 IS NULL THEN 0 ELSE E.MaqPlant2 END) AS MP2, '
+                                                        . '(CASE WHEN E.MaqPlant3 IS NULL THEN 0 ELSE E.MaqPlant3 END) AS MP3,  '
+                                                        . '(CASE WHEN E.MaqPlant4 IS NULL THEN 0 ELSE E.MaqPlant4 END) AS MP4', false)
+                                                ->from('estilos AS E')->like('E.Clave', $xXx['ESTILO'])->get()->result();
+                                /* SI NO TIENE NINGUNA MAQUILA O ESTA EN ZERO O NULO */
+                                if (intval($check_maquila[0]->MP1) === 0 &&
+                                        intval($check_maquila[0]->MP2) === 0 &&
+                                        intval($check_maquila[0]->MP3) === 0 &&
+                                        intval($check_maquila[0]->MP4) === 0) {
+                                    /* ACTUALIZA A 105 ALMACEN CORTE, stsavan 44 */
 
+                                    $avance = array(
+                                        'Control' => $xXx['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 105,
+                                        'DepartamentoT' => 'ALMACEN CORTE',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => 0
+                                    );
+                                    $this->db->insert('avance', $avance);
+                                    $id = $this->db->insert_id();
+
+                                    $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                                            ->where('Control', $xXx['CONTROL'])
+                                            ->update('controles');
+                                    $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
+                                            ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                                            ->update('pedidox');
+                                    $this->db->set('fec44', Date('Y-m-d 00:00:00'))
+                                            ->where('contped', $xXx['CONTROL'])
+                                            ->update('avaprd');
+                                } else {
+                                    /* SI TIENE MAQUILA EL ESTILO EJ: 18 DOMADO SILUETEADO */
+                                    $avance = array(
+                                        'Control' => $x['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 100,
+                                        'DepartamentoT' => 'MAQUILA',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => 0
+                                    );
+                                    $this->db->insert('avance', $avance);
+                                    $id = $this->db->insert_id();
+                                    /* ACTUALIZA A 100 MAQUILA, stsavan 42 */
+                                    $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
+                                            ->where('Control', $xXx['CONTROL'])
+                                            ->update('controles');
+                                    $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
+                                            ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
+                                            ->update('pedidox');
+                                    $this->db->set('fec42', Date('Y-m-d 00:00:00'))
+                                            ->where('contped', $xXx['CONTROL'])
+                                            ->update('avaprd');
+                                }
+                                break;
+                            case 397:
+                                /* AVANCE 397 ENSUELADO */
                                 $avance = array(
                                     'Control' => $xXx['CONTROL'],
                                     'FechaAProduccion' => Date('d/m/Y'),
-                                    'Departamento' => 105,
-                                    'DepartamentoT' => 'ALMACEN CORTE',
+                                    'Departamento' => 130,
+                                    'DepartamentoT' => 'ALMACEN PESPUNTE',
                                     'FechaAvance' => Date('d/m/Y'),
                                     'Estatus' => 'A',
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => 0
+                                    'Fraccion' => $v->NUMERO_FRACCION
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
 
-                                $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
-                                        ->where('Control', $xXx['CONTROL'])
-                                        ->update('controles');
-                                $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
-                                        ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
-                                        ->update('pedidox');
-                                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
-                                        ->where('contped', $xXx['CONTROL'])
-                                        ->update('avaprd');
-                            } else {
-                                /* SI TIENE MAQUILA EL ESTILO EJ: 18 DOMADO SILUETEADO */
-                                $avance = array(
-                                    'Control' => $x['CONTROL'],
-                                    'FechaAProduccion' => Date('d/m/Y'),
-                                    'Departamento' => 100,
-                                    'DepartamentoT' => 'MAQUILA',
-                                    'FechaAvance' => Date('d/m/Y'),
-                                    'Estatus' => 'A',
-                                    'Usuario' => $_SESSION["ID"],
-                                    'Fecha' => Date('d/m/Y'),
-                                    'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => 0
-                                );
-                                $this->db->insert('avance', $avance);
-                                $id = $this->db->insert_id();
-                                /* ACTUALIZA A 100 MAQUILA, stsavan 42 */
-                                $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
-                                        ->where('Control', $xXx['CONTROL'])
-                                        ->update('controles');
-                                $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
-                                        ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
-                                        ->update('pedidox');
-                                $this->db->set('fec42', Date('Y-m-d 00:00:00'))
-                                        ->where('contped', $xXx['CONTROL'])
-                                        ->update('avaprd');
-                            }
-                            break;
-                        case 397:
-                            /* AVANCE 397 ENSUELADO */
-                            $avance = array(
-                                'Control' => $xXx['CONTROL'],
-                                'FechaAProduccion' => Date('d/m/Y'),
-                                'Departamento' => 130,
-                                'DepartamentoT' => 'ALMACEN PESPUNTE',
-                                'FechaAvance' => Date('d/m/Y'),
-                                'Estatus' => 'A',
-                                'Usuario' => $_SESSION["ID"],
-                                'Fecha' => Date('d/m/Y'),
-                                'Hora' => Date('h:i:s a'),
-                                'Fraccion' => $v->NUMERO_FRACCION
-                            );
-                            $this->db->insert('avance', $avance);
-                            $id = $this->db->insert_id();
 
+                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                        ->set('DeptoProduccion', 130)
+                                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 6)
+                                        ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                        ->set('DeptoProduccion', 130)
+                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
+                                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
 
-                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                    ->set('DeptoProduccion', 130)
-                                    ->where('Control', $xXx['CONTROL'])->update('controles');
-                            $this->db->set('stsavan', 6)
-                                    ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                    ->set('DeptoProduccion', 130)
-                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
-                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
-
-                            break;
-                        case 301:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
-                        case 24:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
-                        case 325:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
-                        case 74:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
-                        case 75:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
-                        case 130:
-                            $data["fraccion"] = $v->NUMERO_FRACCION;
-                            $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            $this->db->insert('fracpagnomina', $data);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1));
-                            exit(0);
-                            break;
+                                break;
+                            case 301:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            case 24:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            case 325:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            case 74:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            case 75:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            case 130:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                            default:
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
+                                break;
+                        }
                     }
-
                     /* PAGAR FRACCIONES */
                     $data["fraccion"] = $v->NUMERO_FRACCION;
                     $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
@@ -504,14 +504,17 @@ class Avance8 extends CI_Controller {
                         print json_encode(array("AVANZO" => 2, "STEP" => 1));
                         exit(0);
                     } else {
-                        if ((floatval($xXx['PARES']) * floatval($PXFC)) > 0) {
-                            $this->db->insert('fracpagnomina', $data);
-                        }
+//                        if ((floatval($xXx['PARES']) * floatval($PXFC)) > 0) {
+//                            $this->db->insert('fracpagnomina', $data);
+//                        }
                     }
 //                    print json_encode(array("AVANZO" => 1, "STEP" => 1));
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
-                    print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                    print json_encode(array("AVANZO" => 2, "STEP" => 1,
+                        "FRACCION_PAGADA" => $check_fraccion[0]->EXISTE,
+                        "FRACCION_X_ESTILO" => $check_fraccion_fxe[0]->EXISTE
+                            ));
                     exit(0);
                 }
             }

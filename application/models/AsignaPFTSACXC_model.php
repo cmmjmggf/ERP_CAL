@@ -181,12 +181,13 @@ class AsignaPFTSACXC_model extends CI_Model {
             if ($FRACCION !== '') {
                 $this->db->where('FXE.Fraccion', $FRACCION);
             }
-            return $this->db->where('F.Departamento', 10)
+            $data = $this->db->where('F.Departamento', 10)
                             ->where('OPD.Articulo', $ARTICULO)
                             ->where('OPD.Grupo', $GRUPO)
                             ->group_by('OPD.Articulo')
                             ->group_by('OPD.UnidadMedida')->get()->result();
-            
+//            print $this->db->last_query();
+            return $data;
 //            SELECT SUM(OPD.Cantidad) AS EXPLOSION FROM ordendeproduccion AS OP 
 //                    INNER JOIN ordendeproduccion AS OP 
         } catch (Exception $exc) {

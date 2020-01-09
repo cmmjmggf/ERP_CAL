@@ -384,7 +384,7 @@
         }, {
             type: type,
             z_index: 3031,
-            delay: 15000,
+            delay: 750,
             newest_on_top: true,
             showProgressbar: false,
             placement: placement_config,
@@ -403,7 +403,7 @@
         }, {
             type: type,
             z_index: 3031,
-            delay: 2000,
+            delay: 1000,
             newest_on_top: true,
             showProgressbar: false,
             placement: placement_config,

@@ -15,7 +15,7 @@ CONCAT(D.`PrimerNombre`," ",(CASE WHEN D.`SegundoNombre` = "0" THEN "" ELSE D.`S
 AA.Articulo, AA.ArticuloT, AA.UnidadMedidaT, SUM(AA.Cantidad) AS CANTIDAD, AA.`Grupo`
  FROM ordendeproduccion AS A   INNER JOIN ordendeproducciond AS AA ON A.ID = AA.OrdenDeProduccion
 INNER JOIN programacion AS C ON C.control = A.ControlT INNER JOIN empleados AS D ON C.numemp = D.Numero
-WHERE A.Semana = $P{SEMANA} AND C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.`frac` < 300 AND C.año = 2020  AND C.semana =$P{SEMANA}
+WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.`frac` < 300 AND C.año = 2020  AND C.semana =$P{SEMANA}
 AND AA.`Grupo` IN(1,12,15,16,17,18,2,30,31,34,40,41,50,9)
 GROUP BY C.numemp,AA.Articulo
 ORDER BY ABS(C.numemp) ASC, ABS(AA.`Grupo`) ASC, ABS(AA.Articulo) ASC ;]]>
