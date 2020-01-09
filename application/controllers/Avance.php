@@ -491,6 +491,22 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+            if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
+//                $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
+//                                ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
+//                                ->where('F.numfrac', $frac)->get()->result();
+//                if (intval($check_fraccion[0]->EXISTE) >= 1) {
+                    $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')
+                            ->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec40', Date('Y-m-d 00:00:00'))
+                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+//                }
+                exit(0);
+            }
 
             /*
              * ES PORQUE ESTAN EN ENTRETELADO, PERO NO LLEVAN ENTRETELADO, PERO LOS MUEVEN DE A "PROCESO MAQUILA PARA PODER AVANZAR"
@@ -627,28 +643,9 @@ P.Maquila AS MAQUILA
             /* 55 ENSUELADO */
             /* 55 ENSUELADO Y STSAVAN 5 PESPUNTE */
 
-            if (
-                    intval($xXx['EMPLEADO']) === 899 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 995 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 994 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 996 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 997 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 998 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 999 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 1000 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 1001 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 1002 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 900 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 903 && $frac === 300 ||
-                    intval($xXx['EMPLEADO']) === 904 && $frac === 300) {
-                $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                if (intval($check_fraccion[0]->EXISTE) === 0) {
-                    $this->onPagarFraccionSinAvance($xXx, $frac);
-                }
-                exit(0);
-            }
+            $empleados_celulas = array("899", "995", "994", "996", "997",
+                "998", "999", "1000", "1001", "1002",
+                "900", "901", "902", "903", "904");
 
             if ($depto === 55 && $depto_actual === 5 && $frac === 300 ||
                     $depto === 55 && $depto_actual === 5 && $frac === 303 ||
@@ -709,6 +706,34 @@ P.Maquila AS MAQUILA
                             break;
                     }
                 } else {
+                    /*
+                      LA FRACCION ESTA PAGADA PERO NO ESTA AVANZADO
+                     *                      */
+                    $EXISTE_AVANCE = $this->db->query(
+                                    "SELECT COUNT(*) AS EXISTE, P.stsavan AS AVANCE "
+                                    . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} "
+                                    . "AND P.EstatusProduccion LIKE 'ENSUELADO' LIMIT 1")->result();
+
+                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300) {
+                        $this->db->set('EstatusProduccion', 'ENSUELADO')
+                                ->set('DeptoProduccion', 140)
+                                ->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 55)
+                                ->set('EstatusProduccion', 'ENSUELADO')
+                                ->set('DeptoProduccion', 140)
+                                ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                        $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))
+                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    }
+                    exit(0);
+                }
+                exit(0);
+            }
+
+            if (in_array("{$xXx['EMPLEADO']}", $empleados_celulas) &&
+                    $depto === 55 && $depto_actual === 5 && $frac === 300) {
+                $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
+                if (intval($check_fraccion[0]->EXISTE) === 0) {
                     $this->onPagarFraccionSinAvance($xXx, $frac);
                 }
                 exit(0);

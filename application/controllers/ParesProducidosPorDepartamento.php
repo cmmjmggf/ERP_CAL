@@ -53,7 +53,41 @@ class ParesProducidosPorDepartamento extends CI_Controller {
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
         $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
-        $parametros["DEPARTAMENTO"] = ($x->post('DEPARTAMENTO'));
+        /*ES EL STSAVAN*/
+        switch (intval($x->post('DEPARTAMENTO'))) {
+            case 10:
+                /*CORTE*/
+                $parametros["DEPARTAMENTO"] = 2;
+                break;
+            case 20:
+                /*RAYADO*/
+                $parametros["DEPARTAMENTO"] = 3;
+                break;
+            case 30:
+                /*REBAJADO*/
+                $parametros["DEPARTAMENTO"] = 33;
+                break;
+            case 40:
+                /*FOLEADO*/
+                $parametros["DEPARTAMENTO"] = 4;
+                break;
+            case 130:
+                /*ALM-PESPUNTE*/
+                $parametros["DEPARTAMENTO"] = 6;
+                break;
+            case 140:
+                /*ENSUELADO*/
+                $parametros["DEPARTAMENTO"] = 55;
+                break;
+            case 90:
+                /*ENTRETELADO*/
+                $parametros["DEPARTAMENTO"] = 8;
+                break;
+            case 160:
+                /*ALM-TEJIDO*/
+                $parametros["DEPARTAMENTO"] = 8;
+                break;
+        }
         $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
         $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
         $jc->setParametros($parametros);

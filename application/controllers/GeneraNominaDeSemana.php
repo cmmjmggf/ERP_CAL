@@ -389,8 +389,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         /* 3.4.3  FINALMENTE EL SUBTOTAL GENERADO POR ESA CELULA
                          * SE MULTIPLICA POR EL PORCENTAJE DEL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                    } 
-                    else {
+                    } else {
                         /* 3.5 EL SUELDO FINAL CORRESPONDE AL SUBTOTAL DE FRACPAGNOMINA,
                          * EN CASO DE NO PERTENECER A NINGUNA CELULA SOLO SE LE PAGA LO QUE HIZO
                          * Y REGISTRO DENTRO DEL SISTEMA */
@@ -409,7 +408,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "registro" => 0, "status" => 1, "tpomov" => 0,
                             "depto" => $v->DepartamentoFisico
                         ));
-                    }else{
+                    } else {
                         
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
@@ -490,6 +489,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, cajhao
                 $this->db->set('cajhao', $v->Ahorro)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('cajhao', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -511,6 +514,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp,   infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('infon', $v->Infonavit)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('infon', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -530,7 +537,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "depto" => $v->DepartamentoFisico
                 ));
                 $this->db->set('zapper', $v->Comida)->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
+            } else {
+                $this->db->set('zapper', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -551,7 +563,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                 ));
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('fune', $v->Funeral)->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
+            } else {
+                $this->db->set('fune', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -573,6 +590,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('imss', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -595,6 +616,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('fierabono', $importe_fierabono)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('fierabono', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -616,6 +641,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('fonac', $v->Fonacot)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('fonac', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -637,6 +666,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
                 $this->db->set('impu', $v->ISR)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('impu', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -659,6 +692,10 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                ID, numsem, año, numemp, diasemp, vtazap, zapper
                 $this->db->set('vtazap', $importe_zapatostiendas)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
+            } else {
+                $this->db->set('vtazap', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

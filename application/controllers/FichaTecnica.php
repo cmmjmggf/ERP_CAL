@@ -105,7 +105,7 @@ class FichaTecnica extends CI_Controller {
             $COLOR = $this->input->post('COLOR');
             $ft = $this->db->select("FT.Estilo, FT.Color, FT.Pieza, FT.Articulo, FT.Precio, FT.Consumo, FT.PzXPar, FT.Estatus, FT.FechaAlta, FT.AfectaPV ")
                             ->from("fichatecnica AS FT")
-                            ->where("Estilo LIKE '$ESTILOACOPIAR' AND Color = $COLORACOPIAR", null, false)
+                            ->where("Estilo = '$ESTILOACOPIAR' AND Color = $COLORACOPIAR", null, false)
                             ->get()->result();
             foreach ($ft as $k => $v) {
                 $nft = array(
@@ -122,6 +122,7 @@ class FichaTecnica extends CI_Controller {
                 );
                 $this->db->insert('fichatecnica', $nft);
             }
+            $this->db->set('Seguridad', 0)->where('Estilo', $ESTILO)->update('fichatecnica');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

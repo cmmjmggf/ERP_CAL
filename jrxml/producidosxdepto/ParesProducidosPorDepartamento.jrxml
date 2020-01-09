@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamento" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
-	<property name="ireport.zoom" value="2.4200000000000013"/>
-	<property name="ireport.x" value="213"/>
+	<property name="ireport.zoom" value="1.2418426461183107"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="DEPARTAMENTO" class="java.lang.Integer"/>
 	<parameter name="FECHAINICIAL" class="java.lang.String"/>
@@ -30,7 +30,7 @@ INNER JOIN clientes AS CL ON CL.Clave = P.Cliente
 INNER JOIN estilos AS ES ON P.Estilo = ES.Clave
 INNER JOIN colores AS C ON P.Estilo = C.Estilo AND P.Color = C.Clave
 WHERE FPN.fecha BETWEEN str_to_date($P{FECHAINICIAL},"%d/%m/%Y") and str_to_date($P{FECHAFINAL},"%d/%m/%Y") AND
-FPN.depto IN($P{DEPARTAMENTO}) AND FPN.Maquila = $P{MAQUILA}
+P.stsavan IN($P{DEPARTAMENTO}) AND FPN.Maquila = $P{MAQUILA}
 order by E.Numero ASC;]]>
 	</queryString>
 	<field name="NUMEMP" class="java.lang.Integer"/>

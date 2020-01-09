@@ -768,6 +768,7 @@
                             if (xDepartamento === 40 && stsavan === 4) {
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
+                                onEnable(btnAceptar);
                             }
                             if (xDepartamento === 44 && stsavan === 40) {
                                 Fraccion.val(60);

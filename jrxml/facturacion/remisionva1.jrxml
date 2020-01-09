@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="5.785123966942235"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="627"/>
+	<property name="ireport.zoom" value="4.781094187555569"/>
+	<property name="ireport.x" value="529"/>
+	<property name="ireport.y" value="374"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, UPPER(F.obs) AS obs,
@@ -1071,109 +1071,109 @@ WHERE F.factura  = $P{factura} AND F.tp = 2]]>
 			<line>
 				<reportElement x="163" y="0" width="1" height="13" uuid="2c4d16eb-ddfe-4156-8ba7-26d7291e9b78"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="148" y="0" width="1" height="13" uuid="5aed2b37-9273-40b4-a6f3-bbe9d25c3c7d"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="178" y="0" width="1" height="13" uuid="466d1c9d-9953-4c6c-8027-5b34f6a86c5f"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="193" y="0" width="1" height="13" uuid="85a83d22-a890-4870-bf96-3e20dbb2a946"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="208" y="0" width="1" height="13" uuid="cd3318d2-f72d-4855-86b9-9fc33557e6d1"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="223" y="0" width="1" height="13" uuid="7b779c9e-96fc-49fc-afa0-a32823ddb3b9"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="238" y="0" width="1" height="13" uuid="f2cdee07-bdfd-4764-a70d-5c300d3d455c"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="253" y="0" width="1" height="13" uuid="c7c36fcc-2684-403d-ba30-c76c93c0c774"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="282" y="-1" width="1" height="13" uuid="9a694c96-1681-4ee0-8fcf-4b182e37d8d9"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="267" y="-1" width="1" height="13" uuid="2b43e4dc-1a45-442f-828d-b3fc6595c73a"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="297" y="-1" width="1" height="13" uuid="c2fa984a-6ec5-4419-93f1-dd8ab748deda"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="312" y="-1" width="1" height="13" uuid="f0917e40-36b0-4b5a-8404-3b23f529cd4c"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="327" y="-1" width="1" height="13" uuid="bd735595-3f3d-4ea1-a190-01ff66852448"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="342" y="-1" width="1" height="13" uuid="6a6c1219-0e7e-4683-877c-11e56f5386fd"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="357" y="-1" width="1" height="13" uuid="94750527-4af1-49dc-833c-2a54df3e2985"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="372" y="-1" width="1" height="13" uuid="d7f23a81-3167-4d47-920b-8e0feb77862e"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="402" y="-1" width="1" height="13" uuid="e9bb4f26-5034-4e90-bb95-69fccab890e8"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="387" y="-1" width="1" height="13" uuid="614191fa-6ab6-43a5-af31-135b4d9aeb96"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 		</band>

@@ -670,6 +670,8 @@
             pnlDetalle.addClass('d-none');
             validaSelect = false;
             pnlTablero.find("#bEstilo").focus().select();
+            onClear(pnlDatos.find("#sColor"));
+            onClear(pnlDatos.find("#sColor"));
         });
         btnEditarRenglon.click(function () {
             isValid('mdlEditarArticulo');
@@ -940,13 +942,14 @@
                 });
                 Estilo.attr('readonly', true);
                 Color.attr('readonly', true);
-                pnlDatos.find("[name='sColor']")[0].selectize.disable();
                 pnlDatos.find("#FechaAlta").prop("readonly", true);
                 $.getJSON(master_url + 'getColoresXEstilo', {Estilo: estilo}).done(function (data, x, jq) {
+                    pnlDatos.find("#sColor")[0].selectize.clear(true);
+                    pnlDatos.find("#sColor")[0].selectize.clearOptions();
                     $.each(data, function (k, v) {
-                        pnlDatos.find("[name='sColor']")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
+                        pnlDatos.find("#sColor")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
                     });
-                    pnlDatos.find("[name='sColor']")[0].selectize.addItem(color, true);
+                    pnlDatos.find("#sColor")[0].selectize.setValue(data[0].Color);
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
@@ -955,7 +958,6 @@
                 pnlDatos.find("#Color").val(data[0].Color);
                 pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
                 onVerificarEstiloCerradoCostos(estilo, color);
-
             } else {
                 swal('ATENCIÓN', 'ESTILO NO TIENE FICHA TÉCNICA CAPTURADA, CAPTURE UNA NUEVA', 'warning').then((value) => {
                     //Acciones
