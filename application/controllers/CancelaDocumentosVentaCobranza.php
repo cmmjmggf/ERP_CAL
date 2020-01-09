@@ -49,6 +49,8 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
             $tmnda = $this->input->post('Moneda');
             $tcambio = $this->input->post('TipoCambio');
 
+            $Agente = $this->db->query("select Agente from clientes where clave = {$x['CLIENTE']} ")->result()[0]->Agente;
+
             $UUID = '';
             if ($Tp === '1') {
                 $UUID = $this->db->query("SELECT uuid FROM comprobantes  WHERE Folio = $Docto and Tipo = 'I' ")->result()[0]->uuid;
@@ -107,7 +109,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                         'doctopa' => 'Nc' . $NC,
                         'numpol' => 0,
                         'numfol' => 0,
-                        'agente' => 0,
+                        'agente' => $Agente,
                         'status' => 1,
                         'nc' => $NC,
                         'control' => 0,
@@ -176,7 +178,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                         'doctopa' => 'Nc' . $NC,
                         'numpol' => 0,
                         'numfol' => 0,
-                        'agente' => 0,
+                        'agente' => $Agente,
                         'status' => 1,
                         'nc' => $NC,
                         'control' => 0,
@@ -225,7 +227,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                         'doctopa' => 'Nc' . $NC,
                         'numpol' => 0,
                         'numfol' => 0,
-                        'agente' => 0,
+                        'agente' => $Agente,
                         'status' => 1,
                         'nc' => $NC,
                         'control' => 0,

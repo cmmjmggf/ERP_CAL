@@ -585,8 +585,7 @@
                 $.getJSON('<?php print base_url('PagosDeClientes/getDatosDelDocumentoConSaldo'); ?>',
                         {
                             DOCUMENTO: DoctoPDC.val(),
-                            CLIENTE: ClientePDC.val(),
-                            TP: TPPDC.val()
+                            CLIENTE: ClientePDC.val()
                         })
                         .done(function (a) {
                             PagosDeEsteDocumento.ajax.reload();

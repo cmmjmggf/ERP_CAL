@@ -380,10 +380,10 @@ class Empleados extends CI_Controller {
                     $pdf->SetFont('Calibri', 'B', 10);
                     $pdf->SetY($Y_INI + 41.5);
                     $pdf->SetX(22.5);
-                    $pdf->Code128(25, $pdf->GetY(), $Empleado->NUMERO, 42.5, 8.5);
+                    $pdf->Code39(25, $pdf->GetY(), str_pad($Empleado->NUMERO, 4, "0", STR_PAD_LEFT));
 
                     $pdf->SetY($Y_INI + 38.5);
-                    $pdf->SetX(87.5);
+                    $pdf->SetX(86.5);
                     $pdf->Cell(20, 5, utf8_decode('VIGENCIA'), 0/* BORDE */, 1/* SALTO */, 'C');
 
                     $pdf->SetFont('Calibri', 'B', 8);
@@ -492,10 +492,11 @@ class Empleados extends CI_Controller {
             $pdf->SetFont('Calibri', 'B', 10);
             $pdf->SetY(51.5);
             $pdf->SetX(22.5);
-            $pdf->Code128(25, $pdf->GetY(), $x->get('ID'), 42.5, 8.5);
+
+            $pdf->Code39(25, $pdf->GetY(), str_pad($x->get('ID'), 4, "0", STR_PAD_LEFT));
 
             $pdf->SetY(48.5);
-            $pdf->SetX(87.5);
+            $pdf->SetX(86.5);
             $pdf->Cell(20, 5, utf8_decode('VIGENCIA'), 0/* BORDE */, 1/* SALTO */, 'C');
 
             $pdf->SetFont('Calibri', 'B', 8);

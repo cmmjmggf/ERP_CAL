@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.027650658156821"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.5921068276149564"/>
+	<property name="ireport.x" value="602"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -26,7 +26,7 @@ A.Descripcion AS Articulo,
 U.Descripcion AS Unidad,
 MA.FechaMov,
 SUM(MA.CantidadMov) AS CantidadMov,
-PM.Precio AS PrecioMov,
+MA.PrecioMov,
 SUM(MA.Subtotal) AS Subtotal
 FROM
 movarticulos MA
@@ -36,8 +36,6 @@ INNER JOIN
 unidades U ON U.Clave = A.UnidadMedida
 INNER JOIN
 grupos G ON G.Clave = A.Grupo
-LEFT JOIN
-preciosmaquilas PM ON PM.Articulo = A.Clave AND PM.Maquila = $P{maq}
 WHERE
 MA.CantidadMov > 0
 AND
@@ -49,7 +47,7 @@ MA.Ano = $P{ano}
 AND
 MA.TipoMov IN ('SXM', 'SPR', 'SXP', 'SXC')
 group by MA.DocMov, A.Clave
-ORDER BY Doc ASC, A.Descripcion ASC]]>
+ORDER BY ClaveGrupo ASC, Doc ASC, A.Descripcion ASC]]>
 	</queryString>
 	<field name="Doc" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -77,18 +75,51 @@ ORDER BY Doc ASC, A.Descripcion ASC]]>
 	<field name="CantidadMov" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="PrecioMov" class="java.lang.String"/>
+	<field name="PrecioMov" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="Subtotal" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="Subtotal_1" class="java.lang.Double" resetType="Group" resetGroup="Docto" calculation="Sum">
+	<variable name="Subtotal_1" class="java.lang.Double" resetType="Group" resetGroup="Grupo" calculation="Sum">
 		<variableExpression><![CDATA[$F{Subtotal}]]></variableExpression>
 	</variable>
 	<variable name="Subtotal_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{Subtotal}]]></variableExpression>
 	</variable>
-	<group name="Docto">
-		<groupExpression><![CDATA[$F{Doc}]]></groupExpression>
+	<group name="Grupo">
+		<groupExpression><![CDATA[$F{ClaveGrupo}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<textField>
+					<reportElement x="30" y="0" width="27" height="12" uuid="8cf6d2fe-ebb8-40b1-b5e5-91d2c1dfde18"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ClaveGrupo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="29" height="12" uuid="008afd3a-2702-440d-9b5e-9a8a7e2cc7fa"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Grupo:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="61" y="0" width="159" height="12" uuid="22bfed9a-b932-4aeb-bdad-08c252ccbeb5"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NombreGrupo}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="4" y="12" width="216" height="1" uuid="53cd9b1d-e0a0-48b5-8272-9b42e6013fd2"/>
+					<graphicElement>
+						<pen lineWidth="1.5"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
 		<groupFooter>
 			<band height="13">
 				<staticText>
@@ -96,10 +127,10 @@ ORDER BY Doc ASC, A.Descripcion ASC]]>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Total por documento:]]></text>
+					<text><![CDATA[Total por grupo:]]></text>
 				</staticText>
 				<textField pattern="¤ #,##0.00">
-					<reportElement x="349" y="0" width="52" height="12" uuid="9b66334b-7ddc-41fc-9af9-13963f6c2186"/>
+					<reportElement x="329" y="0" width="72" height="12" uuid="9b66334b-7ddc-41fc-9af9-13963f6c2186"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -351,7 +382,7 @@ ORDER BY Doc ASC, A.Descripcion ASC]]>
 				<text><![CDATA[Total general:]]></text>
 			</staticText>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="349" y="1" width="52" height="12" uuid="a1c55803-0be3-4d62-877b-81851488279b"/>
+				<reportElement x="329" y="1" width="72" height="12" uuid="a1c55803-0be3-4d62-877b-81851488279b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>

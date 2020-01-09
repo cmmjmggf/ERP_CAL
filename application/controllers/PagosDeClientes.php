@@ -86,7 +86,7 @@ class PagosDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $documento = $this->db->query("SELECT CC.cliente AS CLIENTE, CC.importe AS IMPORTE, CC.pagos AS PAGOS, date_format(CC.Fecha,'%d/%m/%Y') AS FECHA, CC.saldo AS SALDO,CC.tipo AS TIPO, DATEDIFF(NOW(),fecha) AS DIAS "
-                            . " FROM cartcliente AS CC WHERE CC.remicion = '{$x['DOCUMENTO']}' and CC.Cliente = '{$x['CLIENTE']}'  and CC.Tipo = '{$x['TP']}'  ")->result();
+                            . " FROM cartcliente AS CC WHERE CC.remicion = '{$x['DOCUMENTO']}' and CC.Cliente = '{$x['CLIENTE']}'  ")->result();
             print json_encode($documento);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -131,6 +131,8 @@ class PagosDeClientes extends CI_Controller {
             $x = $this->input->post();
             $FECHA_FINAL = date("Y-m-d", strtotime(str_replace('/', '-', $x['FECHA'])));
 
+            $Agente = $this->db->query("select Agente from clientes where clave = {$x['CLIENTE']} ")->result()[0]->Agente;
+
             switch (intval($x["TP"])) {
                 case 1:
                     /* FACTURA */
@@ -142,7 +144,7 @@ class PagosDeClientes extends CI_Controller {
                         "importe" => $TOTAL_FINAL_CON_IVA,
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
-                        "agente" => $x['AGENTE'],
+                        "agente" => $Agente,
                         "mov" => $x['MOVIMIENTO']/* MovUno, MovDos... */,
                         "doctopa" => $x['REF'],
                         "numpol" => 0,
@@ -168,7 +170,7 @@ class PagosDeClientes extends CI_Controller {
                         "importe" => $x['IMPORTE'],
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
-                        "agente" => $x['AGENTE'],
+                        "agente" => $Agente,
                         "mov" => $x['MOVIMIENTO']/* MovUno, MovDos... */,
                         "doctopa" => $x['REF'],
                         "numpol" => 0,

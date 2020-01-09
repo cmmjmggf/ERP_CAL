@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-1 col-lg-1 col-xl-1">
                     <label>Pares</label>
-                    <input type="text" id="Pares" maxlength="4" name="Pares" class="form-control form-control-sm numeric required" required="">
+                    <input type="text" id="Pares" maxlength="4" name="Pares" class="form-control form-control-sm numbersOnly required" required="">
                 </div>
                 <div class="col-12 col-sm-1 col-md-2 col-lg-1 col-xl-1" >
                     <label for="" >Fracción</label>

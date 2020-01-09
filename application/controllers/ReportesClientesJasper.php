@@ -245,7 +245,7 @@ class ReportesClientesJasper extends CI_Controller {
         $comicion = Date('ymd'); /* 170905  Dia actual */
         if ($chMarcaComPagadas === '1') {
             $this->db->query("update cartctepagos set pagada = '$comicion'  "
-                    . " WHERE agente= $agente and tipo= $tipo and pagada = 0 and mov <> 10   ");
+                    . " WHERE agente= $agente and tipo= $tipo and pagada = 0  ");
         }
     }
 

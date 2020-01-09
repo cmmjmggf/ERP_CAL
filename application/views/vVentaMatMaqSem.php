@@ -33,7 +33,14 @@
                                 <option value="2">2 Del Movimiento</option>
                             </select>
                         </div>
+                        <div class="col-12 col-sm-12">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="rPorGrupoVtaMatSem">
+                                <label class="custom-control-label text-info labelCheck" for="rPorGrupoVtaMatSem">Por Grupo</label>
+                            </div>
+                        </div>
                     </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -82,7 +89,8 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlVentaMatMaqSem.find("#frmCaptura")[0]);
 
-
+            var xGrupo = mdlVentaMatMaqSem.find("#rPorGrupoVtaMatSem")[0].checked ? '1' : '0';
+            frm.append('GrupoVtaMat', xGrupo);
 
             $.ajax({
                 url: base_url + 'index.php/ReportesMaterialesJasper/onReporteVentaMatMaqSem',

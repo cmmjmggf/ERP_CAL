@@ -222,6 +222,9 @@ class ReportesMaterialesJasper extends CI_Controller {
     public function onReporteVentaMatMaqSem() {
         $Precio = $this->input->post('Precio');
 
+        $xGrupo = $this->input->post('GrupoVtaMat');
+
+
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -233,7 +236,17 @@ class ReportesMaterialesJasper extends CI_Controller {
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\materiales\costoMatMaqSem.jasper');
         if ($Precio === '1') {
-            $jc->setJasperurl('jrxml\materiales\ventaMatMaqSem.jasper');
+            if ($xGrupo === '1') {
+                $jc->setJasperurl('jrxml\materiales\ventaMatMaqSemXGrupo.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\materiales\ventaMatMaqSem.jasper');
+            }
+        } else {
+            if ($xGrupo === '1') {
+                $jc->setJasperurl('jrxml\materiales\costoMatMaqSemXGrupo.jasper');
+            } else {
+                $jc->setJasperurl('jrxml\materiales\costoMatMaqSem.jasper');
+            }
         }
         $jc->setFilename('ENTREGA_MAT_MAQ_SEM_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
