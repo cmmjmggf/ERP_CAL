@@ -155,7 +155,7 @@
                 if (data.length > 0) {
                     var info = JSON.parse(data);
                     console.log('* DATA *', info[0]);
-                    $("#ProfilePicture h1").text(ne);
+                    $("#ProfilePicture h1").text(parseInt(ne));
                     var ext = getExt(info[0].FOTO);
                     $.ajax({
                         url: base_url + info[0].FOTO,
@@ -173,7 +173,7 @@
                             }
                         }
                     });
-                    $("#ProfileName > h1 ").text(parseInt(info[0].Empleado));
+                    $("#ProfileName > h1 ").text(info[0].Empleado);
                 } else {
                     onBeep(2);
                     swal({
