@@ -173,7 +173,7 @@
                             }
                         }
                     });
-                    $("#ProfileName > h1 ").text(info[0].Empleado);
+                    $("#ProfileName > h1 ").text(parseInt(info[0].Empleado));
                 } else {
                     onBeep(2);
                     swal({
