@@ -582,7 +582,12 @@
         DoctoPDC.on('keypress', function (e) {
             if (e.keyCode === 13 && $(this).val()) {
                 onNotifyOld('', 'OBTENIENDO INFORMACIÓN DEL DOCUMENTO...', 'info');
-                $.getJSON('<?php print base_url('PagosDeClientes/getDatosDelDocumentoConSaldo'); ?>', {DOCUMENTO: DoctoPDC.val()})
+                $.getJSON('<?php print base_url('PagosDeClientes/getDatosDelDocumentoConSaldo'); ?>',
+                        {
+                            DOCUMENTO: DoctoPDC.val(),
+                            CLIENTE: ClientePDC.val(),
+                            TP: TPPDC.val()
+                        })
                         .done(function (a) {
                             PagosDeEsteDocumento.ajax.reload();
                             DocumentosConSaldoXClientes.ajax.reload();

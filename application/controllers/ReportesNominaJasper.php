@@ -1672,9 +1672,9 @@ FROM costomanoobratemp CMT
 
                 //Validamos que tipo de reporte es para obtener los importes
                 if ($tipoReporte === '1') {
-                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 65 ";
+                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 65 and status = 2 ";
                 } else {
-                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 70 ";
+                    $query_importes = "SELECT imported,numsem FROM prenomina where numemp = $numemp and año = $ano and numcon  = 70 and status = 2 ";
                 }
                 $Importes = $this->db->query($query_importes)->result();
                 if (!empty($Importes)) {

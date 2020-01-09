@@ -295,6 +295,7 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
                             ->from("cartera_proveedores AS CP")
                             ->like("CP.Tp", $tp)
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
+                            ->where("CP.Saldo_Doc > 1 ")
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
                             ->order_by("ClaveNum", 'ASC')
                             ->order_by("CP.Tp", 'ASC')

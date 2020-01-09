@@ -125,7 +125,6 @@
     var btnVerCabeceros = pnlTablero.find('#btnVerCabeceros');
     var btnControlCompleto = pnlTablero.find('#btnControlCompleto');
     var btnAceptar = pnlTablero.find('#btnAceptar');
-
     var estilo, color, tipoArt;
     $(document).ready(function () {
         init();
@@ -189,7 +188,6 @@
                 }
             });
         });
-
         pnlTablero.find('#Tipo').change(function () {
             if ($(this).val()) {
                 pnlTablero.find('#Control').focus().select();
@@ -219,7 +217,6 @@
                                     closeOnEsc: false
                                 }).then((action) => {
                                     if (action) {
-
                                         //Aún así lo dejamos capturar, sólo se le avisa que ya está capturado
                                         onObtenerControlPedidoSerie(control);
                                         btnControlCompleto.addClass('d-none');
@@ -241,7 +238,6 @@
                             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                             console.log(x.responseText);
                         });
-
                     } else {
                         swal({
                             title: "ATENCIÓN",
@@ -287,7 +283,6 @@
             }
         });
     });
-
     function init() {
         pnlTablero.find('#Tipo')[0].selectize.focus();
         pnlTablero.find('#Tipo')[0].selectize.open();
@@ -317,7 +312,6 @@
             HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
             //traemos la tabla
             var rows = pnlTablero.find("#tblTallas > tbody");
-
             //Iteramos en los renglones
             var f1 = 0;
             var f2 = 0;
@@ -326,7 +320,6 @@
             });
             $.each(rows.find("tr input.numbersOnly:enabled"), function () {
                 var cant = parseInt($(this).val());
-
                 if (cant > 0) {
                     //Obtenemos los articulos de la tabla con el indice del padre
                     var art = rows.find("#rArticulos").find('td').eq($(this).parent().index()).find('input').val();
@@ -377,11 +370,9 @@
                             btnAceptar.attr('disabled', false);
                             console.log(x, y, z);
                         });
-
                     });
                 }
             });
-
         }
     }
     function limpiarCampos() {
@@ -393,7 +384,6 @@
         pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
         pnlTablero.find('#Tipo')[0].selectize.clear(true);
         pnlTablero.find('#Tipo')[0].selectize.focus();
-
     }
     function onImprimirValeEntrada(doc) {
 
@@ -437,7 +427,7 @@
         $.getJSON(master_url + 'getPedidoByControl', {Control: control
         }).done(function (data) {
             if (data.length > 0) { //Si el control existe
-                getFolio();//Armamos el documento con la fecha/hora de hoy
+                getFolio(); //Armamos el documento con la fecha/hora de hoy
                 estilo = data[0].Estilo;
                 color = data[0].Color;
                 $.each(data[0], function (k, v) {
@@ -445,7 +435,6 @@
                     //Llenamos los campos
                     pnlTablero.find("[name='" + k + "']").val(v);
                     pnlTablero.find('#rPares').find("[name='" + ParesPedido + "']").val(v);
-
                     //Deshabilitamos campos inecesarios
                     if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
                         pnlTablero.find('#rCantidades').find("[name='" + k + "']").prop('disabled', true);
@@ -488,8 +477,6 @@
                         });
                     }
                 });
-
-
             } else { //Si el control no existe
                 HoldOn.close();
                 swal({

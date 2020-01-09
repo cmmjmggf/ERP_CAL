@@ -25,9 +25,9 @@
                     <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <label>Cliente</label> 
+                    <label>Cliente</label>
                     <div class="row">
-                        <div class="col-3"> 
+                        <div class="col-3">
                             <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm numbersOnly notdot" maxlength="15">
                         </div>
                         <div class="col-9">
@@ -114,8 +114,10 @@
                                 <th scope="col">Rebajado</th>
                                 <th scope="col">Foleado</th>
                                 <th scope="col">Entretelado</th>
+                                <th scope="col">Maq</th>
                                 <th scope="col">Alm-Corte</th>
                                 <th scope="col">Pespunte</th>
+                                <th scope="col">Ensuelado</th>
                                 <th scope="col">Alm-Pespunte</th>
                                 <th scope="col">Tejido</th>
                                 <th scope="col">Alm-Tejido</th>
@@ -178,7 +180,7 @@
                                             print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
                                         }
                                         ?>
-                                    </select> 
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +221,6 @@
                 getInfoXControl(Control.val());
             }
         });
-
         Cliente.change(function () {
             if (Cliente.val()) {
                 xCliente.val(Cliente.val());
@@ -232,7 +233,6 @@
                 HoldOn.close();
             });
         });
-
         xCliente.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xCliente.val()) {
@@ -255,8 +255,6 @@
                 HoldOn.close();
             });
         });
-
-
         Empleado.change(function () {
             if (Empleado.val()) {
                 xEmpleado.val(Empleado.val());
@@ -269,7 +267,6 @@
                 HoldOn.close();
             });
         });
-
         xEmpleado.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xEmpleado.val()) {
@@ -414,14 +411,25 @@
                 }
             },
             "columns": [
-                {"data": "ID"}/*0*/, {"data": "CONTROL"}/*1*/,
-                {"data": "CORTE"}/*2*/, {"data": "RAYADO"},
-                {"data": "REBAJADO"}/*4*/, {"data": "FOLEADO"},
-                {"data": "ENTRETELADO"}/*6*/, {"data": "ALM-CORTE"},
-                {"data": "PESPUNTE"}/*6*/, {"data": "ALM-PESP"},
-                {"data": "TEJIDO"}/*6*/, {"data": "ALM-TEJIDO"},
-                {"data": "MONTADO"}/*6*/, {"data": "ADORNO"},
-                {"data": "ALM-ADORNO"}/*6*/, {"data": "TERMINADO"}
+                {"data": "ID"}, /*0*/
+                {"data": "CONTROL"}, /*1*/
+                {"data": "CORTE"}, /*2*/
+                {"data": "RAYADO"}, /*3*/
+                {"data": "REBAJADO"}, /*4*/
+                {"data": "FOLEADO"}, /*5*/
+                {"data": "ENTRETELADO"}, /*6*/
+                {"data": "MAQUILA"}, /*7*/
+                {"data": "ALM-CORTE"}, /*8*/
+                {"data": "PESPUNTE"}, /*9*/
+                {"data": "ENSUELADO"}, /*10*/
+                {"data": "ALM-PESP"}, /*11*/
+                {"data": "TEJIDO"}, /*12*/
+                {"data": "ALM-TEJIDO"}, /*13*/
+                {"data": "MONTADO"}, /*14*/
+                {"data": "ADORNO"}, /*15*/
+                {"data": "ALM-ADORNO"}, /*16*/
+                {"data": "TERMINADO"} /*17*/
+
             ],
             "columnDefs": [
                 {
@@ -498,7 +506,6 @@
             }
         });
     });
-
     function getColoresXEstilo(e) {
         Color[0].selectize.clear(true);
         Color[0].selectize.clearOptions();
