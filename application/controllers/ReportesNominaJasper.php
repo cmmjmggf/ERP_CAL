@@ -802,7 +802,7 @@ FROM costomanoobratemp CMT
             }
             $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ';
             fwrite($handle, $txt);
-            $txt = "\n";
+            $txt = "\n                                                                                                                                                                                     ";
             fwrite($handle, $txt);
             fclose($handle);
             exit;
@@ -838,7 +838,7 @@ FROM costomanoobratemp CMT
             }
             $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ';
             fwrite($handle, $txt);
-            $txt = "\n";
+            $txt = "\n                                                                                                                                                                                     ";
             fwrite($handle, $txt);
             fclose($handle);
             exit;

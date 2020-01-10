@@ -42,11 +42,21 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
             $this->db->query("set sql_mode=''");
             $this->db->select(" EXPL.Articulo, EXPL.Descripcion as ArticuloT, EXPL.Unidad,
                                 EXPL.Control as ControlT, EXPL.Estilo, EXPL.Color,
-                                sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as Pares
+                                sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as ParesR,
+                                (select sum(pares)
+                                from pedidox
+                                where clave = EXPL.Pedido
+                                and estilo = EXPL.Estilo
+                                and color = EXPL.Color
+                                and cast(Semana as signed) = $Sem
+                                and Ano = '$Ano'
+                                and stsavan <> 14
+                                and Maquila = 1
+                                )  as Pares
                                 from (
                                 SELECT
                                 FT.Articulo, A.Descripcion, U.Descripcion AS Unidad,
-                                PE.Control, PE.Estilo, PE.Color,
+                                PE.Control, PE.Estilo, PE.Color, PE.Clave AS Pedido, PE.Cliente AS Cliente,
                                 case when A.Departamento = '10' then
                                 (PE.Pares *  FT.Consumo)*
                                 (CASE
@@ -71,7 +81,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                                 AND PE.stsavan <> 14
                                 AND PE.Maquila = 1
                                 ) as EXPL
-                                group by EXPL.Control
+                                group by EXPL.Control,EXPL.Estilo,EXPL.Color
                                 order by EXPL.Control asc ", false);
             $query = $this->db->get();
             /*
@@ -94,12 +104,22 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             EXPL.Control as ControlT, EXPL.Pedido, EXPL.FechaEntrega, EXPL.Estilo, EXPL.Cliente as Clave,
                             (select razons from clientes where clave = EXPL.Cliente) as Cliente,
                             EXPL.Semana, EXPL.Maquila,
-                            sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as Pares
-                            from (
+                            sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as ParesResp,
 
+                            (select sum(pares)
+                            from pedidox
+                            where clave = EXPL.Pedido
+                            and estilo = EXPL.Estilo
+                            and color = EXPL.Color
+                            and cliente = EXPL.Cliente
+                            and cast(Semana as signed) BETWEEN $dSem AND $aSem
+                            and Ano = '$Ano'
+                            )  as Pares
+
+                            from (
                             SELECT
                             FT.Articulo, A.Descripcion,
-                            PE.Control, PE.Clave as Pedido, PE.FechaEntrega, PE.Estilo, PE.Cliente,
+                            PE.Control, PE.Clave as Pedido, PE.FechaEntrega, PE.Estilo, PE.Color, PE.Cliente,
                             PE.Semana, PE.Maquila,
                             case when $TipoE = '10' then
                             (PE.Pares *  FT.Consumo)*(CASE

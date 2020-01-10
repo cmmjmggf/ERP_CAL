@@ -12,7 +12,7 @@ class NotificacionDeLoDocumentado extends CI_Controller {
     }
 
     public function index() {
-        
+
     }
 
     public function getCartaFacs() {
@@ -32,7 +32,7 @@ class NotificacionDeLoDocumentado extends CI_Controller {
             if ($x["TP"] !== '') {
                 $this->db->where("C.tp", $x['TP']);
             }
-            $this->db->where("C.status<", 3);
+            $this->db->where("C.status < 3 ");
             $data = $this->db->get()->result();
 //            print $this->db->last_query();
             print json_encode($data);
@@ -70,12 +70,18 @@ class NotificacionDeLoDocumentado extends CI_Controller {
                         ->update('cartafac');
             } else {
                 $this->db->insert("cartafac", array(
-                    "cliente" => $x['CLIENTE'], "subcte" => 0,
-                    "factura" => $x['DOCUMENTO'], "tp" => $x['TP'],
-                    "guia" => $x['TALON'], "fecha" => $fecha,
-                    "pares" => $pares, "status" => 1,
-                    "cajas" => $cajas, "importe" => $subtotal,
-                    "traspo" => $x['TRANSPORTE_CLAVE'], "transp" => $x['TRANSPORTE']
+                    "cliente" => $x['CLIENTE'],
+                    "subcte" => 0,
+                    "factura" => $x['DOCUMENTO'],
+                    "tp" => $x['TP'],
+                    "guia" => $x['TALON'],
+                    "fecha" => $fecha,
+                    "pares" => $pares,
+                    "status" => 1,
+                    "cajas" => $x['CAJAS'],
+                    "importe" => $subtotal,
+                    "traspo" => $x['TRANSPORTE_CLAVE'],
+                    "transp" => $x['TRANSPORTE']
                 ));
             }
         } catch (Exception $exc) {

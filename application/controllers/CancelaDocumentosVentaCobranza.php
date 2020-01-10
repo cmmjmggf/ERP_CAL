@@ -314,7 +314,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
 
     public function getFolioNCFiscal() {
         try {
-            print json_encode($this->db->query("SELECT max(nc)+1 as nc FROM notcred  WHERE nc < 10000  and tp = 1  ")->result());
+            print json_encode($this->db->query("SELECT max(nc)+1 as nc FROM notcred  WHERE nc < 20000  and tp = 1  ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

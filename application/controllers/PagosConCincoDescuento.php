@@ -98,7 +98,7 @@ class PagosConCincoDescuento extends CI_Controller {
         try {
             $tp = $this->input->get('Tp');
             if ($tp === '1') {
-                print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp and nc < 10000 ")->result());
+                print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp and nc < 20000 ")->result());
             } else {
                 print json_encode($this->db->query("select max(nc)+1 as nc from notcred where tp = $tp  ")->result());
             }

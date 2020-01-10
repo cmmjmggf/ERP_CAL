@@ -286,7 +286,7 @@ class Articulos extends CI_Controller {
 
                 if (intval($check_precio_maquila[0]->EXISTE) === 0) {
                     $this->db->insert('preciosmaquilas', array('Articulo' => $x->post('Clave'), 'Maquila' => $v->Maquila,
-                        'Precio' => $v->Precio, 'Estatus' => 'ACTIVO'));
+                        'Precio' => $v->Precio, 'Estatus' => 'A'));
                 }
             }
         } catch (Exception $exc) {

@@ -12,10 +12,10 @@
                     <div class="col-12">
                         <label class="control-label">Cliente</label>
                         <div class="row">
-                            <div class="col-12 col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" > 
+                            <div class="col-12 col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" >
                                 <input type="text" id="ClienteClaveNDOC" name="ClienteClaveNDOC" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-9 col-md-9 col-lg-9 col-xl-9" >  
+                            <div class="col-12 col-xs-12 col-sm-9 col-md-9 col-lg-9 col-xl-9" >
                                 <select id="ClienteFacturaNDOC" name="ClienteFacturaNDOC" class="form-control form-control-sm">
                                     <option></option>
                                     <?php
@@ -31,28 +31,28 @@
 
                     <div class="col-4">
                         <label>Docto</label>
-                        <input type="text" id="DoctoNDOC" name="DoctoNDOC" class="form-control form-control-sm" maxlength="35">                            
-                    </div>  
+                        <input type="text" id="DoctoNDOC" name="DoctoNDOC" class="form-control form-control-sm" maxlength="35">
+                    </div>
                     <div class="col-2">
                         <label>TP</label>
-                        <input type="text" id="TPNDOC" name="TPNDOC" class="form-control form-control-sm numbersOnly" maxlength="1">                            
-                    </div>  
+                        <input type="text" id="TPNDOC" name="TPNDOC" class="form-control form-control-sm numbersOnly" maxlength="1">
+                    </div>
                     <div class="col-6">
                         <label>Talon</label>
-                        <input type="text" id="Talon" name="Talon" class="form-control form-control-sm" maxlength="35">                            
+                        <input type="text" id="Talon" name="Talon" class="form-control form-control-sm" maxlength="35">
                     </div>
                     <div class="w-100"></div>
                     <div class="col-2">
                         <label>Cajas</label>
-                        <input type="text" id="CajasNDOC" name="CajasNDOC" class="form-control form-control-sm numbersOnly" maxlength="7">                            
-                    </div>  
+                        <input type="text" id="CajasNDOC" name="CajasNDOC" class="form-control form-control-sm numbersOnly" maxlength="7">
+                    </div>
                     <div class="col-9">
                         <label class="control-label">Transporte</label>
                         <div class="row">
-                            <div class="col-12 col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4" > 
+                            <div class="col-12 col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
                                 <input type="text" id="ClaveTransporteNDOC" name="ClaveTransporteNDOC" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" >  
+                            <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" >
                                 <select id="TransporteNDOC" name="TransporteNDOC" class="form-control form-control-sm">
                                     <option></option>
                                     <?php
@@ -61,10 +61,10 @@
                                         print "<option value='{$v->CLAVE}' >{$v->TRANSPORTE}</option>";
                                     }
                                     ?>
-                                </select>   
+                                </select>
                             </div>
                         </div>
-                    </div>   
+                    </div>
                     <div class="col-8">
                         <label class="text-danger font-weight-bold">Transporte</label>
                         <span class="font-weight-bold">
@@ -97,18 +97,18 @@
                     <div class="w-100 my-2"></div>
                     <div class="col-4 justify-content-center text-center">
                         <button type="button" class="btn btn-info" id="btnAceptaNDOC">
-                            <span class="fa fa-save"></span> Acepta</button> 
+                            <span class="fa fa-save"></span> Acepta</button>
                     </div>
                     <div class="col-4 justify-content-center text-center">
                         <button type="button" class="btn btn-info d-none" id="btnImprimeNDOC">
-                            <span class="fa fa-print"></span> Imprime</button> 
+                            <span class="fa fa-print"></span> Imprime</button>
                     </div>
                     <div class="col-4 justify-content-center text-center">
                         <button type="button" class="btn btn-info" id="btnMovimientoNDOC">
-                            <span class="fa fa-recycle"></span> Movimiento</button> 
+                            <span class="fa fa-recycle"></span> Movimiento</button>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </div>
@@ -164,13 +164,15 @@
                 onNotifyOldPC('<span class="fa fa-check"></span>', 'NOTIFICACION COMPLETADA', 'success', {from: "bottom", align: "center"});
                 onClearPanelInputSelect(mdlNotificacionDeLoDocumentado, function () {
                     ClienteClaveNDOC.focus().select();
-                    Documentos.ajax.reload(function () {
-                        if (Documentos.rows().count() > 0) {
-                            onEnable(btnAceptaNDOC);
-                        } else {
-                            onDisable(btnAceptaNDOC);
-                        }
-                    });
+                    Documentos.ajax.reload();
+                    onEnable(btnAceptaNDOC);
+//                    Documentos.ajax.reload(function () {
+//                        if (Documentos.rows().count() > 0) {
+//                            onEnable(btnAceptaNDOC);
+//                        } else {
+//                            onDisable(btnAceptaNDOC);
+//                        }
+//                    });
                 });
             }).fail(function (x) {
                 getError(x);
@@ -181,22 +183,22 @@
 
         DoctoNDOC.on('keydown', function (e) {
             if (e.keyCode === 13 || e.keyCode === 8 || e.keyCode === 9 || e.keyCode === 46) {
-                Documentos.ajax.reload(function () {
-                    if (Documentos.rows().count() > 0) {
-                        onEnable(btnAceptaNDOC);
-                    } else {
-                        onDisable(btnAceptaNDOC);
-                    }
-                });
+//                Documentos.ajax.reload(function () {
+//                    if (Documentos.rows().count() > 0) {
+//                        onEnable(btnAceptaNDOC);
+//                    } else {
+//                        onDisable(btnAceptaNDOC);
+//                    }
+//                });
             }
         }).focusout(function () {
-            Documentos.ajax.reload(function () {
-                if (Documentos.rows().count() > 0) {
-                    onEnable(btnAceptaNDOC);
-                } else {
-                    onDisable(btnAceptaNDOC);
-                }
-            });
+//            Documentos.ajax.reload(function () {
+//                if (Documentos.rows().count() > 0) {
+//                    onEnable(btnAceptaNDOC);
+//                } else {
+//                    onDisable(btnAceptaNDOC);
+//                }
+//            });
         });
 
         ClienteFacturaNDOC.change(function () {
@@ -233,13 +235,13 @@
             } else {
                 ClienteFacturaNDOC[0].selectize.enable();
                 ClienteFacturaNDOC[0].selectize.clear(true);
-                Documentos.ajax.reload(function () {
-                    if (Documentos.rows().count() > 0) {
-                        onEnable(btnAceptaNDOC);
-                    } else {
-                        onDisable(btnAceptaNDOC);
-                    }
-                });
+//                Documentos.ajax.reload(function () {
+//                    if (Documentos.rows().count() > 0) {
+//                        onEnable(btnAceptaNDOC);
+//                    } else {
+//                        onDisable(btnAceptaNDOC);
+//                    }
+//                });
             }
         });
 
@@ -251,13 +253,13 @@
                 TransporteNDOC[0].selectize.enable();
                 TransporteNDOC[0].selectize.clear(true);
             }
-            Documentos.ajax.reload(function () {
-                if (Documentos.rows().count() > 0) {
-                    onEnable(btnAceptaNDOC);
-                } else {
-                    onDisable(btnAceptaNDOC);
-                }
-            });
+//            Documentos.ajax.reload(function () {
+//                if (Documentos.rows().count() > 0) {
+//                    onEnable(btnAceptaNDOC);
+//                } else {
+//                    onDisable(btnAceptaNDOC);
+//                }
+//            });
         });
 
         ClaveTransporteNDOC.on('keydown', function (e) {
@@ -283,13 +285,13 @@
         TPNDOC.keydown(function (e) {
             if (ClienteClaveNDOC.val()) {
                 if (e.keyCode === 13 && parseInt(TPNDOC.val()) >= 1 && parseInt(TPNDOC.val()) <= 2) {
-                    Documentos.ajax.reload(function () {
-                        if (Documentos.rows().count() > 0) {
-                            onEnable(btnAceptaNDOC);
-                        } else {
-                            onDisable(btnAceptaNDOC);
-                        }
-                    });
+//                    Documentos.ajax.reload(function () {
+//                        if (Documentos.rows().count() > 0) {
+//                            onEnable(btnAceptaNDOC);
+//                        } else {
+//                            onDisable(btnAceptaNDOC);
+//                        }
+//                    });
                     return;
                 } else if (e.keyCode === 13 && parseInt(TPNDOC.val()) >= 3) {
                     TPNDOC.focus().select();
@@ -307,13 +309,13 @@
         }).focusout(function () {
             if (ClienteClaveNDOC.val()) {
                 if (parseInt(TPNDOC.val()) >= 1 && parseInt(TPNDOC.val()) <= 2) {
-                    Documentos.ajax.reload(function () {
-                        if (Documentos.rows().count() > 0) {
-                            onEnable(btnAceptaNDOC);
-                        } else {
-                            onDisable(btnAceptaNDOC);
-                        }
-                    });
+//                    Documentos.ajax.reload(function () {
+//                        if (Documentos.rows().count() > 0) {
+//                            onEnable(btnAceptaNDOC);
+//                        } else {
+//                            onDisable(btnAceptaNDOC);
+//                        }
+//                    });
                     return;
                 } else if (parseInt(TPNDOC.val()) >= 3) {
                     TPNDOC.focus().select();
@@ -328,13 +330,13 @@
                 });
                 return;
             }
-            Documentos.ajax.reload(function () {
-                if (Documentos.rows().count() > 0) {
-                    onEnable(btnAceptaNDOC);
-                } else {
-                    onDisable(btnAceptaNDOC);
-                }
-            });
+//            Documentos.ajax.reload(function () {
+//                if (Documentos.rows().count() > 0) {
+//                    onEnable(btnAceptaNDOC);
+//                } else {
+//                    onDisable(btnAceptaNDOC);
+//                }
+//            });
         });
 
         mdlNotificacionDeLoDocumentado.on('shown.bs.modal', function () {
@@ -349,13 +351,13 @@
     function getDocumentos() {
         ClienteClaveNDOC.focus().select();
         if ($.fn.DataTable.isDataTable('#tblDocumentos')) {
-            Documentos.ajax.reload(function () {
-                if (Documentos.rows().count() > 0) {
-                    onEnable(btnAceptaNDOC);
-                } else {
-                    onDisable(btnAceptaNDOC);
-                }
-            });
+//            Documentos.ajax.reload(function () {
+//                if (Documentos.rows().count() > 0) {
+//                    onEnable(btnAceptaNDOC);
+//                } else {
+//                    onDisable(btnAceptaNDOC);
+//                }
+//            });
             return;
         }
         Documentos = tblDocumentos.DataTable({

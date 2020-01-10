@@ -113,7 +113,7 @@ class ReportesCompras extends CI_Controller {
                                                         $pdf->SetFont('Calibri', '', 9);
                                                         $pdf->Row(array(
                                                             $A->ClaveArt,
-                                                            utf8_decode(mb_strimwidth($A->Articulo, 0, 38, "")),
+                                                            utf8_decode(mb_strimwidth($A->Articulo, 0, 34, "")),
                                                             $A->Unidad,
                                                             $A->FechaMov,
                                                             number_format($A->CantidadMov, 2, ".", ","),
@@ -377,7 +377,7 @@ class ReportesCompras extends CI_Controller {
                 foreach ($Articulos as $key => $A) {
                     $pdf->SetX(5);
                     $pdf->Cell(12, 3, $A->Clave . ' ', 'B'/* BORDE */, 0, 'R');
-                    $pdf->Cell(58, 3, utf8_decode(mb_strimwidth($A->Articulo, 0, 40, "")), 'B'/* BORDE */, 0, 'L');
+                    $pdf->Cell(58, 3, utf8_decode(mb_strimwidth($A->Articulo, 0, 34, "")), 'B'/* BORDE */, 0, 'L');
                     $pdf->Cell(15, 3, $A->Unidad, 'B'/* BORDE */, 0, 'C');
                     $pdf->Cell(20, 3, $A->FechaMov, 'B'/* BORDE */, 0, 'C');
                     $pdf->Cell(17, 3, '$' . number_format($A->PrecioMov, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
@@ -610,7 +610,7 @@ class ReportesCompras extends CI_Controller {
                             $pdf->SetFont('Calibri', '', 9);
                             $pdf->Cell(10, 4, utf8_decode($A->Clave), 'B'/* BORDE */, 0, 'R');
                             $pdf->SetX($pdf->GetX());
-                            $pdf->Cell(60, 4, utf8_decode(mb_strimwidth($A->Articulo, 0, 45, "")), 'B'/* BORDE */, 0, 'L');
+                            $pdf->Cell(60, 4, utf8_decode(mb_strimwidth($A->Articulo, 0, 40, "")), 'B'/* BORDE */, 0, 'L');
                             $pdf->SetX($pdf->GetX());
                             $pdf->Cell(12, 4, utf8_decode($A->Unidad), 'B'/* BORDE */, 0, 'C');
                             $pdf->SetX($pdf->GetX());

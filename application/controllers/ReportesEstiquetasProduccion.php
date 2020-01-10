@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/PHPExcel.php";
 
 class ReportesEstiquetasProduccion extends CI_Controller {
 

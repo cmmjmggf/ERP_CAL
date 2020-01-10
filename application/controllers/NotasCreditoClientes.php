@@ -173,7 +173,7 @@ class NotasCreditoClientes extends CI_Controller {
 
             if ($nuevo === '1') {//Si es nuevo trae el nuevo folio
                 if ($x['tp'] === '1') {
-                    $Folio = $this->db->query("SELECT max(nc)+1 as nc FROM notcred  WHERE nc < 10000  and tp = 1 ; ")->result()[0]->nc;
+                    $Folio = $this->db->query("SELECT max(nc)+1 as nc FROM notcred  WHERE nc < 20000  and tp = 1 ; ")->result()[0]->nc;
                 } else {
                     $Folio = $this->db->query("SELECT max(nc)+1 as nc FROM notcred  WHERE nc > 0  and tp = 2 ; ")->result()[0]->nc;
                 }
