@@ -51,7 +51,9 @@ class ParesAsignados_model extends CI_Model {
                     $this->db->order_by('P.FechaEntrega', 'ASC')->order_by('C.RazonS', 'ASC');
                     break;
             }
-            return $this->db->get()->result();
+            $data = $this->db->get()->result();
+            print $this->db->last_query();
+            return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -80,7 +80,11 @@ class ParesAsignados extends CI_Controller {
         try {
             $x = $this->input;
             $PARES_ASIGNADOS = ($this->pam->getParesAsignados(
-                            $x->post('MAQUILA_INICIAL'), $x->post('MAQUILA_FINAL'), $x->post('SEMANA_INICIAL'), $x->post('SEMANA_FINAL'), $x->post('ANIO'), $x->post('TIPO')));
+                            $x->post('MAQUILA_INICIAL'),
+                            $x->post('MAQUILA_FINAL'),
+                            $x->post('SEMANA_INICIAL'),
+                            $x->post('SEMANA_FINAL'),
+                            $x->post('ANIO'), $x->post('TIPO')));
 
             $MAQUILAS = array();
             foreach ($PARES_ASIGNADOS as $k => $v) {
@@ -109,7 +113,7 @@ class ParesAsignados extends CI_Controller {
             $pdf->SetX(40);
             $pdf->Cell(229, $alto_celda, utf8_decode($_SESSION["EMPRESA_RAZON"]), $bordes/* BORDE */, 1/* SALTO */, 'L');
             $pdf->SetX(40);
-            $pdf->Cell(40, $alto_celda, utf8_decode("Pares asignados a maquila"), $bordes/* BORDE */, 0/* SALTO */, 'L');
+            $pdf->Cell(40, $alto_celda, utf8_decode("Pares asignados a maquila xxx"), $bordes/* BORDE */, 0/* SALTO */, 'L');
             $pdf->SetX(80);
             $pdf->Cell(5, $alto_celda, $x->post('MAQUILA_INICIAL') !== '' ? $x->post('MAQUILA_INICIAL') : '', $bordes/* BORDE */, 0/* SALTO */, 'C');
             $pdf->SetX(85);

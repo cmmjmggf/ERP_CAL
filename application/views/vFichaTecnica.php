@@ -32,6 +32,45 @@
                     <button type="button" class="btn btn-info btn-sm mt-4" id="btnBuscarFT">ACEPTAR</button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col mt-2">
+                    <div class="table-responsive" id="xFichaTecnicaDetalle">
+                        <table id="tblxFichaTecnicaDetalle" class="table table-sm display " style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Pieza_ID</th>
+                                    <th>Pieza</th>
+                                    <th>Articulo_ID</th>
+                                    <th>Articulo</th>
+                                    <th>Unidad</th>
+                                    <th>Consumo</th>
+                                    <th>PzaXPar</th>
+                                    <th>ID</th>
+                                    <th>Eliminar</th>
+                                    <th>DeptoCat</th>
+                                    <th>DEP</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Total:</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -754,6 +793,7 @@
                 }
             }
         });
+
         pnlTablero.find("#sbColor").change(function () {
             if ($(this).val()) {
                 pnlTablero.find("#bColor").val($(this).val());
@@ -764,9 +804,131 @@
         pnlTablero.find("#btnBuscarFT").click(function () {
             var estilo = pnlTablero.find("#bEstilo").val();
             var color = pnlTablero.find("#bColor").val();
-            getFichaTecnicaByEstiloByColor(estilo, color);
+            $.fn.dataTable.ext.errMode = 'throw';
+            if ($.fn.DataTable.isDataTable('#tblFichaTecnicaDetalle')) {
+                FichaTecnicaDetalle.ajax.reload();
+                return;
+            }
+//            getFichaTecnicaByEstiloByColor(estilo, color);
         });
 
+        xFichaTecnicaDetalle = tblxFichaTecnicaDetalle.DataTable({
+            "ajax": {
+                "url": '<?php print base_url('FichaTecnica/getFichaTecnicaDetalleByID'); ?>',
+                "dataSrc": "",
+                "data": {
+                    "Estilo": pnlTablero.find("#bEstilo").val() ? pnlTablero.find("#bEstilo").val() : '',
+                    "Color": pnlTablero.find("#bColor").val() ? pnlTablero.find("#bColor").val() : ''
+                }
+            },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [2],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [7],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [8],
+                    "visible": (seguridad === '1' ? false : true),
+                    "searchable": false
+                },
+                {
+                    "targets": [9],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [10],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "columns": [
+                {"data": "Pieza_ID"}, /*0*/
+                {"data": "Pieza"}, /*1*/
+                {"data": "Articulo_ID"}, /*2*/
+                {"data": "Articulo"}, /*3*/
+                {"data": "Unidad"}, /*4*/
+                {"data": "Consumo"}, /*5*/
+                {"data": "PzXPar"}, /*6*/
+                {"data": "ID"}, /*7*/
+                {"data": "Eliminar"}, /*8*/
+                {"data": "DeptoCat"}, /*9*/
+                {"data": "DEPTO"}/*10*/
+            ],
+            "createdRow": function (row, data, index) {
+                $.each($(row).find("td"), function (k, v) {
+                    var c = $(v);
+                    var index = parseInt(k);
+                    switch (index) {
+                        case 2:
+                            /*UNIDAD*/
+                            c.addClass('text-warning text-strong');
+                            break;
+                        case 3:
+                            /*CONSUMO*/
+                            c.addClass('');
+                            break;
+                        case 4:
+                            /*PZXPAR*/
+                            c.addClass('text-info text-strong');
+                            break;
+                        case 5:
+                            /*ELIMINAR*/
+                            c.addClass('text-danger');
+                            break;
+                    }
+                });
+            },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(); //Get access to Datatable API
+                // Update footer
+                var total = api.column(5).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(5).footer()).html(api.column(5, {page: 'current'}).data().reduce(function (a, b) {
+                    return  $.number(parseFloat(total), 3, '.', ',');
+                }, 0));
+            },
+            "dom": 'frt',
+            "autoWidth": true,
+            language: lang,
+            "displayLength": 500,
+            "colReorder": true,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollY": 295,
+            "scrollCollapse": true,
+            "bSort": true,
+            "keys": true,
+            order: [[10, 'asc'], [3, 'asc']],
+            rowGroup: {
+                endRender: function (rows, group) {
+                    var stc = $.number(rows.data().pluck('Consumo').reduce(function (a, b) {
+                        return a + parseFloat(b);
+                    }, 0), 4, '.', ',');
+                    return $('<tr>').
+                            append('<td></td><td colspan="2">Totales de: ' + group + '</td>').append('<td>' + stc + '</td><td colspan="2"></td><td></td></tr>');
+                },
+                dataSrc: "DeptoCat"
+            },
+            "initComplete": function (x, y) {
+                HoldOn.close();
+            }
+        });
     });
 
     function getColoresXEstiloIni(Estilo) {

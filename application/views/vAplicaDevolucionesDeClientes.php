@@ -361,6 +361,7 @@
                 PRECIO: Precio.val(),
                 TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
             };
+
             $.post('<?php print base_url('AplicaDevolucionesDeClientes/onCerrarNC'); ?>', p).done(function (aaa) {
                 console.log(aaa);
                 onImprimirReporteFancyAFC(aaa, function (a, b) {
@@ -386,67 +387,75 @@
             onReadAndWrite(FechaDevolucion);
             onReadAndWrite(AplicaDevolucion);
             onEnable(TP);
-            var p = {
-                CLIENTE: ClienteDevolucion.val(),
-                DOCUMENTO: AplicaDevolucion.val(),
-                APLICA: AplicaDevolucion.val(),
-                NC: NotaCredito.val(),
-                TP: TP.val(),
-                FECHA: FechaDevolucion.val(),
-                CONTROL: Control.val(),
-                ESTILO: Estilo.val(),
-                COLOR: Color.val(),
-                SERIE: Serie.val(),
-                PRECIO: Precio.val(),
-                TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
-            };
+            if (Precio.val()) {
+                var p = {
+                    CLIENTE: ClienteDevolucion.val(),
+                    DOCUMENTO: AplicaDevolucion.val(),
+                    APLICA: AplicaDevolucion.val(),
+                    NC: NotaCredito.val(),
+                    TP: TP.val(),
+                    FECHA: FechaDevolucion.val(),
+                    CONTROL: Control.val(),
+                    ESTILO: Estilo.val(),
+                    COLOR: Color.val(),
+                    SERIE: Serie.val(),
+                    PRECIO: Precio.val(),
+                    TOTAL_EN_LETRA: pnlTablero.find(".total_en_letra").text()
+                };
 
-            for (var i = 1; i < 23; i++) {
-                if (i < 10) {
-                    p["PAR" + i] = pnlTablero.find("#xpar0" + i).val();
-                } else {
-                    p["PAR" + i] = pnlTablero.find("#xpar" + i).val();
+                for (var i = 1; i < 23; i++) {
+                    if (i < 10) {
+                        p["PAR" + i] = pnlTablero.find("#xpar0" + i).val();
+                    } else {
+                        p["PAR" + i] = pnlTablero.find("#xpar" + i).val();
+                    }
                 }
-            }
 
-            if (nuevo) {
-                console.log("PARAMETROS => ", p);
-                $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
-                    console.log(aaa);
-                    nuevo = false;
-                    DevolucionDetalle.ajax.reload();
-                    onNotifyOld('', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
-                    onDisable(ClienteDevolucion);
-                    FechaDevolucion.attr("readonly", true);
-                    AplicaDevolucion.attr("readonly", true);
-                    onDisable(TP);
-                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
-                    DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
-                        onEnable(btnCierraNC);
+                if (nuevo) {
+                    console.log("PARAMETROS => ", p);
+                    $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
+                        console.log(aaa);
+                        nuevo = false;
+                        DevolucionDetalle.ajax.reload();
+                        onNotifyOld('', 'SE HAN GUARDADO LOS CAMBIOS', 'success');
+                        onDisable(ClienteDevolucion);
+                        FechaDevolucion.attr("readonly", true);
+                        AplicaDevolucion.attr("readonly", true);
+                        onDisable(TP);
+                        tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
+                        DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
+                            onEnable(btnCierraNC);
+                        });
+                        getTotal();
+                        Precio.val('');
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
                     });
-                    getTotal();
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                });
+                } else {
+                    $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
+                        console.log(aaa);
+                        nuevo = false;
+                        DevolucionDetalle.ajax.reload();
+                        onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HAN GUARDADO LOS CAMBIOS', 'warning', {from: "bottom", align: "center"});
+                        onDisable(ClienteDevolucion);
+                        FechaDevolucion.attr("readonly", true);
+                        AplicaDevolucion.attr("readonly", true);
+                        onDisable(TP);
+                        tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
+                        DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
+                            onEnable(btnCierraNC);
+                        });
+                        getTotal();
+                        Precio.val('');
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                    });
+                }
             } else {
-                $.post('<?php print base_url('AplicaDevolucionesDeClientes/onGuardarNC'); ?>', p).done(function (aaa) {
-                    console.log(aaa);
-                    nuevo = false;
-                    DevolucionDetalle.ajax.reload();
-                    onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HAN GUARDADO LOS CAMBIOS', 'warning', {from: "bottom", align: "center"});
-                    onDisable(ClienteDevolucion);
-                    FechaDevolucion.attr("readonly", true);
-                    AplicaDevolucion.attr("readonly", true);
-                    onDisable(TP);
-                    tblDevCtrlXAplicarDeEsteCliente.parent().removeClass("blinkb");
-                    DevCtrlXAplicarDeEsteCliente.ajax.reload(function () {
-                        onEnable(btnCierraNC);
-                    });
-                    getTotal();
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
+                    Precio.focus().select();
                 });
             }
         });
@@ -802,7 +811,7 @@
         $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getTotal'); ?>', p).done(function (xxx) {
             console.log(xxx);
             console.log(NumeroALetras(xxx[0].TOTAL));
-            pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL));
+            pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL * 1.16));
         }).fail(function (x) {
             getError(x);
         }).always(function () {

@@ -339,9 +339,7 @@ ORDER BY ABS(CLAVE) ASC]]>
 				<textFieldExpression><![CDATA[$F{CUENTA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad01d54-90de-4b47-8c61-bd72df72f566">
-					<printWhenExpression><![CDATA[$F{SUELDO_NETO}>0]]></printWhenExpression>
-				</reportElement>
+				<reportElement mode="Transparent" x="339" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad01d54-90de-4b47-8c61-bd72df72f566"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -349,9 +347,7 @@ ORDER BY ABS(CLAVE) ASC]]>
 				<textFieldExpression><![CDATA[$F{SUELDO_NETO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="393" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1edf75d3-55ad-4e74-952c-7e037ad90cfd">
-					<printWhenExpression><![CDATA[$F{SUELDO_FIS}>0]]></printWhenExpression>
-				</reportElement>
+				<reportElement mode="Transparent" x="393" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1edf75d3-55ad-4e74-952c-7e037ad90cfd"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -359,9 +355,7 @@ ORDER BY ABS(CLAVE) ASC]]>
 				<textFieldExpression><![CDATA[$F{SUELDO_FIS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="447" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b3216804-7633-4603-b08c-714907376538">
-					<printWhenExpression><![CDATA[$F{ABONO_FIS}>0]]></printWhenExpression>
-				</reportElement>
+				<reportElement mode="Transparent" x="447" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b3216804-7633-4603-b08c-714907376538"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -369,9 +363,7 @@ ORDER BY ABS(CLAVE) ASC]]>
 				<textFieldExpression><![CDATA[$F{ABONO_FIS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="501" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990">
-					<printWhenExpression><![CDATA[$F{ABONO_NOMINA}>0]]></printWhenExpression>
-				</reportElement>
+				<reportElement mode="Transparent" x="501" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a53cd18-88da-4af5-882b-7ed0ebfcc990"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

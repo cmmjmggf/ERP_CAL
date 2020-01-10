@@ -185,7 +185,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
     public function getUltimaNC() {
         try {
             print json_encode($this->db->query("SELECT (NC.nc + 1) AS NCU FROM notcred AS NC "
-                                    . "WHERE NC.tp = 1 ORDER BY NC.nc DESC LIMIT 1")->result());
+                                    . "WHERE NC.tp = 1 AND NC.nc < 20000 ORDER BY NC.nc DESC LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -226,7 +226,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 switch (intval($x["TP"])) {
                     case 1:
                         $subtotal = $x["PRECIO"] * $r->paredev;
-                        $subtotal *= 1.16;
+//                        $subtotal *= 1.16;
                         break;
                     case 2:
                         $subtotal = $x["PRECIO"] * $r->paredev;
@@ -333,8 +333,8 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             }/* END FOR */
 
             $cartcliente = $this->db->query("SELECT * FROM cartcliente  AS N WHERE remicion = {$x['DOCUMENTO']} and cliente= {$x['CLIENTE']} and tipo= {$x['TP']}")->result();
-            print "\n" . $this->db->last_query() . "\n";
-            var_dump($cartcliente);
+//            print "\n" . $this->db->last_query() . "\n";
+//            var_dump($cartcliente);
             if (intval($x["TP"]) === 1) {
                 $cartctepagos = array(
                     "cliente" => $x["CLIENTE"],
@@ -381,7 +381,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         ->where('tipo', $x['TP'])->update('cartcliente');
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-STATUS)(TP-1)", "HA MODIFICADO EL ESTATUS({$status}) DE LA NDC({$x["NC"]})  DEL CLIENTE {$x["CLIENTE"]}.", $this->session);
                 /*                 * ********************** TimbrarNC.exe TODAVIA NO LO TENEMOS***************** */
-                print "\n*** TIMBRANDO NC {$x['NC']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
+//                print "\n*** TIMBRANDO NC {$x['NC']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
 //                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
 //                exec('schtasks /run /tn "Timbrar"  ');
 //                exec('schtasks /delete /tn "Timbrar" /F ');

@@ -442,7 +442,10 @@ class Avance8 extends CI_Controller {
                                         ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                 $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
-
+                                /* REVISAR SI LLEVA TEJIDO FRACCION 401 */
+                                
+                                $TIENE_TEJIDO = $this->db->query("SELECT * FROM ")
+                                
                                 break;
                             case 301:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
@@ -514,7 +517,7 @@ class Avance8 extends CI_Controller {
                     print json_encode(array("AVANZO" => 2, "STEP" => 1,
                         "FRACCION_PAGADA" => $check_fraccion[0]->EXISTE,
                         "FRACCION_X_ESTILO" => $check_fraccion_fxe[0]->EXISTE
-                            ));
+                    ));
                     exit(0);
                 }
             }

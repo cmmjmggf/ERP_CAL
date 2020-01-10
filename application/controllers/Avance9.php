@@ -629,7 +629,7 @@ class Avance9 extends CI_Controller {
 
                             /* ACTUALIZA A 40 FOLEADO, stsavan 40 */
                             $this->onAvanzarXControl($xXx['CONTROL'], 'FOLEADO', 40, 4);
-                            print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A FOLEADO - SWITCH 80"}';
+//                            print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A FOLEADO - SWITCH 80"}';
                         }
 
                         /* 80 CONTAR TAREA */

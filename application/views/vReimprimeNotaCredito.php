@@ -1,8 +1,8 @@
 <div class="modal " id="mdlReimprimeNotaCredito"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reimprime Nota de Crédito</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Reimprime Nota de Crédito</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

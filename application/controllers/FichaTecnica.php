@@ -528,7 +528,34 @@ class FichaTecnica extends CI_Controller {
 
     public function getFichaTecnicaDetalleByID() {
         try {
-            print json_encode($this->ftm->getFichaTecnicaDetalleByID($this->input->get('Estilo'), $this->input->get('Color')));
+//            print json_encode($this->ftm->getFichaTecnicaDetalleByID($this->input->get('Estilo'), $this->input->get('Color')));
+            $this->db->select('
+            P.Clave AS Pieza_ID,
+            CONCAT(P.Clave, \'-\', P.Descripcion) AS Pieza,
+            FT.Articulo Articulo_ID,
+            CONCAT(M.Clave, \'-\', M.Descripcion) AS Articulo,
+            C.Descripcion AS Unidad,
+            CONCAT(\'\', FT.Consumo, \'\') AS Consumo,
+            IFNULL(FT.PzXPar, 1) AS PzXPar,
+            FT.ID AS ID,
+            CONCAT(\'<span class="fa fa-trash fa-lg " onclick="onEliminarArticuloID(\', FT.ID, \')">\', \'</span>\') AS Eliminar,
+            CONCAT(D.Clave, \' - \', D.Descripcion) AS DeptoCat,
+            D.Clave AS DEPTO,FT.AfectaPV ', false)
+                    ->from('fichatecnica AS FT')
+                    ->join('`articulos` AS `M`', '`FT`.`Articulo` = `M`.`Clave`')
+                    ->join('`piezas` AS `P`', '`FT`.`Pieza` = `P`.`Clave`')
+                    ->join('unidades AS C', '`M`.`UnidadMedida` = `C`.`Clave`')
+                    ->join('departamentos AS D', '`P`.`Departamento` = `D`.`Clave`')
+                    ->where('FT.Estilo', $Estilo)->where('FT.Color', $Color)
+                    ->where('FT.Estatus', 'ACTIVO');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+//            print $str;
+            $data = $query->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

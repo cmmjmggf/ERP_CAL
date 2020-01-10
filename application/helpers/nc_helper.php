@@ -75,7 +75,7 @@ class NotaDeCredito {
                                         join clientes ct on ct.clave= nc.cliente
                                         join agentes ag on ag.clave= ct.agente
                                         join estados edo on edo.clave= ct.estado
-                                        join comprobantes c on c.Folio = nc.nc and c.tipo = 'E'
+                                        left join comprobantes c on c.Folio = nc.nc and c.tipo = 'E'
                                         where nc.cliente= $Cliente
                                         and nc.tp = $Tp
                                         and nc.nc = $Folio ")->result();
