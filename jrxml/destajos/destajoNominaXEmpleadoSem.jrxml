@@ -29,7 +29,7 @@ from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 join fracciones F on F.Clave = FPN.numfrac
 where FPN.semana = $P{sem} and FPN.anio = $P{ano} and FPN.numeroempleado = $P{emp}
-order by FPN.fecha asc, FPN.numfrac asc, FPN.control asc]]>
+order by FPN.numfrac asc,FPN.fecha asc,  FPN.control asc]]>
 	</queryString>
 	<field name="numemp" class="java.lang.Integer"/>
 	<field name="nomemp" class="java.lang.String"/>

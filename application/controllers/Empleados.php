@@ -115,6 +115,7 @@ class Empleados extends CI_Controller {
             $data["Registro"] = Date('d/m/Y h:i:s a');
             $data["Estatus"] = 'ACTIVO';
 
+            $data["Busqueda"] = $xxx['PrimerNombre'] . ' ' . $xxx['SegundoNombre'] . ' ' . $xxx['Paterno'] . ' ' . $xxx['Materno'];
 //            var_dump($data);
 
             $ID = $this->Empleados_model->onAgregar($data);

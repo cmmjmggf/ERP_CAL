@@ -313,12 +313,7 @@
             //traemos la tabla
             var rows = pnlTablero.find("#tblTallas > tbody");
             //Iteramos en los renglones
-            var f1 = 0;
-            var f2 = 0;
-            $.each(rows.find("tr input.numbersOnly:enabled"), function (i, v) {
-                f2++;
-            });
-            $.each(rows.find("tr input.numbersOnly:enabled"), function () {
+            $.each(rows.find("tr input.numbersOnly:enabled"), function (index, element) {
                 var cant = parseInt($(this).val());
                 if (cant > 0) {
                     //Obtenemos los articulos de la tabla con el indice del padre
@@ -353,26 +348,28 @@
                                 Ano: ano
                             }
                         }).done(function (data, x, jq) {
-                            btnAceptar.attr('disabled', false);
-                            f1 = f1 + 1;
-                            if (f1 === f2) {
-                                //onImprimirValeEntrada(doc);
-                                total_pares = 0;
-                                pares_pedido = 0;
-                                pnlTablero.find('input').val('');
-                                pnlTablero.find("#FechaMov").val(getToday());
-                                pnlTablero.find('#MaquilaRecibe').html('');
-                                pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
-                                pnlTablero.find('#Control').focus();
-                                HoldOn.close();
-                            }
+
                         }).fail(function (x, y, z) {
                             btnAceptar.attr('disabled', false);
                             console.log(x, y, z);
                         });
                     });
                 }
+
+                if (index === (rows.find("tr input.numbersOnly:enabled").length - 1)) {//Obtiene el ultimo elemento del arreglo
+                    btnAceptar.attr('disabled', false);
+                    total_pares = 0;
+                    pares_pedido = 0;
+                    pnlTablero.find('input').val('');
+                    pnlTablero.find("#FechaMov").val(getToday());
+                    pnlTablero.find('#MaquilaRecibe').html('');
+                    pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
+                    pnlTablero.find('#Control').focus();
+                    HoldOn.close();
+                }
+
             });
+
         }
     }
     function limpiarCampos() {

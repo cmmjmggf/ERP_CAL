@@ -336,7 +336,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ) as Neto,
                     (P.salfis) as SueldoFiscal,
                     '02' as col1,
@@ -435,7 +435,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ) as Neto,
                     (P.salfis) as SueldoFiscal,
                     E.numero as numemp,
@@ -517,7 +517,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ) as Neto,
                     (E.SueldoFijo) as SueldoFiscal,
                     E.numero as numemp,
@@ -654,7 +654,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ) as Neto,
                     (E.SueldoFijo) as SueldoFiscal,
                     E.numero as numemp,
@@ -854,7 +854,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     truncate(
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ,0) as Neto,
                     truncate(E.SueldoFijo,0) as SueldoFiscal,
                     '02' as col1,
@@ -1038,7 +1038,7 @@ FROM costomanoobratemp CMT
         $query = "SELECT
                     (
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
-                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1)
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
                     ) as Neto,
                     (E.SueldoFijo) as SueldoFiscal,
                     '02' as col1,
