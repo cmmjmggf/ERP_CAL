@@ -381,7 +381,7 @@ class Empleados extends CI_Controller {
                     $pdf->SetFont('Calibri', 'B', 10);
                     $pdf->SetY($Y_INI + 41.5);
                     $pdf->SetX(22.5);
-                    $pdf->Code39(25, $pdf->GetY(), str_pad($Empleado->NUMERO, 4, "0", STR_PAD_LEFT));
+                    $pdf->Code39(35, $pdf->GetY(), str_pad($Empleado->NUMERO, 4, "0", STR_PAD_LEFT));
 
                     $pdf->SetY($Y_INI + 38.5);
                     $pdf->SetX(86.5);
@@ -394,26 +394,77 @@ class Empleados extends CI_Controller {
                     $pdf->Cell(20, 4, utf8_decode('31/12/' . date('Y')), 0/* BORDE */, 1/* SALTO */, 'C');
 
                     /*                     * ******************** SEGUNDA HOJA *************************** */
-                    $pdf->SetFont('Calibri', 'B', 17);
-                    $pdf->SetY($Y_INI);
-                    $pdf->SetX(109.2);
-                    $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
-                    $pdf->Image(base_url() . '/img/watermark.png', 127.5, $Y_INI + 5, 45);
-                    $pdf->SetY($Y_INI + 7);
-                    $pdf->SetX(109.2);
-                    $pdf->SetFont('Calibri', 'B', 16);
-                    $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
-                    $pdf->SetFont('Calibri', '', 11.5);
-                    $pdf->SetY($Y_INI + 18);
-                    $pdf->SetX(109.2);
-                    $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
-                    $pdf->SetFont('Calibri', 'B', 9);
-                    $pdf->SetY($Y_INI + 46.3);
-                    $pdf->SetX(109.2);
-                    $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
-                    $pdf->SetX(151);
-                    $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
-                    $pdf->SetY(51.3);
+
+
+                    $deptos_corte = array(10, 20, 30, 50, 60);
+                    $deptos_cordinado = array(40, 70, 80, 90, 140);
+                    if (in_array($Empleado->NUM_DEPTO, $deptos_corte)) {
+
+                        $pdf->SetFont('Calibri', 'B', 17);
+                        $pdf->SetY($Y_INI);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(86, 7, utf8_decode('CALZADO LOBO SOLO'), 1/* BORDE */, 1/* SALTO */, 'C');
+                        $pdf->Image(base_url() . '/img/watermark.png', 137, $Y_INI + 6, 28);
+
+                        $pdf->SetY($Y_INI + 32);
+                        $pdf->SetX(107.5);
+                        $pdf->SetFont('Calibri', 'BI', 12);
+                        $pdf->Cell(90, 7, utf8_decode('Corte y Coordinado'), 0/* BORDE */, 0/* SALTO */, 'C');
+
+                        $pdf->SetFont('Calibri', 'B', 10);
+                        $pdf->Code128(135, $Y_INI + 38, '999999', 35, 8);
+
+                        $pdf->SetFont('Calibri', 'B', 9);
+                        $pdf->SetY($Y_INI + 46.3);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetX(151);
+                        $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetY(51.3);
+                    } else if (in_array($Empleado->NUM_DEPTO, $deptos_cordinado)) {
+                        $pdf->SetFont('Calibri', 'B', 17);
+                        $pdf->SetY($Y_INI);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(86, 7, utf8_decode('CALZADO LOBO SOLO'), 1/* BORDE */, 1/* SALTO */, 'C');
+                        $pdf->Image(base_url() . '/img/watermark.png', 137, $Y_INI + 6, 28);
+
+                        $pdf->SetY($Y_INI + 32);
+                        $pdf->SetX(107.5);
+                        $pdf->SetFont('Calibri', 'BI', 12);
+                        $pdf->Cell(90, 7, utf8_decode('Corte y Coordinado'), 0/* BORDE */, 0/* SALTO */, 'C');
+
+                        $pdf->SetFont('Calibri', 'B', 10);
+                        $pdf->Code128(135, $Y_INI + 38, '88888888', 35, 8);
+
+                        $pdf->SetFont('Calibri', 'B', 9);
+                        $pdf->SetY($Y_INI + 46.3);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetX(151);
+                        $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetY(51.3);
+                    } else {
+                        $pdf->SetFont('Calibri', 'B', 17);
+                        $pdf->SetY($Y_INI);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
+                        $pdf->Image(base_url() . '/img/watermark.png', 127.5, $Y_INI + 5, 45);
+                        $pdf->SetY($Y_INI + 7);
+                        $pdf->SetX(109.2);
+                        $pdf->SetFont('Calibri', 'B', 16);
+                        $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
+                        $pdf->SetFont('Calibri', '', 11.5);
+                        $pdf->SetY($Y_INI + 18);
+                        $pdf->SetX(109.2);
+                        $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
+                        $pdf->SetFont('Calibri', 'B', 9);
+                        $pdf->SetY($Y_INI + 46.3);
+                        $pdf->SetX(109.2);
+                        $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetX(151);
+                        $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+                        $pdf->SetY(51.3);
+                    }
 
                     $Y_INI += $pdf->GetY() + 1.3;
                     $Cont++;
@@ -494,7 +545,7 @@ class Empleados extends CI_Controller {
             $pdf->SetY(51.5);
             $pdf->SetX(22.5);
 
-            $pdf->Code39(25, $pdf->GetY(), str_pad($x->get('ID'), 4, "0", STR_PAD_LEFT));
+            $pdf->Code39(35, $pdf->GetY(), str_pad($x->get('ID'), 4, "0", STR_PAD_LEFT));
 
             $pdf->SetY(48.5);
             $pdf->SetX(86.5);
@@ -508,24 +559,71 @@ class Empleados extends CI_Controller {
 
 
             /*             * ******************** SEGUNDA HOJA *************************** */
-            $pdf->SetFont('Calibri', 'B', 17);
-            $pdf->SetY(10);
-            $pdf->SetX(109.2);
-            $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
-            $pdf->Image(base_url() . '/img/watermark.png', 127.5, 15, 45);
-            $pdf->SetX(109.2);
-            $pdf->SetFont('Calibri', 'B', 16);
-            $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
-            $pdf->SetFont('Calibri', '', 11.5);
-            $pdf->SetY(28);
-            $pdf->SetX(109.2);
-            $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
-            $pdf->SetFont('Calibri', 'B', 9);
-            $pdf->SetY(56.3);
-            $pdf->SetX(109.2);
-            $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
-            $pdf->SetX(151);
-            $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+            $deptos_corte = array(10, 20, 30, 50, 60);
+            $deptos_cordinado = array(40, 70, 80, 90, 140);
+            if (in_array($Empleado[0]->NUM_DEPTO, $deptos_corte)) {
+                $pdf->SetFont('Calibri', 'B', 17);
+                $pdf->SetY(10);
+                $pdf->SetX(109.2);
+                $pdf->Cell(86, 7, utf8_decode('CALZADO LOBO SOLO'), 1/* BORDE */, 1/* SALTO */, 'C');
+                $pdf->Image(base_url() . '/img/watermark.png', 137, 16, 28);
+
+                $pdf->SetY(42);
+                $pdf->SetX(107.5);
+                $pdf->SetFont('Calibri', 'BI', 12);
+                $pdf->Cell(90, 7, utf8_decode('Corte y Coordinado'), 0/* BORDE */, 0/* SALTO */, 'C');
+
+                $pdf->SetFont('Calibri', 'B', 10);
+                $pdf->Code128(135, 48, '999999', 35, 8);
+
+                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetY(56.3);
+                $pdf->SetX(109.2);
+                $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                $pdf->SetX(151);
+                $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+            } else if (in_array($Empleado[0]->NUM_DEPTO, $deptos_cordinado)) {
+                $pdf->SetFont('Calibri', 'B', 17);
+                $pdf->SetY(10);
+                $pdf->SetX(109.2);
+                $pdf->Cell(86, 7, utf8_decode('CALZADO LOBO SOLO'), 1/* BORDE */, 1/* SALTO */, 'C');
+                $pdf->Image(base_url() . '/img/watermark.png', 137, 16, 28);
+
+                $pdf->SetY(42);
+                $pdf->SetX(107.5);
+                $pdf->SetFont('Calibri', 'BI', 12);
+                $pdf->Cell(90, 7, utf8_decode('Corte y Coordinado'), 0/* BORDE */, 0/* SALTO */, 'C');
+
+                $pdf->SetFont('Calibri', 'B', 10);
+                $pdf->Code128(135, 48, '888888', 35, 8);
+
+                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetY(56.3);
+                $pdf->SetX(109.2);
+                $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                $pdf->SetX(151);
+                $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+            } else {
+                $pdf->SetFont('Calibri', 'B', 17);
+                $pdf->SetY(10);
+                $pdf->SetX(109.2);
+                $pdf->Cell(86, 7, utf8_decode('POLÍTICAS DE CALIDAD'), 1/* BORDE */, 1/* SALTO */, 'C');
+                $pdf->Image(base_url() . '/img/watermark.png', 127.5, 15, 45);
+                $pdf->SetX(109.2);
+                $pdf->SetFont('Calibri', 'B', 16);
+                $pdf->Cell(90, 7, utf8_decode('En Calzado Lobo'), 0/* BORDE */, 0/* SALTO */, 'C');
+                $pdf->SetFont('Calibri', '', 11.5);
+                $pdf->SetY(28);
+                $pdf->SetX(109.2);
+                $pdf->MultiCell(86/* ANCHO */, 4/* ALTO */, utf8_decode("Tenemos la responsabilidad de fabricar el mejor calzado en confort y calidad para dama y caballero, mediante la participación comprometida de nuestro personal, buscando siempre una mejora continua en nuestros procesos para satisfacción de nuestros CLIENTES."), 0/* BORDE */, 'J'/* ALINEACION */, false);
+                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetY(56.3);
+                $pdf->SetX(109.2);
+                $pdf->Cell(45, 6, utf8_decode('Firma'), 0/* BORDE */, 0/* SALTO */, 'L');
+                $pdf->SetX(151);
+                $pdf->Cell(45, 6, utf8_decode('Rio Santiago No.245 San Miguel'), 0/* BORDE */, 0/* SALTO */, 'L');
+            }
+
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/Empleados';
             if (!file_exists($path)) {

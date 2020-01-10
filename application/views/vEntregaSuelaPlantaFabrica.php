@@ -306,7 +306,7 @@
         });
     }
     function onGuardarMovimiento() {
-        var doc;
+        var data = [];
         isValid('pnlTablero');
         if (valido) {
             HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
@@ -318,58 +318,50 @@
                 if (cant > 0) {
                     //Obtenemos los articulos de la tabla con el indice del padre
                     var art = rows.find("#rArticulos").find('td').eq($(this).parent().index()).find('input').val();
-                    $.getJSON(master_url + 'getPrecioArticulosByMaquila', {
+                    var fecha = pnlTablero.find('#FechaMov').val();
+                    var doc = pnlTablero.find('#DocMov').val();
+                    var maq = pnlTablero.find('#Maquila').val();
+                    var sem = pnlTablero.find('#Semana').val();
+                    var tipo = pnlTablero.find('#Tipo').val();
+                    var ctrl = pnlTablero.find('#Control').val();
+                    var ano = pnlTablero.find('#Ano').val();
+                    data.push({
                         Maquila: pnlTablero.find('#Maquila').val(),
-                        Articulo: art
-                    }).done(function (data) {
-                        var precio = data[0].Precio;
-                        var fecha = pnlTablero.find('#FechaMov').val();
-                        doc = pnlTablero.find('#DocMov').val();
-                        var maq = pnlTablero.find('#Maquila').val();
-                        var sem = pnlTablero.find('#Semana').val();
-                        var tipo = pnlTablero.find('#Tipo').val();
-                        var ctrl = pnlTablero.find('#Control').val();
-                        var ano = pnlTablero.find('#Ano').val();
-                        //Agregar mov_art
-                        $.ajax({
-                            url: master_url + 'onAgregar',
-                            type: "POST",
-                            data: {
-                                Articulo: art,
-                                PrecioMov: precio,
-                                CantidadMov: cant,
-                                FechaMov: fecha,
-                                DocMov: doc,
-                                Maq: maq,
-                                Sem: sem,
-                                Subtotal: precio * cant,
-                                TpoSuPlEn: tipo,
-                                Control: ctrl,
-                                Ano: ano
-                            }
-                        }).done(function (data, x, jq) {
-
-                        }).fail(function (x, y, z) {
-                            btnAceptar.attr('disabled', false);
-                            console.log(x, y, z);
-                        });
+                        Articulo: art,
+                        CantidadMov: cant,
+                        FechaMov: fecha,
+                        DocMov: doc,
+                        Maq: maq,
+                        Sem: sem,
+                        TpoSuPlEn: tipo,
+                        Control: ctrl,
+                        Ano: ano
                     });
                 }
-
-                if (index === (rows.find("tr input.numbersOnly:enabled").length - 1)) {//Obtiene el ultimo elemento del arreglo
-                    btnAceptar.attr('disabled', false);
-                    total_pares = 0;
-                    pares_pedido = 0;
-                    pnlTablero.find('input').val('');
-                    pnlTablero.find("#FechaMov").val(getToday());
-                    pnlTablero.find('#MaquilaRecibe').html('');
-                    pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
-                    pnlTablero.find('#Control').focus();
-                    HoldOn.close();
-                }
-
             });
-
+            //Agregar mov_art
+            $.ajax({
+                url: master_url + 'onAgregar',
+                type: "POST",
+                async: false,
+                data: {
+                    movs: JSON.stringify(data)
+                }
+            }).done(function (data, x, jq) {
+                console.log(data);
+                btnAceptar.attr('disabled', false);
+                total_pares = 0;
+                pares_pedido = 0;
+                pnlTablero.find('input').val('');
+                pnlTablero.find("#FechaMov").val(getToday());
+                pnlTablero.find('#MaquilaRecibe').html('');
+                pnlTablero.find('#rCantidades').find("input").prop('disabled', true);
+                pnlTablero.find('#Control').focus();
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                btnAceptar.attr('disabled', false);
+                console.log(x, y, z);
+            });
         }
     }
     function limpiarCampos() {

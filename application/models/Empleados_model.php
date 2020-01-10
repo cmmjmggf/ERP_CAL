@@ -158,7 +158,7 @@ class Empleados_model extends CI_Model {
         try {
             return $this->db->select("E.ID, E.Numero, "
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
-                                    . "D.Descripcion AS DEPARTAMENTO", false)
+                                    . "D.Descripcion AS DEPARTAMENTO, E.DepartamentoFisico AS NUM_DEPTO ", false)
                             ->from('empleados AS E')
                             ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
                             ->where('E.Numero', $ID)->get()->result();
@@ -171,7 +171,7 @@ class Empleados_model extends CI_Model {
         try {
             return $this->db->select("E.ID, E.Numero as NUMERO, "
                                     . "CONCAT(E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRE_COMPLETO, E.Foto, "
-                                    . "D.Descripcion AS DEPARTAMENTO", false)
+                                    . "D.Descripcion AS DEPARTAMENTO, E.DepartamentoFisico AS NUM_DEPTO ", false)
                             ->from('empleados AS E')
                             ->join('departamentos AS D', 'D.Clave = E.DepartamentoFisico')
                             ->where('E.AltaBaja', '1')

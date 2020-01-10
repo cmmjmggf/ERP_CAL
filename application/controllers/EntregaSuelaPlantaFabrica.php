@@ -74,24 +74,26 @@ class EntregaSuelaPlantaFabrica extends CI_Controller {
 
     public function onAgregar() {
         try {
-
-            $x = $this->input;
-            $datos = array(
-                'Articulo' => $x->post('Articulo'),
-                'PrecioMov' => $x->post('PrecioMov'),
-                'CantidadMov' => $x->post('CantidadMov'),
-                'FechaMov' => $x->post('FechaMov'),
-                'DocMov' => $x->post('DocMov'),
-                'EntradaSalida' => '2',
-                'TipoMov' => 'SXM',
-                'Maq' => $x->post('Maq'),
-                'Sem' => $x->post('Sem'),
-                'Ano' => $x->post('Ano'),
-                'Subtotal' => $x->post('Subtotal'),
-                'TpoSuPlEn' => $x->post('TpoSuPlEn'),
-                'Control' => $x->post('Control')
-            );
-            $this->EntregaSuelaPlantaFabrica_model->onAgregar($datos);
+            $Movs = json_decode($this->input->post('movs'));
+            foreach ($Movs as $k => $v) {
+                $Precio = $this->db->query("select Precio from preciosmaquilas where Maquila = {$v->Maq} and Articulo = {$v->Articulo} ")->result()[0]->Precio;
+                $datos = array(
+                    'Articulo' => $v->Articulo,
+                    'PrecioMov' => $Precio,
+                    'CantidadMov' => $v->CantidadMov,
+                    'FechaMov' => $v->FechaMov,
+                    'DocMov' => $v->DocMov,
+                    'EntradaSalida' => '2',
+                    'TipoMov' => 'SXM',
+                    'Maq' => $v->Maq,
+                    'Sem' => $v->Sem,
+                    'Ano' => $v->Ano,
+                    'Subtotal' => $v->CantidadMov * $Precio,
+                    'TpoSuPlEn' => $v->TpoSuPlEn,
+                    'Control' => $v->Control
+                );
+                $this->EntregaSuelaPlantaFabrica_model->onAgregar($datos);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
