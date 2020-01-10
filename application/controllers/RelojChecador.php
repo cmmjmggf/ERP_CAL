@@ -71,9 +71,14 @@ class RelojChecador extends CI_Controller {
                         $es['turno'] = 4;
                         $this->db->insert('relojchecador', $es);
                         break;
+                    default:
+                        $es['turno'] = 0;
+                        break;
                 }
                 print json_encode($info_empleado);
-                $l = new Logs("RELOJ CHECADOR", "{$x['Numero']} AH REGISTRADO TURNO {$es['turno']}", $this->session);
+                if (intval($es['turno']) > 0) {
+                    $l = new Logs("RELOJ CHECADOR", "{$x['Numero']} AH REGISTRADO TURNO {$es['turno']}", $this->session);
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

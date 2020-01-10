@@ -26,9 +26,24 @@ class GeneraNominaDeSemana extends CI_Controller {
         }
     }
 
+    public function onRevisarGenerandoNomina() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query(
+                                    "SELECT COUNT(*) AS TOTAL, GN.* FROM generando_nomina AS GN WHERE GN.SEMANA ={$x['SEMANA']} AND GN.ANIO ={$x['ANIO']} LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
+            $this->db->insert('generando_nomina', array('USUARIO' => $this->session->USERNAME,
+                'FECHA' => Date('d/m/Y'), 'HORA' => Date('h:i:s'),
+                'SEMANA' => $x['SEMANA'], 'ANIO' => $x['ANIO'],
+                'FECHA_INICIAL' => $x['FECHAINI'], 'FECHA_FINAL' => $x['FECHAFIN']));
+
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
@@ -468,6 +483,8 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["ANIO"] = $x['ANIO'];
             $jc->setParametros($p);
             $this->getReportes($jc);
+            
+            $this->db->query("DELETE FROM generando_nomina WHERE SEMANA = {$x['SEMANA']} AND ANIO = {$x['ANIO']}");
             $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA DE LA SEMANA {$x['SEMANA']} LA CUAL ESTA ABIERTA.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -488,7 +505,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 ));
 //                ID, numsem, año, numemp, cajhao
                 $this->db->set('cajhao', $v->Ahorro)->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)->where('status', $v->Numero)->update('prenominal');
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
             } else {
                 $this->db->set('cajhao', 0)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)
@@ -678,6 +696,24 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onZapatosTienda($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
+            /* 75	VENTA ZAPATOS */
+            $CONCEPTO_VTA_ZAP_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina AS P "
+                            . "WHERE P.numsem = {$SEM} AND P.año = {$ANIO} "
+                            . "AND P.numemp = {$v->Numero} AND P.numcon = 75")->result();
+            if (intval($CONCEPTO_VTA_ZAP_EXISTE[0]->EXISTE) > 0) {
+                $CONCEPTO_VTA_ZAP = $this->db->query("SELECT P.imported AS IMPORTE FROM prenomina AS P "
+                                . "WHERE P.numsem = {$SEM} AND P.año = {$ANIO} "
+                                . "AND P.numemp = {$v->Numero} "
+                                . "AND P.numcon = 75")->result();
+                $this->db->set('vtazap', $CONCEPTO_VTA_ZAP[0]->IMPORTE)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
+            } else {
+                $this->db->set('vtazap', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
+            }
+            /* 76	ZAPATOS TIENDA */
             if (floatval($v->ZapatosTDA) > 0) {
                 $importe_zapatostiendas = (floatval($v->ZapatosTDA) / intval($v->AbonoZap));
                 $this->db->insert('prenomina', array(
@@ -690,12 +726,11 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "depto" => $v->DepartamentoFisico
                 ));
 //                ID, numsem, año, numemp, diasemp, vtazap, zapper
-                $this->db->set('vtazap', $importe_zapatostiendas)->where('numsem', $SEM)
+                $this->db->set('otrde1', $importe_zapatostiendas)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
-                $this->db->set('vtazap', 0)->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)
-                        ->update('prenominal');
+                $this->db->set('otrde1', 0)->where('numsem', $SEM)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -819,7 +854,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
             $this->benchmark->mark('code_end');
 
-//            $reports['8MARK'] = $this->benchmark->elapsed_time('code_start', 'code_end');
+            $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
 //            echo $this->benchmark->elapsed_time('code_start', 'code_end');
             print json_encode($reports);
         } catch (Exception $exc) {

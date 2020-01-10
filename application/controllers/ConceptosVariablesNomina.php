@@ -74,9 +74,25 @@ class ConceptosVariablesNomina extends CI_Controller {
 
     public function onVerificarSemanaNominaCerrada() {
         try {
-            print json_encode($this->ConceptosVariablesNomina_model->onVerificarSemanaNominaCerrada(
-                                    $this->input->get('Sem'), $this->input->get('Ano')
-            ));
+//            print json_encode($this->ConceptosVariablesNomina_model->onVerificarSemanaNominaCerrada(
+//                                    $this->input->get('Sem'), $this->input->get('Ano')
+//            ));
+            $x =  $this->input->get();
+            $this->db->select(" PM.status as 'status' "
+                    . "FROM "
+                    . "prenomina PM "
+                    . "where PM.numsem = {$x['Sem']} "
+                    . "and PM.año = {$x['Ano']} "
+                    . " ")->group_by('PM.numsem');
+
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

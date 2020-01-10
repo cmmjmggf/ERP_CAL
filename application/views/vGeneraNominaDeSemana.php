@@ -127,7 +127,6 @@
             btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
             btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS"),
             GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos");
-
     $(document).ready(function () {
 
         btnEliminaMovGenGNS.click(function () {
@@ -152,7 +151,6 @@
                 });
             }
         });
-
         btnSemanasGNS.click(function () {
             $.fancybox.open({
                 src: '<?php print base_url('Semanas.shoes'); ?>',
@@ -179,11 +177,9 @@
                 }
             });
         });
-
         btnCierraNominaGNS.click(function () {
             $("#mdlCerrarNominaDeSemana").modal('show');
         });
-
         var busy = false;
         btnGeneraGNS.click(function () {
             if (busy)
@@ -197,7 +193,6 @@
             console.log(parms);
             console.log(parms);
             btnGeneraGNS.attr('disabled', true);
-
             if (SemanaGNS.val() && AnioGNS.val()) {
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
@@ -281,33 +276,52 @@
                     /* GENERA NOMINA POR SEMANA, AÑO */
                     /* CONSULTA NOMINA CERRADA */
                     onBeep(1);
-                    HoldOn.open({
-                        theme: 'sk-rect',
-                        message: 'Por favor espere...'
-                    });
-                    $.post('<?php print base_url('GeneraNominaDeSemana/onGeneraNomina'); ?>',
+                    onOpenOverlay('Por favor espere...');
+                    $.getJSON('<?php print base_url('GeneraNominaDeSemana/onRevisarGenerandoNomina') ?>',
                             {
                                 SEMANA: SemanaGNS.val(),
                                 ANIO: AnioGNS.val(),
                                 FECHAINI: FechaInicialGNS.val(),
-                                FECHAFIN: FechaFinalGNS.val(),
-                                GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
+                                FECHAFIN: FechaFinalGNS.val()
                             }).done(function (a) {
-                        console.log(a);
-                        if (a.length > 0) {
-                            onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
-                                btnGeneraGNS.attr('disabled', false);
-                                busy = false;
-                            });
-                        } else {
-                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                        var r = a[0];
+                        switch (parseInt(r.TOTAL)) {
+                            case 0:
+                                $.post('<?php print base_url('GeneraNominaDeSemana/onGeneraNomina'); ?>',
+                                        {
+                                            SEMANA: SemanaGNS.val(),
+                                            ANIO: AnioGNS.val(),
+                                            FECHAINI: FechaInicialGNS.val(),
+                                            FECHAFIN: FechaFinalGNS.val(),
+                                            GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
+                                        }).done(function (a) {
+                                    console.log(a);
+                                    if (a.length > 0) {
+                                        onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                            btnGeneraGNS.attr('disabled', false);
+                                            busy = false;
+                                        });
+                                    } else {
+                                        swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                                    }
+                                }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
+                                    btnGeneraGNS.attr('disabled', false);
+                                    onCloseOverlay();
+                                    busy = false;
+                                });
+                                break;
+                            case 1:
+                                onCloseOverlay();
+                                iMsg('EL USUARIO ' + r.USUARIO + ' ESTA GENERANDO LA NOMINA DE LA SEMANA ' + SemanaGNS.val() + ' AÑO ' + AnioGNS.val() + ', INTENTE MÁS TARDE.', 'w', function () {
+                                    SemanaGNS.focus().select();
+                                });
+                                break;
                         }
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
-                        btnGeneraGNS.attr('disabled', false);
-                        HoldOn.close();
-                        busy = false;
                     });
                 }
             } else {
@@ -317,7 +331,6 @@
                 });
             }
         });
-
         AnioGNS.keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -334,7 +347,6 @@
                 }
             }
         });
-
         SemanaGNS.keydown(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
@@ -346,8 +358,6 @@
                 }
             }
         });
-
-
         FechaCorteAguinaldoGNS.keydown(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
@@ -355,15 +365,14 @@
                 }
             }
         });
-
-
-
         mdlGeneraNominaDeSemana.on('shown.bs.modal', function () {
             AnioGNS.val('<?php print Date('Y'); ?>').focus().select();
+            onDisable(btnGeneraGNS);
+            onDisable(btnCierraNominaGNS);
+            onDisable(btnEliminaMovGenGNS);
             getSemanaNomina();
         });
     });
-
     function onValidarSemanaConsultaAguinaldoVacaciones() {
         if (SemanaGNS.val() && parseInt(SemanaGNS.val()) !== 99 && parseInt(SemanaGNS.val()) !== 98) {
             SVacacionesAguinaldosParaDestajo.addClass("d-none");
@@ -447,14 +456,19 @@
                                 switch (value) {
                                     case "aceptar":
                                         swal.close();
-                                        $(v).val('');
-                                        $(v).focus();
+                                        $(v).focus().select();
+                                        onDisable(btnGeneraGNS);
+                                        onDisable(btnCierraNominaGNS);
+                                        onDisable(btnEliminaMovGenGNS);
                                         break;
                                 }
                             });
                         } else {//Sí está pero esta en estatus 1
                             FechaInicialGNS.val(dataUno[0].FechaIni);
                             FechaFinalGNS.val(dataUno[0].FechaFin);
+                            onEnable(btnGeneraGNS);
+                            onEnable(btnCierraNominaGNS);
+                            onEnable(btnEliminaMovGenGNS);
                             onValidarSemanaConsultaAguinaldoVacaciones();
                         }
                     } else {//Aún no existe la nomina, podemos continuar
@@ -466,7 +480,6 @@
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
-
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -482,8 +495,10 @@
                     switch (value) {
                         case "aceptar":
                             swal.close();
-                            $(v).val('');
-                            $(v).focus();
+                            $(v).focus().select();
+                            onDisable(btnGeneraGNS);
+                            onDisable(btnCierraNominaGNS);
+                            onDisable(btnEliminaMovGenGNS);
                             break;
                     }
                 });
@@ -491,6 +506,10 @@
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
+            $(v).focus().select();
+            onDisable(btnGeneraGNS);
+            onDisable(btnCierraNominaGNS);
+            onDisable(btnEliminaMovGenGNS);
         });
     }
 
@@ -502,7 +521,6 @@
                 SemanaGNS.val(a[0].SEMANA);
                 FechaInicialGNS.val(a[0].FECHAINI);
                 FechaFinalGNS.val(a[0].FECHAFIN);
-
             } else {
                 onBeep(2);
                 swal('ATENCIÓN', 'NO SE HA SIDO POSIBLE OBTENER LA SEMANA O NO SE HAN GENERADO LAS SEMANAS EN NOMINA', 'warning');
