@@ -95,7 +95,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
                 FROM devolucionnp AS D
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
-                                    . "AND D.staapl = 0  ORDER BY D.fecha DESC {$limite};")->result());
+                                    . "AND D.staapl IN(0,1)  ORDER BY D.fecha DESC {$limite};")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -111,7 +111,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
                 FROM devolucionnp AS D
                 WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
-                                    . "AND D.staapl = 0  "
+                                    . "AND D.staapl IN(0,1)  "
                                     . "AND D.docto = {$x["DOCUMENTO"]} "
                                     . "LIMIT 1")->result());
         } catch (Exception $exc) {
@@ -252,7 +252,11 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                  */
                 $this->db->set('staapl', 1)->set('nc', $x["NC"])
                         ->where('control', $x['CONTROL'])
+                        ->where('cliente', $x["CLIENTE"])
+                        ->where('tp', $x["TP"])
+                        ->where('docto', $r->docto)
                         ->update('devolucionnp');
+                
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVCTES)",
                         "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVOLUCIONNP)",
