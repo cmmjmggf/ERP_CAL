@@ -238,19 +238,8 @@ class Avance8 extends CI_Controller {
                             . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
                             . "F.registro, F.anio, F.avance_id", false)
                     ->from('fracpagnomina AS F')
-//209
-//210
-//34
-//103
-//80
-//102
-//337
-//204
-//51
-//607
-//71
-//75
-                    ->where("F.numfrac IN(209,210,34,103,102,51,70,60,61,62,24,78,75,71,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606)", null, false);
+                    ->where("F.numfrac IN(209,210,301,34,103,102,51,70,60,61,62,24,"
+                            . "78,75,71,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606,24,325,74,130)", null, false);
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }
@@ -431,6 +420,9 @@ class Avance8 extends CI_Controller {
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
+                                $data["fraccion"] = $v->NUMERO_FRACCION;
+                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $this->db->insert('fracpagnomina', $data);
 
 
                                 $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
@@ -442,10 +434,21 @@ class Avance8 extends CI_Controller {
                                         ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                 $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                                /* REVISAR SI LLEVA TEJIDO FRACCION 401 */
-                                
-                                $TIENE_TEJIDO = $this->db->query("SELECT * FROM ")
-                                
+                                /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
+
+                                $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM erp_cal.fraccionesxestilo AS F INNER JOIN fracciones AS FF "
+                                        . "WHERE F.Estilo = '{$xXx['ESTILO']}' AND F.Fraccion = 401 LIMIT 1")->result();
+                                if ($TIENE_TEJIDO[0]->EXISTE === 0) {
+                                    $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                                            ->set('DeptoProduccion', 160)
+                                            ->where('Control', $xXx['CONTROL'])->update('controles');
+                                    $this->db->set('stsavan', 8)
+                                            ->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                                            ->set('DeptoProduccion', 160)
+                                            ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                    $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))
+                                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                }
                                 break;
                             case 301:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
