@@ -95,6 +95,15 @@ class FraccionesXEstilo extends CI_Controller {
         }
     }
 
+    public function onVerificaEstiloFracciones() {
+        try {
+            $Estilo = $this->input->get('Estilo');
+            print json_encode($this->db->query("select estilo from fraccionesxestilo where estilo = '$Estilo' and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAumentarPrecioFracciones() {
         try {
             $Todos = $this->input->post('Todos');

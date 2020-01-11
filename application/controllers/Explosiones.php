@@ -25,6 +25,7 @@ class Explosiones extends CI_Controller {
         print json_encode($reportes);
     }
 
+    //Impresion de reportes
     public function onReporteExplosionSemana() {
         $Tipo = $this->input->post('Tipo');
         $Maq = $this->input->post('Maq');
@@ -35,7 +36,6 @@ class Explosiones extends CI_Controller {
         $SinClasif = $this->input->post('SinClasif');
 
         $cm = $this->Explosiones_model;
-        $DatosEmpresa = $cm->getDatosEmpresa();
         $Grupos = $cm->getGrupos(
                 $Ano, $Sem, $aSem, $Maq, $aMaq, $Tipo
         );
@@ -53,16 +53,13 @@ class Explosiones extends CI_Controller {
         if (!empty($Explosion)) {
 
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
-            $pdf->Logo = $DatosEmpresa[0]->Logo;
-            $pdf->Empresa = $DatosEmpresa[0]->Empresa;
+            $pdf->Logo = $this->session->LOGO;
+            $pdf->Empresa = $this->session->EMPRESA_RAZON;
 
 
             switch ($Tipo) {
                 case '10':
                     $TipoE = '******* PIEL Y FORRO *******';
-                    break;
-                case '80':
-                    $TipoE = '******* SUELA *******';
                     break;
                 case '90':
                     $TipoE = '******* INDIRECTOS *******';
@@ -94,13 +91,7 @@ class Explosiones extends CI_Controller {
                 $pdf->SetFont('Calibri', '', 8);
                 $pdf->Cell(50, 5, utf8_decode($G->Clave . '     ' . $G->Nombre), 0/* BORDE */, 1, 'L');
 
-                //Si es tipo suela planta entresuela traemos el total de pares por grupo para calcular porcentajes
-                $TotalesPorcentaje = '';
-                if ($Tipo === '80') {
-                    $TotalesPorcentaje = $cm->getTotalesPorGrupoParaPorcentaje(
-                            $Ano, $Sem, $aSem, $Maq, $aMaq, $G->Clave
-                    );
-                }
+
 
                 foreach ($Materiales as $key => $M) {
                     $TOTAL_EXP_ART = 0;
@@ -116,15 +107,9 @@ class Explosiones extends CI_Controller {
                                 $pdf->SetX(5);
                                 $pdf->SetFont('Calibri', '', 8);
 
-
                                 $ExplosionCant = $D->Explosion;
                                 $Subtotal = $ExplosionCant * $D->Precio;
 
-                                $PorcentajeSuelas = '';
-                                if ($Tipo === '80') {
-                                    $Porcentaje = $D->Pares * 100 / $TotalesPorcentaje[0]->Explosion;
-                                    $PorcentajeSuelas = number_format($Porcentaje, 2, ".", ",") . '%';
-                                }
 
                                 $pdf->Row(array(
                                     utf8_decode($D->Articulo),
@@ -134,7 +119,7 @@ class Explosiones extends CI_Controller {
                                     number_format($ExplosionCant, 2, ".", ","),
                                     '$' . number_format($D->Precio, 2, ".", ","),
                                     '$' . number_format($Subtotal, 2, ".", ","),
-                                    $PorcentajeSuelas,
+                                    '',
                                     '',
                                     '',
                                 ));
@@ -164,8 +149,6 @@ class Explosiones extends CI_Controller {
                                     $pdf->SetX(150);
                                 }
                                 break;
-                            case '80':
-                                break;
                             case '90':
                                 break;
                         }
@@ -185,16 +168,12 @@ class Explosiones extends CI_Controller {
                 $pdf->Cell(17, 4, '', 'B'/* BORDE */, 0, 'R');
                 $pdf->SetX(130);
                 $pdf->Cell(15, 4, '$' . number_format($TOTAL_SUBT_GRUPO, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
-                if ($Tipo !== '80') {
-                    $pdf->SetX(150);
-                    $pdf->SetFont('Calibri', 'B', 8);
-                    $pdf->Cell(15, 4, 'Costo:', 'B'/* BORDE */, 0, 'L');
-                    $pdf->SetX(165);
-                    $pdf->SetFont('Calibri', '', 8);
-                    $pdf->Cell(15, 4, number_format($COSTO, 2, ".", ","), 'B'/* BORDE */, 1, 'L');
-                } else {
-                    $pdf->Cell(15, 4, '', 0/* BORDE */, 1, 'L');
-                }
+                $pdf->SetX(150);
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->Cell(15, 4, 'Costo:', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetX(165);
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(15, 4, number_format($COSTO, 2, ".", ","), 'B'/* BORDE */, 1, 'L');
             }
 
             $pdf->SetFont('Calibri', 'B', 8);
@@ -241,7 +220,6 @@ class Explosiones extends CI_Controller {
         $SinClasif = $this->input->post('SinClasif');
 
         $cm = $this->Explosiones_model;
-        $DatosEmpresa = $cm->getDatosEmpresa();
         $Grupos = $cm->getGrupos(
                 $Ano, $Sem, $aSem, $Maq, $aMaq, $Tipo
         );
@@ -256,8 +234,8 @@ class Explosiones extends CI_Controller {
         if (!empty($Explosion)) {
 
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
-            $pdf->Logo = $DatosEmpresa[0]->Logo;
-            $pdf->Empresa = $DatosEmpresa[0]->Empresa;
+            $pdf->Logo = $this->session->LOGO;
+            $pdf->Empresa = $this->session->EMPRESA_RAZON;
 
             $pdf->Sem = $Sem;
             $pdf->aSem = $aSem;
@@ -384,16 +362,12 @@ class Explosiones extends CI_Controller {
                 $pdf->Cell(17, 4, '', 'B'/* BORDE */, 0, 'R');
                 $pdf->SetX(130);
                 $pdf->Cell(15, 4, '$' . number_format($TOTAL_SUBT_GRUPO, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
-                if ($Tipo !== '80') {
-                    $pdf->SetX(150);
-                    $pdf->SetFont('Calibri', 'B', 8);
-                    $pdf->Cell(15, 4, 'Costo:', 'B'/* BORDE */, 0, 'L');
-                    $pdf->SetX(165);
-                    $pdf->SetFont('Calibri', '', 8);
-                    $pdf->Cell(15, 4, number_format($COSTO, 2, ".", ","), 'B'/* BORDE */, 1, 'L');
-                } else {
-                    $pdf->Cell(15, 4, '', 0/* BORDE */, 1, 'L');
-                }
+                $pdf->SetX(150);
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->Cell(15, 4, 'Costo:', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetX(165);
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(15, 4, number_format($COSTO, 2, ".", ","), 'B'/* BORDE */, 1, 'L');
             }
 
             $pdf->SetFont('Calibri', 'B', 8);
@@ -442,8 +416,8 @@ class Explosiones extends CI_Controller {
 
 
         $pdf = new PDF('P', 'mm', array(215.9, 279.4));
-        $pdf->Logo = $DatosEmpresa[0]->Logo;
-        $pdf->Empresa = $DatosEmpresa[0]->Empresa;
+        $pdf->Logo = $this->session->LOGO;
+        $pdf->Empresa = $this->session->EMPRESA_RAZON;
 
 
         $TipoE = '******* SUELA *******';
@@ -553,8 +527,8 @@ class Explosiones extends CI_Controller {
         );
 
         $pdf = new PDFExpTallas('P', 'mm', array(215.9, 279.4));
-        $pdf->Logo = $DatosEmpresa[0]->Logo;
-        $pdf->Empresa = $DatosEmpresa[0]->Empresa;
+        $pdf->Logo = $this->session->LOGO;
+        $pdf->Empresa = $this->session->EMPRESA_RAZON;
         $TipoE = '******* SUELA *******';
         $pdf->Sem = $Sem;
         $pdf->aSem = $aSem;
@@ -668,6 +642,7 @@ class Explosiones extends CI_Controller {
                                                             ft.pieza as numpza, p.Descripcion as nompza, ft.estilo as numestilo,
                                                             ft.PzXPar as pzaxpar, u.descripcion as unidad
                                             from fichatecnica ft
+                                            join estilos e on e.clave = ft.estilo and e.liberado = 2
                                             join articulos a on a.clave = ft.articulo and a.grupo = 3
                                             join piezas p on p.clave = ft.pieza
                                             join unidades u on u.clave = a.unidadmedida

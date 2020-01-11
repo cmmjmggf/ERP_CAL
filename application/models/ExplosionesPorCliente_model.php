@@ -216,7 +216,7 @@ class ExplosionesPorCliente_model extends CI_Model {
                                     LEFT JOIN `piezas` `PZA` ON `FT`.`Pieza`= `PZA`.`Clave`
                                     JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='1'
                                     JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
-                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado = 2
                                     JOIN `maquilas` `MA` ON `MA`.`Clave` = PE.Maquila
                                     JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                     WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
@@ -366,7 +366,7 @@ class ExplosionesPorCliente_model extends CI_Model {
                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
-                JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
+                JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado = 2
                 JOIN `series` `S` ON `S`.`Clave` =  `E`.`Serie`
                 JOIN `suelascompras` `SC` ON `SC`.`ArticuloCBZ` =  `FT`.`Articulo`  AND S.Clave = SC.Serie
                 WHERE `PE`.`Maquila` BETWEEN $Maquila AND $aMaquila

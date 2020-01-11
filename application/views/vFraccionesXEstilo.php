@@ -486,8 +486,28 @@
 
         pnlDatos.find("[name='Estilo']").change(function () {
             if (nuevo) {
-                temp = $(this).val();
-                getFotoXEstilo($(this).val());
+                //Verifica si ya existe en fracciones por estilo
+                var estilo = $(this).val();
+                $.getJSON(master_url + 'onVerificaEstiloFracciones', {Estilo: estilo}).done(function (data, x, jq) {
+                    $.each(data, function (k, v) {
+                        if (data.length > 0) {
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "LAS FRACCIONES DE ESTE ESTILO YA HAN SIDO CAPTURADAS",
+                                icon: "error"
+                            }).then((action) => {
+                                pnlDatos.find("[name='Estilo']")[0].selectize.clear(true);
+                                pnlDatos.find("[name='Estilo']")[0].selectize.focus();
+                            });
+                        } else {
+                            temp = estilo;
+                            getFotoXEstilo(temp);
+                        }
+                    });
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                });
+
             }
         });
 
