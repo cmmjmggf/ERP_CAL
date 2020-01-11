@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomlt" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
 	<property name="ireport.zoom" value="2.853116706110129"/>
-	<property name="ireport.x" value="1377"/>
+	<property name="ireport.x" value="1367"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -307,9 +307,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{SAL_DI_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="314" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="62a46906-1dc8-465c-b2e9-51b04318063c">
-						<printWhenExpression><![CDATA[$V{salario_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="314" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="62a46906-1dc8-465c-b2e9-51b04318063c"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -317,9 +315,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{salario_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="346" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a0e5bb6-4076-4de3-a7b8-307fe3fb8868">
-						<printWhenExpression><![CDATA[$V{salariod_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="346" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8a0e5bb6-4076-4de3-a7b8-307fe3fb8868"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -335,9 +331,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{horext_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="410" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="45b92a2e-14e8-4955-a081-bd78345d2822">
-						<printWhenExpression><![CDATA[$V{otrper_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="410" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="45b92a2e-14e8-4955-a081-bd78345d2822"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -345,9 +339,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{otrper_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="442" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8e5439dc-7211-4e9a-af87-181b8c3b4dd1">
-						<printWhenExpression><![CDATA[$V{otrper1_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="442" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="8e5439dc-7211-4e9a-af87-181b8c3b4dd1"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -373,9 +365,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{cajhao_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="543" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a878f591-8601-4412-b991-ad6d70577a6c">
-						<printWhenExpression><![CDATA[$V{infon_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="543" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a878f591-8601-4412-b991-ad6d70577a6c"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -383,9 +373,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{infon_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="575" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="18e5bdf5-48b0-43a6-8f15-85eee2ec7fd1">
-						<printWhenExpression><![CDATA[$V{imss_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="575" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="18e5bdf5-48b0-43a6-8f15-85eee2ec7fd1"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -393,9 +381,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{imss_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="607" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="dca22a1d-4be4-43b5-bf4b-662ae94f00de">
-						<printWhenExpression><![CDATA[$V{fune_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="607" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="dca22a1d-4be4-43b5-bf4b-662ae94f00de"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -403,9 +389,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{fune_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="639" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="59541e70-c59f-41a7-8432-0ba46e647266">
-						<printWhenExpression><![CDATA[$V{vtazap_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="639" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="59541e70-c59f-41a7-8432-0ba46e647266"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -413,9 +397,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{vtazap_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="670" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="aae3481c-3214-4426-9ca1-428fc6cc9a46">
-						<printWhenExpression><![CDATA[$V{cargo_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="670" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="aae3481c-3214-4426-9ca1-428fc6cc9a46"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -423,9 +405,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{cargo_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="702" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b899282e-cb36-46dd-8038-35591f6f1c8e">
-						<printWhenExpression><![CDATA[$V{zapper_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="702" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b899282e-cb36-46dd-8038-35591f6f1c8e"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -433,9 +413,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{zapper_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="733" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9fef9e02-0111-428c-a536-6e3b38902f17">
-						<printWhenExpression><![CDATA[$V{precaha_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="733" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9fef9e02-0111-428c-a536-6e3b38902f17"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -443,9 +421,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{precaha_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="764" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2b4d7892-024d-4925-8124-f2f3a0b98164">
-						<printWhenExpression><![CDATA[$V{impu_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="764" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2b4d7892-024d-4925-8124-f2f3a0b98164"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -453,9 +429,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{impu_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="795" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="20cf5bed-cfa1-481f-a745-005e105bfb35">
-						<printWhenExpression><![CDATA[$V{fonac_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="795" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="20cf5bed-cfa1-481f-a745-005e105bfb35"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -463,9 +437,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{fonac_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="826" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d45d979e-0c6d-4a35-8eea-8dcdccceea9e">
-						<printWhenExpression><![CDATA[$V{otrde_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="826" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d45d979e-0c6d-4a35-8eea-8dcdccceea9e"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>

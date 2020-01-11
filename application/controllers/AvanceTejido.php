@@ -95,7 +95,7 @@ class AvanceTejido extends CI_Controller {
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $parametros["DOCUMENTO"] = $this->input->post('DOCUMENTO');
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\tejido\AvanceTejido.jasper');
+        $jc->setJasperurl('jrxml\tejido\AvanceTejidox.jasper');
         $jc->setFilename('CONTROLES_ENTREGADOS_A_TEJIDA' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();

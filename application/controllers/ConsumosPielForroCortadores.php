@@ -97,7 +97,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     ->from("asignapftsacxc AS A")
                     ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
             if ($ARTICULO !== '') {
-                $this->db->where("A.Articulo LIKE  '$ARTICULO'", null, false);
+                $this->db->where("A.Articulo = '$ARTICULO'", null, false);
             }
             if ($CORTADOR !== '') {
                 $this->db->where("A.Empleado = '$CORTADOR'", null, false)
@@ -112,10 +112,11 @@ class ConsumosPielForroCortadores extends CI_Controller {
             if ($ANIO !== '') {
                 $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANIO'", null, false);
             }
-            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->where('E.AltaBaja', 1)->group_by('A.Empleado')->order_by('abs(A.Empleado)', 'ASC');
+            $this->db->where("A.TipoMov ='$TIPO'", null, false)->where('E.AltaBaja', 1)
+                    ->group_by('A.Empleado')->order_by('abs(A.Empleado)', 'ASC');
             $CORTADORES = $this->db->get()->result();
-            //print $this->db->last_query();
-            //EXIT(0);
+//            print $this->db->last_query();
+//            EXIT(0);
             $base = 6;
             $alto_celda = 4;
             /* ANCHO DESPUÉS DE LOS MARGENES = 259, ES DE 215, PERO SON 10 DE MARGEN IZQ Y 10 DE MARGEN DER */

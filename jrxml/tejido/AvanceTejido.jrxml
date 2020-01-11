@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="712" pageHeight="792" columnWidth="339" columnSpacing="10" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.40197559792557"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="712" pageHeight="792" columnWidth="345" columnSpacing="10" leftMargin="0" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="1.5421731577181272"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -78,7 +78,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="62" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<staticText>
 				<reportElement style="Column header" x="0" y="50" width="50" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
 				<textElement verticalAlignment="Middle">
@@ -121,13 +121,6 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				</textElement>
 				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="568" y="16" width="55" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
-				<textElement textAlignment="Left">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="537" y="3" width="66" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="0ba7c7a6-febc-4bad-9b25-6ee3773d98f3"/>
 				<box>
@@ -150,7 +143,7 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="61" width="345" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="62" width="685" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
 				<graphicElement>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
@@ -285,6 +278,14 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEJEDORA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="572" y="16" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="42b7d23f-641b-49fc-807b-72aed69391f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

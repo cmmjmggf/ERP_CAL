@@ -83,9 +83,9 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "A.Estilo, A.Color, A.Pares, A.Articulo, A.Descripcion AS ArticuloT, "
                             . "(CASE WHEN A.Abono = 0 THEN A.Cargo ELSE A.Abono END) AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
                     ->from("asignapftsacxc AS A");
-            
-            
-            
+
+
+
 //            $this->db->select("A.ID, A.Empleado AS Cortador, A.Control, A.Fraccion AS PiFoFraccion, "
 //                            . "A.Estilo, A.Color, A.Pares, A.Articulo, CONCAT(A.Descripcion) AS ArticuloT, "
 //                            . "A.Cargo AS Entregado, A.Devolucion AS  Regreso, A.TipoMov AS Tipo, A.Fecha AS Fecha")
@@ -309,8 +309,36 @@ class AsignaPFTSACXC extends CI_Controller {
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
 //            exit(0);
-            if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0) {
-                $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])->update('asignapftsacxc');
+            if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0 && 
+                    $x['MATERIAL_EXTRA']>0) {
+                $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])
+                        ->where('Fraccion', $x['FRACCION']) 
+                        ->where('Semana',  $x['SEMANA'])  
+                        ->where('Articulo', $x['ARTICULO']) 
+                        ->update('asignapftsacxc');
+
+                $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
+
+                $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                                ->from("preciosmaquilas AS PM")
+                                ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
+                                ->where("PM.Maquila", 1)->get()->result();
+                $datos = array(
+                    'Articulo' => $x['ARTICULO'],
+                    'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                    'CantidadMov' => $x['ENTREGA'],
+                    'FechaMov' => Date('d/m/Y'),
+                    'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
+                    'TipoMov' => 'SXP', /* SXP = SALIDA A PRODUCCION */
+                    'DocMov' => $x['CONTROL'],
+                    'Tp' => '',
+                    'Maq' => $CONTROL_SEMANA_MAQUILA->MAQUILA,
+                    'Sem' => $x['SEMANA'],
+                    'Ano' => $Ano,
+                    'OrdenCompra' => NULL,
+                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                );
+                $this->db->insert("movarticulos_fabrica", $datos);
             } else {
                 /**/
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
@@ -319,9 +347,9 @@ class AsignaPFTSACXC extends CI_Controller {
                 $DT = $this->db->select("A.*")
                                 ->from("asignapftsacxc AS A")
                                 ->where('A.Empleado', 0)
-                                ->where("A.Articulo LIKE '{$xx['ARTICULO']}' "
-                                        . "AND A.Semana LIKE '{$xx['SEMANA']}' "
-                                        . "AND A.Control LIKE '{$xx['CONTROL']}' "
+                                ->where("A.Articulo = '{$xx['ARTICULO']}' "
+                                        . "AND A.Semana = '{$xx['SEMANA']}' "
+                                        . "AND A.Control = '{$xx['CONTROL']}' "
                                         . "AND A.Fraccion LIKE '{$xx['FRACCION']}' ", null, false)
                                 ->get()->result();
 //                var_dump($DT);
@@ -331,7 +359,7 @@ class AsignaPFTSACXC extends CI_Controller {
                     $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))
                             ->set('Abono', ( $DT[0]->Abono + $x['ENTREGA']))
                             ->where('ID', $DT[0]->ID)->update('asignapftsacxc');
-                    
+
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
                                     ->from("preciosmaquilas AS PM")
                                     ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
@@ -408,7 +436,8 @@ class AsignaPFTSACXC extends CI_Controller {
                     /* GENERAR AVANCE DE CONTROL A CORTE */
 
                     /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
-                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
+                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')
+                            ->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
                     print "\n onEntregarPielForroTextilSintetico ESTATUS DE AVANCE: ";
 
                     print "\n *FIN ESTATUS DE AVANCE* \n";
@@ -481,7 +510,8 @@ class AsignaPFTSACXC extends CI_Controller {
             $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
 
-            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
+            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')
+                            ->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
 
             if (floatval($x['REGRESO']) === 0) {
                 /* OBTENER ULTIMO REGRESO */

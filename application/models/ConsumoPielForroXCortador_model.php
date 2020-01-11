@@ -81,23 +81,25 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                     ->from("asignapftsacxc AS A")
                     ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
             if ($CORTADOR_CLAVE !== '') {
-                $this->db->where("A.Empleado LIKE  '$CORTADOR_CLAVE'", null, false);
+                $this->db->where("A.Empleado = '$CORTADOR_CLAVE'", null, false);
             }
             if ($ARTICULO !== '') {
-                $this->db->where("A.Articulo LIKE  '$ARTICULO'", null, false);
+                $this->db->where("A.Articulo = '$ARTICULO'", null, false);
             }
             if ($SEMANAINICIAL !== '' && $SEMANAFINAL !== '') {
-                $this->db->where("substr(A.Control,3,2) BETWEEN '$SEMANAINICIAL' AND '$SEMANAFINAL'", null, false);
+                $this->db->where("A.Semana BETWEEN '$SEMANAINICIAL' AND '$SEMANAFINAL'", null, false);
             }
             if ($MAQUILA !== '') {
-                $this->db->where("substr(A.Control,5,2) LIKE '$MAQUILA'", null, false);
+                $this->db->where("A.Maquila = '$MAQUILA'", null, false);
             }
             if ($ANO !== '') {
                 $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) LIKE '$ANO'", null, false);
             }
-            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->where('E.AltaBaja', 1);
+            $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1);
             $this->db->group_by('A.Estilo');
-            return $this->db->get()->result();
+            $data = $this->db->get()->result();
+//            print $this->db->last_query();
+            return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -119,16 +121,16 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                 $this->db->where("STR_TO_DATE(A.Fecha, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAFINAL', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAINICIAL', \"%d/%m/%Y\")");
             }
             if ($ANO !== '') {
-                $this->db->where("OP.Ano LIKE '$ANO'", null, false);
+                $this->db->where("OP.Ano = '$ANO'", null, false);
             }
             if ($CORTADOR !== '') {
-                $this->db->where("A.Empleado LIKE '$CORTADOR'", null, false);
+                $this->db->where("A.Empleado = '$CORTADOR'", null, false);
             }
             if ($MAQUILA !== '') {
-                $this->db->where("OP.Maquila LIKE '$MAQUILA'", null, false);
+                $this->db->where("OP.Maquila = '$MAQUILA'", null, false);
             }
             if ($ARTICULO !== '') {
-                $this->db->where("A.Articulo LIKE  '$ARTICULO'", null, false);
+                $this->db->where("A.Articulo =  '$ARTICULO'", null, false);
             }
             if ($SEMANAINICIAL !== '' && $SEMANAFINAL !== '') {
                 $this->db->where("OP.Semana BETWEEN '$SEMANAINICIAL' AND '$SEMANAFINAL'", null, false);
@@ -139,9 +141,10 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             if ($ESTILO !== '') {
                 $this->db->where("A.Estilo LIKE '$ESTILO'", null, false);
             }
-            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->group_by('OP.ControlT')
+            $this->db->where("A.TipoMov = '$TIPO'", null, false)->group_by('OP.ControlT')
                     ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
+//            print $str;
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

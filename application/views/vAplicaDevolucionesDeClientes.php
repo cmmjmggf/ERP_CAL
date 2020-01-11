@@ -238,21 +238,58 @@
                             <th scope="col">ID</th><!--0-->
                             <th scope="col">Cte</th><!--1-->
                             <th scope="col">Docto</th><!--2-->
+
                             <th scope="col">Aplica</th><!--3-->
                             <th scope="col">N-C</th><!--4-->
                             <th scope="col">Control</th><!--5-->
+
                             <th scope="col">Pares</th><!--6-->
+                            <th scope="col">Precio</th><!--6-->
+                            <th scope="col">Total</th><!--6-->
+
                             <th scope="col">Def</th><!--7--> 
                             <th scope="col">Det</th><!--8--> 
                             <th scope="col">Cla</th><!--9--> 
+
                             <th scope="col">Cargo</th><!--10--> 
                             <th scope="col">Fecha</th><!--11--> 
                             <th scope="col">TP</th><!--12--> 
+
                             <th scope="col">Concepto</th><!--13-->  
                         </tr>
                     </thead>
                     <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td> 
+                        </tr>
+                    </tfoot>
                 </table>
+                <div class="col-12">
+                    <button type="button" id="btnRefrescarDEVCTES" name="btnRefrescarDEVCTES" class="btn btn-warning btn-sm">
+                        <span class="fa fa-retweet"></span>
+                    </button>
+                </div>
             </div>
             <div class="col-12">
                 <p class="total_en_letra text-danger font-italic font-weight-bold">-</p>
@@ -286,11 +323,16 @@
             btnRastreoCtrlDoc = pnlTablero.find("#btnRastreoCtrlDoc"),
             btnRastreoEstCte = pnlTablero.find("#btnRastreoEstCte"),
             documento_dtm, devolucion_dtm, btnPrecioEnPrice = pnlTablero.find("#btnPrecioEnPrice"),
+            btnRefrescarDEVCTES = pnlTablero.find("#btnRefrescarDEVCTES"),
             nuevo = true;
 
     $(document).ready(function () {
 
         handleEnterDiv(pnlTablero);
+
+        btnRefrescarDEVCTES.click(function () {
+            DevolucionDetalle.ajax.reload();
+        });
 
         btnPrecioEnPrice.click(function () {
             onOpenWindowAFC("http://proveedores.priceshoes.com/", function () {
@@ -504,6 +546,9 @@
             if (e.keyCode === 13 && $(this).val() && ClienteDevolucion.val()) {
                 onComprobarFacturaXCliente($(this).val());
             }
+            if (e.keyCode === 13) {
+                DevolucionDetalle.ajax.reload();
+            }
         });
 
         btnPagos.click(function () {
@@ -632,7 +677,7 @@
                 {"data": "ID"}, {"data": "CLIENTE"},
                 {"data": "DOCUMENTO"}, {"data": "APLICA"},
                 {"data": "NC"}, {"data": "CONTROL"},
-                {"data": "PARES"}, {"data": "DEFECTOS"},
+                {"data": "PARES"}, {"data": "PRECIO"}, {"data": "TOTAL"}, {"data": "DEFECTOS"},
                 {"data": "DETALLES"}, {"data": "CLASIFICACION"},
                 {"data": "CARGO"}, {"data": "FECHA"},
                 {"data": "TP"}, {"data": "CONCEPTO"}
@@ -657,7 +702,19 @@
             responsive: {
                 orthogonal: 'responsive'
             },
-            "initComplete": function (settings, json) {
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var prs = 0, stt = 0.0;
+                console.log(api.rows().data());
+                $.each(api.rows().data(), function (k, v) {
+                    prs += parseFloat(v.PARES);
+                    stt += parseFloat(v.TOTAL);
+                });
+                $(api.column(6).footer()).html(
+                        '<span class="font-weight-bold">' + prs + ' pares</span>');
+                $(api.column(8).footer()).html(
+                        '<span class="font-weight-bold">$' +
+                        $.number(stt, 2, '.', ',') + '</span>');
             }
         });
 
@@ -694,7 +751,7 @@
     }
 
     function getUltimaNC() {
-        $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getUltimaNC'); ?>').done(function (aaa) {
+        $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getUltimaNC'); ?>', {TP: TP.val()}).done(function (aaa) {
             console.log(aaa, aaa.length, aaa[0].NCU);
             NotaCredito.val(aaa[0].NCU);
             pnlTablero.find(".notac_text").text(aaa[0].NCU);

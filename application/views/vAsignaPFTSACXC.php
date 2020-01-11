@@ -538,7 +538,8 @@
         btnAceptar.click(function () {
             onEnable(Cortador);
             onDisable(btnAceptar);
-            if (mdlRetornaMaterial.find("#Entrego").val() !== '' || mdlRetornaMaterial.find("#Regreso").val() !== '') {
+            if (mdlRetornaMaterial.find("#Entrego").val() !== '' 
+                    || mdlRetornaMaterial.find("#Regreso").val() !== '') {
                 onDevolverPielForro();
             } else {
                 swal('ATENCIÓN', 'DEBE DE SELECCIONAR UN REGISTRO', 'warning').then((value) => {
@@ -1171,7 +1172,8 @@
         }
         if (valid) {
             var entrego = mdlRetornaMaterial.find("#Entrego").val(),
-                    retorno = parseFloat(mdlRetornaMaterial.find("#AnteriormenteRetorno").val()) + parseFloat(mdlRetornaMaterial.find("#Regreso").val());
+                    retorno = parseFloat(mdlRetornaMaterial.find("#AnteriormenteRetorno").val()) + 
+                    parseFloat(mdlRetornaMaterial.find("#Regreso").val());
             console.log(entrego, '|', entrego + ' >=' + retorno, ' ', entrego >= retorno);
             if (entrego >= retorno || parseInt(entrego) === 0) {
                 if (mdlRetornaMaterial.find("#ID").val() !== '') {

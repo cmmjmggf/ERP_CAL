@@ -123,9 +123,14 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
 
-            $this->db->select("D.ID AS ID, D.cliente AS CLIENTE, D.docto AS DOCUMENTO,
-                D.aplica AS APLICA, D.nc AS NC, D.control AS CONTROL, D.paredev AS PARES,
+            $this->db->select("D.ID AS ID, CONCAT(\"<span class='font-weight-bold'>\",D.cliente,\"</span>\") AS CLIENTE, 
+                CONCAT(\"<span class='font-weight-bold'>\",D.docto,\"</span>\")  AS DOCUMENTO,
+                 CONCAT(\"<span class='font-weight-bold text-danger'>\",D.aplica,\"</span>\") AS APLICA, 
+                 CONCAT(\"<span class='font-weight-bold text-info'>\",D.nc,\"</span>\") AS NC, 
+                 CONCAT(\"<span class='font-weight-bold'>\",D.control,\"</span>\") AS CONTROL, D.paredev AS PARES, 
+                 CONCAT(\"<span class='font-weight-bold' style='color: #7CB342;'>$\",FORMAT(D.precio,2),\"</span>\") AS PRECIO,
                 D.defecto AS DEFECTOS, D.detalle AS DETALLES, D.clasif AS CLASIFICACION, D.cargoa AS CARGO,
+                (D.paredev * D.precio) AS TOTAL,
                 DATE_FORMAT(D.fecha,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, D.conce AS CONCEPTO", false)
                     ->from("devctes AS D");
 
@@ -145,7 +150,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $this->db->limit(10);
             }
 
-            print json_encode($this->db->get()->result());
+            $data =  $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -184,8 +191,17 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
 
     public function getUltimaNC() {
         try {
-            print json_encode($this->db->query("SELECT (NC.nc + 1) AS NCU FROM notcred AS NC "
-                                    . "WHERE NC.tp = 1 AND NC.nc < 20000 ORDER BY NC.nc DESC LIMIT 1")->result());
+            $x = $this->input->get();
+            switch (intval($x['TP'])) {
+                case 1:
+                    print json_encode($this->db->query("SELECT (NC.nc + 1) AS NCU FROM notcred AS NC "
+                                            . "WHERE NC.tp = 1 AND NC.nc < 20000 ORDER BY NC.nc DESC LIMIT 1")->result());
+                    break;
+                case 2:
+                    print json_encode($this->db->query("SELECT (NC.nc + 1) AS NCU FROM notcred AS NC "
+                                            . "WHERE NC.tp = 2  ORDER BY NC.nc DESC LIMIT 1")->result());
+                    break;
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -245,23 +261,27 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "subtot" => ($subtotal),
                     "registro" => 0
                 ));
-                $this->db->insert('devctes', $ncc);
-                /*
-                 * COLOCA LA DEVOLUCION COMO APLICADA, SE ASIGNA LA NOTA DE CREDITO A LA DEVOLUCION
-                 *
-                 */
-                $this->db->set('staapl', 1)->set('nc', $x["NC"])
-                        ->where('control', $x['CONTROL'])
-                        ->where('cliente', $x["CLIENTE"])
-                        ->where('tp', $x["TP"])
-                        ->where('docto', $r->docto)
-                        ->update('devolucionnp');
-                
-                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVCTES)",
-                        "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
-                $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVOLUCIONNP)",
-                        "HA ASIGNADO LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+                $EXISTE_EN_DEVCTES = $this->db->query("SELECT COUNT(*) AS EXISTE FROM devctes AS D "
+                                . "WHERE cliente = {$x["CLIENTE"]} AND docto = {$r->docto} "
+                                . "AND aplica = {$x["APLICA"]} AND nc = {$x["NC"]} AND tp ={$x["TP"]} AND control = {$x["CONTROL"]};")->result();
+                if ($EXISTE_EN_DEVCTES[0]->EXISTE <= 0) {
+                    $this->db->insert('devctes', $ncc);
+                    /*
+                     * COLOCA LA DEVOLUCION COMO APLICADA, SE ASIGNA LA NOTA DE CREDITO A LA DEVOLUCION
+                     *
+                     */
+                    $this->db->set('staapl', 1)->set('nc', $x["NC"])
+                            ->where('control', $x['CONTROL'])
+                            ->where('cliente', $x["CLIENTE"])
+                            ->where('tp', $x["TP"])
+                            ->where('docto', $r->docto)
+                            ->update('devolucionnp');
 
+                    $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVCTES)",
+                            "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+                    $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVOLUCIONNP)",
+                            "HA ASIGNADO LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+                }
 //                SE CONSIDERA COMO PASO 2 PARA UNA DEVOLUCION
             }
         } catch (Exception $exc) {
@@ -396,6 +416,9 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $l = new Logs("APLICA DEV DE CLIENTES - NOTA DE CREDITO (RPT)(TP-1)", "IMPRIMIO UN REPORTE DE LA NDC({$x["NC"]}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final_con_iva, 2, ".", ",") . "   TP 1.", $this->session);
                 exit(0);
             } else {
+                $SALDO = $cartcliente[0]->saldo;
+                $PAGOS = $cartcliente[0]->pagos;
+                $STATUS = $cartcliente[0]->status;
                 $saldo_final = ($SALDO - $total_final);
                 $estatus = (floatval($saldo_final) > 1) ? 2 : 3;
 
