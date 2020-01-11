@@ -13,38 +13,37 @@
 	<parameter name="fechaFin" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
-cast(CT.maq as signed) as maq,
-cast(CT.sem as signed) as sem,
-CT.docto,
-PE.Cliente,
-ifnull(CTE.RazonS,'Z NO EXISTE') as NombreCliente,
-CT.control,
-CT.estilo,
-CT.color,
-ifnull(C.Descripcion,'99 SIN COLOR REGISTRADO') AS ColorT,
-CT.fecha,
-str_to_date(PE.FechaEntrega,'%d/%m/%Y') as FechaEntrega,
-datediff(str_to_date(PE.FechaEntrega,'%d/%m/%Y'),CT.fecha) as Dias,
-CT.pares,
-cast(CT.prevta as decimal(5,2)) as prevta,
+ct.maq,
+ct.sem,
+ct.docto,
+pe.Cliente,
+(select razons from clientes where clave = pe.cliente) as NombreCliente,
+ct.control,
+ct.estilo,
+ct.color,
+pe.ColorT,
+ct.fecha,
+str_to_date(pe.FechaEntrega,'%d/%m/%Y') as FechaEntrega,
+datediff(str_to_date(pe.FechaEntrega,'%d/%m/%Y'),CT.fecha) as Dias,
+ct.pares,
+ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0) as prevta,
+(ct.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0))) as subtotal_sintej,
 ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) as tejida,
 ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) * CT.pares as total_tej,
-(CT.pares * CT.prevta) as subtotal_sintej,
-
 (ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) * CT.pares)
 +
-(CT.pares * CT.prevta) as subtotal_gen
-from controlterm CT
-left join colores C on C.Clave = CT.color and C.estilo = CT.estilo
-join pedidox PE on PE.control = CT.control
-left join clientes CTE on CTE.clave = PE.Cliente
-where CT.fecha between str_to_date($P{fechaIni},'%d/%m/%Y') and str_to_date($P{fechaFin},'%d/%m/%Y')
-order by maq asc, abs(CT.docto) asc, sem asc, CT.control;]]>
+(CT.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0))) as subtotal_gen
+
+from controlterm ct
+join pedidox pe on pe.control = ct.control
+left join colores C on C.Clave = ct.color and C.estilo = ct.estilo
+where ct.fecha between str_to_date($P{fechaIni},'%d/%m/%Y') and str_to_date($P{fechaFin},'%d/%m/%Y')
+order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 	</queryString>
-	<field name="maq" class="java.lang.Long">
+	<field name="maq" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="sem" class="java.lang.Long">
+	<field name="sem" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="docto" class="java.lang.String">
@@ -78,12 +77,14 @@ order by maq asc, abs(CT.docto) asc, sem asc, CT.control;]]>
 	<field name="pares" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="prevta" class="java.math.BigDecimal">
+	<field name="prevta" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tejida" class="java.math.BigDecimal"/>
-	<field name="total_tej" class="java.math.BigDecimal"/>
 	<field name="subtotal_sintej" class="java.lang.Double"/>
+	<field name="tejida" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_tej" class="java.math.BigDecimal"/>
 	<field name="subtotal_gen" class="java.lang.Double"/>
 	<variable name="pares_1" class="java.lang.Integer" resetType="Group" resetGroup="Sem" calculation="Sum">
 		<variableExpression><![CDATA[$F{pares}]]></variableExpression>
