@@ -172,7 +172,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
              */
             $str = $this->db->last_query();
             //print $str;
-            $data = $query->result_array();
+            $data = $query->result();
             return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -199,7 +199,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
              */
             $str = $this->db->last_query();
             //print $str;
-            $data = $query->result_array();
+            $data = $query->result();
             return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

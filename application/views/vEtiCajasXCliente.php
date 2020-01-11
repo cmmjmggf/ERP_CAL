@@ -209,8 +209,44 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-                    location.href = base_url + 'index.php/ReportesEstiquetasProduccion/' + csv;
-                    HoldOn.close();
+
+
+                    if (cte === '854') {
+                        $.ajax({
+                            url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
+                            type: "POST"
+                        }).done(function (data, x, jq) {
+                            console.log(data);
+                            if (data.length > 0) {
+                                window.open(data, '_blank');
+                                onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
+                            }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
+                        });
+                    } else if (cte === '39' || cte === '995') {
+                        $.ajax({
+                            url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
+                            type: "POST"
+                        }).done(function (data, x, jq) {
+                            console.log(data);
+                            if (data.length > 0) {
+                                window.open(data, '_blank');
+                                onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
+                            }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
+                        });
+                    } else {
+                        location.href = base_url + 'index.php/ReportesEstiquetasProduccion/' + csv;
+                        HoldOn.close();
+                    }
+
+
                 } else {
                     HoldOn.close();
                     swal({
