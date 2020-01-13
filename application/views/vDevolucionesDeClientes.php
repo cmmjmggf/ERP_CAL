@@ -162,7 +162,7 @@
 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control" disabled="" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="Control" name="Control"  class="form-control form-control-sm numbersOnly">
                 <input type="text" id="TP" name="TP" readonly="" class="d-none form-control form-control-sm numbersOnly">
                 <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly">
                 <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly">
@@ -365,7 +365,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnAceptaReporteDevolucion"><span class="fa fa-print"></span> Aceptar</button>
+                <div class="col-6" align="left">
+                    <button type="button" class="btn btn-success" id="btnAceptaReporteDevolucionXLS"><span class="fa fa-print"></span> Aceptar </button>
+                </div>
+                <div class="col-6" align="right">
+                    <button type="button" class="btn btn-info" id="btnAceptaReporteDevolucion"><span class="fa fa-print"></span> Aceptar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -418,7 +423,8 @@
             mdlReportesDevoluciones = $("#mdlReportesDevoluciones"),
             DeLaFechaDev = mdlReportesDevoluciones.find("#DeLaFechaDev"),
             ALaFechaDev = mdlReportesDevoluciones.find("#ALaFechaDev"),
-            btnAceptaReporteDevolucion = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucion");
+            btnAceptaReporteDevolucion = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucion"),
+            btnAceptaReporteDevolucionXLS = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucionXLS");
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
@@ -686,6 +692,61 @@
             }
         });
 
+        btnAceptaReporteDevolucion.click(function () {
+            var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
+            var indice = parseInt(r);
+            if (DeLaFechaDev.val() && ALaFechaDev.val()) {
+                var p = {
+                    FECHA_INICIAL: DeLaFechaDev.val() ? DeLaFechaDev.val() : '',
+                    FECHA_FINAL: ALaFechaDev.val() ? ALaFechaDev.val() : ''
+                };
+                console.log("INDICE => " + indice);
+                if (indice) {
+                    switch (indice) {
+                        case 1:
+                            /*1 = NORMAL (4 REPORTES)*/
+                            onOpenOverlay('');
+                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
+
+
+                                if (aaa.length > 0) {
+                                    onImprimirReporteFancyArray(JSON.parse(aaa));
+                                }
+                            }).fail(function (x, y, z) {
+                                getError(x);
+                            }).always(function () {
+                                onCloseOverlay();
+                            });
+                            break;
+                        case 2:
+                            /* 2 = POR CLIENTE*/
+                            onMostraReporte('onImprimirReportePorCliente', p);
+                            break;
+                        case 3:
+                            /* 3 = POR MAQUILA*/
+                            onMostraReporte('onImprimirReportePorMaquila', p);
+                            break;
+                        case 4:
+                            /* 4 = POR DEFECTO DETALLE*/
+                            onMostraReporte('onImprimirReportePorDefectoDetalle', p);
+                            break;
+                        case 5:
+                            /* 5 = POR AGENTE, POR CLIENTE, POR DEPARTAMENTO, POR DEFECTO Y DETALLE*/
+                            onMostraReporte('onImprimirReportePorAgenteClienteDepartamentoDefectoDetalle', p);
+                            break;
+                    }
+                } else {
+                    iMsg("DEBE DE ESPECIFICAR UN TIPO DE REPORTE", 'w', function () {
+
+                    });
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR LAS FECHAS", function () {
+                    DeLaFechaDev.focus().select();
+                });
+            }
+        });
+
         btnReportesDev.click(function () {
             ALaFechaDev.val(Hoy);
             DeLaFechaDev.val(Hoy);
@@ -743,11 +804,10 @@
                     $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
                         onOpenOverlay('');
                         onResetCampos();
-                        pnlTablero.find("input").val("");
-                        $.each(pnlTablero.find("select"), function (k, v) {
-                            pnlTablero.find("select")[k].selectize.clear(true);
+                        pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion)").val("");
+                        $.each(pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)"), function (k, v) {
+                            pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)")[k].selectize.clear(true);
                         });
-
                         Pedidos.ajax.reload(function () {
                             Devoluciones.ajax.reload(function () {
                                 onCloseOverlay();

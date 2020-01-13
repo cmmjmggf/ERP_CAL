@@ -958,78 +958,101 @@
         });
 
         btnAcepta.click(function () {
-
-            if (PrecioFacturacion.val() === '' || parseFloat(PrecioFacturacion.val()) < 0) {
-                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
-                    PrecioFacturacion.focus().select();
-                });
-                return;
-            }
+            /*REVISAR CANTIDAD FACTURADA*/
             if (Control.val()) {
-                ClienteFactura[0].selectize.enable();
-                $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
-                            FACTURA: Documento.val()
+                $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
+                        {
+                            CONTROL: Control.val()
                         }).done(function (a) {
-                    if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
-                        onCampoInvalido(pnlTablero, 'ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', function () {
-                            Documento.focus().select();
-                        });
-                        return;
-                    } else {
-                        /*ES UN NUEVO REGISTRO, PERO EL DOCUMENTO/FACTURA NO EXISTE*/
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-
-                });
-                var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
-                        pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
-                for (var i = 1; i < 23; i++) {
-                    pc = pnlTablero.find("#C" + i).val();
-                    pf = pnlTablero.find("#CF" + i).val();
-                    paf = pnlTablero.find("#CAF" + i).val();
-                    pf_mas_paf = parseInt(pf ? pf : 0) + parseInt(paf ? paf : 0);
-                    pares += parseInt(pc ? pc : 0); /*FIJO*/
-                    pares_facturados += parseInt(pf ? pf : 0);
-                    pares_a_facturar += parseInt(paf ? paf : 0);
-                    if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
-                        validos = true;
-                    } else {
-                        //                    console.log(pc, pf, paf, pf_mas_paf);
-                        //                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
-                        validos = false;
-                        break;
-                    }
-                }
-
-                pares_finales = pares_facturados + pares_a_facturar;
-                if (pares_a_facturar > 0) {
-                    console.log("son pares validos? => ", validos);
-                    if (pares_finales <= pares && validos) {
-                        console.log('PARES OK');
-                        onAceptarControl();
-                    } else {
+                    var r = a[0];
+                    var pares_finales_a_facturar = parseFloat(r.PARES_FACTURADOS) + parseFloat(TotalParesEntregaAF.val());
+                    /* 36 ES MENOR QUE 40*/
+                    if (parseInt(r.PARES) < pares_finales_a_facturar) {
                         onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
                             pnlTablero.find("#CAF1").focus().select();
                         });
                         return;
+                    } else {
+
+                        if (PrecioFacturacion.val() === '' || parseFloat(PrecioFacturacion.val()) < 0) {
+                            onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
+                                PrecioFacturacion.focus().select();
+                            });
+                            return;
+                        }
+                        if (Control.val()) {
+
+                            ClienteFactura[0].selectize.enable();
+                            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                                    {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                                        FACTURA: Documento.val()
+                                    }).done(function (a) {
+                                if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
+                                    onCampoInvalido(pnlTablero, 'ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', function () {
+                                        Documento.focus().select();
+                                    });
+                                    return;
+                                } else {
+                                    /*ES UN NUEVO REGISTRO, PERO EL DOCUMENTO/FACTURA NO EXISTE*/
+                                }
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+
+                            });
+                            var pares = 0, pares_facturados = 0, pares_a_facturar = 0, pares_finales = 0, validos = true,
+                                    pc = 0, pf = 0, paf = 0, pf_mas_paf = 0;
+                            for (var i = 1; i < 23; i++) {
+                                pc = pnlTablero.find("#C" + i).val();
+                                pf = pnlTablero.find("#CF" + i).val();
+                                paf = pnlTablero.find("#CAF" + i).val();
+                                pf_mas_paf = parseInt(pf ? pf : 0) + parseInt(paf ? paf : 0);
+                                pares += parseInt(pc ? pc : 0); /*FIJO*/
+                                pares_facturados += parseInt(pf ? pf : 0);
+                                pares_a_facturar += parseInt(paf ? paf : 0);
+                                if (pares >= 0 && pares_a_facturar >= 0 && pares_a_facturar <= pares && pf_mas_paf <= pc) {
+                                    validos = true;
+                                } else {
+                                    //                    console.log(pc, pf, paf, pf_mas_paf);
+                                    //                    console.log('LA SUMA DE PARES DE CF' + i + ' + CAF' + i + ' NO CONCUERDAN CON C' + i + ', ESTA CANTIDAD YA SE CONCLUYO O COMPLETO');
+                                    validos = false;
+                                    break;
+                                }
+                            }
+                            pares_finales = pares_facturados + pares_a_facturar;
+                            if (pares_a_facturar > 0) {
+                                console.log("son pares validos? => ", validos);
+//                                if (pares_finales <= pares && validos) {
+                                    console.log('PARES OK');
+                                    onAceptarControl();
+//                                } else {
+//                                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
+//                                        pnlTablero.find("#CAF1").focus().select();
+//                                    });
+//                                    return;
+//                                }
+                            } else {
+                                onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', function () {
+                                    pnlTablero.find("#CAF1").focus().select();
+                                });
+                                return;
+                            }
+                        } else {
+                            $(".swal-button--confirm").focus();
+                            onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CONTROL A FACTURAR', function () {
+                                Control.focus().select();
+                            });
+                            $(".swal-button--confirm").focus();
+                            return;
+                        }
                     }
-                } else {
-                    onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', function () {
-                        pnlTablero.find("#CAF1").focus().select();
-                    });
-                    return;
-                }
-            } else {
-                $(".swal-button--confirm").focus();
-                onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CONTROL A FACTURAR', function () {
-                    Control.focus().select();
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
                 });
-                $(".swal-button--confirm").focus();
-                return;
             }
+
         });
 
         btnCierraDocto.click(function () {
@@ -1805,7 +1828,6 @@
                                         t += parseInt(xx["C" + i]);
                                         TotalParesEntrega.val(t);
                                         TotalParesEntregaAF.val(t);
-
                                         var pares = pnlTablero.find(`#C${i}`),
                                                 pares_a_facturar = pnlTablero.find(`#CAF${i}`);
                                         if (parseFloat(pares.val()) > 0) {
@@ -2058,7 +2080,7 @@
             CorridaFacturacion.val('');
             PrecioFacturacion.val('');
             SubtotalFacturacion.val('');
-            SubtotalFacturacionIVA.val(''); 
+            SubtotalFacturacionIVA.val('');
             ParesFacturadosFacturacion.val('');
             btnCierraDocto.attr('disabled', false);
             btnFacturaXAnticipoDeProducto.attr('disabled', true);
