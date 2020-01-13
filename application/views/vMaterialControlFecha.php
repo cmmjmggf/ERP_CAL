@@ -73,7 +73,7 @@
                             <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">10 Piel/Forro, 80 Suela, 90 Peletería</span></label>
                             <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >
                                 <option value=""></option>
-                                <option value="0">TODO</option>
+                                <!--                                <option value="0">TODO</option>-->
                                 <option value="10">10 PIEL Y FORRO</option>
                                 <option value="80">80 SUELA</option>
                                 <option value="90">90 INDIRECTOS</option>
@@ -83,7 +83,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimirSemMaqAno">ACEPTAR</button>
+                <button type="button" class="btn btn-info" id="btnImprimirSemMaqAno">DESGLOSADO X CONTROL</button>
+                <button type="button" class="btn btn-primary" id="btnImprimirSemMaqAnoSinControl">IMPRIME SOLO 90</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -102,6 +103,7 @@
     var n = 1;
     var mdlMaterialParaEntregaMaqSemAno = $('#mdlMaterialParaEntregaMaqSemAno');
     var btnImprimirSemMaqAno = mdlMaterialParaEntregaMaqSemAno.find('#btnImprimirSemMaqAno');
+    var btnImprimirSemMaqAnoSinControl = mdlMaterialParaEntregaMaqSemAno.find('#btnImprimirSemMaqAnoSinControl');
     var valida = false;
     $(document).ready(function () {
 
@@ -143,7 +145,7 @@
                         } else { //Si el control no existe
                             swal({
                                 title: "ATENCIÓN",
-                                text: "EL CONTROL " + control + " NO EXISTE ",
+                                text: "EL CONTROL " + control + " NO EXISTE O ESTÁ CANCELADO ",
                                 icon: "warning",
                                 closeOnClickOutside: false,
                                 closeOnEsc: false
@@ -315,6 +317,65 @@
         btnReporteMaqSem.click(function () {
             mdlMaterialParaEntregaMaqSemAno.modal('show');
         });
+
+        btnImprimirSemMaqAnoSinControl.click(function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var ano = mdlMaterialParaEntregaMaqSemAno.find('#Ano').val();
+            var sem = mdlMaterialParaEntregaMaqSemAno.find('#Sem').val();
+            var maq = mdlMaterialParaEntregaMaqSemAno.find('#Maq').val();
+            var tipo = mdlMaterialParaEntregaMaqSemAno.find('#Tipo').val();
+
+            //Imprimir
+            $.post(master_url + 'onImprimirReportePorAnoSemMaqSinControl', {
+                Ano: ano,
+                Sem: sem,
+                Maq: maq,
+                Tipo: tipo
+            }).done(function (data) {
+                console.log(data);
+                if (data.length > 0) {
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            afterClose: function () {
+                                onNotifyOld('fa fa-check', 'REPORTE GENERADO', 'success');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "100%",
+                                    height: "100%"
+                                },
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
+                                }
+                            }
+                        }
+                    });
+                    HoldOn.close();
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA EL REPORTE",
+                        icon: "error"
+                    });
+                    HoldOn.close();
+                }
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
         btnImprimirSemMaqAno.click(function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var ano = mdlMaterialParaEntregaMaqSemAno.find('#Ano').val();

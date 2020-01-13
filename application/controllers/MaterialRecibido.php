@@ -4,6 +4,7 @@
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class MaterialRecibido extends CI_Controller {
 
@@ -12,7 +13,8 @@ class MaterialRecibido extends CI_Controller {
         date_default_timezone_set('America/Mexico_City');
         $this->load->library('session')->model('Ordencompra_model')
                 ->model('MaterialRecibido_model')
-                ->helper('ReportesCompras_helper')->helper('file');
+                ->helper('ReportesCompras_helper')->helper('file')
+                ->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -41,7 +43,72 @@ class MaterialRecibido extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->MaterialRecibido_model->getRecords($this->input->post('Ano'), $this->input->post('Tp'), $this->input->post('Tipo')));
+            $Año = $this->input->post('Ano');
+            $Folio = $this->input->post('Folio');
+            $Prov = $this->input->post('Proveedor');
+            $Arti = $this->input->post('Articulo');
+            $Depto = $this->input->post('Tipo');
+
+            $this->db->select("OC.ID,"
+                            . "OC.Tp, "
+                            . "OC.Folio, "
+                            . "OC.Proveedor, "
+                            . "CASE WHEN OC.Tp ='1' THEN  CONCAT(P.Clave,' ',P.NombreF) "
+                            . "ELSE CONCAT(P.Clave,' ',P.NombreI) END AS NombreProveedor, "
+                            . "CASE WHEN OC.Tp ='1' THEN  "
+                            . "CONCAT('[Ord_Compra: ',OC.Folio,']----->    Prov. ',OC.Proveedor,' ',P.NombreF) "
+                            . "ELSE "
+                            . "CONCAT('[Ord_Compra: ',OC.Folio,']----->    Prov. ',OC.Proveedor,' ',P.NombreI) "
+                            . "END AS GruposT, "
+                            . "OC.FechaOrden, "
+                            . "OC.FechaEntrega, "
+                            . "OC.FechaFactura, "
+                            . "(A.Clave) AS Articulo, "
+                            . "(A.Descripcion) AS NomArticulo, "
+                            . "OC.Cantidad, "
+                            . "OC.CantidadRecibida, "
+                            . "OC.Precio, "
+                            . "OC.SubTotal, "
+                            . "OC.Sem, "
+                            . "OC.Maq, "
+                            . "CONCAT(G.Clave) AS Grupo,"
+                            . "OC.Ano,"
+                            . "OC.Tipo, "
+                            . "OC.Estatus  "
+                            . "", false)
+                    ->from("ordencompra AS OC")
+                    ->join("proveedores P", 'ON P.Clave = OC.Proveedor')
+                    ->join("articulos A", 'ON A.Clave = OC.Articulo')
+                    ->join("grupos G", 'ON G.Clave =  A.Grupo')
+                    ->join("unidades U", 'ON U.Clave =  A.UnidadMedida');
+
+            if ($Año !== '') {
+                $this->db->where('OC.Ano', $Año);
+            }
+            if ($Depto !== '') {
+                $this->db->where('OC.Tipo', $Depto);
+            }
+            if ($Folio !== '') {
+                $this->db->where('OC.Folio', $Folio);
+            }
+            if ($Prov !== '') {
+                $this->db->where('OC.Proveedor', $Prov);
+            }
+            if ($Arti !== '') {
+                $this->db->where('OC.Articulo', $Arti);
+            }
+            if ($Año === '' && $Folio === '' && $Depto === '' && $Prov === '' && $Arti === '') {
+                //$this->db->limit(50);
+                $this->db->where('OC.Ano', 0);
+            }
+            $query = $this->db->get()->result();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+
+            print json_encode($query);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -133,6 +200,23 @@ class MaterialRecibido extends CI_Controller {
             }
             $pdf->Output($url);
             print base_url() . $url;
+        }
+    }
+
+    public function onImprimirReporteMaterialNoRecibido() {
+        try {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\materiales\reporteMaterialNoRecibido.jasper');
+            $jc->setFilename('REPORTE_MATERIAL_SIN_RECIBIR_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 

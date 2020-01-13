@@ -5,27 +5,52 @@
                 <legend class="float-left">Consulta Ordenes de Compra</legend>
             </div>
             <div class="col-sm-4" align="right">
-                <button type="button" class="btn btn-warning" id="btnLimpiarFiltros" data-toggle="tooltip" data-placement="right" title="Limpiar Filtros">
-                    <i class="fa fa-trash"></i>
+                <button type="button" class="btn btn-danger" id="btnReporteMatNoRecibido">
+                    <i class="fa fa-file-pdf"></i> REPORTE MAT. NO RECIBIDO
+                </button>
+                <button type="button" class="btn btn-info" id="btnLimpiarFiltros" >
+                    <i class="fa fa-align-left"></i> RESTAURAR FILTROS
                 </button>
             </div>
         </div>
         <div class="row">
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1" >
-                <label>Tp</label>
-                <input type="text" class="form-control form-control-sm  numbersOnly " id="Tp" autofocus maxlength="2" >
-            </div>
-            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1" >
                 <label>Año</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly " id="Ano" maxlength="4" >
             </div>
-            <div class="col-6 col-sm-5 col-md-5 col-lg-3 col-xl-3">
+            <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-2">
                 <label>Departamento</label>
-                <input type="text" placeholder="10 PIEL/FORRO, 80 SUELA, 90 INDIR." class="form-control form-control-sm  numbersOnly column_filter" id="Depto" maxlength="2" >
+                <input type="text" placeholder="10-PI/FO 80-SUELA 90-PELET." class="form-control form-control-sm  numbersOnly column_filter" id="Depto" maxlength="2" >
             </div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1" >
                 <label>Folio</label>
                 <input type="text" class="form-control form-control-sm  numbersOnly column_filter" id="Folio" maxlength="10" >
+            </div>
+            <div class="col-6 col-sm-5 col-md-5 col-lg-4 col-xl-4">
+                <label>Proveedor</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Proveedor" name="Proveedor" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sProveedor" name="sProveedor" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-5 col-md-5 col-lg-4 col-xl-4">
+                <label>Artículo</label>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="Articulo" name="Articulo" maxlength="6" required="">
+                    </div>
+                    <div class="col-9">
+                        <select id="sArticulo" name="sArticulo" class="form-control form-control-sm required NotSelectize" required="" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-block mt-4">
@@ -42,6 +67,7 @@
                             <th>Fec</th>
                             <th>Fec-Ent</th>
                             <th>Fec-Fac</th>
+                            <th>Cod</th>
                             <th>Artículo</th>
                             <th>Cant</th>
                             <th>Recibi</th>
@@ -60,8 +86,6 @@
         </div>
     </div>
 </div>
-
-
 <script>
     var master_url = base_url + 'index.php/MaterialRecibido/';
     var tblCompras = $('#tblCompras');
@@ -70,8 +94,6 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
-        //handleEnterDiv(pnlTablero);
-
         tblCompras.find('tbody').on('click', 'tr', function () {
             tblCompras.find("tbody tr").removeClass("success");
             $(this).addClass("success");
@@ -94,54 +116,51 @@
         });
         pnlTablero.find('#btnLimpiarFiltros').click(function () {
             pnlTablero.find("input").val("");
-            tblCompras.DataTable().columns().search('').draw();
+            Compras.ajax.reload();
+            $(':input:text:enabled:visible:first').focus();
         });
-
-        pnlTablero.find("#Tp").keypress(function (e) {
-            if (e.keyCode === 13) {
-                var tp = parseInt($(this).val());
-                if (tp > 2) {
-                    $(this).val('').focus();
-                } else {
-                    Compras.column(3).search($(this).val()).draw();
-                    pnlTablero.find("#Ano").focus().select();
-                }
-            }
+        pnlTablero.find('#btnReporteMatNoRecibido').click(function () {
+            HoldOn.open({theme: 'sk-cube', message: 'CARGANDO...'});
+            $.post(master_url + 'onImprimirReporteMaterialNoRecibido').done(function (data) {
+                onNotifyOld('fa fa-check', 'REPORTE GENERADO', 'success');
+                onImprimirReporteFancy(data);
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
         });
 
         pnlTablero.find("#Ano").keypress(function (e) {
             if (e.keyCode === 13) {
-                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "AÑO INCORRECTO",
-                        icon: "warning",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-                        pnlTablero.find("#Ano").val("");
-                        pnlTablero.find("#Ano").focus();
-                    });
+                if ($(this).val()) {
+                    if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025) {
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "AÑO INCORRECTO",
+                            icon: "warning",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+                            pnlTablero.find("#Ano").val("");
+                            pnlTablero.find("#Ano").focus();
+                        });
+                    } else {
+                        Compras.ajax.reload();
+                        pnlTablero.find("#Depto").focus().select();
+                    }
                 } else {
-                    Compras.column(1).search($(this).val()).draw();
+                    Compras.ajax.reload();
                     pnlTablero.find("#Depto").focus().select();
                 }
             }
         });
-
-
         pnlTablero.find("#Depto").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     var tipo = parseInt($(this).val());
                     if (tipo === 80 || tipo === 90 || tipo === 10) {
-
-                        var ano = pnlTablero.find("#Ano").val();
-                        var tp = pnlTablero.find("#Tp").val();
-                        var tipo = pnlTablero.find("#Depto").val();
-                        getRecords(ano, tp, tipo);
-
-                        pnlTablero.find('#Folio').focus();
+                        Compras.ajax.reload();
+                        pnlTablero.find('#Folio').focus().select();
                     } else {
                         swal({
                             title: "ATENCIÓN",
@@ -150,39 +169,107 @@
                             closeOnClickOutside: false,
                             closeOnEsc: false
                         }).then((action) => {
-                            Compras.column(2).search("", false, true).draw();
                             $(this).val('').focus();
-
                         });
                     }
                 } else {
-                    Compras.column(2).search("", false, true).draw();
-                }
-            }
-        });
-
-        pnlTablero.find("#Folio").keypress(function (e) {
-            if (e.keyCode === 13) {
-                if ($(this).val()) {
-                    Compras.column(4).search($(this).val()).draw();
-                } else {
-                    Compras.column(4).search("").draw();
+                    Compras.ajax.reload();
                     pnlTablero.find("#Folio").focus().select();
                 }
             }
         });
-
-
+        pnlTablero.find("#Folio").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    Compras.ajax.reload();
+                    pnlTablero.find("#Proveedor").focus().select();
+                } else {
+                    Compras.ajax.reload();
+                    pnlTablero.find("#Proveedor").focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#Articulo').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(base_url + 'index.php/ReportesKardex/onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            Compras.ajax.reload();
+                            pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
+                            pnlTablero.find('#Articulo').focus().select();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                pnlTablero.find('#Articulo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    Compras.ajax.reload();
+                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                    pnlTablero.find('#Articulo').focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#sArticulo').change(function () {
+            var txtart = $(this).val();
+            if (txtart) {
+                Compras.ajax.reload();
+                pnlTablero.find('#Articulo').val(txtart);
+                pnlTablero.find('#Articulo').focus().select();
+            }
+        });
+        pnlTablero.find('#Proveedor').keydown(function (e) {
+            if (e.keyCode === 13) {
+                var txtprv = $(this).val();
+                if (txtprv) {
+                    $.getJSON(base_url + 'index.php/ReportesKardex/onVerificarProveedor', {Proveedor: txtprv}).done(function (data) {
+                        if (data.length > 0) {
+                            Compras.ajax.reload();
+                            pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprv, true);
+                            pnlTablero.find('#Articulo').focus().select();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                                pnlTablero.find('#Proveedor').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    Compras.ajax.reload();
+                    pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+                    pnlTablero.find('#Articulo').focus().select();
+                }
+            }
+        });
+        pnlTablero.find('#sProveedor').change(function () {
+            var txtprv = $(this).val();
+            if (txtprv) {
+                Compras.ajax.reload();
+                pnlTablero.find('#Proveedor').val(txtprv);
+                pnlTablero.find('#Articulo').focus().select();
+            }
+        });
     });
-
     function init() {
-        getRecords('', '', '');
+        getRecords();
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        getArticulosMatRecibido();
+        getProveedoresMatRecibido();
         pnlTablero.find("input").val("");
         $(':input:text:enabled:visible:first').focus();
-
-
     }
-    function getRecords(ano, tp, tipo) {
+    function getRecords() {
         temp = 0;
         HoldOn.open({
             theme: 'sk-cube',
@@ -201,10 +288,12 @@
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
                 "type": "POST",
-                "data": {
-                    Ano: ano,
-                    Tp: tp,
-                    Tipo: tipo
+                "data": function (d) {
+                    d.Ano = pnlTablero.find("#Ano").val() ? pnlTablero.find("#Ano").val() : '';
+                    d.Tipo = pnlTablero.find("#Depto").val() ? pnlTablero.find("#Depto").val() : '';
+                    d.Articulo = pnlTablero.find("#Articulo").val() ? pnlTablero.find("#Articulo").val() : '';
+                    d.Proveedor = pnlTablero.find("#Proveedor").val() ? pnlTablero.find("#Proveedor").val() : '';
+                    d.Folio = pnlTablero.find("#Folio").val() ? pnlTablero.find("#Folio").val() : '';
                 }
             },
             "columns": [
@@ -218,6 +307,7 @@
                 {"data": "FechaEntrega"},
                 {"data": "FechaFactura"},
                 {"data": "Articulo"},
+                {"data": "NomArticulo"},
                 {"data": "Cantidad"},
                 {"data": "CantidadRecibida"},
                 {"data": "Precio"},
@@ -251,46 +341,46 @@
                     "visible": false,
                     "searchable": true
                 },
+//                {
+//                    "targets": [11, 12],
+//                    "render": function (data, type, row) {
+//                        return $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                },
+//                {
+//                    "targets": [13, 14],
+//                    "render": function (data, type, row) {
+//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+//                    }
+//                },
                 {
-                    "targets": [12],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [13],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [17],
+                    "targets": [18],
                     "visible": false,
                     "searchable": true
                 }
             ],
-            rowGroup: {
-                endRender: function (rows, group) {
-                    var stc = $.number(rows.data().pluck('Cantidad').reduce(function (a, b) {
-                        return a + parseFloat(b);
-                    }, 0), 2, '.', ',');
-                    var stcr = $.number(rows.data().pluck('CantidadRecibida').reduce(function (a, b) {
-                        return a + parseFloat(b);
-                    }, 0), 2, '.', ',');
-                    var stp = $.number(rows.data().pluck('SubTotal').reduce(function (a, b) {
-                        return a + parseFloat(b);
-                    }, 0), 2, '.', ',');
-                    return $('<tr>')
-                            .append('<td></td><td></td><td></td><td></td><td></td><td>Totales: </td>')
-                            .append('<td>' + stc + '</td><td>' + stcr + '</td><td></td><td>$' + stp + '</td><td></td><td></td><td></td><td></td></tr>');
-                },
-                dataSrc: "GruposT"
-            },
+//            rowGroup: {
+//                endRender: function (rows, group) {
+//                    var stc = $.number(rows.data().pluck('Cantidad').reduce(function (a, b) {
+//                        return a + parseFloat(b);
+//                    }, 0), 2, '.', ',');
+//                    var stcr = $.number(rows.data().pluck('CantidadRecibida').reduce(function (a, b) {
+//                        return a + parseFloat(b);
+//                    }, 0), 2, '.', ',');
+//                    var stp = $.number(rows.data().pluck('SubTotal').reduce(function (a, b) {
+//                        return a + parseFloat(b);
+//                    }, 0), 2, '.', ',');
+//                    return $('<tr>')
+//                            .append('<td></td><td></td><td></td><td></td><td></td><td></td><td>Totales: </td>')
+//                            .append('<td>' + stc + '</td><td>' + stcr + '</td><td></td><td>$' + stp + '</td><td></td><td></td><td></td><td></td></tr>');
+//                },
+//                dataSrc: "GruposT"
+//            },
             language: lang,
             "scrollY": 450,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 50,
+            "displayLength": 500,
             "bLengthChange": true,
             "deferRender": true,
             "scrollCollapse": false,
@@ -298,30 +388,30 @@
             "aaSorting": [
                 [4, 'asc'], [5, 'asc'], [7, 'asc']/*Folio*/
             ],
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 3:
-                            /*FECHA ORDEN*/
-                            c.addClass('text-strong');
-                            break;
-                        case 5:
-                            /*FECHA ENTREGA*/
-                            c.addClass('text-success text-strong');
-                            break;
-                        case 7:
-                            /*fecha conf*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 8:
-                            /*fecha conf*/
-                            c.addClass('text-warning text-strong');
-                            break;
-                    }
-                });
-            },
+//            "createdRow": function (row, data, index) {
+//                $.each($(row).find("td"), function (k, v) {
+//                    var c = $(v);
+//                    var index = parseInt(k);
+//                    switch (index) {
+//                        case 3:
+//                            /*FECHA ORDEN*/
+//                            c.addClass('text-strong');
+//                            break;
+//                        case 5:
+//                            /*FECHA ENTREGA*/
+//                            c.addClass('text-success text-strong');
+//                            break;
+//                        case 7:
+//                            /*fecha conf*/
+//                            c.addClass('text-info text-strong');
+//                            break;
+//                        case 8:
+//                            /*fecha conf*/
+//                            c.addClass('text-warning text-strong');
+//                            break;
+//                    }
+//                });
+//            },
             initComplete: function (a, b) {
                 HoldOn.close();
 
@@ -329,7 +419,30 @@
         });
 
     }
-
+    function getArticulosMatRecibido() {
+        pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+        pnlTablero.find("#sArticulo")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/ReportesKardex/getArticulos').done(function (data) {
+            $.each(data, function (k, v) {
+                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+    function getProveedoresMatRecibido() {
+        pnlTablero.find("#sProveedor")[0].selectize.clear(true);
+        pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/ReportesKardex/getProveedores').done(function (data) {
+            $.each(data, function (k, v) {
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
 </script>
 <style>
     .text-strong {

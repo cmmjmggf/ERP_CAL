@@ -16,7 +16,7 @@ class MaterialControlFecha_model extends CI_Model {
                             . ""
                             . "")
                     ->from("pedidox AS PD")
-                    ->where("PD.Control", $Control);
+                    ->where("PD.Control", $Control)->where("PD.stsavan <> 14 ", null, false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
@@ -278,12 +278,13 @@ class MaterialControlFecha_model extends CI_Model {
             $this->db->query("set sql_mode=''");
             $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre "
                             . "")
-                    ->from("ordendeproduccion AS OP")
+                    ->from("pedidox AS PE ")
+                    ->join("ordendeproduccion AS OP", "ON PE.Control = OP.ControlT AND PE.stsavan <> 14 ")
                     ->join("ordendeproducciond AS OPD", "ON OP.ID = OPD.OrdenDeProduccion")
                     ->join("grupos AS G", "ON G.Clave = OPD.Grupo")
-                    ->where_in("OP.ano", $Ano)
-                    ->where_in("OP.semana", $Sem)
-                    ->where_in("OP.maquila", $Maq)
+                    ->where_in("PE.ano", $Ano)
+                    ->where_in("PE.semana", $Sem)
+                    ->where_in("PE.maquila", $Maq)
                     ->where_in("OPD.DepartamentoArt", $Tipo)
                     ->group_by("OPD.DepartamentoArt")
                     ->group_by("OPD.Grupo")
@@ -307,12 +308,13 @@ class MaterialControlFecha_model extends CI_Model {
             $this->db->query("set sql_mode=''");
             $this->db->select("CAST(G.Clave AS SIGNED ) AS ClaveGrupo, OP.ControlT, OPD.Articulo "
                             . "")
-                    ->from("ordendeproduccion AS OP")
+                    ->from("pedidox AS PE ")
+                    ->join("ordendeproduccion AS OP", "ON PE.Control = OP.ControlT AND PE.stsavan <> 14 ")
                     ->join("ordendeproducciond AS OPD", "ON OP.ID = OPD.OrdenDeProduccion")
                     ->join("grupos AS G", "ON G.Clave = OPD.Grupo")
-                    ->where_in("OP.ano", $Ano)
-                    ->where_in("OP.semana", $Sem)
-                    ->where_in("OP.maquila", $Maq)
+                    ->where_in("PE.ano", $Ano)
+                    ->where_in("PE.semana", $Sem)
+                    ->where_in("PE.maquila", $Maq)
                     ->where_in("OPD.DepartamentoArt", $Tipo)
                     ->group_by("OPD.Articulo")
                     ->order_by("ClaveGrupo", 'ASC')
@@ -337,16 +339,82 @@ class MaterialControlFecha_model extends CI_Model {
             $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre,"
                             . "OP.ControlT, OPD.Articulo, OPD.ArticuloT, OPD.UnidadMedidaT,sum(OPD.Cantidad) AS Cantidad"
                             . "")
-                    ->from("ordendeproduccion AS OP")
+                    ->from("pedidox AS PE ")
+                    ->join("ordendeproduccion AS OP", "ON PE.Control = OP.ControlT AND PE.stsavan <> 14 ")
                     ->join("ordendeproducciond AS OPD", "ON OP.ID = OPD.OrdenDeProduccion")
                     ->join("grupos AS G", "ON G.Clave = OPD.Grupo")
-                    ->where_in("OP.ano", $Ano)
-                    ->where_in("OP.semana", $Sem)
-                    ->where_in("OP.maquila", $Maq)
+                    ->where_in("PE.ano", $Ano)
+                    ->where_in("PE.semana", $Sem)
+                    ->where_in("PE.maquila", $Maq)
                     ->where_in("OPD.DepartamentoArt", $Tipo)
                     ->group_by("OP.ControlT")
                     ->group_by("OPD.Articulo")
                     ->order_by("OPD.DepartamentoArt", 'ASC')
+                    ->order_by("ClaveGrupo", 'ASC')
+                    ->order_by("OPD.ArticuloT", 'ASC')
+                    ->order_by("OP.ControlT", 'ASC');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    /* Articulos para Reporte Sin Control */
+
+    public function getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo) {
+        try {
+            $this->db->query("set sql_mode=''");
+            $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre "
+                            . "")
+                    ->from("pedidox AS PE ")
+                    ->join("ordendeproduccion AS OP", "ON PE.Control = OP.ControlT AND PE.stsavan <> 14 ")
+                    ->join("ordendeproducciond AS OPD", "ON OP.ID = OPD.OrdenDeProduccion")
+                    ->join("grupos AS G", "ON G.Clave = OPD.Grupo")
+                    ->where("PE.ano", $Ano)
+                    ->where("PE.semana", $Sem)
+                    ->where("PE.maquila", $Maq)
+                    ->where("OPD.DepartamentoArt", $Tipo)
+                    ->where_in("OPD.Grupo", array('49', '48', '47', '45', '37', '29', '14', '13'))
+                    ->group_by("OPD.DepartamentoArt")
+                    ->group_by("OPD.Grupo")
+                    ->order_by("OPD.DepartamentoArt", 'ASC')
+                    ->order_by("ClaveGrupo", 'ASC');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo) {
+        try {
+            $this->db->query("set sql_mode=''");
+            $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre,"
+                            . "OPD.Articulo, OPD.ArticuloT, OPD.UnidadMedidaT,sum(OPD.Cantidad) AS Cantidad "
+                            . "")
+                    ->from("pedidox AS PE ")
+                    ->join("ordendeproduccion AS OP", "ON PE.Control = OP.ControlT AND PE.stsavan <> 14 ")
+                    ->join("ordendeproducciond AS OPD", "ON OP.ID = OPD.OrdenDeProduccion")
+                    ->join("grupos AS G", "ON G.Clave = OPD.Grupo")
+                    ->where("PE.ano", $Ano)
+                    ->where("PE.semana", $Sem)
+                    ->where("PE.maquila", $Maq)
+                    ->where("OPD.DepartamentoArt", $Tipo)
+                    ->where_in("OPD.Grupo", array('49', '48', '47', '45', '37', '29', '14', '13'))
+                    ->group_by("OPD.Articulo")
                     ->order_by("ClaveGrupo", 'ASC')
                     ->order_by("OPD.ArticuloT", 'ASC')
                     ->order_by("OP.ControlT", 'ASC');

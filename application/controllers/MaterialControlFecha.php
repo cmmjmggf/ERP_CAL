@@ -388,4 +388,79 @@ class MaterialControlFecha extends CI_Controller {
         }
     }
 
+    public function onImprimirReportePorAnoSemMaqSinControl() {
+        $Ano = $this->input->post('Ano');
+        $Sem = $this->input->post('Sem');
+        $Maq = $this->input->post('Maq');
+        $Tipo = $this->input->post('Tipo');
+
+        $Grupos = $this->MaterialControlFecha_model->getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo);
+        $ArticulosE = $this->MaterialControlFecha_model->getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo);
+        if (!empty($ArticulosE)) {
+
+            $pdf = new PDF('P', 'mm', array(215.9, 279.4));
+            $pdf->SetAutoPageBreak(true, 10);
+
+            //Agregamos una hoja por cada departamento del articulo 10, 80, 90
+
+            switch ($Tipo) {
+                case '10':
+                    $Tipo = '******* PIEL Y FORRO *******';
+                    break;
+                case '80':
+                    $Tipo = '******* SUELA *******';
+                    break;
+                case '90':
+                    $Tipo = '******* INDIRECTOS *******';
+                    break;
+            }
+            $pdf->setTipo($Tipo);
+            $pdf->AddPage();
+
+
+            //Agregamos los Grupos
+            foreach ($Grupos as $key => $G) {
+
+                $pdf->SetLineWidth(0.5);
+                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetX(5);
+                $pdf->Cell(15, 4, 'Grupo: ', 'B'/* BORDE */, 0, 'L');
+                $pdf->SetX(20);
+                $pdf->SetFont('Calibri', '', 9);
+                $pdf->Cell(50, 4, utf8_decode($G->ClaveGrupo . '     ' . $G->Nombre), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetLineWidth(0.2);
+                //Agregamos los articulos
+                foreach ($ArticulosE as $key => $AE) {
+
+                    if ($G->ClaveGrupo === $AE->ClaveGrupo) {
+
+                        $pdf->SetFont('Calibri', '', 9);
+                        $pdf->Row(array(
+                            '',
+                            $AE->Articulo,
+                            utf8_decode(mb_strimwidth($AE->ArticuloT, 0, 45, "")),
+                            $AE->UnidadMedidaT,
+                            number_format($AE->Cantidad, 2, ".", ","),
+                            ''
+                                ), 0);
+                    }
+                }
+            }
+
+            /* FIN RESUMEN */
+            $path = 'uploads/Reportes/EntregaMateriales';
+            if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $file_name = "ENTREGA MATERIALES POR A-MAQ-SEM " . ' ' . date("d-m-Y his");
+        $url = $path . '/' . $file_name . '.pdf';
+        /* Borramos el archivo anterior */
+        if (delete_files('uploads/Reportes/EntregaMateriales/')) {
+        /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+    }
+    $pdf->Output($url);
+    print base_url() . $url;
+}
+}
+
 }
