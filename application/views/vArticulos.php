@@ -340,7 +340,7 @@
                             message: 'ESPERE...'
                         });
                         $.post(master_url + 'onIgualarPrecios', {Clave: pnlDatos.find("#Clave").val()}).done(function (data) {
-                            PrecioVentaParaMaquilas.clear().draw();
+                            //PrecioVentaParaMaquilas.clear().draw();
                             getDetalleByID(ClaveArticulo);
                             HoldOn.close();
                             swal('ATENCIÓN', 'SE HAN CAMBIADO LOS PRECIOS A MAQUILA 1', 'success');

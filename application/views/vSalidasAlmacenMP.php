@@ -328,7 +328,7 @@
                     }).done(function (data) {
                         if (data.length > 0) {
                             //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
-                            if (data[0].grupo === '3') {
+                            if (data[0].grupo === '3' && maq === '1') {
                                 swal({
                                     title: "ATENCIÓN",
                                     text: "EN ESTE MÓDULO NO SE PERMITE DAR SALIDA A SUELAS",

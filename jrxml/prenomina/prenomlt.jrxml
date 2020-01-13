@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prenomlt" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aef5d812-a6ee-48da-a55e-46d5292efd64">
-	<property name="ireport.zoom" value="2.853116706110129"/>
-	<property name="ireport.x" value="1367"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="5.054470284993173"/>
+	<property name="ireport.x" value="2023"/>
+	<property name="ireport.y" value="41"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="SEMANA" class="java.lang.Integer">
@@ -16,8 +16,8 @@
 	<queryString>
 		<![CDATA[SELECT
 PNL.ID, PNL.numsem, PNL.año, PNL.numemp, PNL.diasemp, PNL.pares, PNL.salario, PNL.salariod, PNL.horext, PNL.otrper, PNL.otrper1, PNL.infon, PNL.imss, PNL.impu, PNL.precaha, PNL.cajhao,
-(IFNULL(PNL.vtazap,0) + IFNULL(PNL.fierabono,0)) AS vtazap,
-	PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, PNL.otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
+(IFNULL(PNL.vtazap,0)) AS vtazap,
+	PNL.zapper, PNL.fune, PNL.cargo, PNL.fonac, PNL.otrde, IFNULL(PNL.fierabono,0) + IFNULL(PNL.otrde1,0) AS otrde1, PNL.registro, PNL.status, PNL.tpomov, PNL.salfis, PNL.depto,
 IFNULL(D.Clave,999) AS NUMDEP, IFNULL(D.Descripcion,"NO EXISTE DEPTO") AS DEPARTAMENTO,
 CONCAT(E.PrimerNombre,' ',
 (CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),' ',
@@ -355,9 +355,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<textFieldExpression><![CDATA[$V{PERCEPCIONES_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="511" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="85b10521-4045-4345-9877-3bbd84fb9f8b">
-						<printWhenExpression><![CDATA[$V{cajhao_1}>0]]></printWhenExpression>
-					</reportElement>
+					<reportElement mode="Transparent" x="511" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="85b10521-4045-4345-9877-3bbd84fb9f8b"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -434,7 +432,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{fonac_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{otrde1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="826" y="0" width="31" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d45d979e-0c6d-4a35-8eea-8dcdccceea9e"/>
@@ -450,7 +448,7 @@ ORDER BY ABS(NUMDEP) ASC]]>
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{otrde1_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{fonac}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="DEPARTAMENTO" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="888" y="0" width="40" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="666aabad-74ea-439c-9808-f7187bb74904"/>
@@ -1023,20 +1021,12 @@ ORDER BY ABS(NUMDEP) ASC]]>
 				<textFieldExpression><![CDATA[$V{precaha_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="763" y="0" width="32" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="a15ede45-253f-41d6-8258-8e3b842b7c2b"/>
+				<reportElement mode="Transparent" x="764" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="a15ede45-253f-41d6-8258-8e3b842b7c2b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{impu_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="794" y="0" width="32" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="980c3f5a-43f2-43e7-bdc8-b0309dcdcd66"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{fonac_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="826" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="4a21d9e8-c538-40f2-ab99-625e372b5798"/>
@@ -1045,14 +1035,6 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{otrde_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="857" y="0" width="32" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="9053f146-be81-4cf5-ac71-44e128668846"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{otrde1_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="928" y="0" width="40" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="1b044a9f-b0ab-4eb7-8353-3b047129c15d"/>
@@ -1069,6 +1051,22 @@ ORDER BY ABS(NUMDEP) ASC]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_DEDUCCIONES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="795" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="9053f146-be81-4cf5-ac71-44e128668846"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{otrde1_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="857" y="0" width="31" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="980c3f5a-43f2-43e7-bdc8-b0309dcdcd66"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{fonac_2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

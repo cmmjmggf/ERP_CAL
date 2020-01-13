@@ -114,10 +114,12 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             and cliente = EXPL.Cliente
                             and cast(Semana as signed) BETWEEN $dSem AND $aSem
                             and Ano = '$Ano'
+                            and id = EXPL.ID
                             )  as Pares
 
                             from (
                             SELECT
+                            PE.ID,
                             FT.Articulo, A.Descripcion,
                             PE.Control, PE.Clave as Pedido, PE.FechaEntrega, PE.Estilo, PE.Color, PE.Cliente,
                             PE.Semana, PE.Maquila,
@@ -149,7 +151,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
 
                             ) as EXPL
 
-                            group by EXPL.Control,EXPL.Estilo
+                            group by EXPL.Control, EXPL.Estilo
                             order by EXPL.Control asc ", false);
             $query = $this->db->get();
             /*
