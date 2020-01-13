@@ -4,6 +4,7 @@
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class MaterialControlFecha extends CI_Controller {
 
@@ -11,7 +12,7 @@ class MaterialControlFecha extends CI_Controller {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
         $this->load->library('session')->model('MaterialControlFecha_model')
-                ->helper('Entregamaterialcontrol_helper')->helper('file');
+                ->helper('Entregamaterialcontrol_helper')->helper('file')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -389,31 +390,19 @@ class MaterialControlFecha extends CI_Controller {
     }
 
     public function onImprimirReportePorAnoSemMaqSinControl() {
-        $Ano = $this->input->post('Ano');
-        $Sem = $this->input->post('Sem');
-        $Maq = $this->input->post('Maq');
-        $Tipo = $this->input->post('Tipo');
+        $Ano = $this->input->get('Ano');
+        $Sem = $this->input->get('Sem');
+        $Maq = $this->input->get('Maq');
 
-        $Grupos = $this->MaterialControlFecha_model->getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo);
-        $ArticulosE = $this->MaterialControlFecha_model->getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo);
+        $Grupos = $this->MaterialControlFecha_model->getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq);
+        $ArticulosE = $this->MaterialControlFecha_model->getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq);
         if (!empty($ArticulosE)) {
 
             $pdf = new PDF('P', 'mm', array(215.9, 279.4));
             $pdf->SetAutoPageBreak(true, 10);
 
             //Agregamos una hoja por cada departamento del articulo 10, 80, 90
-
-            switch ($Tipo) {
-                case '10':
-                    $Tipo = '******* PIEL Y FORRO *******';
-                    break;
-                case '80':
-                    $Tipo = '******* SUELA *******';
-                    break;
-                case '90':
-                    $Tipo = '******* INDIRECTOS *******';
-                    break;
-            }
+            $Tipo = '******* INDIRECTOS *******';
             $pdf->setTipo($Tipo);
             $pdf->AddPage();
 
@@ -450,17 +439,40 @@ class MaterialControlFecha extends CI_Controller {
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/EntregaMateriales';
             if (!file_exists($path)) {
-            mkdir($path, 0777, true);
+                mkdir($path, 0777, true);
+            }
+            $file_name = "ENTREGA MATERIALES POR A-MAQ-SEM " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.pdf';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/EntregaMateriales/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $pdf->Output($url);
+            return base_url() . $url;
         }
-        $file_name = "ENTREGA MATERIALES POR A-MAQ-SEM " . ' ' . date("d-m-Y his");
-        $url = $path . '/' . $file_name . '.pdf';
-        /* Borramos el archivo anterior */
-        if (delete_files('uploads/Reportes/EntregaMateriales/')) {
-        /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
     }
-    $pdf->Output($url);
-    print base_url() . $url;
-}
-}
+
+    public function imprimirReportes90() {
+        $reports = array();
+        $reports['CONCENTRADO'] = $this->onImprimirReportePorAnoSemMaqSinControl();
+        $reports['DESGLOSADO'] = $this->onReporteMaterialXControlTipo90();
+        print json_encode($reports);
+    }
+
+    public function onReporteMaterialXControlTipo90() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["Ano"] = $this->input->get('Ano');
+        $parametros["Maq"] = $this->input->get('Maq');
+        $parametros["Sem"] = $this->input->get('Sem');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\matxControlTipo90.jasper');
+        $jc->setFilename('MATERIAL_X_CONTROL_TIPO_90_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        return $jc->getReport();
+    }
 
 }

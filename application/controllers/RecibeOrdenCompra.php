@@ -206,13 +206,16 @@ class RecibeOrdenCompra extends CI_Controller {
                         'Subtotal' => $v->Subtotal
                     );
                     $this->Recibeordencompra_model->onAgregarMovArt($datosSalida);
-                    print $Doc_Salida;
                 }
 //Graba en movarticulos_fabrica
 //                if ($v->Maq === '97') {
 //                    $this->Recibeordencompra_model->onAgregarMovArtFabrica($datos);
 //                }
             }
+            if (intval($SalidaMaquilas) === 1) {
+                print $Doc_Salida;
+            }
+
 //Inserta doc en cartera de proveedores
             $CompraCarProv = $this->Recibeordencompra_model->getCompraParaCartProv($this->input->post('Factura'), $this->input->post('TpDoc'), $this->input->post('Proveedor'));
             $c_cart_p = $CompraCarProv[0];

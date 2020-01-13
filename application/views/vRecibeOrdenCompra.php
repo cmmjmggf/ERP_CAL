@@ -361,7 +361,7 @@
                         pnlTablero.find('#SalidaMaquilas').prop("checked", false);
                         pnlTablero.find('#TpOrdenCompra').focus().select();
                         getRecords(0, 0);
-                        getEntradaCompra(0, 0, 0)
+                        getEntradaCompra(0, 0, 0);
                         onImprimirValeEntrada(Fact, tpDoc, prov, salidamaquilas, doc_salida);
                     }).fail(function (x, y, z) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -872,6 +872,7 @@
         });
     }
     function onImprimirValeSalida(TpDoc, doc_salida) {
+        console.log(TpDoc, doc_salida);
         $.ajax({
             url: master_url + 'onImprimirValeSalida',
             type: "POST",
@@ -880,6 +881,7 @@
                 TpDoc: TpDoc
             }
         }).done(function (data, x, jq) {
+            console.log(data);
             if (data.length > 0) {
                 $.fancybox.open({
                     src: data,
