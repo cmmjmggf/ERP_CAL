@@ -48,7 +48,8 @@ class FacturacionProduccion extends CI_Controller {
             print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
                                     . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, P.EstiloT AS ESTILO_TEXT "
+                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+                                    . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
                                     . "WHERE P.Control = '{$this->input->get('CONTROL')}'")->result());
         } catch (Exception $exc) {
@@ -58,8 +59,9 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getFacturacionDiff() {
         try {
+            $x = $this->input->get();
             /* OBTENGO LAS DIFERENCIAS Y EL CLIENTE DE ESTE CONTROL PORQUE NO SE PUEDE FACTURAR UN CONTROL A UN CLIENTE AL QUE YA SE ELIGIO */
-            $facturacion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturaciondif AS F WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result();
+//            $facturacion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturaciondif AS F WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result();
 //            if (intval($facturacion_existe[0]->EXISTE) > 0) {
 //                print json_encode($this->db->query(" F.cliente,
 //SUM(F.par01) AS par01, SUM(F.par02) AS par02, SUM(F.par03) AS par03, SUM(F.par04) AS par04, SUM(F.par05) AS par05,
@@ -69,15 +71,43 @@ class FacturacionProduccion extends CI_Controller {
 //SUM(F.par21) AS par21, SUM(F.par22) AS par22
 //FROM facturacion AS F  INNER JOIN pedidox AS P ON F.contped = P.Control
 //                WHERE F.contped LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
-            print json_encode($this->db->query("SELECT
+
+            /* REVISAR SI EL CONTROL EXISTE */
+            $pedidox_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
+                            . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+            if (intval($pedidox_existe[0]->EXISTE) > 0) {
+                
+                /* SI EXISTE BUSCAR LOS PARES FACTURADOS EN "PEDIDOX" */
+                $pedidox = $this->db->query("SELECT "
+                                . "(CASE WHEN P.ParesFacturados >0 THEN P.ParesFacturados ELSE 0 END) AS PARES_FACTURADOS FROM pedidox AS P "
+                                . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+                                
+                /* SI EXISTE BUSCAR LOS PARES FACTURADOS EN "FACTURACION" */
+                $facturacion = $this->db->query("SELECT F.pareped AS PARES_FACTURADOS FROM facturacion AS F "
+                                . "WHERE P.contped = {$x['CONTROL']} LIMIT 1")->result();
+
+                $facturacion_dif = $this->db->query("SELECT
                                         F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
                                         F.par06, F.par07, F.par08, F.par09, F.par10,
                                         F.par11, F.par12, F.par13, F.par14, F.par15,
                                         F.par16, F.par17, F.par18, F.par19, F.par20,
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
-                                        FROM facturaciondif AS F  INNER JOIN pedidox AS P ON F.contped = P.Control
-                WHERE F.contped = '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+                                        FROM facturaciondif AS F 
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result();
+                                        
+
+                print json_encode($this->db->query("SELECT
+                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
+                                        F.par06, F.par07, F.par08, F.par09, F.par10,
+                                        F.par11, F.par12, F.par13, F.par14, F.par15,
+                                        F.par16, F.par17, F.par18, F.par19, F.par20,
+                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
+                                        FROM facturaciondif AS F 
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result());
 //            }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -295,7 +325,7 @@ class FacturacionProduccion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
-//            exit(0);
+            exit(0);
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -517,6 +547,18 @@ class FacturacionProduccion extends CI_Controller {
                                         . "FROM facturacion AS F "
                                         . "WHERE F.factura = '{$x['FACTURA']}' ORDER BY year(F.fecha) DESC ")->result());
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getParesFacturadosPedidox() {
+        try {
+            $x = $this->input->get();
+            $data = $this->db->query("SELECT P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES "
+                            . "FROM pedidox AS P "
+                            . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -988,7 +1030,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getParesDevueltos() {
         try {
-
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1026,7 +1068,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
 
     public function onControlSinTerminar() {
         try {
-
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

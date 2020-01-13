@@ -391,7 +391,7 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                 $this->db->set('DiaProg', $x['DIA'])
                         ->set('SemProg', $x['SEMANA'])
                         ->set('AnioProg',$x['ANIO'])
-                        ->set('FechaProg', Date('Y-m-d'))
+                        ->set('FechaProg', Date('Y-m-d 00:00:00'))
                         ->set('HoraProg', Date('h:i:s'))
                         ->where('Control', $x['CONTROL'])
                         ->update('pedidox');
@@ -434,7 +434,7 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                 $this->db->set('DiaProg', $x->post('DIA'))
                         ->set('SemProg', $x->post('Semana'))
                         ->set('AnioProg', $x->post('ANIO'))
-                        ->set('FechaProg', Date('Y-m-d'))
+                        ->set('FechaProg', Date('Y-m-d 00:00:00'))
                         ->set('HoraProg', Date('h:i:s'))
                         ->where('Control', $x->post('CONTROL'))
                         ->update('pedidox');

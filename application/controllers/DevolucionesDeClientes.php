@@ -123,6 +123,7 @@ class DevolucionesDeClientes extends CI_Controller {
 
     public function onGuardar() {
         try {
+            exit(0);
             $x = $this->input->post();
             $fecha = Date('Y-m-d 00:00:00');
             $p = array(
