@@ -358,7 +358,7 @@ class MaterialControlFecha_model extends CI_Model {
              * FOR DEBUG ONLY
              */
             $str = $this->db->last_query();
-            //print $str;
+            print $str;
             $data = $query->result();
             return $data;
         } catch (Exception $exc) {
@@ -366,9 +366,9 @@ class MaterialControlFecha_model extends CI_Model {
         }
     }
 
-    /* Articulos para Reporte Sin Control */
+    /* Articulos para Reporte Sin Control 90 */
 
-    public function getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo) {
+    public function getGruposArticulosByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq) {
         try {
             $this->db->query("set sql_mode=''");
             $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre "
@@ -380,7 +380,7 @@ class MaterialControlFecha_model extends CI_Model {
                     ->where("PE.ano", $Ano)
                     ->where("PE.semana", $Sem)
                     ->where("PE.maquila", $Maq)
-                    ->where("OPD.DepartamentoArt", $Tipo)
+                    ->where("OPD.DepartamentoArt", '90')
                     ->where_in("OPD.Grupo", array('49', '48', '47', '45', '37', '29', '14', '13'))
                     ->group_by("OPD.DepartamentoArt")
                     ->group_by("OPD.Grupo")
@@ -399,7 +399,7 @@ class MaterialControlFecha_model extends CI_Model {
         }
     }
 
-    public function getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq, $Tipo) {
+    public function getArticulosEncByAnoMaqSemByDeptoSinControl($Ano, $Sem, $Maq) {
         try {
             $this->db->query("set sql_mode=''");
             $this->db->select("OPD.DepartamentoArt, CAST(G.Clave AS SIGNED ) AS ClaveGrupo, G.Nombre,"
@@ -412,7 +412,7 @@ class MaterialControlFecha_model extends CI_Model {
                     ->where("PE.ano", $Ano)
                     ->where("PE.semana", $Sem)
                     ->where("PE.maquila", $Maq)
-                    ->where("OPD.DepartamentoArt", $Tipo)
+                    ->where("OPD.DepartamentoArt", '90')
                     ->where_in("OPD.Grupo", array('49', '48', '47', '45', '37', '29', '14', '13'))
                     ->group_by("OPD.Articulo")
                     ->order_by("ClaveGrupo", 'ASC')
