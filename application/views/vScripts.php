@@ -1507,7 +1507,7 @@
     function b25NZW51RGlzcGxheQ(e, obj) {
         onOpenOverlay('Cargando...');
         $(obj).addClass("bounce-infinite");
-        
+
         window.location.href = '<?php print base_url(); ?>' + e + '.shoes/';
     }
 
@@ -1555,7 +1555,7 @@
                                 modulo += '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>';
                                 modulo += '</div>';
                                 modulo += '<div class="card-footer">';
-                                modulo += '<h5>' + v.Modulo + '</h5>'; 
+                                modulo += '<h5>' + v.Modulo + '</h5>';
                                 modulo += '</div>';
                                 modulo += '</div>';
                                 modulo += '</div>';
@@ -1927,5 +1927,16 @@
             }
         });
         f();
+    }
+    
+    function onOpenWindowBlank(url) {
+        window.open(url, '_blank');
+    }
+    
+    function onOpenWindowBlankArray(urls) {
+        $.each(urls, function (k, v) {
+            console.log(v)
+            window.open(v, '_blank');
+        });
     }
 </script>

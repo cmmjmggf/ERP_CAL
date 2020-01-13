@@ -692,7 +692,7 @@
             }
         });
 
-        btnAceptaReporteDevolucion.click(function () {
+        btnAceptaReporteDevolucionXLS.click(function () {
             var r = mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') ? mdlReportesDevoluciones.find("input[name='Reporte']:checked").attr('valor') : 0;
             var indice = parseInt(r);
             if (DeLaFechaDev.val() && ALaFechaDev.val()) {
@@ -706,12 +706,11 @@
                         case 1:
                             /*1 = NORMAL (4 REPORTES)*/
                             onOpenOverlay('');
-                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormal'); ?>', p).done(function (aaa) {
-
-
-                                if (aaa.length > 0) {
-                                    onImprimirReporteFancyArray(JSON.parse(aaa));
-                                }
+                            $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormalXLS'); ?>', p).done(function (a) {
+                                var b = JSON.parse(a); 
+//                                    onImprimirReporteFancyArray(JSON.parse(aaa));
+//                                   window.open(aaa, '_blank');
+                                    onOpenWindowBlankArray(b); 
                             }).fail(function (x, y, z) {
                                 getError(x);
                             }).always(function () {
