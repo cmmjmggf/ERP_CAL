@@ -212,7 +212,7 @@ class Explosiones_model extends CI_Model {
                                     AND
                                     case
                                     when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
-                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3','52')
+                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3')
                                     end) as EXPL "
                     . " ", false);
 
@@ -276,8 +276,8 @@ class Explosiones_model extends CI_Model {
                                     AND
                                     case
                                     when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
-                                    when $TipoE = '80' then `A`.`Grupo` IN('3','52')
-                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3','52')
+                                    when $TipoE = '80' then `A`.`Grupo` IN('3')
+                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3')
                                     end) as EXPL
                                     GROUP BY `EXPL`.`Articulo`
                                     ORDER BY abs(`EXPL`.`Grupo`) ASC, `EXPL`.`Descripcion` ASC "
@@ -323,7 +323,7 @@ class Explosiones_model extends CI_Model {
                                 AND `PE`.`Semana` BETWEEN $Semana AND $aSemana
                                 AND `PE`.`Ano` = $Ano
                                 AND `PE`.`Estatus` IN('A', 'F')
-                                AND `A`.`Grupo` NOT IN('1', '2', '3', '52')
+                                AND `A`.`Grupo` NOT IN('1', '2', '3')
                                 AND FT.Articulo ='$Articulo'
                                 ORDER BY `A`.`Descripcion` ASC) AS EXPL
                                 group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC"

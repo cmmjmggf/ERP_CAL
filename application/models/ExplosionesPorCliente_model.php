@@ -45,10 +45,10 @@ class ExplosionesPorCliente_model extends CI_Model {
                     $this->db->where_in('G.Clave', array('1', '2'));
                     break;
                 case '80':
-                    $this->db->where_in('G.Clave', array('3', '50', '52'));
+                    $this->db->where_in('G.Clave', array('3'));
                     break;
                 case '90':
-                    $this->db->where_not_in('G.Clave', array('1', '2', '3', '50', '52'));
+                    $this->db->where_not_in('G.Clave', array('1', '2', '3'));
                     break;
             }
             $this->db->where("cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila");
@@ -151,10 +151,10 @@ class ExplosionesPorCliente_model extends CI_Model {
                     $this->db->where_in('A.Grupo', array('1', '2'));
                     break;
                 case '80':
-                    $this->db->where_in('A.Grupo', array('3', '50', '52'));
+                    $this->db->where_in('A.Grupo', array('3'));
                     break;
                 case '90':
-                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '50', '52'));
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3'));
                     break;
             }
             $this->db->group_by('A.Clave');
@@ -226,8 +226,8 @@ class ExplosionesPorCliente_model extends CI_Model {
                                     AND
                                     case
                                     when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
-                                    when $TipoE = '80' then `A`.`Grupo` IN('3', '50','52')
-                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3', '50','52')
+                                    when $TipoE = '80' then `A`.`Grupo` IN('3')
+                                    when $TipoE = '90' then `A`.`Grupo` NOT IN('1', '2','3')
                                     end) as EXPL "
                     . " ", false);
 
@@ -284,7 +284,7 @@ class ExplosionesPorCliente_model extends CI_Model {
             $this->db->join('fichatecnica FT', 'ON FT.Estilo =  PE.Estilo AND FT.Color = PE.Color');
             $this->db->join('articulos A', 'ON A.Clave =  FT.Articulo');
             $this->db->join('grupos G', 'ON G.Clave = A.Grupo');
-            $this->db->where_in('G.Clave', array('3', '50', '52'));
+            $this->db->where_in('G.Clave', array('3'));
 
             $this->db->where("cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila");
             $this->db->where("cast(PE.Semana as signed) BETWEEN $Semana AND $aSemana");
@@ -326,7 +326,7 @@ class ExplosionesPorCliente_model extends CI_Model {
                     ->where_in('PE.Estatus', array('A', 'F'));
             //->where('PE.Control <>  ', false)
             //->where('PE.Control IS NOT NULL ', NULL, false);
-            $this->db->where_in('A.Grupo', array('3', '50', '52'));
+            $this->db->where_in('A.Grupo', array('3'));
             $this->db->group_by('A.Clave');
             //Ordenamiento será por tallas
             $this->db->order_by('NombreArticulo', 'ASC');
@@ -374,7 +374,7 @@ class ExplosionesPorCliente_model extends CI_Model {
                 AND `PE`.`Ano` = '$Ano'
                 AND `PE`.`Cliente` = '$Cliente'
                 AND `PE`.`Estatus` IN('A', 'F')
-                AND `A`.`Grupo` IN('3', '50', '52')
+                AND `A`.`Grupo` IN('3')
                 ORDER BY `A`.`Descripcion` ASC) AS EXPL
                 group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
                     . " ", false);

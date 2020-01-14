@@ -95,11 +95,6 @@ class ReporteCapturaFisica_model extends CI_Model {
 
     public function getDetalleReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Mes_Anterior) {
         try {
-
-            if ($Tipo === '0') {
-                $Tipo = '';
-            }
-
             $tabla_movs = 'movarticulos';
 
             if ($Maq === 'articulos10') {
@@ -127,17 +122,34 @@ class ReporteCapturaFisica_model extends CI_Model {
                     ->from("$Maq A")
                     ->join("unidades U", 'ON U.Clave = A.UnidadMedida', "left")
                     ->join("preciosmaquilas PM", "ON PM.Articulo = A.Clave AND PM.Maquila = '1' ", "left")
-                    ->where("A.$Mes_Anterior > 0 ", null, false)
-                    ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
-                            . "WHERE EntradaSalida = 1 "
-                            . "AND Articulo = A.Clave "
-                            . "AND MONTH(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Mes "
-                            . "AND YEAR(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
-                    ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
-                            . "WHERE EntradaSalida = 2 "
-                            . "AND Articulo = A.Clave "
-                            . "AND MONTH(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Mes "
-                            . "AND YEAR(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
+                    ->where("A.$Mes_Anterior > 0 ", null, false);
+            switch ($Tipo) {
+                case '10':
+                    $GRUPOS = " AND SA.grupo IN ('1','2') ";
+                    $this->db->where_in('A.Grupo', array('1', '2'));
+                    break;
+                case '80':
+                    $GRUPOS = " AND SA.grupo IN ('3') ";
+                    $this->db->where_in('A.Grupo', array('3'));
+                    break;
+                case '90':
+                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3') ";
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3'));
+                    break;
+            }
+
+            $this->db->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA  "
+                            . "JOIN articulos SA on SA.clave = SMA.articulo $GRUPOS "
+                            . "WHERE SMA.EntradaSalida = 1 "
+                            . "AND SMA.Articulo = A.Clave "
+                            . "AND MONTH(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Mes "
+                            . "AND YEAR(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
+                    ->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA "
+                            . "JOIN articulos SA on SA.clave = SMA.articulo $GRUPOS "
+                            . "WHERE SMA.EntradaSalida = 2 "
+                            . "AND SMA.Articulo = A.Clave "
+                            . "AND MONTH(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Mes "
+                            . "AND YEAR(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
                     //->like("A.Departamento", $Tipo)
                     ->order_by('ClaveGrupo', 'ASC')
                     ->order_by('A.Descripcion', 'ASC');
@@ -156,11 +168,10 @@ class ReporteCapturaFisica_model extends CI_Model {
 
     public function getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior) {
         try {
-            if ($Tipo === '0') {
-                $Tipo = '';
-            }
-            $tabla_movs = 'movarticulos';
 
+            $GRUPOS = '';
+
+            $tabla_movs = 'movarticulos';
             if ($Maq === 'articulos10') {
                 $tabla_movs = 'movarticulos_fabrica';
             }
@@ -170,17 +181,33 @@ class ReporteCapturaFisica_model extends CI_Model {
                             . "")
                     ->from("$Maq A")
                     ->join("grupos G", 'ON A.Grupo = G.Clave')
-                    ->where("A.$Texto_Mes_Anterior > 0 ", null, false)
-                    ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
-                            . "WHERE EntradaSalida = 1 "
-                            . "AND Articulo = A.Clave "
-                            . "AND MONTH(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Mes "
-                            . "AND YEAR(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
-                    ->or_where("IFNULL((SELECT SUM(CantidadMov) FROM $tabla_movs "
-                            . "WHERE EntradaSalida = 2 "
-                            . "AND Articulo = A.Clave "
-                            . "AND MONTH(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Mes "
-                            . "AND YEAR(STR_TO_DATE(FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
+                    ->where("A.$Texto_Mes_Anterior > 0 ", null, false);
+            switch ($Tipo) {
+                case '10':
+                    $GRUPOS = " AND SA.grupo IN ('1','2') ";
+                    $this->db->where_in('A.Grupo', array('1', '2'));
+                    break;
+                case '80':
+                    $GRUPOS = " AND SA.grupo IN ('3') ";
+                    $this->db->where_in('A.Grupo', array('3'));
+                    break;
+                case '90':
+                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3') ";
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3'));
+                    break;
+            }
+            $this->db->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA  "
+                            . "JOIN articulos SA on SA.clave = SMA.articulo $GRUPOS "
+                            . "WHERE SMA.EntradaSalida = 1 "
+                            . "AND SMA.Articulo = A.Clave "
+                            . "AND MONTH(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Mes "
+                            . "AND YEAR(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
+                    ->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA "
+                            . "JOIN articulos SA on SA.clave = SMA.articulo $GRUPOS "
+                            . "WHERE SMA.EntradaSalida = 2 "
+                            . "AND SMA.Articulo = A.Clave "
+                            . "AND MONTH(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Mes "
+                            . "AND YEAR(STR_TO_DATE(SMA.FechaMov, \"%d/%m/%Y\")) = $Ano),0) > 0 ", null, false)
                     //->like("A.Departamento", $Tipo)
                     ->group_by("G.Clave")
                     ->group_by("G.Nombre")
