@@ -202,6 +202,9 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
     public function getExplosionMateriales($Ano, $Semana, $aSemana, $Maquila, $aMaquila, $TipoE) {
         try {
             $this->db->query("set sql_mode=''");
+
+            $Subalmacen = ($Maquila === '1') ? " or  MA.Maq  = '97' " : '';
+
             $this->db->select("EXPL.Grupo, EXPL.Articulo , EXPL.Descripcion, EXPL.Unidad, sum(EXPL.Explosion) as Explosion, EXPL.Precio, sum(EXPL.Pares) as Pares,
 
                                     ifnull((select sum(OC.Cantidad) from ordencompra OC
@@ -224,7 +227,7 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
                                     where  MA.tipomov in ('SXM', 'SPR', 'SXP', 'SXC')
                                     and MA.EntradaSalida = '2'
                                     and MA.Articulo = EXPL.Articulo
-                                    and MA.Maq BETWEEN $Maquila AND $aMaquila
+                                    and (MA.Maq BETWEEN $Maquila AND $aMaquila   $Subalmacen  )
                                     AND MA.Sem BETWEEN $Semana AND $aSemana
                                     AND MA.Ano = $Ano
                                     ), 0) AS EntregadoMaquilas

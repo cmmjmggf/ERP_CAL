@@ -86,9 +86,9 @@ $query_builder = TRUE;
  *  */
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => '127.0.0.1',
-    'username' => 'root',
-    'password' => '',
+    'hostname' => '192.168.0.1',
+    'username' => 'lobo',
+    'password' => 'abcd1234',
     'database' => 'erp_cal',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

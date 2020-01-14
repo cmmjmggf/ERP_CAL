@@ -32,32 +32,32 @@ class ConciliaFabricaProduccion extends CI_Controller {
         $Sem = $this->input->get('Sem');
         $Ano = $this->input->get('Ano');
 
-
+        $MaqSub = ($Maq === '1') ? " '1','97' " : $Maq;
         $this->db->query("TRUNCATE TABLE concilias_temp ");
         //Sí Obtenemos todas las DEVOLUCIONES del minialmacen
-        if ($Maq === '1') {
-            $this->db->query("
-                INSERT INTO concilias_temp
-                (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
-                 SELECT
-                A.Grupo,
-                A.Clave AS Articulo,
-                U.Descripcion AS Unidad,
-                '' as Talla,
-                0 as Explosion,
-                0 as CantidadEntregada,
-                sum(ifnull(MA.CantidadMov, 0)) as Devolucion,
-                CASE WHEN $T_Precio = 1 THEN PM.Precio ELSE MA.PrecioMov END as Precio
-                FROM articulos A
-                JOIN movarticulos_fabrica MA ON MA.Articulo = A.Clave
-                JOIN unidades U ON U.Clave = A.UnidadMedida
-                JOIN preciosmaquilas PM ON PM.Articulo = MA.Articulo AND PM.Maquila = '$Maq'
-                WHERE MA.TipoMov = 'SDV'
-                AND MA.Ano = '$Ano'
-                AND MA.Sem = '$Sem'
-                GROUP BY A.Clave, A.Descripcion, MA.tipomov
-                ORDER BY A.Descripcion ASC; ");
-        }
+//        if ($Maq === '1') {
+//            $this->db->query("
+//                INSERT INTO concilias_temp
+//                (Grupo,Articulo,Unidad,Talla,Explosion,Entregado,Devuelto,Precio)
+//                 SELECT
+//                A.Grupo,
+//                A.Clave AS Articulo,
+//                U.Descripcion AS Unidad,
+//                '' as Talla,
+//                0 as Explosion,
+//                0 as CantidadEntregada,
+//                sum(ifnull(MA.CantidadMov, 0)) as Devolucion,
+//                CASE WHEN $T_Precio = 1 THEN PM.Precio ELSE MA.PrecioMov END as Precio
+//                FROM articulos A
+//                JOIN movarticulos_fabrica MA ON MA.Articulo = A.Clave
+//                JOIN unidades U ON U.Clave = A.UnidadMedida
+//                JOIN preciosmaquilas PM ON PM.Articulo = MA.Articulo AND PM.Maquila = '$Maq'
+//                WHERE MA.TipoMov = 'SDV'
+//                AND MA.Ano = '$Ano'
+//                AND MA.Sem = '$Sem'
+//                GROUP BY A.Clave, A.Descripcion, MA.tipomov
+//                ORDER BY A.Descripcion ASC; ");
+//        }
         //Obtenemos todas las salidas a maquilas de movarticulos einsertamos a tabla temporal del reporte
         $this->db->query("
                 INSERT INTO concilias_temp
@@ -79,7 +79,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 WHERE MA.TipoMov IN('SXM', 'SPR', 'SXP', 'SXC', 'EDV')
                 AND MA.Ano = '$Ano'
                 AND MA.Sem = '$Sem'
-                AND MA.Maq = '$Maq'
+                AND MA.Maq in ($MaqSub)
                 GROUP BY A.Clave, A.Descripcion, MA.tipomov
                 ORDER BY A.Descripcion ASC; ");
         //Obtenemos la explosión de materiales sin suela ni planta y los guardamos en concilias_temp
@@ -106,7 +106,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
                 JOIN `maquilas` `MA` ON `MA`.`Clave` = '$Maq'
                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
-                WHERE cast(PE.Maquila as signed) = $Maq
+                WHERE PE.Maquila in ($MaqSub)
                 AND cast(PE.Semana as signed) = $Sem
                 AND `PE`.`Ano` = '$Ano'
                 AND `A`.`Grupo` NOT IN('3', '50', '52') ) as EXPL
