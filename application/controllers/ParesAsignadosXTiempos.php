@@ -68,11 +68,60 @@ class ParesAsignadosXTiempos extends CI_Controller {
         $jc->setParametros(array("logo" => base_url() . $this->session->LOGO, "empresa" => $this->session->EMPRESA_RAZON,
             "MAQUILA" => intval($x['MAQUILA']), "SEMANA" => intval($x['SEMANA']),
             "DIA" => intval($x['DIA']), "ANO" => intval($x['ANIO'])));
+        if ($x['DIA'] !== '') {
+            $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
+            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
+        } else {
+            $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSemSinDia.jasper');
+            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
+        }
+    }
 
-        $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
-        $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        print $jc->getReport();
+    public function getParesAsignadosControlXTiemposXLS() {
+
+        $x = $this->input->post();
+
+        $programacion = $this->db->query("SELECT P.control AS CONTROL, P.estilo AS ESTILO, P.diaprg AS DIA, "
+                        . "P.semana AS SEMANA, P.año AS ANIO, P.fecha AS FECHA "
+                        . "FROM programacion AS P "
+                        . "WHERE P.semana = '{$x['SEMANA']}' AND P.año = '{$x['ANIO']}'")->result();
+
+        foreach ($programacion as $k => $v) {
+            $this->db->set('DiaProg', $v->DIA)
+                    ->set('SemProg', $v->SEMANA)
+                    ->set('AnioProg', $v->ANIO)
+                    ->set('FechaProg', $v->FECHA)
+                    ->where('Control', $v->CONTROL)
+                    ->where('Estilo', $v->ESTILO)
+                    ->update('pedidox');
+        }
+
+        if ($x['DIA'] !== '' && intval($x['DIA']) > 0) {
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $jc->setParametros(array("logo" => base_url() . $this->session->LOGO, "empresa" => $this->session->EMPRESA_RAZON,
+                "MAQUILA" => intval($x['MAQUILA']), "SEMANA" => intval($x['SEMANA']),
+                "DIA" => intval($x['DIA']), "ANO" => intval($x['ANIO'])));
+            $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSem.jasper');
+            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+            $jc->setDocumentformat('xls');
+            print $jc->getReport();
+        } else {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $jc->setParametros(array("logo" => base_url() . $this->session->LOGO, "empresa" => $this->session->EMPRESA_RAZON,
+                "MAQUILA" => intval($x['MAQUILA']), "SEMANA" => intval($x['SEMANA']),
+                "ANO" => intval($x['ANIO'])));
+            $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSemSinDia.jasper');
+            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+            $jc->setDocumentformat('xls');
+            print $jc->getReport();
+        }
     }
 
 }

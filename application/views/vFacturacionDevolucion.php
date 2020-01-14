@@ -769,6 +769,7 @@
             FAPEORCOFactura.val('');
             ClienteFactura[0].selectize.clear(true);
             TPFactura.val('');
+            onEnable(TPFactura);
             LPFactura.val('');
             btnNuevo.attr('disabled', true);
             btnNuevo.addClass("d-none");
@@ -898,8 +899,6 @@
                 };
                 $.post('<?php print base_url('FacturacionDevolucion/onCerrarDocto') ?>', p).done(function (abc) {
                     ClienteFactura[0].selectize.enable();
-                    Documento.attr('readonly', false);
-                    TPFactura.attr('disabled', false);
                     getVistaPreviaDocumentoCerrado(function () {
                         iMsg('SE HA CERRADO EL DOCTO', 's', function () {
                             btnCierraDocto.attr('disabled', true);
@@ -910,8 +909,8 @@
                             FCAFactura.attr('readonly', false);
                             PAGFactura.attr('readonly', false);
                             TMNDAFactura.attr('readonly', false);
-                            
-                            
+
+
                             nuevo = true;
                             pnlTablero.find("input").val('');
                             $.each(pnlTablero.find("select"), function (k, v) {
@@ -931,7 +930,6 @@
                             btnControlCompleto.attr('disabled', true);
                             btnVistaPreviaF.attr('disabled', true);
                             FechaFactura.attr('readonly', false);
-                            Documento.attr('readonly', false);
                             FCAFactura.attr('readonly', false);
                             PAGFactura.attr('readonly', false);
                             TMNDAFactura.attr('readonly', false);
@@ -940,6 +938,7 @@
                             ClienteClave.focus().select();
                             FechaFactura.val(Hoy);
                             ClienteClave.focus().select();
+                            TPFactura.attr('disabled', false);
                         });
                     });
                 }).fail(function (x) {

@@ -242,9 +242,9 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
             $hora = Date('h:i:s');
-            PRINT "\n*** IMPORTE TOTAL ***\n";
-            var_dump($TOTAL);
-            PRINT "\n*** IMPORTE TOTAL ***\n";
+//            PRINT "\n*** IMPORTE TOTAL ***\n";
+//            var_dump($TOTAL);
+//            PRINT "\n*** IMPORTE TOTAL ***\n";
             $this->db->insert('cartcliente', array(
                 'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
                 'fecha' => "{$anio}-{$mes}-{$dia} 00:00:00", 'importe' => $TOTAL,

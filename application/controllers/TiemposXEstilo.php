@@ -64,7 +64,7 @@ class TiemposXEstilo extends CI_Controller {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
-            var_dump($data);
+//            var_dump($data);
             $this->db->insert("estilostiempox", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

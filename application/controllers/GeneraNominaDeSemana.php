@@ -35,7 +35,18 @@ class GeneraNominaDeSemana extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-
+    
+public function onRegeneraCelulasPespunte() {
+        try {
+            $x = $this->input->get();
+            var_dump($x);
+            exit(0);
+            $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();

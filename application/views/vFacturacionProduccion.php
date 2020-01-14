@@ -259,7 +259,13 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
                 <hr>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10" align="center">  
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">  
+                <button type="button" id="btnRefrescaRegistro" name="btnRefrescaRegistro" class="btn btn-sm btn-info">
+                    <span class="fa fa-retweet"></span>
+                </button>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" align="center">  
+
                 <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;"> 
                     <table id="tblTallasF" class="Tallas">
                         <thead></thead>
@@ -782,7 +788,9 @@
             mdlConsignarA = $("#mdlConsignarA"), TiendaClave = mdlConsignarA.find("#TiendaClave"),
             ConsignarATienda = mdlConsignarA.find("#Tienda"),
             btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal"),
-            btnNuevaFactura = pnlTablero.find("#btnNuevaFactura");
+            btnNuevaFactura = pnlTablero.find("#btnNuevaFactura"),
+            btnRefrescaRegistro = pnlTablero.find("#btnRefrescaRegistro");
+
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
     pnlTablero.find("input,textarea").addClass("font-weight-bold");
@@ -790,6 +798,19 @@
 
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
+
+        btnRefrescaRegistro.click(function () {
+            $.getJSON('<?php print base_url('FacturacionProduccion/getRegistrosPreFacturados') ?>', {
+                CLIENTE: ClienteFactura.val(),
+                TP: TPFactura.val(),
+                DOCUMENTO: Documento.val()
+            }).done(function (a) {
+                console.log(a);
+            }).fail(function (x) {
+                getError(x);
+            });
+        });
+
         $('.modal').on('show.bs.modal', function (e) {
             $('body').addClass("example-open");
         }).on('hide.bs.modal', function (e) {
@@ -903,7 +924,7 @@
             FechaFactura.val(Hoy);
             Documento.val('');
             ClienteFactura[0].selectize.clear(true);
-            TPFactura[0].selectize.clear(true);
+            TPFactura.val('');
             LPFactura.val('');
             btnNuevo.attr('disabled', true);
             btnNuevo.addClass("d-none");
@@ -983,9 +1004,10 @@
                         if (Control.val()) {
 
                             ClienteFactura[0].selectize.enable();
-                            $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                            $.post('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
                                     {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
-                                        FACTURA: Documento.val()
+                                        FACTURA: Documento.val(),
+                                        TP: TPFactura.val()
                                     }).done(function (a) {
                                 if (parseInt(a[0].FACTURA_EXISTE) >= 1 && nuevo) {
                                     onCampoInvalido(pnlTablero, 'ESTA DOCUMENTO YA EXISTE, INTENTE CON OTRO', function () {
@@ -1023,8 +1045,8 @@
                             if (pares_a_facturar > 0) {
                                 console.log("son pares validos? => ", validos);
 //                                if (pares_finales <= pares && validos) {
-                                    console.log('PARES OK');
-                                    onAceptarControl();
+                                console.log('PARES OK');
+                                onAceptarControl();
 //                                } else {
 //                                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
 //                                        pnlTablero.find("#CAF1").focus().select();
@@ -1129,86 +1151,119 @@
 
         Documento.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
-                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: Documento.val()
+                $.post('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                            FACTURA: Documento.val(),
+                            TP: TPFactura.val()
                         }).done(function (a) {
-                    if (a.length > 0) {
-                        //                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
-
-                        if (parseInt(a[0].FACTURA_EXISTE) === 0) {
-                            btnAcepta.attr('disabled', false);
-                            btnVistaPreviaF.attr('disabled', true);
-                            CajasFacturacion.attr('disabled', false);
-                            onCloseOverlay();
-                        } else {
-                            if (ClienteFactura.val() === a[0].CLIENTE) {
-                                btnVistaPreviaF.attr('disabled', false);
-                                btnAcepta.attr('disabled', true);
-                                CajasFacturacion.attr('disabled', true);
-                                onDisableInputs(true);
-                                $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
-                                        {
-                                            CLIENTE: ClienteFactura.val(),
-                                            FACTURA: Documento.val(),
-                                            TP: TPFactura.val()
-                                        }).done(function (a) {
-                                    if (a.length > 0) {
-                                        /*DATOS DEL ENCABEZADO*/
-                                        FechaFactura.val(a[0].FECHA_FACTURA);
-                                        TMNDAFactura.val(a[0].TIPO_MONEDA);
-                                        onNotifyOld('', 'ESTE DOCUMENTO SE ENCUENTRA "' + a[0].ESTATUS_PRODUCCION + '" ', 'info');
-                                        /*DATOS DEL DETALLE*/
-                                        ParesFacturados.rows().remove().draw();
-                                        var facturado = false;
-                                        var r = [];
-                                        $.each(a, function (k, v) {
-                                            r.push([v.ID, v.FACTURA, v.CLIENTE, v.CONTROL, v.FECHA_FACTURA, v.PARES,
-                                                v["par01"], v["par02"], v["par03"], v["par04"], v["par05"],
-                                                v["par06"], v["par07"], v["par08"], v["par09"], v["par10"],
-                                                v["par11"], v["par12"], v["par13"], v["par14"], v["par15"],
-                                                v["par16"], v["par17"], v["par18"], v["par19"], v["par20"],
-                                                v["par21"], v["par22"],
-                                                '$' + $.number(v.PRECIO, 2, '.', ','), v.PRECIO,
-                                                '$' + $.number(v.SUBTOTAL, 2, '.', ','), v.SUBTOTAL,
-                                                '<span class="fa fa-lock"></span>',
-                                                v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
-                                                v.ESTATUS_PRODUCCION, 1]);
-                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
-                                                facturado = true;
-                                            }
-                                        });
-                                        ParesFacturados.rows.add(r).draw(false);
-                                        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-                                        onCloseOverlay();
-                                        getTotalFacturado();
+                    //                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
+                    console.log(a,JSON.parse(a),a[0],a[0].CLIENTE, a.CLIENTE);
+                    var r = JSON.parse(a);
+                    if (parseInt(r.FACTURA_EXISTE) === 2) {
+                        btnAcepta.attr('disabled', false);
+                        btnVistaPreviaF.attr('disabled', true);
+                        CajasFacturacion.attr('disabled', false);
+                        onCloseOverlay();
+                        return;
+                    }
+                    console.log(parseInt(ClienteFactura.val()) === r.CLIENTE,r)
+                    if (parseInt(ClienteFactura.val()) === r.CLIENTE) {
+                        $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
+                                {
+                                    CLIENTE: ClienteFactura.val(),
+                                    FACTURA: Documento.val(),
+                                    TP: TPFactura.val()
+                                }).done(function (a) {
+                            if (a.length > 0) {
+                                /*DATOS DEL ENCABEZADO*/
+                                FechaFactura.val(a[0].FECHA_FACTURA);
+                                TMNDAFactura.val(a[0].TIPO_MONEDA);
+                                var r = a[0];
+                                switch (parseInt(r.EXISTE_CARTCLIENTE)) {
+                                    case 1:
+                                        onNotifyOld('', 'ESTE DOCUMENTO SE ENCUENTRA "' + a[0].ESTATUS_PRODUCCION + '" PERO NO ESTA CERRADA.', 'info');
+                                        onEnable(btnCierraDocto);
+                                        onEnable(btnVistaPreviaF);
+                                        onEnable(btnAcepta);
+                                        onEnable(CajasFacturacion);
+                                        onEnable(Control);
+                                        onEnable(btnElijeControl);
+                                        onEnable(btnAcepta);
+                                        onReadOnly(Documento);
+                                        onDisable(ClienteFactura);
+                                        onDisable(TPFactura);
+                                        onDisable(pnlTablero.find("#btnNuevo"));
+                                        pnlTablero.find("#btnNuevo").addClass("d-none");
+                                        Control.focus().select();
+                                        nuevo = false;
+                                        break;
+                                    case 2:
+                                        onNotifyOld('', 'ESTE DOCUMENTO YA ESTA CERRADO.', 'info');
+                                        btnVistaPreviaF.attr('disabled', false);
+                                        btnAcepta.attr('disabled', true);
+                                        CajasFacturacion.attr('disabled', true);
+                                        onDisableInputs(true);
+                                        onDisable(btnCierraDocto);
+                                        onReadOnly(Documento);
                                         pnlTablero.find("#btnNuevo").removeClass("d-none");
                                         pnlTablero.find("#btnNuevo").attr("disabled", false);
                                         Control.attr('disabled', true);
                                         btnElijeControl.attr('disabled', true);
-                                        if (facturado) {
-                                            ClienteFactura[0].selectize.disable();
-                                            TPFactura.attr('disabled', true);
-                                            //                                            TPFactura[0].selectize.disable();
-                                            btnElijeControl.addClass("d-none");
-                                            btnAcepta.addClass("d-none");
-                                        }
-                                    } else {
-                                        pnlTablero.find("#btnNuevo").addClass("d-none");
-                                        pnlTablero.find("#btnNuevo").attr("disabled", true);
-                                    }
-                                }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                });
-                            } else {
-                                onCampoInvalido(pnlTablero, 'ESTA FACTURA NO PERTENECE A ESTE CLIENTE', function () {
-                                    ClienteClave.focus().select();
-                                });
-                            }
-                        }
+                                        ClienteFactura[0].selectize.disable();
+                                        TPFactura.attr('disabled', true);
+                                        btnElijeControl.addClass("d-none");
+                                        btnAcepta.addClass("d-none");
+                                        break;
+                                }
 
+                                /*DATOS DEL DETALLE*/
+                                ParesFacturados.rows().remove().draw();
+                                var facturado = false;
+                                var r = [];
+                                $.each(a, function (k, v) {
+                                    r.push([v.ID, v.FACTURA, v.CLIENTE, v.CONTROL, v.FECHA_FACTURA, v.PARES,
+                                        v["par01"], v["par02"], v["par03"], v["par04"], v["par05"],
+                                        v["par06"], v["par07"], v["par08"], v["par09"], v["par10"],
+                                        v["par11"], v["par12"], v["par13"], v["par14"], v["par15"],
+                                        v["par16"], v["par17"], v["par18"], v["par19"], v["par20"],
+                                        v["par21"], v["par22"],
+                                        '$' + $.number(v.PRECIO, 2, '.', ','), v.PRECIO,
+                                        '$' + $.number(v.SUBTOTAL, 2, '.', ','), v.SUBTOTAL,
+                                        '<span class="fa fa-lock"></span>',
+                                        v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
+                                        v.ESTATUS_PRODUCCION, 1]);
+//                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
+//                                                facturado = true;
+//                                            }
+                                });
+                                ParesFacturados.rows.add(r).draw(false);
+                                $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                                onCloseOverlay();
+                                getTotalFacturado();
+
+//                                        pnlTablero.find("#btnNuevo").removeClass("d-none");
+//                                        pnlTablero.find("#btnNuevo").attr("disabled", false);
+//                                        Control.attr('disabled', true);
+//                                        btnElijeControl.attr('disabled', true);
+//                                        if (facturado) {
+//                                            ClienteFactura[0].selectize.disable();
+//                                            TPFactura.attr('disabled', true);
+//                                            btnElijeControl.addClass("d-none");
+//                                            btnAcepta.addClass("d-none");
+//                                        }
+
+                            } else {
+                                pnlTablero.find("#btnNuevo").addClass("d-none");
+                                pnlTablero.find("#btnNuevo").attr("disabled", true);
+                            }
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+                        });
                     } else {
-                        btnAcepta.attr('disabled', true);
+                        onCampoInvalido(pnlTablero, 'ESTA FACTURA NO PERTENECE A ESTE CLIENTE', function () {
+                            ClienteClave.focus().select();
+                        });
                     }
                 }).fail(function (x) {
                     getError(x);
@@ -1300,7 +1355,7 @@
                             onDisable(pares_a_facturar);
                         }
                     }
-                    pnlTablero.find("#CAF1").focus().select();
+                    pnlTablero.find("input[id^='CAF']:not(:disabled):eq(0)").focus().select();
                     onNotifyOldPCE('', 'POR FAVOR ESPECIFIQUE LAS CANTIDADES', 'info', "bottom", "center");
                 } else {
                     swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
@@ -1973,6 +2028,8 @@
         /*OBTENER CODIGO DEL SAT X ESTILO*/
         $.getJSON('<?php print base_url('FacturacionProduccion/onObtenerCodigoSatXEstilo'); ?>', {ESTILO: EstiloFacturacion.val()}).done(function (abcd) {
             CodigoSat.val(abcd[0].CPS);
+
+        }).always(function () {
         });
     }
 
@@ -1980,7 +2037,7 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
-        onObtenerCodigoSatXEstilo();
+        onObtenerCodigoSatXEstilo( );
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
@@ -2005,10 +2062,37 @@
         rowx.push(PAGFactura.val());
         rowx.push(EstatusControl.val());
         rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
-        //            console.log(rowx);
         ParesFacturados.row.add(rowx).draw(false);
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         getTotalFacturado();
+//        var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
+//        var b = '</div><div class="col-12 cantidad" align="center">';
+//        var c = '</div></div>';
+//        var rowx = [
+//            123456789010, Documento.val(), ClienteFactura.val(), Control.val(), FechaFactura.val(),
+//            TotalParesEntregaAF.val()
+//        ];
+//        for (var i = 1; i < 23; i++) {
+//            rowx.push(a + getTalla('#T' + i) + b + getValor('#CAF' + i) + c);
+//        }
+//        rowx.push('$' + $.number(parseFloat(PrecioFacturacion.val()), 2, '.', ','));
+//        rowx.push(PrecioFacturacion.val());
+//        rowx.push('$' + $.number(parseFloat(SubtotalFacturacion.val()), 2, '.', ','));
+//        rowx.push(SubtotalFacturacion.val());
+//        rowx.push('<button type="button" class="btn btn-danger" onclick="onEliminarFila(this);"><span class="fa fa-trash"></span></button>');
+//        rowx.push(CajasFacturacion.val());
+//        rowx.push(ObservacionFacturacion.val());
+//        rowx.push(DescuentoFacturacion.val());
+//        rowx.push(ParesFacturadosFacturacion.val());
+//        rowx.push(Documento.val());
+//        rowx.push(TMNDAFactura.val());
+//        rowx.push(PAGFactura.val());
+//        rowx.push(EstatusControl.val());
+//        rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
+//        //            console.log(rowx);
+//        ParesFacturados.row.add(rowx).draw(false);
+//        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+//        getTotalFacturado();
         /*REGISTRAR EN FACTURACION*/
         TPFactura.attr('disabled', false);
         ClienteFactura[0].selectize.enable();
@@ -2127,7 +2211,8 @@
         } else {
             FechaFactura.attr('disabled', false);
             ClienteFactura[0].selectize.enable();
-            TPFactura[0].selectize.enable();
+            TPFactura.val('');
+            onEnable(TPFactura);
             Documento.attr('disabled', false);
             FCAFactura.attr('disabled', false);
             PAGFactura.attr('disabled', false);

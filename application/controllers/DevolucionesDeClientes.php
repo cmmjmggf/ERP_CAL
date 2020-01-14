@@ -245,18 +245,18 @@ class DevolucionesDeClientes extends CI_Controller {
             $reports['2DOS'] = $jc->getReport();
             
 //            /* 3. REPORTE AGRUPADO CARGO UNO (cargoa = 1) */
-            $jc->setParametros($P);
-            $jc->setJasperurl('jrxml\facturacion\devolnaplp.jasper');
-            $jc->setFilename('DEV_CON_CARGO_PARA_VTA_' . Date('dmYhis'));
-            $jc->setDocumentformat('xls');
-            $reports['3TRES'] = $jc->getReport();
+//            $jc->setParametros($P);
+//            $jc->setJasperurl('jrxml\facturacion\devolnaplp.jasper');
+//            $jc->setFilename('DEV_CON_CARGO_PARA_VTA_' . Date('dmYhis'));
+//            $jc->setDocumentformat('xls');
+//            $reports['3TRES'] = $jc->getReport();
             
 //            /* 4. REPORTE AGRUPADO CARGO CERO (cargoa = 0, Cargo a = NO) */
-            $jc->setParametros($P);
-            $jc->setJasperurl('jrxml\facturacion\devolnapl0.jasper');
-            $jc->setFilename('DEV_SIN_CARGO_' . Date('dmYhis'));
-            $jc->setDocumentformat('xls');
-            $reports['4CUATRO'] = $jc->getReport();
+//            $jc->setParametros($P);
+//            $jc->setJasperurl('jrxml\facturacion\devolnapl0.jasper');
+//            $jc->setFilename('DEV_SIN_CARGO_' . Date('dmYhis'));
+//            $jc->setDocumentformat('xls');
+//            $reports['4CUATRO'] = $jc->getReport();
 
             print json_encode($reports);
         } catch (Exception $exc) {

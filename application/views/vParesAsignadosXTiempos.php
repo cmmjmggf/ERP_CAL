@@ -27,8 +27,13 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnAceptaPAXT"><span class="fa fa-print"></span> Acepta </button>
+            <div class="modal-footer"> 
+                <div class="col-6" align="left">
+                    <button type="button" class="btn btn-success" id="btnAceptaPAXTXLS"><span class="fa fa-print"></span> Acepta </button>
+                </div>
+                <div class="col-6" align="right">
+                    <button type="button" class="btn btn-primary" id="btnAceptaPAXT"><span class="fa fa-print"></span> Acepta </button>
+                </div> 
             </div>
         </div>
     </div>
@@ -41,9 +46,45 @@
             DiaPAXT = mdlParesAsignadosXTiempos.find("#DiaPAXT"),
             AnioPAXT = mdlParesAsignadosXTiempos.find("#AnioPAXT"),
             AnioX = '<?php print Date('Y'); ?>',
+            btnAceptaPAXTXLS = mdlParesAsignadosXTiempos.find("#btnAceptaPAXTXLS"),
             btnAceptaPAXT = mdlParesAsignadosXTiempos.find("#btnAceptaPAXT");
 
     $(document).ready(function () {
+
+        btnAceptaPAXTXLS.click(function () {
+            if (MaquilaPAXT.val() && SemanaPAXT.val() && AnioPAXT.val()) {
+                btnAceptaPAXT.attr('disabled', true);
+                HoldOn.open({
+                    theme: 'sk-cube',
+                    message: 'Por favor espere...'
+                });
+                $.post('<?php print base_url('ParesAsignadosXTiempos/getParesAsignadosControlXTiemposXLS'); ?>', {
+                    MAQUILA: MaquilaPAXT.val().trim() !== '' ? parseInt(MaquilaPAXT.val()) : '',
+                    SEMANA: SemanaPAXT.val().trim() !== '' ? SemanaPAXT.val() : '',
+                    DIA: DiaPAXT.val().trim() !== '' ? DiaPAXT.val() : 0,
+                    ANIO: AnioPAXT.val().trim() !== '' ? AnioPAXT.val() : ''
+                }).done(function (data, x, jq) {
+                    console.log(data)
+                    onBeep(1); 
+                    window.open(data, '_blank');
+                }).fail(function (x, y, z) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                    btnAceptaPAXT.attr('disabled', false);
+                });
+            } else {
+                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
+                    if (MaquilaPAXT.val()) {
+                        MaquilaPAXT.focus();
+                    } else if (SemanaPAXT.val()) {
+                        SemanaPAXT.focus().select();
+                    } else if (AnioPAXT.val()) {
+                        AnioPAXT.focus().select();
+                    }
+                });
+            }
+        });
 
         btnAceptaPAXT.click(function () {
             if (MaquilaPAXT.val() && SemanaPAXT.val() && AnioPAXT.val()) {
@@ -83,6 +124,7 @@
                 });
             }
         });
+
 
         mdlParesAsignadosXTiempos.on('shown.bs.modal', function () {
             handleEnterDiv(mdlParesAsignadosXTiempos);

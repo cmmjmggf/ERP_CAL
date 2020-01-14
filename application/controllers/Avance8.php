@@ -311,7 +311,6 @@ class Avance8 extends CI_Controller {
                                 ->where('F.Estilo', $xXx['ESTILO'])
                                 ->where('F.Fraccion', $v->NUMERO_FRACCION)
                                 ->get()->result();
-
 //                print $this->db->last_query();
                 if ($check_fraccion[0]->EXISTE <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
                     $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL FROM pedidox AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE  FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();
@@ -405,27 +404,33 @@ class Avance8 extends CI_Controller {
                                 }
                                 break;
                             case 397:
-                                /* AVANCE 397 ENSUELADO */ 
-                                
-                                $avance = array(
-                                    'Control' => $xXx['CONTROL'],
-                                    'FechaAProduccion' => Date('d/m/Y'),
-                                    'Departamento' => 130,
-                                    'DepartamentoT' => 'ALMACEN PESPUNTE',
-                                    'FechaAvance' => Date('d/m/Y'),
-                                    'Estatus' => 'A',
-                                    'Usuario' => $_SESSION["ID"],
-                                    'Fecha' => Date('d/m/Y'),
-                                    'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => $v->NUMERO_FRACCION
-                                );
-                                $this->db->insert('avance', $avance);
-                                $id = $this->db->insert_id();
-                                $data["fraccion"] = $v->NUMERO_FRACCION;
-                                $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                                $this->db->insert('fracpagnomina', $data);
+                                /* AVANCE 397 ENSUELADO */
 
-                                $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) FROM pedidox AS P "
+                                $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
+                                                . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 130")->result();
+
+                            
+                                if (intval($REVISAR_AVANCE_POR_CONTROL[0]->EXISTE) === 0) {
+                                    $avance = array(
+                                        'Control' => $xXx['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 130,
+                                        'DepartamentoT' => 'ALMACEN PESPUNTE',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => $v->NUMERO_FRACCION
+                                    );
+                                    $this->db->insert('avance', $avance);
+                                    $id = $this->db->insert_id();
+                                    $data["fraccion"] = $v->NUMERO_FRACCION;
+                                    $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                    $this->db->insert('fracpagnomina', $data);
+                                }
+
+                                $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
                                                 . "WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan <=55 ")->result();
                                 if ($REVISAR_AVANCE[0]->EXISTE >= 1) {
                                     $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
@@ -520,6 +525,54 @@ class Avance8 extends CI_Controller {
 //                    print json_encode(array("AVANZO" => 1, "STEP" => 1));
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
+                    if ($check_fraccion[0]->EXISTE > 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
+                        $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
+                                        . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 130")->result();
+                        if ($REVISAR_AVANCE_POR_CONTROL[0]->EXISTE === 0) {
+                            $avance = array(
+                                'Control' => $xXx['CONTROL'],
+                                'FechaAProduccion' => Date('d/m/Y'),
+                                'Departamento' => 130,
+                                'DepartamentoT' => 'ALMACEN PESPUNTE',
+                                'FechaAvance' => Date('d/m/Y'),
+                                'Estatus' => 'A',
+                                'Usuario' => $_SESSION["ID"],
+                                'Fecha' => Date('d/m/Y'),
+                                'Hora' => Date('h:i:s a'),
+                                'Fraccion' => $v->NUMERO_FRACCION
+                            );
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
+                        }
+
+                        $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
+                                        . "WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan <=55 ")->result();
+                        if ($REVISAR_AVANCE[0]->EXISTE >= 1) {
+                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                    ->set('DeptoProduccion', 130)
+                                    ->where('Control', $xXx['CONTROL'])->update('controles');
+                            $this->db->set('stsavan', 6)
+                                    ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                    ->set('DeptoProduccion', 130)
+                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
+                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                            /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
+                            $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM erp_cal.fraccionesxestilo AS F INNER JOIN fracciones AS FF "
+                                            . "WHERE F.Estilo = '{$xXx['ESTILO']}' AND F.Fraccion = 401 LIMIT 1")->result();
+                            if ($TIENE_TEJIDO[0]->EXISTE === 0) {
+                                $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                                        ->set('DeptoProduccion', 160)
+                                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 8)
+                                        ->set('EstatusProduccion', 'ALMACEN TEJIDO')
+                                        ->set('DeptoProduccion', 160)
+                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))
+                                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                            }
+                        }
+                    }
                     print json_encode(array("AVANZO" => 2, "STEP" => 1,
                         "FRACCION_PAGADA" => $check_fraccion[0]->EXISTE,
                         "FRACCION_X_ESTILO" => $check_fraccion_fxe[0]->EXISTE

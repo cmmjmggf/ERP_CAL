@@ -883,7 +883,7 @@ class PDF extends FPDF {
         $this->Cell(30, $alto_celda, utf8_decode("Pedido. " . $this->getFechaPedido()), 1/* BORDE */, 0, 'L', 0);
 
         /* CONTROL */
-        $this->SetFont('Calibri', 'B', 8.5);
+        $this->SetFont('Calibri', 'B', 11);
         $this->SetX($pos[3]);
         $this->Cell(42.5, $alto_celda, utf8_decode($this->getControl()), 1/* BORDE */, 1, 'C', 0);
 

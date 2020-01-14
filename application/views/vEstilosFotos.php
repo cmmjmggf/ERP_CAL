@@ -1,5 +1,5 @@
 <div class="modal" id="mdlEstilosFotos">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">ESTILOS (FOTO)</h5>

@@ -48,27 +48,29 @@ class ConsumoPielForroXCortador_model extends CI_Model {
 
     function getCortadoresXMaquilaSemanaArticulo($ARTICULO, $MAQUILA, $SEMANAINICIAL, $SEMANAFINAL, $ANO, $CORTADOR, $TIPO) {
         try {
-            $this->db->select("A.Semana AS SEMANA,substr(A.Control,5,2) AS MAQUILA,
-                                   IFNULL(E.Numero,0) AS NUMERO, CONCAT(IFNULL(E.PrimerNombre,\"\"), \" \", IFNULL(E.SegundoNombre,\"\"), \" \", IFNULL(E.Paterno,\"\"), \" \", IFNULL(E.Materno,\"\")) AS CORTADOR", false)
+            $this->db->select("A.Semana AS SEMANA,A.Maquila AS MAQUILA,
+                                   IFNULL(E.Numero,0) AS NUMERO, CONCAT(IFNULL(E.PrimerNombre,\"\"), \" \", 
+                                   IFNULL(E.SegundoNombre,\"\"), \" \", IFNULL(E.Paterno,\"\"), \" \", 
+                                   IFNULL(E.Materno,\"\")) AS CORTADOR", false)
                     ->from("asignapftsacxc AS A")
                     ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
             if ($ARTICULO !== '') {
-                $this->db->where("A.Articulo LIKE  '$ARTICULO'", null, false);
+                $this->db->where("A.Articulo =  '$ARTICULO'", null, false);
             }
             if ($CORTADOR !== '') {
-                $this->db->where("A.Empleado LIKE  '$CORTADOR'", null, false);
-                $this->db->where("E.Numero LIKE  '$CORTADOR'", null, false);
+                $this->db->where("A.Empleado =  '$CORTADOR'", null, false);
+                $this->db->where("E.Numero =  '$CORTADOR'", null, false);
             }
             if ($SEMANAINICIAL !== '' && $SEMANAFINAL !== '') {
                 $this->db->where("A.Semana BETWEEN '$SEMANAINICIAL' AND '$SEMANAFINAL'", null, false);
             }
             if ($MAQUILA !== '') {
-                $this->db->where("substr(A.Control,5,2) LIKE '$MAQUILA'", null, false);
+                $this->db->where("A.Maquila = '$MAQUILA'", null, false);
             }
             if ($ANO !== '') {
-                $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) LIKE '$ANO'", null, false);
+                $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANO'", null, false);
             }
-            $this->db->where("A.TipoMov LIKE '$TIPO'", null, false)->where('E.AltaBaja', 1);
+            $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1);
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

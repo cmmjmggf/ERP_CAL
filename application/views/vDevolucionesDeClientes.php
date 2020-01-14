@@ -189,7 +189,7 @@
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
-                                    print '<td><input type="text"  id="C' . $index . '" maxlength="3"  readonly="" class="form-control form-control-sm numbersOnly style-pares" name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
+                                    print '<td><input type="text"  id="C' . $index . '" maxlength="3"  class="form-control form-control-sm numbersOnly style-pares" name="C' . $index . '"  data-toggle="tooltip" data-placement="top" title="-" onfocus="getTotalPares();" onchange="getTotalPares();" keyup="getTotalPares();" onfocusout="getTotalPares();"></td>';
                                 }
                                 ?>
                                 <td class="font-weight-bold"><input type="text" style="width: 45px;" id="TotalParesEntrega" class="form-control form-control-sm  style-pares" readonly=""  data-toggle="tooltip" data-placement="top" title="0"></td>

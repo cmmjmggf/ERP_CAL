@@ -76,28 +76,30 @@ class FacturacionProduccion extends CI_Controller {
             $pedidox_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
                             . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
             if (intval($pedidox_existe[0]->EXISTE) > 0) {
-                
+
                 /* SI EXISTE BUSCAR LOS PARES FACTURADOS EN "PEDIDOX" */
                 $pedidox = $this->db->query("SELECT "
-                                . "(CASE WHEN P.ParesFacturados >0 THEN P.ParesFacturados ELSE 0 END) AS PARES_FACTURADOS FROM pedidox AS P "
+                                . "(CASE WHEN P.ParesFacturados >0 THEN P.ParesFacturados ELSE 0 END) AS PARES_FACTURADOS "
+                                . " FROM pedidox AS P "
                                 . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
-                                
+
                 /* SI EXISTE BUSCAR LOS PARES FACTURADOS EN "FACTURACION" */
-                $facturacion = $this->db->query("SELECT F.pareped AS PARES_FACTURADOS FROM facturacion AS F "
-                                . "WHERE P.contped = {$x['CONTROL']} LIMIT 1")->result();
+                $facturacion = $this->db->query("SELECT SUM(F.pareped) AS PARES_FACTURADOS FROM facturacion AS F "
+                                . "WHERE F.contped = {$x['CONTROL']} LIMIT 1")->result();
 
                 $facturacion_dif = $this->db->query("SELECT
-                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
-                                        F.par06, F.par07, F.par08, F.par09, F.par10,
-                                        F.par11, F.par12, F.par13, F.par14, F.par15,
-                                        F.par16, F.par17, F.par18, F.par19, F.par20,
-                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
+                                        F.contped, F.pareped, 
+                                        (par01 +  par02 +  par03 +  par04 +  par05 +  
+                                        par06 +  par07 +  par08 +  par09 +  par10 +  
+                                        par11 +  par12 +  par13 +  par14 +  par15 +  
+                                        par16 +  par17 +  par18 +  par19 +  par20 +  
+                                        par21 +  par22) AS TOTAL_PARES, F.staped, P.Cliente AS CLIENTE
                                         FROM facturaciondif AS F 
                                         INNER JOIN pedidox AS P ON F.contped = P.Control 
                                         WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result();
-                                        
 
-                print json_encode($this->db->query("SELECT
+                if (intval($pedidox[0]->PARES_FACTURADOS) === intval($facturacion[0]->PARES_FACTURADOS)) {
+                    print json_encode($this->db->query("SELECT
                                         F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
                                         F.par06, F.par07, F.par08, F.par09, F.par10,
                                         F.par11, F.par12, F.par13, F.par14, F.par15,
@@ -106,6 +108,18 @@ class FacturacionProduccion extends CI_Controller {
                                         FROM facturaciondif AS F 
                                         INNER JOIN pedidox AS P ON F.contped = P.Control 
                                         WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result());
+                    exit(0);
+                } else {
+                    print json_encode($this->db->query("SELECT
+                                        F.contped, F.pareped, F.par01, F.par02, F.par03, F.par04, F.par05,
+                                        F.par06, F.par07, F.par08, F.par09, F.par10,
+                                        F.par11, F.par12, F.par13, F.par14, F.par15,
+                                        F.par16, F.par17, F.par18, F.par19, F.par20,
+                                        F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
+                                        FROM facturaciondif AS F 
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result());
+                }
 //            }
             }
         } catch (Exception $exc) {
@@ -180,6 +194,20 @@ class FacturacionProduccion extends CI_Controller {
             }
             $this->db->order_by("P.FechaRecepcion", "DESC");
             print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getRegistrosPreFacturados() {
+        try {
+            $x = $this->input->get();
+            $data = $this->db->query("SELECT * FROM facturacion AS F "
+                            . "WHERE F.cliente = {$x['CLIENTE']} "
+                            . "AND F.tp = {$x['TP']} "
+                            . "AND F.factura = {$x['DOCUMENTO']}")->result();
+
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -325,6 +353,7 @@ class FacturacionProduccion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
+
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -340,7 +369,7 @@ class FacturacionProduccion extends CI_Controller {
                 'cliente' => $x['CLIENTE'],
                 'contped' => $x['CONTROL'],
                 'fecha' => "$anio-$mes-$dia 00:00:00",
-                'hora' => Date('d/m/Y'),
+                'hora' => Date('Y-m-d'),
                 'corrida' => $x['SERIE'],
                 'pareped' => $x['PARES_A_FACTURAR'],
                 'estilo' => $x['ESTILO'],
@@ -534,17 +563,42 @@ class FacturacionProduccion extends CI_Controller {
 
     public function onComprobarFactura() {
         try {
-            $x = $this->input->get();
-            if ($x['CLIENTE'] !== '') {
-                print json_encode(
-                                $this->db->query("SELECT COUNT(F.factura) AS FACTURA_EXISTE, F.cliente AS CLIENTE "
-                                        . "FROM facturacion AS F "
-                                        . "WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = '{$x['CLIENTE']}' ORDER BY year(F.fecha) DESC ")->result());
+            $x = $this->input->post();
+            $cartcliente_existe = $this->db->query("SELECT COUNT(*) AS EXISTE,IFNULL(CC.cliente,0) AS CLIENTE FROM cartcliente AS CC "
+                            . "WHERE CC.cliente ={$x['CLIENTE']} AND CC.remicion = {$x['FACTURA']} AND CC.tipo = {$x['TP']}")->result();
+            /* SI EXISTE ES PORQUE YA LA CERRARON, DE LO CONTRARIO SI ES CERO NO LA HAN CERRADO*/
+             if (intval($cartcliente_existe[0]->EXISTE) === 0) {
+                $factura_existe = $this->db->query("SELECT COUNT(*) AS EXISTE, F.cliente AS CLIENTE "
+                                . "FROM facturacion AS F "
+                                . "WHERE F.factura = '{$x['FACTURA']}' "
+                                . "AND F.cliente = '{$x['CLIENTE']}' "
+                                . "AND F.tp = '{$x['TP']}' "
+                                . "ORDER BY year(F.fecha) DESC ")->result();
+                if (intval($factura_existe[0]->EXISTE) >=1) {
+                    /*documento en cartcliente no existe, pero en facturacion si*/
+                    print json_encode(array("FACTURA_EXISTE" => 0, "CLIENTE" => intval($factura_existe[0]->CLIENTE)));
+                    exit(0);
+//                    print json_encode(
+//                                    $this->db->query("SELECT 1 AS FACTURA_EXISTE, F.cliente AS CLIENTE "
+//                                            . "FROM facturacion AS F "
+//                                            . "WHERE F.factura = '{$x['FACTURA']}' "
+//                                            . "AND F.cliente = '{$x['CLIENTE']}' "
+//                                            . "AND F.tp = '{$x['TP']}' "
+//                                            . "ORDER BY year(F.fecha) DESC ")->result());
+                }else{
+                    /*documento en cartcliente existe pero no en facturacion*/
+                    print json_encode(array("FACTURA_EXISTE" => 2, "CLIENTE" => intval($factura_existe[0]->CLIENTE)));
+                    exit(0);
+                }
             } else {
-                print json_encode(
-                                $this->db->query("SELECT COUNT(F.factura) AS FACTURA_EXISTE, F.cliente AS CLIENTE "
-                                        . "FROM facturacion AS F "
-                                        . "WHERE F.factura = '{$x['FACTURA']}' ORDER BY year(F.fecha) DESC ")->result());
+                print json_encode(array("FACTURA_EXISTE" => 1, "CLIENTE" => intval($cartcliente_existe[0]->CLIENTE)));
+                exit(0);
+//                                    $this->db->query("SELECT 1 AS FACTURA_EXISTE, F.cliente AS CLIENTE "
+//                                            . "FROM facturacion AS F "
+//                                            . "WHERE F.factura = '{$x['FACTURA']}' "
+//                                            . "AND F.cliente = '{$x['CLIENTE']}' "
+//                                            . "AND F.tp = '{$x['TP']}' "
+//                                            . "ORDER BY year(F.fecha) DESC ")->result()
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -1005,7 +1059,14 @@ class FacturacionProduccion extends CI_Controller {
     public function getFacturaXFolio() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT F.ID,(C.Descuento *100) AS DESCUENTO,
+
+            /* revisar en cartcliente, con el fin de saber si es posible agregar más registros,porque no se ha cerrado pero por x o y razon se cerro el navegador y queda en edicion */
+            $cartcliente_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM cartcliente AS CC "
+                            . "WHERE CC.cliente ={$x['CLIENTE']} AND CC.remicion = {$x['FACTURA']} AND CC.tipo = {$x['TP']}")->result();
+
+            if (intval($cartcliente_existe[0]->EXISTE) === 0) {
+
+                print json_encode($this->db->query("SELECT 1 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
             (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
             F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
             F.par21 +  F.par22) AS PARES_FACTURADOS,
@@ -1021,7 +1082,28 @@ class FacturacionProduccion extends CI_Controller {
             (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
             FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
-                                    . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+                                        . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+            } else {
+                print json_encode($this->db->query("SELECT 2 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
+            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
+            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
+            F.par21 +  F.par22) AS PARES_FACTURADOS,
+            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL,
+            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA,
+            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR,
+            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10,
+            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20,
+            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
+            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente,
+            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom,
+            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS,
+            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
+            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
+            FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave   
+            INNER JOIN cartcliente AS CC ON CC.cliente = C.Clave AND CC.remicion = F.factura AND CC.tipo = F.tp 
+            WHERE F.factura = '{$x['FACTURA']}' AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' "
+                                        . "AND C.Clave = '{$x['CLIENTE']}'")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
