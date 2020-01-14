@@ -37,33 +37,33 @@ class PDFKardexProveedor extends FPDF {
         $this->AddFont('Calibri', 'B');
         $this->AddFont('Calibri', 'BI');
         $this->Image($_SESSION["LOGO"], /* LEFT */ 5, 5/* TOP */, /* ANCHO */ 30);
-        $this->SetFont('Calibri', 'B', 11);
+        $this->SetFont('Calibri', 'B', 10);
         $this->SetY(5);
         $this->SetX(36);
         $this->Cell(60, 4, utf8_decode($_SESSION["EMPRESA_RAZON"]), 0/* BORDE */, 1, 'L');
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9);
         $this->SetX(36);
         $this->Cell(40, 4, utf8_decode("Kardex de Artículos de la fecha: "), 0/* BORDE */, 0, 'L');
 
 
         $this->SetX(85);
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9);
         $this->Cell(20, 4, utf8_decode($this->getFecha()), 0/* BORDE */, 0, 'C');
 
 
         $this->SetX(105);
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9);
         $this->Cell(10, 4, 'Al: ', 0/* BORDE */, 0, 'C');
         $this->SetX(110);
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9);
         $this->Cell(25, 4, utf8_decode($this->getAfecha()), 0/* BORDE */, 1, 'C');
 
-        $this->SetFont('Calibri', 'B', 10);
+        $this->SetFont('Calibri', 'B', 9);
         $this->SetX(36);
         $this->Cell(20, 4, utf8_decode("Proveedor: "), 0/* BORDE */, 0, 'L');
 
         $this->SetX(56);
-        $this->SetFont('Calibri', '', 10);
+        $this->SetFont('Calibri', '', 9);
         $this->Cell(20, 4, utf8_decode($this->getProveedor()), 0/* BORDE */, 0, 'L');
 
         //Paginador
@@ -83,17 +83,17 @@ class PDFKardexProveedor extends FPDF {
         /* Primer Renglon de Titulos */
         $this->SetY(19);
         $this->SetX(5);
-        $this->SetFont('Calibri', 'B', 9.5);
-        $this->Cell(20, 4, 'Docto', 0/* BORDE */, 0, 'C');
+        $this->SetFont('Calibri', 'B', 8);
+        $this->Cell(16, 4, 'Docto', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, 'Orden', 0/* BORDE */, 0, 'C');
+        $this->Cell(13, 4, 'Orden', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(88, 4, '', 0/* BORDE */, 0, 'C');
+        $this->Cell(64, 4, '', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(84, 4, 'Cantidad en U.Medida y pesos', 1/* BORDE */, 0, 'C');
+        $this->Cell(68, 4, 'Cantidad en U.Medida y pesos', 1/* BORDE */, 0, 'C');
 
 
         $this->SetX($this->GetX());
@@ -104,43 +104,43 @@ class PDFKardexProveedor extends FPDF {
         $this->SetY(23);
         $this->SetX(5);
 
-        $this->Cell(20, 4, 'Ent-Sal', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(16, 4, 'Ent-Sal', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, 'Compra', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(13, 4, 'Compra', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(11, 4, 'Maq', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(7, 4, 'Maq', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(11, 4, 'Sem', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(7, 4, 'Sem', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(13, 4, 'Mov', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(8, 4, 'Mov', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(19, 4, 'Fecha', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, 'Fecha', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(15, 4, 'Precio', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(12, 4, 'Precio', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(19, 4, 'Subtotal', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, 'Subtotal', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Entrada', 'LB'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Entrada', 'LB'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Pesos $', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Pesos $', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Salida', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Salida', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Pesos $', 'RB'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Pesos $', 'RB'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(60, 4, 'Proveedor', 'B'/* BORDE */, 1, 'L');
+        $this->Cell(45, 4, 'Proveedor', 'B'/* BORDE */, 1, 'L');
     }
 
     var $widths;
@@ -295,14 +295,14 @@ class PDF extends FPDF {
         $this->Cell(25, 4, utf8_decode($this->getAfecha()), 0/* BORDE */, 0, 'C');
         //Paginador
         $this->SetY(3);
-        $this->SetX(265);
+        $this->SetX(200);
         // Select Calibri italic 8
         $this->SetFont('Calibri', 'I', 9);
         // Print centered page number
         $this->Cell(20, 4, utf8_decode('Pag. ' . $this->PageNo() . ' de  {totalPages}'), 0/* BORDE */, 1, 'C');
 
         $this->SetY(7);
-        $this->SetX(245);
+        $this->SetX(180);
         $this->SetFont('Calibri', 'B', 9);
         $this->Cell(30, 4, utf8_decode("Fecha: " . date("d-m-Y     h:i:s a")), 0/* BORDE */, 1, 'R');
         $this->AliasNbPages(' {totalPages}');
@@ -310,17 +310,17 @@ class PDF extends FPDF {
         /* Primer Renglon de Titulos */
         $this->SetY(19);
         $this->SetX(5);
-        $this->SetFont('Calibri', 'B', 9.5);
-        $this->Cell(20, 4, 'Docto', 0/* BORDE */, 0, 'C');
+        $this->SetFont('Calibri', 'B', 8);
+        $this->Cell(16, 4, 'Docto', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, 'Orden', 0/* BORDE */, 0, 'C');
+        $this->Cell(13, 4, 'Orden', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(88, 4, '', 0/* BORDE */, 0, 'C');
+        $this->Cell(64, 4, '', 0/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(84, 4, 'Cantidad en U.Medida y pesos', 1/* BORDE */, 0, 'C');
+        $this->Cell(68, 4, 'Cantidad en U.Medida y pesos', 1/* BORDE */, 0, 'C');
 
 
         $this->SetX($this->GetX());
@@ -331,43 +331,43 @@ class PDF extends FPDF {
         $this->SetY(23);
         $this->SetX(5);
 
-        $this->Cell(20, 4, 'Ent-Sal', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(16, 4, 'Ent-Sal', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(16, 4, 'Compra', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(13, 4, 'Compra', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(11, 4, 'Maq', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(7, 4, 'Maq', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(11, 4, 'Sem', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(7, 4, 'Sem', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(13, 4, 'Mov', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(8, 4, 'Mov', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(19, 4, 'Fecha', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, 'Fecha', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(15, 4, 'Precio', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(12, 4, 'Precio', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(19, 4, 'Subtotal', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(15, 4, 'Subtotal', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Entrada', 'LB'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Entrada', 'LB'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Pesos $', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Pesos $', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Salida', 'B'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Salida', 'B'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(21, 4, 'Pesos $', 'RB'/* BORDE */, 0, 'C');
+        $this->Cell(17, 4, 'Pesos $', 'RB'/* BORDE */, 0, 'C');
 
         $this->SetX($this->GetX());
-        $this->Cell(60, 4, 'Proveedor', 'B'/* BORDE */, 1, 'L');
+        $this->Cell(45, 4, 'Proveedor', 'B'/* BORDE */, 1, 'L');
     }
 
     var $widths;

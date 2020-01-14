@@ -1057,13 +1057,14 @@
         var consignarA = pnlDatos.find("#ConsignarA").val();
         var observaciones = pnlDatos.find("#Observaciones").val();
 
-        $.when($.each(table.find("input.numeric:enabled"), function (k, v) {
+        var detalle = [];
+        $.each(table.find("input.numeric:enabled"), function (k, v) {
             if (parseFloat($(v).val()) > 0) {
                 var precio = precios.find('td').eq($(this).parent().index()).find("input").val();
                 var articulo = arts.find('td').eq($(this).parent().index()).find("input").val();
                 //var articuloAnt = arts.find('td').eq($(this).parent().index() - 1).find("input").val();
                 var cantidad = parseFloat($(v).val());
-                var detalle = {
+                detalle.push({
                     Tp: tp,
                     Folio: folio,
                     Tipo: tipo,
@@ -1080,32 +1081,20 @@
                     Precio: precio,
                     SubTotal: parseFloat(precio * cantidad),
                     Estatus: 'BORRADOR'
-                };
-
-                $.post(master_url + 'onAgregarDetalleTemp', detalle).done(function (data) {
-                }).fail(function (x, y, z) {
-                    btnAgregar.attr('disabled', false);
-                    console.log(x, y, z);
                 });
 
             }
-        })).then(function (data, textStatus, jqXHR) {
-
-            $.post(master_url + 'onInsertarDetalleOptimizado', {Tp: tp, Folio: folio}).done(function (data) {
-                btnAgregar.attr('disabled', false);
-            }).fail(function (x, y, z) {
-                btnAgregar.attr('disabled', false);
-                console.log(x, y, z);
-            });
-
-            if (nuevo) {
-                getDetalleByID(tp, folio);
-                nuevo = false;
-            } else {
-                ComprasDetalle.ajax.reload();
+        });
+        //Se hace la instruccion de php ya con todo el detalle mandado
+        $.ajax({
+            url: master_url + 'onInsertarDetalleOptimizado',
+            type: "POST",
+            data: {
+                movs: JSON.stringify(detalle)
             }
-
+        }).done(function (data, x, jq) {
             //Despues de que se guarda
+            btnAgregar.attr('disabled', false);
             btnCancelar.removeClass('d-none');
             btnCerrarOrden.removeClass('d-none');
             pnlDatosDetalle.find("input").val('');
@@ -1117,7 +1106,17 @@
                 pnlDatos.find("select")[k].selectize.disable();
             });
             HoldOn.close();
+        }).fail(function (x, y, z) {
+            HoldOn.close();
+            btnAgregar.attr('disabled', false);
+            console.log(x, y, z);
         });
+        if (nuevo) {
+            getDetalleByID(tp, folio);
+            nuevo = false;
+        } else {
+            ComprasDetalle.ajax.reload();
+        }
     }
     function onEliminarDetalleByID(IDX) {
         if (estatus === 'ACTIVA') {

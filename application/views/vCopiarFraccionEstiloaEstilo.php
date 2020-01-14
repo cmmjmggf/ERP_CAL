@@ -65,14 +65,19 @@
             if (e.keyCode === 13) {
                 var estilo = $(this).val();
                 if (estilo) {
-                    $.getJSON(base_url + 'index.php/Pedidos/onVerificaEstilo', {Estilo: estilo}).done(function (data) {
-                        if (data.length > 0) {
 
-                        } else {
-                            swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
-                                mdlCopiaFraccionesEstilo.find('#aEstilo').focus().val('');
-                            });
-                        }
+                    $.getJSON(base_url + 'index.php/FraccionesXEstilo/' + 'onVerificaEstiloFracciones', {Estilo: estilo}).done(function (data, x, jq) {
+                        $.each(data, function (k, v) {
+                            if (data.length > 0) {
+                                swal('ERROR', 'EL ESTILO YA TIENE SUS FRACCIONES CAPTURADAS', 'warning').then((value) => {
+                                    mdlCopiaFraccionesEstilo.find('#aEstilo').focus().val('');
+                                });
+                            } else {
+                                mdlCopiaFraccionesEstilo.find('#btnImprimir').focus();
+                            }
+                        });
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
                     });
                 }
             }

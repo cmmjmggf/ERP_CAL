@@ -206,35 +206,66 @@ class OrdenCompraTallas extends CI_Controller {
         }
     }
 
-    public function onAgregarDetalleTemp() {
+    public function onInsertarDetalleOptimizado() {
         try {
-            $x = $this->input;
-            $this->db->insert("ordencompratallastemp", array(
-                'Tp' => $x->post('Tp'),
-                'Folio' => $x->post('Folio'),
-                'Tipo' => $x->post('Tipo'),
-                'Proveedor' => $x->post('Proveedor'),
-                'FechaOrden' => $x->post('FechaOrden'),
-                'FechaCaptura' => Date('d/m/Y'),
-                'FechaEntrega' => $x->post('FechaEntrega'),
-                'ConsignarA' => $x->post('ConsignarA'),
-                'Sem' => $x->post('Sem'),
-                'Maq' => $x->post('Maq'),
-                'Ano' => $x->post('Ano'),
-                'Observaciones' => $x->post('Observaciones'),
-                'Articulo' => $x->post('Articulo'),
-                'Cantidad' => $x->post('Cantidad'),
-                'Precio' => $x->post('Precio'),
-                'Subtotal' => $x->post('SubTotal'),
-                'Estatus' => $x->post('Estatus'),
-                'Usuario' => $this->session->userdata('ID')
-            ));
+            //Inserta tabla temporal para tallas
+            $Detalle = json_decode($this->input->post('movs'));
+            //var_dump($Detalle);
+            foreach ($Detalle as $k => $v) {
+                $datos = array(
+                    'Tp' => $v->Tp,
+                    'Folio' => $v->Folio,
+                    'Tipo' => $v->Tipo,
+                    'Proveedor' => $v->Proveedor,
+                    'FechaOrden' => $v->FechaOrden,
+                    'FechaCaptura' => Date('d/m/Y'),
+                    'FechaEntrega' => $v->FechaEntrega,
+                    'ConsignarA' => $v->ConsignarA,
+                    'Sem' => $v->Sem,
+                    'Maq' => $v->Maq,
+                    'Ano' => $v->Ano,
+                    'Observaciones' => $v->Observaciones,
+                    'Articulo' => $v->Articulo,
+                    'Cantidad' => $v->Cantidad,
+                    'Precio' => $v->Precio,
+                    'Subtotal' => $v->SubTotal,
+                    'Estatus' => $v->Estatus,
+                    'Usuario' => $this->session->userdata('ID')
+                );
+
+                $this->db->insert("ordencompratallastemp", $datos);
+            }
+            //Leemos la tabla temporal para traernos las tallas sin repetir
+            $OrdenCompraAgrupada = $this->Ordencompra_model->getOrdenCompraTallasTemp();
+            foreach ($OrdenCompraAgrupada as $k => $O) {
+                $this->db->insert("ordencompra", array(
+                    'Tp' => $O->Tp,
+                    'Folio' => $O->Folio,
+                    'Tipo' => $O->Tipo,
+                    'Proveedor' => $O->Proveedor,
+                    'FechaOrden' => $O->FechaOrden,
+                    'FechaCaptura' => Date('d/m/Y'),
+                    'FechaEntrega' => $O->FechaEntrega,
+                    'ConsignarA' => $O->ConsignarA,
+                    'Sem' => $O->Sem,
+                    'Maq' => $O->Maq,
+                    'Ano' => $O->Ano,
+                    'Observaciones' => $O->Observaciones,
+                    'Articulo' => $O->Articulo,
+                    'Cantidad' => $O->Cantidad,
+                    'Precio' => $O->Precio,
+                    'Subtotal' => $O->Subtotal,
+                    'Estatus' => $O->Estatus,
+                    'Usuario' => $O->Usuario
+                ));
+            }
+            $this->db->query("truncate table ordencompratallastemp ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function onInsertarDetalleOptimizado() {
+    public function onInsertarDetalleOptimizadoBack() {
         $OrdenCompraAgrupada = $this->Ordencompra_model->getOrdenCompraTallasTemp();
 
         foreach ($OrdenCompraAgrupada as $k => $O) {

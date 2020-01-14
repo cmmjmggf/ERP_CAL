@@ -172,7 +172,7 @@ END AS DESPERDICIO
     public function getManoObra($Estilo) {
         try {
             $this->db->query("set sql_mode=''");
-            $this->db->select("CAST(D.Clave AS SIGNED ) AS CDEPTO, D.Descripcion AS DDEPTO,SUM(FXE.CostoMO) AS COSTOMO  "
+            $this->db->select("CAST(D.Clave AS SIGNED ) AS CDEPTO, D.Descripcion AS DDEPTO,SUM(FXE.CostoVTA) AS COSTOMO  "
                             . " ", false)
                     ->from('fraccionesxestilo  FXE')
                     ->join('fracciones AS F', 'ON FXE.Fraccion = F.Clave')

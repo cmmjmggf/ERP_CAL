@@ -859,6 +859,7 @@
         });
     }
     function getEstiloFraccionByID(clave) {
+        temp = clave;
         $.getJSON(master_url + 'getFraccionXEstiloByEstilo', {Estilo: clave}).done(function (data, x, jq) {
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
@@ -866,7 +867,7 @@
             });
             Estilo[0].selectize.disable();
             pnlDatos.find("#FechaAlta").addClass('disabledForms');
-            pnlDatos.find("#Estilo")[0].selectize.setValue(data[0].Estilo);
+            pnlDatos.find("#Estilo")[0].selectize.addItem(data[0].Estilo, true);
             pnlDatos.find("#FechaAlta").val(data[0].FechaAlta);
             getFotoXEstilo(clave);
             onVerificarEstiloBloqueadoCostos(clave);
