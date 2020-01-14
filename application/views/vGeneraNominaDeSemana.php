@@ -80,16 +80,16 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-success btn-sm btn-block" style="background-color: #4CAF50; border-color: #4CAF50;" id="btnGeneraGNS">
+                        <button type="button" class="btn btn-info btn-sm btn-block" id="btnGeneraGNS">
                             <span class="fa fa-print"></span> GENERA</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-default btn-sm btn-block" style="background-color: #000; color:  #ffffff;" data-dismiss="modal"id="btnSalirGNS">
-                            <span class="fa fa-times-circle"></span> SALIR</button>
+                        <button type="button" class="btn btn-success btn-sm btn-block" id="btnPrenominaExcel">
+                            <span class="fa fa-file-excel"></span> PRENÓMINA EXCEL</button>
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-info btn-sm btn-block" id="btnSemanasGNS">
+                        <button type="button" class="btn btn-warning btn-sm btn-block" id="btnSemanasGNS">
                             <span class="fa fa-calendar-alt"></span> SEMANAS</button>
                     </div>
                     <div class="col-6">
@@ -122,9 +122,9 @@
             FechaCorteAguinaldoGNS = mdlGeneraNominaDeSemana.find("#FechaCorteAguinaldoGNS"),
             ConsultaNominaCerrada = mdlGeneraNominaDeSemana.find("#ConsultaNominaCerrada"),
             btnGeneraGNS = mdlGeneraNominaDeSemana.find("#btnGeneraGNS"),
+            btnPrenominaExcel = mdlGeneraNominaDeSemana.find("#btnPrenominaExcel"),
             SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo"),
-            btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"),
-            btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
+            btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"), btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
             btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS"),
             GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos");
     $(document).ready(function () {
@@ -148,6 +148,38 @@
             } else {
                 swal('ATENCIÓN', 'EL AÑO Y SEMANA SON NECESARIOS, PARA PODER ELIMINAR LOS MOVIMIENTOS', 'warning').then((value) => {
                     AnioGNS.focus().select();
+                });
+            }
+        });
+        btnPrenominaExcel.click(function () {
+            btnPrenominaExcel.attr('disabled', true);
+            if (SemanaGNS.val() && AnioGNS.val()) {
+                HoldOn.open({
+                    theme: 'sk-rect',
+                    message: 'Por favor espere...'
+                });
+                $.post('<?php print base_url('GeneraNominaDeSemana/getPrenominaExcel'); ?>',
+                        {
+                            SEMANA: SemanaGNS.val(),
+                            ANIO: AnioGNS.val(),
+                            FECHAINI: FechaInicialGNS.val(),
+                            FECHAFIN: FechaFinalGNS.val()
+                        }).done(function (a) {
+                    console.log(a);
+                    HoldOn.close();
+                    if (a.length > 0) {
+                        window.open(a, '_blank');
+                        btnPrenominaExcel.attr('disabled', false);
+
+                    } else {
+                        //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+                    }
+                }).fail(function (x) {
+                    HoldOn.close();
+                    getError(x);
+                }).always(function () {
+                    btnPrenominaExcel.attr('disabled', false);
+                    HoldOn.close();
                 });
             }
         });
@@ -263,7 +295,7 @@
                                 btnGeneraGNS.attr('disabled', false);
                             });
                         } else {
-//                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+                            //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -444,8 +476,7 @@
                         if (parseInt(data[0].status) === 2) {
                             swal({
                                 title: "ATENCIÓN",
-                                text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "ESTÁ CERRADA",
-                                icon: "warning",
+                                text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "ESTÁ CERRADA", icon: "warning",
                                 buttons: {
                                     eliminar: {
                                         text: "Aceptar",

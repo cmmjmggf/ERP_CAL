@@ -424,7 +424,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "depto" => $v->DepartamentoFisico
                         ));
                     } else {
-                        
+
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
@@ -483,7 +483,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["ANIO"] = $x['ANIO'];
             $jc->setParametros($p);
             $this->getReportes($jc);
-            
+
             $this->db->query("DELETE FROM generando_nomina WHERE SEMANA = {$x['SEMANA']} AND ANIO = {$x['ANIO']}");
             $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA DE LA SEMANA {$x['SEMANA']} LA CUAL ESTA ABIERTA.", $this->session);
         } catch (Exception $exc) {
@@ -1312,6 +1312,25 @@ class GeneraNominaDeSemana extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function getPrenominaExcel() {
+        $xxx = $this->input->post();
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array(
+            "empresa" => $this->session->EMPRESA_RAZON,
+            "SEMANA" => $xxx['SEMANA'],
+            "FECHAINI" => $xxx['FECHAINI'],
+            "FECHAFIN" => $xxx['FECHAFIN'],
+            "ANIO" => $xxx['ANIO']);
+        $jc->setParametros($parametros);
+
+        //Imprimimos el reporte
+        $jc->setJasperurl('jrxml\prenomina\excel\excel_prenoml.jasper');
+        $jc->setFilename('PRENOMINA_EXCEL_SEM_' . $xxx['SEMANA'] . '_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        print $jc->getReport();
     }
 
 }

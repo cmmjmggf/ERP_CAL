@@ -9,10 +9,10 @@ class JasperCommand {
 
     //put your code here
     private $dbname = "erp_cal";
-    private $dbuser = "lobo";
+    private $dbuser = "christian";
     private $dbpassword = "abcd1234";
     private $dbtype = "mysql";
-    private $ip = "192.168.0.1";
+    private $ip = "127.0.0.1";
     private $dbport = "3306";
     //SI ES WINDOWS JAVA -JAR
     private $jasperurlsoftware = 'java -jar application\third_party\JasperPHP\src\JasperStarter\lib\jasperstarter.jar';
