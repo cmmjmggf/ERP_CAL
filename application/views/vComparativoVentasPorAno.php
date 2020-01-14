@@ -57,12 +57,11 @@
     var mdlComparativoVentasPorAno = $('#mdlComparativoVentasPorAno');
     var precio_Art = 0;
     $(document).ready(function () {
+        mdlComparativoVentasPorAno.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlComparativoVentasPorAno.on('shown.bs.modal', function () {
-            mdlComparativoVentasPorAno.find('.NotSelectize').selectize({
-                hideSelected: false,
-                openOnFocus: false
-            });
-            //handleEnterDiv(mdlComparativoVentasPorAno);
             mdlComparativoVentasPorAno.find("input").val("");
             $.each(mdlComparativoVentasPorAno.find("select"), function (k, v) {
                 mdlComparativoVentasPorAno.find("select")[k].selectize.clear(true);

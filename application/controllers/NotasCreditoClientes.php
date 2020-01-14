@@ -193,7 +193,7 @@ class NotasCreditoClientes extends CI_Controller {
                 'orden' => $x['orden'],
                 'fecha' => $nuevafecha,
                 'hora' => Date('h:i:s A'),
-                'cant' => 1,
+                'cant' => ($x['cantidad'] !== '') ? $x['cantidad'] : 1,
                 'descripcion' => $x['descripcion'] . $Folio,
                 'precio' => $x['precio'],
                 'subtot' => $x['subtot'],

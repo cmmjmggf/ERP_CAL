@@ -96,6 +96,10 @@
             </div>
             <div class="w-100"></div>
             <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
+                <label>Cantidad</label>
+                <input type="text" class="form-control form-control-sm numbersOnly" id="Cantidad" name="Cantidad" required="">
+            </div>
+            <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1">
                 <label>Importe NC</label>
                 <input type="text" class="form-control form-control-sm numbersOnly" id="ImporteNC" name="ImporteNC" required="">
             </div>
@@ -220,6 +224,7 @@
         ctipo = false;
         getRecords(0);
         getDetalleNC(0, 0, 0);
+        pnlTablero.find("#Cantidad").val(1);
         pnlTablero.find("#fechacap").val(getToday());
         pnlTablero.find("#fechadep").val(getToday());
         pnlTablero.find("#Cliente").focus();
@@ -400,6 +405,15 @@
             if (e.keyCode === 13) {
                 var txtfd = $(this).val();
                 if (txtfd) {
+                    pnlTablero.find('#Cantidad').focus().select();
+                }
+            }
+        });
+
+        pnlTablero.find('#Cantidad').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtcan = $(this).val();
+                if (txtcan) {
                     pnlTablero.find('#ImporteNC').focus().select();
                 }
             }
@@ -477,6 +491,7 @@
                         orden: pnlTablero.find("#Tipo").val(),
                         fecha: pnlTablero.find("#fechacap").val(),
                         descripcion: pnlTablero.find("#Concepto").val(),
+                        cantidad: pnlTablero.find("#Cantidad").val(),
                         precio: importenc,
                         subtot: importenc,
                         defecto: pnlTablero.find("#Defecto").val(),
@@ -499,6 +514,7 @@
                         pnlTablero.find("#Concepto").val(conc + data);
                         pnlTablero.find("#FolioNC").html(data);
                         pnlTablero.find("#ImporteNC").val('');
+                        pnlTablero.find("#Cantidad").val('1');
                         pnlTablero.find("#Concepto").val('');
                         pnlTablero.find("#Defecto")[0].selectize.clear(true);
                         pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
@@ -617,8 +633,7 @@
             fixedHeader: true,
             "ajax": {
                 "url": master_url + 'getRecords',
-                "dataSrc": "",
-                "data": {Cliente: cliente},
+                "dataSrc": "", "data": {Cliente: cliente},
                 "type": "GET"
             },
             "columns": [
@@ -719,8 +734,7 @@
             fixedHeader: true,
             "ajax": {
                 "url": master_url + 'getDetalleNC',
-                "dataSrc": "",
-                "data": {Tp: tp, Cliente: cliente, NC: doc},
+                "dataSrc": "", "data": {Tp: tp, Cliente: cliente, NC: doc},
                 "type": "GET"
             },
             "columns": [
@@ -735,8 +749,7 @@
             ],
             "columnDefs": [
                 {
-                    "targets": [6, 7],
-                    "render": function (data, type, row) {
+                    "targets": [6, 7], "render": function (data, type, row) {
                         return '$' + $.number(parseFloat(data), 2, '.', ',');
                     }
                 }

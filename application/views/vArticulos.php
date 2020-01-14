@@ -299,8 +299,8 @@
                                 swal('ATENCIÓN', 'DEBE DE CAPTURAR EL PRECIO PARA LA MAQUILA 1', 'error');
                             } else {
                                 /*Si todo sale bien ejecutamos esto para actualizar*/
-                                PrecioVentaParaMaquilas.clear().draw();
-                                getDetalleByID(ClaveArticulo);
+                                //PrecioVentaParaMaquilas.clear().draw();
+                                getDetalleByID(pnlDatos.find("#Clave").val());
                                 HoldOn.close();
                                 swal('ATENCIÓN', 'SE HAN GENERADO LOS PRECIOS EN BASE A MAQUILA 1', 'success');
                             }
@@ -341,7 +341,7 @@
                         });
                         $.post(master_url + 'onIgualarPrecios', {Clave: pnlDatos.find("#Clave").val()}).done(function (data) {
                             //PrecioVentaParaMaquilas.clear().draw();
-                            getDetalleByID(ClaveArticulo);
+                            getDetalleByID(pnlDatos.find("#Clave").val());
                             HoldOn.close();
                             swal('ATENCIÓN', 'SE HAN CAMBIADO LOS PRECIOS A MAQUILA 1', 'success');
                         }).fail(function (x, y, z) {
