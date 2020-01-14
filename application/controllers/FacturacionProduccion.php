@@ -1027,6 +1027,7 @@ class FacturacionProduccion extends CI_Controller {
                     break;
                 case 2:
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                    $pr["cliente"] = $x['CLIENTE'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
                     $jc->setFilename("remisionva1_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));

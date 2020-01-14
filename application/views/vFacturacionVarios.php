@@ -431,6 +431,18 @@
                 $.post('<?php print base_url('FacturacionVarios/onCerrarDocumento'); ?>', p).done(function (a) {
                     console.log(a);
                     getVistaPrevia();
+                    $.getJSON('<?php print base_url('FacturacionVarios/getUltimaFactura') ?>', {
+                        TP: TPFactura.val()
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
+                            Documento.val(r);
+                        }
+                    }).fail(function (xyz) {
+                        getError(xyz);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -449,6 +461,7 @@
                 onOpenOverlay('');
                 modo = 1;
                 getVistaPrevia();
+
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', function () {
                     if (ClienteFactura.val()) {
@@ -604,7 +617,7 @@
                                     Subtotal.val('');
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
-                                    Pedido.val(''); 
+                                    Pedido.val('');
                                     pnlTablero.find("#cNoIva")[0].checked = false;
                                     pnlTablero.find("#cTimbrar")[0].checked = false;
                                     pnlTablero.find("#cPorAnticipo")[0].checked = false;
@@ -1217,8 +1230,10 @@
             MODO: modo
         }).done(function (data, x, jq) {
             onBeep(1);
-            onImprimirReporteFancy(data);
             onCloseOverlay();
+            onImprimirReporteFancyAFC(data, function (a, b) {
+                location.reload();
+            });
         }).fail(function (x, y, z) {
             swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
         }).always(function () {

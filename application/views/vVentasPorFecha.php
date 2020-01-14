@@ -1,11 +1,8 @@
 <div class="modal " id="mdlVentasPorFecha"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Ventas por fechas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title"><span class="fa fa-file-invoice-dollar"></span> Ventas por fechas</h5>
             </div>
             <div class="modal-body">
                 <form id="frmCaptura">
@@ -46,7 +43,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-info" id="btnImprimir"><span class="fa fa-check"></span> ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>

@@ -4,6 +4,9 @@
 	<property name="ireport.x" value="529"/>
 	<property name="ireport.y" value="374"/>
 	<parameter name="factura" class="java.lang.String"/>
+	<parameter name="cliente" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT  C.ListaPrecios AS LISTA_PRECIO,  CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE,  (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.estado LIMIT 1) AS ESTADO, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, date_format(F.fecha,"%d/%m/%Y") AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra AS MONEDA_LETRA, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias,   F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, UPPER(F.obs) AS obs,
 (CASE
@@ -72,7 +75,7 @@ C.NombreP AS NOMBRE_CLIENTE
 
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave
 LEFT JOIN estilos AS E ON F.estilo = E.Clave LEFT JOIN series AS S ON E.Serie = S.Clave
-WHERE F.factura  = $P{factura} AND F.tp = 2]]>
+WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 	</queryString>
 	<field name="LISTA_PRECIO" class="java.lang.String"/>
 	<field name="CLIENTE" class="java.lang.String">

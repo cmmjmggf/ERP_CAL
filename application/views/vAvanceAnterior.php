@@ -1,8 +1,8 @@
 <div class="modal " id="mdlAvanceAnterior"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Avance por control</h5>
+                <h5 class="modal-title"><span class="fa fa-arrow-up"></span> Avance por control</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -62,6 +62,45 @@
                             <label>Avance Actual:  <span class="badge badge-danger" style="font-size: 14px;" id="EstatusProduccionAvance"></span></label>
 
                         </div>
+                        <div class="w-100"></div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <ul id="deptos" class="list-group my-2">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="FOLEADO">4</span><span class="d-none" des="FOLEADO">40</span>4 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ENTRETELADO">40</span><span class="d-none" des="ENTRETELADO">90</span>40 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;" >
+                                    <span class="d-none stsavan" des="MAQUILA">42</span><span class="d-none" des="MAQUILA">100</span>42 - MAQUILA<span class="deptodes d-none">MAQUILA</span><span class="deptoclave d-none">100</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ALMACEN CORTE">44</span> <span class="d-none" des="ALMACEN CORTE">105</span>44 - ALMACEN CORTE<span class="deptodes d-none">ALMACEN CORTE</span><span class="deptoclave d-none">105</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="PESPUNTE">5</span> <span class="d-none" des="PESPUNTE">110</span>5 - PESPUNTE<span class="deptodes d-none">PESPUNTE</span><span class="deptoclave d-none">110</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ENSUELADO">55</span> <span class="d-none" des="ENSUELADO">140</span>55 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ALMACEN PESPUNTE">6</span> <span class="d-none" des="ALMACEN PESPUNTE">130</span>6 - ALMACEN PESPUNTE<span class="deptodes d-none">ALMACEN PESPUNTE</span><span class="deptoclave d-none">130</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="TEJIDO">7</span><span class="d-none" des="TEJIDO">150</span>7 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ALMACEN TEJIDO">8</span><span class="d-none" des="ALMACEN TEJIDO">160</span>8 - ALMACEN TEJIDO<span class="deptodes d-none">ALMACEN TEJIDO</span><span class="deptoclave d-none">160</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="MONTADO">9</span><span class="d-none" des="MONTADO ">180</span>9 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ADORNO ">10</span>10 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                    <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -78,6 +117,29 @@
 
     $(document).ready(function () {
         setFocusSelectToInputOnChange('#DeptoAvance', '#DoctoAvance', mdlAvanceAnterior);
+
+        var ul = $("#deptos");
+        ul.find("li").click(function () {
+            ul.find("li").removeClass('li-selected');
+            var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
+            var depto = parseInt(clave);
+            if (depto >= 180 || depto === 30 || depto === 40 ||
+                    depto === 90 || depto === 100 || depto === 105 ||
+                    depto === 110 || depto === 140 || depto === 150) {
+                li.addClass('li-selected');
+                mdlAvanceAnterior.find("#DeptoAvance").val(parseInt(li.find("span").first().text()));
+                mdlAvanceAnterior.find("#ControlAvance").focus().select();
+                getDeptoActualXControl();
+                DeptoDes.val(deptodes);
+                DeptoAva.val(clave);
+                onBeep(3);
+            } else {
+                swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
+                    ul.find("li").removeClass('li-selected');
+                });
+            }
+        });
+
         mdlAvanceAnterior.on('shown.bs.modal', function () {
             handleEnterDiv(mdlAvanceAnterior);
             mdlAvanceAnterior.find("input").val("");
@@ -468,5 +530,20 @@
 
     #Titulo span.badge{
         font-size: 16px !important;
+    }
+    li.list-group-item:hover {
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        background-color: #3f51b5;
+        -webkit-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        -moz-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        padding-top: 3px;
+        padding-bottom: 3px;
+        animation: myfirst .4s;
+        -moz-animation:myfirst 1.4s infinite; /* Firefox */
+        -webkit-animation:myfirst 1.4s infinite; /* Safari and Chrome */
+        border-radius: 5px;
     }
 </style>

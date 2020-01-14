@@ -861,6 +861,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                     }
                 case 2:
                     $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                    $pr["cliente"] = $x['CLIENTE'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\facturacion\remisionva1.jasper');
                     $jc->setFilename("remisionva1_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));

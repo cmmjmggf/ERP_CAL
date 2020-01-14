@@ -274,7 +274,7 @@
                         <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm d-none" readonly="">
                         <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
                         <label>Cortador</label>
                         <input type="text" id="CortadorClave" autofocus="" name="CortadorClave" class="form-control form-control-sm" autofocus="" autocomplete="off">
                     </div>
@@ -283,16 +283,24 @@
                             <option></option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                         <label>1 = PIEL / 2 = FORRO</label>
-                        <select id="PielForro" name="PielForro" class="form-control form-control-sm">
-                            <option></option>
-                            <option value="1">1 PIEL</option>
-                            <option value="2">2 FORRO</option>
-                            <option value="34">34 TEXTIL</option>
-                            <option value="40">40 SINTETICO</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-3">
+                                <input type="text" id="xPielForro" name="xPielForro" class="form-control form-control-sm numbersOnly" maxlength="2">
+                            </div>
+                            <div class="col-9">
+                                <select id="PielForro" name="PielForro" class="form-control form-control-sm">
+                                    <option></option>
+                                    <option value="1">1 PIEL</option>
+                                    <option value="2">2 FORRO</option>
+                                    <option value="34">34 TEXTIL</option>
+                                    <option value="40">40 SINTETICO</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="w-100"></div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                         <label>Control</label>
@@ -334,6 +342,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="w-100"></div>
+                    <div class="col-6"></div>
+                    <div class="col-6 mb-2" align="right"><button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
+                            <span class="fa fa-check"></span> Aceptar</button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table id="tblRegresos" class="table table-hover table-sm" style="width: 100%;">
                             <thead>
@@ -362,19 +375,19 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+<!--            <div class="modal-footer">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="left">
-                            <button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
-                                <span class="fa fa-check"></span> Aceptar</button>
+                                                        <button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
+                                                            <span class="fa fa-check"></span> Aceptar</button>
                         </div>
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -417,6 +430,7 @@
             EntregoRetorno = mdlRetornaMaterial.find("#Entrego"),
             Regreso = mdlRetornaMaterial.find("#Regreso"),
             MatMalo = mdlRetornaMaterial.find("#MatMalo"),
+            xPielForro = mdlRetornaMaterial.find("#xPielForro"),
             PielForro = mdlRetornaMaterial.find("#PielForro"),
             CortadorClave = mdlRetornaMaterial.find("#CortadorClave"),
             Cortador = mdlRetornaMaterial.find("#Cortador");
@@ -426,6 +440,25 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
+
+        xPielForro.on('keydown', function (e) {
+            if (e.keyCode === 13 && xPielForro.val()) {
+                PielForro[0].selectize.setValue(xPielForro.val());
+                onDisable(PielForro);
+                if (PielForro.val() === '') {
+                    onCampoInvalido(mdlRetornaMaterial, "DEBE DE ESPECIFICAR UN TIPO VALIDO", function () {
+                        xPielForro.focus().select();
+                    });
+                }
+            }
+            if (e.keyCode === 8 && xPielForro.val() === '' ||
+                    e.keyCode === 46 && xPielForro.val() === '') {
+                onEnable(PielForro);
+                onClear(PielForro);
+            }
+        });
+
+
         Semana.on('keydown', function (e) {
             Pieles.ajax.reload();
             Forros.ajax.reload();
@@ -466,7 +499,7 @@
                         Regresos.ajax.reload();
                     }
                 }).fail(function (x) {
-                    getError(x)
+                    getError(x);
                 });
             }
         });
@@ -538,16 +571,19 @@
         btnAceptar.click(function () {
             onEnable(Cortador);
             onDisable(btnAceptar);
-            if (mdlRetornaMaterial.find("#Entrego").val() !== '' 
-                    || mdlRetornaMaterial.find("#Regreso").val() !== '') {
+            if (mdlRetornaMaterial.find("#Entrego").val() !== '' &&
+                    mdlRetornaMaterial.find("#Control").val() !== '' 
+                    || mdlRetornaMaterial.find("#Regreso").val() !== '' &&
+                    mdlRetornaMaterial.find("#Control").val() !== '') {
                 onDevolverPielForro();
             } else {
-                swal('ATENCIÓN', 'DEBE DE SELECCIONAR UN REGISTRO', 'warning').then((value) => {
+                onCampoInvalido(mdlRetornaMaterial, 'DEBE DE SELECCIONAR UN REGISTRO', function () {
                     mdlRetornaMaterial.find("#tblRegresos tbody tr").addClass("highlight-rows");
                     setTimeout(function () {
                         mdlRetornaMaterial.find("#tblRegresos tbody tr").removeClass("highlight-rows");
-                    }, 2500);
+                    }, 3500);
                 });
+                return;
             }
         });
 
@@ -865,7 +901,7 @@
             "displayLength": 20,
             "bLengthChange": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "375px",
             "aaSorting": [
                 [12, 'desc']
             ],
@@ -1172,7 +1208,7 @@
         }
         if (valid) {
             var entrego = mdlRetornaMaterial.find("#Entrego").val(),
-                    retorno = parseFloat(mdlRetornaMaterial.find("#AnteriormenteRetorno").val()) + 
+                    retorno = parseFloat(mdlRetornaMaterial.find("#AnteriormenteRetorno").val()) +
                     parseFloat(mdlRetornaMaterial.find("#Regreso").val());
             console.log(entrego, '|', entrego + ' >=' + retorno, ' ', entrego >= retorno);
             if (entrego >= retorno || parseInt(entrego) === 0) {
@@ -1249,8 +1285,9 @@
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO ' + x.responseText, 'warning');
             }).always(function () {
                 HoldOn.close();
-                mdlRetornaMaterial.find('input').val('');
-                mdlRetornaMaterial.find("#Cortador")[0].selectize.clear(true);
+                /*14-01-2020 0912am*/
+//                mdlRetornaMaterial.find('input').val('');
+//                mdlRetornaMaterial.find("#Cortador")[0].selectize.clear(true);
             });
         } else {
             swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CORTADOR, SI ES PIEL O FORRO, UN CONTROL VÁLIDO, UN REGISTRO DE ASIGNACIÓN DE CONTROL, CUANTO REGRESO EL CORTADOR Y SI TIENE MATERIAL MALO O DEFECTUOSO O SI ES MATERIAL EXTRA', 'warning').then((value) => {
