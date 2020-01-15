@@ -66,7 +66,7 @@ class GeneraCostosVenta extends CI_Controller {
                             (select Descripcion from colores where estilo = e.clave and precioventa = 1 limit 1) as nomcolor
                             from estilos e
                             join maquilas m on m.Clave = 1
-                            where e.linea = '$linea' and e.clave <> '5418N' and e.Corrida = $corr and e.costos = 0 ")->result();
+                            where e.linea = '$linea' and e.clave <> '5418N' and e.Corrida = $corr and e.costos = 0 and e.clave = '5049' ")->result();
 
             $txttolera = 0;
             $txtutili = 0;
@@ -80,6 +80,12 @@ class GeneraCostosVenta extends CI_Controller {
 
                     if ($color !== null) {
                         $porcentajeDesp = $E->PorcenDesperd;
+//                        print "select ft.consumo, a.grupo, pm.precio
+//                                            from fichatecnica ft
+//                                            join articulos a on a.clave  = ft.articulo
+//                                            join preciosmaquilas pm on pm.Articulo = a.clave and pm.maquila = 1
+//                                            where ft.estilo = '$estilo' and ft.color = '$color' and ft.afectapv = 0
+//                                            order by abs(a.grupo) asc ";
                         //------------------------------Obtenemos la materia prima "materiales"------------------------------
                         $FichaTecnica = $this->db->query("select ft.consumo, a.grupo, pm.precio
                                             from fichatecnica ft

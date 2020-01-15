@@ -61,7 +61,7 @@ class NotasCreditoClientes extends CI_Controller {
                     'cliente' => $txtcliente,
                     'remicion' => $txtnumfac,
                     'tipo' => $txttp,
-                    'mov' => $txtorden,
+                    'mov' => ($txtorden !== '') ? $txtorden : 9,
                     'fecha' => $txtfecha,
                     'fechadep' => $txtfecha,
                     'fechacap' => $nuevafechacap,
