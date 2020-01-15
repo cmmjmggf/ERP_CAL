@@ -202,13 +202,13 @@
 
                 <div class="col-12 col-sm-12 col-md-4 col-lg-2">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <label for="Consumo">Afecta PV</label>
+<!--                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <label for="Consumo">No Afecta PV</label>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="AfectaPV" name="AfectaPV" >
                                 <label class="custom-control-label" for="AfectaPV"></label>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <button type="button" id="btnAgregar" class="btn btn-primary mt-4"><span class="fa fa-check"></span> ACEPTAR</button>
                         </div>
@@ -317,13 +317,13 @@
                             <label for="Consumo">Consumo</label>
                             <input type="text"  id="eConsumo" name="Consumo" class="form-control form-control-sm numbersOnly" required="" maxlength="7">
                         </div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <label for="Consumo">Afecta PV</label>
+<!--                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                            <label for="Consumo">No Afecta PV</label>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="eAfectaPV" name="AfectaPV" >
                                 <label class="custom-control-label" for="eAfectaPV"></label>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
 
                 </form>
@@ -719,7 +719,7 @@
             isValid('mdlEditarArticulo');
             if (valido) {
                 var frm = new FormData(mdlEditarArticulo.find("#frmEditarRenglon")[0]);
-                frm.append('AfectaPV', mdlEditarArticulo.find("#eAfectaPV")[0].checked ? 1 : 0);
+//                frm.append('AfectaPV', mdlEditarArticulo.find("#eAfectaPV")[0].checked ? 0 : 1);
                 $.ajax({
                     url: master_url + 'onModificarDetalle',
                     type: "POST",
@@ -777,7 +777,7 @@
                 }
                 if (Estilo && pnlTablero.find("#bColor").val()) {
                     xFichaTecnicaDetalle.ajax.reload(function () {
-                        
+
                     });
                 }
             }
@@ -808,6 +808,7 @@
             if ($(this).val()) {
                 pnlTablero.find("#bColor").val($(this).val());
                 pnlTablero.find("#btnBuscarFT").focus();
+                xFichaTecnicaDetalle.ajax.reload();
             }
         });
 
@@ -932,12 +933,12 @@
         pnlTablero.find("#btnBuscarFT").click(function () {
             var estilo = pnlTablero.find("#bEstilo").val();
             var color = pnlTablero.find("#bColor").val();
-            $.fn.dataTable.ext.errMode = 'throw';
-            if ($.fn.DataTable.isDataTable('#tblxFichaTecnicaDetalle')) {
-                xFichaTecnicaDetalle.ajax.reload();
-                return;
-            }
-//            getFichaTecnicaByEstiloByColor(estilo, color);
+//            $.fn.dataTable.ext.errMode = 'throw';
+//            if ($.fn.DataTable.isDataTable('#tblxFichaTecnicaDetalle')) {
+//                xFichaTecnicaDetalle.ajax.reload();
+//                return;
+//            }
+            getFichaTecnicaByEstiloByColor(estilo, color);
         });
 
     });
@@ -1092,7 +1093,7 @@
                 $.each(dtm, function (k, v) {
                     mdlEditarArticulo.find("[name='" + k + "']").val(v);
                 });
-                (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
+//                (dtm.AfectaPV === '1') ? mdlEditarArticulo.find("#eAfectaPV").prop('checked', true) : mdlEditarArticulo.find("#eAfectaPV").prop('checked', false);
                 mdlEditarArticulo.find("[name='Pieza']")[0].selectize.addItem(dtm.Pieza_ID, true);
                 mdlEditarArticulo.find("[name='eArticulo']")[0].selectize.addItem(dtm.Articulo_ID, true);
                 mdlEditarArticulo.modal('show');
@@ -1319,7 +1320,7 @@
                 frm.append('Articulo', Articulo.val());
                 frm.append('PzXPar', PzXPar.val());
                 frm.append('Consumo', Consumo.val());
-                frm.append('AfectaPV', pnlControlesDetalle.find("#AfectaPV")[0].checked ? 1 : 0);
+//                frm.append('AfectaPV', pnlControlesDetalle.find("#AfectaPV")[0].checked ? 0 : 1);
                 $.ajax({
                     url: master_url + 'onAgregar',
                     type: "POST",

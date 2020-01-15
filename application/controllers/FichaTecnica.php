@@ -117,8 +117,7 @@ class FichaTecnica extends CI_Controller {
                     'Consumo' => $v->Consumo,
                     'PzXPar' => $v->PzXPar,
                     'Estatus' => $v->Estatus,
-                    'FechaAlta' => Date('d/m/Y'),
-                    'AfectaPV' => $v->AfectaPV
+                    'FechaAlta' => Date('d/m/Y')
                 );
                 $this->db->insert('fichatecnica', $nft);
             }
@@ -510,7 +509,7 @@ class FichaTecnica extends CI_Controller {
             foreach ($ftf as $k => $v) {
                 $ftf = array('Estilo' => $ESTILO, 'Color' => $COLOR,
                     'Pieza' => $v->CLAVE_PIEZA, 'Articulo' => $v->CLAVE_ARTICULO,
-                    'Precio' => $v->PRECIO, 'Consumo' => $v->CONSUMO, 'PzXPar' => 0, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
+                    'Precio' => $v->PRECIO, 'Consumo' => $v->CONSUMO, 'PzXPar' => 0, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'));
                 $this->db->insert('fichatecnica', $ftf);
             }
         } catch (Exception $exc) {
@@ -580,8 +579,7 @@ class FichaTecnica extends CI_Controller {
                 'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
                 'Articulo' => ($x->post('Articulo') !== NULL) ? $x->post('Articulo') : NULL,
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
-                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
-                'AfectaPV' => ($x->post('AfectaPV') !== NULL) ? $x->post('AfectaPV') : 0,
+                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL, 
                 'Estatus' => 'ACTIVO',
                 'FechaAlta' => Date('d/m/Y')
             );
@@ -604,8 +602,7 @@ class FichaTecnica extends CI_Controller {
                 'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
                 'Articulo' => ($x->post('eArticulo') !== NULL) ? $x->post('eArticulo') : NULL,
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
-                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
-                'AfectaPV' => ($x->post('AfectaPV') !== NULL) ? $x->post('AfectaPV') : 0,
+                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL, 
             );
             $this->ftm->onModificar($this->input->post('ID'), $data);
         } catch (Exception $exc) {
@@ -673,7 +670,8 @@ class FichaTecnica extends CI_Controller {
                 $FT = array('Estilo' => $v->ESTILO, 'Color' => $v->COLOR,
                     'Pieza' => $PIEZA, 'Articulo' => $ARTICULO,
                     'Precio' => $v->PRECIO, 'Consumo' => $CONSUMO,
-                    'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y'), 'AfectaPV' => 0);
+                    'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y')
+                    );
                 $this->db->insert('fichatecnica', $FT);
             }
         } catch (Exception $exc) {
