@@ -326,6 +326,7 @@ class Avance8 extends CI_Controller {
                         "estilo" => $xXx['ESTILO'],
                         "pares" => $xXx['PARES'],
                         "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                        "fecha_registro" => Date('d/m/Y h:i:s'),
                         "semana" => $xXx['SEMANA'],
                         "depto" => $xXx['DEPARTAMENTO'],
                         "anio" => $xXx['ANIO']);
@@ -405,11 +406,8 @@ class Avance8 extends CI_Controller {
                                 break;
                             case 397:
                                 /* AVANCE 397 ENSUELADO */
-
                                 $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
                                                 . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 130")->result();
-
-                            
                                 if (intval($REVISAR_AVANCE_POR_CONTROL[0]->EXISTE) === 0) {
                                     $avance = array(
                                         'Control' => $xXx['CONTROL'],

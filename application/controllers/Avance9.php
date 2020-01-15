@@ -398,8 +398,9 @@ class Avance9 extends CI_Controller {
                 "control" => $xXx['CONTROL'],
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
-                "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                 "semana" => $xXx['SEMANA'],
+                "fecha_registro"=>Date('d/m/Y h:i:s'),
                 "depto" => $xXx['DEPARTAMENTO'],
                 "anio" => $xXx['ANIO']);
             $msj = "[";
@@ -428,7 +429,8 @@ class Avance9 extends CI_Controller {
                     "control" => $xXx['CONTROL'],
                     "estilo" => $xXx['ESTILO'],
                     "pares" => $xXx['PARES'],
-                    "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                    "fecha_registro" => Date('d/m/Y h:i:s'),
                     "semana" => $xXx['SEMANA'],
                     "depto" => $xXx['DEPARTAMENTO'],
                     "anio" => $xXx['ANIO']);
@@ -745,9 +747,10 @@ class Avance9 extends CI_Controller {
                 "preciofrac" => $xXx['PRECIO_FRACCION'],
                 "pares" => $xXx['PARES'],
                 "subtot" => (floatval($xXx['PARES']) * floatval($xXx['PRECIO_FRACCION'])),
-                "fecha" => $nueva_fecha->format('Y-m-d h:i:s'),
+                "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPARTAMENTO'],
+                "fecha_registro" => Date('d/m/Y h:i:s'),
                 "anio" => $xXx['ANIO']);
 
             $departamento = $xXx['DEPARTAMENTO'];

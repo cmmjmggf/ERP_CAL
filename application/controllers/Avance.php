@@ -423,6 +423,7 @@ P.Maquila AS MAQUILA
                                 "estilo" => $xXx['ESTILO'],
                                 "pares" => $xXx['PARES'],
                                 "fecha" => Date('Y-m-d 00:00:00'),
+                                "fecha_registro" => Date('d/m/Y h:i:s'),
                                 "semana" => $xXx['SEMANA'],
                                 "depto" => $xXx['DEPTOACTUAL'],
                                 "anio" => Date('Y'));
@@ -497,7 +498,7 @@ P.Maquila AS MAQUILA
                             exit(0);
                         }
                         $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND A.Departamento = 40")->result();
-                        if (intval($REVISAR_AVANCE[0]->EXISTE) >= 1) { 
+                        if (intval($REVISAR_AVANCE[0]->EXISTE) >= 1) {
                             $this->db->set('EstatusProduccion', 'FOLEADO')->set('DeptoProduccion', 40)
                                     ->where('Control', $xXx['CONTROL'])
                                     ->update('controles');
@@ -517,7 +518,7 @@ P.Maquila AS MAQUILA
             }
 
             if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
-                /*60 FOLEADO*/
+                /* 60 FOLEADO */
 //                $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
 //                                ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
 //                                ->where('F.numfrac', $frac)->get()->result();
@@ -1020,6 +1021,7 @@ P.Maquila AS MAQUILA
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d 00:00:00'),
+                "fecha_registro"=>Date('d/m/Y h:i:s'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
@@ -1056,6 +1058,7 @@ P.Maquila AS MAQUILA
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d 00:00:00'),
+                "fecha_registro"=>Date('d/m/Y h:i:s'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
