@@ -1039,12 +1039,12 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="12" width="1290" height="1" uuid="d80429ea-db8a-46b6-9418-ab1358f328e1"/>
+				<reportElement x="0" y="13" width="1290" height="1" uuid="d80429ea-db8a-46b6-9418-ab1358f328e1"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="0" y="0" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="58d347e2-a3c1-4b1e-8893-ed74a47c8a57"/>
+				<reportElement mode="Transparent" x="0" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="58d347e2-a3c1-4b1e-8893-ed74a47c8a57"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1052,7 +1052,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="41" y="0" width="47" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dccf0724-28a8-490b-b4e8-c2ec52bec849"/>
+				<reportElement mode="Transparent" x="41" y="1" width="47" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dccf0724-28a8-490b-b4e8-c2ec52bec849"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1060,7 +1060,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="87" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="aee02a95-96bc-419f-84f9-ba5e97df8f25"/>
+				<reportElement mode="Transparent" x="87" y="1" width="39" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="aee02a95-96bc-419f-84f9-ba5e97df8f25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1068,7 +1068,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="126" y="0" width="128" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="817227cf-8357-48a0-86f1-42baa13d2bb6"/>
+				<reportElement mode="Transparent" x="126" y="1" width="128" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="817227cf-8357-48a0-86f1-42baa13d2bb6"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1076,7 +1076,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{ClienteT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="254" y="0" width="191" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="55bba92c-e0cd-46f4-9c36-c0212639dfc1"/>
+				<reportElement mode="Transparent" x="254" y="1" width="191" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="55bba92c-e0cd-46f4-9c36-c0212639dfc1"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1084,7 +1084,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Suela}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="488" y="0" width="98" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="11205308-aa6b-4391-bd44-137c32563962"/>
+				<reportElement mode="Transparent" x="488" y="1" width="98" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="11205308-aa6b-4391-bd44-137c32563962"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1092,7 +1092,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Avance}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="586" y="0" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e704b3a4-1f10-4dc6-ad89-fd4847286c20"/>
+				<reportElement mode="Transparent" x="586" y="1" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e704b3a4-1f10-4dc6-ad89-fd4847286c20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1100,7 +1100,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{SUELA_ENTREGADA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="632" y="0" width="216" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="41745a27-d808-46db-9c12-434c27daaa11"/>
+				<reportElement mode="Transparent" x="632" y="1" width="216" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="41745a27-d808-46db-9c12-434c27daaa11"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1108,7 +1108,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{ColorT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="446" y="0" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fc1b041b-f111-47b7-ad9f-d8417ba4b5df"/>
+				<reportElement mode="Transparent" x="446" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fc1b041b-f111-47b7-ad9f-d8417ba4b5df"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1116,7 +1116,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="848" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a1bfd57d-74f6-4cb9-b73f-ad49353ea2a4">
+				<reportElement mode="Transparent" x="848" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a1bfd57d-74f6-4cb9-b73f-ad49353ea2a4">
 					<printWhenExpression><![CDATA[$F{C1}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1126,7 +1126,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="868" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e642931d-2924-4dd9-8a70-e7f7efb0aaac">
+				<reportElement mode="Transparent" x="868" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e642931d-2924-4dd9-8a70-e7f7efb0aaac">
 					<printWhenExpression><![CDATA[$F{C2}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1136,7 +1136,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="888" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8c8a52c4-6fc8-473b-826d-c45c7814efee">
+				<reportElement mode="Transparent" x="888" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8c8a52c4-6fc8-473b-826d-c45c7814efee">
 					<printWhenExpression><![CDATA[$F{C3}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1146,7 +1146,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C3}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="908" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8baefde6-b56c-4629-80c2-cbc243b9942a">
+				<reportElement mode="Transparent" x="908" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8baefde6-b56c-4629-80c2-cbc243b9942a">
 					<printWhenExpression><![CDATA[$F{C4}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1156,7 +1156,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="928" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="72fa64f9-3882-419b-b9ab-47d72f2f25f6">
+				<reportElement mode="Transparent" x="928" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="72fa64f9-3882-419b-b9ab-47d72f2f25f6">
 					<printWhenExpression><![CDATA[$F{C5}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1166,7 +1166,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C5}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="948" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3d620ee7-c8b1-4ee8-9c16-b65464ee9197">
+				<reportElement mode="Transparent" x="948" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3d620ee7-c8b1-4ee8-9c16-b65464ee9197">
 					<printWhenExpression><![CDATA[$F{C6}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1176,7 +1176,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C6}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="968" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7fc4caf4-00c3-4a58-8d38-a3f18a947c7f">
+				<reportElement mode="Transparent" x="968" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7fc4caf4-00c3-4a58-8d38-a3f18a947c7f">
 					<printWhenExpression><![CDATA[$F{C7}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1186,7 +1186,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C7}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="988" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="57777d18-903a-4f12-bd62-2f9a3a592694">
+				<reportElement mode="Transparent" x="988" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="57777d18-903a-4f12-bd62-2f9a3a592694">
 					<printWhenExpression><![CDATA[$F{C8}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1196,7 +1196,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C8}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1008" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39cc76cf-1505-4365-8aea-d7a2dca325e7">
+				<reportElement mode="Transparent" x="1008" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39cc76cf-1505-4365-8aea-d7a2dca325e7">
 					<printWhenExpression><![CDATA[$F{C9}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1206,7 +1206,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C9}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1028" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8258a3aa-a621-4212-b61f-0bd326391db1">
+				<reportElement mode="Transparent" x="1028" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8258a3aa-a621-4212-b61f-0bd326391db1">
 					<printWhenExpression><![CDATA[$F{C10}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1216,7 +1216,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C10}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1048" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1845394a-b32f-4d6e-9048-900d9bed09e2">
+				<reportElement mode="Transparent" x="1048" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1845394a-b32f-4d6e-9048-900d9bed09e2">
 					<printWhenExpression><![CDATA[$F{C11}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1226,7 +1226,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C11}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1068" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dbcd9ede-5014-4af7-8bd7-dafbe10947c8">
+				<reportElement mode="Transparent" x="1068" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dbcd9ede-5014-4af7-8bd7-dafbe10947c8">
 					<printWhenExpression><![CDATA[$F{C12}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1236,7 +1236,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C12}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1088" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4b67175f-96a4-4cc6-bbd4-2a133ba879bd">
+				<reportElement mode="Transparent" x="1088" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4b67175f-96a4-4cc6-bbd4-2a133ba879bd">
 					<printWhenExpression><![CDATA[$F{C13}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1246,7 +1246,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C13}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1108" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a8f145d4-6303-47e7-b60a-f2d276ef1aed">
+				<reportElement mode="Transparent" x="1108" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a8f145d4-6303-47e7-b60a-f2d276ef1aed">
 					<printWhenExpression><![CDATA[$F{C14}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1256,7 +1256,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C14}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1128" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1d6fb8a0-6b5a-4c0c-b52c-e267fb937c44">
+				<reportElement mode="Transparent" x="1128" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1d6fb8a0-6b5a-4c0c-b52c-e267fb937c44">
 					<printWhenExpression><![CDATA[$F{C15}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1266,7 +1266,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C15}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1148" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6e334f5f-d6a2-478e-89c7-bb2bdb46a6b6">
+				<reportElement mode="Transparent" x="1148" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6e334f5f-d6a2-478e-89c7-bb2bdb46a6b6">
 					<printWhenExpression><![CDATA[$F{C16}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1276,7 +1276,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C16}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1168" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae6e008a-4682-471f-982f-37abb5e80c4b">
+				<reportElement mode="Transparent" x="1168" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae6e008a-4682-471f-982f-37abb5e80c4b">
 					<printWhenExpression><![CDATA[$F{C17}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1286,7 +1286,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C17}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1188" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="92e3396a-d8bd-4597-b8e6-0db66d95e0e8">
+				<reportElement mode="Transparent" x="1188" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="92e3396a-d8bd-4597-b8e6-0db66d95e0e8">
 					<printWhenExpression><![CDATA[$F{C18}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1296,7 +1296,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C18}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1208" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1d014fdb-42fe-44ba-a536-ac4af56de3e7">
+				<reportElement mode="Transparent" x="1208" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1d014fdb-42fe-44ba-a536-ac4af56de3e7">
 					<printWhenExpression><![CDATA[$F{C19}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1306,7 +1306,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C19}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1228" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="82cd6518-7525-41fb-87ae-1b4c0c741aca">
+				<reportElement mode="Transparent" x="1228" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="82cd6518-7525-41fb-87ae-1b4c0c741aca">
 					<printWhenExpression><![CDATA[$F{C20}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1316,7 +1316,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C20}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1248" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="af5dc0e0-3ed5-4893-89f0-f1ff1923a1d0">
+				<reportElement mode="Transparent" x="1248" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="af5dc0e0-3ed5-4893-89f0-f1ff1923a1d0">
 					<printWhenExpression><![CDATA[$F{C21}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1326,7 +1326,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{C21}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="1268" y="0" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c90a1fc9-2d8b-41b2-84a4-813a4ae187c0">
+				<reportElement mode="Transparent" x="1268" y="1" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c90a1fc9-2d8b-41b2-84a4-813a4ae187c0">
 					<printWhenExpression><![CDATA[$F{C22}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">

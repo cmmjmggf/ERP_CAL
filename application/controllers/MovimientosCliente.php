@@ -80,7 +80,8 @@ class MovimientosCliente extends CI_Controller {
                             CP.doctopa,
                             datediff(CP.fecha,CC.fecha) as dias
                             FROM cartcliente CC
-                            join cartctepagos CP on CC.remicion = CP.remicion
+                            join cartctepagos CP on CC.remicion = CP.remicion AND CC.cliente = CP.cliente 
+                            AND CC.tipo = CP.tipo
                             where CC.cliente = $cliente
                             ";
             if ($doc !== '') {
