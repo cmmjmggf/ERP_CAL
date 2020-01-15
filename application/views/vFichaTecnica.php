@@ -359,7 +359,10 @@
     var FichaTecnicaDetalle;
     var mdlEditarArticulo = $('#mdlEditarArticulo');
     var btnEditarRenglon = mdlEditarArticulo.find('#btnEditarRenglon');
-    var FechaAlta = pnlDatos.find("#FechaAlta");
+    var FechaAlta = pnlDatos.find("#FechaAlta"),
+            xFichaTecnicaDetalle,
+            tblxFichaTecnicaDetalle = pnlTablero.find("#tblxFichaTecnicaDetalle");
+
     var Selectizer = function () {
         return {
             loadOptions: function (query, callback) {
@@ -755,7 +758,9 @@
             if (e.keyCode === 13) {
                 var Estilo = $(this).val();
                 if (Estilo) {
-                    $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {Clave: Estilo}).done(function (data, x, jq) {
+                    $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {
+                        Clave: Estilo
+                    }).done(function (data, x, jq) {
                         if (data.length > 0) {
                             pnlTablero.find("#sbColor")[0].selectize.clear(true);
                             pnlTablero.find("#sbColor")[0].selectize.clearOptions();
@@ -768,6 +773,11 @@
                         }
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
+                    });
+                }
+                if (Estilo && pnlTablero.find("#bColor").val()) {
+                    xFichaTecnicaDetalle.ajax.reload(function () {
+                        
                     });
                 }
             }
@@ -799,17 +809,6 @@
                 pnlTablero.find("#bColor").val($(this).val());
                 pnlTablero.find("#btnBuscarFT").focus();
             }
-        });
-
-        pnlTablero.find("#btnBuscarFT").click(function () {
-            var estilo = pnlTablero.find("#bEstilo").val();
-            var color = pnlTablero.find("#bColor").val();
-            $.fn.dataTable.ext.errMode = 'throw';
-            if ($.fn.DataTable.isDataTable('#tblFichaTecnicaDetalle')) {
-                FichaTecnicaDetalle.ajax.reload();
-                return;
-            }
-//            getFichaTecnicaByEstiloByColor(estilo, color);
         });
 
         xFichaTecnicaDetalle = tblxFichaTecnicaDetalle.DataTable({
@@ -929,6 +928,18 @@
                 HoldOn.close();
             }
         });
+
+        pnlTablero.find("#btnBuscarFT").click(function () {
+            var estilo = pnlTablero.find("#bEstilo").val();
+            var color = pnlTablero.find("#bColor").val();
+            $.fn.dataTable.ext.errMode = 'throw';
+            if ($.fn.DataTable.isDataTable('#tblxFichaTecnicaDetalle')) {
+                xFichaTecnicaDetalle.ajax.reload();
+                return;
+            }
+//            getFichaTecnicaByEstiloByColor(estilo, color);
+        });
+
     });
 
     function getColoresXEstiloIni(Estilo) {

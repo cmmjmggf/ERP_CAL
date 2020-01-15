@@ -529,6 +529,7 @@ class FichaTecnica extends CI_Controller {
     public function getFichaTecnicaDetalleByID() {
         try {
 //            print json_encode($this->ftm->getFichaTecnicaDetalleByID($this->input->get('Estilo'), $this->input->get('Color')));
+            $x = $this->input->get();
             $this->db->select('
             P.Clave AS Pieza_ID,
             CONCAT(P.Clave, \'-\', P.Descripcion) AS Pieza,
@@ -546,7 +547,7 @@ class FichaTecnica extends CI_Controller {
                     ->join('`piezas` AS `P`', '`FT`.`Pieza` = `P`.`Clave`')
                     ->join('unidades AS C', '`M`.`UnidadMedida` = `C`.`Clave`')
                     ->join('departamentos AS D', '`P`.`Departamento` = `D`.`Clave`')
-                    ->where('FT.Estilo', $Estilo)->where('FT.Color', $Color)
+                    ->where('FT.Estilo', $x['Estilo'])->where('FT.Color', $x['Color'])
                     ->where('FT.Estatus', 'ACTIVO');
             $query = $this->db->get();
             /*

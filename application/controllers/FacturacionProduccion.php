@@ -165,14 +165,14 @@ class FacturacionProduccion extends CI_Controller {
             $xxx = $this->input->get();
             $this->db->select("P.ID, P.Control AS CONTROL,
                                 P.Clave AS PEDIDO,
-                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE ,
+                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C 
+                                WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE,
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES,
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA,
                                 P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
                     ->from("pedidox AS P")
                     ->where_not_in("P.Control", array(0, 1));
-
             $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14));

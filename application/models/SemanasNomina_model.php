@@ -12,7 +12,7 @@ class SemanasNomina_model extends CI_Model {
 
     public function onComprobarSemanaNomina($Clave, $Ano) {
         try {
-            return $this->db->select("G.Sem, G.FechaIni, G.FechaFin ")->from("semanasnomina AS G")->where("G.Sem", $Clave)->where("G.Ano", $Ano)->where("G.Estatus", "ACTIVO")->get()->result();
+            return $this->db->select("G.Sem, G.FechaIni, G.FechaFin ")->from("semanasnomina AS G")->where("G.Sem", $Clave)->where("G.Ano", $Ano)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

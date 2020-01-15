@@ -30,7 +30,7 @@ INNER JOIN clientes AS CL ON CL.Clave = P.Cliente
 INNER JOIN estilos AS ES ON P.Estilo = ES.Clave
 INNER JOIN colores AS C ON P.Estilo = C.Estilo AND P.Color = C.Clave
 WHERE FPN.fecha BETWEEN str_to_date($P{FECHAINICIAL},"%d/%m/%Y") and str_to_date($P{FECHAFINAL},"%d/%m/%Y") AND
-P.stsavan IN($P{DEPARTAMENTO}) AND FPN.Maquila = $P{MAQUILA}
+P.stsavan IN($P{DEPARTAMENTO}) AND FPN.Maquila = $P{MAQUILA} AND E.DepartamentoFisico IN($P{DEPARTAMENTO})
 order by E.Numero ASC;]]>
 	</queryString>
 	<field name="NUMEMP" class="java.lang.Integer"/>

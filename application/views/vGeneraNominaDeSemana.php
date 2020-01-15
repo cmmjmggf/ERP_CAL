@@ -224,7 +224,7 @@
                 FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
             console.log(parms);
             console.log(parms);
-            btnGeneraGNS.attr('disabled', true);
+            onDisable(btnGeneraGNS);
             if (SemanaGNS.val() && AnioGNS.val()) {
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
@@ -243,7 +243,7 @@
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
-                                btnGeneraGNS.attr('disabled', false);
+                                onEnable(btnGeneraGNS);
                                 HoldOn.close();
                                 busy = false;
                             });
@@ -270,7 +270,7 @@
                             getError(x);
                         }).always(function () {
                             HoldOn.close();
-                            btnGeneraGNS.attr('disabled', false);
+                            onEnable(btnGeneraGNS);
                             busy = false;
                         });
                         break;
@@ -292,7 +292,7 @@
                         console.log(a);
                         if (a.length > 0) {
                             onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
-                                btnGeneraGNS.attr('disabled', false);
+                                onEnable(btnGeneraGNS);
                             });
                         } else {
                             //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
@@ -301,7 +301,7 @@
                         getError(x);
                     }).always(function () {
                         busy = false;
-                        btnGeneraGNS.attr('disabled', false);
+                        onEnable(btnGeneraGNS);
                         HoldOn.close();
                     });
                 } else {
@@ -330,7 +330,7 @@
                                     console.log(a);
                                     if (a.length > 0) {
                                         onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
-                                            btnGeneraGNS.attr('disabled', false);
+                                            onEnable(btnGeneraGNS);
                                             busy = false;
                                         });
                                     } else {
@@ -339,7 +339,7 @@
                                 }).fail(function (x) {
                                     getError(x);
                                 }).always(function () {
-                                    btnGeneraGNS.attr('disabled', false);
+                                    onEnable(btnGeneraGNS);
                                     onCloseOverlay();
                                     busy = false;
                                 });
@@ -408,6 +408,7 @@
     function onValidarSemanaConsultaAguinaldoVacaciones() {
         if (SemanaGNS.val() && parseInt(SemanaGNS.val()) !== 99 && parseInt(SemanaGNS.val()) !== 98) {
             SVacacionesAguinaldosParaDestajo.addClass("d-none");
+            onEnable(btnGeneraGNS);
             btnGeneraGNS.focus();
         } else if (SemanaGNS.val() && parseInt(SemanaGNS.val()) === 99) {
             $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
@@ -434,12 +435,16 @@
 
     function onComprobarSemanasNominaGeneraNominaConsulta(v, ano) {
         //Valida que esté creada la semana en nominas
-        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
+        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {
+            Clave: $(v).val(), Ano: ano
+        }).done(function (dataUno) {
             if (dataUno.length > 0) {
+                console.log('onComprobarSemanaNomina ok')
                 FechaInicialGNS.val(dataUno[0].FechaIni);
                 FechaFinalGNS.val(dataUno[0].FechaFin);
                 onValidarSemanaConsultaAguinaldoVacaciones();
             } else {
+                console.log('onComprobarSemanaNomina else')
                 swal({
                     title: "ATENCIÓN",
                     text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
@@ -467,7 +472,8 @@
     }
 
     function onComprobarSemanasNominaGeneraNomina(v, ano) {
-        //Valida que esté creada la semana en nominas
+
+        //Valida que este creada la semana en nominas
         $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
             if (dataUno.length > 0) {
                 //Valida que no esté cerrada la semana en nomina

@@ -150,7 +150,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 $this->db->limit(10);
             }
 
-            $data =  $this->db->get()->result();
+            $data = $this->db->get()->result();
 //            print $this->db->last_query();
             print json_encode($data);
         } catch (Exception $exc) {
@@ -168,7 +168,8 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                                     . "D.par06, D.par07, D.par08, D.par09, D.par10, "
                                     . "D.par11, D.par12, D.par13, D.par14, D.par15, "
                                     . "D.par16, D.par17, D.par18, D.par19, D.par20, D.par21, D.par22 "
-                                    . "FROM devolucionnp AS D WHERE D.control = '{$x["CONTROL"]}'")->result());
+                                    . "FROM devolucionnp AS D WHERE D.control = '{$x["CONTROL"]}' "
+                                    . "AND D.paredev = {$x["PARES"]} AND D.ID = '{$x["IDX"]}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -218,7 +219,11 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
 
-            $dev = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.control ='{$x["CONTROL"]}' LIMIT 1")->result();
+            $dev = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.control ='{$x["CONTROL"]}' "
+                            . " AND D.paredev ={$x["PARES"]} AND D.ID ='{$x["IDX"]}' LIMIT 1")->result();
+//            var_dump($dev);
+//            print $this->db->last_query(); 
+//            exit(0);
             if (count($dev) > 0) {
                 $r = $dev[0];
                 $nc = array(
@@ -263,7 +268,8 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 ));
                 $EXISTE_EN_DEVCTES = $this->db->query("SELECT COUNT(*) AS EXISTE FROM devctes AS D "
                                 . "WHERE cliente = {$x["CLIENTE"]} AND docto = {$r->docto} "
-                                . "AND aplica = {$x["APLICA"]} AND nc = {$x["NC"]} AND tp ={$x["TP"]} AND control = {$x["CONTROL"]};")->result();
+                                . "AND aplica = {$x["APLICA"]} AND nc = {$x["NC"]} AND tp ={$x["TP"]} "
+                                . "AND control = {$x["CONTROL"]} AND paredev = {$x["PARES"]};")->result();
                 if ($EXISTE_EN_DEVCTES[0]->EXISTE <= 0) {
                     $this->db->insert('devctes', $ncc);
                     /*

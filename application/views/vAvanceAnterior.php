@@ -14,9 +14,8 @@
                             <label for="" >Fecha</label>
                             <input type="text" class="form-control form-control-sm date notEnter" id="FechaAvance" name="FechaAvance" required="">
                         </div>
-
                         <div class="col-5">
-                            <label>Departamento</label>
+                            <label>Avance</label>
                             <select id="DeptoAvance" name="DeptoAvance" class="form-control form-control-sm required">
                                 <option value="33">33-Rebajado</option>
                                 <option value="4">4-Foleado</option>
@@ -105,9 +104,12 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary selectNotEnter" id="btnAceptar">ACEPTAR</button>
-                <button type="button" class="btn btn-success selectNotEnter" id="btnImprimir">IMPRIMIR</button>
-                <button type="button" class="btn btn-secondary selectNotEnter" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-primary selectNotEnter" id="btnAceptar">
+                    <span class="fa fa-check"></span> ACEPTAR</button>
+                <button type="button" class="btn btn-info selectNotEnter" id="btnImprimir">
+                    <span class="fa fa-print"></span> IMPRIMIR</button>
+                <button type="button" class="btn btn-secondary selectNotEnter" id="btnSalir" data-dismiss="modal">
+                    <span class="fa fa-times"></span> SALIR</button>
             </div>
         </div>
     </div>
@@ -121,24 +123,14 @@
         var ul = $("#deptos");
         ul.find("li").click(function () {
             ul.find("li").removeClass('li-selected');
-            var li = $(this), deptodes = li.find("span.deptodes").text(), clave = li.find("span.deptoclave").text();
-            var depto = parseInt(clave);
-            if (depto >= 180 || depto === 30 || depto === 40 ||
-                    depto === 90 || depto === 100 || depto === 105 ||
-                    depto === 110 || depto === 140 || depto === 150) {
-                li.addClass('li-selected');
-                mdlAvanceAnterior.find("#DeptoAvance").val(parseInt(li.find("span").first().text()));
-                mdlAvanceAnterior.find("#ControlAvance").focus().select();
-                getDeptoActualXControl();
-                DeptoDes.val(deptodes);
-                DeptoAva.val(clave);
-                onBeep(3);
-            } else {
-                swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
-                    ul.find("li").removeClass('li-selected');
-                });
-            }
-        });
+            var li = $(this);
+            li.addClass('li-selected');
+            console.log(li.find("span").first().text());
+            mdlAvanceAnterior.find("#DeptoAvance")[0].selectize.setValue(parseInt(li.find("span").first().text()));
+            mdlAvanceAnterior.find("#DoctoAvance").focus().select();
+            onBeep(3);
+            console.log(ul.find("li").index())
+    });
 
         mdlAvanceAnterior.on('shown.bs.modal', function () {
             handleEnterDiv(mdlAvanceAnterior);
@@ -532,6 +524,21 @@
         font-size: 16px !important;
     }
     li.list-group-item:hover {
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        background-color: #3f51b5;
+        -webkit-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        -moz-box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        box-shadow: 0px 3px 67px 1px rgba(47,56,99,1);
+        padding-top: 3px;
+        padding-bottom: 3px;
+        animation: myfirst .4s;
+        -moz-animation:myfirst 1.4s infinite; /* Firefox */
+        -webkit-animation:myfirst 1.4s infinite; /* Safari and Chrome */
+        border-radius: 5px;
+    }
+    .li-selected{
         font-weight: bold;
         color: #fff;
         cursor: pointer;

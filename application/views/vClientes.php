@@ -212,7 +212,7 @@
                         </div>
                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
                             <label for="NoCuenta" >No.Cuenta*</label>
-                            <input type="text" class="form-control form-control-sm" id="NoCuenta" name="NoCuenta" maxlength="99"  placeholder="" required="">
+                            <input type="text" class="form-control form-control-sm" id="NoCuenta" name="NoCuenta" maxlength="99"  placeholder="">
                         </div>
                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
                             <label for="Banco" >Banco</label>
@@ -240,23 +240,23 @@
                     <div class="row">
                         <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                             <label for="CLABE" >CLABE*</label>
-                            <input type="text" class="form-control form-control-sm" id="CLABE" name="CLABE" maxlength="45"  placeholder="" required="">
+                            <input type="text" class="form-control form-control-sm" id="CLABE" name="CLABE" maxlength="45"  placeholder="" >
                         </div>
                         <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                             <label for="FormaDePagoElectronico" >Forma de pago*</label>
-                            <select class="form-control form-control-sm" id="FormaDePagoElectronico" name="FormaDePagoElectronico" placeholder="" required="">
+                            <select class="form-control form-control-sm" id="FormaDePagoElectronico" name="FormaDePagoElectronico" placeholder="">
                                 <option></option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                             <label for="MetodoDePagosElectronicos" >Metodos de pagos electrónicos*</label>
-                            <select class="form-control form-control-sm" id="MetodoDePagosElectronicos" name="MetodoDePagosElectronicos" placeholder="" required="">
+                            <select class="form-control form-control-sm" id="MetodoDePagosElectronicos" name="MetodoDePagosElectronicos" placeholder="" >
                                 <option></option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
                             <label for="CorreoPagos" >Correo (pagos)*</label>
-                            <input type="text" class="form-control form-control-sm" id="CorreoPagos" name="CorreoPagos" maxlength="45"  placeholder="" required="">
+                            <input type="text" class="form-control form-control-sm" id="CorreoPagos" name="CorreoPagos" maxlength="45"  placeholder="" >
                         </div>
                     </div>
                     <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">

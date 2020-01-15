@@ -82,6 +82,8 @@
                         <span class="font-weight-bold text-danger">Control: </span> 
                         <span class="font-weight-bold text-info control_text" style="color: #1d1d1d !important;">- - - -</span>
                         <input type="text" id="Control" name="Control" readonly="" class="form-control form-control-sm numbersOnly d-none" readonly="">
+                        <input type="text" id="ParesXcontrol" name="ParesXcontrol" readonly="" class="form-control form-control-sm numbersOnly d-none" readonly="">
+                        <input type="text" id="Control_ID" name="Control_ID" readonly="" class="form-control form-control-sm numbersOnly d-none" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
                         <div class="w-100 mt-3"></div>
@@ -306,7 +308,9 @@
             AplicaDevolucion = pnlTablero.find('#AplicaDevolucion'),
             Precio = pnlTablero.find('#Precio'),
             NotaCredito = pnlTablero.find('#NotaCredito'),
-            Control = pnlTablero.find('#Control'), Estilo = pnlTablero.find('#Estilo'),
+            Control = pnlTablero.find('#Control'),
+            ParesXcontrol = pnlTablero.find('#ParesXcontrol'),
+            Estilo = pnlTablero.find('#Estilo'),
             Color = pnlTablero.find('#Color'), ColorT = pnlTablero.find('#ColorT'),
             Serie = pnlTablero.find('#Serie'),
             DocDeEsteCteConSaldo,
@@ -431,6 +435,7 @@
             onEnable(TP);
             if (Precio.val()) {
                 var p = {
+                    IDX: pnlTablero.find("#Control_ID").val(),
                     CLIENTE: ClienteDevolucion.val(),
                     DOCUMENTO: AplicaDevolucion.val(),
                     APLICA: AplicaDevolucion.val(),
@@ -438,6 +443,7 @@
                     TP: TP.val(),
                     FECHA: FechaDevolucion.val(),
                     CONTROL: Control.val(),
+                    PARES: ParesXcontrol.val(),
                     ESTILO: Estilo.val(),
                     COLOR: Color.val(),
                     SERIE: Serie.val(),
@@ -470,6 +476,9 @@
                         });
                         getTotal();
                         Precio.val('');
+                        Precio.focus().select();
+                        pnlTablero.find("#Control_ID").val('');
+                        ParesXcontrol.val(0);
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
@@ -490,6 +499,9 @@
                         });
                         getTotal();
                         Precio.val('');
+                        Precio.focus().select();
+                        pnlTablero.find("#Control_ID").val('');
+                        ParesXcontrol.val(0);
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
@@ -653,6 +665,8 @@
         tblDevCtrlXAplicarDeEsteCliente.find('tbody').on('click', 'tr', function () {
             var dtm = DevCtrlXAplicarDeEsteCliente.row(this).data();
             if (ClienteDevolucion.val()) {
+                pnlTablero.find("#Control_ID").val(dtm.ID);
+                ParesXcontrol.val(dtm.PARES);
                 getInfoXControl(dtm);
             } else {
                 onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CLIENTE', function () {
@@ -765,7 +779,9 @@
     function getInfoXControl(dtm) {
 
         $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getInfoXControl'); ?>', {
-            CONTROL: dtm.CONTROL
+            IDX: dtm.ID,
+            CONTROL: dtm.CONTROL,
+            PARES: dtm.PARES
         }).done(function (aaa) {
             if (aaa.length > 0) {
                 console.log(dtm);
