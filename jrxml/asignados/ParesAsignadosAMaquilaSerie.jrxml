@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePago" language="groovy" pageWidth="1330" pageHeight="950" orientation="Landscape" columnWidth="1290" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="2.483685292236641"/>
+	<property name="ireport.zoom" value="7.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="288"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -1039,12 +1039,12 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="13" width="1290" height="1" uuid="d80429ea-db8a-46b6-9418-ab1358f328e1"/>
+				<reportElement x="0" y="12" width="1290" height="1" uuid="d80429ea-db8a-46b6-9418-ab1358f328e1"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="0" y="1" width="42" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="58d347e2-a3c1-4b1e-8893-ed74a47c8a57"/>
+				<reportElement mode="Transparent" x="0" y="1" width="41" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="58d347e2-a3c1-4b1e-8893-ed74a47c8a57"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1052,7 +1052,7 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="41" y="1" width="47" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dccf0724-28a8-490b-b4e8-c2ec52bec849"/>
+				<reportElement mode="Transparent" x="41" y="1" width="46" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="dccf0724-28a8-490b-b4e8-c2ec52bec849"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

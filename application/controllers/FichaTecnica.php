@@ -121,7 +121,7 @@ class FichaTecnica extends CI_Controller {
                 );
                 $this->db->insert('fichatecnica', $nft);
             }
-            $this->db->set('Seguridad', 0)->where('Estilo', $ESTILO)->update('fichatecnica');
+            $this->db->set('Seguridad', 0)->where('Clave', $ESTILO)->update('estilos');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -1566,7 +1566,9 @@
                     }
 //                            if (control_pertenece_a_cliente) {
                     $.getJSON('<?php print base_url('FacturacionDevolucion/getInfoXControl'); ?>', {
-                        CONTROL: Control.val()
+                        CONTROL: Control.val(),
+                        CLIENTE: ClienteFactura.val() ? ClienteFactura.val() : '',
+                        TP: TPFactura.val() ? TPFactura.val() : ''
                     }).done(function (a) {
                         if (a.length > 0) {
                             if (a[0].hasOwnProperty('EXISTE')) {

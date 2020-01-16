@@ -35,7 +35,7 @@ END) AS ABONO_NOMINA
 
 FROM empleados AS E LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
 ON E.Numero = PNL.numemp
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1 AND E.Numero = 1941 ORDER BY ABS(CLAVE) ASC]]>
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1  ORDER BY ABS(CLAVE) ASC]]>
 	</queryString>
 	<field name="CLAVE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

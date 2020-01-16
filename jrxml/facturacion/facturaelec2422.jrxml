@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec39" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="2.662000000000026"/>
+	<property name="ireport.zoom" value="2.000000000000019"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -226,7 +226,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 					<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="172" y="0" width="233" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="ffa9e633-f33c-4462-80f6-eff8eecb25a1"/>
+					<reportElement mode="Transparent" x="172" y="0" width="168" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="ffa9e633-f33c-4462-80f6-eff8eecb25a1"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -285,6 +285,14 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 						<pen lineWidth="0.25"/>
 					</graphicElement>
 				</line>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="341" y="0" width="64" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="e818c36e-60eb-4420-a917-e5d366dcc1f5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 	</group>
