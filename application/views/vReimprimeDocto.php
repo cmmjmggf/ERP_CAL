@@ -160,7 +160,9 @@
         });
 
         mdlReimprimeDocto.on('hidden.bs.modal', function () {
-            onClearPanelInputSelectEnableDisable(mdlReimprimeDocto, true);
+            onClearPanelInputSelectEnableDisable(mdlReimprimeDocto, function () {
+                
+            }, true);
         });
     });
 </script>
