@@ -188,10 +188,10 @@ class RecibeOrdenCompra extends CI_Controller {
 //Grabar salida si tiene el check de salida maquilas
 
                 if (intval($SalidaMaquilas) === 1) {
-
+                    $Precio = $this->db->query("select Precio from preciosmaquilas where articulo = {$v->Articulo} and maquila = {$v->Maq} ")->result()[0]->Precio;
                     $datosSalida = array(
                         'Articulo' => $v->Articulo,
-                        'PrecioMov' => $v->Precio,
+                        'PrecioMov' => (empty($Precio)) ? 0 : $Precio,
                         'CantidadMov' => $v->Cantidad,
                         'FechaMov' => $v->FechaDoc,
                         'EntradaSalida' => '2',
@@ -203,7 +203,7 @@ class RecibeOrdenCompra extends CI_Controller {
                         'Sem' => $v->Sem,
                         'Ano' => $v->Ano,
                         'OrdenCompra' => $v->Doc,
-                        'Subtotal' => $v->Subtotal
+                        'Subtotal' => (empty($Precio)) ? 0 : (floatval($Precio) * floatval($v->Cantidad))
                     );
                     $this->Recibeordencompra_model->onAgregarMovArt($datosSalida);
                 }

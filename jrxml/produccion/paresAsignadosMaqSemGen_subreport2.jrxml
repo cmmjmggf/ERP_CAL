@@ -14,21 +14,11 @@ sum(case when PE.maquila = 10 then PE.pares else 0 end) as maq2,
 sum(case when PE.maquila = 98 then PE.pares else 0 end) as maq3,
 sum(PE.pares) as maq4,
 
-ifnull((select sum(case when C.maquila = 9  then C.pares else 0 end) from controles C
-where C.estatusproduccion in ('TERMINADO','FACTURADO') and C.semana = PE.semana
-and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq1,
 
-ifnull((select sum(case when C.maquila = 10  then C.pares else 0 end) from controles C
-where C.estatusproduccion in ('TERMINADO','FACTURADO') and C.semana = PE.semana
-and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq2,
-
-ifnull((select sum(case when C.maquila = 98  then C.pares else 0 end) from controles C
-where C.estatusproduccion in ('TERMINADO','FACTURADO') and C.semana = PE.semana
-and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq3,
-
-ifnull((select sum(C.pares) from controles C
-where C.estatusproduccion in ('TERMINADO','FACTURADO') and C.semana = PE.semana
-and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq4,
+sum(case when ct.maq = 9 then ct.pares else 0 end) as emaq1,
+sum(case when ct.maq = 10 then ct.pares else 0 end) as emaq2,
+sum(case when ct.maq = 98 then ct.pares else 0 end) as emaq3,
+sum(PE.pares) as emaq4,
 
 (SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =9 And año = $P{ano} order by conce desc limit 1) as pmaq1,
 (SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =10 And año = $P{ano} order by conce desc limit 1) as pmaq2,
@@ -46,8 +36,9 @@ and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq4,
 (SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =10 And año = $P{ano} order by conce desc limit 1) as dimaq2,
 (SELECT dipes FROM cierrasem  WHERE sem = PE.semana and maq =98 And año = $P{ano} order by conce desc limit 1) as dimaq3
 
-
-from pedidox PE where PE.Estatus in ('A','F')
+from pedidox PE
+left join controlterm ct on ct.control = pe.control
+where PE.stsavan <> 14
 and cast(PE.semana as signed) between $P{sem} and $P{asem}
 and cast(PE.ano as signed) = $P{ano}
 GROUP BY PE.semana
@@ -68,9 +59,9 @@ order by sem asc;]]>
 	<field name="maq4" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="emaq1" class="java.lang.Double"/>
-	<field name="emaq2" class="java.lang.Double"/>
-	<field name="emaq3" class="java.lang.Double"/>
+	<field name="emaq1" class="java.math.BigDecimal"/>
+	<field name="emaq2" class="java.math.BigDecimal"/>
+	<field name="emaq3" class="java.math.BigDecimal"/>
 	<field name="emaq4" class="java.lang.Double"/>
 	<field name="pmaq1" class="java.lang.Double"/>
 	<field name="pmaq2" class="java.lang.Double"/>

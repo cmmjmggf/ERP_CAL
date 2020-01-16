@@ -37,6 +37,7 @@ when ag.clave=2 and cp.cliente=100 then .03
 when ag.clave=3 and cp.cliente=1410 then .03
 when ag.clave=3 and cp.cliente=1701 then .05
 when ag.clave=3 and cp.cliente=1755 then .05
+when ag.clave=3 and cp.cliente=1421 then .05
 when ag.clave=4 and cp.cliente=1916 then .02
 when ag.clave=5 and cp.cliente=328 then .03
 when ag.clave=5 and cp.cliente=430 then .025

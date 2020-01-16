@@ -27,7 +27,7 @@ U.Descripcion AS Unidad,
 MA.FechaMov,
 SUM(MA.CantidadMov) AS CantidadMov,
 PM.Precio AS PrecioMov,
-SUM(MA.Subtotal) AS Subtotal
+SUM(MA.CantidadMov)*PM.Precio AS Subtotal
 FROM
 movarticulos MA
 INNER JOIN

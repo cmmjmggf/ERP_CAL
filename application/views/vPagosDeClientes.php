@@ -210,7 +210,7 @@
             </div>
             <div class="col-2 col-sm-1">
                 <br>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control custom-checkbox d-none" id ="dMinicartera">
                     <input type="checkbox" class="custom-control-input" id="chMinicartera" name="chMinicartera" >
                     <label class="custom-control-label text-info labelCheck" for="chMinicartera">Minicartera</label>
                 </div>
@@ -312,7 +312,8 @@
             tblDocumentosConSaldoXClientes = pnlTablero.find("#tblDocumentosConSaldoXClientes"),
             SaldoTotalPendiente = pnlTablero.find("#SaldoTotalPendiente"),
             FechaActual = '<?php print Date('d/m/Y'); ?>', DepositoFecha = pnlTablero.find("#DepositoFecha"),
-            SaldoDelDeposito = pnlTablero.find("#SaldoDelDeposito"),
+            SaldoDelDeposito = pnlTablero.find("#SaldoDelDeposito"), dMinicartera = pnlTablero.find("#dMinicartera"),
+            chMinicartera = pnlTablero.find("#chMinicartera"),
             btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), btnMovimientos = pnlTablero.find("#btnMovimientos");
     txtCondicion = 0;
 
@@ -523,6 +524,7 @@
                             RefUno.val("Otr");
                             break;
                     }
+                    onValidaOpcionMinicartera();
                     ImporteUno.focus();
                 } else {
                     swal('ERROR', 'Tipo de movimiento debe ser sólo: 2,3,5,7 ó 9', 'warning').then((value) => {
@@ -582,6 +584,7 @@
                                 RefDos.val("Otr");
                                 break;
                         }
+                        onValidaOpcionMinicartera();
                         ImporteDos.focus();
                     } else {
                         swal('ERROR', 'Tipo de movimiento debe ser sólo: 2,3,5,7 ó 9', 'warning').then((value) => {
@@ -644,6 +647,7 @@
                                 RefTres.val("Otr");
                                 break;
                         }
+                        onValidaOpcionMinicartera();
                         ImporteTres.focus();
                     } else {
                         swal('ERROR', 'Tipo de movimiento debe ser sólo: 2,3,5,7 ó 9', 'warning').then((value) => {
@@ -706,6 +710,7 @@
                                 RefCuatro.val("Otr");
                                 break;
                         }
+                        onValidaOpcionMinicartera();
                         ImporteCuatro.focus();
                     } else {
                         swal('ERROR', 'Tipo de movimiento debe ser sólo: 2,3,5,7 ó 9', 'warning').then((value) => {
@@ -1116,12 +1121,21 @@
                 .done(function (a) {
                     console.log(a);
                     onBeep(1);
+                    dMinicartera.addClass("d-none");
                     onNotifyOld('', 'SE HAN REALIZADO LOS PAGOS', 'success');
                 }).fail(function (x) {
             getError(x);
         }).always(function () {
 
         });
+    }
+    function onValidaOpcionMinicartera() {
+        if (MovUno.val() === '5' || MovDos.val() === '5' || MovTres.val() === '5' || MovCuatro.val() === '5') {
+            dMinicartera.removeClass("d-none");
+        } else {
+            chMinicartera.prop('checked', false);
+            dMinicartera.addClass("d-none");
+        }
     }
 </script>
 <style>

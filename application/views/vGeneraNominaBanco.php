@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Fecha de aplicación de la nómina</label>
-                            <input type="text" class="form-control form-control-sm date notEnter" id="FechaAplicacionNomina" name="FechaAplicacionNomina" >
+                            <input type="text" class="form-control form-control-sm date selectNotEnter notEnter" id="FechaAplicacionNomina" name="FechaAplicacionNomina" >
                         </div>
                     </div>
                 </form>
@@ -64,6 +64,9 @@
             });
             mdlGeneraNominaBanco.find("#AnoNominaBanco").val(new Date().getFullYear());
             getSemanaByFechaNominaBancoControlNom(getFechaActualConDiagonales());
+
+
+            mdlGeneraNominaBanco.find('#FechaAplicacionNomina').val(getToday());
             mdlGeneraNominaBanco.find('#AnoNominaBanco').focus().select();
         });
         mdlGeneraNominaBanco.find('#btnImprimirXLS').on("click", function () {
@@ -152,9 +155,9 @@
                 mdlGeneraNominaBanco.find('#btnImprimir').attr('disabled', false);
                 console.log(data);
                 onGeneraNominaFiscal();
-                setTimeout(function () {
-                    onGeneraNominaFiscalDos();
-                }, 1000);
+//                setTimeout(function () {
+//                    onGeneraNominaFiscalDos();
+//                }, 1000);
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 HoldOn.close();
@@ -167,7 +170,7 @@
 
         });
 
-        mdlGeneraNominaBanco.find("#AnoNominaBanco").keydown(function (e) {
+        mdlGeneraNominaBanco.find("#AnoNominaBanco").keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
                     swal({
@@ -187,13 +190,13 @@
                 }
             }
         });
-        mdlGeneraNominaBanco.find("#SemNominaBanco").keydown(function (e) {
+        mdlGeneraNominaBanco.find("#SemNominaBanco").keypress(function (e) {
             if (e.keyCode === 13) {
                 var ano = mdlGeneraNominaBanco.find("#AnoNominaBanco");
                 onComprobarSemanasNominaNominaBanco($(this), ano.val());
             }
         });
-        mdlGeneraNominaBanco.find("#FechaAplicacionNomina").keyup(function (e) {
+        mdlGeneraNominaBanco.find("#FechaAplicacionNomina").keypress(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     mdlGeneraNominaBanco.find("#btnImprimir").focus().select();

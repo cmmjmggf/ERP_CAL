@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="1.771561000000119"/>
-	<property name="ireport.x" value="139"/>
+	<property name="ireport.x" value="199"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -1045,7 +1045,7 @@ order by f.agente,f.cliente asc]]>
 					<font size="6"/>
 					<paragraph rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{abr2} > 0) ? $F{abr2} : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{may2} > 0) ? $F{may2} : ""]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
 				<reportElement x="384" y="0" width="21" height="9" uuid="c1ce5ea2-76a9-4002-a21c-67f351e84ce1"/>
