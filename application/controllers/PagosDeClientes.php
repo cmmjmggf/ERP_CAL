@@ -28,6 +28,16 @@ class PagosDeClientes extends CI_Controller {
         }
     }
 
+    public function onVerificarBanco() {
+        try {
+            $Tp = $this->input->get('Tp');
+            $Banco = $this->input->get('Banco');
+            print json_encode($this->db->query("select clave, CtaCheques AS CTACHEQUE from bancos where clave = '$Banco' and Tp = $Tp and estatus = 'ACTIVO' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarCliente() {
         try {
             $Cliente = $this->input->get('Cliente');
@@ -202,7 +212,7 @@ class PagosDeClientes extends CI_Controller {
     public function getBancos() {
         try {
             $Tp = $this->input->get('Tp');
-            print json_encode($this->db->query("SELECT B.Clave AS CLAVE, CONCAT(B.Clave,' ',B.Nombre) AS BANCO FROM bancos AS B where B.Tp = $Tp ORDER BY ABS(B.Clave) ASC")->result());
+            print json_encode($this->db->query("SELECT B.Clave AS CLAVE, CONCAT(B.Nombre) AS BANCO FROM bancos AS B where B.Tp = $Tp ORDER BY BANCO ASC")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -219,7 +229,7 @@ class PagosDeClientes extends CI_Controller {
     public function getAgenteXCliente() {
         try {
             print json_encode($this->db->query(
-                                    "SELECT C.agente AS AGENTE "
+                                    "SELECT C.agente AS AGENTE,C.Descuento "
                                     . "FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

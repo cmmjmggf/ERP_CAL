@@ -13,7 +13,7 @@
 	<parameter name="fechaFin" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
-ct.maq,
+pe.maquila as maq,
 ct.sem,
 ct.docto,
 pe.Cliente,
@@ -26,23 +26,21 @@ ct.fecha,
 str_to_date(pe.FechaEntrega,'%d/%m/%Y') as FechaEntrega,
 datediff(str_to_date(pe.FechaEntrega,'%d/%m/%Y'),CT.fecha) as Dias,
 ct.pares,
-ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0) as prevta,
-(ct.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0))) as subtotal_sintej,
+ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = pe.maquila limit 1 ),0) as prevta,
+(ct.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = pe.maquila limit 1 ),0))) as subtotal_sintej,
 ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) as tejida,
 ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) * CT.pares as total_tej,
 (ifnull((select CAST(FXE.CostoMO AS DECIMAL(10,2)) from fraccionesxestilo FXE where FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'),0) * CT.pares)
 +
-(CT.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = ct.maq limit 1 ),0))) as subtotal_gen
+(CT.pares * (ifnull((select PrecioVta from listapreciosmaquilas PM where PM.Estilo = C.Estilo AND PM.Color = C.Clave AND PM.Maq = pe.maquila limit 1 ),0))) as subtotal_gen
 
 from controlterm ct
 join pedidox pe on pe.control = ct.control
 left join colores C on C.Clave = ct.color and C.estilo = ct.estilo
 where ct.fecha between str_to_date($P{fechaIni},'%d/%m/%Y') and str_to_date($P{fechaFin},'%d/%m/%Y')
-order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
+order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 	</queryString>
-	<field name="maq" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="maq" class="java.lang.String"/>
 	<field name="sem" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -161,7 +159,7 @@ order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 					<textFieldExpression><![CDATA[$V{pares_3}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="543" y="1" width="45" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="79abb0a7-e942-42a4-b607-1bc10c2d1631"/>
+					<reportElement mode="Transparent" x="518" y="1" width="70" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="79abb0a7-e942-42a4-b607-1bc10c2d1631"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -213,7 +211,7 @@ order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 					<textFieldExpression><![CDATA[$V{pares_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="543" y="1" width="45" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="0ac18b92-a984-4afb-9273-91b06389a0cc"/>
+					<reportElement mode="Transparent" x="518" y="1" width="70" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="0ac18b92-a984-4afb-9273-91b06389a0cc"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -246,7 +244,7 @@ order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 					<textFieldExpression><![CDATA[$V{pares_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="543" y="0" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="bbaf03ba-e829-4cb3-a8fe-95c8e12be15a"/>
+					<reportElement mode="Transparent" x="518" y="0" width="70" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="bbaf03ba-e829-4cb3-a8fe-95c8e12be15a"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -564,7 +562,7 @@ order by abs(ct.maq) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				<textFieldExpression><![CDATA[$V{pares_4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="531" y="1" width="57" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1bfbdbcb-d3ad-47c0-8b4f-2a2b2060dc45"/>
+				<reportElement mode="Transparent" x="518" y="1" width="70" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1bfbdbcb-d3ad-47c0-8b4f-2a2b2060dc45"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

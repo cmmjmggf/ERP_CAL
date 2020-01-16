@@ -1,15 +1,15 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-2 float-left">
+            <div class="col-sm-7 float-left">
                 <legend class="float-left">Empleados</legend>
             </div>
-            <div class="col-sm-5">
-                <input type="text" id="NumeroEmpleado" name="NumeroEmpleado" class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="####">
-            </div>
+            <!--            <div class="col-sm-5">
+                            <input type="text" id="NumeroEmpleado" name="NumeroEmpleado" class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="####">
+                        </div>-->
             <div class="col-sm-5 float-right" align="right">
-                <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
-                <button type="button" class="btn btn-success selectNotEnter" id="btnVerTodos" data-toggle="tooltip" data-placement="left" title="Ver todos">
+                <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo"><span class="fa fa-plus"></span> NUEVO</button>
+                <button type="button" class="btn btn-success selectNotEnter" id="btnVerTodos">
                     <span class="fa fa-eye"></span> VER TODOS
                 </button>
             </div>
@@ -420,12 +420,11 @@
             tblEmpleados = $("#tblEmpleados"), Empleados, Foto = $("#Foto"),
             FotoPerfil = $("#FotoPerfil"), btnCredencial = $("#btnCredencial"),
             btnCambiarFoto = $("#btnCambiarFoto"), btnImprimeContrato = $("#btnImprimeContrato"),
-            btnBajaEmpleado = $("#btnBajaEmpleado"),
-            NumeroEmpleado = pnlTablero.find("#NumeroEmpleado"), nuevo = false, tfoto,
+            btnBajaEmpleado = $("#btnBajaEmpleado"), nuevo = false, tfoto,
             numeroEmp = 0, prestamo, zaptda;
 
     $(document).ready(function () {
-        handleEnterDiv(pnlTablero);
+        //handleEnterDiv(pnlTablero);
         handleEnterDiv(pnlDatos);
         getRecords(1);
         getEstados();
@@ -433,22 +432,11 @@
 
 
         pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').addClass('selectNotEnter');
+        pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').focus().select();
 
-        pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').on('keydown', function (e) {
+        pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').on('keypress', function (e) {
             if ($(this).val() && e.keyCode === 13) {
-                onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
-            } else {
-                onBuscar("", e, tblEmpleados, Empleados, $(this), 1);
-            }
-        });
-
-        NumeroEmpleado.unbind();
-
-        NumeroEmpleado.on('keydown', function (e) {
-            if ($(this).val()) {
-                onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
-            } else {
-                onBuscar("", e, tblEmpleados, Empleados, $(this), 1);
+                getEmpleadoByID($(this).val());
             }
         });
 
@@ -616,6 +604,7 @@
                             Empleados.ajax.reload();
                             pnlDatos.addClass("d-none");
                             pnlTablero.removeClass("d-none");
+                            pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').focus().select();
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         }).always(function () {
@@ -675,8 +664,7 @@
             pnlTablero.toggleClass('d-none');
             pnlDatos.toggleClass('d-none');
             btnCredencial.addClass("d-none");
-            NumeroEmpleado.focus().select();
-
+            pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').focus().select();
         });
 
         btnNuevo.click(function () {
@@ -760,7 +748,7 @@
             ],
             initComplete: function (a, b) {
                 HoldOn.close();
-                NumeroEmpleado.focus();
+                pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').focus().select();
             }
         });
 
@@ -773,7 +761,7 @@
             tblEmpleados.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = Empleados.row(this).data();
-            temp = parseInt(dtm.ID);
+            temp = parseInt(dtm.No);
 
             FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
             pnlDatos.find("input").val("");
@@ -783,77 +771,87 @@
             $.each(pnlDatos.find("input[type='checkbox']"), function (k, v) {
                 $(v)[0].checked = false;
             });
-            getEmpleadoByID(temp);
+            getEmpleadoByID(parseInt(temp));
         });
 
     }
 
     function getEmpleadoByID(XXX) {
         $.getJSON(master_url + 'getEmpleadoByID', {ID: XXX}).done(function (data) {
-            nuevo = false;
-            //console.log(data);
-            var dtm = data[0];
-            numeroEmp = parseInt(dtm.Numero);
-            zaptda = data[0].ZapatosTDA;
-            prestamo = data[0].SaldoPres;
-            pnlDatos.find("input").val("");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
-            });
+            if (data.length > 0) {
+                nuevo = false;
+                //console.log(data);
+                var dtm = data[0];
+                numeroEmp = parseInt(dtm.Numero);
+                zaptda = data[0].ZapatosTDA;
+                prestamo = data[0].SaldoPres;
+                pnlDatos.find("input").val("");
+                $.each(pnlDatos.find("select"), function (k, v) {
+                    pnlDatos.find("select")[k].selectize.clear(true);
+                });
 
-            /*Si es baja puede consultar*/
-            if (data[0].AltaBaja === '1') {
-                btnBajaEmpleado.removeClass('d-none');
-                btnGuardar.removeClass('d-none');
-                btnImprimeContrato.removeClass('d-none');
-                btnCredencial.removeClass('d-none');
-                pnlDatos.find('#dMotivoBaja').addClass('d-none');
-            } else {
-                btnGuardar.addClass('d-none');
-                btnImprimeContrato.addClass('d-none');
-                btnCredencial.addClass('d-none');
-                btnBajaEmpleado.addClass('d-none');
-                pnlDatos.find('#dMotivoBaja').removeClass('d-none');
-                pnlDatos.find('#tMotivoBaja').html(data[0].MotivoBaja);
-            }
+                /*Si es baja puede consultar*/
+                if (data[0].AltaBaja === '1') {
+                    btnBajaEmpleado.removeClass('d-none');
+                    btnGuardar.removeClass('d-none');
+                    btnImprimeContrato.removeClass('d-none');
+                    btnCredencial.removeClass('d-none');
+                    pnlDatos.find('#dMotivoBaja').addClass('d-none');
+                } else {
+                    swal('ERROR', 'EMPLEADO DADO DE BAJA', 'warning').then((value) => {
+                        btnGuardar.addClass('d-none');
+                        btnImprimeContrato.addClass('d-none');
+                        btnCredencial.addClass('d-none');
+                        btnBajaEmpleado.addClass('d-none');
+                        pnlDatos.find('#dMotivoBaja').removeClass('d-none');
+                        pnlDatos.find('#tMotivoBaja').html(data[0].MotivoBaja);
+                    });
 
-            $.each(data[0], function (k, v) {
-                pnlDatos.find("[name='" + k + "']").val(v);
-                if (pnlDatos.find("[name='" + k + "']").is('select')) {
-                    pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
                 }
-                if (pnlDatos.find("[name='" + k + "']").is(':checkbox')) {
-                    if (v !== null && v !== 'null') {
-                        pnlDatos.find("[name='" + k + "']")[0].checked = parseInt(v);
+
+                $.each(data[0], function (k, v) {
+                    pnlDatos.find("[name='" + k + "']").val(v);
+                    if (pnlDatos.find("[name='" + k + "']").is('select')) {
+                        pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
                     }
-                }
-            });
-            var ext = getExt(dtm.FOTOEMPLEADO);
-            $.ajax({
-                url: base_url + dtm.FOTOEMPLEADO,
-                type: 'HEAD',
-                error: function ()
-                {
-                    FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
-                    tfoto = false;
-                },
-                success: function ()
-                {
-                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
-                        FotoPerfil[0].src = base_url + dtm.FOTOEMPLEADO;
-                        tfoto = true;
-                    } else {
-                        tfoto = false;
+                    if (pnlDatos.find("[name='" + k + "']").is(':checkbox')) {
+                        if (v !== null && v !== 'null') {
+                            pnlDatos.find("[name='" + k + "']")[0].checked = parseInt(v);
+                        }
+                    }
+                });
+                var ext = getExt(dtm.FOTOEMPLEADO);
+                $.ajax({
+                    url: base_url + dtm.FOTOEMPLEADO,
+                    type: 'HEAD',
+                    error: function ()
+                    {
                         FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
+                        tfoto = false;
+                    },
+                    success: function ()
+                    {
+                        if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg" || ext === "GIF") {
+                            FotoPerfil[0].src = base_url + dtm.FOTOEMPLEADO;
+                            tfoto = true;
+                        } else {
+                            tfoto = false;
+                            FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
+                        }
                     }
-                }
-            });
+                });
 
 
 
-            pnlTablero.addClass("d-none");
-            pnlDatos.removeClass('d-none');
-            btnCredencial.removeClass("d-none");
+                pnlTablero.addClass("d-none");
+                pnlDatos.removeClass('d-none');
+                btnCredencial.removeClass("d-none");
+
+            } else {
+                swal('ERROR', 'EMPLEADO INEXISTENTE', 'warning').then((value) => {
+                    pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').val('').focus().select();
+                });
+            }
         }).fail(function (x, y, z) {
             onBeep(2);
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -926,37 +924,7 @@
         });
     }
 
-    function onBuscar(search_value, evt, tbl, objeto, input, index_column) {
-        tbl.DataTable().column(index_column).search(search_value).draw();
-        if (evt.keyCode === 13) {
-            HoldOn.open({
-                theme: 'sk-rect',
-                message: 'Buscando...'
-            });
-            tbl.DataTable().column(index_column).search("^" + search_value + "$", true, false, true).draw();
-            var row_count = objeto.page.info().recordsDisplay;
-            if (row_count > 0) {
-                var EX = 0;
-                $.each(tbl.find("tbody > tr"), function (k, v) {
-                    var row = objeto.row($(this)).data();
-                    EX = row.ID;
-                    return false;
-                });
-                getEmpleadoByID(EX);
-            } else {
-                onBeep(2);
-                HoldOn.close();
-                onCampoInvalido(pnlDatos, 'EMPLEADO NO ENCONTRADO O ESTA DADO DE BAJA. HAGA CLIC EN "VER TODOS" Y REALICE LA BUSQUEDA NUEVAMENTE.', function () {
-                    input.focus().select();
-                    tbl.DataTable().column(index_column).search("").draw();
-                });
-            }
-        } else {
-            if (input.val().length <= 0) {
-                tbl.DataTable().column(index_column).search("").draw();
-            }
-        }
-    }
+
 </script>
 <style>
     .nav-tabs {

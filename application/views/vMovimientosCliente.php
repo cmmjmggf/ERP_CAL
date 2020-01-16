@@ -307,14 +307,14 @@
                 {"data": "tipo"},
                 {"data": "status"}
             ],
-//            "columnDefs": [
-//                {
-//                    "targets": [3, 4, 5],
-//                    "render": function (data, type, row) {
-//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                }
-//            ],
+            "columnDefs": [
+                {
+                    "targets": [3, 4, 5],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
+            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -422,12 +422,12 @@
                     "visible": false,
                     "searchable": true
                 },
-//                {
-//                    "targets": [4],
-//                    "render": function (data, type, row) {
-//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                }
+                {
+                    "targets": [4],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
             ],
             language: lang,
             "autoWidth": true,

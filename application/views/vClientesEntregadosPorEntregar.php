@@ -51,14 +51,14 @@
                                 <table id="tblNoEntregadosCliente" class="table table-sm display " style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Cliente</th>
+                                            <th class="d-none">Cliente</th>
                                             <th>Pedido</th>
                                             <th>Maq</th>
                                             <th>Fec-Ped</th>
                                             <th>Fec-Ent</th>
                                             <th>Sem</th>
-                                            <th>Pares fab</th>
-                                            <th>Pares ent</th>
+                                            <th>Par-fab</th>
+                                            <th>Par-ent</th>
                                             <th>Control</th>
                                             <th>Estilo</th>
                                             <th>Col</th>
@@ -82,14 +82,14 @@
                                 <table id="tblEntregadosCliente" class="table table-sm display " style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Cliente</th>
+                                            <th class="d-none">Cliente</th>
                                             <th>Pedido</th>
                                             <th>Maq</th>
                                             <th>Fec-Ped</th>
                                             <th>Fec-Ent</th>
                                             <th>Sem</th>
-                                            <th>Pares fab</th>
-                                            <th>Pares ent</th>
+                                            <th>Par-fab</th>
+                                            <th>Par-ent</th>
                                             <th>Control</th>
                                             <th>Estilo</th>
                                             <th>Col</th>
@@ -281,6 +281,13 @@
                 "data": {Cliente: cliente},
                 "type": "GET"
             },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
             "columns": [
                 {"data": "cliente"},
                 {"data": "pedido"},
@@ -383,6 +390,13 @@
                 "data": {Cliente: cliente},
                 "type": "GET"
             },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
             "columns": [
                 {"data": "cliente"},
                 {"data": "pedido"},

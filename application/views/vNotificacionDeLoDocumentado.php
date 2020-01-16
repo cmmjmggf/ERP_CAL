@@ -136,7 +136,6 @@
         });
 
         btnAceptaNDOC.click(function () {
-            onDisable(btnAceptaNDOC);
             var p = {
                 CLIENTE: ClienteClaveNDOC.val(),
                 DOCUMENTO: DoctoNDOC.val(),
@@ -165,7 +164,6 @@
                 onClearPanelInputSelect(mdlNotificacionDeLoDocumentado, function () {
                     ClienteClaveNDOC.focus().select();
                     Documentos.ajax.reload();
-                    onEnable(btnAceptaNDOC);
 //                    Documentos.ajax.reload(function () {
 //                        if (Documentos.rows().count() > 0) {
 //                            onEnable(btnAceptaNDOC);
