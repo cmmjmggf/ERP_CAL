@@ -6,13 +6,13 @@
             </div>
             <div class="col-sm-6" align="right">
 
-                <button type="button" class="btn btn-info btn-sm " id="btnAnadeClientes" >
+                <button type="button" class="btn btn-info btn-sm font-weight-bold" id="btnAnadeClientes" >
                     <span class="fa fa-cube" ></span> AÑADE CLIENTES A PRIORIDAD
                 </button>
-                <button type="button" class="btn btn-warning btn-sm" id="btnTodosPedidos">
+                <button type="button" class="btn btn-info btn-sm font-weight-bold" id="btnTodosPedidos">
                     <i class="fa fa-print"></i> IMPRIME TODOS LOS PEDIDOS
                 </button>
-                <button type="button" class="btn btn-warning btn-sm" id="btnPedidosCliente">
+                <button type="button" class="btn btn-info btn-sm font-weight-bold" id="btnPedidosCliente">
                     <i class="fa fa-check"></i> IMPRIME PEDIDOS DEL CLIENTE
                 </button>
             </div>

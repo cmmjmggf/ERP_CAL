@@ -1928,15 +1928,23 @@
         });
         f();
     }
-    
+
     function onOpenWindowBlank(url) {
         window.open(url, '_blank');
     }
-    
+
     function onOpenWindowBlankArray(urls) {
         $.each(urls, function (k, v) {
             console.log(v)
             window.open(v, '_blank');
         });
+    }
+    
+    function onCheck(check_a_checkear) {
+        check_a_checkear[0].checked = true;
+    }
+    
+    function onUnCheck(check_a_descheckear) {
+        check_a_descheckear[0].checked = false;
     }
 </script>

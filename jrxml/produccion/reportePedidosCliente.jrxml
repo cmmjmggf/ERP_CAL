@@ -70,7 +70,7 @@ LEFT JOIN agentes AG on AG.Clave =  P.Agente
 WHERE P.Cliente = $P{Cliente}
 and cast(ifnull(DEP.Clave,'0') as signed) <= 240
 
-order by ClaveEstatus ASC, Control ASC;]]>
+order by ClaveEstatus ASC, Control ASC, FechaEntrega ASC;]]>
 	</queryString>
 	<field name="Cliente" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

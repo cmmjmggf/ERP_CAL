@@ -126,6 +126,7 @@
                     });
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
+                    onEnable(btnAceptarReImprime);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
                 }).always(function () {
                     onCloseOverlay();
@@ -161,7 +162,7 @@
 
         mdlReimprimeDocto.on('hidden.bs.modal', function () {
             onClearPanelInputSelectEnableDisable(mdlReimprimeDocto, function () {
-                
+
             }, true);
         });
     });
