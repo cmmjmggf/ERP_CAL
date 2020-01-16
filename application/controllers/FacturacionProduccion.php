@@ -289,9 +289,9 @@ class FacturacionProduccion extends CI_Controller {
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
             $hora = Date('h:i:s');
-            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL ***\n";
-            var_dump($TOTAL);
-            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL***\n";
+//            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL ***\n";
+//            var_dump($TOTAL);
+//            PRINT "\n*** IMPORTE TOTAL SIN IVA TOTAL***\n";
             $this->db->insert('cartcliente', array(
                 'cliente' => $x['CLIENTE'], 'remicion' => $x['FACTURA'],
                 'fecha' => "{$anio}-{$mes}-{$dia} 00:00:00", 'importe' => $TOTAL,
@@ -304,14 +304,6 @@ class FacturacionProduccion extends CI_Controller {
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
 
-//
-//            if (intval($x['TP_DOCTO']) === 1) {
-//                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
-//                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
-//                exec('schtasks /run /tn "Timbrar"  ');
-//                exec('schtasks /delete /tn "Timbrar" /F ');
-//                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
-//            }
             /*             * *CARTAFAC** */
             $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
             if (intval($x['TP_DOCTO']) === 1) {
@@ -801,6 +793,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -847,6 +840,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -875,6 +869,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -889,6 +884,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -903,6 +899,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -917,6 +914,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -931,6 +929,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -961,6 +960,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2332.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -990,6 +990,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
+                            $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2212.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
@@ -1002,6 +1003,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2422.jasper');
@@ -1015,6 +1017,7 @@ class FacturacionProduccion extends CI_Controller {
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec3.jasper');
@@ -1066,7 +1069,7 @@ class FacturacionProduccion extends CI_Controller {
                             . "WHERE CC.cliente ={$x['CLIENTE']} AND CC.remicion = {$x['FACTURA']} AND CC.tipo = {$x['TP']}")->result();
 
             if (intval($cartcliente_existe[0]->EXISTE) === 0) {
-
+                /*documento sin cerrar, por x o y se le cerro la pestaña*/
                 print json_encode($this->db->query("SELECT 1 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
             (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
             F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
@@ -1085,6 +1088,7 @@ class FacturacionProduccion extends CI_Controller {
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
                                         . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
             } else {
+                /*documento cerrado*/
                 print json_encode($this->db->query("SELECT 2 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
             (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
             F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +

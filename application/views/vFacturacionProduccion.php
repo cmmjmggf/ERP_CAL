@@ -553,7 +553,7 @@
                 </table>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
-                <h4 class="font-weight-bold text-danger font-italic pares_totales_facturados">PARES 0</h4>
+                <h3 style="color: #2196F3 !important;" class="font-weight-bold font-italic pares_totales_facturados">PARES 0</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
                 <h3 class="font-weight-bold text-danger font-italic">SUBTOTAL</h3>
@@ -1157,7 +1157,7 @@
                             TP: TPFactura.val()
                         }).done(function (a) {
                     //                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
-                    console.log(a,JSON.parse(a),a[0],a[0].CLIENTE, a.CLIENTE);
+                    console.log(a, JSON.parse(a), a[0], a[0].CLIENTE, a.CLIENTE);
                     var r = JSON.parse(a);
                     if (parseInt(r.FACTURA_EXISTE) === 2) {
                         btnAcepta.attr('disabled', false);
@@ -1166,7 +1166,7 @@
                         onCloseOverlay();
                         return;
                     }
-                    console.log(parseInt(ClienteFactura.val()) === r.CLIENTE,r)
+                    console.log(parseInt(ClienteFactura.val()) === r.CLIENTE, r)
                     if (parseInt(ClienteFactura.val()) === r.CLIENTE) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
                                 {
@@ -1240,7 +1240,6 @@
                                 $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
                                 onCloseOverlay();
                                 getTotalFacturado();
-
 //                                        pnlTablero.find("#btnNuevo").removeClass("d-none");
 //                                        pnlTablero.find("#btnNuevo").attr("disabled", false);
 //                                        Control.attr('disabled', true);
@@ -1644,7 +1643,7 @@
                     prs = prs + parseInt(v[5]);
                 });
                 //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
-                pnlTablero.find("h4.pares_totales_facturados").text('PARES  ' + prs);
+                pnlTablero.find("h3.pares_totales_facturados").text('PARES  ' + prs);
             }
         });
     });

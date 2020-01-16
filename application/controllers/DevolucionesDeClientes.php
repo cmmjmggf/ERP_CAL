@@ -54,7 +54,7 @@ class DevolucionesDeClientes extends CI_Controller {
     public function onComprobarControlXCliente() {
         try {
             print json_encode($this->db->query("SELECT P.Cliente AS CLIENTE "
-                                    . "FROM pedidox AS P WHERE P.Control LIKE '{$this->input->get('CONTROL')}' LIMIT 1")->result());
+                                    . "FROM pedidox AS P WHERE P.Control = '{$this->input->get('CONTROL')}' LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -74,7 +74,8 @@ class DevolucionesDeClientes extends CI_Controller {
                                     . "F.par06, F.par07, F.par08, F.par09, F.par10, "
                                     . "F.par11, F.par12, F.par13, F.par14, F.par15, "
                                     . "F.par16, F.par17, F.par18, F.par19, F.par20, F.par21, F.par22 "
-                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave INNER JOIN facturacion AS F ON P.Control = F.contped "
+                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+                                    . "INNER JOIN facturacion AS F ON P.Control = F.contped "
                                     . "WHERE P.Control = '{$x['CONTROL']}' AND F.ID = {$x['ID']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -100,7 +101,9 @@ class DevolucionesDeClientes extends CI_Controller {
                             . "D.maq AS MAQUILA, DATE_FORMAT(D.fecha,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, "
                             . "D.conce AS CONCEPTO, D.preciodev AS PRECIO_DEVOLUCION, "
                             . "D.preciomaq AS PRECIO_CG", false)
-                    ->from("devolucionnp AS D");
+                    ->from("devolucionnp AS D")
+                    ->where_in('D.staapl', array(0, 1));
+
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('D.cliente', $x['CLIENTE'])->order_by("D.fecha", "DESC");
             }
@@ -229,7 +232,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 "FECHA_INICIAL" => $x["FECHA_INICIAL"],
                 "FECHA_FINAL" => $x["FECHA_FINAL"],
             );
-            
+
             /* 1. REPORTE AGRUPADO POR CLASIFICACIÓN */
             $jc->setParametros($P);
             $jc->setJasperurl('jrxml\facturacion\devolnapl.jasper');
@@ -243,14 +246,13 @@ class DevolucionesDeClientes extends CI_Controller {
             $jc->setFilename('DEV_X_MAQUILA_' . Date('dmYhis'));
             $jc->setDocumentformat('xls');
             $reports['2DOS'] = $jc->getReport();
-            
+
 //            /* 3. REPORTE AGRUPADO CARGO UNO (cargoa = 1) */
 //            $jc->setParametros($P);
 //            $jc->setJasperurl('jrxml\facturacion\devolnaplp.jasper');
 //            $jc->setFilename('DEV_CON_CARGO_PARA_VTA_' . Date('dmYhis'));
 //            $jc->setDocumentformat('xls');
 //            $reports['3TRES'] = $jc->getReport();
-            
 //            /* 4. REPORTE AGRUPADO CARGO CERO (cargoa = 0, Cargo a = NO) */
 //            $jc->setParametros($P);
 //            $jc->setJasperurl('jrxml\facturacion\devolnapl0.jasper');

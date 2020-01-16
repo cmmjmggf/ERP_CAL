@@ -65,9 +65,9 @@ class FacturacionDevolucion extends CI_Controller {
                             . "(SELECT E.Descripcion FROM estilos AS E "
                             . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
                             . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                            . "WHERE D.control = '{$this->input->get('CONTROL')}' " 
+                            . "WHERE D.control = '{$this->input->get('CONTROL')}' "
                             . "AND D.tp = '{$this->input->get('TP')}' LIMIT 1")->result();
-                            
+
 //                            print $this->db->last_query();
 //                            print "\n";
             print json_encode($data);
@@ -83,11 +83,13 @@ class FacturacionDevolucion extends CI_Controller {
 
             if ($devolucionnp_existe[0]->EXISTE > 0) {
 
-                print json_encode($this->db->query("SELECT  1 AS EXISTE, D.control, D.paredev, D.par01, D.par02, D.par03, D.par04, D.par05, 
+                print json_encode($this->db->query(
+                                        "SELECT  1 AS EXISTE, D.control, D.paredev, D.par01, D.par02, D.par03, D.par04, D.par05, 
 D.par06, D.par07, D.par08, D.par09, D.par10, 
 D.par11, D.par12, D.par13, D.par14, D.par15, 
 D.par16, D.par17, D.par18, D.par19, D.par20, 
-D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}' LIMIT 1")->result());
+D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}'  "
+                                        . "AND D.tp ={$this->input->get('TP')} LIMIT 1")->result());
             } else {
                 print json_encode(array("EXISTE" => "NO"));
             }
@@ -184,7 +186,8 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES
-                FROM devolucionnp AS D WHERE  D.control = {$xxx['CONTROL']} LIMIT 1")->result();
+                FROM devolucionnp AS D 
+                WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} LIMIT 1")->result();
             print json_encode($dt);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -209,10 +212,23 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                     ->where('cliente', $x['CLIENTE'])
                     ->where('tp', $x['TP_DOCTO'])
                     ->where('staped', 1)->update('facturacion');
-            $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
-            $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+//            $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+//            $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']}")->result();
+//            $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
+//            $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+
+            if (intval($x['TP_DOCTO']) === 1) {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.importe) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
+
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
+            } else {
+                $IMPORTE_TOTAL_SIN_IVA = $this->db->query("SELECT SUM(F.subtot) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
+
+                $IMPORTE_TOTAL_IVA = $this->db->query("SELECT IFNULL(SUM(F.iva),0) AS IMPORTE FROM facturacion AS F WHERE F.factura = {$x['FACTURA']}  AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']}")->result();
+            }
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
+
             /* MONEDAS 
              * 1 = PESOS
              * 2 = DOLARES
@@ -263,13 +279,6 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
 
-            if (intval($x['TP_DOCTO']) === 1) {
-//                print "\n*** TIMBRANDO FACTURA {$x['FACTURA']} CON IMPORTE DE $" . number_format($TOTAL, 4, ".", ",") . "***\n";
-//                exec('schtasks /create /sc minute /tn "Timbrar" /tr "C:/Mis comprobantes/Timbrar.exe ' . $x['FACTURA'] . '" ');
-//                exec('schtasks /run /tn "Timbrar"  ');
-//                exec('schtasks /delete /tn "Timbrar" /F ');
-//                $l = new Logs("FACTURACION (TIMBRADO)", "HA TIMBRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']}, POR  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
-            }
             /*             * *CARTAFAC** */
             $FACTURA_CAJAS = $this->db->query("SELECT SUM(F.cajas) AS CAJAS FROM facturacion AS F WHERE F.factura = '{$x['FACTURA']}' AND F.cliente = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
             $FACTURA_PARES = $this->db->query("SELECT SUM(F.cantidad) AS PARES FROM facturadetalle AS F WHERE F.numfac = '{$x['FACTURA']}' AND F.numcte = {$x['CLIENTE']} AND F.tp = {$x['TP_DOCTO']};")->result();
@@ -375,20 +384,22 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                     break;
             }
             /* FACTURACION DETALLE */
-            $facturacion_detalle = array(
-                'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
-                'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
-                'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
-                'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
-                'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
-                'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
-                'tcamb' => $tipo_cambio,
-                'noidentificado' => NULL,
-                'referencia' => $x['REFERENCIA'],
-                'tienda' => $x['TIENDA']);
-            $this->db->insert('facturadetalle', $facturacion_detalle);
+            if (intval($x['TP_DOCTO']) === 1) {
+                $facturacion_detalle = array(
+                    'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
+                    'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
+                    'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
+                    'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                    'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
+                    'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
+                    'control' => $x['CONTROL'], 'iva' => $x['IVA'],
+                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                    'tcamb' => $tipo_cambio,
+                    'noidentificado' => NULL,
+                    'referencia' => $x['REFERENCIA'],
+                    'tienda' => $x['TIENDA']);
+                $this->db->insert('facturadetalle', $facturacion_detalle);
+            }
 
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - intval($x['PARES_A_FACTURAR']);
@@ -900,23 +911,52 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
     public function getFacturaXFolio() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT F.ID,(C.Descuento *100) AS DESCUENTO, 
-            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +  
-            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +  
+
+            /* revisar en cartcliente, con el fin de saber si es posible agregar más registros,porque no se ha cerrado pero por x o y razon se cerro el navegador y queda en edicion */
+            $cartcliente_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM cartcliente AS CC "
+                            . "WHERE CC.cliente ={$x['CLIENTE']} AND CC.remicion = {$x['FACTURA']} AND CC.tipo = {$x['TP']}")->result();
+
+            if (intval($cartcliente_existe[0]->EXISTE) === 0) {
+                /* documento sin cerrar, por x o y se le cerro la pestaña */
+                print json_encode($this->db->query("SELECT 1 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
+            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
+            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
             F.par21 +  F.par22) AS PARES_FACTURADOS,
-            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL, 
-            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA, 
-            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, 
-            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10, 
-            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20, 
-            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra, 
-            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente, 
-            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, 
-            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS, 
-            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION 
-            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION 
+            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL,
+            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA,
+            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR,
+            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10,
+            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20,
+            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
+            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente,
+            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom,
+            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS,
+            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
+            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
             FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave  WHERE F.factura = '{$x['FACTURA']}' "
-                                    . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+                                        . " AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' AND C.Clave = '{$x['CLIENTE']}'")->result());
+            } else {
+                /* documento cerrado */
+                print json_encode($this->db->query("SELECT 2 AS EXISTE_CARTCLIENTE, F.ID,(C.Descuento *100) AS DESCUENTO,
+            (F.par01 +  F.par02 +  F.par03 +  F.par04 +  F.par05 +  F.par06 +  F.par07 +  F.par08 +  F.par09 +  F.par10 +
+            F.par11 +  F.par12 +  F.par13 +  F.par14 +  F.par15 +  F.par16 +  F.par17 +  F.par18 +  F.par19 +  F.par20 +
+            F.par21 +  F.par22) AS PARES_FACTURADOS,
+            F.factura AS FACTURA, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL,
+            DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA,
+            F.hora, F.corrida, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR,
+            F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10,
+            F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20,
+            F.par21, F.par22, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
+            F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente,
+            F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom,
+            F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS,
+            (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
+            FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
+            FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave   
+            INNER JOIN cartcliente AS CC ON CC.cliente = C.Clave AND CC.remicion = F.factura AND CC.tipo = F.tp 
+            WHERE F.factura = '{$x['FACTURA']}' AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' "
+                                        . "AND C.Clave = '{$x['CLIENTE']}'")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

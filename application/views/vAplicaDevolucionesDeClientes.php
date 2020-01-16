@@ -188,7 +188,7 @@
                 </div><!--ROW-->
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
-                <p class="font-weight-bold text-danger">DOCUMENTADOS DE ESTE CLIENTE CON SALDO</p>
+                <p class="font-weight-bold text-danger">DOCUMENTADOS DE ESTE CLIENTE CON SALDO (CARTCLIENTE)</p>
 
                 <table id="tblDocDeEsteCteConSaldo" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
@@ -208,7 +208,7 @@
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <p class="font-weight-bold text-danger">CONTROLES POR APLICAR DE ESTE CLIENTE</p>
+                <p class="font-weight-bold text-danger">CONTROLES POR APLICAR DE ESTE CLIENTE (DEVOLUCIONNP)</p>
                 <table id="tblDevCtrlXAplicarDeEsteCliente" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
                         <tr>
@@ -231,9 +231,12 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+                <div class="w-100">
+                    <span class="font-weight-bold">*Estos controles desaparecen hasta que se facturen*</span>
+                </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 ">
-                <p class="font-weight-bold text-danger">DETALLE DE LA DEVOLUCIÓN</p>
+                <p class="font-weight-bold text-danger">DETALLE DE LA DEVOLUCIÓN (DEVCTES)</p>
                 <table id="tblDevolucionDetalle" class="table table-hover table-sm display nowrap"  style="width: 100%!important;">
                     <thead>
                         <tr>
@@ -639,7 +642,7 @@
                 {"data": "CARGO"},
                 {"data": "MAQUILA"}, {"data": "FECHA"},
                 {"data": "TP"}, {"data": "CONCEPTO"},
-                {"data": "PREDV"}, {"data": "PRECG"}
+                {"data": "PREDVT"}, {"data": "PRECG"}
             ],
             "columnDefs": [{
                     "targets": [0],
@@ -670,7 +673,7 @@
                 getInfoXControl(dtm);
             } else {
                 onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CLIENTE', function () {
-                    ClienteDevolucion[0].selectize.focus();
+                    xClienteDevolucion.focus().select();
                     DevCtrlXAplicarDeEsteCliente.rows('.important').deselect();
                 });
             }
@@ -870,7 +873,7 @@
             } else {
                 onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UN CLIENTE', function () {
                     DocDeEsteCteConSaldo.rows('.important').deselect();
-                    ClienteDevolucion[0].selectize.focus();
+                    xClienteDevolucion.focus().select();
                 });
             }
         }

@@ -51,7 +51,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             $x = $this->input->get();
             $limite = "";
             if ($x['CLIENTE'] === '') {
-                $limite = "LIMIT 10";
+                $limite = "LIMIT 5";
             }
             print json_encode($this->db->query("SELECT CC.ID AS ID, CC.tipo AS TP, "
                                     . "CC.remicion AS DOCUMENTO, DATE_FORMAT(CC.fecha,\"%d/%m/%Y\") AS FECHA, "
@@ -85,17 +85,34 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $limite = "";
-            if ($x['CLIENTE'] === '') {
-                $limite = "LIMIT 10";
-            }
-            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE,
-                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES,
+            $this->db->select("D.ID, D.cliente AS CLIENTE,
+                D.docto AS DOCUMENTO,
+                CONCAT(\"<span class='font-weight-bold'>\", D.control,\"</span>\") AS CONTROL, D.paredev AS PARES,
                 D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
                 D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
-                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
-                FROM devolucionnp AS D
-                WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
-                                    . "AND D.staapl IN(0,1)  ORDER BY D.fecha DESC {$limite};")->result());
+                CONCAT(\"<span class='font-weight-bold'>\",D.conce,\"</span>\") AS CONCEPTO, 
+               D.preciodev  AS PREDV,   CONCAT(\"$ \", D.preciodev) AS PREDVT, D.preciomaq AS PRECG", false)->from("devolucionnp AS D");
+            if ($x['CLIENTE'] !== '') {
+                $this->db->where("D.cliente", $x['CLIENTE']);
+            }
+            $this->db->where_in("D.staapl", array(0, 1))->order_by('D.fecha', 'DESC');
+
+
+            if ($x['CLIENTE'] === '') {
+                $limite = "LIMIT 10";
+                $this->db->limit(1);
+            }
+            $dtm = $this->db->get()->result();
+//            print $this->db->last_query();
+            print json_encode($dtm);
+//            print json_encode($this->db->query("SELECT D.ID, D.cliente AS CLIENTE,
+//                D.docto AS DOCUMENTO, D.control AS CONTROL, D.paredev AS PARES,
+//                D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
+//                D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
+//                D.conce AS CONCEPTO, D.preciodev AS PREDV, D.preciomaq AS PRECG
+//                FROM devolucionnp AS D
+//                WHERE (CASE WHEN '{$x['CLIENTE']}' <> '' THEN D.cliente = '{$x['CLIENTE']}' ELSE D.cliente LIKE '%%' END) "
+//                                    . "AND D.staapl IN(0,1)  ORDER BY D.fecha DESC {$limite};")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -147,7 +164,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             $this->db->order_by("D.fecha", "DESC");
 
             if ($x["CLIENTE"] === '' || $x["NC"] === '') {
-                $this->db->limit(10);
+                $this->db->limit(5);
             }
 
             $data = $this->db->get()->result();
@@ -168,7 +185,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                                     . "D.par06, D.par07, D.par08, D.par09, D.par10, "
                                     . "D.par11, D.par12, D.par13, D.par14, D.par15, "
                                     . "D.par16, D.par17, D.par18, D.par19, D.par20, D.par21, D.par22 "
-                                    . "FROM devolucionnp AS D WHERE D.control = '{$x["CONTROL"]}' "
+                                    . "FROM devolucionnp AS D WHERE D.control = '{$x["CONTROL"]}' AND D.staapl IN(0,1) "
                                     . "AND D.paredev = {$x["PARES"]} AND D.ID = '{$x["IDX"]}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -220,7 +237,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             $nueva_fecha->setDate($anio, $mes, $dia);
 
             $dev = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.control ='{$x["CONTROL"]}' "
-                            . " AND D.paredev ={$x["PARES"]} AND D.ID ='{$x["IDX"]}' LIMIT 1")->result();
+                            . " AND D.paredev ={$x["PARES"]} AND D.ID ='{$x["IDX"]}' AND D.staapl IN(0,1) LIMIT 1")->result();
 //            var_dump($dev);
 //            print $this->db->last_query(); 
 //            exit(0);
@@ -382,6 +399,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "gcom" => 0, "numpol" => 0, "numfol" => 0, "posfe" => 0,
                     "pagada" => 0, "stscont" => 0, "regdev" => 0);
                 $this->db->insert('cartctepagos', $cartctepagos);
+
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCTEPAGOS-IVA)(TP-1)", "HA GENERADO EL IVA PARA LA NDC({$x["NC"]}) DE LA FACTURA ({$x['DOCUMENTO']}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final * 0.16, 2, ".", ",") . "   TP 1.", $this->session);
                 /* MODIFICAR MONEDA - LETRA */
                 $SALDO = $cartcliente[0]->saldo;
@@ -398,6 +416,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         ->set('pagos', ($PAGOS + $total_final_con_iva))
                         ->where('cliente', $x['CLIENTE'])->where('remicion', $x['DOCUMENTO'])
                         ->where('tipo', $x['TP'])->update('cartcliente');
+
                 $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (CARTCLIENTE-SALDO-PAGOS)(TP-1)", "HA MODIFICADO EL SALDO DE LA NDC({$x["NC"]}) PARA LA FACTURA ({$x['DOCUMENTO']}) DEL CLIENTE {$x["CLIENTE"]}  POR $ " . number_format($total_final * 0.16, 2, ".", ",") . "   TP 1.", $this->session);
                 $status = 2;
                 if ($saldo_final <= 5) {
