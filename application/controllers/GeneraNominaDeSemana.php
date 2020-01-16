@@ -35,8 +35,8 @@ class GeneraNominaDeSemana extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
-public function onRegeneraCelulasPespunte() {
+
+    public function onRegeneraCelulasPespunte() {
         try {
             $x = $this->input->get();
             var_dump($x);
@@ -46,7 +46,7 @@ public function onRegeneraCelulasPespunte() {
             echo $exc->getTraceAsString();
         }
     }
-    
+
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
@@ -134,8 +134,13 @@ public function onRegeneraCelulasPespunte() {
                     /* 2 DESTAJO */
                     /* 2.1 OBTENER EL SUELDO POR DESTAJO HECHO EN LA SEMANA */
                     $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(subtot) IS NULL THEN 0 ELSE SUM(subtot) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                    $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
 
+                    /* 10 = CORTE , FRACCION 100 */
+                    if (intval($v->DepartamentoFisico) === 10) {
+                        $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']} AND FPN.numfrac = 100")->result();
+                    } else {
+                        $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                    }
                     /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
                     $SUELDO_FINAL_DESTAJO = 0;
                     if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
@@ -435,7 +440,7 @@ public function onRegeneraCelulasPespunte() {
                             "depto" => $v->DepartamentoFisico
                         ));
                     } else {
-
+                        
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);

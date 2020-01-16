@@ -91,7 +91,8 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                 D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
                 D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
                 CONCAT(\"<span class='font-weight-bold'>\",D.conce,\"</span>\") AS CONCEPTO, 
-               D.preciodev  AS PREDV,   CONCAT(\"$ \", D.preciodev) AS PREDVT, D.preciomaq AS PRECG", false)->from("devolucionnp AS D");
+               D.preciodev  AS PREDV,   CONCAT(\"$ \", D.preciodev) AS PREDVT, D.preciomaq AS PRECG", false)
+                    ->from("devolucionnp AS D");
             if ($x['CLIENTE'] !== '') {
                 $this->db->where("D.cliente", $x['CLIENTE']);
             }
