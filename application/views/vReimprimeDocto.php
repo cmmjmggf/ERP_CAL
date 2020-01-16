@@ -12,10 +12,10 @@
                         <label>Cliente</label>
                         <div class="row">
                             <div class="col-3">
-                                <input id="xClienteReg" name="xClienteReg" class="form-control form-control-sm" maxlength="15">
+                                <input id="xClienteReg" name="xClienteReg" class="form-control form-control-sm order-1" maxlength="15">
                             </div>
                             <div class="col-9">
-                                <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm">
+                                <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm order-2">
                                     <option></option>
                                     <?php
                                     foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
@@ -29,33 +29,32 @@
                     </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Factura</label>
-                        <input type="text" id="FacturaReg" name="FacturaReg" class="form-control form-control-sm">
+                        <input type="text" id="FacturaReg" name="FacturaReg" class="form-control form-control-sm  order-3">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 order-6">
+                        <label>TP</label>
+                        <input type="text" id="TPReg" name="TPReg" class="form-control form-control-sm numbersOnly" maxlength="1">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4  order-4">
                         <div class="form-group"> 
                             <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                                <input type="checkbox" class="custom-control-input" id="NoGenIVA" name="NoGenIVA" style="cursor: pointer !important;">
+                                <input type="checkbox" class="custom-control-input notEnter selectNotEnter" id="NoGenIVA" name="NoGenIVA" style="cursor: pointer !important;">
                                 <label class="custom-control-label text-danger labelCheck" for="NoGenIVA" style="cursor: pointer !important;">No genera I.V.A</label>
                             </div>
                         </div> 
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4  order-5">
                         <div class="form-group"> 
                             <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                                <input type="checkbox" class="custom-control-input" id="RemisionVarios" name="RemisionVarios" style="cursor: pointer !important;">
+                                <input type="checkbox" class="custom-control-input notEnter selectNotEnter" id="RemisionVarios" name="RemisionVarios" style="cursor: pointer !important;">
                                 <label class="custom-control-label text-danger labelCheck" for="RemisionVarios" style="cursor: pointer !important;">Remisión varios</label>
                             </div>
                         </div> 
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <label>TP</label>
-                        <input type="text" id="TPReg" name="TPReg" class="form-control form-control-sm numbersOnly" maxlength="1">
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4  order-7">
                         <div class="form-group"> 
                             <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                                <input type="checkbox" class="custom-control-input" id="FacturaVarios" name="FacturaVarios" style="cursor: pointer !important;">
+                                <input type="checkbox" class="custom-control-input notEnter selectNotEnter" id="FacturaVarios" name="FacturaVarios" style="cursor: pointer !important;">
                                 <label class="custom-control-label text-danger labelCheck" for="FacturaVarios" style="cursor: pointer !important;">Factura varios</label>
                             </div>
                         </div> 
@@ -92,7 +91,7 @@
                     } else {
                         ClienteReg[0].selectize.clear(true);
                         ClienteReg[0].selectize.disable();
-                        iMsg('NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', 'w', function () {
+                        onCampoInvalido(mdlReimprimeDocto, 'NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', function () {
                             xClienteReg.focus().select();
                             ClienteReg[0].selectize.enable();
                         });
@@ -121,7 +120,7 @@
                     console.log(data);
                     onBeep(1);
                     onImprimirReporteFancyAFC(data, function () {
-                        ClienteReg.focus().select();
+                        xClienteReg.focus().select();
                         onEnable(btnAceptarReImprime);
                     });
                 }).fail(function (x, y, z) {
@@ -157,12 +156,17 @@
         });
 
         mdlReimprimeDocto.on('shown.bs.modal', function () {
+            onEnable(xClienteReg);
+            onEnable(FacturaReg);
+            onEnable(TPReg);
             xClienteReg.focus();
         });
 
         mdlReimprimeDocto.on('hidden.bs.modal', function () {
             onClearPanelInputSelectEnableDisable(mdlReimprimeDocto, function () {
-
+                onEnable(xClienteReg);
+                onEnable(FacturaReg);
+                onEnable(TPReg);
             }, true);
         });
     });

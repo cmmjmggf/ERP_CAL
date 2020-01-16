@@ -88,10 +88,10 @@ class IOrdenDeProduccion extends CI_Controller {
                 $this->db->where("OP.ControlT BETWEEN {$INICIO} AND {$FIN}", null, false);
             }
             if ($SEMANA !== '') {
-                $this->db->where("PE.Semana", $SEMANA);
+                $this->db->where("PE.SemProg", $SEMANA);
             }
             if ($ANO !== '') {
-                $this->db->where("PE.Ano", $ANO);
+                $this->db->where("PE.AnioProg", $ANO);
             }
             if ($DIA !== '') {
                 $this->db->where("PE.DiaProg", $DIA);

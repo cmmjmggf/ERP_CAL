@@ -1935,7 +1935,7 @@
 
     function onOpenWindowBlankArray(urls) {
         $.each(urls, function (k, v) {
-            console.log(v)
+            console.log(v);
             window.open(v, '_blank');
         });
     }
