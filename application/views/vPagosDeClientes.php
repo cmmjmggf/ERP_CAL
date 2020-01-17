@@ -208,11 +208,11 @@
                     <span class="fa fa-check"></span>  Aceptar
                 </button>
             </div>
-            <div class="col-2 col-sm-1">
+            <div class="col-2 col-sm-2">
                 <br>
                 <div class="custom-control custom-checkbox d-none" id ="dMinicartera">
                     <input type="checkbox" class="custom-control-input" id="chMinicartera" name="chMinicartera" >
-                    <label class="custom-control-label text-info labelCheck" for="chMinicartera">Minicartera</label>
+                    <label class="custom-control-label text-info labelCheck" for="chMinicartera">Pasa a Minicartera</label>
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-lg-1 col-xl-2">
@@ -608,7 +608,7 @@
                         ImporteDos.val('').focus().select();
                     });
                 } else {
-                    onRecalcularSaldoActual(1);
+                    onRecalcularSaldoActual(2);
                     RefDos.focus();
                 }
             }
@@ -671,7 +671,7 @@
                         ImporteTres.val('').focus().select();
                     });
                 } else {
-                    onRecalcularSaldoActual(1);
+                    onRecalcularSaldoActual(3);
                     RefTres.focus();
                 }
             }
@@ -734,7 +734,7 @@
                         ImporteCuatro.val('').focus().select();
                     });
                 } else {
-                    onRecalcularSaldoActual(1);
+                    onRecalcularSaldoActual(4);
                     RefCuatro.focus();
                 }
             }
@@ -788,148 +788,171 @@
         });
 
         btnAceptaPagos.click(function () {
-            var movs = [getIntVR(MovUno), getIntVR(MovDos), getIntVR(MovTres), getIntVR(MovCuatro)];
-            /*VALIDAR FECHA DEL CHEQUE POSFECHADO EN CASO DE PONER 3 Chec.posf*/
-            if (movs.indexOf(3) >= 0 && !Posfechado.val()) {
-                onBeep(2);
-                swal('ATENCIÓN', 'DEBE DE CAPTURAR LA FECHA DEL CHEQUE POSFECHADO', 'warning')
-                        .then((value) => {
-                            Posfechado.focus().select();
-                        });
-            } else {
-                /*VALIDAR BANCO EN CASO DE PONER 2 EFECTIVO O DEPOSITO*/
-                if (movs.indexOf(2) >= 0 && !Banco.val()) {
-                    onBeep(2);
-                    swal('ATENCIÓN', 'EN CASO DE EFECTIVO, DEBE DE CAPTURAR EL BANCO', 'warning')
-                            .then((value) => {
-                                Banco.focus();
-                            });
-                } else {
-                    if (ClientePDC.val() && DepositoPDC.val() && DoctoPDC.val() && FechaPDC.val() && TPPDC.val() && CapturaPDC.val()) {
-                        HoldOn.open({
-                            theme: 'sk-rect',
-                            message: 'Guardando pagos...'
-                        });
-                        var p = {
-                            CLIENTE: ClientePDC.val(),
-                            AGENTE: AgentePDC.val(),
-                            NUMERO_RF: DoctoPDC.val(),
-                            TP: parseInt(TPPDC.val()),
-                            FECHA: CapturaPDC.val(),
-                            TIPO: TPPDC.val(),
-                            UUID: FolioFiscal.val(),
-                            MOVIMIENTO: MovUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                            IMPORTE: ImporteUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                            REF: RefUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
-                            CLAVE_BANCO: Banco.val() ? Banco.val() : ''
-                        };
-                        var npagos = 0;
-                        if (MovUno.val() && ImporteUno.val() && RefUno.val()) {
-                            npagos += 1;
-                            onPagoCliente(p);
-                        }
-                        if (MovDos.val() && ImporteDos.val() && RefDos.val()) {
-                            npagos += 1;
-                            p.MOVIMIENTO = MovDos.val();
-                            p.IMPORTE = ImporteDos.val();
-                            p.REF = RefDos.val();
-                            onPagoCliente(p);
-                        }
-                        if (MovTres.val() && ImporteTres.val() && RefTres.val()) {
-                            npagos += 1;
-                            p.MOVIMIENTO = MovTres.val();
-                            p.IMPORTE = ImporteTres.val();
-                            p.REF = RefTres.val();
-                            onPagoCliente(p);
-                        }
-                        if (MovCuatro.val() && ImporteCuatro.val() && RefCuatro.val()) {
-                            npagos += 1;
-                            p.MOVIMIENTO = MovCuatro.val();
-                            p.IMPORTE = ImporteCuatro.val();
-                            p.REF = RefCuatro.val();
-                            onPagoCliente(p);
-                        }
-                        console.log('PAGOS : ' + npagos);
-                        if (npagos > 0) {
-                            console.log("\n P CONTIENE \n", p);
-
-                            /*ACTUALIZAR SALDO EN CARTCLIENTE*/
-                            $.post('<?php print base_url('PagosDeClientes/onModificaSaldoXDocumento'); ?>', {
-                                CLIENTE: ClientePDC.val(),
-                                REMISION: DoctoPDC.val(),
-                                IMPORTE_INICIAL: ImportePDC.val(),
-                                PAGADO: PagosPDC.val(),
-                                SALDO: SaldoPDC.val(),
-                                NUEVO_PAGADO: (parseFloat(ImportePDC.val()) - parseFloat(SaldoActual.val())),
-                                NUEVO_SALDO: SaldoActual.val()
-                            }).done(function (a) {
-                                console.log(a);
-                                /*TERMINAR PROCESO */
-                                //Recalcula el saldo final del deposito
-                                var depos = parseFloat((ImporteUno.val() !== '') ? ImporteUno.val() : 0) +
-                                        parseFloat((ImporteDos.val() !== '') ? ImporteDos.val() : 0) +
-                                        parseFloat((ImporteTres.val() !== '') ? ImporteTres.val() : 0) +
-                                        parseFloat((ImporteCuatro.val() !== '') ? ImporteCuatro.val() : 0)
-
-                                var nuevo_saldo = SaldoDelDeposito.val() - depos;
-
-
-
-                                pnlTablero.find("input:not(#DepositoPDC):not(#Agente):not(#SaldoDelDeposito):not(#ClientePDC):not(#CapturaPDC)").val('');
-
-
-
-                                Banco.val('');
-                                sBanco[0].selectize.clear(true);
-                                TPPDC.val('');
-                                MovUno.val('');
-                                MovDos.val('');
-                                MovTres.val('');
-                                MovCuatro.val('');
-                                if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
-                                    getPagosDocumento();
-                                } else {
-                                    PagosDeEsteDocumento.ajax.reload();
-                                }
-                                if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
-                                    getDocumentosConSaldoXClientes();
-                                } else {
-                                    DocumentosConSaldoXClientes.ajax.reload();
-                                }
-
-                                //Pinta nuevo saldo del deposito inicial y si no pone el cursor en el nuevo deposito
-                                if (parseInt(nuevo_saldo) > 0) {
-                                    SaldoDelDeposito.val(nuevo_saldo);
-                                    DoctoPDC.val('').focus().select();
-                                } else {
-                                    DepositoPDC.val('').focus();
-                                }
-
-                                onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
-                            }).fail(function (x) {
-                                getError(x);
-                            }).always(function () {
-                            });
-                        } else {
-                            onBeep(2);
-                            swal('ATENCIÓN', 'ES NECESARIO AÑADIR LOS DATOS DEL PAGO', 'warning').then((value) => {
-                                MovUno.focus();
-                            });
-                        }
-                        HoldOn.close();
-                    } else {
+            swal({
+                buttons: ["Cancelar", "Aceptar"],
+                title: 'Estás Seguro?',
+                text: "Esta acción no se puede revertir",
+                icon: "warning",
+                closeOnEsc: false,
+                closeOnClickOutside: false
+            }).then((action) => {
+                if (action) {
+                    var movs = [getIntVR(MovUno), getIntVR(MovDos), getIntVR(MovTres), getIntVR(MovCuatro)];
+                    /*VALIDAR FECHA DEL CHEQUE POSFECHADO EN CASO DE PONER 3 Chec.posf*/
+                    if (movs.indexOf(3) >= 0 && !Posfechado.val()) {
                         onBeep(2);
-                        swal('ATENCIÓN', 'ES NECESARIO CAPTURAR LA INFORMACIÓN DEL CLIENTE,DEPOSITO,DOCUMENTO,TIPO,FECHAS', 'warning')
+                        swal('ATENCIÓN', 'DEBE DE CAPTURAR LA FECHA DEL CHEQUE POSFECHADO', 'warning')
                                 .then((value) => {
+                                    Posfechado.focus().select();
+                                });
+                    } else {
+                        /*VALIDAR BANCO EN CASO DE PONER 2 EFECTIVO O DEPOSITO*/
+                        if (movs.indexOf(2) >= 0 && !Banco.val()) {
+                            onBeep(2);
+                            swal('ATENCIÓN', 'EN CASO DE EFECTIVO, DEBE DE CAPTURAR EL BANCO', 'warning')
+                                    .then((value) => {
+                                        Banco.focus();
+                                    });
+                        } else {
+                            if (ClientePDC.val() && DepositoPDC.val() && DoctoPDC.val() && FechaPDC.val() && TPPDC.val() && CapturaPDC.val()) {
+                                HoldOn.open({
+                                    theme: 'sk-rect',
+                                    message: 'Guardando pagos...'
+                                });
+
+                                /*Datos generales*/
+                                var p = {
+                                    CLIENTE: ClientePDC.val(),
+                                    AGENTE: AgentePDC.val(),
+                                    NUMERO_RF: DoctoPDC.val(),
+                                    TP: parseInt(TPPDC.val()),
+                                    FECHA: CapturaPDC.val(),
+                                    FECHAFAC: FechaPDC.val(),
+                                    IMPORTEFAC: ImportePDC.val(),
+                                    TIPO: TPPDC.val(),
+                                    UUID: FolioFiscal.val(),
+                                    MOVIMIENTO: MovUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                                    IMPORTE: ImporteUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                                    REF: RefUno.val()/*POR DEFECTO INICIA EN ESTE CAMPO*/,
+                                    CLAVE_BANCO: Banco.val() ? Banco.val() : ''
+                                };
+                                /*Graba Minicartera*/
+                                if (chMinicartera[0].checked) {
+                                    if (MovUno.val() === '5') {
+                                        p.MOVIMIENTO = MovUno.val();
+                                        p.IMPORTE = (TPPDC.val() === '1') ? (ImporteUno.val() * 1.16) : ImporteUno.val();
+                                        p.REF = RefUno.val();
+                                        onRegistraMinicartera(p);
+                                    } else if (MovDos.val() === '5') {
+                                        p.MOVIMIENTO = MovDos.val();
+                                        p.IMPORTE = (TPPDC.val() === '1') ? (ImporteDos.val() * 1.16) : ImporteDos.val();
+                                        p.REF = RefDos.val();
+                                        onRegistraMinicartera(p);
+                                    } else if (MovTres.val() === '5') {
+                                        p.MOVIMIENTO = MovTres.val();
+                                        p.IMPORTE = (TPPDC.val() === '1') ? (ImporteTres.val() * 1.16) : ImporteTres.val();
+                                        p.REF = RefTres.val();
+                                        onRegistraMinicartera(p);
+                                    } else if (MovCuatro.val() === '5') {
+                                        p.MOVIMIENTO = MovCuatro.val();
+                                        p.IMPORTE = (TPPDC.val() === '1') ? (ImporteCuatro.val() * 1.16) : ImporteCuatro.val();
+                                        p.REF = RefCuatro.val();
+                                        onRegistraMinicartera(p);
+                                    }
+
+                                }
+                                var npagos = 0;
+                                if (MovUno.val() && ImporteUno.val() && RefUno.val()) {
+                                    npagos += 1;
+                                    p.MOVIMIENTO = MovUno.val();
+                                    p.IMPORTE = (TPPDC.val() === '1' && MovUno.val() === '5') ? (ImporteUno.val() * 1.16) : ImporteUno.val();
+                                    p.REF = RefUno.val();
+                                    onPagoCliente(p);
+                                }
+                                if (MovDos.val() && ImporteDos.val() && RefDos.val()) {
+                                    npagos += 1;
+                                    p.MOVIMIENTO = MovDos.val();
+                                    p.IMPORTE = (TPPDC.val() === '1' && MovDos.val() === '5') ? (ImporteDos.val() * 1.16) : ImporteDos.val();
+                                    p.REF = RefDos.val();
+                                    onPagoCliente(p);
+                                }
+                                if (MovTres.val() && ImporteTres.val() && RefTres.val()) {
+                                    npagos += 1;
+                                    p.MOVIMIENTO = MovTres.val();
+                                    p.IMPORTE = (TPPDC.val() === '1' && MovTres.val() === '5') ? (ImporteTres.val() * 1.16) : ImporteTres.val();
+                                    p.REF = RefTres.val();
+                                    onPagoCliente(p);
+                                }
+                                if (MovCuatro.val() && ImporteCuatro.val() && RefCuatro.val()) {
+                                    npagos += 1;
+                                    p.MOVIMIENTO = MovCuatro.val();
+                                    p.IMPORTE = (TPPDC.val() === '1' && MovCuatro.val() === '5') ? (ImporteCuatro.val() * 1.16) : ImporteCuatro.val();
+                                    p.REF = RefCuatro.val();
+                                    onPagoCliente(p);
+                                }
+                                console.log('PAGOS : ' + npagos);
+                                if (npagos > 0) {
+                                    console.log("\n P CONTIENE \n", p);
+                                    /*TERMINAR PROCESO */
+                                    //Recalcula el saldo final del deposito
+                                    var depos = parseFloat((ImporteUno.val() !== '') ? ImporteUno.val() : 0) +
+                                            parseFloat((ImporteDos.val() !== '') ? ImporteDos.val() : 0) +
+                                            parseFloat((ImporteTres.val() !== '') ? ImporteTres.val() : 0) +
+                                            parseFloat((ImporteCuatro.val() !== '') ? ImporteCuatro.val() : 0)
+
+                                    var nuevo_saldo = SaldoDelDeposito.val() - depos;
+                                    pnlTablero.find("input:not(#DepositoPDC):not(#Agente):not(#SaldoDelDeposito):not(#ClientePDC):not(#CapturaPDC)").val('');
+                                    Banco.val('');
+                                    sBanco[0].selectize.clear(true);
+                                    TPPDC.val('');
+                                    MovUno.val('');
+                                    MovDos.val('');
+                                    MovTres.val('');
+                                    MovCuatro.val('');
+                                    if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+                                        getPagosDocumento();
+                                    } else {
+                                        PagosDeEsteDocumento.ajax.reload();
+                                    }
+                                    if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+                                        getDocumentosConSaldoXClientes();
+                                    } else {
+                                        DocumentosConSaldoXClientes.ajax.reload();
+                                    }
+
+                                    //Pinta nuevo saldo del deposito inicial y si no pone el cursor en el nuevo deposito
+                                    if (parseInt(nuevo_saldo) > 0) {
+                                        SaldoDelDeposito.val(parseFloat(nuevo_saldo).toFixed(2));
+                                        DoctoPDC.val('').focus().select();
+                                    } else {
+                                        DepositoPDC.val('').focus();
+                                    }
+                                    chMinicartera.prop('checked', false);
+                                    dMinicartera.addClass("d-none");
+                                    onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
+
+                                } else {
+                                    onBeep(2);
+                                    swal('ATENCIÓN', 'ES NECESARIO AÑADIR LOS DATOS DEL PAGO', 'warning').then((value) => {
+                                        MovUno.focus();
+                                    });
+                                }
+                                HoldOn.close();
+                            } else {
+                                onBeep(2);
+                                swal('ATENCIÓN', 'ES NECESARIO CAPTURAR LA INFORMACIÓN DEL CLIENTE,DEPOSITO,DOCUMENTO,TIPO,FECHAS', 'warning').then((value) => {
                                     if (!ClientePDC.val()) {
                                         ClientePDC.focus();
                                     } else {
                                         DepositoPDC.focus().select();
                                     }
                                 });
+                            }
+                        }
                     }
                 }
-            }
+            });
+
         });
     });
 
@@ -1120,9 +1143,21 @@
         $.post('<?php print base_url('PagosDeClientes/onPagoCliente') ?>', p)
                 .done(function (a) {
                     console.log(a);
-                    onBeep(1);
-                    dMinicartera.addClass("d-none");
-                    onNotifyOld('', 'SE HAN REALIZADO LOS PAGOS', 'success');
+                    //onBeep(1);
+                    //onNotifyOld('', 'SE HAN REALIZADO LOS PAGOS', 'success');
+                }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
+    }
+    function onRegistraMinicartera(p) {
+        console.log("\n ONPAGOMINICARTERA ", p.IMPORTE, p.MOVIMIENTO, p.REF);
+        $.post('<?php print base_url('PagosDeClientes/onRegistraMinicartera') ?>', p)
+                .done(function (a) {
+                    console.log(a);
+                    //onBeep(1);
+                    //onNotifyOld('', 'SE HAN GUARDADO EN MINICARTERA', 'success');
                 }).fail(function (x) {
             getError(x);
         }).always(function () {

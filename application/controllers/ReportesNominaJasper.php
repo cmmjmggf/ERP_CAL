@@ -834,7 +834,7 @@ FROM costomanoobratemp CMT
                 $Ultimo_row = $M->consecutivo + 1;
                 $Num_rows = $M->consecutivo - 1;
             }
-            $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ';
+            $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ' . "\n";
             fwrite($handle, $txt);
             fclose($handle);
             exit;

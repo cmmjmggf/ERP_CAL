@@ -142,16 +142,16 @@ class PagosDeClientes extends CI_Controller {
             $FECHA_FINAL = date("Y-m-d", strtotime(str_replace('/', '-', $x['FECHA'])));
 
             $Agente = $this->db->query("select Agente from clientes where clave = {$x['CLIENTE']} ")->result()[0]->Agente;
-
+            $ImporteMov = round($x['IMPORTE'], 2);
             switch (intval($x["TP"])) {
                 case 1:
                     /* FACTURA */
-                    $TOTAL_FINAL_CON_IVA = $x['IMPORTE'] * 1.16;
+                    //$TOTAL_FINAL_CON_IVA = $x['IMPORTE'] * 1.16;
                     $this->db->insert("cartctepagos", array(
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* FACTURA */,
                         "fecha" => Date('Y-m-d'),
-                        "importe" => $TOTAL_FINAL_CON_IVA,
+                        "importe" => $ImporteMov,
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
                         "agente" => $Agente,
@@ -177,7 +177,7 @@ class PagosDeClientes extends CI_Controller {
                         "cliente" => $x['CLIENTE'],
                         "remicion" => $x['NUMERO_RF']/* REMISION */,
                         "fecha" => Date('Y-m-d'),
-                        "importe" => $x['IMPORTE'],
+                        "importe" => $ImporteMov,
                         "tipo" => $x['TIPO'],
                         "gcom" => 0,
                         "agente" => $Agente,
@@ -204,6 +204,41 @@ class PagosDeClientes extends CI_Controller {
                     "fechadep" => $FECHA_FINAL, 'importe' => $x['IMPORTE'],
                     'tipo' => 1, 'status' => 1, 'doctopa' => $x['DOCUMENTO']));
             }
+
+            //Actualiza saldo y status en cartcliente
+            $sql = "UPDATE cartcliente  "
+                    . "SET saldo =  ifnull(saldo,0) - {$ImporteMov}, pagos = ifnull(pagos,0) + {$ImporteMov} "
+                    . "WHERE tipo = '{$x['TIPO']}' "
+                    . "AND remicion = '{$x['NUMERO_RF']}' "
+                    . "AND cliente = '{$x['CLIENTE']}' ";
+            $this->db->query($sql);
+            $sql_upd = "UPDATE cartcliente
+                                   SET status = CASE WHEN saldo <= 1 THEN 3 ELSE 2 END,
+                                   saldo = CASE WHEN saldo <= 1 THEN 0 ELSE saldo END
+                                   WHERE tipo = '{$x['TIPO']}'
+                                   AND remicion = '{$x['NUMERO_RF']}'
+                                   AND cliente = '{$x['CLIENTE']}'  ";
+            $this->db->query($sql_upd);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRegistraMinicartera() {
+        try {
+            $x = $this->input->post();
+            $FECHAFAC = date("Y-m-d", strtotime(str_replace('/', '-', $x['FECHAFAC'])));
+            $this->db->insert('cartclientem', array(
+                'cliente' => $x['CLIENTE'],
+                'tipo' => $x['TIPO'],
+                'remicion' => $x['NUMERO_RF']/* FACTURA */,
+                'fechafac' => $FECHAFAC,
+                'fechamov' => Date('Y-m-d'),
+                'importefac' => $x['IMPORTEFAC'],
+                'importemov' => round($x['IMPORTE'], 2),
+                'status' => 1,
+                'saldo' => round($x['IMPORTE'], 2)
+            ));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

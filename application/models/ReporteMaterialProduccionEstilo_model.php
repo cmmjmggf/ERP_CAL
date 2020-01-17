@@ -104,18 +104,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             EXPL.Control as ControlT, EXPL.Pedido, EXPL.FechaEntrega, EXPL.Estilo, EXPL.Cliente as Clave,
                             (select razons from clientes where clave = EXPL.Cliente) as Cliente,
                             EXPL.Semana, EXPL.Maquila,
-                            sum(EXPL.Explosion) as Cantidad, sum(EXPL.Pares) as ParesResp,
-
-                            (select sum(pares)
-                            from pedidox
-                            where clave = EXPL.Pedido
-                            and estilo = EXPL.Estilo
-                            and color = EXPL.Color
-                            and cliente = EXPL.Cliente
-                            and cast(Semana as signed) BETWEEN $dSem AND $aSem
-                            and Ano = '$Ano'
-                            and id = EXPL.ID
-                            )  as Pares
+                            sum(EXPL.Explosion) as Cantidad, EXPL.Pares as Pares
 
                             from (
                             SELECT
@@ -151,8 +140,8 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
 
                             ) as EXPL
 
-                            group by EXPL.Control, EXPL.Estilo
-                            order by EXPL.Control asc ", false);
+                            group by EXPL.ID
+                            order by EXPL.Control, EXPL.Pedido, EXPL.Estilo asc ", false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
