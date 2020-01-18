@@ -177,44 +177,24 @@ class OrdenCompraTallas extends CI_Controller {
         }
     }
 
-    public function onAgregarDetalle() {
-        try {
-
-            $x = $this->input;
-            $this->db->insert("ordencompra", array(
-                'Tp' => $x->post('Tp'),
-                'Folio' => $x->post('Folio'),
-                'Tipo' => $x->post('Tipo'),
-                'Proveedor' => $x->post('Proveedor'),
-                'FechaOrden' => $x->post('FechaOrden'),
-                'FechaCaptura' => Date('d/m/Y'),
-                'FechaEntrega' => $x->post('FechaEntrega'),
-                'ConsignarA' => $x->post('ConsignarA'),
-                'Sem' => $x->post('Sem'),
-                'Maq' => $x->post('Maq'),
-                'Ano' => $x->post('Ano'),
-                'Observaciones' => $x->post('Observaciones'),
-                'Articulo' => $x->post('Articulo'),
-                'Cantidad' => $x->post('Cantidad'),
-                'Precio' => $x->post('Precio'),
-                'Subtotal' => $x->post('SubTotal'),
-                'Estatus' => $x->post('Estatus'),
-                'Usuario' => $this->session->userdata('ID')
-            ));
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function onInsertarDetalleOptimizado() {
         try {
             //Inserta tabla temporal para tallas
             $Detalle = json_decode($this->input->post('movs'));
+
+
+            if ($this->input->post('Folio') === 'S') {
+                $Folio = $this->db->query("select (folio + 1) as Folio  from ordencompra where tp = {$this->input->post('Tp')} order by abs(folio) desc limit 1 ")->result()[0]->Folio;
+            } else {
+                $Folio = $this->input->post('Folio');
+            }
+            print $Folio;
             //var_dump($Detalle);
             foreach ($Detalle as $k => $v) {
+
                 $datos = array(
                     'Tp' => $v->Tp,
-                    'Folio' => $v->Folio,
+                    'Folio' => $Folio,
                     'Tipo' => $v->Tipo,
                     'Proveedor' => $v->Proveedor,
                     'FechaOrden' => $v->FechaOrden,
@@ -263,35 +243,6 @@ class OrdenCompraTallas extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    }
-
-    public function onInsertarDetalleOptimizadoBack() {
-        $OrdenCompraAgrupada = $this->Ordencompra_model->getOrdenCompraTallasTemp();
-
-        foreach ($OrdenCompraAgrupada as $k => $O) {
-            $this->db->insert("ordencompra", array(
-                'Tp' => $O->Tp,
-                'Folio' => $O->Folio,
-                'Tipo' => $O->Tipo,
-                'Proveedor' => $O->Proveedor,
-                'FechaOrden' => $O->FechaOrden,
-                'FechaCaptura' => Date('d/m/Y'),
-                'FechaEntrega' => $O->FechaEntrega,
-                'ConsignarA' => $O->ConsignarA,
-                'Sem' => $O->Sem,
-                'Maq' => $O->Maq,
-                'Ano' => $O->Ano,
-                'Observaciones' => $O->Observaciones,
-                'Articulo' => $O->Articulo,
-                'Cantidad' => $O->Cantidad,
-                'Precio' => $O->Precio,
-                'Subtotal' => $O->Subtotal,
-                'Estatus' => $O->Estatus,
-                'Usuario' => $O->Usuario
-            ));
-        }
-
-        $this->db->query("truncate table ordencompratallastemp ");
     }
 
     public function onCerrarOrden() {

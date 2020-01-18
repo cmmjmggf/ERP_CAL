@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-xl-1">
                         <label for="Folio" >Folio</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" readonly="" id="Folio" name="Folio" required="">
+                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" readonly="" id="Folio" name="Folio" >
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2">
                         <label for="" >Tipo*<span class="badge badge-info" style="font-size:14px;">10 Piel/Forro - 90 Peletería</span></label>
@@ -227,7 +227,7 @@
             if (e.keyCode === 13) {
                 var tp = parseInt($(this).val());
                 if (tp === 1 || tp === 2) {
-                    getFolio(tp);
+                    //getFolio(tp);
                     pnlDatos.find('#Tipo')[0].selectize.focus();
                     getProveedores(tp);
                 } else {
@@ -1063,7 +1063,7 @@
         if (!existe) {
             var detalle = {
                 Tp: tp,
-                Folio: folio,
+                Folio: (nuevo) ? 'S' : folio,
                 Tipo: tipo,
                 Proveedor: prov,
                 FechaOrden: fecha,
@@ -1082,7 +1082,8 @@
             $.post(master_url + 'onAgregarDetalle', detalle).done(function (data) {
                 btnAgregar.attr('disabled', false);
                 if (nuevo) {
-                    getDetalleByID(tp, folio);
+                    pnlDatos.find("#Folio").val(data);
+                    getDetalleByID(tp, data);
                     nuevo = false;
 
                 } else {

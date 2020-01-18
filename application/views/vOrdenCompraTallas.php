@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-xl-1">
                         <label for="Folio" >Folio</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" readonly="" id="Folio" name="Folio" required="">
+                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" readonly="" id="Folio" name="Folio">
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-2 d-none">
                         <label for="" >Tipo* <span class="badge badge-info" style="font-size:14px;">(80 Suela)</span></label>
@@ -261,7 +261,7 @@
             if (e.keyCode === 13) {
                 var tp = parseInt($(this).val());
                 if (tp === 1 || tp === 2) {
-                    getFolio(tp);
+                    //getFolio(tp);
                     pnlDatos.find('#Proveedor').focus().select();
                     getProveedores(tp);
                 } else {
@@ -1066,7 +1066,7 @@
                 var cantidad = parseFloat($(v).val());
                 detalle.push({
                     Tp: tp,
-                    Folio: folio,
+                    Folio: (nuevo) ? 'S' : folio,
                     Tipo: tipo,
                     Proveedor: prov,
                     FechaOrden: fecha,
@@ -1090,7 +1090,9 @@
             url: master_url + 'onInsertarDetalleOptimizado',
             type: "POST",
             data: {
-                movs: JSON.stringify(detalle)
+                movs: JSON.stringify(detalle),
+                Folio: (nuevo) ? 'S' : folio,
+                Tp: tp
             }
         }).done(function (data, x, jq) {
             //Despues de que se guarda
@@ -1105,18 +1107,20 @@
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.disable();
             });
+            if (nuevo) {
+                pnlDatos.find("#Folio").val(data);
+                getDetalleByID(tp, data);
+                nuevo = false;
+            } else {
+                ComprasDetalle.ajax.reload();
+            }
             HoldOn.close();
         }).fail(function (x, y, z) {
             HoldOn.close();
             btnAgregar.attr('disabled', false);
             console.log(x, y, z);
         });
-        if (nuevo) {
-            getDetalleByID(tp, folio);
-            nuevo = false;
-        } else {
-            ComprasDetalle.ajax.reload();
-        }
+
     }
     function onEliminarDetalleByID(IDX) {
         if (estatus === 'ACTIVA') {

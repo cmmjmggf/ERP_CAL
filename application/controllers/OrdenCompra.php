@@ -164,9 +164,16 @@ class OrdenCompra extends CI_Controller {
         try {
 
             $x = $this->input;
+
+
+            if ($x->post('Folio') === 'S') {
+                $Folio = $this->db->query("select (folio + 1) as Folio  from ordencompra where tp = {$x->post('Tp')} order by abs(folio) desc limit 1 ")->result()[0]->Folio;
+            } else {
+                $Folio = $x->post('Folio');
+            }
             $this->db->insert("ordencompra", array(
                 'Tp' => $x->post('Tp'),
-                'Folio' => $x->post('Folio'),
+                'Folio' => $Folio,
                 'Tipo' => $x->post('Tipo'),
                 'Proveedor' => $x->post('Proveedor'),
                 'FechaOrden' => $x->post('FechaOrden'),
@@ -184,6 +191,7 @@ class OrdenCompra extends CI_Controller {
                 'Estatus' => $x->post('Estatus'),
                 'Usuario' => $this->session->userdata('ID')
             ));
+            print $Folio;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
