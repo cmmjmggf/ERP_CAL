@@ -154,7 +154,9 @@
             }).done(function (data, x, jq) {
                 mdlGeneraNominaBanco.find('#btnImprimir').attr('disabled', false);
                 console.log(data);
-                onGeneraNominaFiscal();
+                HoldOn.close();
+                onNotifyOld('', 'SE HAN CREADO LOS ARCHIVOS DE NÓMINA PARA ESTA SEMANA CORRECTAMENTE', 'success');
+                //onGeneraNominaFiscal();
 //                setTimeout(function () {
 //                    onGeneraNominaFiscalDos();
 //                }, 1000);

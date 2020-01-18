@@ -817,8 +817,12 @@ FROM costomanoobratemp CMT
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        $handle = fopen('php://output', "w");
-
+        //Creamos el directorio en caso de que no exista
+        $path = 'uploads/Nominas';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $handle = fopen($path . '/' . $filename, "w+");
         $Registros = $this->db->query('SELECT col1,truncate(importe,0) as importe,consecutivo FROM nominabanco where tipo = 1')->result();
 
         if (!empty($Registros)) {
@@ -826,7 +830,7 @@ FROM costomanoobratemp CMT
             $Ultimo_row = 0;
             $Num_rows = 0;
             $Importe = 0;
-            $txt = '01' . '0000001' . '030S9000008149' . Date('Ymd') . '00000000064266210201                                                                                                                                  ' . "\n";
+            $txt = '01' . '0000001' . '030S9000008149' . Date('Ymd') . '00000000064266210201                                                                                                                                  ' . "\r\n";
             fwrite($handle, $txt);
             foreach ($Registros as $M) {
                 fwrite($handle, $M->col1);
@@ -834,7 +838,7 @@ FROM costomanoobratemp CMT
                 $Ultimo_row = $M->consecutivo + 1;
                 $Num_rows = $M->consecutivo - 1;
             }
-            $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ' . "\n";
+            $txt = '09' . str_pad($Ultimo_row, 7, "0", STR_PAD_LEFT) . '90' . str_pad($Num_rows, 7, "0", STR_PAD_LEFT) . str_pad($Importe, 16, "0", STR_PAD_LEFT) . '00                                                                                                                                                 ' . "\r\n";
             fwrite($handle, $txt);
             fclose($handle);
             exit;
@@ -902,7 +906,7 @@ FROM costomanoobratemp CMT
                                 $M->col11 .
                                 $M->conceptint .
                                 $M->col12 .
-                                "\n";
+                                "\r\n";
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
                             'consecutivo' => $cont2,
@@ -930,7 +934,7 @@ FROM costomanoobratemp CMT
                                     $M->col11 .
                                     $M->concepfis .
                                     $M->col12 .
-                                    "\n";
+                                    "\r\n";
                             //Agregamos el registro
                             $this->db->insert("nominabanco", array(
                                 'consecutivo' => $cont1,
@@ -956,7 +960,7 @@ FROM costomanoobratemp CMT
                                     $M->col11 .
                                     $M->conceptint .
                                     $M->col12 .
-                                    "\n";
+                                    "\r\n";
                             //Agregamos el registro
                             $this->db->insert("nominabanco", array(
                                 'consecutivo' => $cont2,
@@ -982,7 +986,7 @@ FROM costomanoobratemp CMT
                                     $M->col11 .
                                     $M->conceptint .
                                     $M->col12 .
-                                    "\n";
+                                    "\r\n";
                             //Agregamos el registro
                             $this->db->insert("nominabanco", array(
                                 'consecutivo' => $cont2,
@@ -1011,7 +1015,7 @@ FROM costomanoobratemp CMT
                             $M->col11 .
                             $M->concepfis .
                             $M->col12 .
-                            "\n";
+                            "\r\n";
                     //Agregamos el registro
                     $this->db->insert("nominabanco", array(
                         'consecutivo' => $cont1,
@@ -1022,6 +1026,8 @@ FROM costomanoobratemp CMT
                     $cont1 ++;
                 }
             }
+            //Creamos el directorio y guardamos el archivo
+            $this->generaArchivoBancoFiscal();
         }
     }
 
