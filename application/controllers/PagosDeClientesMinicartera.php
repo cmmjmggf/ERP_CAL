@@ -183,7 +183,7 @@ class PagosDeClientesMinicartera extends CI_Controller {
                     . "AND remicion = '{$x['NUMERO_RF']}' "
                     . "AND cliente = '{$x['CLIENTE']}' ";
             $this->db->query($sql);
-            $sql_upd = "UPDATE cartcliente
+            $sql_upd = "UPDATE cartclientem
                                    SET status = CASE WHEN saldo <= 1 THEN 3 ELSE 2 END,
                                    saldo = CASE WHEN saldo <= 1 THEN 0 ELSE saldo END
                                    WHERE tipo = '{$x['TP']}'
@@ -215,7 +215,8 @@ class PagosDeClientesMinicartera extends CI_Controller {
 
             //Si check de regresa esta encendido
             if ($x['REGRESA_SALDO'] === '1') {
-
+                $this->db->query("update cartcliente set pagos = (ifnull(pagos,0)- $ImporteMov) , saldo = $ImporteMov, status = 2 where cliente = {$x['CLIENTE']} and remicion = {$x['NUMERO_RF']}; ");
+                $this->db->query("update cartctepagos set importe = 0 where cliente = {$x['CLIENTE']} and mov = 5 and remicion = {$x['NUMERO_RF']} and round(importe,2) = $ImporteMov; ");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

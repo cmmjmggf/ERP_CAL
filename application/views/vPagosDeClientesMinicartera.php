@@ -262,17 +262,8 @@
                             } else {
                                 DocumentosConSaldoXClientesMini.ajax.reload();
                             }
-
-                            $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: txtcte})
-                                    .done(function (a) {
-                                        if (a.length > 0) {
-                                            DoctoPDC.focus();
-                                        }
-                                    }).fail(function (x) {
-                                getError(x);
-                            }).always(function () {
-                                HoldOn.close();
-                            });
+                            HoldOn.close();
+                            DoctoPDC.focus().select();
 
                         } else {
                             swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
@@ -313,16 +304,8 @@
                 } else {
                     DocumentosConSaldoXClientesMini.ajax.reload();
                 }
-                $.getJSON('<?php print base_url('PagosDeClientes/getAgenteXCliente'); ?>', {CLIENTE: sClientePDC.val()})
-                        .done(function (a) {
-                            if (a.length > 0) {
-                                DoctoPDC.focus().select();
-                            }
-                        }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
+                HoldOn.close();
+                DoctoPDC.focus().select();
             }
         });
         DoctoPDC.on('keypress', function (e) {
@@ -492,6 +475,7 @@
                                     } else {
                                         DocumentosConSaldoXClientesMini.ajax.reload();
                                     }
+                                    chRegresaSaldo.prop('checked', false);
                                     HoldOn.close();
                                     DoctoPDC.focus();
                                     onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
