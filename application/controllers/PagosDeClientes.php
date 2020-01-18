@@ -2,6 +2,7 @@
 
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class PagosDeClientes extends CI_Controller {
 
@@ -51,8 +52,8 @@ class PagosDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("CCP.ID AS ID, CCP.cliente AS CLIENTE, CCP.remicion AS DOCUMENTO,
-                CCP.tipo AS TP, DATE_FORMAT(CCP.fecha,\"%d/%m/%Y\") AS FECHA_DEPOSITO,
-                 DATE_FORMAT(CCP.fechacap,\"%d/%m/%Y\") AS FECHA_CAPTURA,
+                CCP.tipo AS TP, DATE_FORMAT(CCP.fechadep,\"%d/%m/%Y\") AS FECHA_DEPOSITO,
+                 DATE_FORMAT(CCP.fecha,\"%d/%m/%Y\") AS FECHA_CAPTURA,
                 FORMAT(CCP.importe,2) AS IMPORTE, CCP.mov AS MV, CCP.doctopa AS REFERENCIA,
                 CCP.numfol AS DIAS ", false)->from("cartctepagos AS CCP");
             if ($x['DOCUMENTO'] !== '') {
@@ -62,7 +63,8 @@ class PagosDeClientes extends CI_Controller {
                 $this->db->where('CCP.cliente', $x['CLIENTE']);
             }
             if ($x['CLIENTE'] === '' && $x['DOCUMENTO'] === '') {
-                $this->db->order_by("CCP.fecha", "DESC")->limit(99);
+                $this->db->where('CCP.cliente', 0);
+                $this->db->where('CCP.remicion', 0);
             } else {
                 $this->db->order_by("CCP.fecha", "DESC");
             }
@@ -118,7 +120,7 @@ class PagosDeClientes extends CI_Controller {
                 $this->db->where('CC.remicion', $x['DOCUMENTO'])->where('CC.saldo > ', 2);
             }
             if ($x['CLIENTE'] === '' && $x['DOCUMENTO'] === '') {
-                $this->db->where('CC.saldo > ', 2)->order_by("CC.fecha", "DESC")->limit(99);
+                $this->db->where('CC.cliente ', 0)->where('CC.remicion ', 0)->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -266,23 +268,6 @@ class PagosDeClientes extends CI_Controller {
             print json_encode($this->db->query(
                                     "SELECT C.agente AS AGENTE,C.Descuento "
                                     . "FROM clientes AS C WHERE C.Clave = {$this->input->get('CLIENTE')}")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onModificaSaldoXDocumento() {
-        try {
-            $x = $this->input->post();
-
-            $estatus = (floatval($x['NUEVO_SALDO']) > 1) ? 2 : 3;
-
-            $this->db->set('saldo', $x['NUEVO_SALDO'])
-                    ->set('pagos', $x['NUEVO_PAGADO'])
-                    ->set('status', $estatus)
-                    ->where('cliente', $x['CLIENTE'])
-                    ->where('remicion', $x['REMISION'])
-                    ->update('cartcliente');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

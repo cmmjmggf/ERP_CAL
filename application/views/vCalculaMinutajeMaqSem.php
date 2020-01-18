@@ -354,6 +354,12 @@
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2"  id="Color" name="Color">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="Clave" >Observaciones</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="500"  id="Observaciones" name="Observaciones">
+                        </div>
+                    </div>
                     <div class="row mt-4">
                         <div class="col-4">
                             <label class="badge badge-danger" style="font-size: 14px;">Nota: Sólo capture los campos que se van a modificar</label>
@@ -423,6 +429,7 @@
                     f.append('maq', $('#mdlEditarRenglonPedido').find("#Maq").val());
                     f.append('estilo', $('#mdlEditarRenglonPedido').find("#Estilo").val());
                     f.append('color', $('#mdlEditarRenglonPedido').find("#Color").val());
+                    f.append('observaciones', $('#mdlEditarRenglonPedido').find("#Observaciones").val());
                     f.append('renglones', JSON.stringify(ids_renglones));
                     $.ajax({
                         url: '<?php print base_url('CalculaMinutajeMaqSem/onModificarEnMasa'); ?>',

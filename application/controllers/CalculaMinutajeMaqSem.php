@@ -89,6 +89,11 @@ class CalculaMinutajeMaqSem extends CI_Controller {
                     $upd_col = "update pedidox set color = {$x['color']} where ID = {$v->ID} and stsavan not in ('12','13','14') ; ";
                     $this->db->query($upd_col);
                 }
+                /* actualiza observ */
+                if ($x['observaciones'] !== '') {
+                    $upd_col = "update pedidox set Observacion = '{$x['observaciones']}' where ID = {$v->ID} and stsavan not in ('12','13','14') ; ";
+                    $this->db->query($upd_col);
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

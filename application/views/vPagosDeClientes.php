@@ -964,6 +964,16 @@
             hideSelected: false,
             openOnFocus: false
         });
+        if (!$.fn.DataTable.isDataTable('#tblPagosDeEsteDocumento')) {
+            getPagosDocumento();
+        } else {
+            PagosDeEsteDocumento.ajax.reload();
+        }
+        if (!$.fn.DataTable.isDataTable('#tblDocumentosConSaldoXClientes')) {
+            getDocumentosConSaldoXClientes();
+        } else {
+            DocumentosConSaldoXClientes.ajax.reload();
+        }
     }
     function getPagosDocumento() {
         $.fn.dataTable.ext.errMode = 'throw';
