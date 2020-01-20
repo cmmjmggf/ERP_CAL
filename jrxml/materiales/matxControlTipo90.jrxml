@@ -21,7 +21,7 @@ WHERE `PE`.`ano` = $P{Ano}
 AND `PE`.`semana` = $P{Sem}
 AND `PE`.`maquila` = $P{Maq}
 AND `OPD`.`DepartamentoArt` IN('90')
-AND OPD.Grupo IN ('10', '22', '32', '38', '39','8')
+AND OPD.Grupo IN ('10', '22', '32', '38', '39','8','6','5','53')
 GROUP BY `OP`.`ControlT`, `OPD`.`Articulo`
 ORDER BY  `OP`.`ControlT` ASC ,`OPD`.`ArticuloT` ASC]]>
 	</queryString>

@@ -111,8 +111,8 @@
                                 <th scope="col">CONTROL</th>
                                 <th scope="col">Corte</th>
                                 <th scope="col">Rayado</th>
-                                <th scope="col">Rebajado</th>
                                 <th scope="col">Foleado</th>
+                                <th scope="col">Rebajado</th>
                                 <th scope="col">Entretelado</th>
                                 <th scope="col">Maq</th>
                                 <th scope="col">Alm-Corte</th>
@@ -303,7 +303,7 @@
             }
         ];
         FechasDelPedido = tblFechasDelPedido.DataTable({
-            "dom": 'ritp',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getPedidos'); ?>',
@@ -329,7 +329,7 @@
             "scrollX": true
         });
         FechasDeFacturacion = tblFechasDeFacturacion.DataTable({
-            "dom": 'ritp',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFacturas'); ?>',
@@ -365,7 +365,7 @@
             "scrollX": true
         });
         FechasDevolucion = tblFechasDevolucion.DataTable({
-            "dom": 'ritp',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getDevoluciones'); ?>',
@@ -400,7 +400,7 @@
             "scrollX": true
         });
         FechasDeAvance = tblFechasDeAvance.DataTable({
-            "dom": 'ritp',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getFechasDeAvance'); ?>',
@@ -415,8 +415,8 @@
                 {"data": "CONTROL"}, /*1*/
                 {"data": "CORTE"}, /*2*/
                 {"data": "RAYADO"}, /*3*/
-                {"data": "REBAJADO"}, /*4*/
                 {"data": "FOLEADO"}, /*5*/
+                {"data": "REBAJADO"}, /*4*/
                 {"data": "ENTRETELADO"}, /*6*/
                 {"data": "MAQUILA"}, /*7*/
                 {"data": "ALM-CORTE"}, /*8*/
@@ -457,7 +457,7 @@
             "scrollX": true
         });
         RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
-            "dom": 'ritp',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('RastreoDeControlesEnDocumentos/getControlesEnNomina'); ?>',
