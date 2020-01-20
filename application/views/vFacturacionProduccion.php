@@ -5,7 +5,7 @@
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
-                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info selectNotEnter" style="background-color: #3F51B5;">
+                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info selectNotEnter font-weight-bold" style="background-color: #3F51B5;">
                     <span class="fa fa-plus"></span> Nuevo
                 </button>
                 <div class="btn-group  selectNotEnter">
@@ -17,7 +17,7 @@
                         <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
                     </div>
                 </div> 
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter" >
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter font-weight-bold" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
@@ -53,7 +53,7 @@
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
-                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" class="btn btn-info" disabled="">
+                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" class="btn btn-info font-weight-bold">
                     <span class="fa fa-file-archive"></span>   ADDENDA COPPEL 
                 </button> 
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
@@ -727,6 +727,178 @@
     </div>
 </div>
 
+<div class="modal fade" id="mdlAddendaCoppel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="fa fa-file-archive"></span> Prepara Addenda Coppel
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label>Tienda</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" id="xTiendaCoppel" name="xTiendaCoppel" class="form-control form-control-sm numbersOnly" maxlength="5">
+                            </div>
+                            <div class="col-8">
+                                <select id="TiendaCoppel" name="TiendaCoppel" class="form-control form-control-sm">
+                                    <option></option>
+                                    <?php
+                                    $data = $this->db->query("SELECT numtda, nomtda, dirtda, numetda, numitda, coltda, ciutda, edotda, teltda1, teltda2, teltda3, coptda, tpprov, provee FROM tiendas AS T ORDER BY ABS(T.numtda) ASC ")->result();
+                                    foreach ($data as $k => $v) {
+                                        print "<option value='{$v->numtda}'>{$v->nomtda}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 d-none">
+                        <table id="tblTiendas" class="table table-hover table-sm table-responsive d-none" style="height: 150px !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">numtda</th><th scope="col">nomtda</th>
+                                    <th scope="col">dirtda</th><th scope="col">numetda</th>
+                                    <th scope="col">numitda</th><th scope="col">coltda</th>
+                                    <th scope="col">ciutda</th><th scope="col">edotda</th>
+                                    <th scope="col">teltda1</th><th scope="col">teltda2</th>
+                                    <th scope="col">teltda3</th><th scope="col">coptda</th>
+                                    <th scope="col">tpprov</th><th scope="col">provee</th>
+                                </tr>
+                            </thead>
+                            <tbody> 
+                                <?php
+                                foreach ($data as $k => $v) {
+                                    $row = "<tr>"
+                                            . "<td>{$v->numtda}</td>" . "<td th scope=\"row\">{$v->nomtda}</td>"
+                                            . "<td>{$v->dirtda}</td>" . "<td>{$v->numetda}</td>"
+                                            . "<td>{$v->numitda}</td>";
+                                    $row .= "<td>{$v->coltda}</td>";
+                                    $row .= "<td>{$v->ciutda}</td>";
+                                    $row .= "<td>{$v->edotda}</td>";
+                                    $row .= "<td>{$v->teltda1}</td>";
+                                    $row .= "<td>{$v->teltda2}</td>";
+                                    $row .= "<td>{$v->teltda3}</td>";
+                                    $row .= "<td>{$v->coptda}</td>";
+                                    $row .= "<td>{$v->tpprov}</td>";
+                                    $row .= "<td>{$v->provee}</td>";
+                                    $row .= "</tr>";
+                                    print $row;
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-2">
+                        <label>Factura</label>
+                        <input type="text" id="FacturaCoppel" name="FacturaCoppel" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-2">
+                        <label>Fecha</label>
+                        <input type="text" id="FechaFacturaCoppel" name="FechaFacturaCoppel" class="form-control date notEnter form-control-sm">
+                    </div>
+                    <div class="col-2">
+                        <label>Pedido</label>
+                        <input type="text" id="PedidoCoppel" name="PedidoCoppel" class="form-control form-control-sm">
+                    </div>
+                    <div class="w-100"></div>
+
+                    <div class="col-3">
+                        <label>Proveedor</label>
+                        <input type="text" id="CoppelProveedor" name="CoppelProveedor" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-3">
+                        <label>T-Provee</label>
+                        <input type="text" id="TProveedor" name="TProveedor" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-3">
+                        <label>N.Bodega</label>
+                        <input type="text" id="NBodega" name="NBodega" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-3">
+                        <label>Direccion</label>
+                        <input type="text" id="DireccionBodega" name="DireccionBodega" class="form-control form-control-sm">
+                    </div>
+                    <div class="w-100"></div> 
+                    <div class="col-4">
+                        <label>Ciudad</label>
+                        <input type="text" id="CiudadTiendaCoppel" name="CiudadTiendaCoppel" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-2">
+                        <label>Código Postal</label>
+                        <input type="text" id="CodigoPostalTienda" name="CodigoPostalTienda" class="form-control form-control-sm numbersOnly">
+                    </div>
+                    <div class="col-2">
+                        <label>No.Bodega</label>
+                        <input type="text" id="NoBodegaCoppel" name="NoBodegaCoppel" class="form-control form-control-sm">
+                    </div> 
+                    <div class="col-2">
+                        <label>C.Lotes</label>
+                        <input type="text" id="CantidadLotes" name="CantidadLotes" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-2">
+                        <label>CantidadPrepack</label>
+                        <input type="text" id="CantidadPrepack" name="CantidadPrepack" class="form-control form-control-sm">
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-2">
+                        <label>Importe</label>
+                        <input type="text" id="ImporteAddenda" name="ImporteAddenda" class="form-control form-control-sm numbersOnly numericdot">
+                    </div>
+                    <div class="col-2">
+                        <label>Descuento</label>
+                        <input type="text" id="DescuentoAddenda" name="ImporteAddenda" class="form-control form-control-sm numbersOnly numericdot">
+                    </div>
+                    <div class="col-3">
+                        <label>Subtotal</label>
+                        <input type="text" id="SubtotalAddenda" name="SubtotalAddenda" class="form-control form-control-sm numbersOnly numericdot">
+                    </div>
+                    <div class="col-2">
+                        <label>I.V.A</label>
+                        <input type="text" id="IVAAddenda" name="IVAAddenda" class="form-control form-control-sm numbersOnly numericdot">
+                    </div>
+                    <div class="col-3">
+                        <label>TOTAL</label>
+                        <input type="text" id="TotalAddenda" name="TotalAddenda" class="form-control form-control-sm numbersOnly numericdot">
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table id="tblAddendasCoppel" class="table table-hover table-sm nowrap" style="width: 100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th><th scope="col">FACTURA</th>
+                                        <th scope="col">R.SOC</th><th scope="col">EST.CTE</th>
+                                        <th scope="col">TALLA</th><th scope="col">EST.4E</th>
+                                        <th scope="col">PARES</th><th scope="col">PRECIO</th>
+                                        <th scope="col">PRECODES</th><th scope="col">CANTIDAD</th>
+                                        <th scope="col">%DECTO</th><th scope="col">MON.DESCTO</th>
+                                        <th scope="col">TOTAL</th><th scope="col">TOTALCONDESCUENTO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-active">
+                                        <th scope="row">1</th><th scope="row">2</th><td>3</td><td>4</td><td>5</td>
+                                        <td>6</td><td>7</td><td>8</td><td>9</td><td>10</td> 
+                                        <td>11</td><td>12</td><td>13</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <span class="fa fa-times"></span> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
@@ -789,7 +961,9 @@
             ConsignarATienda = mdlConsignarA.find("#Tienda"),
             btnCerrarTiendaModal = mdlConsignarA.find("#btnCerrarTiendaModal"),
             btnNuevaFactura = pnlTablero.find("#btnNuevaFactura"),
-            btnRefrescaRegistro = pnlTablero.find("#btnRefrescaRegistro");
+            btnRefrescaRegistro = pnlTablero.find("#btnRefrescaRegistro"),
+            btnAdendaCoppel = pnlTablero.find("#btnAdendaCoppel"),
+            mdlAddendaCoppel = $("#mdlAddendaCoppel");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
@@ -798,6 +972,68 @@
 
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
+
+        /*INICIO MODAL ADDENDA*/
+        handleEnterDiv(mdlAddendaCoppel);
+
+        mdlAddendaCoppel.find("#TiendaCoppel").change(function () {
+            var tienda = $(this).val();
+            if (tienda) {
+
+            }
+        });
+
+        mdlAddendaCoppel.find("#xTiendaCoppel").keydown(function (e) {
+            var tcp = $(this).val();
+            if (e.keyCode === 13 && tcp) {
+                var index = 0;
+                $.each(mdlAddendaCoppel.find("#tblTiendas tbody tr"), function (k, v) {
+                    var nmtda = $(v).find("td");
+                    if ($(nmtda).eq(0).text() === tcp) {
+                        console.log(v);
+                        var r = nmtda;
+                        mdlAddendaCoppel.find("#TiendaCoppel")[0].selectize.setValue(r.eq(0).text());
+                        if (mdlAddendaCoppel.find("#TiendaCoppel").val()) {
+                            onDisable(mdlAddendaCoppel.find("#TiendaCoppel"));
+                        } else {
+                            onEnable(mdlAddendaCoppel.find("#TiendaCoppel"));
+                        }
+                        mdlAddendaCoppel.find("#CoppelProveedor").val(r.eq(1).text());
+                        mdlAddendaCoppel.find("#DireccionBodega").val(r.eq(2).text());
+                        mdlAddendaCoppel.find("#CiudadTiendaCoppel").val(r.eq(6).text());
+                        mdlAddendaCoppel.find("#CodigoPostalTienda").val(r.eq(11).text());
+                        mdlAddendaCoppel.find("#TProveedor").val(r.eq(12).text());
+                        mdlAddendaCoppel.find("#NBodega").val(r.eq(13).text());
+                        mdlAddendaCoppel.find("#FacturaCoppel").focus().select();
+                        index = 1;
+                        return false;
+                    }
+                });
+                if (index <= 0) {
+                    onEnable(mdlAddendaCoppel.find("#TiendaCoppel"));
+                    onClearInputs(mdlAddendaCoppel);
+                    onClearSelects(mdlAddendaCoppel);
+                }
+            }
+            if (mdlAddendaCoppel.find("#xTiendaCoppel").val() === '' ||
+                    e.keyCode === 8 && mdlAddendaCoppel.find("#xTiendaCoppel").val() === '') {
+                onEnable(mdlAddendaCoppel.find("#TiendaCoppel"));
+                onClearInputs(mdlAddendaCoppel);
+                onClearSelects(mdlAddendaCoppel);
+            }
+        });
+
+        mdlAddendaCoppel.on('shown.bs.modal', function () {
+            mdlAddendaCoppel.find("input").val("");
+            mdlAddendaCoppel.find("#xTiendaCoppel").focus().select();
+        });
+
+        btnAdendaCoppel.click(function () {
+            mdlAddendaCoppel.modal('show');
+        });
+        /*FIN MODAL ADDENDA*/
+
+
 
         btnRefrescaRegistro.click(function () {
             $.getJSON('<?php print base_url('FacturacionProduccion/getRegistrosPreFacturados') ?>', {
@@ -1044,7 +1280,7 @@
                             pares_finales = pares_facturados + pares_a_facturar;
                             if (pares_a_facturar > 0) {
                                 console.log("son pares validos? => ", validos);
-//                                if (pares_finales <= pares && validos) {
+                                //                                if (pares_finales <= pares && validos) {
                                 console.log('PARES OK');
                                 onAceptarControl();
 //                                } else {
@@ -1052,7 +1288,7 @@
 //                                        pnlTablero.find("#CAF1").focus().select();
 //                                    });
 //                                    return;
-//                                }
+                                //                                }
                             } else {
                                 onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', function () {
                                     pnlTablero.find("#CAF1").focus().select();
@@ -1234,7 +1470,7 @@
                                         v.ESTATUS_PRODUCCION, 1]);
 //                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
 //                                                facturado = true;
-//                                            }
+                                    //                                            }
                                 });
                                 ParesFacturados.rows.add(r).draw(false);
                                 $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
@@ -1832,7 +2068,7 @@
 //                            Control.focus().select();
 //                        });
 //                    }
-//                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
+                //                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
                     CONTROL: Control.val() ? Control.val() : ''
                 }).done(function (aa) {
@@ -1865,7 +2101,7 @@
 //                                                Control.focus().select();
 //                                            });
 //                                            return;
-//                                        }
+                                //                                        }
                                 Corrida.val(xx.Serie);
                                 var t = 0;
                                 for (var i = 1; i < 23; i++) {
@@ -1956,7 +2192,7 @@
 //                        Control.focus().select();
 //                    });
 //                    return;
-//                }
+                //                }
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
@@ -2091,7 +2327,7 @@
 //        //            console.log(rowx);
 //        ParesFacturados.row.add(rowx).draw(false);
 //        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-//        getTotalFacturado();
+        //        getTotalFacturado();
         /*REGISTRAR EN FACTURACION*/
         TPFactura.attr('disabled', false);
         ClienteFactura[0].selectize.enable();

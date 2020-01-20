@@ -299,7 +299,7 @@ class FacturacionProduccion extends CI_Controller {
                 'status' => 1, 'pagos' => 0,
                 'saldo' => $TOTAL, 'comiesp' => 1,
                 'tcamb' => $x['TIPO_DE_CAMBIO'],
-                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
@@ -379,7 +379,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["iva"] = $x["IVA"];
             $f["staped"] = 1;
             $f["monletra"] = $x["TOTAL_EN_LETRA"];
-            $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1);
+            $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1);
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
             $f["origen"] = 0;
@@ -430,7 +430,7 @@ class FacturacionProduccion extends CI_Controller {
                     'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
                     'importe' => $x['SUBTOTAL'], 'fecha' => "$anio-$mes-$dia $hora",
                     'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                     'tcamb' => $tipo_cambio,
                     'noidentificado' => NULL,
                     'referencia' => $x['REFERENCIA'],
@@ -1155,6 +1155,15 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
     public function onControlSinTerminar() {
         try {
             
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function getTiendasCoppel() {
+        try {
+            $data = $this->db->query("SELECT numtda, nomtda, dirtda, numetda, numitda, coltda, ciutda, edotda, teltda1, teltda2, teltda3, coptda, tpprov, provee FROM tiendas AS T ORDER BY ABS(T.numtda) ASC ")->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

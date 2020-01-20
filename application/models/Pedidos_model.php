@@ -56,8 +56,8 @@ class Pedidos_model extends CI_Model {
 
     public function getPedidoDByID($ID, $CLIENTE) {
         try {
-            $ini = '<div class=\"row\"><div class=\"col-12 text-danger text-nowrap talla\" align=\"center\">';
-            $mid = '</div><div class="col-12 cantidad" align="center">';
+            $ini = '<div class=\"row\"><div class=\"col-12 text-danger text-nowrap talla font-weight-bold\" align=\"center\">';
+            $mid = '</div><div class="col-12 cantidad font-weight-bold" align="center">';
             $end = '</div></div>';
             $data = $this->db->select("P.ID as PDID,
                                     P.Clave AS Pedido,
@@ -94,13 +94,10 @@ class Pedidos_model extends CI_Model {
                                     CONCAT('$ini',(CASE WHEN S.T22 = 0 THEN '-' ELSE S.T22 END),'$mid',CASE WHEN P.C22 = 0 THEN '-' ELSE P.C22 END,'$end') AS T22,
 
                                     CONCAT('<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminar(this,2)\"><span class=\"fa fa-trash\"></span> </button>') AS ELIMINAR", false)
-                            ->from('pedidox AS P')
-                            ->join('series AS S', 'P.Serie = S.Clave')
-                            ->where('P.Clave', $ID)
-                            ->where('P.Cliente', $CLIENTE)
+                            ->from('pedidox AS P')->join('series AS S', 'P.Serie = S.Clave')
+                            ->where('P.Clave', $ID)->where('P.Cliente', $CLIENTE)
                             ->where_not_in('P.stsavan', 14)
-                            ->order_by('abs(S.Clave)', 'ASC')
-                            ->get()->result();
+                            ->order_by('abs(S.Clave)', 'ASC')->get()->result();
 //            print $this->db->last_query();
             return $data;
         } catch (Exception $exc) {
@@ -114,7 +111,7 @@ class Pedidos_model extends CI_Model {
                             ->from('fichatecnica as FT')
                             ->join('articulos AS A', 'FT.Articulo = A.Clave AND A.Grupo = 3')
                             ->where('FT.Estilo', $Estilo)
-                            ->where('FT.Color', $Color) 
+                            ->where('FT.Color', $Color)
                             ->limit(1)
                             ->get()->result();
         } catch (Exception $exc) {

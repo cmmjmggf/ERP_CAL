@@ -1,6 +1,3 @@
-<?php
-var_dump($this->session);
-?>
 <div class="card m-3 animated fadeIn d-none" id="pnlTablero">
     <div class="card-body">
         <div class="row">
@@ -22,7 +19,7 @@ var_dump($this->session);
             </div>
             <div class="col-sm-4">
                 <label>Pedido</label>
-                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #f1f0eb; " class="form-control form-control-sm  noBorders notEnter numbersOnly" placeholder="# # # # #">
+                <input type="text" id="NumeroDePedido" name="NumeroDePedido" style="font-size: 20px; font-style: italic; background-color: #f1f0eb; border-color: #b1afa9; " class="form-control form-control-sm  noBorders notEnter numbersOnly" placeholder="# # # # #">
             </div>
             <div class="col-sm-1 float-right" align="right">
                 <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar">
@@ -242,15 +239,16 @@ var_dump($this->session);
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
+<!--                </div>
+            </div>-->
             <!--SEGUNDO CONTENEDOR-->
 
             <!--FIN SEGUNDO CONTENEDOR-->
             <!--DETALLE-->
             <!--SEGUNDO CONTENEDOR-->
-            <div class="card  m-3 ">
-                <div class="card-body">
+<!--            <div class="card  m-3 ">
+                <div class="card-body">-->
+                    
                     <div class="row">
                         <div class="col-12"> 
                             <table id="tblPedidoDetalle" class="table table-hover table-sm"  style="width: 100% !important;">
@@ -311,11 +309,16 @@ var_dump($this->session);
                     </div><!--ROW-->
                     <div class="row mt-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 font-weight-bold "></div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">Pares</div>
-                        <div id="ParesTotales" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center"></div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">Total</div>
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">
+                            <h4 class="font-weight-bold">Pares</h4>
+                        </div>
+                        <div id="ParesTotales" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center" style="color: #4caf50 !important;"></div>
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center"> 
+                            <h4 class="font-weight-bold">Total</h4>
+                        </div>
                         <div id="Total" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center"></div>
                     </div>
+                    
                 </div>
             </div>
         </fieldset>
@@ -484,8 +487,8 @@ var_dump($this->session);
                 bx = $.isNumeric(b) ? parseFloat(b) : 0;
                 return  (ax + bx);
             }, 0);
-            $("#ParesTotales").html("<span class='text-warning'>" + pares + "</span>");
-            $("#Total").html("<span class='text-info'>$" + $.number(total, 3, '.', ',') + "</span>");
+            $("#ParesTotales").html("<h4 style=\"color: #fff; !important; font-weight:bold;  text-shadow: 0 0 3px #000000, 0 0 5px #000000;\">" + pares + "</h4>");
+            $("#Total").html("<h4 style='color: #fff; !important; font-weight:bold;  text-shadow: 0 0 3px #000000, 0 0 5px #000000;'>$" + $.number(total, 3, '.', ',') + "</h4>");
         },
         initComplete: function (x, y) {
             HoldOn.close();
@@ -784,7 +787,7 @@ var_dump($this->session);
                     getError(x);
                 });
                 pnlDatos.find('#Color').val(color);
-                pnlDatos.find("#Maquila").focus().select();
+                pnlDatos.find("#FechaEntrega").focus().select();
 
             } else {
                 pnlDatos.find("#Precio").prop('readonly', true);
@@ -1562,5 +1565,8 @@ var_dump($this->session);
         border-bottom-color: #007bff !important;
         background-color: #fff !important;
         color: #000 !important;
+    }
+    .card {
+        background-color: #efefef;; 
     }
 </style>

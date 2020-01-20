@@ -274,7 +274,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 'tipo' => $x['TP_DOCTO'],
                 'status' => 1, 'pagos' => 0,
                 'saldo' => $TOTAL, 'comiesp' => 1,
-                'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                'tcamb' => $x['TIPO_DE_CAMBIO'], 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
                 'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
@@ -343,7 +343,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["iva"] = $x["IVA"];
             $f["staped"] = 1;
             $f["monletra"] = $x["TOTAL_EN_LETRA"];
-            $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1);
+            $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1);
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
             $f["origen"] = 0;
@@ -393,7 +393,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                     'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
                     'importe' => $x['SUBTOTAL'], 'fecha' => $x['FECHA'],
                     'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MODENA"] : 1),
+                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                     'tcamb' => $tipo_cambio,
                     'noidentificado' => NULL,
                     'referencia' => $x['REFERENCIA'],

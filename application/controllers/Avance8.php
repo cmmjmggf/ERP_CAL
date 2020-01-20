@@ -311,6 +311,8 @@ class Avance8 extends CI_Controller {
                                 ->where('F.Estilo', $xXx['ESTILO'])
                                 ->where('F.Fraccion', $v->NUMERO_FRACCION)
                                 ->get()->result();
+//                var_dump($check_fraccion,$check_fraccion_fxe);
+                
 //                print $this->db->last_query();
                 if ($check_fraccion[0]->EXISTE <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
                     $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL FROM pedidox AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE  FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();

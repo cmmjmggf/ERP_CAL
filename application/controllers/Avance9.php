@@ -695,6 +695,7 @@ class Avance9 extends CI_Controller {
                             /* PAGAR LA FRACCION 103 AL EMPLEADO 49 */
                             $this->db->insert('fracpagnomina', $data);
                             $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40);
+                            
                             print '{"AVANZO":"1","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
                         } else {
                             print "\n 105 ALMACEN DE CORTE";

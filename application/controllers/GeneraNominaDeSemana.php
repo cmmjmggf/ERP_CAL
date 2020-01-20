@@ -99,7 +99,11 @@ class GeneraNominaDeSemana extends CI_Controller {
                     $SUELDO_FINAL = 0;
                     $SUELDO_FINAL = $v->Sueldo * intval($ASISTENCIAS);
                     /* 1.1 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) */
-                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+//                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    $EXISTE_EN_PRENOMINA = $this->db->query("SELECT PN.* FROM prenomina AS PN "
+                                    . "WHERE PN.año ={$x['ANIO']} AND PN.numsem = {$x['SEMANA']} "
+                                    . "AND PN.numemp = {$v->Numero} AND PN.numcon =1")->result();
+                                    
                     if (empty($EXISTE_EN_PRENOMINA)) {
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
@@ -428,7 +432,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
 
                     /* 3.6 INSERT PARA EL CONCEPTO 5 = SALARIO DESTAJO */
-                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
+                    $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 5);
                     if (empty($EXISTE_EN_PRENOMINA)) {
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],

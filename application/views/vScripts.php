@@ -1939,12 +1939,23 @@
             window.open(v, '_blank');
         });
     }
-    
+
     function onCheck(check_a_checkear) {
         check_a_checkear[0].checked = true;
     }
-    
+
     function onUnCheck(check_a_descheckear) {
         check_a_descheckear[0].checked = false;
+    }
+    
+    function onClearInputs(div_padre) {
+        $.each(div_padre.find("input"), function (k, v) {
+            div_padre.find("input").val('');
+        });
+    }
+    function onClearSelects(div_padre) {
+        $.each(div_padre.find("select"), function (k, v) {
+            div_padre.find("select")[k].selectize.clear(true);
+        });
     }
 </script>
