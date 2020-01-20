@@ -121,8 +121,8 @@ class ParesAsignadosControl extends CI_Controller {
         $parametros["SEMANAFIN"] = intval($x->post('SEMANA_FINAL'));
         $parametros["ANO"] = intval($x->post('ANIO'));
 
-        $jc->setParametros($parametros); 
-        $jc->setJasperurl('jrxml\asignados\ParesAsignadosAMaquilaSerie.jasper');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\asignados\excel\ParesAsignadosAMaquilaSerie.jasper');
         $jc->setFilename('ParesAsignadosAMaquilaSerie_' . Date('h_i_s'));
         $jc->setDocumentformat('xls');
         print $jc->getReport();
