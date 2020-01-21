@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.8433187801425788"/>
-	<property name="ireport.x" value="133"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="5.259203606311104"/>
+	<property name="ireport.x" value="617"/>
+	<property name="ireport.y" value="102"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -43,15 +43,15 @@ ct.RazonS as nomcliente,
 dv.control,
 dv.estilo,
 dv.comb,
--- (select descripcion from colores where clave = dv.comb and estilo = dv.estilo limit 1) as nomcolor,
+ifnull((select descripcion from colores where clave = dv.comb and estilo = dv.estilo limit 1),'') as nomcolor,
 dv.paredev,
 dv.parefac,
 dv.paredev-dv.parefac as saldo,
 dv.seriped,
 s.T1, s.T2, s.T3, s.T4, s.T5, s.T6, s.T7, s.T8, s.T9, s.T10, s.T11, s.T12, s.T13, s.T14, s.T15, s.T16,
 dv.par01, dv.par02, dv.par03, dv.par04, dv.par05, dv.par06, dv.par07, dv.par08, dv.par09, dv.par10, dv.par11, dv.par12, dv.par13, dv.par14, dv.par15, dv.par16,
-def.Descripcion as defecto,
-det.Descripcion as detalle,
+(select descripcion from defectos where clave = dv.defecto) as defecto,
+(select descripcion from defectosdetalle where clave = dv.detalle) as detalle,
 dv.stafac,
 (case
 when dv.staapl = 0 then 'No'
@@ -69,8 +69,6 @@ end) as factu
 from devolucionnp dv
 join series s on s.clave = dv.seriped
 join clientes ct on ct.clave = dv.cliente
-join defectos def on def.clave = dv.defecto
-join defectosdetalle det on det.clave = dv.detalle
 where dv.stafac < 2
 order by dv.clasif , dv.seriped , dv.control asc;]]>
 	</queryString>
@@ -91,6 +89,7 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 	<field name="comb" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nomcolor" class="java.lang.String"/>
 	<field name="paredev" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -199,8 +198,12 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 	<field name="par16" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="defecto" class="java.lang.String"/>
-	<field name="detalle" class="java.lang.String"/>
+	<field name="defecto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="detalle" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="stafac" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -277,14 +280,16 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 					<textFieldExpression><![CDATA[$F{nomclasif}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="245" y="1" width="16" height="10" uuid="ce275865-9b1e-490c-a177-ab14b7c42257"/>
+					<reportElement x="245" y="1" width="15" height="10" uuid="ce275865-9b1e-490c-a177-ab14b7c42257"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{paredev_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="261" y="1" width="18" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="be837449-616d-460d-a4e1-ceab5730ec90"/>
+					<reportElement mode="Transparent" x="260" y="1" width="18" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="be837449-616d-460d-a4e1-ceab5730ec90">
+						<printWhenExpression><![CDATA[$V{parefac_1}>0]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -292,7 +297,9 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 					<textFieldExpression><![CDATA[$V{parefac_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="279" y="1" width="19" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f59c0fef-cfb1-42f9-999a-49fa275c70b7"/>
+					<reportElement mode="Transparent" x="278" y="1" width="20" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="f59c0fef-cfb1-42f9-999a-49fa275c70b7">
+						<printWhenExpression><![CDATA[$V{saldo_1}>0]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -307,7 +314,7 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 		<groupHeader>
 			<band height="12">
 				<textField>
-					<reportElement x="277" y="0" width="21" height="11" uuid="8cf6d2fe-ebb8-40b1-b5e5-91d2c1dfde18"/>
+					<reportElement x="278" y="0" width="20" height="11" uuid="8cf6d2fe-ebb8-40b1-b5e5-91d2c1dfde18"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
@@ -320,7 +327,7 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 					</graphicElement>
 				</line>
 				<staticText>
-					<reportElement style="Column header" x="249" y="0" width="28" height="11" forecolor="#000000" uuid="c764426e-dfc0-4410-8a41-fd20baf0b5ae"/>
+					<reportElement style="Column header" x="249" y="0" width="29" height="11" forecolor="#000000" uuid="c764426e-dfc0-4410-8a41-fd20baf0b5ae"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="7" isBold="true"/>
 					</textElement>
@@ -729,14 +736,14 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<text><![CDATA[Control]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="145" y="44" width="22" height="11" forecolor="#000000" uuid="72675927-d3e7-43d3-ab1a-c686b9c25cbb"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement style="Column header" x="145" y="44" width="25" height="11" forecolor="#000000" uuid="72675927-d3e7-43d3-ab1a-c686b9c25cbb"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="169" y="44" width="42" height="11" forecolor="#000000" uuid="d70e8744-33bb-4f21-95f5-2ee961b97081"/>
+				<reportElement style="Column header" x="170" y="44" width="41" height="11" forecolor="#000000" uuid="d70e8744-33bb-4f21-95f5-2ee961b97081"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -1172,29 +1179,29 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="111" y="0" width="32" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="e8ea259f-1d02-47d5-b652-145fdbc0f50d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="145" y="0" width="22" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="0a0efd04-2f1f-4aa6-9e2c-3e158fe4ef9d"/>
+				<reportElement mode="Transparent" x="145" y="0" width="25" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="0a0efd04-2f1f-4aa6-9e2c-3e158fe4ef9d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="169" y="0" width="10" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="29c1744d-cb79-4ee3-b63d-cd3f93f80ad6"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
+				<reportElement mode="Transparent" x="170" y="0" width="9" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="29c1744d-cb79-4ee3-b63d-cd3f93f80ad6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comb}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="245" y="0" width="16" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="755f49dc-35b5-4e37-bc95-b59e7be3e686"/>
+				<reportElement mode="Transparent" x="245" y="0" width="15" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="755f49dc-35b5-4e37-bc95-b59e7be3e686"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1202,7 +1209,9 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<textFieldExpression><![CDATA[$F{paredev}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="261" y="0" width="18" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="ed87bbfb-a17d-43a0-aa16-b4046d06a181"/>
+				<reportElement mode="Transparent" x="260" y="0" width="18" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="ed87bbfb-a17d-43a0-aa16-b4046d06a181">
+					<printWhenExpression><![CDATA[$F{parefac}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1210,7 +1219,9 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<textFieldExpression><![CDATA[$F{parefac}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="279" y="0" width="20" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="bd75862e-4517-4ff4-834d-2974b820d417"/>
+				<reportElement mode="Transparent" x="278" y="0" width="20" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="bd75862e-4517-4ff4-834d-2974b820d417">
+					<printWhenExpression><![CDATA[$F{saldo}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1257,6 +1268,14 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factu}]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="179" y="0" width="65" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="472da62e-5939-4614-b35b-8dceb127218b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomcolor}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
@@ -1272,7 +1291,7 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<reportElement x="112" y="0" width="187" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="245" y="1" width="16" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a1cd70e6-2827-4ec1-adc0-ad634107a763"/>
+				<reportElement mode="Transparent" x="245" y="1" width="15" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a1cd70e6-2827-4ec1-adc0-ad634107a763"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1280,7 +1299,9 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<textFieldExpression><![CDATA[$V{paredev_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="261" y="1" width="18" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a7230284-da21-46f9-97c8-dd917cbabb70"/>
+				<reportElement mode="Transparent" x="260" y="1" width="18" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="a7230284-da21-46f9-97c8-dd917cbabb70">
+					<printWhenExpression><![CDATA[$V{parefac_2}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1288,7 +1309,9 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<textFieldExpression><![CDATA[$V{parefac_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="279" y="1" width="19" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ae91fc82-4397-48af-b508-50c5c71781d1"/>
+				<reportElement mode="Transparent" x="278" y="1" width="20" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ae91fc82-4397-48af-b508-50c5c71781d1">
+					<printWhenExpression><![CDATA[$V{saldo_2}>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

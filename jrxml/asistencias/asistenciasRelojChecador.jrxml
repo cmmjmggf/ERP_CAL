@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="1.650000000000009"/>
-	<property name="ireport.x" value="255"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -69,7 +69,8 @@ fecha7,
 time_format(emi1,'%h:%i') as emi1, time_format(smi1,'%h:%i') as smi1,
 time_format(emi2,'%h:%i') as emi2, time_format(smi2,'%h:%i') as smi2,
 time_format(timediff(emi1,'08:30'),'%H:%i')  as difmi1,
-time_format(timediff(emi2,'16:00'),'%H:%i')  as difmi2
+time_format(timediff(emi2,'16:00'),'%H:%i')  as difmi2,
+identifica
 FROM relojchecadortemp order by numdep asc, numemp]]>
 	</queryString>
 	<field name="numemp" class="java.lang.Integer">
@@ -209,6 +210,9 @@ FROM relojchecadortemp order by numdep asc, numemp]]>
 	</field>
 	<field name="difmi1" class="java.lang.String"/>
 	<field name="difmi2" class="java.lang.String"/>
+	<field name="identifica" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<group name="Depto" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{nomdep}]]></groupExpression>
 		<groupHeader>
@@ -870,6 +874,11 @@ FROM relojchecadortemp order by numdep asc, numemp]]>
 	</columnHeader>
 	<detail>
 		<band height="10" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="128" y="0" width="630" height="10" backcolor="#FF9999" uuid="1cb6d7b0-2a73-47b0-a4ae-f1c47174db7f">
+					<printWhenExpression><![CDATA[$F{identifica} != ""]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
 			<line>
 				<reportElement x="128" y="-1" width="630" height="1" uuid="d2e3addd-98f2-4e2c-8fac-42a0146951a5"/>
 				<graphicElement>

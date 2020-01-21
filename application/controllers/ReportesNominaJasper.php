@@ -1372,16 +1372,23 @@ FROM costomanoobratemp CMT
                     from semanasnomina where Sem = '$sem' and Ano = '$ano' ";
         $Semanas = $this->db->query($query)->result();
 
-        /* Trameos los registros actuales del reloj checador */
+        /* Trameos los registros actuales del reloj checador , los valores por default en ifnull son para los empleados que no checan per que estan dados de alta */
         $query2 = "select
-                cast(ifnull(D.Clave,'999') as signed) as clavedepto,
-                ifnull(D.Descripcion,'NO EXISTE DEPTO') as nombredepto,
-                RC.numemp,RC.nomemp,RC.año,RC.semana,date_format(RC.fecalta,'%Y-%m-%d') as fecalta,RC.turno,RC.hora
-                from relojchecador RC
-                join empleados E on E.Numero = RC.numemp
-                left join departamentos D on D.Clave = E.DepartamentoFisico
-                where RC.semana = $sem and RC.año = $ano and E.DepartamentoFisico like '%$depto%'
-                order by clavedepto asc,RC.nomemp asc, RC.fecalta asc, RC.turno asc  ";
+                    cast(E.DepartamentoFisico as signed) as clavedepto,
+                    (select descripcion from departamentos where clave = E.DepartamentoFisico) as nombredepto,
+                    E.numero as numemp,
+                    E.Busqueda as nomemp,
+                    ifnull(RC.año,'$ano') as año,
+                    ifnull(RC.semana,'$sem') as semana,
+                    ifnull(date_format(RC.fecalta,'%Y-%m-%d'),'{$Semanas[0]->fec1}') as fecalta,
+                    ifnull(RC.turno,'1') as turno,
+                    ifnull(RC.hora,'') as hora,
+                    case when RC.hora is null then '999' else '' end as identifica
+                    from empleados E
+                    left join relojchecador RC on E.Numero = RC.numemp and RC.semana = '$sem' and RC.año = '$ano'
+                    where E.DepartamentoFisico like '%$depto%' and E.AltaBaja = 1
+                    order by clavedepto asc,E.Busqueda asc, RC.fecalta asc, RC.turno asc ";
+        //print $query2;
         $Movimientos = $this->db->query($query2)->result();
 
         //Iteramos en los registros para hacer el insert/update
@@ -1536,7 +1543,8 @@ FROM costomanoobratemp CMT
                         'fecha7' => $Semanas[0]->fec7,
                         'año' => $M->año,
                         'sem' => $M->semana,
-                        $turno => $M->hora
+                        $turno => $M->hora,
+                        'identifica' => $M->identifica
                     ));
                 }
             }

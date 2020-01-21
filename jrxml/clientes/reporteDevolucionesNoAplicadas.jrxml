@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.2590115293645094"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="5.259203606311104"/>
+	<property name="ireport.x" value="602"/>
+	<property name="ireport.y" value="75"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -740,14 +740,14 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 				<text><![CDATA[Control]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="145" y="44" width="22" height="11" forecolor="#000000" uuid="72675927-d3e7-43d3-ab1a-c686b9c25cbb"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement style="Column header" x="145" y="44" width="26" height="11" forecolor="#000000" uuid="72675927-d3e7-43d3-ab1a-c686b9c25cbb"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="169" y="44" width="42" height="11" forecolor="#000000" uuid="d70e8744-33bb-4f21-95f5-2ee961b97081"/>
+				<reportElement style="Column header" x="171" y="44" width="40" height="11" forecolor="#000000" uuid="d70e8744-33bb-4f21-95f5-2ee961b97081"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -1183,24 +1183,24 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="111" y="0" width="32" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="e8ea259f-1d02-47d5-b652-145fdbc0f50d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="145" y="0" width="22" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="0a0efd04-2f1f-4aa6-9e2c-3e158fe4ef9d"/>
+				<reportElement mode="Transparent" x="145" y="0" width="26" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="0a0efd04-2f1f-4aa6-9e2c-3e158fe4ef9d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="169" y="0" width="10" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="29c1744d-cb79-4ee3-b63d-cd3f93f80ad6"/>
+				<reportElement mode="Transparent" x="171" y="0" width="10" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="29c1744d-cb79-4ee3-b63d-cd3f93f80ad6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comb}]]></textFieldExpression>
 			</textField>
@@ -1277,7 +1277,7 @@ order by dv.clasif , dv.seriped , dv.control asc;]]>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="181" y="0" width="63" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="01011040-a076-4cd0-8c6e-21e4e770e5d9"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomcolor}]]></textFieldExpression>
