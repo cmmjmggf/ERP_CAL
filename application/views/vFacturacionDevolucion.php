@@ -133,7 +133,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
-                <input type="text" id="TMNDAFactura" name="TMNDAFactura" maxlength="1" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="TMNDAFactura" name="TMNDAFactura" maxlength="1" class="form-control form-control-sm numbersOnly"  maxlength="1">
             </div> 
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1">
                 <div class="form-group">  
@@ -718,18 +718,23 @@
         });
 
         pnlTablero.find("input[id^='CAF']").keydown(function (e) {
-            console.log(e.keyCode)
+            console.log(e.keyCode);
             var cde = e.keyCode;
             if (cde === 13 || cde === 9) {
                 var input = $(this);
-                var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
+                var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val() ? pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val() : 0;
                 var cantidad_a_devolver = $(this).val();
-                if (cantidad_a_devolver > cantidad_facturada) {
-                    onDisable(btnAcepta);
-                    onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 1", function () {
-                        input.focus().select();
-                    });
-                    return;
+                console.log(cantidad_a_devolver, cantidad_facturada);
+                if (cantidad_facturada > 0) {
+                    if (cantidad_a_devolver > cantidad_facturada) {
+                        onDisable(btnAcepta);
+                        onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 123 " + cantidad_a_devolver + " " + cantidad_facturada, function () {
+                            input.focus().select();
+                        });
+                        return;
+                    } else {
+                        onEnable(btnAcepta);
+                    }
                 } else {
                     onEnable(btnAcepta);
                 }
@@ -741,9 +746,9 @@
             var input = $(this);
             var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
             var cantidad_a_devolver = $(this).val();
-            if (cantidad_a_devolver > cantidad_facturada) {
+            if (parseFloat(cantidad_a_devolver) > parseFloat(cantidad_facturada)) {
                 onDisable(btnAcepta);
-                onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 1", function () {
+                onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA 2", function () {
                     input.focus().select();
                 });
                 return;
@@ -859,13 +864,20 @@
             for (var i = 1; i < 23; i++) {
                 var pares_facturados = pnlTablero.find("#CF" + i).val();
                 var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
-                if (pares_a_devolver > pares_facturados) {
-                    btnAcepta.attr('disabled', true);
-                    registro_valido = false;
-                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
-                        pnlTablero.find("#CAF" + i).focus().select();
-                    });
-                    return;
+                if (pares_facturados > 0) {
+                    if (pares_a_devolver > pares_facturados) {
+                        btnAcepta.attr('disabled', true);
+                        registro_valido = false;
+                        onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
+                            pnlTablero.find("#CAF" + i).focus().select();
+                        });
+                        return;
+                    } else {
+                        registro_valido = true;
+                        if (parseInt(pares_a_devolver) > 0) {
+                            pares_devueltos += parseInt(pares_a_devolver);
+                        }
+                    }
                 } else {
                     registro_valido = true;
                     if (parseInt(pares_a_devolver) > 0) {
@@ -918,7 +930,7 @@
                     onNotifyOldPCE('', 'SE HA CERRADO EL DOCUMENTO', 'info', "top", "center");
                     ClienteFactura[0].selectize.enable();
                     FAPEORCOFactura.attr('readonly', false);
-                    TPFactura.attr('disabled', false); 
+                    TPFactura.attr('disabled', false);
                     getVistaPreviaDocumentoCerrado(function () {
                         iMsg("SE HA CERRADO EL DOCUMENTO", "s", function () {
                             nuevo = true;
@@ -952,8 +964,8 @@
                         });
                     });
                     onCloseOverlay();
-                    
-                    
+
+
 //                    getVistaPreviaDocumentoCerrado(function () {
 //                        iMsg('SE HA CERRADO EL DOCTO', 's', function () {
 //                            btnCierraDocto.attr('disabled', true);
@@ -1358,6 +1370,7 @@
                         $.getJSON('<?php print base_url('FacturacionDevolucion/getPedidosXFacturarXControl') ?>',
                                 {
                                     CONTROL: Control.val(),
+                                    CLIENTE: ClienteFactura.val(),
                                     TP: TPFactura.val() ? TPFactura.val() : ''
                                 }).done(function (a) {
                             var xxx = a[0];
@@ -1583,18 +1596,23 @@
 
     function onCalcularPares(e, i, evt) {
 //        console.log("CODEEEE", evt.keyCode);
-        var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val();
+        var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val() ? pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val() : 0;
         var cantidad_a_devolver = $(e).val();
         if (evt.keyCode === 13 || evt.keyCode === 9) {
-            if (cantidad_a_devolver > cantidad_facturada) {
-                btnAcepta.attr('disabled', true);
-                onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA", function () {
-                    $(e).focus().select();
+            if (cantidad_facturada > 0) {
+                if (parseFloat(cantidad_a_devolver) > parseFloat(cantidad_facturada)) {
                     btnAcepta.attr('disabled', true);
-                });
-                return;
+                    onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA", function () {
+                        $(e).focus().select();
+                        btnAcepta.attr('disabled', true);
+                    });
+                    return;
+                } else {
+                    btnAcepta.attr('disabled', false);
+                    getTotalPares();
+                }
             } else {
-                btnAcepta.attr('disabled', false);
+                onEnable(btnAcepta);
                 getTotalPares();
             }
         }

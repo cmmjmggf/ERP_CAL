@@ -706,6 +706,8 @@
             });
         }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
+        
+        
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n * AVANCE NOMINA * \n", data);
             Avance.ajax.reload(function () {

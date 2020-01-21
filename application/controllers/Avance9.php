@@ -400,7 +400,7 @@ class Avance9 extends CI_Controller {
                 "pares" => $xXx['PARES'],
                 "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
                 "semana" => $xXx['SEMANA'],
-                "fecha_registro"=>Date('d/m/Y h:i:s'),
+                "fecha_registro" => Date('d/m/Y h:i:s'),
                 "depto" => $xXx['DEPARTAMENTO'],
                 "anio" => $xXx['ANIO']);
             $msj = "[";
@@ -630,7 +630,10 @@ class Avance9 extends CI_Controller {
                             $this->db->insert('fracpagnomina', $data);
 
                             /* ACTUALIZA A 40 FOLEADO, stsavan 40 */
-                            $this->onAvanzarXControl($xXx['CONTROL'], 'FOLEADO', 40, 4);
+                            $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20) AND A.Control ={$xXx['CONTROL']}")->result();
+                            if (intval($revisar_avance[0]->EXISTE) === 2) {
+                                $this->onAvanzarXControl($xXx['CONTROL'], 'FOLEADO', 40, 4);
+                            }
 //                            print '{"AVANZO":"1","FR":"102","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A FOLEADO - SWITCH 80"}';
                         }
 
@@ -666,36 +669,33 @@ class Avance9 extends CI_Controller {
                                             ->where('F.control', $xXx['CONTROL'])
                                             ->where('F.numfrac', $FRACCION)
                                             ->get()->result();
-//                        var_dump($check_fraccion);
-                            if (intval($check_fraccion[0]->EXISTE) >= 1) {
-                                print '{"AVANZO":"0","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL YA HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
-                                exit(0);
-                            }
-                            $data["fraccion"] = $FRACCION;
-                            $data["numfrac"] = $FRACCION;
-                            /* FILTRADO POR FRACCION 102 RAYADO */
-                            $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$FRACCION}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
-                            $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
-                            $data["preciofrac"] = $PXFC;
-                            $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-                            $this->db->insert('avance', array(
-                                'Control' => $xXx['CONTROL'],
-                                'FechaAProduccion' => Date('d/m/Y'),
-                                'Departamento' => 90,
-                                'DepartamentoT' => 'ENTRETELADO',
-                                'FechaAvance' => Date('d/m/Y'),
-                                'Estatus' => 'A',
-                                'Usuario' => $_SESSION["ID"],
-                                'Fecha' => Date('d/m/Y'),
-                                'Hora' => Date('h:i:s a'),
-                                'Fraccion' => 51
-                            ));
-                            $id = $this->db->insert_id();
-                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-                            /* PAGAR LA FRACCION 103 AL EMPLEADO 49 */
-                            $this->db->insert('fracpagnomina', $data);
-                            $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40);
+
+                            if (intval($check_fraccion[0]->EXISTE) === 0) {
+                                $data["fraccion"] = $FRACCION;
+                                $data["numfrac"] = $FRACCION;
+                                /* FILTRADO POR FRACCION 102 RAYADO */
+                                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$FRACCION}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                                $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                                $data["preciofrac"] = $PXFC;
+                                $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
+                                $this->db->insert('fracpagnomina', $data);
+                            } 
                             
+                            /*AVANCE*/ 
+                            $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20,40) AND A.Control ={$xXx['CONTROL']}")->result();
+                            if (intval($revisar_avance[0]->EXISTE) === 3) {
+                                $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40); 
+                                $this->db->insert('avance', array(
+                                    'Control' => $xXx['CONTROL'], 'FechaAProduccion' => Date('d/m/Y'),
+                                    'Departamento' => 90, 'DepartamentoT' => 'ENTRETELADO',
+                                    'FechaAvance' => Date('d/m/Y'), 'Estatus' => 'A',
+                                    'Usuario' => $_SESSION["ID"], 'Fecha' => Date('d/m/Y'),
+                                    'Hora' => Date('h:i:s a'), 'Fraccion' => 51
+                                ));
+                                $id = $this->db->insert_id();
+                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                /* PAGAR LA FRACCION 103 AL EMPLEADO 49 */
+                            }                         
                             print '{"AVANZO":"1","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
                         } else {
                             print "\n 105 ALMACEN DE CORTE";

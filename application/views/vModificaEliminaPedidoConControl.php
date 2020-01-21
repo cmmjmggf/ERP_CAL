@@ -24,6 +24,10 @@
         </div>
         <div class="card-block mt-4">
             <div class="row">
+                <div class="col-12 d-none">
+                    <label for="">ID</label>
+                    <input type="text" id="IDPEDIDO" name="IDPEDIDO" class="form-control form-control-sm numbersOnly d-none">
+                </div>
                 <div class="col-3">
                     <label for="">Control</label>
                     <input type="text" id="ControlMEPCC" name="ControlMEPCC" class="form-control form-control-sm numbersOnly">
@@ -60,7 +64,7 @@
                                             <?php
                                             $new_style = "width: 37px;padding-right: 1px;padding-left: 1px; font-weight: bold; ";
                                             for ($i = 1; $i < 23; $i++) {
-                                                print '<td><span class="T' . $i . '" style="font-weight: bold; "></span><input type="text" style="' . $new_style . '" maxlength="4" class="numbersOnly d-none" name="T' . $i . '" disabled></td>';
+                                                print '<td><span class="T' . $i . '" style="font-weight: bold; "></span><input type="text" style="' . $new_style . '" maxlength="4" class="numbersOnly d-none" id="xT' . $i . '" name="T' . $i . '" disabled></td>';
                                             }
                                             ?>
                                             <td class="font-weight-bold text-white">Pares</td>
@@ -68,7 +72,7 @@
                                         <tr>
                                             <?php
                                             for ($index = 1; $index < 23; $index++) {
-                                                print '<td><input type="text" style="' . $new_style . '" maxlength="4" class="form-control numbersOnly" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
+                                                print '<td><input type="text" style="' . $new_style . '" maxlength="4" class="form-control numbersOnly" id="xC' . $index . '" name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);"></td>';
                                             }
                                             ?>
                                             <td><input type="text" style="width: 40px;" maxlength="4" class="form-control numbersOnly font-weight-bold" disabled=""  id="TPares"></td>
@@ -77,6 +81,15 @@
                                 </table>
                             </div>
                         </div> 
+                        <div class="col-2">
+                            <label>Fecha Entrega</label>
+                            <input type="text" id="FechaEntregaModificada" name="FechaEntregaModificada" class="form-control form-control-sm date">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" id="btnModificaRegistro" name="btnModificaRegistro" class="btn btn-sm btn-info">
+                                <span class="fa fa-check"></span> Acepta
+                            </button>    
+                        </div>
                     </div>
                 </div>
                 <!--PEDIDO--> 
@@ -142,12 +155,14 @@
     var pnlTablero = $("#pnlTablero"), PedidoMEPCC = pnlTablero.find("#PedidoMEPCC"),
             ControlMEPCC = pnlTablero.find("#ControlMEPCC"),
             ClienteMEPCC = pnlTablero.find("#ClienteMEPCC"),
+            FechaEntregaModificada = pnlTablero.find("#FechaEntregaModificada"),
             TPares = pnlTablero.find("#TPares"), PedidoDetalle,
             tblPedidoDetalle = pnlTablero.find("#tblPedidoDetalle"),
             btnVerClientes = pnlTablero.find("#btnVerClientes"),
             btnImprimePedido = pnlTablero.find("#btnImprimePedido"),
             btnRepAsignado = pnlTablero.find("#btnRepAsignado"),
-            btnCtrlCancelados = pnlTablero.find("#btnCtrlCancelados");
+            btnCtrlCancelados = pnlTablero.find("#btnCtrlCancelados"),
+            btnModificaRegistro = pnlTablero.find("#btnModificaRegistro");
 
     var opciones_detalle = {
         dom: 'rtip',
@@ -205,6 +220,58 @@
     };
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+
+        btnModificaRegistro.click(function () {
+            if (ControlMEPCC.val()) {
+                var p = {
+                    IDPEDIDO: pnlTablero.find("#IDPEDIDO").val(),
+                    CLAVE_NUEVO: PedidoMEPCC.val(),
+                    FECHA_ENTREGA_NUEVO: FechaEntregaModificada.val(),
+                    CLIENTE_NUEVO: ClienteMEPCC.val(),
+                    CONTROL: ControlMEPCC.val()
+                };
+                p["CANTIDAD_UNO"] = pnlTablero.find("#xC1").val();
+                p["CANTIDAD_DOS"] = pnlTablero.find("#xC2").val();
+                p["CANTIDAD_TRES"] = pnlTablero.find("#xC3").val();
+                p["CANTIDAD_CUATRO"] = pnlTablero.find("#xC4").val();
+                p["CANTIDAD_CINCO"] = pnlTablero.find("#xC5").val();
+                p["CANTIDAD_SEIS"] = pnlTablero.find("#xC6").val();
+                p["CANTIDAD_SIETE"] = pnlTablero.find("#xC7").val();
+                p["CANTIDAD_OCHO"] = pnlTablero.find("#xC8").val();
+                p["CANTIDAD_NUEVE"] = pnlTablero.find("#xC9").val();
+                p["CANTIDAD_DIEZ"] = pnlTablero.find("#xC10").val();
+                p["CANTIDAD_ONCE"] = pnlTablero.find("#xC11").val();
+                p["CANTIDAD_DOCE"] = pnlTablero.find("#xC12").val();
+                p["CANTIDAD_TRECE"] = pnlTablero.find("#xC13").val();
+                p["CANTIDAD_CATORCE"] = pnlTablero.find("#xC14").val();
+                p["CANTIDAD_QUINCE"] = pnlTablero.find("#xC15").val();
+                p["CANTIDAD_DIESCISEIS"] = pnlTablero.find("#xC16").val();
+                p["CANTIDAD_DIECISIETE"] = pnlTablero.find("#xC17").val();
+                p["CANTIDAD_DIECIOCHO"] = pnlTablero.find("#xC18").val();
+                p["CANTIDAD_DIECINUEVE"] = pnlTablero.find("#xC19").val();
+                p["CANTIDAD_VEINTE"] = pnlTablero.find("#xC20").val();
+                p["CANTIDAD_VEINTIUNO"] = pnlTablero.find("#xC21").val();
+                p["CANTIDAD_VEINTIDOS"] = pnlTablero.find("#xC22").val();
+
+                $.post('<?php print base_url('ModificaEliminaPedidoConControl/onModificarFecha') ?>', p)
+                        .done(function (a) {
+                            console.log(a);
+                            iMsg("SE HAN GUARDADO LOS CAMBIOS", "s", function () {
+                                ControlMEPCC.focus();
+                                PedidoDetalle.ajax.reload();
+                            });
+                        }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CONTROL", function () {
+                    ControlMEPCC.focus();
+                });
+            }
+        });
+
         getRecords();
 
         btnCtrlCancelados.click(function () {
@@ -245,9 +312,11 @@
                         {CONTROL: ControlMEPCC.val()})
                         .done(function (a) {
                             if (a.length > 0) {
+                                pnlTablero.find("#IDPEDIDO").val(a[0].ID);
                                 PedidoMEPCC.val(a[0].Clave);
                                 getSerie(a[0].Serie);
                                 ClienteMEPCC[0].selectize.setValue(a[0].Cliente);
+                                FechaEntregaModificada.val(a[0].FechaEntrega);
                                 delete a[0].Clave;
                                 delete a[0].Serie;
                                 delete a[0].Cliente;

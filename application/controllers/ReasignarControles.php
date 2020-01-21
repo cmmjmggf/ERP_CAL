@@ -233,11 +233,11 @@ class ReasignarControles extends CI_Controller {
 `Registro`,`Recibido`,`Pares`,`ParesFacturados`,`EstiloT`,`ColorT`,`DiaProg`,`SemProg`,`AnioProg`,`FechaProg`,`HoraProg`,
 `Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion`)
 SELECT `Clave`,`Cliente`,`Agente`,`FechaPedido`,`FechaRecepcion`,`Usuario`,`Estilo`,`Color`,`FechaEntrega`,{$MAQUILA_A_ASIGNAR},
-{$SEMANA_A_ASIGNAR},`Ano`,`Recio`,`Precio`,`Observacion`,`ObservacionDetalle`,`Serie`,{$Control},`C1`,`C2`,
+{$SEMANA_A_ASIGNAR},`Ano`,`Recio`,`Precio`,`Observacion`,`ObservacionDetalle`,`Serie`,0,`C1`,`C2`,
 `C3`,`C4`,`C5`,`C6`,`C7`,`C8`,`C9`,`C10`,`C11`,`C12`,`C13`,
 `C14`,`C15`,`C16`,`C17`,`C18`,`C19`,`C20`,`C21`,`C22`,`Estatus`,
-`Registro`,`Recibido`,`Pares`,`ParesFacturados`,`EstiloT`,`ColorT`,`DiaProg`,`SemProg`,`AnioProg`,`FechaProg`,`HoraProg`,
-`Empleado`,`Tiempo`,`EstatusProduccion`,`DeptoProduccion`,`stsavan`,`FechaProduccion` FROM pedidox AS PP WHERE PP.Control = {$v->Control} limit 1;");
+`Registro`,`Recibido`,`Pares`,0,`EstiloT`,`ColorT`,0,0,0,`FechaProg`,0,
+`Empleado`,`Tiempo`,'PRE-PROGRAMADO',NULL,0,`FechaProduccion` FROM pedidox AS PP WHERE PP.Control = {$v->Control} limit 1;");
 
 //                  print "\n 5. update pedidox control,semana,maquila \n";
 //                $this->db->set('Control', $Control)

@@ -50,7 +50,8 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <ul id="deptos" class="list-group my-2">
                         <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                            <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                            <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span>
+                        </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                             <span class="d-none stsavan" des="FOLEADO">4</span><span class="d-none" des="FOLEADO">40</span>4 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                         <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
@@ -768,6 +769,11 @@
                             if (xDepartamento === 40 && stsavan === 4) {
                                 Fraccion.val(60);
                                 FraccionS[0].selectize.setValue(60);
+                                onEnable(btnAceptar);
+                            }
+                            if (xDepartamento === 33 && stsavan === 4) {
+                                Fraccion.val(103);
+                                FraccionS[0].selectize.setValue(103);
                                 onEnable(btnAceptar);
                             }
                             if (xDepartamento === 44 && stsavan === 40) {

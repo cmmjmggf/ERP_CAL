@@ -48,25 +48,49 @@ class FacturacionDevolucion extends CI_Controller {
 //                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
 //                                    . "WHERE P.Control LIKE '{$this->input->get('CONTROL')}'")->result());
 
-
-            $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
-                            . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
-                            . "(SELECT C.Descripcion FROM colores AS C "
-                            . "WHERE C.Estilo = D.estilo AND C.Clave = D.comb LIMIT 1)  AS COLORT, "
-                            . "D.estilo AS ESTILOT , D.precio AS PRECIO, "
-                            . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
-                            . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-                            . "S.T21, S.T22, 
+            $x = $this->input->get();
+            switch (intval($x['CLIENTE'])) {
+                case 500:
+                    $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
+                                    . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
+                                    . "(SELECT C.Descripcion FROM colores AS C "
+                                    . "WHERE C.Estilo = D.estilo AND C.Clave = D.comb LIMIT 1)  AS COLORT, "
+                                    . "D.estilo AS ESTILOT , D.precio AS PRECIO, "
+                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+                                    . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+                                    . "S.T21, S.T22, 
                                         D.par01 AS C1, D.par02 AS C2, D.par03 AS C3, D.par04 AS C4, D.par05 AS C5, 
                                         D.par06 AS C6, D.par07 AS C7, D.par08 AS C8, D.par09 AS C9, D.par10 AS C10, 
                                         D.par11 AS C11, D.par12 AS C12, D.par13 AS C13, D.par14 AS C14, D.par15 AS C15, 
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
-                            . "(SELECT E.Descripcion FROM estilos AS E "
-                            . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
-                            . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                            . "WHERE D.control = '{$this->input->get('CONTROL')}' "
-                            . "AND D.tp = '{$this->input->get('TP')}' LIMIT 1")->result();
+                                    . "(SELECT E.Descripcion FROM estilos AS E "
+                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
+                                    . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
+                                    . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
+                    break;
+
+                default:
+                    $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
+                                    . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
+                                    . "(SELECT C.Descripcion FROM colores AS C "
+                                    . "WHERE C.Estilo = D.estilo AND C.Clave = D.comb LIMIT 1)  AS COLORT, "
+                                    . "D.estilo AS ESTILOT , D.precio AS PRECIO, "
+                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+                                    . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+                                    . "S.T21, S.T22, 
+                                        D.par01 AS C1, D.par02 AS C2, D.par03 AS C3, D.par04 AS C4, D.par05 AS C5, 
+                                        D.par06 AS C6, D.par07 AS C7, D.par08 AS C8, D.par09 AS C9, D.par10 AS C10, 
+                                        D.par11 AS C11, D.par12 AS C12, D.par13 AS C13, D.par14 AS C14, D.par15 AS C15, 
+                                        D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
+                                        D.par21 AS C21, D.par22 AS C22, "
+                                    . "(SELECT E.Descripcion FROM estilos AS E "
+                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
+                                    . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
+                                    . "WHERE D.control = '{$this->input->get('CONTROL')}' "
+                                    . "AND D.tp = '{$this->input->get('TP')}' LIMIT 1")->result();
+                    break;
+            }
 
 //                            print $this->db->last_query();
 //                            print "\n";
@@ -173,7 +197,27 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
     public function getPedidosXFacturarXControl() {
         try {
             $xxx = $this->input->get();
-            $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+            switch (intval($xxx['CLIENTE'])) {
+                case 500:
+                    $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
+                D.cargoa AS CARGOA, 
+                D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
+                D.par06 AS P6, D.par07 AS P7, D.par08 AS P8, D.par09 AS P9, D.par10 AS P10, 
+                D.par11 AS P11, D.par12 AS P12, D.par13 AS P13, D.par14 AS P14, D.par15 AS P15, 
+                D.par16 AS P16, D.par17 AS P17, D.par18 AS P18, D.par19 AS P19, D.par20 AS P20, 
+                D.par21 AS P21, D.par22 AS P22,
+                (D.par01 +  D.par02 +  D.par03 +   D.par04 +  D.par05  +  
+                D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
+                D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
+                D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
+                D.par21 +  D.par22 ) AS PARES_TOTALES
+                FROM devolucionnp AS D 
+                WHERE D.control = {$xxx['CONTROL']} LIMIT 1")->result();
+                    break;
+
+                default:
+                    $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
                 D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
                 D.cargoa AS CARGOA, 
                 D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
@@ -188,6 +232,8 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par21 +  D.par22 ) AS PARES_TOTALES
                 FROM devolucionnp AS D 
                 WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} LIMIT 1")->result();
+                    break;
+            }
             print json_encode($dt);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

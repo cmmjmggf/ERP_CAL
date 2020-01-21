@@ -28,12 +28,12 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
     public function getPedidoXControl() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT P.Clave, P.Serie, P.Cliente, "
+            print json_encode($this->db->query("SELECT P.ID, P.Clave, P.Serie, P.Cliente, "
                                     . "P.C1, P.C2, P.C3, P.C4, P.C5, "
                                     . "P.C6, P.C7, P.C8, P.C9, P.C10, "
                                     . "P.C11, P.C12, P.C13, P.C14, P.C15, "
                                     . "P.C16, P.C17, P.C18, P.C19, P.C20, "
-                                    . "P.C21, P.C22 FROM pedidox AS P WHERE P.Control LIKE '{$x["CONTROL"]}'")->result());
+                                    . "P.C21, P.C22, P.FechaEntrega FROM pedidox AS P WHERE P.Control LIKE '{$x["CONTROL"]}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -155,6 +155,33 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 exit(0);
             }
 //            var_dump($PEDIDOX, $CONTROLES, $AVAPRD, $AVANCE, $ASIGNAPFTSACXC, $CONTROLPES, $CONTROLPLA, $CONTROLTEJ, $CONTROLTERM);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificarFecha() {
+        try {
+            $x = $this->input->post();
+//            var_dump($x);
+//            exit(0);
+            
+            $this->db->set('Clave', $x['CLAVE_NUEVO'])
+                    ->set('FechaEntrega', $x['FECHA_ENTREGA_NUEVO'])
+                    ->set('Cliente', $x['CLIENTE_NUEVO'])
+                    ->set('C1', $x['CANTIDAD_UNO'])->set('C2', $x['CANTIDAD_DOS'])
+                    ->set('C3', $x['CANTIDAD_TRES'])->set('C4', $x['CANTIDAD_CUATRO'])
+                    ->set('C5', $x['CANTIDAD_CINCO'])->set('C6', $x['CANTIDAD_SEIS'])
+                    ->set('C7', $x['CANTIDAD_SIETE'])->set('C8', $x['CANTIDAD_OCHO'])
+                    ->set('C9', $x['CANTIDAD_NUEVE'])->set('C10', $x['CANTIDAD_DIEZ'])
+                    ->set('C11', $x['CANTIDAD_ONCE'])->set('C12', $x['CANTIDAD_DOCE'])
+                    ->set('C13', $x['CANTIDAD_TRECE'])->set('C14', $x['CANTIDAD_CATORCE'])
+                    ->set('C15', $x['CANTIDAD_QUINCE'])->set('C16', $x['CANTIDAD_DIESCISEIS'])
+                    ->set('C17', $x['CANTIDAD_DIECISIETE'])->set('C18', $x['CANTIDAD_DIECIOCHO'])
+                    ->set('C19', $x['CANTIDAD_DIECINUEVE'])->set('C20', $x['CANTIDAD_VEINTE'])
+                    ->set('C21', $x['CANTIDAD_VEINTIUNO'])->set('C22', $x['CANTIDAD_VEINTIDOS'])
+                    ->where('ID', $x['IDPEDIDO'])
+                    ->where('Control', $x['CONTROL'])->update('pedidox');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

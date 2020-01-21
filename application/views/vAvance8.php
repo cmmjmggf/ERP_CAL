@@ -74,6 +74,11 @@
                         <label>Fraccion</label>
                         <input type="text" id="FraccionFiltro" name="FraccionFiltro" maxlength="4" class="form-control numbersOnly form-control-sm selectNotEnter noBorders">
                     </div>
+                    <div class="col-2">
+                        <button type="button" id="btnRevisarFraccionesXEstilo" name="btnRevisarFraccionesXEstilo" class="btn btn-sm btn-info mt-3">
+                            <span class="fa fa-search"></span> Fracciones X Estilo
+                        </button>
+                    </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
@@ -392,6 +397,47 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="mdlFraccionesXEstilo">
+    <div class="modal-dialog notdraggable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-puzzle-piece"></span> Fracciones x estilo </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label>Estilo</label>
+                        <input type="text" id="xEstiloABuscar" name="xEstiloABuscar" class="form-control form-control-sm" maxlength="8">
+                    </div> 
+                    <div class="col-12">
+                        <table id="tblFraccionesXEstilo" class="table table-hover table-sm nowrap">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Fraccion</th>
+                                    <th scope="col">Costo</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <span class="fa fa-times"></span>    Cerrar 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var dias = ["JUEVES", "VIERNES", "SABADO", "DOMINGO", "LUNES", "MARTES", "MIERCOLES"],
             ndias = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO"],
@@ -412,7 +458,9 @@
             EstatusAvance = pnlTablero.find("#EstatusAvance"),
             ManoDeOB = pnlTablero.find("#ManoDeOB"),
             estatus_de_avance = pnlTablero.find("span.estatus_de_avance"),
-            Anio = pnlTablero.find("#Anio"), btnAceptar = pnlTablero.find("#btnAceptar");
+            Anio = pnlTablero.find("#Anio"), btnAceptar = pnlTablero.find("#btnAceptar"),
+            btnRevisarFraccionesXEstilo = pnlTablero.find("#btnRevisarFraccionesXEstilo"),
+            mdlFraccionesXEstilo = $("#mdlFraccionesXEstilo");
 
     var AVANO = {
         NUMERO_EMPLEADO: 0,
@@ -429,6 +477,16 @@
     };
     // IIFE - Immediately Invoked Function Expression
     $(document).ready(function () {
+
+        mdlFraccionesXEstilo.on('shown.bs.modal', function () {
+            onClearInputs(mdlFraccionesXEstilo);
+            mdlFraccionesXEstilo.find("#xEstiloABuscar").focus();
+        });
+
+        btnRevisarFraccionesXEstilo.click(function () {
+            mdlFraccionesXEstilo.modal('show');
+        });
+
         var fff = "";
         $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
             fff += $(v).attr('fraccion') + ",";
@@ -597,7 +655,7 @@
                 };
                 $.each(api.rows().data(), function (k, v) {
                     r += parseFloat(intVal(v.SUBTOTAL));
-                    prs += parseInt(v.PARES); 
+                    prs += parseInt(v.PARES);
                 });
                 $(api.column(5).footer()).html(
                         '<span class="font-weight-bold">' + prs + ' pares</span>');
@@ -629,7 +687,7 @@
                 });
             }
         });
-        
+
         pnlTablero.find("#SemanaFiltro").on('keydown', function (e) {
             if (e.keyCode === 13) {
                 onOpenOverlay('Buscando...');
@@ -950,10 +1008,10 @@
                 DESCRIPCION: "RAYAR PLANTILLA"
             });
         }
-        
-        
-        
-        
+
+
+
+
         /*AVANZA EL CONTROL A ENTRETELADO A ALMACEN DE CORTE*/
         if (pnlTablero.find("#chk51")[0].checked) {
             fracciones.push({
@@ -1164,7 +1222,7 @@
         color: #c1850c  !important;
         font-weight: bold !important;
     }
-    
+
     tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black{
         color: #fff !important;
         font-weight: bold !important;

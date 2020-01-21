@@ -464,6 +464,18 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+            if ($depto === 4 && $depto_actual === 33 && $frac === 103) {
+                $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
+                        ->where('Control', $xXx['CONTROL'])
+                        ->update('controles');
+                $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')
+                        ->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec40', Date('Y-m-d 00:00:00'))
+                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+            }
+
+
             if ($depto === 4 && $frac === 103 && $depto_actual <= 33 ||
                     $depto === 4 && $frac === 59 && $depto_actual <= 33 ||
                     $depto === 4 && $frac === 58 && $depto_actual <= 33) {
@@ -532,6 +544,18 @@ P.Maquila AS MAQUILA
                 $this->db->set('fec40', Date('Y-m-d 00:00:00'))
                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
 //                }
+                exit(0);
+            }
+
+            if ($depto === 33 && $depto_actual === 4 && $frac === 103) {
+                $this->db->set('EstatusProduccion', 'REBAJADO')->set('DeptoProduccion', 30)
+                        ->where('Control', $xXx['CONTROL'])
+                        ->update('controles');
+                $this->db->set('stsavan', 33)->set('EstatusProduccion', 'REBAJADO')
+                        ->set('DeptoProduccion', 30)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec33', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])
+                        ->update('avaprd');
                 exit(0);
             }
 
@@ -1021,7 +1045,7 @@ P.Maquila AS MAQUILA
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d 00:00:00'),
-                "fecha_registro"=>Date('d/m/Y h:i:s'),
+                "fecha_registro" => Date('d/m/Y h:i:s'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));
@@ -1058,7 +1082,7 @@ P.Maquila AS MAQUILA
                 "estilo" => $xXx['ESTILO'],
                 "pares" => $xXx['PARES'],
                 "fecha" => Date('Y-m-d 00:00:00'),
-                "fecha_registro"=>Date('d/m/Y h:i:s'),
+                "fecha_registro" => Date('d/m/Y h:i:s'),
                 "semana" => $xXx['SEMANA'],
                 "depto" => $xXx['DEPTOACTUAL'],
                 "anio" => Date('Y'));

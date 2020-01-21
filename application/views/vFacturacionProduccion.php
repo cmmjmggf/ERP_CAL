@@ -133,7 +133,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
-                <input type="text" id="TMNDAFactura" name="TMNDAFactura"  class="form-control form-control-sm numbersOnly"> 
+                <input type="text" id="TMNDAFactura" name="TMNDAFactura"  class="form-control form-control-sm numbersOnly" maxlength="1"> 
 
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
