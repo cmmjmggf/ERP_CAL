@@ -279,7 +279,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $pdf->SetFont('Calibri', 'B', 7.1);
                 $col = array(5/* 0 */, 40/* 1 */, 80/* 2 */, 88/* 3 */, 98/* 4 */, 108/* 5 */, 143/* 6 */, 183/* 7 */, 191/* 8 */, 201/* 9 */);
                 $anc = array(35, 40, 8, 10, 10);
-                $alto_celda = 3;
+                $alto_celda = 3.5;
                 $pdf->SetX($col[0]);
                 $pdf->Cell($anc[0], $alto_celda, "Pieza", 0/* BORDE */, 0, 'L', 0);
 
@@ -343,10 +343,10 @@ class IOrdenDeProduccion extends CI_Controller {
                                 case 1:
                                     $COLUMN += 1;
                                     $pdf->SetX($col[0]);
-                                    $pdf->Cell($anc[0], $alto_celda, utf8_decode($v->PIEZA), $border/* BORDE */, 0, 'L', 0);
+                                    $pdf->Cell($anc[0], $alto_celda, utf8_decode(mb_strimwidth($v->PIEZA, 0, 17)), $border/* BORDE */, 0, 'L', 0);
 
                                     $pdf->SetX($col[1]);
-                                    $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
+                                    $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 44)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
                                     $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[2]);
@@ -365,10 +365,10 @@ class IOrdenDeProduccion extends CI_Controller {
                                 case 2:
                                     $COLUMN = 1;
                                     $pdf->SetX($col[5]);
-                                    $pdf->Cell($anc[0], $alto_celda, utf8_decode($v->PIEZA), $border/* BORDE */, 0, 'L', 0);
+                                    $pdf->Cell($anc[0], $alto_celda, utf8_decode(mb_strimwidth($v->PIEZA, 0, 17)), $border/* BORDE */, 0, 'L', 0);
 
                                     $pdf->SetX($col[6]);
-                                    $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 47)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
+                                    $pdf->Cell($anc[1], $alto_celda, utf8_decode(mb_strimwidth($v->ARTICULOT, 0, 44)) . " " . $v->CLASIFICACION, $border/* BORDE */, 0, 'L', 0);
 
                                     $pdf->SetFont('Calibri', 'B', 7.1);
                                     $pdf->SetX($col[7]);
@@ -393,20 +393,20 @@ class IOrdenDeProduccion extends CI_Controller {
 
                 if ($COLUMN === 2 && $CELL === 1) {
                     $pdf->Cell(200, 3.5, "", 0/* BORDE */, 1/* SALTO NO */, 'C', 0);
-                    $pdf->Line(108, $pdf->GetY(), 210, $pdf->GetY());
+                    $pdf->Line(108, $pdf->GetY() - 0.5, 210, $pdf->GetY());
                 }
 
                 $pdf->SetLineWidth(0.4);
-                $pdf->Line(5, $Y, 5, $pdf->GetY());
-                $pdf->Line(108, $Y, 108, $pdf->GetY());
+                $pdf->Line(5, $Y, 5, $pdf->GetY() - 0.5);
+                $pdf->Line(108, $Y, 108, $pdf->GetY() - 0.5);
                 $pdf->Line(210, $Y, 210, $pdf->GetY());
 
                 $pdf->SetFont('Calibri', 'B', 14);
                 $pdf->SetX(5);
                 $pdf->Code128(5/* X */, $pdf->GetY()/* Y */, $vc->ControlT/* TEXT */, 53/* ANCHO */, 6/* ALTURA */);
 
-                $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->SetX(58);
+                $pdf->SetFont('Calibri', 'B', 9);
+                $pdf->SetX(50);
                 $pdf->Cell(152, 6, utf8_decode("* LEA CUIDADOSAMENTE LAS INSTRUCCIONES, CUALQUIER ERROR LE SERÁ CARGADO *"), 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
                 $OE = strlen($vc->OBSERVACIONES_ESTILO);
 

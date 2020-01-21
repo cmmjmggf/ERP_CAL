@@ -859,13 +859,13 @@ class PDF extends FPDF {
         $this->AddFont('Calibri', 'B');
         $this->AddFont('Calibri', 'BI');
         $this->Image($_SESSION["LOGO"], /* LEFT */ 5, 5/* TOP */, /* ANCHO */ 28, 14);
-        $this->SetFont('Calibri', 'B', 8);
+        $this->SetFont('Calibri', 'B', 9);
 
         $pos = array(37.5/* 0 */, 107.5/* 1 */, 137.5/* 2 */, 167.5/* 3 */, 40/* 4 */, 200/* 5 */, 215/* 6 */);
         $anc = array(15/* 0 */, 65/* 1 */, 40/* 2 */, 120/* 3 */, 55/* 4 */);
 
         $base = 5;
-        $alto_celda = 3.25;
+        $alto_celda = 4;
         $cliente = utf8_decode($this->getCliente());
         /* CLIENTE */
         $this->SetY($base);
@@ -873,6 +873,7 @@ class PDF extends FPDF {
         $this->Cell(70, $alto_celda, (strlen($cliente) > 50) ? substr($cliente, 0, 50) . '' : $cliente, 1/* BORDE */, 0, 'L', 0);
 
         /* FECHA ENTREGA */
+        $this->SetFont('Calibri', 'B', 8);
         $this->SetX($pos[1]);
         $this->Cell(30, $alto_celda, utf8_decode("Entrega. " . $this->getFechaEntrega()), 1/* BORDE */, 0, 'L', 0);
 
@@ -883,10 +884,11 @@ class PDF extends FPDF {
         $this->Cell(30, $alto_celda, utf8_decode("Pedido. " . $this->getFechaPedido()), 1/* BORDE */, 0, 'L', 0);
 
         /* CONTROL */
-        $this->SetFont('Calibri', 'B', 11);
+        $this->SetFont('Calibri', 'B', 11.5);
         $this->SetX($pos[3]);
         $this->Cell(42.5, $alto_celda, utf8_decode($this->getControl()), 1/* BORDE */, 1, 'C', 0);
 
+        $alto_celda = 3.25;
         /* # DE PEDIDO */
         $this->SetFont('Calibri', 'B', 8);
         $this->SetX($pos[0]);
@@ -910,20 +912,20 @@ class PDF extends FPDF {
         $this->SetX($pos[3]);
         $this->Code128($pos[3]/* X */, $this->GetY()/* Y */, $this->getControl()/* TEXT */, 43/* ANCHO */, 6/* ALTURA */);
         $this->Cell(42.5, 6, "", 0/* BORDE */, 1, 'C', 0);
-        $this->SetFont('Calibri', 'B', 9.5);
+        $this->SetFont('Calibri', 'B', 10);
 
         /* ESTILO */
-        $this->SetX($pos[0]); 
+        $this->SetX($pos[0]);
         if (strlen($this->getEstilo()) < 30) {
             $this->Cell(70, $alto_celda, utf8_decode("ESTILO  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
-        } else { 
+        } else {
             $this->Cell(70, $alto_celda, utf8_decode("ESTILO  " . $this->getEstilo()), 0/* BORDE */, 0, 'L', 0);
         }
         $this->SetFont('Calibri', 'B', 8);
         /* AGENTE */
         $this->SetX($pos[1]);
         $this->Cell(5, $alto_celda, utf8_decode("Agt."), 0/* BORDE */, 0, 'L', 0);
-        $this->SetFont('Calibri', '', 7);
+        $this->SetFont('Calibri', '', 8);
         $this->SetX($pos[1] + 5);
         $this->Cell(45, $alto_celda, utf8_decode($this->getAgente()), 0/* BORDE */, 0, 'L', 0);
 
@@ -931,7 +933,7 @@ class PDF extends FPDF {
         $this->SetFont('Calibri', 'B', 8);
         $this->SetX($pos[2] + 20);
         $this->Cell(5, $alto_celda, utf8_decode("Trans.  "), 0/* BORDE */, 0, 'L', 0);
-        $this->SetFont('Calibri', '', 7);
+        $this->SetFont('Calibri', '', 8);
         $this->SetX($pos[2] + 27.5);
         $this->Cell(47.5, $alto_celda, utf8_decode(" " . $this->getTrasp()), 0/* BORDE */, 1, 'L', 0);
         $this->Line(37.5, $this->GetY(), 210, $this->GetY());
