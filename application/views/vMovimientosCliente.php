@@ -115,8 +115,8 @@
             openOnFocus: false
         });
         getClientes();
-        getRecords('0');
-        getPagos(0, '', '');
+        getRecords();
+        getPagos();
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
@@ -132,11 +132,10 @@
                         if (data.length > 0) {
                             pnlTablero.find("#Tp").val('');
                             pnlTablero.find("#Doc").val('');
-                            getPagos(txtcte, '', '');
-                            MovimientosClientes.column(1).search('').draw();//Refresca la tabla sin el doc
+                            PagosClientes.ajax.reload();
+                            MovimientosClientes.ajax.reload();
 
                             pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
-                            getRecords(txtcte);
                             pnlTablero.find("#Doc").focus();
                         } else {
                             swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
@@ -148,6 +147,8 @@
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                         console.log(x.responseText);
                     });
+                } else {
+                    pnlTablero.find("#Doc").focus();
                 }
             }
         });
@@ -155,22 +156,23 @@
         pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
                 pnlTablero.find("#Doc").val('');
-                getPagos($(this).val(), '');
-                MovimientosClientes.column(1).search('').draw();
+                PagosClientes.ajax.reload();
+                MovimientosClientes.ajax.reload();
 
                 pnlTablero.find("#Cliente").val($(this).val());
-                getRecords($(this).val());
+                MovimientosClientes.ajax.reload();
                 pnlTablero.find("#Doc").focus();
             }
         });
-        pnlTablero.find("#Doc").on('keyup', function (e) {
+        pnlTablero.find("#Doc").on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    MovimientosClientes.column(1).search('^' + $(this).val() + '$', true, false).draw();
-                    getPagos(pnlTablero.find("#Cliente").val(), $(this).val());
+                    getPagos();
+                    //PagosClientes.ajax.reload();
+                    MovimientosClientes.ajax.reload();
                 } else {
-                    getPagos(pnlTablero.find("#Cliente").val(), '');
-                    MovimientosClientes.column(1).search('').draw();
+                    PagosClientes.ajax.reload();
+                    MovimientosClientes.ajax.reload();
                 }
             }
         });
@@ -254,7 +256,7 @@
                     closeOnClickOutside: false,
                     closeOnEsc: false
                 }).then((action) => {
-                    pnlTablero.find("#Cliente")[0].selectize.focus();
+                    pnlTablero.find("#Cliente").focus();
                 });
             }
         });
@@ -279,7 +281,7 @@
         });
     }
 
-    function getRecords(cliente) {
+    function getRecords() {
         HoldOn.open({
             theme: 'sk-cube',
             message: 'CARGANDO...'
@@ -294,8 +296,11 @@
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "data": {Cliente: cliente},
-                "type": "POST"
+                "type": "POST",
+                "data": function (d) {
+                    d.Cliente = pnlTablero.find("#Cliente").val() ? pnlTablero.find("#Cliente").val() : '';
+                    d.Doc = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : '';
+                }
             },
             "columns": [
                 {"data": "cliente"},
@@ -391,7 +396,7 @@
 
     }
 
-    function getPagos(cliente, doc) {
+    function getPagos() {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblPagosClientes')) {
             tblPagosClientes.DataTable().destroy();
@@ -402,8 +407,11 @@
             "ajax": {
                 "url": master_url + 'getPagos',
                 "dataSrc": "",
-                "data": {Cliente: cliente, Doc: doc},
-                "type": "POST"
+                "type": "POST",
+                "data": function (d) {
+                    d.Cliente = pnlTablero.find("#Cliente").val() ? pnlTablero.find("#Cliente").val() : '';
+                    d.Doc = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : '';
+                }
             },
             "columns": [
                 {"data": "tipo"},

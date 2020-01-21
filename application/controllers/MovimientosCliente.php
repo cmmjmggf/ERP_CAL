@@ -48,7 +48,9 @@ class MovimientosCliente extends CI_Controller {
     public function getRecords() {
         try {
             $cliente = $this->input->post('Cliente');
-            print json_encode($this->db->query(" SELECT
+            $doc = $this->input->post('Doc');
+
+            $this->db->select("
                             CC.cliente,
                             CC.remicion,
                             date_format(CC.fecha,'%Y/%m/%d') as fechadoc,
@@ -56,10 +58,28 @@ class MovimientosCliente extends CI_Controller {
                             CC.pagos,
                             CC.saldo,
                             CC.tipo,
-                            CC.status
-                            FROM cartcliente CC
-                            where CC.cliente = $cliente
-                            ")->result());
+                            CC.status ", false)
+                    ->from("cartcliente AS CC");
+            if ($cliente !== '') {
+                $this->db->where('CC.cliente', $cliente);
+            }
+            if ($doc !== '') {
+                $this->db->where('CC.remicion', $doc);
+            }
+            if ($cliente === '' && $doc === '') {
+                //$this->db->limit(50);
+                $this->db->where('CC.cliente', 0);
+                $this->db->where('CC.remicion', 0);
+            }
+
+            $query = $this->db->get()->result();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+
+            print json_encode($query);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -69,7 +89,8 @@ class MovimientosCliente extends CI_Controller {
         try {
             $cliente = $this->input->post('Cliente');
             $doc = $this->input->post('Doc');
-            $query = " SELECT
+
+            $this->db->select("
                             CC.remicion,
                             CC.tipo,
                             date_format(CP.fechacap,'%Y/%m/%d') as fechacap,
@@ -80,14 +101,27 @@ class MovimientosCliente extends CI_Controller {
                             CP.doctopa,
                             datediff(CP.fecha,CC.fecha) as dias
                             FROM cartcliente CC
-                            join cartctepagos CP on CC.remicion = CP.remicion AND CC.cliente = CP.cliente 
-                            AND CC.tipo = CP.tipo
-                            where CC.cliente = $cliente
-                            ";
-            if ($doc !== '') {
-                $query .= "and CC.remicion = $doc ";
+                            join cartctepagos CP on CC.remicion = CP.remicion AND CC.cliente = CP.cliente AND CC.tipo = CP.tipo ", false);
+            if ($cliente !== '') {
+                $this->db->where('CC.cliente', $cliente);
             }
-            print json_encode($this->db->query($query)->result());
+            if ($doc !== '') {
+                $this->db->where('CC.remicion', $doc);
+            }
+            if ($cliente === '' && $doc === '') {
+                //$this->db->limit(50);
+                $this->db->where('CC.cliente', 0);
+                $this->db->where('CC.remicion', 0);
+            }
+
+            $query = $this->db->get()->result();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+
+            print json_encode($query);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

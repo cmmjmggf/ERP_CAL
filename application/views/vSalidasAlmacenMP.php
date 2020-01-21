@@ -331,7 +331,7 @@
                             if (data[0].grupo === '3' && maq === '1') {
                                 swal({
                                     title: "ATENCIÓN",
-                                    text: "EN ESTE MÓDULO NO SE PERMITE DAR SALIDA A SUELAS",
+                                    text: "NO SE PERMITE DAR SALIDA A SUELAS POR (SXM,SPR,SXP,SXC)",
                                     icon: "warning"
                                 }).then((value) => {
                                     pnlTablero.find("#sArticulo")[0].selectize.clear(true);

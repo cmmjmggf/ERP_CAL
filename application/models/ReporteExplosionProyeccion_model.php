@@ -22,7 +22,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA')
                                  ), 0) AS CantPedida,
 
                                 ifnull((select SUM(OC.CantidadRecibida) AS CantidadRecibida from ordencompra OC
@@ -30,7 +30,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA')
                                 ), 0) AS CantEntregada,
 
                                 ifnull((select OC.Folio from ordencompra OC
@@ -38,7 +38,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA')
                                 AND OC.Folio IS NOT NULL LIMIT 1
                                  ), '') AS FolioOrden,
 
@@ -47,7 +47,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 and OC.Maq BETWEEN $Maquila AND $aMaquila
                                 AND OC.Sem = $Sem_Compras
                                 AND OC.Ano =  $Ano
-                                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA', 'RECIBIDA')
+                                AND OC.Estatus NOT IN ('CANCELADA')
                                 AND OC.FechaOrden IS NOT NULL LIMIT 1
                                  ), '') AS FechaOrden,
 
