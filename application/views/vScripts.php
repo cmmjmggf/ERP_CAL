@@ -16,6 +16,7 @@
     var base_url = "<?php print base_url(); ?>";
     var isMobile = false;
     var seg = <?php print (isset($_SESSION["SEG"]) ? $_SESSION["SEG"] : 0); ?>;
+    var usuario = "<?php print (isset($_SESSION["USERNAME"]) ? $_SESSION["USERNAME"] : 0); ?>";
     var iframe_opts = {
         // Iframe template
         tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
@@ -1947,7 +1948,7 @@
     function onUnCheck(check_a_descheckear) {
         check_a_descheckear[0].checked = false;
     }
-    
+
     function onClearInputs(div_padre) {
         $.each(div_padre.find("input"), function (k, v) {
             div_padre.find("input").val('');

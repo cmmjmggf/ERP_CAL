@@ -65,38 +65,31 @@
                         <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                             <ul id="deptos" class="list-group my-2">
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="FOLEADO">4</span><span class="d-none" des="FOLEADO">40</span>4 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ENTRETELADO">40</span><span class="d-none" des="ENTRETELADO">90</span>40 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;" >
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"  >
                                     <span class="d-none stsavan" des="MAQUILA">42</span><span class="d-none" des="MAQUILA">100</span>42 - MAQUILA<span class="deptodes d-none">MAQUILA</span><span class="deptoclave d-none">100</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ALMACEN CORTE">44</span> <span class="d-none" des="ALMACEN CORTE">105</span>44 - ALMACEN CORTE<span class="deptodes d-none">ALMACEN CORTE</span><span class="deptoclave d-none">105</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="PESPUNTE">5</span> <span class="d-none" des="PESPUNTE">110</span>5 - PESPUNTE<span class="deptodes d-none">PESPUNTE</span><span class="deptoclave d-none">110</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ENSUELADO">55</span> <span class="d-none" des="ENSUELADO">140</span>55 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ALMACEN PESPUNTE">6</span> <span class="d-none" des="ALMACEN PESPUNTE">130</span>6 - ALMACEN PESPUNTE<span class="deptodes d-none">ALMACEN PESPUNTE</span><span class="deptoclave d-none">130</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="TEJIDO">7</span><span class="d-none" des="TEJIDO">150</span>7 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ALMACEN TEJIDO">8</span><span class="d-none" des="ALMACEN TEJIDO">160</span>8 - ALMACEN TEJIDO<span class="deptodes d-none">ALMACEN TEJIDO</span><span class="deptoclave d-none">160</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="MONTADO">9</span><span class="d-none" des="MONTADO ">180</span>9 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ADORNO ">10</span>10 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" style=" padding:6px 10px 6px 10px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                             </ul>
                         </div>
@@ -130,7 +123,7 @@
             mdlAvanceAnterior.find("#DoctoAvance").focus().select();
             onBeep(3);
             console.log(ul.find("li").index())
-    });
+        });
 
         mdlAvanceAnterior.on('shown.bs.modal', function () {
             handleEnterDiv(mdlAvanceAnterior);
@@ -187,50 +180,76 @@
                                     }
                                 });
                             } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
-                                var deptoActual = parseInt(data[0].stsavan);
-                                if (deptoAvance === 33 && deptoActual === 3) {
-                                    agregarAvance(data, 'fec33', '30', 'REBAJADO Y PERFORADO');
-                                } else if (deptoAvance === 4 && deptoActual === 33) {
-                                    agregarAvance(data, 'fec40', '40', 'FOLEADO');
-                                } else if (deptoAvance === 40 && deptoActual === 4) {
-                                    agregarAvance(data, 'fec40', '90', 'ENTRETELADO');
-                                } else if (deptoAvance === 42 && deptoActual === 40) {
-                                    agregarAvance(data, 'fec42', '100', 'MAQUILA');
-                                } else if (deptoAvance === 44 && deptoActual === 42) {
-                                    agregarAvance(data, 'fec44', '105', 'ALMACEN CORTE');
-                                } else if (deptoAvance === 5 && deptoActual === 44) {
-                                    agregarAvance(data, 'fec5', '110', 'PESPUNTE');
-                                } else if (deptoAvance === 55 && deptoActual === 5) {
-                                    agregarAvance(data, 'fec55', '140', 'ENSUELADO');
-                                } else if (deptoAvance === 6 && deptoActual === 55) {
-                                    agregarAvance(data, 'fec6', '130', 'ALMACEN PESPUNTE');
-                                } else if (deptoAvance === 7 && deptoActual === 6) {
-                                    agregarAvance(data, 'fec7', '150', 'TEJIDO');
-                                } else if (deptoAvance === 8 && deptoActual === 7) {
-                                    agregarAvance(data, 'fec8', '160', 'ALMACEN TEJIDO');
-                                } else if (deptoAvance === 9 && deptoActual === 8) {
-                                    agregarAvance(data, 'fec9', '180', 'MONTADO "A"');
-                                } else if (deptoAvance === 10 && deptoActual === 9) {
-                                    agregarAvance(data, 'fec10', '210', 'ADORNO "A"');
-                                } else if (deptoAvance === 11 && deptoActual === 10) {
-                                    agregarAvance(data, 'fec11', '230', 'ALMACEN ADORNO');
-                                } else {
-                                    mdlAvanceAnterior.find("#EstatusProduccionAvance").html('');
-                                    mdlAvanceAnterior.find("#EstiloAvance").val("");
-                                    mdlAvanceAnterior.find("#ColorAvance").val("");
-                                    mdlAvanceAnterior.find("#ParesAvance").val("");
-                                    swal({
-                                        title: "ATENCIÓN",
-                                        text: "EL CONTROL NO CONCUERDA CON EL AVANCE QUE DESEA CAPTURAR ",
-                                        icon: "warning",
-                                        closeOnClickOutside: false,
-                                        closeOnEsc: false
-                                    }).then((action) => {
-                                        if (action) {
-                                            mdlAvanceAnterior.find("#ControlAvance").val('').focus();
-                                        }
-                                    });
+                                var deptoActual = parseInt(data[0].stsavan);//Obtenemos el avance actual
+                                if (usuario === 'CHEOK') {//Si el usuario es cheo sólo puede dar avande a 7 o 8, estando en 6
+                                    if (deptoAvance === 7 && deptoActual === 6) {
+                                        agregarAvance(data, 'fec7', '150', 'TEJIDO');
+                                    } else if (deptoAvance === 8 && deptoActual === 7) {
+                                        agregarAvance(data, 'fec8', '160', 'ALMACEN TEJIDO');
+                                    } else {
+                                        mdlAvanceAnterior.find("#EstatusProduccionAvance").html('');
+                                        mdlAvanceAnterior.find("#EstiloAvance").val("");
+                                        mdlAvanceAnterior.find("#ColorAvance").val("");
+                                        mdlAvanceAnterior.find("#ParesAvance").val("");
+                                        swal({
+                                            title: "ATENCIÓN",
+                                            text: "EL CONTROL NO CONCUERDA CON EL AVANCE QUE DESEA CAPTURAR ",
+                                            icon: "warning",
+                                            closeOnClickOutside: false,
+                                            closeOnEsc: false
+                                        }).then((action) => {
+                                            if (action) {
+                                                mdlAvanceAnterior.find("#ControlAvance").val('').focus();
+                                            }
+                                        });
+                                    }
+                                } else {//Si es ali, puede dar todo
+                                    if (deptoAvance === 33 && deptoActual === 3) {
+                                        agregarAvance(data, 'fec33', '30', 'REBAJADO Y PERFORADO');
+                                    } else if (deptoAvance === 4 && deptoActual === 33) {
+                                        agregarAvance(data, 'fec40', '40', 'FOLEADO');
+                                    } else if (deptoAvance === 40 && deptoActual === 4) {
+                                        agregarAvance(data, 'fec40', '90', 'ENTRETELADO');
+                                    } else if (deptoAvance === 42 && deptoActual === 40) {
+                                        agregarAvance(data, 'fec42', '100', 'MAQUILA');
+                                    } else if (deptoAvance === 44 && deptoActual === 42) {
+                                        agregarAvance(data, 'fec44', '105', 'ALMACEN CORTE');
+                                    } else if (deptoAvance === 5 && deptoActual === 44) {
+                                        agregarAvance(data, 'fec5', '110', 'PESPUNTE');
+                                    } else if (deptoAvance === 55 && deptoActual === 5) {
+                                        agregarAvance(data, 'fec55', '140', 'ENSUELADO');
+                                    } else if (deptoAvance === 6 && deptoActual === 55) {
+                                        agregarAvance(data, 'fec6', '130', 'ALMACEN PESPUNTE');
+                                    } else if (deptoAvance === 7 && deptoActual === 6) {
+                                        agregarAvance(data, 'fec7', '150', 'TEJIDO');
+                                    } else if (deptoAvance === 8 && deptoActual === 7) {
+                                        agregarAvance(data, 'fec8', '160', 'ALMACEN TEJIDO');
+                                    } else if (deptoAvance === 9 && deptoActual === 8) {
+                                        agregarAvance(data, 'fec9', '180', 'MONTADO "A"');
+                                    } else if (deptoAvance === 10 && deptoActual === 9) {
+                                        agregarAvance(data, 'fec10', '210', 'ADORNO "A"');
+                                    } else if (deptoAvance === 11 && deptoActual === 10) {
+                                        agregarAvance(data, 'fec11', '230', 'ALMACEN ADORNO');
+                                    } else {
+                                        mdlAvanceAnterior.find("#EstatusProduccionAvance").html('');
+                                        mdlAvanceAnterior.find("#EstiloAvance").val("");
+                                        mdlAvanceAnterior.find("#ColorAvance").val("");
+                                        mdlAvanceAnterior.find("#ParesAvance").val("");
+                                        swal({
+                                            title: "ATENCIÓN",
+                                            text: "EL CONTROL NO CONCUERDA CON EL AVANCE QUE DESEA CAPTURAR ",
+                                            icon: "warning",
+                                            closeOnClickOutside: false,
+                                            closeOnEsc: false
+                                        }).then((action) => {
+                                            if (action) {
+                                                mdlAvanceAnterior.find("#ControlAvance").val('').focus();
+                                            }
+                                        });
+                                    }
                                 }
+
+
 
                             }
                         } else { //Si el control no existe
