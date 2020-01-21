@@ -1223,6 +1223,10 @@
             "9": "", "10": 500, "11": 600
         };
         switch (mono) {
+            case "X":
+                Control.focus().select();
+                btnAceptar.attr('disabled', false);
+                break;
             case "GUSTAVO":
                 switch (parseInt(Departamento.val())) {
                     case 40:
@@ -1294,6 +1298,10 @@
             case "JOSE":
                 /*JOSE PINA */
                 switch (parseInt(Departamento.val())) {
+                    case 3:
+                        Control.focus().select();
+                        btnAceptar.attr('disabled', false);
+                        break;
                     case 33:
                         Control.focus().select();
                         btnAceptar.attr('disabled', false);

@@ -87,7 +87,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
             $limite = "";
             $this->db->select("D.ID, D.cliente AS CLIENTE,
                 D.docto AS DOCUMENTO,
-                CONCAT(\"<span class='font-weight-bold'>\", D.control,\"</span>\") AS CONTROL, D.paredev AS PARES,
+                 D.control  AS CONTROL, D.paredev AS PARES,
                 D.defecto AS DEFECTOS, D.detalle AS DETALLE, D.clasif AS CLASIFICACION,
                 D.cargoa AS CARGO, D.maq AS MAQUILA,  DATE_FORMAT(D.fechadev,\"%d/%m/%Y\") AS FECHA, D.tp AS TP,
                 CONCAT(\"<span class='font-weight-bold'>\",D.conce,\"</span>\") AS CONCEPTO, 

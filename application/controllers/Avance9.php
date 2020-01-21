@@ -215,7 +215,7 @@ class Avance9 extends CI_Controller {
                             . "(CASE WHEN E.SegundoNombre <>'0' THEN E.SegundoNombre ELSE '' END),"
                             . "' ',(CASE WHEN E.Paterno <>'0' THEN E.Paterno ELSE '' END),' ',"
                             . "(CASE WHEN E.Materno <>'0' THEN E.Materno ELSE '' END)) END) AS NOMBRE_COMPLETO, "
-                            . "E.DepartamentoCostos AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES, E.Busqueda AS CELULAS ", false)
+                            . "E.DepartamentoFisico AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Clave AS DEPTO, D.Descripcion AS DEPTO_DES, E.Busqueda AS CELULAS ", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
                     ->where_in('E.AltaBaja', array(1));

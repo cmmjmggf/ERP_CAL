@@ -62,7 +62,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-info" id="btnImprimir"><span class="fa fa-print"></span> ACEPTAR</button>
                 <button type="button" class="btn btn-success" id="btnExcel"><span class="fa fa-file-excel"> </span> EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
