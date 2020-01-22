@@ -46,6 +46,9 @@
                 <button id="btnPedidoXAnoXMes" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="PEDIDOS POR MES AÑO">
                     <span class="fa fa-exclamation"></span>
                 </button>
+                <button id="btnExportaXLS" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="PEDIDOS POR MES AÑO">
+                    <span class="fa fa-exclamation"></span> XLS
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -408,12 +411,16 @@
             btnLog = pnlTableroBody.find("#btnLog"), mdlLogs = $("#mdlLogs"),
             tblLogs = mdlLogs.find("#tblLogs"), Logs, UsuarioLog = mdlLogs.find("#UsuarioLog"),
             SUsuarioLog = mdlLogs.find("#SUsuarioLog"),
-            btnPedidoXAnoXMes = pnlTableroBody.find("#btnPedidoXAnoXMes");
+            btnPedidoXAnoXMes = pnlTableroBody.find("#btnPedidoXAnoXMes"),
+            btnExportaXLS = pnlTableroBody.find("#btnExportaXLS");
 
     var usr = '<?php PRINT $this->session->ID; ?>';
     $(document).ready(function () {
         console.log(usr);
 
+        btnExportaXLS.click(function () {
+            window.open('<?php print base_url('ExportaXLS'); ?>', '_blank');
+        });
         btnPedidoXAnoXMes.click(function () {
             window.open('<?php print base_url('PedidoXMesAno'); ?>', '_blank');
         });

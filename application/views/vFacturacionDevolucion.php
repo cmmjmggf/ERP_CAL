@@ -852,56 +852,57 @@
         });
 
         btnAcepta.click(function () {
-            if (parseInt(PrecioFacturacion.val()) === 0 || PrecioFacturacion.val() === "") {
+            if (parseInt(PrecioFacturacion.val()) > 0 || PrecioFacturacion.val() === "") {
                 onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
                     PrecioFacturacion.focus().select();
                 });
                 return;
-            }
-            getSubtotal();
-            /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
-            var registro_valido = false, pares_devueltos = 0;
-            for (var i = 1; i < 23; i++) {
-                var pares_facturados = pnlTablero.find("#CF" + i).val();
-                var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
-                if (pares_facturados > 0) {
-                    if (pares_a_devolver > pares_facturados) {
-                        btnAcepta.attr('disabled', true);
-                        registro_valido = false;
-                        onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
-                            pnlTablero.find("#CAF" + i).focus().select();
-                        });
-                        return;
+            } else {
+                getSubtotal();
+                /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
+                var registro_valido = false, pares_devueltos = 0;
+                for (var i = 1; i < 23; i++) {
+                    var pares_facturados = pnlTablero.find("#CF" + i).val();
+                    var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
+                    if (pares_facturados > 0) {
+                        if (pares_a_devolver > pares_facturados) {
+                            btnAcepta.attr('disabled', true);
+                            registro_valido = false;
+                            onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
+                                pnlTablero.find("#CAF" + i).focus().select();
+                            });
+                            return;
+                        } else {
+                            registro_valido = true;
+                            if (parseInt(pares_a_devolver) > 0) {
+                                pares_devueltos += parseInt(pares_a_devolver);
+                            }
+                        }
                     } else {
                         registro_valido = true;
                         if (parseInt(pares_a_devolver) > 0) {
                             pares_devueltos += parseInt(pares_a_devolver);
                         }
                     }
-                } else {
-                    registro_valido = true;
-                    if (parseInt(pares_a_devolver) > 0) {
-                        pares_devueltos += parseInt(pares_a_devolver);
-                    }
                 }
-            }
-            console.log("pares degueltos ", pares_devueltos);
-            if (pares_devueltos > 0) {
-                if (registro_valido) {
-                    onAceptarControl();
+                console.log("pares devueltos ", pares_devueltos);
+                if (pares_devueltos > 0) {
+                    if (registro_valido) {
+                        onAceptarControl();
+                    } else {
+                        btnAcepta.attr('disabled', true);
+                        onCampoInvalido(pnlTablero, 'VERIFIQUE QUE SEAN VÁLIDAS LAS CANTIDADES INGRESADAS', function () {
+                            pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
+                        });
+                        return;
+                    }
                 } else {
                     btnAcepta.attr('disabled', true);
-                    onCampoInvalido(pnlTablero, 'VERIFIQUE QUE SEAN VÁLIDAS LAS CANTIDADES INGRESADAS', function () {
+                    onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO (' + pares_devueltos + ')', function () {
                         pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
                     });
                     return;
                 }
-            } else {
-                btnAcepta.attr('disabled', true);
-                onCampoInvalido(pnlTablero, 'LA CANTIDAD DE PARES A DEVOLVER DEBE DE SER MAYOR A CERO (' + pares_devueltos + ')', function () {
-                    pnlTablero.find("tr#rParesAFacturar input:first-child:enabled:eq(0)").focus().select();
-                });
-                return;
             }
         });
 
@@ -1024,7 +1025,9 @@
             if (e.keyCode === 13) {
                 onOpenOverlay('Espere un momento por favor...');
                 $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarFactura'); ?>',
-                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), FACTURA: FAPEORCOFactura.val()
+                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), 
+                            FACTURA: FAPEORCOFactura.val(), 
+                            TP: TPFactura.val()
                         }).done(function (a) {
                     if (a.length > 0) {
                         console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
@@ -1061,6 +1064,8 @@
                                                 onEnable(btnAcepta);
                                                 onEnable(CajasFacturacion);
                                                 onEnable(Control);
+                                                onEnable(PrecioFacturacion);
+                                                onEnable(ObservacionFacturacion);
                                                 onEnable(btnElijeControl);
                                                 onEnable(btnAcepta);
                                                 onReadOnly(FAPEORCOFactura);
@@ -1956,8 +1961,7 @@
             CorridaFacturacion.val('');
             PrecioFacturacion.val('');
             SubtotalFacturacion.val('');
-            SubtotalFacturacionIVA.val('');
-            ObservacionFacturacion.val('');
+            SubtotalFacturacionIVA.val(''); 
             ParesFacturadosFacturacion.val('');
             btnCierraDocto.attr('disabled', false);
             btnFacturaXAnticipoDeProducto.attr('disabled', true);

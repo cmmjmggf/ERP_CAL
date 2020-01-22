@@ -431,12 +431,13 @@
 
 
         btnAcepta.click(function () {
+            onDisable(btnAcepta);
             onEnable(xClienteDevolucion);
             onEnable(ClienteDevolucion);
             onReadAndWrite(FechaDevolucion);
             onReadAndWrite(AplicaDevolucion);
             onEnable(TP);
-            if (Precio.val()) {
+            if (Precio.val() && pnlTablero.find("#Control_ID").val()) {
                 var p = {
                     IDX: pnlTablero.find("#Control_ID").val(),
                     CLIENTE: ClienteDevolucion.val(),
@@ -482,6 +483,7 @@
                         Precio.focus().select();
                         pnlTablero.find("#Control_ID").val('');
                         ParesXcontrol.val(0);
+                        onEnable(btnAcepta);
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
@@ -505,14 +507,16 @@
                         Precio.focus().select();
                         pnlTablero.find("#Control_ID").val('');
                         ParesXcontrol.val(0);
+                        onEnable(btnAcepta);
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
                     });
                 }
             } else {
-                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO Y UN REGISTRO", function () {
                     Precio.focus().select();
+                    onEnable(btnAcepta);
                 });
             }
         });

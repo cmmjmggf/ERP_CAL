@@ -677,7 +677,7 @@ class FacturacionProduccion extends CI_Controller {
                     $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE  (QR ERROR)";
                     exit(0);
                 }
-                $qr_url = QRcode::png($qr, 'rpt/QR/qr.png');
+                $qr_url = QRcode::png($qr, 'qrplus/qr.png');
                 switch (intval($x["TP"])) {
                     case 1:
                         $pr["logo"] = base_url() . $this->session->LOGO;
@@ -695,7 +695,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* COPPEL - OK */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MÉXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -710,7 +710,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* ZAPATERIAS COBAN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -727,7 +727,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* ELECTROLAB MEDIC, S.A. DE C.V.  = SI HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -743,7 +743,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* INVERSIONES CENTROAMERICANAS INCEN, S.A.  = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -759,7 +759,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* CONFIANDO, SOCIEDAD ANONIMA = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -775,7 +775,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* PIELES FINAS, SOCIEDAD ANONIMA  = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -791,7 +791,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* COORDINADORA DE FOMENTO AL COMERCIO EXTERIOR DEL ESTADO DE GUANAJUATO  = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
@@ -805,7 +805,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* IMPORTADORA SOES, S.A.   = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -821,7 +821,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* INTERNACIONAL DE CALZADO, SOCIEDAD ANONIMA    = NO HAY RESULTADOS 28/08/2019 */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -837,7 +837,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -852,7 +852,7 @@ class FacturacionProduccion extends CI_Controller {
                             ;                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setParametros($pr);
@@ -866,7 +866,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -881,7 +881,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -896,7 +896,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -911,7 +911,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -926,7 +926,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -941,7 +941,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -957,7 +957,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -972,7 +972,7 @@ class FacturacionProduccion extends CI_Controller {
                             /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
@@ -987,7 +987,7 @@ class FacturacionProduccion extends CI_Controller {
                         case 1967:
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
@@ -1001,7 +1001,7 @@ class FacturacionProduccion extends CI_Controller {
                         case 2422:
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
@@ -1015,7 +1015,7 @@ class FacturacionProduccion extends CI_Controller {
                         default :
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('rpt/QR/qr.png');
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["cliente"] = $x['CLIENTE'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
@@ -1046,7 +1046,7 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getReporteXNumero($x, $jc, $num_reporte) {
         try {
-            $jc->setJasperurl('jrxml\facturacion\{$num_reporte}.jasper');
+            $jc->setJasperurl("jrxml\facturacion\{$num_reporte}.jasper");
             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();

@@ -228,7 +228,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
 
     public function onGuardarNC() {
         try {
-            $x = $this->input->post();
+            $x = $this->input->post(); 
             $fecha = $x["FECHA"];
             $dia = substr($fecha, 0, 2);
             $mes = substr($fecha, 3, 2);
@@ -271,40 +271,41 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                         $subtotal = $x["PRECIO"] * $r->paredev;
                         break;
                 }
-                $ncc = array_merge($nc, array(
-                    "defecto" => $r->defecto,
-                    "detalle" => $r->detalle,
-                    "clasif" => $r->clasif,
-                    "cargoa" => $r->cargoa,
-                    "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
-                    "estilo" => $x["ESTILO"],
-                    "comb" => $x["COLOR"],
-                    "seriped" => $r->seriped,
-                    "precio" => $x["PRECIO"],
-                    "subtot" => ($subtotal),
-                    "registro" => 0
-                ));
                 $EXISTE_EN_DEVCTES = $this->db->query("SELECT COUNT(*) AS EXISTE FROM devctes AS D "
                                 . "WHERE cliente = {$x["CLIENTE"]} AND docto = {$r->docto} "
                                 . "AND aplica = {$x["APLICA"]} AND nc = {$x["NC"]} AND tp ={$x["TP"]} "
-                                . "AND control = {$x["CONTROL"]} AND paredev = {$x["PARES"]};")->result();
+                                . "AND control = {$r->control} AND paredev = {$r->paredev} "
+                                . "AND id_devolucionesnp = {$r->ID};")->result();
                 if ($EXISTE_EN_DEVCTES[0]->EXISTE <= 0) {
+                    $ncc = array_merge($nc, array(
+                        "defecto" => $r->defecto,
+                        "detalle" => $r->detalle,
+                        "clasif" => $r->clasif,
+                        "cargoa" => $r->cargoa,
+                        "fecha" => $nueva_fecha->format('Y-m-d 00:00:00'),
+                        "estilo" => $x["ESTILO"],
+                        "comb" => $x["COLOR"],
+                        "seriped" => $r->seriped,
+                        "precio" => $x["PRECIO"],
+                        "subtot" => ($subtotal),
+                        "registro" => 0
+                    ));
                     $this->db->insert('devctes', $ncc);
                     /*
                      * COLOCA LA DEVOLUCION COMO APLICADA, SE ASIGNA LA NOTA DE CREDITO A LA DEVOLUCION
                      *
                      */
                     $this->db->set('staapl', 1)->set('nc', $x["NC"])
-                            ->where('control', $x['CONTROL'])
+                            ->where('control', $r->control)
                             ->where('cliente', $x["CLIENTE"])
                             ->where('tp', $x["TP"])
                             ->where('docto', $r->docto)
                             ->update('devolucionnp');
 
                     $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVCTES)",
-                            "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+                            "HA APLICADO UNA DEVOLUCION CON LA NOTA {$x["NC"]} AL CONTROL {$r->control} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
                     $l = new Logs("APLICA DEVOLUCIONES PENDIENTES (DEVOLUCIONNP)",
-                            "HA ASIGNADO LA NOTA {$x["NC"]} AL CONTROL {$x['CONTROL']} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
+                            "HA ASIGNADO LA NOTA {$x["NC"]} AL CONTROL {$r->control} POR $ " . number_format($subtotal, 2, ".", ",") . "  .", $this->session);
                 }
 //                SE CONSIDERA COMO PASO 2 PARA UNA DEVOLUCION
             }
@@ -344,7 +345,7 @@ class AplicaDevolucionesDeClientes extends CI_Controller {
                     "importe" => $v->subtot,
                     "agente" => $cte[0]->Agente,
                     "mov" => 6, "status" => 1,
-                    "nc" => $x["NC"], "control" => $x["CONTROL"],
+                    "nc" => $x["NC"], "control" => $v->control,
                     "gcom" => 0, "numpol" => 0, "numfol" => 0, "posfe" => 0,
                     "pagada" => 0, "stscont" => 0, "regdev" => 0);
                 $this->db->insert('cartctepagos', $cartctepagos);

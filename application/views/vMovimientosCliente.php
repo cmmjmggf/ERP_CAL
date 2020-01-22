@@ -88,6 +88,19 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>$0.0</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -477,6 +490,17 @@
 //            },
             initComplete: function (a, b) {
                 HoldOn.close();
+            }, 
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var stt = 0.0;
+                console.log(api.rows().data());
+                $.each(api.rows().data(), function (k, v) {
+                    stt += parseFloat(v.importeP);
+                });
+                $(api.column(4).footer()).html(
+                        '<span class="font-weight-bold">$' +
+                        $.number(stt, 2, '.', ',') + '</span>');
             }
         });
         tblPagosClientes.find('tbody').on('click', 'tr', function () {
