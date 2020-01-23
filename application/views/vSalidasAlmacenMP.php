@@ -255,16 +255,24 @@
                                     Depto3: depto3
                                 }).done(function (data) {
                                     if (data.length > 0) {
+                                        var mov = pnlTablero.find("#TipoMov").val();
                                         //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
                                         if (data[0].grupo === '3' && maq === '1') {
-                                            swal({
-                                                title: "ATENCIÓN",
-                                                text: "EN ESTE MÓDULO NO SE PERMITE DAR SALIDA A SUELAS",
-                                                icon: "warning"
-                                            }).then((value) => {
-                                                pnlTablero.find("#sArticulo")[0].selectize.clear(true);
-                                                pnlTablero.find("#Articulo").val('').focus();
-                                            });
+                                            if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP' || mov === 'SXC') {//Validamos los mov no permitidos para dar salida
+                                                swal({
+                                                    title: "ATENCIÓN",
+                                                    text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP \n SXC ",
+                                                    icon: "warning"
+                                                }).then((value) => {
+                                                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                                    pnlTablero.find("#Articulo").val('').focus();
+                                                });
+                                            } else {
+                                                pnlTablero.find('#Precio').val(data[0].Precio);
+                                                pnlTablero.find('#Unidad').val(data[0].Unidad);
+                                                getMatEntregado(ano, maq, sem, pnlTablero.find("#Articulo").val());
+                                                pnlTablero.find('#Cantidad').focus();
+                                            }
                                         } else {
                                             pnlTablero.find('#Precio').val(data[0].Precio);
                                             pnlTablero.find('#Unidad').val(data[0].Unidad);
@@ -327,16 +335,27 @@
                         Depto3: depto3
                     }).done(function (data) {
                         if (data.length > 0) {
+                            var mov = pnlTablero.find("#TipoMov").val();
+
+
                             //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
                             if (data[0].grupo === '3' && maq === '1') {
-                                swal({
-                                    title: "ATENCIÓN",
-                                    text: "NO SE PERMITE DAR SALIDA A SUELAS POR (SXM,SPR,SXP,SXC)",
-                                    icon: "warning"
-                                }).then((value) => {
-                                    pnlTablero.find("#sArticulo")[0].selectize.clear(true);
-                                    pnlTablero.find("#Articulo").val('').focus();
-                                });
+
+                                if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP' || mov === 'SXC') {//Validamos los mov no permitidos para dar salida
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP \n SXC ",
+                                        icon: "warning"
+                                    }).then((value) => {
+                                        pnlTablero.find("#sArticulo")[0].selectize.clear(true);
+                                        pnlTablero.find("#Articulo").val('').focus();
+                                    });
+                                } else {
+                                    pnlTablero.find('#Precio').val(data[0].Precio);
+                                    pnlTablero.find('#Unidad').val(data[0].Unidad);
+                                    getMatEntregado(ano, maq, sem, pnlTablero.find("#Articulo").val());
+                                    pnlTablero.find('#Cantidad').focus();
+                                }
                             } else {
                                 pnlTablero.find('#Precio').val(data[0].Precio);
                                 pnlTablero.find('#Unidad').val(data[0].Unidad);
@@ -687,7 +706,7 @@
 //                    });
 //                } else {
 //
-//                }
+                //                }
                 depto1 = data[0].Depto1;
                 depto2 = data[0].Depto2;
                 depto3 = data[0].Depto3;

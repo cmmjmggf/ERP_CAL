@@ -465,7 +465,7 @@ order by Articulo asc  ", false);
                     ->join('unidades AS U', 'U.Clave = A.UnidadMedida')
                     ->where('OC.Tp', $Tp)
                     ->where('OC.Folio', $Folio)
-                    ->order_by('OC.Articulo', 'ASC');
+                    ->order_by('NombreArticulo', 'ASC');
 //                    ->where('OC.Tp', $TP);
             $query = $this->db->get();
             /*

@@ -64,7 +64,7 @@ class ReportesKardex_model extends CI_Model {
                                     . "(select (select maq from compras where Doc = NCP.DocCartProv limit 1) from notascreditoprov NCP where NCP.folio = MA.DocMov and Proveedor = MA.Proveedor and Articulo = MA.Articulo) "
                                     . "WHEN MA.TipoMov ='EXC' "
                                     . "THEN "
-                                    . "(select Maq from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' ) "
+                                    . "(select Maq from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' limit 1 ) "
                                     . "ELSE MA.Maq END AS Maq, "
                                     . ""
                                     . "CASE "
@@ -74,7 +74,7 @@ class ReportesKardex_model extends CI_Model {
                                     . ""
                                     . "WHEN MA.TipoMov ='EXC' "
                                     . "THEN "
-                                    . "(select Sem from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' ) "
+                                    . "(select Sem from compras where Proveedor = MA.Proveedor and Articulo = MA.Articulo and OrdenCompra = MA.OrdenCompra and doc = MA.DocMov and estatus = 'CONCLUIDA' limit 1 ) "
                                     . "ELSE MA.Sem END AS Sem, "
                                     . "MA.TipoMov, "
                                     . "MA.FechaMov, "
@@ -94,7 +94,6 @@ class ReportesKardex_model extends CI_Model {
                             ->join("grupos G", "ON G.Clave =  A.Grupo ")
                             ->join("unidades U", "ON U.Clave = A.UnidadMedida ")
                             ->join("proveedores P", "ON P.Clave =  MA.Proveedor ", "left")
-                            ->where("MA.CantidadMov >0 ", null, false)
                             ->where("MA.Articulo", $Articulo)
                             ->where("STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$fecha', \"%d/%m/%Y\") AND STR_TO_DATE('$aFecha', \"%d/%m/%Y\")")
                             // ->order_by("MA.EntradaSalida", 'ASC')

@@ -58,7 +58,7 @@
                 <table id="tblCompras" class="table table-sm display " style="width:100%">
                     <thead>
                         <tr>
-                            <th>Group</th>
+                            <th class="d-none">Group</th>
                             <th>Ano</th>
                             <th>Tipo</th>
                             <th>Tp</th>
@@ -71,16 +71,33 @@
                             <th>Artículo</th>
                             <th>Cant</th>
                             <th>Recibi</th>
+                            <th>Saldo</th>
                             <th>Precio</th>
                             <th>Subt</th>
                             <th>Sem</th>
                             <th>Maq</th>
                             <th>Gpo</th>
-                            <th>ID</th>
+                            <th class="d-none">ID</th>
                             <th>Sts</th>
+                            <th class="d-none">NFCant</th>
+                            <th class="d-none">NFCantRec</th>
+                            <th class="d-none">NFSaldo</th>
+                            <th class="d-none">NFSubTotal</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="9" align="center"></th>
+                            <th colspan="2" align="center">Totales:</th>
+                            <th>0.0</th>
+                            <th>0.0</th>
+                            <th>0.0</th>
+                            <th></th>
+                            <th>$0.0</th>
+                            <th colspan="9"></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -310,77 +327,35 @@
                 {"data": "NomArticulo"},
                 {"data": "Cantidad"},
                 {"data": "CantidadRecibida"},
+                {"data": "Saldo"},
                 {"data": "Precio"},
                 {"data": "SubTotal"},
                 {"data": "Sem"},
                 {"data": "Maq"},
                 {"data": "Grupo"},
                 {"data": "ID"},
-                {"data": "Estatus"}
-
+                {"data": "Estatus"},
+                {"data": "NFCant"},
+                {"data": "NFCantRec"},
+                {"data": "NFSaldo"},
+                {"data": "NFSubTotal"}
             ],
-
             "columnDefs": [
                 {
-                    "targets": [0],
+                    "targets": [0, 1, 2, 3, 19, 21, 22, 23, 24],
                     "visible": false,
                     "searchable": true
                 },
                 {
-                    "targets": [1],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [2],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [3],
-                    "visible": false,
-                    "searchable": true
-                },
-//                {
-//                    "targets": [11, 12],
-//                    "render": function (data, type, row) {
-//                        return $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                },
-//                {
-//                    "targets": [13, 14],
-//                    "render": function (data, type, row) {
-//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                },
-                {
-                    "targets": [18],
-                    "visible": false,
-                    "searchable": true
+                    "targets": [10],
+                    width: 350
                 }
             ],
-//            rowGroup: {
-//                endRender: function (rows, group) {
-//                    var stc = $.number(rows.data().pluck('Cantidad').reduce(function (a, b) {
-//                        return a + parseFloat(b);
-//                    }, 0), 2, '.', ',');
-//                    var stcr = $.number(rows.data().pluck('CantidadRecibida').reduce(function (a, b) {
-//                        return a + parseFloat(b);
-//                    }, 0), 2, '.', ',');
-//                    var stp = $.number(rows.data().pluck('SubTotal').reduce(function (a, b) {
-//                        return a + parseFloat(b);
-//                    }, 0), 2, '.', ',');
-//                    return $('<tr>')
-//                            .append('<td></td><td></td><td></td><td></td><td></td><td></td><td>Totales: </td>')
-//                            .append('<td>' + stc + '</td><td>' + stcr + '</td><td></td><td>$' + stp + '</td><td></td><td></td><td></td><td></td></tr>');
-//                },
-//                dataSrc: "GruposT"
-//            },
             language: lang,
             "scrollY": 450,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 500,
+            "displayLength": 250,
             "bLengthChange": true,
             "deferRender": true,
             "scrollCollapse": false,
@@ -388,33 +363,65 @@
             "aaSorting": [
                 [4, 'asc'], [5, 'asc'], [7, 'asc']/*Folio*/
             ],
-//            "createdRow": function (row, data, index) {
-//                $.each($(row).find("td"), function (k, v) {
-//                    var c = $(v);
-//                    var index = parseInt(k);
-//                    switch (index) {
-//                        case 3:
-//                            /*FECHA ORDEN*/
-//                            c.addClass('text-strong');
-//                            break;
-//                        case 5:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-success text-strong');
-//                            break;
-//                        case 7:
-//                            /*fecha conf*/
-//                            c.addClass('text-info text-strong');
-//                            break;
-//                        case 8:
-//                            /*fecha conf*/
-//                            c.addClass('text-warning text-strong');
-//                            break;
-//                    }
-//                });
-//            },
+            "createdRow": function (row, data, index) {
+                $.each($(row).find("td"), function (k, v) {
+                    var c = $(v);
+                    var index = parseInt(k);
+                    switch (index) {
+                        case 9:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-danger text-strong');
+                            break;
+                    }
+                });
+            },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api();//Get access to Datatable API
+                // cantidad pedida
+                var can = api.column(21).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(11).footer()).html(api.column(11, {page: 'current'}).data().reduce(function (a, b) {
+                    return  $.number(parseFloat(can), 2, '.', ',');
+                }, 0));
+                //Cantidad recibida
+                var canrec = api.column(22).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(12).footer()).html(api.column(12, {page: 'current'}).data().reduce(function (a, b) {
+                    return  (canrec > 0) ? $.number(parseFloat(canrec), 2, '.', ',') : '';
+                }, 0));
+                //Saldo
+                var sald = api.column(23).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(13).footer()).html(api.column(13, {page: 'current'}).data().reduce(function (a, b) {
+
+                    return  (parseInt(sald) === 0) ? '' : "<span class='text-danger' >" + $.number(parseFloat(sald), 2, '.', ',') + "</span>";
+                }, 0));
+                //Importe
+                //Cantidad recibida
+                var subt = api.column(24).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(15).footer()).html(api.column(15, {page: 'current'}).data().reduce(function (a, b) {
+                    return '$' + $.number(parseFloat(subt), 2, '.', ',');
+                }, 0));
+            },
             initComplete: function (a, b) {
                 HoldOn.close();
-
             }
         });
 

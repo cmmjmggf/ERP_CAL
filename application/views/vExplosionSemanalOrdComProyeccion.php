@@ -122,8 +122,18 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlExplosionSemanalOrdComProyeccion.find("#frmCaptura")[0]);
 
+
+            var Tipo = parseInt(mdlExplosionSemanalOrdComProyeccion.find('#Tipo').val());
+            var Reporte = '';
+
+            if (Tipo === 80) {
+                Reporte = 'index.php/ReporteExplosionConProyeccionSuelas/onReporteExplosionProyeccionSuelas';
+            } else {
+                Reporte = 'index.php/ReporteExplosionConProyeccion/onReporteExplosionProyeccion';
+            }
+
             $.ajax({
-                url: base_url + 'index.php/ReporteExplosionConProyeccion/onReporteExplosionProyeccion',
+                url: base_url + Reporte,
                 type: "POST",
                 cache: false,
                 contentType: false,

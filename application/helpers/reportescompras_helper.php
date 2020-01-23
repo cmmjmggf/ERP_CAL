@@ -423,35 +423,35 @@ class PDF extends FPDF {
     function Footer() {
         $this->SetFont('Calibri', 'B', 8);
         /* Primer bloque */
-        $this->SetY(183);
+        $this->SetY(190);
         $this->SetX(3);
-        $this->Cell(120, 4, 'IMPORTANTE', 0/* BORDE */, 1, 'C');
+        $this->Cell(150, 4, 'IMPORTANTE', 0/* BORDE */, 1, 'C');
         $this->SetX(3);
         $this->SetFont('Times', '', 8);
-        $this->Cell(120, 3, utf8_decode('1.-Presentar la doc. requerida para la recepción: Factura(3 tantos), Orden de Compra'), 0/* BORDE */, 1, 'J');
+        $this->Cell(200, 3, utf8_decode('1.-Presentar la doc. requerida para la recepción: Factura(3 tantos), Orden de Compra'), 0/* BORDE */, 1, 'J');
         $this->SetX(3);
-        $this->MultiCell(120, 3, utf8_decode('2.-Entregar Orden de Compra completa: artículos y cantidades, cualquier parcialidad debe ser previamente autorizada por el responsable de compras'), 0/* BORDE */, 'J');
+        $this->MultiCell(200, 3, utf8_decode('2.-Entregar Orden de Compra completa: artículos y cantidades, cualquier parcialidad debe ser previamente autorizada por el responsable de compras'), 0/* BORDE */, 'J');
         $this->SetX(3);
-        $this->Cell(120, 3, utf8_decode('3.-La mercancía debe ser etiquetada con la descripción del producto y la cantidad'), 0/* BORDE */, 1, 'J');
+        $this->Cell(200, 3, utf8_decode('3.-La mercancía debe ser etiquetada con la descripción del producto y la cantidad'), 0/* BORDE */, 1, 'J');
         $this->SetX(3);
-        $this->MultiCell(120, 3, utf8_decode('4.-Horario de Recepción de Luneas a Viernes: de 9:00am a 1:00pm y de 3:00pm a 5:00pm  ***Indispensable confirmar cita en caso de Pieles, Forros y Suelas '), 0/* BORDE */, 'J');
+        $this->MultiCell(200, 3, utf8_decode('4.-Horario de Recepción de Luneas a Viernes: de 9:00am a 1:00pm y de 3:00pm a 5:00pm  ***Indispensable confirmar cita en caso de Pieles, Forros y Suelas '), 0/* BORDE */, 'J');
         $this->SetX(3);
-        $this->MultiCell(120, 3, utf8_decode('5.-Entregas después de este horario sólo con autorización '), 0/* BORDE */, 'J');
+        $this->MultiCell(200, 3, utf8_decode('5.-Entregas después de este horario sólo con autorización '), 0/* BORDE */, 'J');
         $this->SetX(3);
-        $this->MultiCell(120, 3, utf8_decode('6.-Sí la entrega se realiza después de la fecha acordada, se sellará la factura con la leyenda "MERCANCÍA RECIBIDA FUERA DE TIEMPO" '), 0/* BORDE */, 'J');
-        /* Segundo bloque */
-        $this->SetFont('Times', 'B', 8.5);
-        $this->SetY(202);
-        $this->SetX(130);
-        $this->Cell(60, 4, 'Recibe marcancia', 'T'/* BORDE */, 1, 'C');
-        $this->SetX(130);
-        $this->Cell(60, 4, 'Nombre, firma y fecha de confirmacion pedido', 0/* BORDE */, 1, 'C');
-        /* tercer bloque */
-        $this->SetY(189);
-        $this->SetX(195);
-        $this->Cell(80, 17, 'Favor de entregar mercancia y orden de compra en almacen', 1/* BORDE */, 1, 'C');
-        $this->SetX(195);
-        $this->Cell(80, 4, 'Atentamente COMPRAS', 1/* BORDE */, 1, 'C');
+        $this->MultiCell(200, 3, utf8_decode('6.-Sí la entrega se realiza después de la fecha acordada, se sellará la factura con la leyenda "MERCANCÍA RECIBIDA FUERA DE TIEMPO" '), 0/* BORDE */, 'J');
+//        /* Segundo bloque */
+//        $this->SetFont('Times', 'B', 8.5);
+//        $this->SetY(202);
+//        $this->SetX(130);
+//        $this->Cell(60, 4, 'Recibe marcancia', 'T'/* BORDE */, 1, 'C');
+//        $this->SetX(130);
+//        $this->Cell(60, 4, 'Nombre, firma y fecha de confirmacion pedido', 0/* BORDE */, 1, 'C');
+//        /* tercer bloque */
+//        $this->SetY(189);
+//        $this->SetX(195);
+//        $this->Cell(80, 17, 'Favor de entregar mercancia y orden de compra en almacen', 1/* BORDE */, 1, 'C');
+//        $this->SetX(195);
+//        $this->Cell(80, 4, 'Atentamente COMPRAS', 1/* BORDE */, 1, 'C');
     }
 
     var $widths;
