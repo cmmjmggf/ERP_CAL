@@ -113,7 +113,7 @@ D.par06, D.par07, D.par08, D.par09, D.par10,
 D.par11, D.par12, D.par13, D.par14, D.par15, 
 D.par16, D.par17, D.par18, D.par19, D.par20, 
 D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}'  "
-                                        . "AND D.tp ={$this->input->get('TP')} LIMIT 1")->result());
+                                        . "AND D.tp ={$this->input->get('TP')} AND D.stafac <= 1 LIMIT 1")->result());
             } else {
                 print json_encode(array("EXISTE" => "NO"));
             }
@@ -213,7 +213,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES
                 FROM devolucionnp AS D 
-                WHERE D.control = {$xxx['CONTROL']} LIMIT 1")->result();
+                WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
                     break;
 
                 default:
@@ -231,7 +231,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES
                 FROM devolucionnp AS D 
-                WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} LIMIT 1")->result();
+                WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} AND stafac <= 1 LIMIT 1")->result();
                     break;
             }
             print json_encode($dt);
@@ -374,7 +374,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f = array(
                 'factura' => $x['FACTURA'], 'tp' => $x['TP_DOCTO'],
                 'cliente' => $x['CLIENTE'], 'contped' => $x['CONTROL'],
-                'fecha' => "$anio-$mes-$dia $hora", 'hora' => Date('d/m/Y'),
+                'fecha' => "$anio-$mes-$dia 00:00:00", 'hora' => Date('d/m/Y'),
                 'corrida' => $x['SERIE'], 'pareped' => $x['PARES_A_FACTURAR'],
                 'estilo' => $x['ESTILO'], 'combin' => $x['COLOR']);
             for ($i = 1; $i < 23; $i++) {
@@ -449,18 +449,22 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
 
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - intval($x['PARES_A_FACTURAR']);
-
+            $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
             $devolucion = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.ID = {$x['DEVOLUCION']}")->result();
             if ($saldopares === 0) {
                 $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
                 $this->db->query("UPDATE devolucionnp "
                         . "SET stafac = 2, "
                         . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
+                        
             } else if (intval($x['PARES_A_FACTURAR']) < $saldopares) {
+                $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
                 $this->db->query("UPDATE devolucionnp "
                         . "SET stafac = 1, "
                         . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
+                        
             }
+            
             if (intval($devolucion[0]->fact) === 0) {
                 $this->db->query("UPDATE devolucionnp "
                         . "SET fact = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");

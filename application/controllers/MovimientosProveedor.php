@@ -46,6 +46,9 @@ class MovimientosProveedor extends CI_Controller {
                 case 'PRODUCPION':
                     $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
+                case 'ALMACEN':
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
+                    break;
             }
 
             $this->load->view('vFondo');
@@ -69,8 +72,24 @@ class MovimientosProveedor extends CI_Controller {
 
     public function getRecords() {
         try {
-            $proveedor = $this->input->post('Proveedor');
-            print json_encode($this->db->query(" SELECT
+            $x = $this->input->get();
+            if ($x['Proveedor'] !== '') {
+                $this->db->select("
+                            CP.Proveedor,
+                            CP.Doc,
+                            date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
+                            CP.ImporteDoc,
+                            CP.Pagos_Doc,
+                            CP.Saldo_Doc,
+                            CP.Tp,
+                            CP.Estatus", false)->from("cartera_proveedores CP")
+                        ->where("CP.Proveedor", $x['Proveedor']);
+                if ($x['Documento'] !== '') {
+                    $this->db->where("CP.Doc", $x['Documento']);
+                }
+                print json_encode($this->db->get()->result());
+            } else {
+                print json_encode($this->db->query("SELECT
                             CP.Proveedor,
                             CP.Doc,
                             date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
@@ -80,8 +99,9 @@ class MovimientosProveedor extends CI_Controller {
                             CP.Tp,
                             CP.Estatus
                             FROM cartera_proveedores CP
-                            where CP.Proveedor = $proveedor
-                            ")->result());
+                            LIMIT 5
+            ")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

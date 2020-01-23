@@ -1,36 +1,38 @@
 <div class="modal " id="mdlControlesPorFacturarAClientes"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Controles por facturar a Clientes</h5>
+                <h5 class="modal-title">
+                    <span class="fa fa-print"></span>
+                    Controles por facturar a Clientes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="frmCaptura">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="rProduccion" name="Reporte" class="custom-control-input">
-                                    <label class="custom-control-label text-success" for="rProduccion">De producción</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="rDevolucion" name="Reporte" class="custom-control-input">
-                                    <label class="custom-control-label text-danger" for="rDevolucion">De devolución</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="rMuestras" name="Reporte" class="custom-control-input">
-                                    <label class="custom-control-label text-info" for="rMuestras">De muestras y prototipos</label>
-                                </div>
-                            </div>
-                        </div>
+            <div class="modal-body"> 
+                <div class="row" align="center"> 
+                    <div class="col-4">
+                        <button type="button" id="rProduccion" name="rProduccion" style="background-color: #8BC34A !important;
+    border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
+                            <span class="fa fa-print"></span> DE PRODUCCIÓN
+                        </button>
                     </div>
-                </form>
+                    <div class="col-4">
+                        <button type="button" id="rDevolucion" name="rDevolucion" class="btn btn-sm btn-info font-weight-bold">
+                            <span class="fa fa-print"></span> DE DEVOLUCIÓN
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="rMuestras" name="rMuestras" class="btn btn-sm btn-info font-weight-bold" style="background-color: #673AB7 !important;
+    border-color: #4527A0 !important;">
+                            <span class="fa fa-print"></span> DE MUESTRAS Y PROTOTIPOS
+                        </button>
+                    </div>
+                </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-secondary font-weight-bold" id="btnSalir" data-dismiss="modal">
+                    <span class="fa fa-times"></span> SALIR</button>
             </div>
         </div>
     </div>
@@ -43,13 +45,13 @@
             mdlControlesPorFacturarAClientes.find('input:radio').prop("checked", false);
         });
 
-        mdlControlesPorFacturarAClientes.find('#rProduccion').change(function () {
+        mdlControlesPorFacturarAClientes.find('#rProduccion').click(function () {
             onReporteControlesPorFacturar(1);
         });
-        mdlControlesPorFacturarAClientes.find('#rDevolucion').change(function () {
+        mdlControlesPorFacturarAClientes.find('#rDevolucion').click(function () {
             onReporteControlesPorFacturar(2);
         });
-        mdlControlesPorFacturarAClientes.find('#rMuestras').change(function () {
+        mdlControlesPorFacturarAClientes.find('#rMuestras').click(function () {
             onReporteControlesPorFacturar(3);
         });
     });
@@ -68,8 +70,8 @@
             console.log(data);
             if (data.length > 0) {
                 console.log(data);
-                onImprimirReporteFancyAFC(data, function () { 
-                }); 
+                onImprimirReporteFancyAFC(data, function () {
+                });
                 HoldOn.close();
             }
             HoldOn.close();

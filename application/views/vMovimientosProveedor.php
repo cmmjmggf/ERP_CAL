@@ -2,7 +2,9 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-8 float-left">
-                <legend class="float-left">Consulta de Movimientos de Proveedores</legend>
+                <legend class="float-left">
+                    <span class="fa fa-check-circle"></span>
+                    Consulta de Movimientos de Proveedores</legend>
             </div>
             <div class="col-sm-4" align="right">
 
@@ -75,6 +77,14 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -138,17 +148,20 @@
                 pnlTablero.find('#Doc').val('').focus();
                 getRecords($(this).val());
                 getPagos($(this).val(), '');
-                MovimientosProveedores.column(1).search('').draw();
+//                MovimientosProveedores.column(1).search('').draw();
+                MovimientosProveedores.ajax.reload();
             }
         });
         pnlTablero.find("#Doc").on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    MovimientosProveedores.column(1).search('^' + $(this).val() + '$', true, false).draw();
+//                    MovimientosProveedores.column(1).search('^' + $(this).val() + '$', true, false).draw();
+                    MovimientosProveedores.ajax.reload();
                     getPagos(pnlTablero.find("#Proveedor").val(), $(this).val());
                 } else {
                     getPagos(pnlTablero.find("#Proveedor").val(), '');
-                    MovimientosProveedores.column(1).search('').draw();
+//                    MovimientosProveedores.column(1).search('').draw();
+                    MovimientosProveedores.ajax.reload();
                 }
             }
         });
@@ -242,6 +255,17 @@
 //            },
             initComplete: function (a, b) {
                 HoldOn.close();
+            },
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var stt = 0.0;
+                console.log(api.rows().data());
+                $.each(api.rows().data(), function (k, v) {
+                    stt += parseFloat(v.importeP);
+                });
+                $(api.column(2).footer()).html(
+                        '<span class="font-weight-bold">$' +
+                        $.number(stt, 2, '.', ',') + '</span>');
             }
         });
 
@@ -253,7 +277,8 @@
         });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMovimientosProveedores')) {
-            tblMovimientosProveedores.DataTable().destroy();
+            MovimientosProveedores.ajax.reload();
+            return;
         }
         MovimientosProveedores = tblMovimientosProveedores.DataTable({
             "dom": 'rtp',
@@ -261,8 +286,10 @@
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
-                "data": {Proveedor: prov},
-                "type": "POST"
+                "data": function (d) {
+                    d.Proveedor = pnlTablero.find("#Proveedor").val() ? pnlTablero.find("#Proveedor").val() : ''; 
+                    d.Documento = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : ''; 
+                }
             },
             "columns": [
                 {"data": "Proveedor"},

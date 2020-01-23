@@ -852,7 +852,7 @@
         });
 
         btnAcepta.click(function () {
-            if (parseInt(PrecioFacturacion.val()) > 0 || PrecioFacturacion.val() === "") {
+            if (parseInt((PrecioFacturacion.val() ? PrecioFacturacion.val(): 0)) <= 0 ) {
                 onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
                     PrecioFacturacion.focus().select();
                 });

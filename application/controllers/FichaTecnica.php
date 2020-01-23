@@ -1,6 +1,8 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/phpqrcode/qrlib.php";
 
 class FichaTecnica extends CI_Controller {
 
@@ -93,6 +95,31 @@ class FichaTecnica extends CI_Controller {
                                     ->from('estilos AS E')->group_by('E.Foto')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEstiloParaImprimir() {
+        try {
+            $x = $this->input->post();
+            $pdf = new PDF('L');
+            $pdf->AddPage();
+            
+            $pdf->centreImage(base_url("uploads/Estilos/{$x['ESTILO']}.gif"));  
+            
+            /* FIN RESUMEN */
+            $path = 'uploads/ReportesEstilos';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            if (delete_files('uploads/ReportesEstilos/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $file_name = "{$x['ESTILO']}" . date("d_m_Y_his");
+            $url = $path . '/' . $file_name . '.pdf'; 
+            $pdf->Output($url); 
+            print base_url() . $url;
+        } catch (Exception $ex) {
+            echo $ex->getTraceAsString();
         }
     }
 
@@ -579,7 +606,7 @@ class FichaTecnica extends CI_Controller {
                 'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
                 'Articulo' => ($x->post('Articulo') !== NULL) ? $x->post('Articulo') : NULL,
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
-                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL, 
+                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
                 'Estatus' => 'ACTIVO',
                 'FechaAlta' => Date('d/m/Y')
             );
@@ -602,7 +629,7 @@ class FichaTecnica extends CI_Controller {
                 'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
                 'Articulo' => ($x->post('eArticulo') !== NULL) ? $x->post('eArticulo') : NULL,
                 'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
-                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL, 
+                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
             );
             $this->ftm->onModificar($this->input->post('ID'), $data);
         } catch (Exception $exc) {
@@ -671,7 +698,7 @@ class FichaTecnica extends CI_Controller {
                     'Pieza' => $PIEZA, 'Articulo' => $ARTICULO,
                     'Precio' => $v->PRECIO, 'Consumo' => $CONSUMO,
                     'PzXPar' => $PZASXPAR, 'Estatus' => 'ACTIVO', 'FechaAlta' => Date('d/m/Y')
-                    );
+                );
                 $this->db->insert('fichatecnica', $FT);
             }
         } catch (Exception $exc) {
@@ -775,6 +802,49 @@ class FichaTecnica extends CI_Controller {
             $pdf->Output($url);
             print base_url() . $url;
         }
+    }
+
+}
+
+class PDF extends FPDF {
+
+    const DPI = 96;
+    const MM_IN_INCH = 25.4;
+    const A4_HEIGHT = 297;
+    const A4_WIDTH = 210;
+    // tweak these values (in pixels)
+    const MAX_WIDTH = 800;
+    const MAX_HEIGHT = 500;
+
+    function pixelsToMM($val) {
+        return $val * self::MM_IN_INCH / self::DPI;
+    }
+
+    function resizeToFit($imgFilename) {
+        list($width, $height) = getimagesize($imgFilename);
+
+        $widthScale = self::MAX_WIDTH / $width;
+        $heightScale = self::MAX_HEIGHT / $height;
+
+        $scale = min($widthScale, $heightScale);
+
+        return array(
+            round($this->pixelsToMM($scale * $width)),
+            round($this->pixelsToMM($scale * $height))
+        );
+    }
+
+    function centreImage($img) {
+        list($width, $height) = $this->resizeToFit($img);
+
+        // you will probably want to swap the width/height
+        // around depending on the page's orientation
+        $this->Image(
+                $img, (self::A4_HEIGHT - $width) / 2,
+                (self::A4_WIDTH - $height) / 2,
+                $width,
+                $height
+        );
     }
 
 }

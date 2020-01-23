@@ -24,6 +24,9 @@ class MenuProveedores extends CI_Controller {
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral')->view('vMenuProveedores');
                     break;
+                case 'ALMACEN':
+                    $this->load->view('vNavGeneral')->view('vMenuProveedores');
+                    break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);
         } else {

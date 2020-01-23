@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.8433187801425874"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.2304157239725333"/>
+	<property name="ireport.x" value="103"/>
+	<property name="ireport.y" value="46"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -811,6 +811,9 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<line>
 				<reportElement x="1" y="12" width="614" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
 			</line>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="554" y="0" width="61" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
@@ -846,9 +849,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="148" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a6290f01-b8ff-4426-9403-c5d15017e1b3"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -857,9 +857,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="163" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6536c7f8-47d8-4c64-81b7-a43ea41d60a8"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -868,9 +865,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="178" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="734e4fa5-193a-4c6b-8eac-7a677babd6df"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -879,9 +873,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="193" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="26582e98-5868-4f2e-a010-25bbb946b06d"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -890,9 +881,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="208" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96b9515b-aa77-4414-b428-b9f16c79945d"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -901,9 +889,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="223" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="66cfd81c-74c6-49eb-960e-a08bda24039c"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -912,9 +897,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="238" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a5db3eb-2ce4-4b6e-bae8-9a76096f6930"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -923,9 +905,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="253" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f0c59bb2-a6cf-4dfe-9c9d-ad6ab0daf8f3"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -934,9 +913,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="268" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f2437290-ba91-4237-9606-1acd11dc5b47"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -945,9 +921,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="283" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9c7d4ec7-a485-41c4-8ec7-ec3d5aa62981"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -956,9 +929,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="298" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9755f075-59df-40e1-a965-00ed8adee455"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -967,9 +937,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="313" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96dcf9a5-d819-4753-8ae3-f3d412251c2a"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -978,9 +945,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="328" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae98da05-a720-4dcb-86fb-3cc6dec92ea1"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -989,9 +953,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="343" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="465bc305-3adf-4c31-b68c-b0e117a4a7a9"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1000,9 +961,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="358" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ef6d68b-da94-43a1-b645-a814336deee6"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1011,9 +969,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="373" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="576e895e-33dc-4b5d-95eb-94d1ec674db2"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1022,9 +977,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="388" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6635449-8a93-49ef-afd9-c43c759acd0c"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1071,114 +1023,6 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{par22}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="163" y="0" width="1" height="13" uuid="2c4d16eb-ddfe-4156-8ba7-26d7291e9b78"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="148" y="0" width="1" height="13" uuid="5aed2b37-9273-40b4-a6f3-bbe9d25c3c7d"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="178" y="0" width="1" height="13" uuid="466d1c9d-9953-4c6c-8027-5b34f6a86c5f"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="193" y="0" width="1" height="13" uuid="85a83d22-a890-4870-bf96-3e20dbb2a946"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="208" y="0" width="1" height="13" uuid="cd3318d2-f72d-4855-86b9-9fc33557e6d1"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="223" y="0" width="1" height="13" uuid="7b779c9e-96fc-49fc-afa0-a32823ddb3b9"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="238" y="0" width="1" height="13" uuid="f2cdee07-bdfd-4764-a70d-5c300d3d455c"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="253" y="0" width="1" height="13" uuid="c7c36fcc-2684-403d-ba30-c76c93c0c774"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="282" y="-1" width="1" height="13" uuid="9a694c96-1681-4ee0-8fcf-4b182e37d8d9"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="267" y="-1" width="1" height="13" uuid="2b43e4dc-1a45-442f-828d-b3fc6595c73a"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="297" y="-1" width="1" height="13" uuid="c2fa984a-6ec5-4419-93f1-dd8ab748deda"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="312" y="-1" width="1" height="13" uuid="f0917e40-36b0-4b5a-8404-3b23f529cd4c"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="327" y="-1" width="1" height="13" uuid="bd735595-3f3d-4ea1-a190-01ff66852448"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="342" y="-1" width="1" height="13" uuid="6a6c1219-0e7e-4683-877c-11e56f5386fd"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="357" y="-1" width="1" height="13" uuid="94750527-4af1-49dc-833c-2a54df3e2985"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="372" y="-1" width="1" height="13" uuid="d7f23a81-3167-4d47-920b-8e0feb77862e"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="402" y="-1" width="1" height="13" uuid="e9bb4f26-5034-4e90-bb95-69fccab890e8"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="387" y="-1" width="1" height="13" uuid="614191fa-6ab6-43a5-af31-135b4d9aeb96"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
 		</band>
 	</detail>
 	<pageFooter>

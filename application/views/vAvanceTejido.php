@@ -474,7 +474,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "450px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
@@ -518,12 +518,16 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "450px",
             "scrollX": true,
             "aaSorting": [
                 [0, 'desc']
-            ]
-
+            ],
+            initComplete: function () {
+                pnlTablero.find("input").addClass("font-weight-bold");
+                pnlTablero.find("td").addClass("font-weight-bold");
+                pnlTablero.find("td").css({"font-size": "16px"});
+            }
         };
         ControlesEntregados = tblControlesEntregados.DataTable(xoptions);
     });
@@ -594,7 +598,7 @@
             if (a.length > 0) {
                 if (parseInt(a[0].EXISTE) > 0) {
                     swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL', 'warning').then((value) => {
-                        Control.focus().select(); 
+                        Control.focus().select();
                         Estilo.val('');
                         Color[0].selectize.clear(true);
                         Pares.val('');
@@ -710,5 +714,16 @@
         background: -ms-linear-gradient(top, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
         background: linear-gradient(to bottom, rgba(148,180,71,1) 0%, rgba(93,110,30,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94b447', endColorstr='#5d6e1e', GradientType=0 );
+    }
+    .btn-success{
+        background-color: #99cc00 !important;
+        border-color: #99cc00 !important;
+    }
+    input,.btn {
+        font-weight: bold !important;
+    }
+    table tbody td {
+        font-size: 18px !important;
+        font-weight: bold !important;
     }
 </style>

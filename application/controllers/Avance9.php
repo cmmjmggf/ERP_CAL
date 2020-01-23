@@ -609,7 +609,7 @@ class Avance9 extends CI_Controller {
                         $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                         $data["preciofrac"] = $PXFC;
                         $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-                        if ($check_fraccion[0]->EXISTE <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) === 0) {
                             /* 20 RAYADO => 40 FOLEADO */
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
@@ -679,12 +679,12 @@ class Avance9 extends CI_Controller {
                                 $data["preciofrac"] = $PXFC;
                                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                                 $this->db->insert('fracpagnomina', $data);
-                            } 
-                            
-                            /*AVANCE*/ 
+                            }
+
+                            /* AVANCE */
                             $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20,40) AND A.Control ={$xXx['CONTROL']}")->result();
                             if (intval($revisar_avance[0]->EXISTE) === 3) {
-                                $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40); 
+                                $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40);
                                 $this->db->insert('avance', array(
                                     'Control' => $xXx['CONTROL'], 'FechaAProduccion' => Date('d/m/Y'),
                                     'Departamento' => 90, 'DepartamentoT' => 'ENTRETELADO',
@@ -695,8 +695,9 @@ class Avance9 extends CI_Controller {
                                 $id = $this->db->insert_id();
                                 $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                                 /* PAGAR LA FRACCION 103 AL EMPLEADO 49 */
-                            }                         
+                            }
                             print '{"AVANZO":"1","FR":"' . $FRACCION . '","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A ENTRETELADO - SWITCH 30 EMPLEADO 49 FRACCION ' . $FRACCION . '"}';
+                            exit(0);
                         } else {
                             print "\n 105 ALMACEN DE CORTE";
                             exit(0);
