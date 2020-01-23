@@ -24,7 +24,7 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
         $this->db->query("TRUNCATE TABLE explosion_proyeccion_temp; ");
         $this->db->query("truncate table explosion_proyeccion_tallas_temp;");
         $cm = $this->ReporteExplosionProyeccion_model;
-        $Tipo = $this->input->post('Tipo');
+
         $Maq = $this->input->post('Maq');
         $aMaq = $this->input->post('aMaq');
         $Sem = $this->input->post('Sem');
@@ -120,15 +120,6 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
                         if ($Exp_Acum > 0) {
                             $Articulo = $D->{"A$i"};
                             //Insertamos la explosion en la tabla temporal
-//                            $this->db->insert("explosion_proyeccion_temp", array(
-//                                'Grupo' => $D->Grupo,
-//                                'Articulo' => $Articulo,
-//                                'Descripcion' => $D->Descripcion,
-//                                'Unidad' => $D->Unidad,
-//                                'Talla' => $Talla,
-//                                'SemAnt' => $Exp_Acum
-//                            ));
-
                             $this->db->query("INSERT INTO explosion_proyeccion_temp
                                              (Grupo,Articulo,Descripcion,Unidad,Talla,SemAnt) VALUES
                                             ({$D->Grupo},$Articulo,'{$D->Descripcion}','{$D->Unidad}',$Talla,$Exp_Acum) ");
@@ -137,14 +128,6 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
                         if ($Exp_Acum > 0) {
                             $Articulo = $D->{"A$i"};
                             //Insertamos la explosion en la tabla temporal
-//                            $this->db->insert("explosion_proyeccion_temp", array(
-//                                'Grupo' => $D->Grupo,
-//                                'Articulo' => $Articulo,
-//                                'Descripcion' => $D->Descripcion,
-//                                'Unidad' => $D->Unidad,
-//                                'Talla' => $Talla,
-//                                'SemAnt' => $Exp_Acum
-//                            ));
                             $this->db->query("INSERT INTO explosion_proyeccion_temp
                                              (Grupo,Articulo,Descripcion,Unidad,Talla,SemAnt) VALUES
                                             ({$D->Grupo},$Articulo,'{$D->Descripcion}','{$D->Unidad}',$Talla,$Exp_Acum) ");
@@ -209,7 +192,8 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
             $Cont ++; //Incrementamos cada ves para aumentar la semana
         }
         //Obtenemos la tabla agrupada para eliminar registros que no sirven
-        $ArticulosAgrupados = $cm->onCreaYObtieneTablaTemporalAgrupada($Texto_Mes_Anterior);
+        $Desglosado = $this->input->post('Desglosado');
+        $ArticulosAgrupados = $cm->onCreaYObtieneTablaTemporalAgrupada($Texto_Mes_Anterior, $Desglosado);
 
         if (!empty($ArticulosAgrupados)) {
             foreach ($ArticulosAgrupados as $key => $D) {

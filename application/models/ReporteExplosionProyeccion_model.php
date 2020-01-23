@@ -258,13 +258,13 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
         }
     }
 
-    public function onCreaYObtieneTablaTemporalAgrupada($Texto_Mes_Anterior) {
+    public function onCreaYObtieneTablaTemporalAgrupada($Texto_Mes_Anterior, $Desglosado) {
         try {
             $this->db->query("
                             INSERT INTO explosion_proyeccion_tallas_temp
                             (`Grupo`,`Articulo`,`Descripcion`,`Unidad`,`Inicial`,`Entradas`,`Salidas`,
                             `Actual`,`OrdCom`,`FechaCom`,`Pedido`,`Recibido`,`SemAnt`,`Sem1`,`Sem2`,`Sem3`,`Sem4`,`Sem5`,`Sem6`,`Talla`)
-                            SELECT CON.ClaveGrupo, CON.Articulo, A.Descripcion, CON.Unidad,
+                            SELECT CON.ClaveGrupo, CON.Articulo, $Desglosado.Descripcion, CON.Unidad,
                             A.$Texto_Mes_Anterior AS Inicial,
                             0 AS Entradas,
                             0 AS Salidas,
@@ -340,25 +340,26 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
                                 Articulo,
                                 Descripcion,
                                 Unidad,
-                                Inicial,
-                                Entradas,
-                                Salidas,
-                                Actual,
+                                sum(Inicial) as Inicial,
+                                sum(Entradas) as Entradas,
+                                sum(Salidas) as Salidas,
+                                sum(Actual) as Actual,
                                 OrdCom,
                                 FechaCom,
-                                Pedido,
-                                Recibido,
-                                (SemAnt) as Anterior,
-                                (Sem1) AS Sem1,
-                                (Sem2) AS Sem2,
-                                (Sem3) AS Sem3,
-                                (Sem4) AS Sem4,
-                                (Sem5) AS Sem5,
-                                (Sem6) AS Sem6  "
-                            . "", false)
-                    ->from('explosion_proyeccion_tallas_temp');
-            $this->db->order_by('ClaveGrupo', 'ASC');
-            $this->db->order_by('Descripcion', 'ASC');
+                                sum(Pedido) as Pedido,
+								sum(Recibido) as Recibido,
+                                sum(SemAnt) as Anterior,
+                                sum(Sem1) AS Sem1,
+                                sum(Sem2) AS Sem2,
+                                sum(Sem3) AS Sem3,
+                                sum(Sem4) AS Sem4,
+                                sum(Sem5) AS Sem5,
+                                sum(Sem6) AS Sem6
+                                from
+                                explosion_proyeccion_tallas_temp
+                                group by Descripcion
+                                order by Descripcion "
+                    . "", false);
 
             $query = $this->db->get();
             /*

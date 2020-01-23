@@ -61,6 +61,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-12">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="chPorTallasProyeccion">
+                                <label class="custom-control-label text-info labelCheck" for="chPorTallasProyeccion">Desglosado por tallas (Sólo para suela)</label>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -88,7 +96,6 @@
         mdlExplosionSemanalOrdComProyeccion.find('#btnExcel').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlExplosionSemanalOrdComProyeccion.find("#frmCaptura")[0]);
-
             $.ajax({
                 url: base_url + 'index.php/ReporteExplosionConProyeccion/onReporteExplosionProyeccionExcel',
                 type: "POST",
@@ -128,6 +135,8 @@
 
             if (Tipo === 80) {
                 Reporte = 'index.php/ReporteExplosionConProyeccionSuelas/onReporteExplosionProyeccionSuelas';
+                var desglose = mdlExplosionSemanalOrdComProyeccion.find("#chPorTallasProyeccion")[0].checked ? 'A' : 'CON';
+                frm.append('Desglosado', desglose);
             } else {
                 Reporte = 'index.php/ReporteExplosionConProyeccion/onReporteExplosionProyeccion';
             }

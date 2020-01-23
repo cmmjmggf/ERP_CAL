@@ -79,7 +79,13 @@ class MaterialRecibido extends CI_Controller {
                             . "CONCAT(G.Clave) AS Grupo,"
                             . "OC.Ano,"
                             . "OC.Tipo, "
-                            . "OC.Estatus  "
+                            . "(CASE "
+                            . "WHEN  OC.Estatus ='ACTIVA' THEN CONCAT('<span class=\'badge badge-info\'>','ACTIVA','</span>') "
+                            . "WHEN  OC.Estatus ='PENDIENTE' THEN CONCAT('<span class=\'badge badge-warning\'>','PENDIENTE','</span>')"
+                            . "WHEN  OC.Estatus ='RECIBIDA' THEN CONCAT('<span class=\'badge badge-success\'>','RECIBIDA','</span>')"
+                            . "WHEN  OC.Estatus ='CANCELADA' THEN CONCAT('<span class=\'badge badge-danger\'>','CANCELADA','</span>')"
+                            . "WHEN  OC.Estatus ='INACTIVA' THEN CONCAT('<span class=\'badge badge-secondary\'>','INACTIVA','</span>')"
+                            . " END) AS Estatus "
                             . "", false)
                     ->from("ordencompra AS OC")
                     ->join("proveedores P", 'ON P.Clave = OC.Proveedor')

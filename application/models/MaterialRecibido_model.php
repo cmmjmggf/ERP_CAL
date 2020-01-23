@@ -36,7 +36,13 @@ class MaterialRecibido_model extends CI_Model {
                             . "CONCAT(G.Clave,'-',G.Nombre) AS Grupo,"
                             . "OC.Ano,"
                             . "OC.Tipo, "
-                            . "OC.Estatus  "
+                            . "(CASE "
+                            . "WHEN  OC.Estatus ='ACTIVA' THEN CONCAT('<span class=\'badge badge-info\'>','ACTIVA','</span>') "
+                            . "WHEN  OC.Estatus ='PENDIENTE' THEN CONCAT('<span class=\'badge badge-warning\'>','PENDIENTE','</span>')"
+                            . "WHEN  OC.Estatus ='RECIBIDA' THEN CONCAT('<span class=\'badge badge-success\'>','RECIBIDA','</span>')"
+                            . "WHEN  OC.Estatus ='CANCELADA' THEN CONCAT('<span class=\'badge badge-danger\'>','CANCELADA','</span>')"
+                            . "WHEN  OC.Estatus ='INACTIVA' THEN CONCAT('<span class=\'badge badge-secondary\'>','INACTIVA','</span>')"
+                            . " END) AS Estatus "
                             . "", false)
                     ->from("ordencompra AS OC")
                     ->join("proveedores P", 'ON P.Clave = OC.Proveedor')
@@ -46,7 +52,7 @@ class MaterialRecibido_model extends CI_Model {
                     ->where('OC.Ano', $Ano)
                     ->where('OC.Tp', $Tp)
                     ->where('OC.Tipo', $Tipo)
-                    ->where_in('OC.Estatus', array('ACTIVA', 'PENDIENTE', 'RECIBIDA', 'CANCELADA'));
+                    ->where_in('OC.Estatus', array('ACTIVA', 'PENDIENTE', 'RECIBIDA', 'CANCELADA', 'INACTIVA'));
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
