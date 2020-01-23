@@ -18,24 +18,20 @@ class ControlesTerminados_model extends CI_Model {
     public function getControl($Control, $Maq) {
         try {
             $this->db->select("
-                            CONCAT(E.Clave,' - ',E.Descripcion) AS Estilo,
-                            CONCAT(CO.Clave,' - ',CO.Descripcion) AS Color,
-                            E.Clave ClaveEstilo,
-                            CO.Clave AS ClaveColor,
-                            E.Linea AS Linea,
-                            C.Semana,
-                            C.Pares,
-                            CAST(ifnull(LPM.PrecioVta,0) AS DECIMAL(5,2)) AS Precio,
-                            D.Clave AS Depto,
-                            ifnull(CT.Control,'') AS Terminado "
-                            . "")
-                    ->from("controles C")
-                    ->join("estilos E", 'ON E.Clave = C.Estilo')
-                    ->join("colores CO", 'ON CO.Clave =  C.Color AND CO.Estilo = C.Estilo')
-                    ->join("listapreciosmaquilas LPM", "ON LPM.Estilo = C.Estilo AND LPM.Color =  C.Color AND LPM.Maq = '$Maq' ", 'left')
-                    ->join("departamentos D", 'ON D.Descripcion = C.EstatusProduccion')
-                    ->join("controlterm CT", 'ON CT.Control = C.Control', 'left')
-                    ->where("C.Control", $Control);
+                                CONCAT(PE.Estilo, ' - ', PE.EstiloT) AS Estilo,
+                                CONCAT(PE.Color, ' - ', PE.ColorT) AS Color,
+                                PE.Estilo AS  `ClaveEstilo`,
+                                PE.Color AS `ClaveColor`,
+                                (select linea from estilos where clave = PE.Estilo) AS `Linea`,
+                                PE.Semana,
+                                PE.Pares,
+                                CAST(ifnull(LPM.PrecioVta, 0) AS DECIMAL(5, 2)) AS Precio,
+                                `PE`.`DeptoProduccion` AS `Depto`,
+                                ifnull(CT.Control, '') AS Terminado
+                                FROM `pedidox` `PE`
+                                LEFT JOIN `listapreciosmaquilas` `LPM` ON `LPM`.`Estilo` = `PE`.`Estilo` AND `LPM`.`Color` =  `PE`.`Color` AND `LPM`.`Maq` = '$Maq'
+                                LEFT JOIN `controlterm` `CT` ON `CT`.`Control` = `PE`.`Control`
+                                WHERE `PE`.`Control` = '$Control' ");
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
