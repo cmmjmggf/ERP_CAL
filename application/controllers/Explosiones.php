@@ -653,8 +653,9 @@ class Explosiones extends CI_Controller {
                     foreach ($FichaTecnica as $key => $FT) {
                         $txtrangopz = $FT->rango;
                         //sacamos el rango para las suelas
-                        if ($txtrangopz !== '') {
+                        if ($txtrangopz !== '' && $txtrangopz !== '0') {
                             $Ran = $this->db->query("select * from rangos where clave = '{$txtrangopz}' ")->result()[0];
+
                             if (!empty($Ran)) {
                                 if (floatval($Ran->PtoInUno) > 0 && floatval($Ran->PtoFinUno) > 0) {
                                     $pnti = $Ran->PtoInUno;

@@ -124,10 +124,12 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                HoldOn.close();
+                mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
                 if (data.length > 0) {
                     if (Tipo === 80) {
                         onImprimirReporteFancyArrayAFC(JSON.parse(data), function (a, b) {
-                            mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
+
                         });
                     } else {
                         onImprimirReporteFancyAFC(data, function (a, b) {
@@ -144,7 +146,7 @@
                         mdlExplosionSemanal.find('#Ano').focus();
                     });
                 }
-                HoldOn.close();
+
             }).fail(function (x, y, z) {
                 mdlExplosionSemanal.find('#btnImprimir').attr('disabled', false);
                 console.log(x, y, z);
