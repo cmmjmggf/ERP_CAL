@@ -541,7 +541,7 @@
 
         tblEstilos.find('tbody').on('click', 'tr', function () {
             var dtm = Estilos.row(this).data();
-            var estilo = parseInt(dtm.ID);
+            var estilo = (dtm.Clave);
             getInfoEstilo(estilo);
         });
 

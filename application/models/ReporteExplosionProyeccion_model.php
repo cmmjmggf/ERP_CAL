@@ -54,14 +54,14 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                  ifnull((select sum(MA.CantidadMov) from movarticulos MA
                                 where MA.EntradaSalida = '1'
                                 and MA.Articulo = EXPL.Articulo
-                                and MA.Maq BETWEEN $Maquila AND $aMaquila
+                                AND MA.TipoMov <> 'CAN'
                                 AND STR_TO_DATE(MA.FechaMov, '%d/%m/%Y') BETWEEN STR_TO_DATE('$FechaIni', '%d/%m/%Y') AND STR_TO_DATE('$FechaFin', '%d/%m/%Y')
                                 ), 0) AS Entradas,
 
                                 ifnull((select sum(MA.CantidadMov) from movarticulos MA
                                 where MA.EntradaSalida = '2'
                                 and MA.Articulo = EXPL.Articulo
-                                and (MA.Maq BETWEEN $Maquila AND $aMaquila   $Subalmacen  )
+                                AND MA.TipoMov <> 'CAN'
                                 AND STR_TO_DATE(MA.FechaMov, '%d/%m/%Y') BETWEEN STR_TO_DATE('$FechaIni', '%d/%m/%Y') AND STR_TO_DATE('$FechaFin', '%d/%m/%Y')
                                 ), 0) AS Salidas
 

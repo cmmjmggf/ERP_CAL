@@ -72,36 +72,35 @@ class MovimientosProveedor extends CI_Controller {
 
     public function getRecords() {
         try {
-            $x = $this->input->get();
+            $x = $this->input->post();
+            $this->db->select("
+                            CP.Proveedor,
+                            CP.Doc,
+                            date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
+                            CP.ImporteDoc,
+                            CP.Pagos_Doc,
+                            CP.Saldo_Doc,
+                            CP.Tp,
+                            CP.Estatus", false)->from("cartera_proveedores CP");
+
             if ($x['Proveedor'] !== '') {
-                $this->db->select("
-                            CP.Proveedor,
-                            CP.Doc,
-                            date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
-                            CP.ImporteDoc,
-                            CP.Pagos_Doc,
-                            CP.Saldo_Doc,
-                            CP.Tp,
-                            CP.Estatus", false)->from("cartera_proveedores CP")
-                        ->where("CP.Proveedor", $x['Proveedor']);
-                if ($x['Documento'] !== '') {
-                    $this->db->where("CP.Doc", $x['Documento']);
-                }
-                print json_encode($this->db->get()->result());
-            } else {
-                print json_encode($this->db->query("SELECT
-                            CP.Proveedor,
-                            CP.Doc,
-                            date_format(str_to_date(CP.fechadoc, '%d/%m/%Y'),'%Y/%m/%d') as fechadoc,
-                            CP.ImporteDoc,
-                            CP.Pagos_Doc,
-                            CP.Saldo_Doc,
-                            CP.Tp,
-                            CP.Estatus
-                            FROM cartera_proveedores CP
-                            LIMIT 5
-            ")->result());
+                $this->db->where('CP.Proveedor', $x['Proveedor']);
             }
+            if ($x['Doc'] !== '') {
+                $this->db->where('CP.Doc', $x['Doc']);
+            }
+            if ($x['Proveedor'] === '' && $x['Doc'] === '') {
+                $this->db->where('CP.Proveedor', 0);
+                $this->db->where('CP.Doc', 0);
+            }
+            $query = $this->db->get()->result();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+
+            print json_encode($query);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -109,20 +108,33 @@ class MovimientosProveedor extends CI_Controller {
 
     public function getPagos() {
         try {
-            $prov = $this->input->post('Proveedor');
-            $doc = $this->input->post('Doc');
-            $query = " SELECT
+            $x = $this->input->post();
+            $this->db->select("
                             CP.Factura as remicion,
                             date_format(str_to_date(CP.fecha, '%d/%m/%Y'),'%Y/%m/%d') as fechacap,
                             CP.importe as importeP,
                             CP.DocPago
-                            FROM pagosproveedores CP
-                            where CP.Proveedor = $prov
-                            ";
-            if ($doc !== '') {
-                $query .= "and CP.Factura = $doc ";
+                            FROM pagosproveedores CP", false);
+
+            if ($x['Proveedor'] !== '') {
+                $this->db->where('CP.Proveedor', $x['Proveedor']);
             }
-            print json_encode($this->db->query($query)->result());
+            if ($x['Doc'] !== '') {
+                $this->db->where('CP.Factura', $x['Doc']);
+            }
+            if ($x['Proveedor'] === '' && $x['Doc'] === '') {
+                $this->db->where('CP.Proveedor', 0);
+                $this->db->where('CP.Factura', 0);
+            }
+
+            $query = $this->db->get()->result();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+
+            print json_encode($query);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

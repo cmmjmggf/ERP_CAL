@@ -203,7 +203,7 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
                                 sum(case when MA.EntradaSalida = '2' then MA.CantidadMov else 0 end) as salidas
                                 from movarticulos MA
                                 where MA.Articulo = {$D->Articulo}
-                                AND MA.Maq BETWEEN $Maq AND $aMaq AND MA.TipoMov <> 'CAN'
+                                AND MA.TipoMov <> 'CAN'
                                 AND STR_TO_DATE(MA.FechaMov, '%d/%m/%Y') BETWEEN STR_TO_DATE('{$FechaIni}', '%d/%m/%Y') AND STR_TO_DATE('{$FechaFin}', '%d/%m/%Y') ";
 
                 $InfoMovArt = $this->db->query($sql)->result();

@@ -3,7 +3,6 @@
         <div class="row">
             <div class="col-sm-8 float-left">
                 <legend class="float-left">
-                    <span class="fa fa-check-circle"></span>
                     Consulta de Movimientos de Proveedores</legend>
             </div>
             <div class="col-sm-4" align="right">
@@ -110,8 +109,8 @@
             openOnFocus: false
         });
         getProveedores();
-        getRecords(0);
-        getPagos(0, 0);
+        getRecords();
+        getPagos();
         pnlTablero.find("input").val("");
         $.each(pnlTablero.find("select"), function (k, v) {
             pnlTablero.find("select")[k].selectize.clear(true);
@@ -125,9 +124,8 @@
                     $.getJSON(master_url + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
                         if (data.length > 0) {
                             pnlTablero.find("#sProveedor")[0].selectize.addItem(txtprov, true);
-                            getRecords(txtprov);
-                            getPagos(txtprov, '');
-                            MovimientosProveedores.column(1).search('').draw();
+                            MovimientosProveedores.ajax.reload();
+                            PagosProveedores.ajax.reload();
                             pnlTablero.find('#Doc').val('').focus();
                         } else {
                             swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
@@ -139,6 +137,8 @@
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                         console.log(x.responseText);
                     });
+                } else {
+                    pnlTablero.find('#Doc').focus().select();
                 }
             }
         });
@@ -146,22 +146,18 @@
             if ($(this).val()) {
                 pnlTablero.find('#Proveedor').val($(this).val());
                 pnlTablero.find('#Doc').val('').focus();
-                getRecords($(this).val());
-                getPagos($(this).val(), '');
-//                MovimientosProveedores.column(1).search('').draw();
                 MovimientosProveedores.ajax.reload();
+                PagosProveedores.ajax.reload();
             }
         });
         pnlTablero.find("#Doc").on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-//                    MovimientosProveedores.column(1).search('^' + $(this).val() + '$', true, false).draw();
                     MovimientosProveedores.ajax.reload();
-                    getPagos(pnlTablero.find("#Proveedor").val(), $(this).val());
+                    PagosProveedores.ajax.reload();
                 } else {
-                    getPagos(pnlTablero.find("#Proveedor").val(), '');
-//                    MovimientosProveedores.column(1).search('').draw();
                     MovimientosProveedores.ajax.reload();
+                    PagosProveedores.ajax.reload();
                 }
             }
         });
@@ -187,7 +183,7 @@
             console.log(x.responseText);
         });
     }
-    function getPagos(cliente, doc) {
+    function getPagos() {
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblPagosProveedores')) {
             tblPagosProveedores.DataTable().destroy();
@@ -198,8 +194,11 @@
             "ajax": {
                 "url": master_url + 'getPagos',
                 "dataSrc": "",
-                "data": {Proveedor: cliente, Doc: doc},
-                "type": "POST"
+                "type": "POST",
+                "data": function (d) {
+                    d.Proveedor = pnlTablero.find("#Proveedor").val() ? pnlTablero.find("#Proveedor").val() : '';
+                    d.Doc = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : '';
+                }
             },
             "columns": [
                 {"data": "remicion"},
@@ -207,14 +206,14 @@
                 {"data": "importeP"},
                 {"data": "DocPago"}
             ],
-//            "columnDefs": [
-//                {
-//                    "targets": [4],
-//                    "render": function (data, type, row) {
-//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                }
-//            ],
+            "columnDefs": [
+                {
+                    "targets": [2],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
+            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -228,31 +227,6 @@
             "aaSorting": [
                 [1, 'desc']
             ],
-//            "createdRow": function (row, data, index) {
-//                $.each($(row).find("td"), function (k, v) {
-//                    var c = $(v);
-//                    var index = parseInt(k);
-//                    switch (index) {
-//
-//                        case 0:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-strong');
-//                            break;
-//                        case 1:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-strong');
-//                            break;
-//                        case 2:
-//                            /*FECHA ORDEN*/
-//                            c.addClass('text-success text-strong');
-//                            break;
-//                        case 5:
-//                            /*fecha conf*/
-//                            c.addClass('text-info text-strong');
-//                            break;
-//                    }
-//                });
-//            },
             initComplete: function (a, b) {
                 HoldOn.close();
             },
@@ -270,7 +244,7 @@
         });
 
     }
-    function getRecords(prov) {
+    function getRecords() {
         HoldOn.open({
             theme: 'sk-cube',
             message: 'CARGANDO...'
@@ -286,9 +260,10 @@
             "ajax": {
                 "url": master_url + 'getRecords',
                 "dataSrc": "",
+                "type": "POST",
                 "data": function (d) {
-                    d.Proveedor = pnlTablero.find("#Proveedor").val() ? pnlTablero.find("#Proveedor").val() : ''; 
-                    d.Documento = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : ''; 
+                    d.Proveedor = pnlTablero.find("#Proveedor").val() ? pnlTablero.find("#Proveedor").val() : '';
+                    d.Doc = pnlTablero.find("#Doc").val() ? pnlTablero.find("#Doc").val() : '';
                 }
             },
             "columns": [
@@ -301,14 +276,14 @@
                 {"data": "Tp"},
                 {"data": "Estatus"}
             ],
-//            "columnDefs": [
-//                {
-//                    "targets": [3, 4, 5],
-//                    "render": function (data, type, row) {
-//                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-//                    }
-//                }
-//            ],
+            "columnDefs": [
+                {
+                    "targets": [3, 4, 5],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
+                }
+            ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -322,31 +297,6 @@
             "aaSorting": [
                 [2, 'desc'], [1, 'asc']
             ],
-//            "createdRow": function (row, data, index) {
-//                $.each($(row).find("td"), function (k, v) {
-//                    var c = $(v);
-//                    var index = parseInt(k);
-//                    switch (index) {
-//
-//                        case 0:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-strong');
-//                            break;
-//                        case 1:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-strong');
-//                            break;
-//                        case 3:
-//                            /*FECHA ENTREGA*/
-//                            c.addClass('text-strong text-success');
-//                            break;
-//                        case 7:
-//                            /*fecha conf*/
-//                            c.addClass('badge badge-info text-strong');
-//                            break;
-//                    }
-//                });
-//            },
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
                 // Update footer
