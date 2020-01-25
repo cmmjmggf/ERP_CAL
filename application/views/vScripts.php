@@ -1373,7 +1373,7 @@
                                                                     break;
                                                                 case 1:
                                                                     if (vvv.IsSubItem !== null) {
-                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + (vvv.SubItemBackdrop === 1 ? 'true' : 'false') + '\'><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
+                                                                        opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vvv.RefSubItem + '" data-backdrop=\'' + (vvv.SubItemBackdrop === 'true' ? 'true' : 'false') + '\'><span class="fa fa-' + vvv.IconSubItem + '"></span> ' + vvv.SubItem + '</a>';
                                                                     }
                                                                     break;
                                                             }

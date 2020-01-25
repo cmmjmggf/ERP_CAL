@@ -11,11 +11,11 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                         <label>De la fecha</label>
-                        <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date notEnter" autofocus="">
+                        <input type="text" id="xFechaInicial" name="xFechaInicial" class="form-control form-control-sm date notEnter" autofocus="">
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                         <label>A la fecha</label>
-                        <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
+                        <input type="text" id="xFechaFinal" name="xFechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                         <label>Maquila</label>
@@ -29,22 +29,9 @@
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnEnsuelado" name="btnEnsuelado" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> ENSUELADO
-                        </button>
-                    </div>
-                    <div class="col-4">
                         <button type="button" id="btnRayado" name="btnRayado" class="btn btn-sm btn-info font-weight-bold" 
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> RAYADO
-                        </button>
-                    </div>
-                    <div class="w-100 my-2"></div>
-                    <div class="col-4">
-                        <button type="button" id="btnAlmPespunte" name="btnAlmPespunte" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> ALM-PESPUNTE
                         </button>
                     </div>
                     <div class="col-4">
@@ -53,23 +40,12 @@
                             <span class="fa fa-file"></span> REBAJADO
                         </button>
                     </div>
-                    <div class="col-4">
-                        <button type="button" id="btnTejido" name="btnTejido" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> TEJIDO
-                        </button>
-                    </div>
                     <div class="w-100 my-2"></div>
+
                     <div class="col-4">
                         <button type="button" id="btnFoleado" name="btnFoleado" class="btn btn-sm btn-info font-weight-bold" 
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> FOLEADO
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button" id="btnAlmTejido" name="btnAlmTejido" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> ALM-TEJIDO
                         </button>
                     </div>
                     <div class="col-4">
@@ -78,26 +54,14 @@
                             <span class="fa fa-file"></span> ENTRETELADO
                         </button>
                     </div>
-                    <div class="w-100 my-2"></div>
-                    <div class="col-4">
-                        <button type="button" id="btnMontado" name="btnMontado" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> MONTADO
-                        </button>
-                    </div>
                     <div class="col-4">
                         <button type="button" id="btnAlmCorte" name="btnAlmCorte" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> ALM-CORTE
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button" id="btnAdorno" name="btnAdorno" class="btn btn-sm btn-info font-weight-bold" 
-                                style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> ADORNO
+                                style="background-color: #990000;  border-color: #990000;">
+                            <span class="fa fa-file"></span> ALM-CORTE 
                         </button>
                     </div>
                     <div class="w-100 my-2"></div>
+
                     <div class="col-4">
                         <button type="button" id="btnPespunte" name="btnPespunte" class="btn btn-sm btn-info font-weight-bold" 
                                 style="background-color: #373a3c;  border-color: #373a3c;">
@@ -105,8 +69,46 @@
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnAlmAdorno" name="btnAlmAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnEnsuelado" name="btnEnsuelado" class="btn btn-sm btn-info font-weight-bold" 
                                 style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ENSUELADO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmPespunte" name="btnAlmPespunte" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #990000;  border-color: #990000;">
+                            <span class="fa fa-file"></span> ALM-PESPUNTE
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnTejido" name="btnTejido" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> TEJIDO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmTejido" name="btnAlmTejido" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #990000;  border-color: #990000;">
+                            <span class="fa fa-file"></span> ALM-TEJIDO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnMontado" name="btnMontado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> MONTADO
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnAdorno" name="btnAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ADORNO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmAdorno" name="btnAlmAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #990000;  border-color: #990000;">
                             <span class="fa fa-file"></span> ALM-ADORNO
                         </button>
                     </div>
@@ -128,13 +130,11 @@
 </div>
 
 <script>
-    var pnlTablero = $("#pnlTablero"), Anio = pnlTablero.find("#Anio"),
-            btnAceptar = pnlTablero.find("#btnAceptar"),
-            FechaInicial = pnlTablero.find("#FechaInicial"),
-            FechaFinal = pnlTablero.find("#FechaFinal"),
-            Maquila = pnlTablero.find("#Maquila"),
-            Hoy = '<?php print Date('d/m/Y'); ?>',
-            mdlParesProducidosPorDepartamento = $("#mdlParesProducidosPorDepartamento");
+    var mdlParesProducidosPorDepartamento = $("#mdlParesProducidosPorDepartamento"),
+            xFechaInicial = mdlParesProducidosPorDepartamento.find("#xFechaInicial"),
+            xFechaFinal = mdlParesProducidosPorDepartamento.find("#xFechaFinal"),
+            xMaquila = mdlParesProducidosPorDepartamento.find("#xMaquila"),
+            Hoy = '<?php print Date('d/m/Y'); ?>';
 
     $(document).ready(function () {
         handleEnterDiv(mdlParesProducidosPorDepartamento);
@@ -143,59 +143,51 @@
             getReportexDepto(10);
         });
 
+        mdlParesProducidosPorDepartamento.find("#btnRayado").click(function () {
+            getReportexDepto(20);
+        });
+
+        mdlParesProducidosPorDepartamento.find("#btnRebajado").click(function () {
+            getReportexDepto(30);
+        });
+
+        mdlParesProducidosPorDepartamento.find("#btnFoleado").click(function () {
+            getReportexDepto(40);
+        });
+
+        mdlParesProducidosPorDepartamento.find("#btnEntretelado").click(function () {
+            getReportexDepto(90);
+        });
+        
+        mdlParesProducidosPorDepartamento.find("#btnPespunte").click(function () {
+            getReportexDepto(110);
+        });
+        
+        mdlParesProducidosPorDepartamento.find("#btnEnsuelado").click(function () {
+            getReportexDepto(140);
+        });
+        
+        mdlParesProducidosPorDepartamento.find("#btnTejido").click(function () {
+            getReportexDepto(150);
+        });
+        
+        mdlParesProducidosPorDepartamento.find("#btnMontado").click(function () {
+            getReportexDepto(180);
+        });
+        
+        mdlParesProducidosPorDepartamento.find("#btnAdorno").click(function () {
+            getReportexDepto(210);
+        });
+
         mdlParesProducidosPorDepartamento.on('shown.bs.modal', function () {
-            mdlParesProducidosPorDepartamento.find("#FechaInicial").val(Hoy);
-            mdlParesProducidosPorDepartamento.find("#FechaFinal").val(Hoy);
-            mdlParesProducidosPorDepartamento.find("#FechaInicial").focus().select();
+            xFechaInicial.val(Hoy);
+            xFechaFinal.val(Hoy);
+            xFechaInicial.focus().select();
         });
-
-        FechaInicial.val(Hoy);
-
-        btnAceptar.click(function () {
-            btnAceptar.attr('disabled', true);
-            var depto = pnlTablero.find("label.active").eq(0).find("input[type='radio']").attr('depto');
-            if (depto !== undefined) {
-                if (FechaInicial.val() && FechaFinal.val()) {
-                    HoldOn.open({
-                        theme: 'sk-cube',
-                        message: 'Por favor espere...'
-                    });
-                    $.post('<?php print base_url('ParesProducidosPorDepartamento/getReporte'); ?>', {
-                        FECHA_INICIAL: FechaInicial.val().trim() !== '' ? (FechaInicial.val()) : '',
-                        FECHA_FINAL: FechaFinal.val().trim() !== '' ? (FechaFinal.val()) : '',
-                        MAQUILA: Maquila.val().trim() !== '' ? Maquila.val() : '',
-                        DEPARTAMENTO: depto !== '' && depto !== undefined ? parseInt(depto) : 0
-                    }).done(function (data, x, jq) {
-                        onBeep(1);
-                        onImprimirReporteFancy(data);
-                    }).fail(function (x, y, z) {
-                        console.log(x.responseText);
-                        swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-                    }).always(function () {
-                        HoldOn.close();
-                        btnAceptar.attr('disabled', false);
-                    });
-                } else {
-                    swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
-                        if (FechaInicial.val()) {
-                            FechaInicial.focus();
-                        } else if (FechaFinal.val()) {
-                            FechaFinal.focus();
-                        } else if (Maquila.val()) {
-                            Maquila.focus().select();
-                        }
-                        btnAceptar.attr('disabled', false);
-                    });
-                }
-            } else {
-                swal('ATENCIÓN', 'DEBE DE SELECCIONAR AL MENOS UN DEPARTAMENTO', 'warning');
-            }
-        });
-
     });
 
     function onHabilitar() {
-        if (FechaInicial.val() && FechaFinal.val() && Maquila.val()) {
+        if (xFechaInicial.val() && xFechaFinal.val() && xMaquila.val()) {
             btnAceptar.attr('disabled', false);
         } else {
             btnAceptar.attr('disabled', true);
@@ -204,11 +196,31 @@
 
     function getReportexDepto(depto) {
         if (mdlParesProducidosPorDepartamento.find("#xMaquila").val()) {
+            getReporteXDeptoFiltro(depto);
         } else {
             onCampoInvalido(mdlParesProducidosPorDepartamento, "DEBE DE ESPECIFICAR UNA MAQUILA", function () {
                 mdlParesProducidosPorDepartamento.find("#xMaquila").focus();
             });
         }
+    }
+
+    function getReporteXDeptoFiltro(depto) {
+        onOpenOverlay('Espere un momento por favor...');
+        $.post('<?php print base_url('ParesProducidosPorDepartamento/getReportexDepto'); ?>', {
+            FECHA_INICIAL: xFechaInicial.val() ? xFechaInicial.val() : '',
+            FECHA_FINAL: xFechaFinal.val() ? xFechaFinal.val() : '',
+            MAQUILA: xMaquila.val() ? xMaquila.val() : '',
+            DEPARTAMENTO: depto !== '' && depto !== undefined ? parseInt(depto) : 0
+        }).done(function (data, x, jq) {
+            onBeep(1);
+            onImprimirReporteFancy(data);
+        }).fail(function (x, y, z) {
+            console.log(x.responseText);
+            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+        }).always(function () {
+            HoldOn.close();
+            btnAceptar.attr('disabled', false);
+        });
     }
 </script>
 <style>
