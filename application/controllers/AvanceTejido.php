@@ -150,7 +150,7 @@ class AvanceTejido extends CI_Controller {
             $x = $this->input->get();
 
             $this->db->select("C.ID, C.numcho AS CHOFER, "
-                            . "C.numtej AS TEJEDORA, C.fechapre AS FECHA, "
+                            . "C.numtej AS TEJEDORA, DATE_FORMAT(C.fechapre,\"%d/%m/%Y\") AS FECHA, "
                             . "C.control AS CONTROL, C.estilo AS ESTILO, "
                             . "C.color AS COLOR, C.nomcolo AS COLORT, "
                             . "C.docto AS DOCTO, C.pares AS PARES", false)

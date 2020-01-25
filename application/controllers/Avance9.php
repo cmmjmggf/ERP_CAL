@@ -463,7 +463,7 @@ class Avance9 extends CI_Controller {
 
                     /* SOLO SE GENERA EL AVANCE EN LA FRACCIÓN 100 QUE ES LA PIEL */
                     /* CORTE = > RAYADO */
-                    if ($check_avance[0]->EXISTE <= 0) {
+                    if (intval($check_avance[0]->EXISTE) <= 0) {
                         $id = 0;
                         if (intval($v->NUMERO_FRACCION) === 100 ||
                                 intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98) {
@@ -492,7 +492,7 @@ class Avance9 extends CI_Controller {
                                         ->where('F.numfrac', $v->NUMERO_FRACCION)
                                         ->get()->result();
                         $data["fraccion"] = $v->NUMERO_FRACCION;
-                        if ($check_fraccion[0]->EXISTE <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
 
                             if (intval($v->NUMERO_FRACCION) === 100 && $MAQUILA_MUESTRA !== 98) {
@@ -556,7 +556,7 @@ class Avance9 extends CI_Controller {
                         $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                         $data["preciofrac"] = $PXFC;
                         $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-                        if ($check_fraccion[0]->EXISTE <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
                             /* GENERAR UN AVANCE A REBAJADO */
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
@@ -644,7 +644,7 @@ class Avance9 extends CI_Controller {
                                         ->where('F.control', $xXx['CONTROL'])
                                         ->where('F.numfrac', $FRACCION)
                                         ->get()->result();
-                        if ($check_fraccion[0]->EXISTE <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
                             $data["fraccion"] = $FRACCION;
                             $data["numfrac"] = $FRACCION;
                             /* FILTRADO POR FRACCION 102 RAYADO */
@@ -814,7 +814,7 @@ class Avance9 extends CI_Controller {
             $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
             $data["preciofrac"] = $PXFC;
             $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-            if ($check_fraccion[0]->EXISTE <= 0) {
+            if (intval($check_fraccion[0]->EXISTE) <= 0) {
                 /* GENERAR UN AVANCE A REBAJADO */
                 $avance = array(
                     'Control' => $xXx['CONTROL'],
