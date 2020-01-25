@@ -1319,10 +1319,10 @@
                 $.each(menus, function (k, v) {
                     if (parseInt(v.Button) === 0) {
                         opcion += '<li class="nav-item dropdown">';
-                        opcion += '<a class="btn btn-primary dropdown-toggle" href="' + v.Ref + '" id="nav' + v.Opcion + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                        opcion += '<a class="btn btn-primary dropdown-toggle  " href="' + v.Ref + '" id="nav' + v.Opcion + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
                         opcion += '<span class="fa fa-' + v.Icon + '"></span> ' + v.Opcion + '</a>';
                         /*START ITEMS*/
-                        opcion += '<ul class="dropdown-menu animate  slideIn" aria-labelledby="nav' + v.Opcion + '">';
+                        opcion += '<ul class="dropdown-menu" aria-labelledby="nav' + v.Opcion + '">';
                         $.each(items, function (kk, vv) {
                             if (v.Opcion === vv.Opcion) {
                                 switch (vv.ItemDropdown) {
@@ -1331,25 +1331,25 @@
                                             case 0:
                                                 switch (parseInt(vv.Function)) {
                                                     case 0:
-                                                        opcion += '<a class="dropdown-item" href="' + (burl + vv.RefItem) + '"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                        opcion += '<a class="dropdown-item " href="' + (burl + vv.RefItem) + '"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                         break;
                                                     case 1:
-                                                        opcion += '<a class="dropdown-item" href="#" onclick="' + vv.Trigger + '()"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                        opcion += '<a class="dropdown-item " href="#" onclick="' + vv.Trigger + '()"><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                         break;
                                                 }
                                                 break;
                                             case 1:
-                                                opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vv.RefItem + '" data-backdrop=\'true\'><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
+                                                opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="' + vv.RefItem + '" data-backdrop=\'true\'><span class="fa fa-' + vv.IconItem + '"></span> ' + vv.Item + '</a>';
                                                 break;
                                         }
                                         break;
                                     case 1:
                                         if (n === 0) {
                                             opcion += '<li class="dropdown-submenu">';
-                                            opcion += '<a class="dropdown-item dropdown-toggle" href="#"><span class="fa fa-plus"></span> ' + vv.Item + '</a>';
+                                            opcion += '<a class="dropdown-item dropdown-toggle " href="#"><span class="fa fa-plus"></span> ' + vv.Item + '</a>';
                                             var nav_subitems = vv.ItemDropdown, nav_subsubitems = 0;
                                             if (nav_subitems === 1) {
-                                                opcion += '<ul class="dropdown-menu  animate slideIn">';
+                                                opcion += '<ul class="dropdown-menu">';
                                             }
                                             /*NIVEL 2*/
                                             $.each(subitems, function (kkk, vvv) {
@@ -1381,20 +1381,18 @@
                                                         case 1:
                                                             if (vvv.IsSubItem !== null) {
                                                                 opcion += '<li class="dropdown-submenu">';
-                                                                opcion += '<a class="dropdown-item dropdown-toggle" href="#">';
-                                                                opcion += '<span class="fa fa-plus"></span> ';
-                                                                opcion += '<span class="fa fa-plus"></span> ';
+                                                                opcion += '<a class="dropdown-item dropdown-toggle " href="#">';
+                                                                opcion += '<span class="fa fa-asterisk "></span> '; 
                                                                 opcion += vvv.SubItem;
                                                                 opcion += '</a>';
-                                                                opcion += '<ul class="dropdown-menu  animate slideIn">';
-                                                                $.each(subsubitems, function (kss, vss) {
-//                                                                    console.log(vss);
+                                                                opcion += '<ul class="dropdown-menu">';
+                                                                $.each(subsubitems, function (kss, vss) { 
                                                                     switch (parseInt(vss.SubSubItemModal)) {
                                                                         case 0:
-                                                                            opcion += '<a class="dropdown-item" href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
+                                                                            opcion += '<a class="dropdown-item " href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';
                                                                             break;
                                                                         case 1:
-                                                                            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + (vss.SubSubItemBackdrop === 1 ? 'true' : 'false') + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + ' *</a>';
+                                                                            opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="' + vss.RefSubSubItem + '" data-backdrop=\'' + (vss.SubSubItemBackdrop === 'true' ? 'true' : 'false') + '\'><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + ' *</a>';
                                                                             break;
                                                                     }
                                                                 });
@@ -1443,10 +1441,10 @@
             opcion += '</a>';
             opcion += '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">';
             opcion += '<a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" width="50%" class="rounded-circle"></a>';
-            opcion += '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
-            opcion += '<a class="dropdown-item" href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
+            opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
+            opcion += '<a class="dropdown-item " href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
             opcion += '<div class="dropdown-divider"></div>';
-            opcion += '<a class="dropdown-item" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';
+            opcion += '<a class="dropdown-item " href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';
             opcion += '</div>';
             opcion += '</li>';
 //            console.log(opcion)

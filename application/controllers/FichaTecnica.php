@@ -103,9 +103,10 @@ class FichaTecnica extends CI_Controller {
             $x = $this->input->post();
             $pdf = new PDF('L');
             $pdf->AddPage();
-            
-            $pdf->centreImage(base_url("uploads/Estilos/{$x['ESTILO']}.gif"));  
-            
+
+//            $pdf->centreImage(base_url("uploads/Estilos/{$x['ESTILO']}.JPG"));  
+            $pdf->centreImage("{$x['URL']}");
+
             /* FIN RESUMEN */
             $path = 'uploads/ReportesEstilos';
             if (!file_exists($path)) {
@@ -115,8 +116,8 @@ class FichaTecnica extends CI_Controller {
                 /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
             }
             $file_name = "{$x['ESTILO']}" . date("d_m_Y_his");
-            $url = $path . '/' . $file_name . '.pdf'; 
-            $pdf->Output($url); 
+            $url = $path . '/' . $file_name . '.pdf';
+            $pdf->Output($url);
             print base_url() . $url;
         } catch (Exception $ex) {
             echo $ex->getTraceAsString();
@@ -701,6 +702,23 @@ class FichaTecnica extends CI_Controller {
                 );
                 $this->db->insert('fichatecnica', $FT);
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEstilosParaFotos() {
+        try {
+            $burl = base_url();
+            $this->db->select('E.Clave AS CLAVE, CONCAT("' . $burl . '",E.Foto) AS URL, '
+                    . 'REPLACE(E.Foto,"uploads/Estilos/","") AS FOTO ', false)
+                    ->from('estilos AS E');
+            if ($this->input->get('ESTILO') !== '') {
+                $this->db->where('E.Clave', $this->input->get('ESTILO'));
+            }
+            $data = $this->db->group_by('E.Foto')
+                    ->order_by('ABS(E.Clave)', 'ASC')->get()->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -722,8 +722,8 @@
     input,.btn {
         font-weight: bold !important;
     }
-    table tbody td {
-        font-size: 18px !important;
+    table tbody td, div.card {
+        font-size: 20px !important;
         font-weight: bold !important;
     }
 </style>

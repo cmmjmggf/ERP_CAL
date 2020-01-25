@@ -439,17 +439,15 @@ class FacturacionProduccion extends CI_Controller {
             }
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
+            
             print "SALDO PARES : {$saldopares}";
 
             $facturaciondif = array(
                 'pareped' => $saldopares/* PARES QUE FALTAN POR FACTURAR */,
                 'staped' => (($saldopares == 0) ? 99 : 98)
             );
-            if ($saldopares === 0) {
-
-
+            if ($saldopares === 0) { 
                 //Validar clientes permitidos para facturar por adelantado
-
                 $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782);
                 if (!in_array($x['CLIENTE'], $people)) {
                     $EstatusProduccion = 'FACTURADO';

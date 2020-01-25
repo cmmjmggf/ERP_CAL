@@ -1,87 +1,4 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header" align="center">
-        <h3 class="font-weight-bold">Pares producidos por departamento</h3>
-    </div>
-    <div class="card-body">
-        <div class="row" align="center">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <label>De la fecha</label>
-                <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date notEnter" autofocus="">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <label>A la fecha</label>
-                <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <label>Maq</label>
-                <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm  numbersOnly">
-            </div>
-            <div class="w-100 my-3"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="btn-group btn-group-toggle flex-wrap" data-toggle="buttons">
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnCorte" id="btnCorte" autocomplete="off" depto="10"> CORTE
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnEnsuelado" id="btnEnsuelado" autocomplete="off" depto="140"> ENSUELADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnRayado" id="btnRayado" autocomplete="off" depto="20"> RAYADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnAlmPespunte" id="btnAlmPespunte" autocomplete="off" depto="130"> ALM-PESPUNTE
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnRebajado" id="btnRebajado" autocomplete="off" depto="30"> REBAJADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnTejido" id="btnTejido" autocomplete="off" depto="150"> TEJIDO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnFoleado" id="btnFoleado" autocomplete="off" depto="40"> FOLEADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnAlmTejido" id="btnAlmTejido" autocomplete="off" depto="160"> ALM-TEJIDO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnEntretelado" id="btnEntretelado" autocomplete="off" depto="90"> ENTRETELADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnMontado" id="btnMontado" autocomplete="off" depto="180"> MONTADO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnAlmCorte" id="btnAlmCorte" autocomplete="off" depto="105"> ALM-CORTE
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnAdorno" id="btnAdorno" autocomplete="off" depto="210"> ADORNO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnPespunte" id="btnPespunte" autocomplete="off" depto="110"> PESPUNTE
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnAlmAdorno" id="btnAlmAdorno" autocomplete="off" depto="230"> ALM-ADORNO
-                    </label>
-                    <label class="btn btn-indigo">
-                        <input type="radio" name="btnLaser" id="btnLaser" autocomplete="off" depto="60"> LASER
-                    </label>
-                    <label class="btn btn-indigo d-none">
-                        <input type="radio" name="btnTodos" id="btnTodos" autocomplete="off"> TODOS
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-primary" id="btnAceptar">Aceptar</button>
-        </div>
-        <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#mdlParesProducidosPorDepartamento">
-            Launch demo modal
-        </button>
-    </div>
-</div>
-
-<div class="modal" id="mdlParesProducidosPorDepartamento">
+<div id="mdlParesProducidosPorDepartamento" class="modal fade" >
     <div class="modal-dialog notdraggable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -101,13 +18,110 @@
                         <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date notEnter" autofocus="">
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                        <label>Maq</label>
-                        <input type="text" id="Maquila" name="Maquila" class="form-control form-control-sm  numbersOnly">
+                        <label>Maquila</label>
+                        <input type="text" id="xMaquila" name="xMaquila" class="form-control form-control-sm  numbersOnly" maxlength="2">
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnCorte" name="btnCorte" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> CORTE
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnEnsuelado" name="btnEnsuelado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ENSUELADO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnRayado" name="btnRayado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> RAYADO
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmPespunte" name="btnAlmPespunte" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ALM-PESPUNTE
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnRebajado" name="btnRebajado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> REBAJADO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnTejido" name="btnTejido" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> TEJIDO
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnFoleado" name="btnFoleado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> FOLEADO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmTejido" name="btnAlmTejido" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ALM-TEJIDO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnEntretelado" name="btnEntretelado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ENTRETELADO
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnMontado" name="btnMontado" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> MONTADO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmCorte" name="btnAlmCorte" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ALM-CORTE
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAdorno" name="btnAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ADORNO
+                        </button>
+                    </div>
+                    <div class="w-100 my-2"></div>
+                    <div class="col-4">
+                        <button type="button" id="btnPespunte" name="btnPespunte" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> PESPUNTE
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnAlmAdorno" name="btnAlmAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> ALM-ADORNO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnLaser" name="btnLaser" class="btn btn-sm btn-info font-weight-bold" 
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> LASER
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info"><span class="fa fa-print"></span> Acepta</button>
+                <button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">
+                    <span class="fa fa-times"></span> CERRAR
+                </button>
             </div>
         </div>
     </div>
@@ -123,30 +137,19 @@
             mdlParesProducidosPorDepartamento = $("#mdlParesProducidosPorDepartamento");
 
     $(document).ready(function () {
-        handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlParesProducidosPorDepartamento);
 
-        btnAceptar.attr('disabled', true);
-        Anio.val(new Date().getFullYear());
+        mdlParesProducidosPorDepartamento.find("#btnCorte").click(function () {
+            getReportexDepto(10);
+        });
 
         mdlParesProducidosPorDepartamento.on('shown.bs.modal', function () {
             mdlParesProducidosPorDepartamento.find("#FechaInicial").val(Hoy);
+            mdlParesProducidosPorDepartamento.find("#FechaFinal").val(Hoy);
+            mdlParesProducidosPorDepartamento.find("#FechaInicial").focus().select();
         });
 
         FechaInicial.val(Hoy);
-
-        $("input[type='radio']").on('change', function () {
-            onHabilitar();
-        });
-        FechaInicial.on('keyup keydown', function () {
-            onHabilitar();
-        });
-        FechaFinal.on('keyup keydown', function () {
-            onHabilitar();
-        });
-        Maquila.on('keyup keydown', function () {
-            onHabilitar();
-        });
 
         btnAceptar.click(function () {
             btnAceptar.attr('disabled', true);
@@ -196,6 +199,15 @@
             btnAceptar.attr('disabled', false);
         } else {
             btnAceptar.attr('disabled', true);
+        }
+    }
+
+    function getReportexDepto(depto) {
+        if (mdlParesProducidosPorDepartamento.find("#xMaquila").val()) {
+        } else {
+            onCampoInvalido(mdlParesProducidosPorDepartamento, "DEBE DE ESPECIFICAR UNA MAQUILA", function () {
+                mdlParesProducidosPorDepartamento.find("#xMaquila").focus();
+            });
         }
     }
 </script>
@@ -424,8 +436,5 @@
     }
     .switch + .switch {
         margin-left: 1rem;
-    }
-    .dropdown-menu {
-        margin-top: 0.75rem;
-    }
+    } 
 </style>
