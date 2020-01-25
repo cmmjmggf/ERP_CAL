@@ -56,11 +56,11 @@ class ReportesInspeccion extends CI_Controller {
             foreach ($Proveedores as $key => $P) {
                 $pdf->SetLineWidth(0.5);
                 $pdf->SetX(5);
-                $pdf->SetFont('Calibri', 'B', 7.5);
-                $pdf->Cell(15, 4, utf8_decode('Proveedor: '), 'B'/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 7);
+                $pdf->Cell(15, 3.5, utf8_decode('Proveedor: '), 'B'/* BORDE */, 0, 'L');
                 $pdf->SetX(20);
-                $pdf->SetFont('Calibri', '', 7.5);
-                $pdf->Cell(50, 4, utf8_decode($P->Proveedor), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', '', 7);
+                $pdf->Cell(50, 3.5, utf8_decode($P->Proveedor), 'B'/* BORDE */, 1, 'L');
 
                 $CONT = 0;
                 $TOTAL_RECIBIDA = 0;
@@ -123,31 +123,54 @@ class ReportesInspeccion extends CI_Controller {
                     if ($P->ClaveNum === $D->ClaveNum) {
 
                         $pdf->SetLineWidth(0.2);
-                        $pdf->SetFont('Calibri', '', 7.5);
-                        $pdf->Row(array(
-                            $D->OrdenCompra,
-                            $D->Factura,
-                            $D->Articulo,
-                            mb_strimwidth(utf8_decode($D->ArtDesc), 0, 25, ""),
-                            $D->Precio,
-                            number_format($D->Cantidad, 0, ".", ","),
-                            ($D->CantidadDevuelta > 0) ? number_format($D->CantidadDevuelta, 0, ".", ",") : '',
-                            ($D->Cant_Real > 0) ? number_format($D->Cant_Real, 0, ".", ",") : '',
-                            $D->Aprovechamiento,
-                            number_format($Merma, 0, ".", ","),
-                            $D->NumHojas,
-                            $D->HojasRevisadas,
-                            number_format(($D->Por_Hoj), 0, ".", ","),
-                            mb_strimwidth(utf8_decode($D->Defecto), 0, 15, ""),
-                            ($D->Primera > 0) ? number_format($D->Primera, 0, ".", ",") : '',
-                            ($D->Segunda > 0) ? number_format($D->Segunda, 0, ".", ",") : '',
-                            ($D->Tercera > 0) ? number_format($D->Tercera, 0, ".", ",") : '',
-                            ($D->Cuarta > 0) ? number_format($D->Cuarta, 0, ".", ",") : '',
-                            (number_format(($D->Primera / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Primera / $D->Cant_Real) * 100, 0, ".", ",") . ' |' : '' . ' |',
-                            (number_format(($D->Segunda / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Segunda / $D->Cant_Real) * 100, 0, ".", ",") . ' |' : '' . ' |',
-                            (number_format(($D->Tercera / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Tercera / $D->Cant_Real) * 100, 0, ".", ",") . ' |' : '' . ' |',
-                            $D->PartidaIni,
-                            '|' . $D->PartidaFin), 'B');
+                        $pdf->SetFont('Calibri', '', 7);
+                        $pdf->SetX(5);
+                        $pdf->Cell(11, 3, utf8_decode($D->OrdenCompra), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, utf8_decode($D->Factura), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, utf8_decode($D->Articulo), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(32, 3, utf8_decode(mb_strimwidth($D->ArtDesc, 0, 24, "")), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, utf8_decode($D->Precio), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, number_format($D->Cantidad, 0, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, ($D->CantidadDevuelta > 0) ? number_format($D->CantidadDevuelta, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, ($D->Cant_Real > 0) ? number_format($D->Cant_Real, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, $D->Aprovechamiento, 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(11, 3, number_format($Merma, 0, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, $D->NumHojas, 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, $D->HojasRevisadas, 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(10, 3, number_format(($D->Por_Hoj), 0, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(22, 3, mb_strimwidth(utf8_decode($D->Defecto), 0, 15, ""), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, ($D->Primera > 0) ? number_format($D->Primera, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, ($D->Segunda > 0) ? number_format($D->Segunda, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, ($D->Tercera > 0) ? number_format($D->Tercera, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(8, 3, ($D->Cuarta > 0) ? number_format($D->Cuarta, 0, ".", ",") : '', 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, (number_format(($D->Primera / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Primera / $D->Cant_Real) * 100, 0, ".", ",") : '', 'LB'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9, 3, (number_format(($D->Segunda / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Segunda / $D->Cant_Real) * 100, 0, ".", ",") : '', 'LB'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(9.5, 3, (number_format(($D->Tercera / $D->Cant_Real) * 100, 0, ".", ",") > 0) ? number_format(($D->Tercera / $D->Cant_Real) * 100, 0, ".", ",") : '', 'LRB'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->SetFont('Calibri', '', 6);
+                        $pdf->Cell(17, 3, $D->PartidaIni, 'BL'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(17, 3, $D->PartidaFin, 'BL'/* BORDE */, 1, 'C');
 
                         $TOTAL_RECIBIDA += $D->Cantidad;
                         $TOTAL_DEV += $D->CantidadDevuelta;
@@ -169,35 +192,34 @@ class ReportesInspeccion extends CI_Controller {
                     }
                 }
                 $pdf->SetX(40);
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->Cell(15, 4, utf8_decode('Total por Proveedor: '), 0/* BORDE */, 0, 'L');
+                $pdf->SetFont('Calibri', 'B', 7);
+                $pdf->Cell(15, 3.5, utf8_decode('Total por Proveedor: '), 0/* BORDE */, 0, 'L');
 
-                $pdf->SetFont('Calibri', 'B', 8.5);
-
+                $pdf->SetFont('Calibri', 'B', 7);
                 $anchos = array(
-                    12/* 1 O.C. */,
+                    11/* 1 O.C. */,
                     10/* 2 Doc */,
-                    0/* 3 MAT */,
-                    40/* 4  */,
-                    0/* 5  PRECIO */,
-                    19/* 6  CANTIDAD REC */,
-                    0/* 7   Devuelta */,
-                    20/* 8 Real */,
+                    10/* 3 MAT */,
+                    32/* 4  */,
+                    7/* 5  PRECIO */,
+                    12/* 6  CANTIDAD REC */,
+                    8/* 7   Devuelta */,
+                    12/* 8 Real */,
                     10/* 9 APRV */,
-                    0/* 10 Merma */,
-                    20/* 11 HOJA REC */,
-                    0/* 12  Conta */,
-                    19/* 13 DM2 */,
-                    16/* 14 DETALLE */,
-                    15/* 15  1 */,
-                    0/* 16 2 */,
-                    18/* 17 3 */,
-                    0/* 18 4 */,
-                    18.5/* 19 Selecta */,
-                    0/* 20 90/10 */,
-                    20/* 21 80/20 */,
-                    0/* 22 Inicial */,
-                    0/* 23 Final */);
+                    9/* 10 Merma */,
+                    11/* 11 HOJA REC */,
+                    7/* 12  Conta */,
+                    12/* 13 DM2 */,
+                    19/* 14 DETALLE */,
+                    12/* 15  1 */,
+                    6/* 16 2 */,
+                    11.5/* 17 3 */,
+                    5/* 18 4 */,
+                    12/* 19 Selecta */,
+                    9/* 20 90/10 */,
+                    12/* 21 80/20 */,
+                    17/* 22 Inicial */,
+                    17/* 23 Final */);
                 $pdf->SetWidths($anchos);
 
                 //PRIMEROS TOTALES
@@ -226,33 +248,31 @@ class ReportesInspeccion extends CI_Controller {
                     '',
                     ''), 0);
                 //SEGUNDOS TOTALES
-
                 $anchos = array(
-                    12/* 1 O.C. */,
+                    11/* 1 O.C. */,
                     10/* 2 Doc */,
-                    0/* 3 MAT */,
-                    40/* 4  */,
+                    10/* 3 MAT */,
+                    32/* 4  */,
                     9/* 5  PRECIO */,
-                    0/* 6  CANTIDAD REC */,
-                    20/* 7   Devuelta */,
+                    10/* 6  CANTIDAD REC */,
+                    10/* 7   Devuelta */,
                     10/* 8 Real */,
-                    0/* 9 APRV */,
-                    21/* 10 Merma */,
-                    0/* 11 HOJA REC */,
-                    18/* 12  Conta */,
+                    10/* 9 APRV */,
+                    11/* 10 Merma */,
+                    9/* 11 HOJA REC */,
+                    9/* 12  Conta */,
                     10/* 13 DM2 */,
                     22/* 14 DETALLE */,
-                    0/* 15  1 */,
-                    18/* 16 2 */,
-                    0/* 17 3 */,
-                    18/* 18 4 */,
-                    0/* 19 Selecta */,
-                    19.5/* 20 90/10 */,
-                    0/* 21 80/20 */,
-                    0/* 22 Inicial */,
-                    0/* 23 Final */);
+                    9/* 15  1 */,
+                    9/* 16 2 */,
+                    9/* 17 3 */,
+                    9/* 18 4 */,
+                    9.5/* 19 Selecta */,
+                    9.5/* 20 90/10 */,
+                    9/* 21 80/20 */,
+                    17/* 22 Inicial */,
+                    17/* 23 Final */);
                 $pdf->SetWidths($anchos);
-                $pdf->SetFont('Calibri', 'B', 8.5);
                 $pdf->Row(array(
                     '',
                     '',

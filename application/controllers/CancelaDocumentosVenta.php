@@ -66,7 +66,7 @@ class CancelaDocumentosVenta extends CI_Controller {
                             $txtpareped = $Pedido[0]->Pares;
 
                             if (intval($paresfact) < intval($txtpareped)) {//Si los pares sobrantes son menores a los del pedido se va a terminado y actualiza los pares
-                                $this->db->set('DeptoProduccion', 240)->set('ParesFacturados', $txtpareped - $paresfact)
+                                $this->db->set('DeptoProduccion', 240)->set('ParesFacturados', $paresfact)
                                         ->set('EstatusProduccion', 'TERMINADO')->set('stsavan', 12)->set('Estatus', 'A')->where('Control', $txtcontped)->update("pedidox");
                                 $this->db->set('DeptoProduccion', 12)->set('EstatusProduccion', 'TERMINADO')->where('Control', $txtcontped)->update("controles");
                             } else {//Si no, se va a facturado y actualiza los pares

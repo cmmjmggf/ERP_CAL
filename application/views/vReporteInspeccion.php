@@ -62,7 +62,7 @@
     var mdlReporteInspeccion = $('#mdlReporteInspeccion');
     $(document).ready(function () {
         setFocusSelectToInputOnChange('#Tipo', '#btnImprimir', mdlReporteInspeccion);
-
+        handleEnterDiv(mdlReporteInspeccion);
         mdlReporteInspeccion.on('shown.bs.modal', function () {
             mdlReporteInspeccion.find("input").val("");
             $.each(mdlReporteInspeccion.find("select"), function (k, v) {

@@ -35,7 +35,7 @@ class PDFInspeccion extends FPDF {
 
         $this->SetY(19);
         $this->SetX(77);
-        $this->SetFont('Calibri', 'B', 7.5);
+        $this->SetFont('Calibri', 'B', 7);
         $this->Cell(30, 10, 'Cantidades', 'LRT'/* BORDE */, 0, 'C');
 
 
@@ -84,7 +84,7 @@ class PDFInspeccion extends FPDF {
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Calibri', 'B', 7.5);
+        $this->SetFont('Calibri', 'B', 7);
         $this->Row(array(
             'Ord-Com',
             'Doc',
@@ -305,7 +305,7 @@ class PDF extends FPDF {
 
         $this->SetY(19);
         $this->SetX(77);
-        $this->SetFont('Calibri', 'B', 7.5);
+        $this->SetFont('Calibri', 'B', 7);
         $this->Cell(30, 10, 'Cantidades', 'LRT'/* BORDE */, 0, 'C');
 
 
@@ -317,17 +317,17 @@ class PDF extends FPDF {
         $this->Cell(10.5, 10, '% X Hoja', 'LRT'/* BORDE */, 0, 'C');
 
         $this->SetX(213);
-        $this->Cell(30, 10, 'Aprovechamiento Real', 'LRT'/* BORDE */, 0, 'C');
+        $this->Cell(28, 10, 'Aprovechamiento Real', 'LRT'/* BORDE */, 0, 'C');
 
-        $this->SetX(243);
-        $this->Cell(32, 10, 'Partidas', 'LRT'/* BORDE */, 0, 'C');
+        $this->SetX(241);
+        $this->Cell(33, 10, 'Partidas', 'LRT'/* BORDE */, 0, 'C');
 
         $this->SetY(25);
         $this->SetX(5);
 
         /* ENCABEZADO DETALLE TITULOS */
         $anchos = array(
-            12/* 1 O.C. */,
+            11/* 1 O.C. */,
             10/* 2 Doc */,
             0/* 3 MAT */,
             40/* 4  */,
@@ -345,18 +345,18 @@ class PDF extends FPDF {
             9/* 16 2 */,
             9/* 17 3 */,
             9/* 18 4 */,
-            10/* 19 Selecta */,
-            10/* 20 90/10 */,
-            10/* 21 80/20 */,
-            16/* 22 Inicial */,
-            16/* 23 Final */);
-        $aligns = array('L', 'C', 'R', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'L', 'L', 'R', 'R', 'R', 'R', 'C', 'C', 'C', 'C', 'C');
+            9.5/* 19 Selecta */,
+            9.5/* 20 90/10 */,
+            9/* 21 80/20 */,
+            17/* 22 Inicial */,
+            17/* 23 Final */);
+        $aligns = array('L', 'C', 'R', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'L', 'R', 'R', 'R', 'R', 'C', 'C', 'C', 'C', 'C');
         $this->SetWidths($anchos);
         $this->SetAligns($aligns);
 
-        $this->SetFont('Calibri', 'B', 7.5);
+        $this->SetFont('Calibri', 'B', 7);
         $this->Row(array(
-            'Ord-Com',
+            'OrCom',
             'Doc',
             '',
             'Material',
@@ -379,34 +379,6 @@ class PDF extends FPDF {
             '80/20',
             'Inicial',
             'Final'), 'B');
-
-        $aligns = array('L', 'L', 'R', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'L', 'L');
-        $anchos = array(
-            12/* 1 O.C. */,
-            10/* 2 Doc */,
-            10/* 3 MAT */,
-            30/* 4  */,
-            9/* 5  PRECIO */,
-            10/* 6  CANTIDAD REC */,
-            10/* 7   Devuelta */,
-            10/* 8 Real */,
-            10/* 9 APRV */,
-            11/* 10 Merma */,
-            9/* 11 HOJA REC */,
-            9/* 12  Conta */,
-            10/* 13 DM2 */,
-            22/* 14 DETALLE */,
-            9/* 15  1 */,
-            9/* 16 2 */,
-            9/* 17 3 */,
-            9/* 18 4 */,
-            10/* 19 Selecta */,
-            10/* 20 90/10 */,
-            10/* 21 80/20 */,
-            17/* 22 Inicial */,
-            17/* 23 Final */);
-        $this->SetAligns($aligns);
-        $this->SetWidths($anchos);
     }
 
     var $widths;
