@@ -1283,8 +1283,7 @@
                         items.push({Opcion: el.Opcion, Item: el.Item, IconItem: el.IconItem,
                             RefItem: el.RefItem, ItemModal: el.ItemModal,
                             ItemBackdrop: el.ItemBackdrop, ItemDropdown: parseInt(el.ItemDropdown),
-                            Function: parseInt(el.Function),
-                            Trigger: el.Trigger});
+                            Function: parseInt(el.Function), Trigger: el.Trigger});
                     }
                     /*ITEMS TIENEN SUBITEMS*/
                     if ($.inArray(el.SubItem, usubitems) === -1) {
@@ -1382,11 +1381,11 @@
                                                             if (vvv.IsSubItem !== null) {
                                                                 opcion += '<li class="dropdown-submenu">';
                                                                 opcion += '<a class="dropdown-item dropdown-toggle " href="#">';
-                                                                opcion += '<span class="fa fa-asterisk "></span> '; 
+                                                                opcion += '<span class="fa fa-asterisk "></span> ';
                                                                 opcion += vvv.SubItem;
                                                                 opcion += '</a>';
                                                                 opcion += '<ul class="dropdown-menu">';
-                                                                $.each(subsubitems, function (kss, vss) { 
+                                                                $.each(subsubitems, function (kss, vss) {
                                                                     switch (parseInt(vss.SubSubItemModal)) {
                                                                         case 0:
                                                                             opcion += '<a class="dropdown-item " href="' + (burl + vss.RefSubSubItem) + '"><span class="fa fa-' + vss.IconSubSubItem + '"></span> ' + vss.SubSubItem + '</a>';

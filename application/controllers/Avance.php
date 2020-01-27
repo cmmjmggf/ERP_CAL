@@ -1104,6 +1104,22 @@ P.Maquila AS MAQUILA
                                 $this->db->set('fec10', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
+                                /*EN ONPAGARFRACCION YA REVISO EL AVANCE, PERO DE TODOS MODOS RECTIFICO QUE EXISTA*/
+                                $revisar_avance_adorno_a = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 210 LIMIT 1")->result();
+                                if (intval($revisar_avance_adorno_a[0]->EXISTE) === 0) {
+                                    $this->db->insert('avance', array(
+                                        'Control' => $xXx['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 210,
+                                        'DepartamentoT' => 'ADORNO A',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => NULL
+                                    ));
+                                }
                                 exit(0);
                                 break;
                             default:
@@ -1132,6 +1148,7 @@ P.Maquila AS MAQUILA
                     if (intval($check_fraccion[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 600:
+
                                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN ADORNO.", $this->session);
                                 $this->onPagarFraccion($xXx, $frac, 230, 'ALMACEN ADORNO');
 
@@ -1144,6 +1161,21 @@ P.Maquila AS MAQUILA
                                 $this->db->set('fec11', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
+                                $revisar_avance_alm_adorno = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 230 LIMIT 1")->result();
+                                if (intval($revisar_avance_alm_adorno[0]->EXISTE) === 0) {
+                                    $this->db->insert('avance', array(
+                                        'Control' => $xXx['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 230,
+                                        'DepartamentoT' => 'ALMACEN ADORNO',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => NULL
+                                    ));
+                                }
                                 exit(0);
                                 break;
                             default:

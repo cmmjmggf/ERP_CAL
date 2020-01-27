@@ -1,22 +1,25 @@
 <div class="modal " id="mdlAvanceProduccionPorDepto"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reporte Avance por Departamento</h5>
+                <h5 class="modal-title">
+                    <span class="fa fa-file"></span>  Reporte Avance por Departamento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="frmCaptura">
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <label>Departamento</label>
-                            <select class="form-control form-control-sm required selectize" id="Depto" name="Depto" >
-                                <option value=""></option>
-                                <option value="5">5-Pespunte </option>
-                                <option value="7">7-Tejido</option>
-                            </select>
+                    <div class="row"> 
+                        <div class="col-6">
+                            <button type="button" id="btnPespunte" name="btnPespunte" class="btn btn-block btn-sm btn-info font-weight-bold" style="background-color: #373a3c;  border-color: #373a3c;"> 
+                                <span class="fa fa-file"></span> 5-PESPUNTE
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" id="btnTejido" name="btnTejido" class="btn btn-block btn-sm btn-info font-weight-bold" style="background-color: #373a3c;  border-color: #373a3c;"> 
+                                <span class="fa fa-file"></span> 7-TEJIDO
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -29,70 +32,51 @@
 <script>
     var mdlAvanceProduccionPorDepto = $('#mdlAvanceProduccionPorDepto');
     $(document).ready(function () {
-        mdlAvanceProduccionPorDepto.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlAvanceProduccionPorDepto);
-            mdlAvanceProduccionPorDepto.find("input").val("");
-            $.each(mdlAvanceProduccionPorDepto.find("select"), function (k, v) {
-                mdlAvanceProduccionPorDepto.find("select")[k].selectize.clear(true);
-            });
-            //getDeptos();
-            mdlAvanceProduccionPorDepto.find('#Depto')[0].selectize.focus();
-            mdlAvanceProduccionPorDepto.find('#Depto')[0].selectize.open();
-        });
-        mdlAvanceProduccionPorDepto.find('#Depto').on("change", function () {
-            if ($(this).val) {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                var frm = new FormData(mdlAvanceProduccionPorDepto.find("#frmCaptura")[0]);
-                $.ajax({
-                    url: base_url + 'index.php/ReportesProduccionJasper/onReporteAvancePorDeptoEspecifico',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: frm
-                }).done(function (data, x, jq) {
-                    console.log(data);
-                    if (data.length > 0) {
 
-                        $.fancybox.open({
-                            src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                            type: 'iframe',
-                            opts: {
-                                afterShow: function (instance, current) {
-                                    console.info('done!');
-                                },
-                                iframe: {
-                                    // Iframe template
-                                    tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                    preload: true,
-                                    // Custom CSS styling for iframe wrapping element
-                                    // You can use this to set custom iframe dimensions
-                                    css: {
-                                        width: "85%",
-                                        height: "85%"
-                                    },
-                                    // Iframe tag attributes
-                                    attr: {
-                                        scrolling: "auto"
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "NO EXISTEN DATOS PARA ESTE REPORTE",
-                            icon: "error"
-                        }).then((action) => {
-                            mdlAvanceProduccionPorDepto.find('#Depto')[0].selectize.focus();
-                        });
-                    }
-                    HoldOn.close();
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                    HoldOn.close();
-                });
-            }
+        mdlAvanceProduccionPorDepto.find("#btnTejido").click(function () {
+            onOpenOverlay('Espere un momento por favor...');
+            $.post('<?php print base_url('ReportesProduccionJasper/onReporteAvancePorDeptoEspecifico'); ?>', {
+                Depto: 7
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    onImprimirReporteFancy(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
+        mdlAvanceProduccionPorDepto.find("#btnPespunte").click(function () {
+            onOpenOverlay('Espere un momento por favor...');
+            $.post('<?php print base_url('ReportesProduccionJasper/onReporteAvancePorDeptoEspecifico'); ?>', {
+                Depto: 5
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    onImprimirReporteFancy(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
         });
     });
 

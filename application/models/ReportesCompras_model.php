@@ -391,10 +391,10 @@ class ReportesCompras_model extends CI_Model {
             }
 
             return $this->db->group_by("MA.Maq")
-                            ->group_by("A.Departamento")
+                            ->group_by("ABS(A.Departamento)")
                             ->group_by("MA.DocMov")
-                            ->order_by("Maquila", 'ASC')
-                            ->order_by("Departamento", 'ASC')
+                            ->order_by("ABS(Maquila)", 'ASC')
+                            ->order_by("ABS(A.Departamento)", 'ASC')
                             ->order_by("Doc", 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {
