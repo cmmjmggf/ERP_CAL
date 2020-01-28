@@ -50,7 +50,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
             $x = $this->input->post();
             switch (intval($x['DEPARTAMENTO'])) {
                 case 10:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -67,7 +67,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 20:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -84,7 +84,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 30:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -101,7 +101,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 40:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -118,7 +118,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 90:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -134,8 +134,25 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     $jc->setDocumentformat('pdf');
                     print $jc->getReport();
                     break;
+                case 105:
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $x = $this->input;
+                    $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
+                    $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
+                    $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoALMCORTE.jasper');
+                    $jc->setFilename('ParesProducidosPorDepartamento105ALMCORTE' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
                 case 110:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -151,8 +168,25 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     $jc->setDocumentformat('pdf');
                     print $jc->getReport();
                     break;
+                case 130:
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $x = $this->input;
+                    $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
+                    $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
+                    $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoALMPESPUNTE.jasper');
+                    $jc->setFilename('ParesProducidosPorDepartamento130ALMPESPUNTE' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
                 case 140:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -168,8 +202,25 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     $jc->setDocumentformat('pdf');
                     print $jc->getReport();
                     break;
+                case 160:
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $x = $this->input;
+                    $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
+                    $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
+                    $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoALMTEJIDO.jasper');
+                    $jc->setFilename('ParesProducidosPorDepartamento160ALMTEJIDO' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
                 case 150:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -186,7 +237,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 180:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -203,7 +254,7 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     print $jc->getReport();
                     break;
                 case 210:
-                    /*OK 25/01/2020 ULTIMA MODIFICACIÓN*/
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
                     $jc = new JasperCommand();
                     $jc->setFolder('rpt/' . $this->session->USERNAME);
                     $parametros = array();
@@ -216,6 +267,23 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     $jc->setParametros($parametros);
                     $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoADORNO.jasper');
                     $jc->setFilename('ParesProducidosPorDepartamento210ADORNO' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
+                case 230:
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $x = $this->input;
+                    $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
+                    $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
+                    $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoALMADORNO.jasper');
+                    $jc->setFilename('ParesProducidosPorDepartamento230ALMADORNO' . Date('h_i_s'));
                     $jc->setDocumentformat('pdf');
                     print $jc->getReport();
                     break;

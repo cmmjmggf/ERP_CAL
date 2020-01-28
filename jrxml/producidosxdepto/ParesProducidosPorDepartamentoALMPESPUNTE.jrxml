@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamento" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
+	<property name="ireport.zoom" value="1.5394743546921197"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FECHAINICIAL" class="java.lang.String"/>
+	<parameter name="FECHAFINAL" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="MAQUILA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT "N/A" AS NUMEMP, "N/A" AS  EMPLEADO,
+AX.contped AS CONTROL,
+P.Estilo AS ESTILO,
+(SELECT C.Descripcion FROM colores AS C WHERE C.Estilo = P.estilo AND C.Clave =  P.Color LIMIT 1) AS COLOR,
+P.Pares AS PARES,
+P.Cliente AS CLAVE_CLIENTE, CL.RazonS AS CLIENTET, P.FechaEntrega AS FECHA_ENTREGA,
+AX.fec6 AS FECHA_FPN, CAST(P.Pares AS SIGNED) AS PARESCOUNT,
+(CASE
+WHEN P.stsavan = 1 THEN "PROGRAMADO"
+WHEN P.stsavan = 2 THEN "CORTE"
+WHEN P.stsavan = 3 THEN "RAYADO"
+WHEN P.stsavan = 33 THEN "REBAJADO"
+WHEN P.stsavan = 4 THEN "FOLEADO"
+WHEN P.stsavan = 40 THEN "ENTRETELADO"
+WHEN P.stsavan = 42 THEN "MAQUILA"
+WHEN P.stsavan = 44 THEN "ALMACEN CORTE"
+WHEN P.stsavan = 5 THEN "PESPUNTE"
+WHEN P.stsavan = 55 THEN "ENSUELADO"
+WHEN P.stsavan = 6 THEN "ALMACEN PESPUNTE"
+WHEN P.stsavan = 7 THEN "TEJIDO"
+WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO"
+WHEN P.stsavan = 9 THEN "MONTADO"
+WHEN P.stsavan = 10 THEN "ADORNO"
+WHEN P.stsavan = 11 THEN "ALMACEN ADORNO"
+WHEN P.stsavan = 12 THEN "TERMINADO"
+WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT,  P.Maquila
+FROM avaprd AS AX
+LEFT JOIN pedidox AS P ON AX.contped = P.Control
+LEFT JOIN clientes AS CL ON CL.Clave = P.Cliente
+WHERE AX.fec6 BETWEEN str_to_date($P{FECHAINICIAL},"%d/%m/%Y") and str_to_date($P{FECHAFINAL},"%d/%m/%Y") AND P.Maquila = $P{MAQUILA}
+ORDER BY ABS(AX.fec6) ASC,ABS(P.FechaEntrega) ASC;]]>
+	</queryString>
+	<field name="NUMEMP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EMPLEADO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CONTROL" class="java.lang.Integer"/>
+	<field name="ESTILO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLOR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PARES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLAVE_CLIENTE" class="java.lang.String"/>
+	<field name="CLIENTET" class="java.lang.String"/>
+	<field name="FECHA_ENTREGA" class="java.lang.String"/>
+	<field name="FECHA_FPN" class="java.sql.Timestamp"/>
+	<field name="PARESCOUNT" class="java.lang.Long"/>
+	<field name="AvanceT" class="java.lang.String"/>
+	<field name="Maquila" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="PARESCOUNT_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{PARESCOUNT}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="67" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="176" y="27" width="77" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="52fd3ebf-40f9-475c-87f7-02dd06b0f9db"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[De la fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="72" y="13" width="323" height="14" isPrintInFirstWholeBand="true" uuid="e8ecfabe-45d6-401f-88b5-53edf348c6a2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares fabricados por departamento      130 ALMACEN PESPUNTE]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
+				<reportElement isPrintRepeatedValues="false" x="661" y="14" width="139" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="5b84a6dd-d909-48bc-8e81-2201dcc36d09"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="0" width="433" height="14" isRemoveLineWhenBlank="true" uuid="d9f7cc57-467e-4ba3-955f-63a4767d2c8c"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="353" y="27" width="52" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="380ea55d-c1d0-49eb-9ad4-b4fe9aceeebf"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la fecha]]></text>
+			</staticText>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="f45e1d8e-40d3-49d0-b99e-e0e8f6def94c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField evaluationTime="Report">
+				<reportElement isPrintRepeatedValues="false" x="785" y="2" width="15" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e44f1b65-6a92-4a47-918c-ff432634274c"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="690" y="2" width="78" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="704f84b4-5ea2-4220-bac0-6d901008471e"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="53" width="82" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="736272e1-620f-4f21-9473-9f634a44aa1e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Control]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="66" width="801" height="1" uuid="bbf1f5ef-61d2-4e3a-b287-fe062ebdb1b7"/>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="82" y="53" width="50" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="82a51657-e841-499a-99b7-1ea5983f37ee"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="132" y="53" width="44" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="78d72232-1782-4203-8857-ddc240c3f45c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="305" y="53" width="48" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e1f3c377-031d-4522-90f0-f7c4b1e88721"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="353" y="53" width="92" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="389f4ec7-51b4-438a-aa0d-84a59a084279"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avance Actual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="445" y="53" width="48" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="f22404bf-0782-4b6e-89e3-85cb1027bb9c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="656" y="53" width="73" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="f9e16323-e49a-4cc8-9be6-5a86ed04eb09"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="729" y="53" width="73" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="daf7b8a9-8586-4c72-9127-1e58aec4433a"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Depto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="656" y="39" width="146" height="15" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="395d0dd0-a480-452a-b88e-245c31651743"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fechas entrega]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="253" y="27" width="100" height="14" uuid="d9f1cebf-8b76-4630-b44f-72219bce1f6a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{FECHAINICIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="405" y="27" width="100" height="14" uuid="7cdc6eea-1402-4d2e-a475-de7fe2a7e29b"/>
+				<textFieldExpression><![CDATA[$P{FECHAFINAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="82" height="11" uuid="1ec9d0a9-243d-4501-be5f-2a8d409263cb"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="0" width="50" height="11" uuid="8c8975d7-0d64-47c1-b0a2-06d8b527718a"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="11" width="801" height="1" uuid="69ddc483-46f9-4343-9861-fc1cb59120cc"/>
+			</line>
+			<textField>
+				<reportElement x="132" y="0" width="173" height="11" uuid="aff38c95-8ddf-40ee-9db9-d5db28cb9fc7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="48" height="11" uuid="2cf0cea5-028f-4eb6-9a28-5b5b61eae803"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="656" y="0" width="73" height="11" uuid="ac8b8899-1d29-4bee-a452-64b319ec891f"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_ENTREGA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="729" y="0" width="73" height="11" uuid="1f815f92-fcc1-46f0-a1ba-3f759b02ab65"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_FPN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="0" width="211" height="12" uuid="e5180be8-97cc-4eac-8806-a772a1c64d54"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLIENTET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="353" y="0" width="92" height="12" uuid="8734c8d6-c550-4a38-87fd-bba521a0b40b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AvanceT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="305" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="d6dacf63-287c-4804-9d13-9de2180d1cf6"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total general]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="305" y="0" width="48" height="14" uuid="7b290967-b29d-4eb8-932e-651d32010ab5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{PARESCOUNT_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

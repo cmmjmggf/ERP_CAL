@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remisionnva1" language="groovy" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="2.2304157239725333"/>
-	<property name="ireport.x" value="103"/>
-	<property name="ireport.y" value="46"/>
+	<property name="ireport.zoom" value="1.2590115293645172"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="factura" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -359,7 +359,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 	<variable name="subtot_4" class="java.lang.Double" resetType="Group" resetGroup="FACTURA" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
-	<variable name="subtot_5" class="java.lang.Double" resetType="Page" calculation="Sum">
+	<variable name="subtot_5" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
 	<group name="FACTURA">
@@ -447,7 +447,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 	<group name="SERIE">
 		<groupExpression><![CDATA[$F{SERIE}]]></groupExpression>
 		<groupHeader>
-			<band height="10">
+			<band height="11">
 				<textField pattern="0.#" isBlankWhenNull="true">
 					<reportElement x="148" y="0" width="15" height="10" uuid="2fc5811a-0d7e-46ee-8996-dfe63531f13e"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -623,6 +623,12 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{T22}.equals("0") ? "" : $F{T22}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="148" y="10" width="330" height="1" uuid="49432b3c-403a-4378-8a02-4db3faa6aee5"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
 			</band>
 		</groupHeader>
 	</group>
@@ -793,16 +799,16 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="31" height="12" uuid="286fb789-a183-4fc9-8631-33747e1d6b8d"/>
+				<reportElement x="0" y="0" width="31" height="11" uuid="286fb789-a183-4fc9-8631-33747e1d6b8d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pareped}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="478" y="0" width="36" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="7da803b0-bf8e-4b51-9ccb-913e41d05d20"/>
+				<reportElement mode="Transparent" x="478" y="0" width="36" height="11" forecolor="#333333" backcolor="#FFFFFF" uuid="7da803b0-bf8e-4b51-9ccb-913e41d05d20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -810,13 +816,13 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{CONTROL}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="1" y="12" width="614" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
+				<reportElement x="1" y="11" width="614" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="554" y="0" width="61" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
+				<reportElement mode="Transparent" x="554" y="0" width="61" height="11" forecolor="#333333" backcolor="#FFFFFF" uuid="5a0841a4-0757-4b34-8352-32b6075d24c3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -824,7 +830,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{subtot}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="514" y="0" width="40" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
+				<reportElement mode="Transparent" x="514" y="0" width="40" height="11" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -832,23 +838,23 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{PRECIO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="65" y="0" width="83" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="8d74a124-b3e0-4d7c-8c87-b70b59e4427d"/>
+				<reportElement mode="Transparent" x="65" y="0" width="83" height="11" forecolor="#333333" backcolor="#FFFFFF" uuid="8d74a124-b3e0-4d7c-8c87-b70b59e4427d"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="30" y="0" width="35" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="b53c8d1b-de01-4c43-9e3f-ae7b7bd97c0f"/>
+				<reportElement mode="Transparent" x="30" y="0" width="35" height="11" forecolor="#333333" backcolor="#FFFFFF" uuid="b53c8d1b-de01-4c43-9e3f-ae7b7bd97c0f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="148" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a6290f01-b8ff-4426-9403-c5d15017e1b3"/>
+				<reportElement mode="Transparent" x="148" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="a6290f01-b8ff-4426-9403-c5d15017e1b3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -856,7 +862,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par01}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="163" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6536c7f8-47d8-4c64-81b7-a43ea41d60a8"/>
+				<reportElement mode="Transparent" x="163" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="6536c7f8-47d8-4c64-81b7-a43ea41d60a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -864,7 +870,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par02}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="178" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="734e4fa5-193a-4c6b-8eac-7a677babd6df"/>
+				<reportElement mode="Transparent" x="178" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="734e4fa5-193a-4c6b-8eac-7a677babd6df"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -872,7 +878,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par03}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="193" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="26582e98-5868-4f2e-a010-25bbb946b06d"/>
+				<reportElement mode="Transparent" x="193" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="26582e98-5868-4f2e-a010-25bbb946b06d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -880,7 +886,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par04}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="208" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96b9515b-aa77-4414-b428-b9f16c79945d"/>
+				<reportElement mode="Transparent" x="208" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="96b9515b-aa77-4414-b428-b9f16c79945d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -888,7 +894,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par05}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="223" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="66cfd81c-74c6-49eb-960e-a08bda24039c"/>
+				<reportElement mode="Transparent" x="223" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="66cfd81c-74c6-49eb-960e-a08bda24039c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -896,7 +902,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par06}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="238" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a5db3eb-2ce4-4b6e-bae8-9a76096f6930"/>
+				<reportElement mode="Transparent" x="238" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="4a5db3eb-2ce4-4b6e-bae8-9a76096f6930"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -904,7 +910,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par07}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="253" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f0c59bb2-a6cf-4dfe-9c9d-ad6ab0daf8f3"/>
+				<reportElement mode="Transparent" x="253" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f0c59bb2-a6cf-4dfe-9c9d-ad6ab0daf8f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -912,7 +918,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par08}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="268" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f2437290-ba91-4237-9606-1acd11dc5b47"/>
+				<reportElement mode="Transparent" x="268" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f2437290-ba91-4237-9606-1acd11dc5b47"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -920,7 +926,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par09}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="283" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9c7d4ec7-a485-41c4-8ec7-ec3d5aa62981"/>
+				<reportElement mode="Transparent" x="283" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="9c7d4ec7-a485-41c4-8ec7-ec3d5aa62981"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -928,7 +934,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par10}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="298" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9755f075-59df-40e1-a965-00ed8adee455"/>
+				<reportElement mode="Transparent" x="298" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="9755f075-59df-40e1-a965-00ed8adee455"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -936,7 +942,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par11}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="313" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="96dcf9a5-d819-4753-8ae3-f3d412251c2a"/>
+				<reportElement mode="Transparent" x="313" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="96dcf9a5-d819-4753-8ae3-f3d412251c2a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -944,7 +950,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par12}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="328" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ae98da05-a720-4dcb-86fb-3cc6dec92ea1"/>
+				<reportElement mode="Transparent" x="328" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="ae98da05-a720-4dcb-86fb-3cc6dec92ea1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -952,7 +958,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par13}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="343" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="465bc305-3adf-4c31-b68c-b0e117a4a7a9"/>
+				<reportElement mode="Transparent" x="343" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="465bc305-3adf-4c31-b68c-b0e117a4a7a9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -960,7 +966,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par14}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="358" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ef6d68b-da94-43a1-b645-a814336deee6"/>
+				<reportElement mode="Transparent" x="358" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="1ef6d68b-da94-43a1-b645-a814336deee6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -968,7 +974,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par15}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="373" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="576e895e-33dc-4b5d-95eb-94d1ec674db2"/>
+				<reportElement mode="Transparent" x="373" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="576e895e-33dc-4b5d-95eb-94d1ec674db2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -976,7 +982,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par16}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="388" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6635449-8a93-49ef-afd9-c43c759acd0c"/>
+				<reportElement mode="Transparent" x="388" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="d6635449-8a93-49ef-afd9-c43c759acd0c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -984,7 +990,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par17}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="403" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="40c7144b-45eb-4bb8-972f-8a7604c41391"/>
+				<reportElement mode="Transparent" x="403" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="40c7144b-45eb-4bb8-972f-8a7604c41391"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -992,7 +998,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par18}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="418" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2642fd15-6e23-4813-9626-f8cc442820b1"/>
+				<reportElement mode="Transparent" x="418" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="2642fd15-6e23-4813-9626-f8cc442820b1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1000,7 +1006,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par19}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="433" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3016b664-e49b-4df2-bc6f-67be596b4fc2"/>
+				<reportElement mode="Transparent" x="433" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="3016b664-e49b-4df2-bc6f-67be596b4fc2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1008,7 +1014,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par20}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="448" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="80f60660-6e95-4729-8d93-af97127a807a"/>
+				<reportElement mode="Transparent" x="448" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="80f60660-6e95-4729-8d93-af97127a807a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1016,7 +1022,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{par21}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="463" y="0" width="15" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c342bccf-863d-43cc-992f-f27491548c72"/>
+				<reportElement mode="Transparent" x="463" y="0" width="15" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="c342bccf-863d-43cc-992f-f27491548c72"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1025,20 +1031,26 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 			</textField>
 		</band>
 	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
 	<pageFooter>
-		<band height="172">
+		<band/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="163">
 			<rectangle>
-				<reportElement mode="Transparent" x="1" y="26" width="612" height="144" uuid="695a15b2-ca51-40ba-b965-b3a9dd6d79b4"/>
+				<reportElement mode="Transparent" x="1" y="16" width="612" height="144" uuid="695a15b2-ca51-40ba-b965-b3a9dd6d79b4"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="613" height="13" uuid="5740f20d-f59d-459b-a40d-42c8e2964dab"/>
+				<reportElement x="0" y="1" width="613" height="13" uuid="5740f20d-f59d-459b-a40d-42c8e2964dab"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Favor  de enviar su ficha  de deposito vía Whatsapp  477-767 18 11]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="26" width="45" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6d31024e-9316-4577-9a6c-75eefcf384ae"/>
+				<reportElement mode="Opaque" x="1" y="16" width="45" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6d31024e-9316-4577-9a6c-75eefcf384ae"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1046,7 +1058,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Pagaré]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="262" y="26" width="24" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="f912e7d0-48f8-4fc9-8d84-8f1999080d94"/>
+				<reportElement mode="Opaque" x="262" y="16" width="24" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="f912e7d0-48f8-4fc9-8d84-8f1999080d94"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1054,7 +1066,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="458" y="26" width="53" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="eea5685d-1e3f-42f2-a07c-bce1247026ca"/>
+				<reportElement mode="Opaque" x="458" y="16" width="53" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="eea5685d-1e3f-42f2-a07c-bce1247026ca"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1062,7 +1074,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Bueno por]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="52" width="239" height="12" forecolor="#000000" backcolor="#666666" uuid="ff93db9a-5be2-4395-80b3-ee067bbdc886"/>
+				<reportElement mode="Transparent" x="0" y="42" width="239" height="12" forecolor="#000000" backcolor="#666666" uuid="ff93db9a-5be2-4395-80b3-ee067bbdc886"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1073,7 +1085,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Debe(mos) y pagare(mos) incondicionalmente por este Pagare a la orden de]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="65" width="50" height="12" forecolor="#000000" backcolor="#666666" uuid="72988559-8792-43d1-a8ed-d88ab4e812a8"/>
+				<reportElement mode="Transparent" x="1" y="55" width="50" height="12" forecolor="#000000" backcolor="#666666" uuid="72988559-8792-43d1-a8ed-d88ab4e812a8"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1084,7 +1096,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[La cantidad de]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="239" y="52" width="91" height="12" uuid="bff720bc-172c-4884-bbca-7722f51208b8"/>
+				<reportElement x="239" y="42" width="91" height="12" uuid="bff720bc-172c-4884-bbca-7722f51208b8"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1094,7 +1106,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Calzado Lobo, s.a. de c.v.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="375" y="53" width="119" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eb725e3d-265c-4873-b34e-fa91d556c140"/>
+				<reportElement mode="Transparent" x="375" y="43" width="119" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="eb725e3d-265c-4873-b34e-fa91d556c140"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1105,7 +1117,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Lugar del pago   Leon, Gto. Mexico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="375" y="38" width="159" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b145c357-039a-4664-8a56-6f15bfc89db9"/>
+				<reportElement mode="Transparent" x="375" y="28" width="159" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b145c357-039a-4664-8a56-6f15bfc89db9"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1116,7 +1128,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Lugar y fecha de expedicion    Leon, Gto. Mexico]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="51" y="65" width="279" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="4a6020e8-03ec-47b9-8ef0-7c4acca199dc"/>
+				<reportElement mode="Transparent" x="51" y="55" width="279" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="4a6020e8-03ec-47b9-8ef0-7c4acca199dc"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1124,7 +1136,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{MONEDA_LETRA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="493" y="53" width="62" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="de5be3a0-4eb0-474a-ab07-8f33bdfc7aca"/>
+				<reportElement mode="Transparent" x="493" y="43" width="62" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="de5be3a0-4eb0-474a-ab07-8f33bdfc7aca"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1135,7 +1147,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Fecha del pago]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="552" y="53" width="59" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c3d9581d-2cad-4162-a6d4-e03160f91a83"/>
+				<reportElement mode="Transparent" x="552" y="43" width="59" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c3d9581d-2cad-4162-a6d4-e03160f91a83"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1143,7 +1155,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{FECHA_DEL_PAGO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="78" width="610" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="a9e98ea1-567f-4de9-91c0-ee3f7179818b"/>
+				<reportElement mode="Transparent" x="1" y="68" width="610" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="a9e98ea1-567f-4de9-91c0-ee3f7179818b"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1151,23 +1163,23 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Valor recibido a mi (nuestra) entera satisfaccion. Este pagare forma parte de una serie numerada del 1 al 1 sujetos a la condicion de que, al no pagarse desde la fecha de vencimiento de este cualquiera de ellos a su vencimiento, sera exigibles todos los que les sigan en numero ademas de los ya vencidos, documento hasta el dia de su liquidacion, causara intereses moratorios al tipo de % mensual, pagadero en esta ciudad juntamente con el principal, mas los gastos que por ello se originen]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Opaque" x="285" y="26" width="69" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="e921486d-22b8-4b85-ae93-9c82af4833cf"/>
+				<reportElement mode="Opaque" x="285" y="16" width="69" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="e921486d-22b8-4b85-ae93-9c82af4833cf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FACTURA}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Opaque" x="511" y="26" width="102" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6c615696-9248-4b5e-9ec3-0a1b6aea8f25"/>
+			<textField evaluationTime="Auto" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="511" y="16" width="102" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="6c615696-9248-4b5e-9ec3-0a1b6aea8f25"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{subtot_5}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement mode="Transparent" x="534" y="38" width="77" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c9e483ce-0bd4-4a96-9af9-b5d56f828e1f"/>
+				<reportElement mode="Transparent" x="534" y="28" width="77" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c9e483ce-0bd4-4a96-9af9-b5d56f828e1f"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -1178,7 +1190,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="117" width="453" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="82bf6b5e-6e15-4b64-b020-5a927e811a6e"/>
+				<reportElement mode="Opaque" x="1" y="107" width="453" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="82bf6b5e-6e15-4b64-b020-5a927e811a6e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1186,28 +1198,28 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Nombre y datos del deudor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="128" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="438ead54-b80a-46d7-9853-8c7e592fa848"/>
+				<reportElement mode="Transparent" x="1" y="118" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="438ead54-b80a-46d7-9853-8c7e592fa848"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="140" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="be8d7635-cf1c-4dc5-9cd1-4dfe4dee650a"/>
+				<reportElement mode="Transparent" x="1" y="130" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="be8d7635-cf1c-4dc5-9cd1-4dfe4dee650a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="1" y="152" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ea08c483-791e-4fc6-99e5-20d04ff4a36b"/>
+				<reportElement mode="Transparent" x="1" y="142" width="34" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ea08c483-791e-4fc6-99e5-20d04ff4a36b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Colonia]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="35" y="128" width="419" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0974534e-ae10-4afa-98ad-5134cae7995a"/>
+				<reportElement mode="Transparent" x="35" y="118" width="419" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0974534e-ae10-4afa-98ad-5134cae7995a"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1215,7 +1227,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{NOMBRE_CLIENTE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="35" y="140" width="240" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6aeb37e1-5cc5-4992-8d26-72afa5b9ef67"/>
+				<reportElement mode="Transparent" x="35" y="130" width="240" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="6aeb37e1-5cc5-4992-8d26-72afa5b9ef67"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1223,7 +1235,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="262" y="153" width="86" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3abba87e-0b61-4098-b3ca-0dbf9c0dbc9d"/>
+				<reportElement mode="Transparent" x="262" y="143" width="86" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3abba87e-0b61-4098-b3ca-0dbf9c0dbc9d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1231,14 +1243,14 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{CIUDAD}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="217" y="153" width="45" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="e4813c42-db1c-4518-903c-65c2700a4039"/>
+				<reportElement mode="Transparent" x="217" y="143" width="45" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="e4813c42-db1c-4518-903c-65c2700a4039"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ciudad]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="304" y="140" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="f8a1a069-2575-4c1a-bbc4-a113bd3416e6"/>
+				<reportElement mode="Transparent" x="304" y="130" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="f8a1a069-2575-4c1a-bbc4-a113bd3416e6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1246,14 +1258,14 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{NOEXT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="275" y="140" width="30" height="13" uuid="67524036-1ec7-467c-9b23-d46b243969f5"/>
+				<reportElement x="275" y="130" width="30" height="13" uuid="67524036-1ec7-467c-9b23-d46b243969f5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#EXT.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="379" y="141" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="047c120c-240f-45a4-9e6d-ce45b416393b"/>
+				<reportElement mode="Transparent" x="379" y="131" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="047c120c-240f-45a4-9e6d-ce45b416393b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1261,14 +1273,14 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{NOINT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="355" y="140" width="25" height="13" uuid="8bcea5c5-119e-4a65-9c40-5c70d48d5367"/>
+				<reportElement x="355" y="130" width="25" height="13" uuid="8bcea5c5-119e-4a65-9c40-5c70d48d5367"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[#INT]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="373" y="153" width="59" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="18296f39-4590-48c7-902a-c3d4bc1d907a"/>
+				<reportElement mode="Transparent" x="373" y="143" width="59" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="18296f39-4590-48c7-902a-c3d4bc1d907a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1276,14 +1288,14 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="348" y="153" width="25" height="13" uuid="63c207f5-02f5-4468-9bd2-2761e716a626"/>
+				<reportElement x="348" y="143" width="25" height="13" uuid="63c207f5-02f5-4468-9bd2-2761e716a626"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Edo]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="34" y="152" width="179" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b1bd7f03-f299-49e6-89fe-669a6cc5e570"/>
+				<reportElement mode="Transparent" x="34" y="142" width="179" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b1bd7f03-f299-49e6-89fe-669a6cc5e570"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -1291,7 +1303,7 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<textFieldExpression><![CDATA[$F{COLONIA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="454" y="159" width="158" height="11" uuid="05b64ade-b0a4-4f8d-ad94-bae59adf5d7d"/>
+				<reportElement x="454" y="149" width="158" height="11" uuid="05b64ade-b0a4-4f8d-ad94-bae59adf5d7d"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -1301,5 +1313,5 @@ WHERE F.factura  = $P{factura} AND F.tp = 2 AND F.cliente = $P{cliente}]]>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 		</band>
-	</pageFooter>
+	</lastPageFooter>
 </jasperReport>

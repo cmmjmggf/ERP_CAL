@@ -158,25 +158,41 @@
         mdlParesProducidosPorDepartamento.find("#btnEntretelado").click(function () {
             getReportexDepto(90);
         });
-        
+
+        mdlParesProducidosPorDepartamento.find("#btnAlmCorte").click(function () {
+            getReportexDepto(105);
+        });
+
         mdlParesProducidosPorDepartamento.find("#btnPespunte").click(function () {
             getReportexDepto(110);
         });
-        
+
+        mdlParesProducidosPorDepartamento.find("#btnAlmPespunte").click(function () {
+            getReportexDepto(130);
+        });
+
         mdlParesProducidosPorDepartamento.find("#btnEnsuelado").click(function () {
             getReportexDepto(140);
         });
-        
+
         mdlParesProducidosPorDepartamento.find("#btnTejido").click(function () {
             getReportexDepto(150);
         });
-        
+
+        mdlParesProducidosPorDepartamento.find("#btnAlmTejido").click(function () {
+            getReportexDepto(160);
+        });
+
         mdlParesProducidosPorDepartamento.find("#btnMontado").click(function () {
             getReportexDepto(180);
         });
-        
+
         mdlParesProducidosPorDepartamento.find("#btnAdorno").click(function () {
             getReportexDepto(210);
+        });
+
+        mdlParesProducidosPorDepartamento.find("#btnAlmAdorno").click(function () {
+            getReportexDepto(230);
         });
 
         mdlParesProducidosPorDepartamento.on('shown.bs.modal', function () {
@@ -205,6 +221,7 @@
     }
 
     function getReporteXDeptoFiltro(depto) {
+        onBeep(1);
         onOpenOverlay('Espere un momento por favor...');
         $.post('<?php print base_url('ParesProducidosPorDepartamento/getReportexDepto'); ?>', {
             FECHA_INICIAL: xFechaInicial.val() ? xFechaInicial.val() : '',

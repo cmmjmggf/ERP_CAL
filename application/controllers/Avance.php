@@ -427,8 +427,8 @@ P.Maquila AS MAQUILA
                                 "semana" => $xXx['SEMANA'],
                                 "depto" => $xXx['DEPTOACTUAL'],
                                 "anio" => Date('Y'));
-                            $data["fraccion"] = $xfraccion;
-                            $data["numfrac"] = $xfraccion;
+                            $data["fraccion"] = 102;
+                            $data["numfrac"] = 102;
                             $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
                             $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                             $data["preciofrac"] = $PXFC;
