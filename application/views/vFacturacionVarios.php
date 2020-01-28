@@ -553,7 +553,42 @@
                 }
             }
         });
+        TPFactura.keydown(function (e) {
+            if (ClienteClave.val()) {
+                if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                    getTipoDeCambioYUltimaFactura();
+                } else if (e.keyCode === 13) {
+                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+                return;
+            }
+        }).focusout(function () {
 
+            if (ClienteClave.val()) {
+                if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
+                    getTipoDeCambioYUltimaFactura();
+                } else {
+                    TPFactura.focus().select();
+                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
+                        TPFactura.focus().select();
+                    });
+                    return;
+                }
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+                return;
+            }
+        });
         btnAcepta.click(function () {
             /*validar encabezado*/
 
@@ -1255,6 +1290,50 @@
             getError(x);
         }).always(function () {
         });
+    }
+    
+    function getTipoDeCambioYUltimaFactura() {
+        var tpx = parseInt(TPFactura.val());
+        if (tpx >= 1 && tpx <= 2) {
+            onOpenOverlay('');
+            $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
+                if (abcde.length > 0) {
+                    TIPODECAMBIO.val(abcde[0].DOLAR);
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                onCloseOverlay();
+            });
+            if (ClienteFactura.val() && TPFactura.val()) {
+                var x = tpx === 1 ? 1 : 2;
+                if (x === 1 || x === 2) {
+                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                        TP: x
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
+                            Documento.val(r);
+                            getReferencia();
+                        }  
+                    }).fail(function (xyz) {
+                        getError(xyz);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2 x', 'warning').then((value) => {
+                        TPFactura.focus().select();
+                    });
+                }
+            } else {
+            }
+            onCloseOverlay();
+        } else {
+            swal('ATENCIÓN', 'SOLO SE ACEPTA 1 Y 2 xx', 'warning').then((value) => {
+                TPFactura.focus().select();
+            });
+        }
     }
 </script>
 

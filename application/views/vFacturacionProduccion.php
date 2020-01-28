@@ -1402,7 +1402,7 @@
                         onCloseOverlay();
                         return;
                     }
-                    console.log(parseInt(ClienteFactura.val()) === r.CLIENTE, r)
+                    console.log(parseInt(ClienteFactura.val()) === r.CLIENTE, r);
                     if (parseInt(ClienteFactura.val()) === r.CLIENTE) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
                                 {
@@ -1943,8 +1943,18 @@
         TotalParesEntregaF.val(ttpf);
         TotalParesEntregaAF.val(ttpaf);
         pnlTablero.find(".produccionfabricados").text(ttp);
-        pnlTablero.find(".produccionfacturados").text(ttpf);
-        pnlTablero.find(".produccionsaldo").text((ttpf > 0) ? ttpaf : ttp);
+        $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
+                {
+                    CONTROL: Control.val()
+                }).done(function (a) {
+            var r = a[0];
+            pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS); 
+            pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
     }
 
     function getReferencia() {
