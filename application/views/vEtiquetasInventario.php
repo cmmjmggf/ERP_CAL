@@ -53,7 +53,7 @@
             $.each(mdlEtiquetasInventario.find("select"), function (k, v) {
                 mdlEtiquetasInventario.find("select")[k].selectize.clear(true);
             });
-            getGrupos();
+            getGruposEtiInv();
             mdlEtiquetasInventario.find('#Grupo')[0].selectize.focus();
         });
 
@@ -115,7 +115,7 @@
     });
 
 
-    function getGrupos() {
+    function getGruposEtiInv() {
         $.getJSON(base_url + 'index.php/Articulos/getGrupos').done(function (data) {
             $.each(data, function (k, v) {
                 mdlEtiquetasInventario.find("#Grupo")[0].selectize.addOption({text: v.Grupo, value: v.ID});

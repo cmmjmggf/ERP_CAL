@@ -139,11 +139,10 @@ class ReportesEstiquetasProduccion extends CI_Controller {
             $row = 2;
             foreach ($reporte as $key => $value) {
                 // Agregamos los datos
-
-                $objPHPExcel->getActiveSheet()->getStyle('B' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+                //$objPHPExcel->getActiveSheet()->getStyle('B' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value->control);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value->estilo);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $row, $value->estilo, PHPExcel_Cell_DataType::TYPE_STRING);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value->color);
                 $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value->piel);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value->suela);
@@ -276,10 +275,10 @@ class ReportesEstiquetasProduccion extends CI_Controller {
             $row = 2;
             foreach ($reporte as $key => $value) {
                 // Agregamos los datos
-
-                $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-
-                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value->estilo);
+                //$objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+                //    $objPHPExcel->getActiveSheet()->setCellValueExplicit('A' . $row, PHPExcel_Cell_DataType::TYPE_STRING);
+                //$objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value->estilo);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('A' . $row, $value->estilo, PHPExcel_Cell_DataType::TYPE_STRING);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value->color);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value->c3);
                 $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value->idart);

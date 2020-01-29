@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.6757443455841927"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.265551661468227"/>
+	<property name="ireport.x" value="655"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -654,7 +654,9 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$F{ParesFacturados}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement x="283" y="0" width="26" height="9" uuid="5dbd43f7-4130-44cd-9d3f-62079b5ff111"/>
+				<reportElement x="283" y="0" width="26" height="9" uuid="5dbd43f7-4130-44cd-9d3f-62079b5ff111">
+					<printWhenExpression><![CDATA[($F{Pares}-$F{ParesFacturados})>0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>

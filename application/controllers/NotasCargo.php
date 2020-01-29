@@ -139,7 +139,7 @@ class NotasCargo extends CI_Controller {
                     'Subtotal' => $R->Subtotal,
                     'Proveedor' => $Proveedor
                 );
-                if ($Tipo === '5') {//EN ESTE MODULO ES 2 pero como lo convertimos al TIPO deL MODULO DE pagos 5 es DEVOLUCION
+                if ($Tipo === '5') {//EN ESTE MODULO ES 2 pero como lo convertimos EN LA VISTA al TIPO deL MODULO DE pagos 5 es DEVOLUCION
                     $this->NotasCargo_model->onAgregarMovArt($datos);
                 }
                 //REGISTRA EN PAGOS PROVEEDORES

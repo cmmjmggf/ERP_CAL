@@ -220,7 +220,35 @@
                 var tp = pnlTablero.find("#Tp").val();
                 var prov = pnlTablero.find("#Proveedor").val();
                 var fact = pnlTablero.find("#Factura").val();
-                onVerificarExisteCompra($(this), tp, prov, fact);
+                var componente = pnlTablero.find("#Factura");
+
+                $.getJSON(master_url + 'onVerificarCartProv', {
+                    Doc: fact,
+                    TpDoc: tp,
+                    Proveedor: prov
+                }).done(function (data) {
+                    console.log(data);
+                    if (data.length > 0) {//SI EL DOCUMENTO YA EXISTE EN CART PROV
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "ESTE DOCUMENTO YA FUE CAPTRUADO",
+                            icon: "warning"
+                        }).then((value) => {
+                            pnlTablero.find("#Factura").val('').focus();
+                        });
+                    } else {//EL DOCUMENTO NO EXISTE
+                        onVerificarExisteCompra(componente, tp, prov, fact);
+                    }
+                }).fail(function (x, y, z) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
+                });
+
+
+
+
+
+
             }
         });
         pnlTablero.find("#FechaFactura").keypress(function (e) {
@@ -716,12 +744,13 @@
             console.log(x.responseText);
         });
     }
-    function onVerificarExisteCompra(v, tp, prov) {
+    function onVerificarExisteCompra(v, tp, prov, fact) {
         $.getJSON(master_url + 'onVerificarExisteCompra', {
             Doc: $(v).val(),
             TpDoc: tp,
             Proveedor: prov
         }).done(function (data) {
+            console.log(data);
             if (data.length > 0) {
                 //SI LA ORDEN DE COMPRA YA EXISTE Y ESTATUS CONCLUIDA
                 if (data[0].Estatus === 'CONCLUIDA') {

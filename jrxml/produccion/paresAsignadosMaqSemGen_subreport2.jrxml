@@ -18,7 +18,7 @@ sum(PE.pares) as maq4,
 sum(case when ct.maq = 9 then ct.pares else 0 end) as emaq1,
 sum(case when ct.maq = 10 then ct.pares else 0 end) as emaq2,
 sum(case when ct.maq = 98 then ct.pares else 0 end) as emaq3,
-sum(PE.pares) as emaq4,
+sum(ct.pares) as emaq4,
 
 (SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =9 And año = $P{ano} order by conce desc limit 1) as pmaq1,
 (SELECT pepes FROM cierrasem  WHERE sem = PE.semana and maq =10 And año = $P{ano} order by conce desc limit 1) as pmaq2,

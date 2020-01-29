@@ -96,6 +96,22 @@ class RecibeOrdenCompra extends CI_Controller {
         }
     }
 
+    public function onVerificarCartProv() {
+        try {
+            $tp = $this->input->get('TpDoc');
+            $doc = $this->input->get('Doc');
+            $prov = $this->input->get('Proveedor');
+            print json_encode($this->db->query("select * from cartera_proveedores "
+                                    . " where estatus in ('SIN PAGAR','PENDIENTE','PAGADO') "
+                                    . " and tp = {$tp} "
+                                    . " and doc = {$doc} "
+                                    . " and proveedor = {$prov} "
+                                    . "")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarExisteCompra() {
         try {
             print json_encode($this->Recibeordencompra_model->onVerificarExisteCompra($this->input->get('Doc'), $this->input->get('TpDoc'), $this->input->get('Proveedor')));

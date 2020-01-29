@@ -185,7 +185,7 @@ class Empleados extends CI_Controller {
             $fechaIMSS = str_replace('/', '-', $origFechaImss);
             $data["FechaIMSS"] = date("Y-m-d", strtotime($fechaIMSS));
 
-
+            $data["Busqueda"] = $xxx['PrimerNombre'] . ' ' . $xxx['SegundoNombre'] . ' ' . $xxx['Paterno'] . ' ' . $xxx['Materno'];
             unset($data["ID"]);
             $this->db->where('ID', $x->post('ID'))->update("empleados", $data);
             $ID = $x->post('ID');

@@ -125,16 +125,16 @@ class ReporteCapturaFisica_model extends CI_Model {
                     ->where("A.$Mes_Anterior > 0 ", null, false);
             switch ($Tipo) {
                 case '10':
-                    $GRUPOS = " AND SA.grupo IN ('1','2') ";
-                    $this->db->where_in('A.Grupo', array('1', '2'));
+                    $GRUPOS = " AND SA.grupo IN ('1', '2','12','15','16','17','18','34','40') ";
+                    $this->db->where_in('A.Grupo', array('1', '2', '12', '15', '16', '17', '18', '34', '40'));
                     break;
                 case '80':
                     $GRUPOS = " AND SA.grupo IN ('3') ";
                     $this->db->where_in('A.Grupo', array('3'));
                     break;
                 case '90':
-                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3') ";
-                    $this->db->where_not_in('A.Grupo', array('1', '2', '3'));
+                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40') ";
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40'));
                     break;
             }
 
@@ -184,8 +184,8 @@ class ReporteCapturaFisica_model extends CI_Model {
                     ->where("A.$Texto_Mes_Anterior > 0 ", null, false);
             switch ($Tipo) {
                 case '10':
-                    $GRUPOS = " AND SA.grupo IN ('1','2') ";
-                    $this->db->where_in('A.Grupo', array('1', '2'));
+                    $GRUPOS = " AND SA.grupo IN ('1', '2','12','15','16','17','18','34','40') ";
+                    $this->db->where_in('A.Grupo', array('1', '2', '12', '15', '16', '17', '18', '34', '40'));
                     break;
                 case '80':
                     $GRUPOS = " AND SA.grupo IN ('3') ";
@@ -193,7 +193,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                     break;
                 case '90':
                     $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40') ";
-                    $this->db->where_not_in('A.Grupo', array('1', '2', '3','12','15','16','17','18','34','40'));
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40'));
                     break;
             }
             $this->db->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA  "
