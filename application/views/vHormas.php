@@ -5,7 +5,8 @@
                 <legend class="float-left">Hormas</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
+                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar">
+                    <span class="fa fa-plus"></span></button>
             </div>
         </div>
         <div class="card-block mt-4">
@@ -48,7 +49,7 @@
                     </div>
                     <div class="col-12 col-md-2 col-sm-6">
                         <label for="Clave" >Clave*</label>
-                        <input type="text" class="form-control form-control-sm" id="Clave" name="Clave" required>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="Clave" name="Clave" maxlength="8" required>
                     </div>
                     <div class="col-12 col-md-4 col-sm-6">
                         <label for="" >Descripción*</label>
@@ -298,7 +299,7 @@
             pnlDatos.removeClass("d-none");
             btnEliminar.addClass("d-none");
             getID();
-            pnlDatos.find("[name='Clave']").addClass('disabledForms');
+//            pnlDatos.find("[name='Clave']").addClass('disabledForms');
             pnlDatos.find("[name='Descripcion']").focus();
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);

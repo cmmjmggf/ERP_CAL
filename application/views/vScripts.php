@@ -83,6 +83,19 @@
             }
         });
     }
+    function onImprimirReporteFancySetOptions(url,options) {
+        $.fancybox.open({
+            closeExisting: true,
+            smallBtn: true,
+            src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + url + '#pagemode=thumbs',
+            type: 'iframe',
+            opts: {
+                afterClose: function (instance, current) {
+                },
+                iframe: iframe_opts
+            }
+        });
+    }
     function onImprimirReporteFancyAFC(url, doafterClose) {
         $.fancybox.open({
             closeExisting: true,

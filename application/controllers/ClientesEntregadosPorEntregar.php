@@ -26,6 +26,10 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuClientes');
                     break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral');
+                    $this->load->view('vMenuClientes');
+                    break;
             }
             $this->load->view('vClientesEntregadosPorEntregar')->view('vFooter');
         } else {

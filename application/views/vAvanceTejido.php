@@ -57,7 +57,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Pares</label>
-                <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
+                <input type="text" id="Pares" name="Pares" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-6 col-xs-6 col-sm-1 col-lg-1 col-xl-1">
                 <label>Avace</label>
@@ -601,8 +601,7 @@
                         Control.focus().select();
                         Estilo.val('');
                         Color[0].selectize.clear(true);
-                        Pares.val('');
-                        Semana.val('');
+                        Pares.val(''); 
                         Fecha.val('');
                         return;
                     });

@@ -34,7 +34,8 @@ class ParesAsignadosExportaXLS extends CI_Controller {
                     . "P.Cliente AS CLIENTE_CLAVE, "
                     . "(SELECT REPLACE(CC.RazonS, \"-\", \"_\") FROM clientes AS CC "
                     . "WHERE CC.Clave = P.Cliente LIMIT 1) AS CLIENTE, "
-                    . "P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES", false)->from("pedidox AS P");
+                    . "P.FechaEntrega AS FECHA_ENTREGA, P.Pares AS PARES", false)
+                    ->from("pedidox AS P");
 
             if ($x['SEMANA'] !== '') {
                 $this->db->where("P.Semana", $x['SEMANA']);

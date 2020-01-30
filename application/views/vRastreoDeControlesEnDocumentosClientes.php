@@ -271,15 +271,15 @@
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentosClientes/getInfoXControl') ?>", {CONTROL: e}).done(function (a, b, c) {
                 if (a.length > 0) {
                     var xx = a[0];
-                    ParesFabricados.val(xx.TOTAL_PARES);
-                    ParesFacturados.val(xx.TOTAL_PARES);
+                    ParesFabricados.val(xx.PARES_PEDIDO);
+                    ParesFacturados.val(xx.PARES_FACTURADOS);
                     ParesVendidos.val(xx.PARES_VENDIDOS);
                     ParesDevueltos.val(xx.PARES_DEVUELTOS);
                     
                     switch (parseInt(xx.ESTATUS_PEDIDO)) {
                         case 2:
                             /*VENDIDO/CERRADA/CONCLUIDA*/
-                            ParesCancelados.val(0);
+                            ParesCancelados.val(xx.PARES_FACTURADOS_CANCELADOS);
                             /*PARES DEVUELTOS*/
                             $.getJSON('<?php print base_url('RastreoDeControlesEnDocumentosClientes/getDevolucionesXControl') ?>', {CONTROL: e}).done(function (aa, bb, cc) {
                                 if (aa.length > 0) {
@@ -309,10 +309,9 @@
                             });
                             break;
                         case 3:
-                            /*CANCELADA/CANCELADOS LOS PARES*/
-                            ParesFabricados.val(xx.PARES);
+                            /*CANCELADA/CANCELADOS LOS PARES*/ 
                             ParesVendidos.val(0);
-                            ParesCancelados.val(xx.PARES);
+                            ParesCancelados.val(xx.PARES_FACTURADOS_CANCELADOS);
                             break;
                     }
                     Facturados.ajax.reload(function () {

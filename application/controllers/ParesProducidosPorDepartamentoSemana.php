@@ -141,7 +141,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                     ));
                 }
 //                exit(0);
-                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
+//                $parametros["FECHA_INICIAL"] = ($x->post('FECHA_INICIAL'));
                 $jc->setParametros($parametros);
                 $jc->setJasperurl('jrxml\producidosxdepto\ParesFabricadosPorDepartamentoSemana.jasper');
                 $jc->setFilename('ParesFabricadosPorDepartamentoSemana' . Date('h_i_s'));

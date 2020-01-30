@@ -39,9 +39,12 @@ class Accesos extends CI_Controller {
             $this->db->select("L.ID AS ID, E.RazonSocial AS Empresa, L.Usuario, L.Modulo, L.Accion, L.Fecha, L.Hora, L.Dia, L.Mes, L.Anio, L.Estatus, L.Registro, L.Tipo", false)
                     ->from("logs AS L")->join("empresas AS E", "L.Empresa = E.Clave")->join("usuarios AS U", "L.IdUsuario = U.ID");
             if ($x['USUARIO'] !== '') {
-                $this->db->where("U.Usuario", $x['USUARIO']);
-            }
+                $this->db->where("L.IdUsuario", $x['USUARIO']);
+            } 
             $this->db->order_by('L.ID', 'DESC');
+            if ($x['USUARIO'] === '') {
+                $this->db->limit(50);
+            }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

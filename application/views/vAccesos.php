@@ -49,6 +49,9 @@
                 <button id="btnExportaXLS" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="PEDIDOS POR MES AÑO">
                     <span class="fa fa-exclamation"></span> XLS
                 </button>
+                <button id="btnAvanceForzado" type="button" class="btn btn-info"  data-toggle="tooltip" data-placement="top" title="AVANCE FORZADO">
+                    <span class="fa fa-cog"></span> AF
+                </button>
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -350,6 +353,7 @@
                         <div class="row">
                             <div class="col-3">
                                 <input type="text" class="form-control form-control-sm" id="UsuarioLog" name="UsuarioLog" placeholder="999">
+                                <input type="text"  id="IDUsuarioLog" name="IDUsuarioLog" class="form-control form-control-sm" placeholder="999">
                             </div>
                             <div class="col-9">
                                 <select id="SUsuarioLog" name="SUsuarioLog" class="form-control form-control-sm"> 
@@ -442,6 +446,7 @@
             } else {
                 UsuarioLog.val('');
             }
+            Logs.ajax.reload();
         });
 
         UsuarioLog.on('keydown', function (e) {
@@ -1478,4 +1483,4 @@
     }
 </style>
 <?php
-$this->load->view("vNuevasOpciones");
+$this->load->view("vNuevasOpciones")->view("vAvanceForzado");

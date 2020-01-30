@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorDepartamentoSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
 	<property name="ireport.zoom" value="2.9282000000000323"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="471"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.String"/>
 	<parameter name="ANO" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
-	<parameter name="FECHA_INICIAL" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<queryString>
 		<![CDATA[SELECT A.DEPTOCLAVE,
 (CASE
@@ -25,7 +22,15 @@ WHEN A.DEPTOCLAVE = 70 THEN "TEJIDO"
 WHEN A.DEPTOCLAVE = 90 THEN "MONTADO"
 WHEN A.DEPTOCLAVE = 100 THEN "ADORNO"
 ELSE A.DEPARTAMENTO END) AS DEPARTAMENTO,
- DATE_FORMAT(A.FECHA_JUEVES,"%d/%m/%Y") AS FECHA_JUEVES, DATE_FORMAT(A.FECHA_VIERNES,"%d/%m/%Y") AS FECHA_VIERNES, DATE_FORMAT(A.FECHA_SABADO,"%d/%m/%Y") AS FECHA_SABADO, DATE_FORMAT(A.FECHA_DOMINGO,"%d/%m/%Y") AS FECHA_DOMINGO, DATE_FORMAT(A.FECHA_LUNES,"%d/%m/%Y") AS FECHA_LUNES, DATE_FORMAT(A.FECHA_MARTES,"%d/%m/%Y") AS FECHA_MARTES, DATE_FORMAT(A.FECHA_MIERCOLES,"%d/%m/%Y") AS FECHA_MIERCOLES, A.TOTALES, A.CANTIDAD_JUEVES, A.CANTIDAD_VIERNES, A.CANTIDAD_SABADO, A.CANTIDAD_DOMINGO, A.CANTIDAD_LUNES, A.CANTIDAD_MARTES, A.CANTIDAD_MIERCOLES, A.REGISTRO, A.SEM, A.ANIO FROM fabricadosxdeptoxsem AS A WHERE A.ANIO = $P{ANO} AND A.SEM = $P{SEMANA}]]>
+ DATE_FORMAT(A.FECHA_JUEVES,"%d/%m/%Y") AS FECHA_JUEVES, DATE_FORMAT(A.FECHA_VIERNES,"%d/%m/%Y") AS FECHA_VIERNES, DATE_FORMAT(A.FECHA_SABADO,"%d/%m/%Y") AS FECHA_SABADO, DATE_FORMAT(A.FECHA_DOMINGO,"%d/%m/%Y") AS FECHA_DOMINGO, DATE_FORMAT(A.FECHA_LUNES,"%d/%m/%Y") AS FECHA_LUNES, DATE_FORMAT(A.FECHA_MARTES,"%d/%m/%Y") AS FECHA_MARTES, DATE_FORMAT(A.FECHA_MIERCOLES,"%d/%m/%Y") AS FECHA_MIERCOLES, A.TOTALES,
+
+A.CANTIDAD_JUEVES AS CANTIDAD_JUEVES, A.CANTIDAD_VIERNES AS CANTIDAD_VIERNES,
+
+A.CANTIDAD_SABADO  AS CANTIDAD_SABADO, A.CANTIDAD_DOMINGO  AS CANTIDAD_DOMINGO, A.CANTIDAD_LUNES AS CANTIDAD_LUNES,
+
+A.CANTIDAD_MARTES AS CANTIDAD_MARTES, A.CANTIDAD_MIERCOLES AS CANTIDAD_MIERCOLES,
+
+ A.REGISTRO, A.SEM, A.ANIO FROM fabricadosxdeptoxsem AS A WHERE A.ANIO = $P{ANO} AND A.SEM = $P{SEMANA}]]>
 	</queryString>
 	<field name="DEPTOCLAVE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -424,7 +429,7 @@ ELSE A.DEPARTAMENTO END) AS DEPARTAMENTO,
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CANTIDAD_LUNES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
+			<textField pattern="#,##0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="395" y="0" width="48" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b930b7fd-b2e8-41ed-839b-d30da7106a62">
 					<printWhenExpression><![CDATA[$F{CANTIDAD_MARTES}>0]]></printWhenExpression>
 				</reportElement>

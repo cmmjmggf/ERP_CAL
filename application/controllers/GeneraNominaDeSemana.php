@@ -899,9 +899,13 @@ class GeneraNominaDeSemana extends CI_Controller {
             /* 1 ELIMINAR TODO REGISTRO QUE YA TENGA LA SEMANA, AÑO EN PRENOMINA Y PRENOMINAL */
             $this->db->where('numsem', $x->post('SEMANA'))
                     ->where('año', $x->post('ANIO'))
+                    ->where('status', 1)  
+                    ->where('registro <>', 999)  
                     ->delete('prenomina');
             $this->db->where('numsem', $x->post('SEMANA'))
                     ->where('año', $x->post('ANIO'))
+                    ->where('status', 1)  
+                    ->where('registro <>', 999)  
                     ->delete('prenominal');
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
             $empleados = $this->db->select('E.*')->from('empleados AS E')

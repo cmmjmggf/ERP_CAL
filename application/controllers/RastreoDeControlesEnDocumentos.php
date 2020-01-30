@@ -57,6 +57,19 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                             break;
                     }
                     break;
+                case 'FACTURACION':
+                    switch ($indice['ORIGEN']) {
+                        case 'A':
+                            $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                            break;
+                        case 'B':
+                            $this->load->view('vNavGeneral')->view('vMenuClientes');
+                            break;
+                        default :
+                            $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                            break;
+                    }
+                    break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
         } else {

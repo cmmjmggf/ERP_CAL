@@ -22,6 +22,9 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
                 case 'VENTAS':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentosClientes')->view('vFooter');
         } else {
@@ -32,9 +35,15 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
     public function getFacturas() {
         try {
             $this->db->select("F.ID AS ID, F.factura AS DOCUMENTO, F.tp AS TP, "
-                    . "F.cliente AS CLIENTE, F.contped AS CONTROL, date_format(F.fecha, '%d/%m/%Y') AS FECHA, "
-                    . "F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, "
-                    . "F.subtot AS SUBTOTAL, F.staped AS ESTATUS_PEDIDO", false)->from("facturacion AS F");
+                    . "F.cliente AS CLIENTE, "
+                    . "CONCAT(\"<span class='font-weight-bold' style='font-size: 14px !important;'>\",F.contped,\"</span>\") AS CONTROL, "
+                    . "date_format(F.fecha, '%d/%m/%Y') AS FECHA, "
+                    . "F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, FORMAT(F.precto,2) AS PRECIO, "
+                    . "FORMAT(F.subtot,2) AS SUBTOTAL, "
+                    . "(CASE WHEN F.staped = 3 THEN "
+                    . "CONCAT(\"<span class='font-weight-bold text-danger' style='font-size: 16px !important;'>\",F.staped,\"</span>\") "
+                    . "ELSE "
+                    . "CONCAT(\"<span class='font-weight-bold' style='font-size: 14px !important;'>\",F.staped,\"</span>\")  END) AS ESTATUS_PEDIDO", false)->from("facturacion AS F");
             $C = $this->input->get();
             if ($C['CONTROL'] !== '') {
                 $this->db->where('F.contped', $C['CONTROL']);
@@ -88,24 +97,29 @@ class RastreoDeControlesEnDocumentosClientes extends CI_Controller {
     public function getInfoXControl() {
         try {
             $x = $this->input->get();
-            if ($x['CONTROL'] !== '') {
-                print json_encode($this->db->select("F.ID, F.factura AS DOCUMENTO, F.tp AS TP, F.cliente AS CLIENTE, F.contped AS CONTROL,
+            if ($x['CONTROL'] !== '') { 
+
+                print json_encode($this->db->select("F.ID, F.factura AS DOCUMENTO, F.tp AS TP, F.cliente AS CLIENTE, 
+                    F.contped AS CONTROL, 
+                    (SELECT P.Pares FROM pedidox AS P WHERE P.Control = '{$x['CONTROL']}' LIMIT 1) AS PARES_PEDIDO, 
+                        (SELECT SUM(XF.pareped)  FROM facturacion AS XF WHERE  XF.contped = '{$x['CONTROL']}' AND XF.staped NOT IN(3)) AS PARES_FACTURADOS,
+                        (SELECT SUM(XF.pareped)  FROM facturacion AS XF WHERE  XF.contped = '{$x['CONTROL']}' AND XF.staped IN(3)) AS PARES_FACTURADOS_CANCELADOS,
 date_format(F.fecha, '%d/%m/%Y') AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR,
 F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.staped AS ESTATUS_PEDIDO,
+(SELECT SUM(XF.pareped)  FROM facturacion AS XF WHERE  XF.contped = '{$x['CONTROL']}') AS PARES_VENDIDOS , 
 
-SUM(F.par01 + F.par02 + F.par03+ F.par04+ F.par05+ F.par06+ F.par07+ F.par08+ F.par09+ F.par10+ F.par11+
-F.par12+ F.par13+ F.par14+ F.par15+ F.par16+ F.par17+ F.par18+ F.par19+ F.par20+ F.par21+ F.par22) AS PARES_VENDIDOS , (SELECT
+(SELECT
 SUM(d.par01+ d.par02+ d.par03 +  d.par04 +  d.par05 +  d.par06 +  d.par07 +  d.par08 +  d.par09 +  d.par10 +  d.par11 +
 d.par12 +  d.par13 +  d.par14 +  d.par15 +  d.par16 +  d.par17 +  d.par18 +  d.par19 +  d.par20 +  d.par21 +  d.par22 )
-FROM devolucionnp as d where d.control LIKE '18061036' GROUP BY d.control) AS PARES_DEVUELTOS,
+FROM devolucionnp as d where d.control = '{$x['CONTROL']}' GROUP BY d.control ) AS PARES_DEVUELTOS,
 
 (SUM(F.par01 + F.par02 + F.par03+ F.par04+ F.par05+ F.par06+ F.par07+ F.par08+ F.par09+ F.par10+ F.par11+
 F.par12+ F.par13+ F.par14+ F.par15+ F.par16+ F.par17+ F.par18+ F.par19+ F.par20+ F.par21+ F.par22) - (SELECT
 SUM(d.par01+ d.par02+ d.par03 +  d.par04 +  d.par05 +  d.par06 +  d.par07 +  d.par08 +  d.par09 +  d.par10 +  d.par11 +
 d.par12 +  d.par13 +  d.par14 +  d.par15 +  d.par16 +  d.par17 +  d.par18 +  d.par19 +  d.par20 +  d.par21 +  d.par22 )
-FROM devolucionnp as d where d.control LIKE '18061036' GROUP BY d.control)) AS TOTAL_PARES", false)
-                                        ->from('facturacion  AS F')->where('F.contped', $x['CONTROL'])->group_by('F.contped')
-                                        ->get()->result());
+FROM devolucionnp as d where d.control = '{$x['CONTROL']}' GROUP BY d.control)) AS TOTAL_PARES", false)
+                                        ->from('facturacion  AS F')->where('F.contped', $x['CONTROL'])->where('F.contped', $x['CONTROL'])
+                                        ->group_by('F.contped')->get()->result());
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -21,6 +21,9 @@ class RastreoEstilosClientesXFechasEnVentas extends CI_Controller {
                 case 'VENTAS':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
+                case 'FACTURACION':
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
+                    break;
             }
             $this->load->view('vRastreoEstilosClientesXFechasEnVentas')->view('vFooter');
         } else {

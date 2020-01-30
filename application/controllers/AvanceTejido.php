@@ -186,7 +186,12 @@ class AvanceTejido extends CI_Controller {
 
     public function onVerificarAvance() {
         try {
-            print json_encode($this->avtm->onVerificarAvance($this->input->get('CONTROL')));
+//            print json_encode($this->avtm->onVerificarAvance($this->input->get('CONTROL')));
+             print json_encode($this->db->select("COUNT(A.ID) AS EXISTE", false)
+                            ->from('avance AS A')
+                            ->where_in('A.Departamento', array(150, 160))
+                            ->like('A.Control', $this->input->get('CONTROL'))
+                            ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

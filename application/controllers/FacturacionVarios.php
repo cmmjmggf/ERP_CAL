@@ -187,7 +187,7 @@ class FacturacionVarios extends CI_Controller {
             }
             $IMPORTE_TOTAL_CON_IVA = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE + $IMPORTE_TOTAL_IVA[0]->IMPORTE;
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
-            switch (intval($x['MONEDA'])) {
+            switch (intval($x['TIPO_MONEDA'])) {
                 case 1:
                     switch (intval($x['TP_DOCTO'])) {
                         case 1:
@@ -670,6 +670,19 @@ class FacturacionVarios extends CI_Controller {
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $jc->setJasperurl("jrxml\facturacion\facturaelec2212.jasper");
                             $jc->setFilename("{$x['CLIENTE']}_xxx_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            break;
+                        case 2571:
+                            /*CLIENTE DEL COCHE MAZDA*/
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('rpt/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["certificado"] = $CERTIFICADO_CFD;
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl("jrxml\facturacion\facturaelec2571.jasper");
+                            $jc->setFilename("2571_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             break;

@@ -385,6 +385,9 @@ P.Maquila AS MAQUILA
 //            EXIT(0);
 //            var_dump($xXx);
 //            exit(0);
+
+
+            /* DE RAYADO A REBAJADO (YA NO APLICA ESTAN INVERTIDOS, VA PRIMERO FOLEADO Y LUEGO REBAJADO) */
             if ($depto === 33 && $depto_actual === 3 && $frac === 102 ||
                     $depto === 33 && $depto_actual === 3 && $frac === 93 ||
                     $depto === 33 && $depto_actual === 3 && $frac === 113) {
@@ -464,7 +467,38 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            if ($depto === 4 && $depto_actual === 33 && $frac === 103) {
+            /* DE RAYADO A FOLEADO */
+            if ($depto === 4 && $depto_actual === 3 && $depto_actual === 102) {
+                $this->db->set('EstatusProduccion', 'FOLEADO')->set('DeptoProduccion', 40)
+                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                $this->db->set('stsavan', 4)->set('EstatusProduccion', 'FOLEADO')
+                        ->set('DeptoProduccion', 40)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec4', Date('Y-m-d 00:00:00'))
+                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+
+                $revisa_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
+                                . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 40")->result();
+                if (intval($revisa_foleado[0]->EXISTE) === 0) {
+                    $avance = array(
+                        'Control' => $xXx['CONTROL'],
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'Departamento' => 40,
+                        'DepartamentoT' => 'FOLEADO',
+                        'FechaAvance' => Date('d/m/Y'),
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => 0
+                    );
+                    $this->db->insert('avance', $avance);
+                }
+                exit(0);
+            }
+
+            /* DE REBAJADO A ENTRETELADO */
+            if ($depto === 40 && $depto_actual === 33 && $frac === 103) {
                 $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
                         ->where('Control', $xXx['CONTROL'])
                         ->update('controles');
@@ -491,6 +525,7 @@ P.Maquila AS MAQUILA
                     );
                     $this->db->insert('avance', $avance);
                 }
+                exit(0);
             }
 
 
@@ -546,7 +581,7 @@ P.Maquila AS MAQUILA
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
                                 'FechaAProduccion' => Date('d/m/Y'),
-                                'Departamento' => 60,
+                                'Departamento' => 40,
                                 'DepartamentoT' => 'FOLEADO',
                                 'FechaAvance' => Date('d/m/Y'),
                                 'Estatus' => 'A',
@@ -565,8 +600,8 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+            /* DE FOLEADO A ENTRETELADO */
             if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
-                /* 60 FOLEADO */
                 $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)
                         ->where('Control', $xXx['CONTROL'])
                         ->update('controles');
@@ -596,6 +631,7 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+            /* DE FOLEADO A REBAJADO */
             if ($depto === 33 && $depto_actual === 4 && $frac === 103) {
                 $this->db->set('EstatusProduccion', 'REBAJADO')->set('DeptoProduccion', 30)
                         ->where('Control', $xXx['CONTROL'])
@@ -641,7 +677,6 @@ P.Maquila AS MAQUILA
                         ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
                         ->update('pedidox');
                 $this->db->set('fec42', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])->update('avaprd');
-
 
                 $revisa_proceso_maquila = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
                                 . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 100")->result();
@@ -960,8 +995,6 @@ P.Maquila AS MAQUILA
                             $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE PESPUNTE.", $this->session);
                             break;
                             $this->onPagarFraccionSinAvance($xXx, $frac);
-                        default:
-                            break;
                     }
                 }
                 exit(0);
@@ -1104,7 +1137,7 @@ P.Maquila AS MAQUILA
                                 $this->db->set('fec10', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
-                                /*EN ONPAGARFRACCION YA REVISO EL AVANCE, PERO DE TODOS MODOS RECTIFICO QUE EXISTA*/
+                                /* EN ONPAGARFRACCION YA REVISO EL AVANCE, PERO DE TODOS MODOS RECTIFICO QUE EXISTA */
                                 $revisar_avance_adorno_a = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 210 LIMIT 1")->result();
                                 if (intval($revisar_avance_adorno_a[0]->EXISTE) === 0) {
                                     $this->db->insert('avance', array(
