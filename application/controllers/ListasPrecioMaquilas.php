@@ -104,15 +104,27 @@ class ListasPrecioMaquilas extends CI_Controller {
 
     public function onAgregar() {
         try {
+            $maq = $this->input->post('Maq');
+            $est = $this->input->post('Estilo');
+            $col = $this->input->post('Color');
+            $precio = $this->input->post('PrecioVta');
             $datos = array(
-                'Maq' => $this->input->post('Maq'),
+                'Maq' => $maq,
                 'Linea' => $this->input->post('Linea'),
-                'Estilo' => $this->input->post('Estilo'),
-                'Color' => $this->input->post('Color'),
+                'Estilo' => $est,
+                'Color' => $col,
                 'Corrida' => $this->input->post('Corrida'),
-                'PrecioVta' => $this->input->post('PrecioVta')
+                'PrecioVta' => $precio
             );
-            $this->ListasPrecioMaquilas_model->onAgregar($datos);
+
+            //Si no existe lo agrega, de lo contrario solo modifica el registro
+            $Existe = $this->db->query("select * from listapreciosmaquilas where maq = {$maq} and estilo = '{$est}' and color = {$col} ")->result();
+
+            if (!empty($Existe)) {
+                $this->db->query("update listapreciosmaquilas set PrecioVta = {$precio} where maq = {$maq} and estilo = '{$est}' and color = {$col} ");
+            } else {
+                $this->ListasPrecioMaquilas_model->onAgregar($datos);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

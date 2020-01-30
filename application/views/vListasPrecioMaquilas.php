@@ -203,7 +203,7 @@
                     Sem: Sem
                 }).done(function (data) {
                     btnGuardar.attr('disabled', false);
-                    onNotifyOld('fa fa-check', 'REGISTRO AGREGADO', 'info');
+                    onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                     ListasPrecioMaquilas.ajax.reload();
                     pnlTablero.find("#Corrida").val("");
                     pnlTablero.find("#PrecioVta").val("");

@@ -45,16 +45,6 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
-    public function onVerificarFraccion() {
-        try {
-            $est = $this->input->get('Estilo');
-            $fracc = $this->input->get('Fraccion');
-            print json_encode($this->db->query("select * from fraccionesxestilo where estilo = '$est' and fraccion = $fracc ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function onVerificarPlantilla() {
         try {
             $Maquila = $this->input->get('Maquila');
@@ -188,17 +178,33 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
-    public function getPrecioXFraccionXEstilo() {
+    public function onVerificaFraccionControlFraccionCobrada() {
         try {
-            print json_encode($this->cpm->getPrecioXFraccionXEstilo($this->input->get('FRACCION'), $this->input->get('ESTILO')));
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
+            $est = $this->input->get('ESTILO');
+            $control = $this->input->get('CONTROL');
+            $fracc = $this->input->get('FRACCION');
 
-    public function onVerificaControlFraccion() {
-        try {
-            print json_encode($this->db->query("SELECT * from controlpla where control = {$this->input->get('CONTROL')} and fraccion = {$this->input->get('FRACCION')}  ")->result());
+
+            //Verifica existe fracción en catalogo de fracciones
+
+            $Existe = $this->db->query("select * from fraccionesxestilo where estilo = '$est' and fraccion = $fracc ")->result();
+            if (!empty($Existe)) {
+                //Verifica que no hayan enviado el control a maquilar con anterioridad
+                $ExisteControlPla = $this->db->query("SELECT * from controlpla where control = {$control} and fraccion = {$fracc} ")->result();
+                if (empty($ExisteControlPla)) {
+                    //Verifica que no hayan cobrado el control con anterioridad en otros módulos
+                    $ExisteFracPagNom = $this->db->query("SELECT * from fracpagnomina where control = {$control} and numfrac = {$fracc} ")->result();
+                    if (empty($ExisteFracPagNom)) {
+                        print ($Existe[0]->CostoMO);
+                    } else {
+                        print (2);
+                    }
+                } else {
+                    print (1);
+                }
+            } else {
+                print (0);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -252,7 +258,96 @@ class ControlPlantilla extends CI_Controller {
 
     public function onRetornaDocumento() {
         try {
-            $this->db->set('Estatus', 2)->set('FechaRetorna', $this->input->post('FECHA'))->where('Documento', $this->input->post('Docto'))->update('controlpla');
+            $docto = $this->input->post('Docto');
+            $fecdoc = $this->input->post('FECHA');
+            $this->db->set('Estatus', 2)->set('FechaRetorna', $fecdoc)->where('Documento', $docto)->update('controlpla');
+            //Hacemos el movimiento de NÓMINA
+            $Doc = $this->db->query("select * from controlpla where Documento = {$docto} ")->result();
+            if (!empty($Doc)) {
+                $numemp = $Doc[0]->Proveedor;
+                //$fecdoc = $Doc[0]->Fecha; //se usaba cuando capturaban anteriores, pero ahora debe ser al momento de entrega de retorno
+                if (intval($numemp) > 99) {//Si el campo proveedor es mayor a 99 lo capturamos en nomina con concepto 15
+                    $total = 0;
+                    foreach ($Doc as $key => $v) {//Sacamos el total
+                        $subtotal = floatval($v->Pares) * floatval($v->Precio);
+                        $total += $subtotal;
+                    }
+                    //Ahora sacamos la semana y año actual de nomina en base a la fecha del documento
+                    //Se saca con la fecha actual para que no se pague en nominas con fechas anteriores o cerradas
+                    $NomActu = $this->db->query("select Sem, Ano from semanasnomina AS U "
+                                    . " where str_to_date('$fecdoc','%d/%m/%Y') BETWEEN str_to_date(FechaIni,'%d/%m/%Y') AND str_to_date(FechaFin,'%d/%m/%Y') ")->result();
+                    $Sem = $NomActu[0]->Sem;
+                    $Ano = $NomActu[0]->Ano;
+
+                    //Verificamos si el registro ya existe en prenomina por año- sem - empleado y vemos si inserta o modifica
+                    $PN = $this->db->query("select * from prenomina where año = {$Ano} and numsem = {$Sem} and numemp = {$numemp} and numcon = 15 and status = 1 ")->result();
+
+                    //Tenemos que sacar información del empleado para traer depto y la asistencia en tabla de asistencias
+                    $Empleado = $this->db->query("select e.DepartamentoFisico as depto, ifnull(a.numasistencias, 0) as asis
+                            from empleados e
+                            left join asistencia a on e.numero = a.numemp and a.año = {$Ano}  and a.numsem = {$Sem}
+                            where e.numero = {$numemp}  ")->result();
+                    /* PRENOMINA */
+                    if (!empty($PN)) {
+                        $this->db->where('numemp', $numemp)->where('numsem', $Sem)->where('año', $Ano)->where('numcon', 15);
+                        $this->db->update("prenomina", array(
+                            'registro' => 999,
+                            'tpcon' => 1,
+                            'tpcond' => 0,
+                            'importe' => ($total + $PN[0]->importe),
+                            'imported' => 0
+                        ));
+                    } else {
+                        $data = array(
+                            'numsem' => $Sem,
+                            'numemp' => $numemp,
+                            'numcon' => 15,
+                            'año' => $Ano,
+                            'tpcon' => 1,
+                            'tpcond' => 0,
+                            'importe' => $total,
+                            'imported' => 0,
+                            'diasemp' => $Empleado[0]->asis,
+                            'fecha' => Date('Y-m-d'),
+                            'tpomov' => 1,
+                            'status' => 1,
+                            'registro' => 999,
+                            'depto' => $Empleado[0]->depto
+                        );
+                        $this->db->insert("prenomina", $data);
+                    }
+                    //Imprimimos el reporte para nómina
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $parametros["docto"] = $docto;
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\plantilla\reporteDoctoPlantillaConFraccion.jasper');
+                    $jc->setFilename('IMPRIME_DOCTO_PLANTILLA_MAQUILA_CON_FRACCIONES_' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    PRINT $jc->getReport();
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getSemanaByFecha($fecha) {
+        try {
+            $this->db->select('U.sem, U.Ano ', false);
+            $this->db->from('semanasnomina AS U');
+            $this->db->where("str_to_date('$fecha','%d/%m/%Y') BETWEEN str_to_date(FechaIni,'%d/%m/%Y') AND str_to_date(FechaFin,'%d/%m/%Y')", null, false);
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+//        print $str;
+            $data = $query->result();
+            return $data;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

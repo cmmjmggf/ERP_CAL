@@ -77,7 +77,7 @@ class ConceptosVariablesNomina extends CI_Controller {
 //            print json_encode($this->ConceptosVariablesNomina_model->onVerificarSemanaNominaCerrada(
 //                                    $this->input->get('Sem'), $this->input->get('Ano')
 //            ));
-            $x =  $this->input->get();
+            $x = $this->input->get();
             $this->db->select(" PM.status as 'status' "
                     . "FROM "
                     . "prenomina PM "
@@ -186,7 +186,10 @@ class ConceptosVariablesNomina extends CI_Controller {
 
             /* PRENOMINA */
             if (!empty($PN)) {
-                $this->db->where('numemp', $x->post('Empleado'))->where('numsem', $x->post('Sem'))->where('año', $x->post('Ano')->where('numcon', $x->post('Concepto')));
+                $this->db->where('numemp', $x->post('Empleado'))
+                        ->where('numsem', $x->post('Sem'))
+                        ->where('año', $x->post('Ano'))
+                        ->where('numcon', $x->post('Concepto'));
                 $this->db->update("prenomina", array(
                     'registro' => 999,
                     'tpcon' => ($x->post('tpcon') === '1') ? $x->post('tpcon') : 0,

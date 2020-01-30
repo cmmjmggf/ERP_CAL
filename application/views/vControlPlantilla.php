@@ -339,6 +339,7 @@
 
         btnAceptaRetorno.click(function () {
             if (DocumentoRetorno.val()) {
+                onOpenOverlay('Por favor, espere');
                 /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
                 $.getJSON('<?php print base_url('ControlPlantilla/onComprobarEstatusDocumento'); ?>', {
                     DOCTO: DocumentoRetorno.val()
@@ -347,12 +348,23 @@
                     if (a.length > 0) {
                         var r = a[0];
                         if (parseInt(r.VALIDO) > 0) {
-                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>',
-                                    {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val()}).done(function (a) {
-                                swsd('SE HA RETORNADO EL DOCUMENTO', function () {
-                                    DocumentoRetorno.val('').focus().select();
-                                    RetornaDocumento.ajax.reload();
-                                });
+                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>', {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val()}).done(function (data) {
+                                console.log(data);
+                                onCloseOverlay();
+
+                                if (data.length > 0) {//Si es de empleado imprime el reporte de su pago
+                                    onImprimirReporteFancyAFC(data, function (a, b) {
+                                        swsd('SE HA RETORNADO EL DOCUMENTO', function () {
+                                            DocumentoRetorno.val('').focus().select();
+                                            RetornaDocumento.ajax.reload();
+                                        });
+                                    });
+                                } else {//Si no solo actualiza tabla
+                                    swsd('SE HA RETORNADO EL DOCUMENTO', function () {
+                                        DocumentoRetorno.val('').focus().select();
+                                        RetornaDocumento.ajax.reload();
+                                    });
+                                }
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
@@ -552,60 +564,46 @@
             if (e.keyCode === 13) {
                 var txtfr = $(this).val();
                 if (txtfr) {
-                    $.getJSON('<?php print base_url('ControlPlantilla/onVerificarFraccion'); ?>',
-                            {
-                                Fraccion: Fraccion.val(),
-                                Estilo: Estilo.val()
-                            }).done(function (data) {
-                        if (data.length > 0) {
-
-
-                            $.getJSON('<?php print base_url('ControlPlantilla/onVerificaControlFraccion') ?>', {
-                                FRACCION: Fraccion.val(),
-                                CONTROL: Control.val()
-                            }).done(function (a) {
-                                if (a.length > 0) {
-                                    swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO', 'warning').then((value) => {
-                                        Fraccion.val('');
-                                        sFraccion[0].selectize.clear(true);
-                                        sFraccion[0].selectize.clearOptions();
-                                        Precio.val('');
-                                        Estilo.val('');
-                                        Color.val('');
-                                        Pares.val('');
-                                        btnAcepta.attr('disabled', true);
-                                        Control.val('').focus();
-                                        return;
-                                    });
-                                } else {
-                                    $.getJSON('<?php print base_url('ControlPlantilla/getPrecioXFraccionXEstilo') ?>', {
-                                        FRACCION: Fraccion.val(),
-                                        ESTILO: Estilo.val()
-                                    }).done(function (a) {
-                                        Precio.val((a.length > 0) ? a[0].PRECIO_COSTOMO : '');
-                                        Fecha.val(FechaActual);
-                                        sFraccion[0].selectize.addItem(txtfr, true);
-                                        btnAcepta.attr('disabled', false);
-                                        btnAcepta.focus();
-                                    }).fail(function (x, y, z) {
-                                        getError(x);
-                                    }).always(function () {
-                                    });
-                                }
-                            }).fail(function (x, y, z) {
-                                getError(x);
-                            }).always(function () {
-                            });
-
-
-
-                        } else {
+                    $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
+                        ESTILO: Estilo.val(),
+                        FRACCION: Fraccion.val(),
+                        CONTROL: Control.val()
+                    }).done(function (data) {
+                        console.log(data);
+                        if (data === '0') {//No existe fracción en fracciones por estilo
                             swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
+                                sFraccion[0].selectize.clear(true);
+                                sFraccion[0].selectize.clearOptions();
                                 Precio.val('');
                                 btnAcepta.attr('disabled', true);
-                                sFraccion[0].selectize.clear(true);
-                                Fraccion.focus().val('');
+                                Fraccion.val('');
+                                Fraccion.val('').focus();
+                                return;
                             });
+                        } else if (data === '1') {
+                            swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
+                                sFraccion[0].selectize.clear(true);
+                                sFraccion[0].selectize.clearOptions();
+                                Precio.val('');
+                                btnAcepta.attr('disabled', true);
+                                Fraccion.val('').focus();
+                                return;
+                            });
+                        } else if (data === '2') {
+                            swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
+                                sFraccion[0].selectize.clear(true);
+                                sFraccion[0].selectize.clearOptions();
+                                Precio.val('');
+                                btnAcepta.attr('disabled', true);
+                                Fraccion.val('').focus();
+                                return;
+                            });
+                        } else {
+                            Precio.val(data);
+                            Fecha.val(FechaActual);
+                            sFraccion[0].selectize.addItem(txtfr, true);
+                            btnAcepta.attr('disabled', false);
+                            btnAcepta.focus();
                         }
                     }).fail(function (x) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -616,45 +614,53 @@
         });
 
         sFraccion.change(function () {
-            if ($(this).val()) {
+            var txtfr = $(this).val();
+            if (txtfr) {
                 Fraccion.val(sFraccion.val());
-                $.getJSON('<?php print base_url('ControlPlantilla/onVerificaControlFraccion') ?>', {
-                    FRACCION: sFraccion.val(),
+                $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
+                    ESTILO: Estilo.val(),
+                    FRACCION: Fraccion.val(),
                     CONTROL: Control.val()
-                }).done(function (a) {
-                    if (a.length > 0) {
-                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO', 'warning').then((value) => {
-                            Fraccion.val('');
+                }).done(function (data) {
+                    console.log(data);
+                    if (data === '0') {//No existe fracción en fracciones por estilo
+                        swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
                             sFraccion[0].selectize.clear(true);
-                            sFraccion[0].selectize.clearOptions();
                             Precio.val('');
-                            Estilo.val('');
-                            Color.val('');
-                            Pares.val('');
                             btnAcepta.attr('disabled', true);
-                            Control.val('').focus();
+                            Fraccion.val('');
+                            Fraccion.val('').focus();
+                            return;
+                        });
+                    } else if (data === '1') {
+                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
+                            sFraccion[0].selectize.clear(true);
+                            Precio.val('');
+                            btnAcepta.attr('disabled', true);
+                            Fraccion.val('').focus();
+                            return;
+                        });
+                    } else if (data === '2') {
+                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
+                            sFraccion[0].selectize.clear(true);
+                            Precio.val('');
+                            btnAcepta.attr('disabled', true);
+                            Fraccion.val('').focus();
                             return;
                         });
                     } else {
-                        $.getJSON('<?php print base_url('ControlPlantilla/getPrecioXFraccionXEstilo') ?>', {
-                            FRACCION: sFraccion.val(),
-                            ESTILO: Estilo.val()
-                        }).done(function (a) {
-                            Precio.val((a.length > 0) ? a[0].PRECIO_COSTOMO : '');
-                            Fecha.val(FechaActual);
-                            btnAcepta.attr('disabled', false);
-                            btnAcepta.focus();
-                        }).fail(function (x, y, z) {
-                            getError(x);
-                        }).always(function () {
-                        });
+                        Precio.val(data);
+                        Fecha.val(FechaActual);
+                        btnAcepta.attr('disabled', false);
+                        btnAcepta.focus();
                     }
-                }).fail(function (x, y, z) {
-                    getError(x);
-                }).always(function () {
+                }).fail(function (x) {
+                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                    console.log(x.responseText);
                 });
-
             }
+
+
         });
     });
 
