@@ -23,8 +23,18 @@ class PagosDeClientesMinicartera extends CI_Controller {
                     break;
             }
             $this->load->view('vFondo')->view('vPagosDeClientesMinicartera')->view('vFooter');
+            $this->onRedondeaYActualizaSaldos();
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
+    public function onRedondeaYActualizaSaldos() {
+        try {
+            $this->db->query(" update cartclientem set saldo = 0, status = 3 where saldo < 1 and saldo > 0; ");
+            $this->db->query(" update cartclientem set saldo = 0, status = 3 where saldo < 0 and saldo > -1; ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 

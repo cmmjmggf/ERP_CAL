@@ -129,12 +129,12 @@ class ReporteCapturaFisica_model extends CI_Model {
                     $this->db->where_in('A.Grupo', array('1', '2', '12', '15', '16', '17', '18', '34', '40'));
                     break;
                 case '80':
-                    $GRUPOS = " AND SA.grupo IN ('3') ";
-                    $this->db->where_in('A.Grupo', array('3'));
+                    $GRUPOS = " AND SA.grupo IN ('3','50') ";
+                    $this->db->where_in('A.Grupo', array('3', '50'));
                     break;
                 case '90':
-                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40') ";
-                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40'));
+                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40','50') ";
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40', '50'));
                     break;
             }
 
@@ -188,12 +188,12 @@ class ReporteCapturaFisica_model extends CI_Model {
                     $this->db->where_in('A.Grupo', array('1', '2', '12', '15', '16', '17', '18', '34', '40'));
                     break;
                 case '80':
-                    $GRUPOS = " AND SA.grupo IN ('3') ";
-                    $this->db->where_in('A.Grupo', array('3'));
+                    $GRUPOS = " AND SA.grupo IN ('3','50') ";
+                    $this->db->where_in('A.Grupo', array('3', '50'));
                     break;
                 case '90':
-                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40') ";
-                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40'));
+                    $GRUPOS = " AND SA.grupo NOT IN ('1', '2', '3','12','15','16','17','18','34','40','50') ";
+                    $this->db->where_not_in('A.Grupo', array('1', '2', '3', '12', '15', '16', '17', '18', '34', '40', '50'));
                     break;
             }
             $this->db->or_where("IFNULL((SELECT SUM(SMA.CantidadMov) FROM $tabla_movs SMA  "

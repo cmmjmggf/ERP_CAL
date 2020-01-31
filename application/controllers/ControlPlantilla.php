@@ -281,7 +281,7 @@ class ControlPlantilla extends CI_Controller {
 
                     //Verificamos si el registro ya existe en prenomina por año- sem - empleado y vemos si inserta o modifica
                     $PN = $this->db->query("select * from prenomina where año = {$Ano} and numsem = {$Sem} and numemp = {$numemp} and numcon = 15 and status = 1 ")->result();
-
+                    $PNL = $this->db->query("select * from prenominal where año = {$Ano} and numsem = {$Sem} and numemp = {$numemp} and status = 1  ")->result();
                     //Tenemos que sacar información del empleado para traer depto y la asistencia en tabla de asistencias
                     $Empleado = $this->db->query("select e.DepartamentoFisico as depto, ifnull(a.numasistencias, 0) as asis
                             from empleados e
@@ -315,6 +315,47 @@ class ControlPlantilla extends CI_Controller {
                             'depto' => $Empleado[0]->depto
                         );
                         $this->db->insert("prenomina", $data);
+                    }
+                    /* PRENOMINA L */
+                    if (!empty($PNL)) {
+
+                        $this->db->where('numemp', $numemp)->where('numsem', $Sem)->where('año', $Ano);
+                        $this->db->set('diasemp', $Empleado[0]->asis);
+                        $this->db->set('tpomov', 1);
+                        $this->db->set('status', 1);
+                        $this->db->set('registro', 999);
+                        $this->db->set('depto', $Empleado[0]->depto);
+                        $this->db->set('año', $Ano);
+                        $this->db->set('otrper', ($total + $PNL[0]->otrper))->update("prenominal");
+                    } else {
+                        $this->db->insert("prenominal", array(
+                            'numsem' => $Sem,
+                            'numemp' => $numemp,
+                            'diasemp' => $Empleado[0]->asis,
+                            'tpomov' => 1,
+                            'status' => 1,
+                            'año' => $Ano,
+                            'registro' => 999,
+                            'depto' => $Empleado[0]->depto,
+                            'salario' => 0,
+                            'salariod' => 0,
+                            'horext' => 0,
+                            'otrper' => $total,
+                            'otrper1' => 0,
+                            'infon' => 0,
+                            'impu' => 0,
+                            'imss' => 0,
+                            'impu' => 0,
+                            'precaha' => 0,
+                            'cajhao' => 0,
+                            'vtazap' => 0,
+                            'zapper' => 0,
+                            'fune' => 0,
+                            'cargo' => 0,
+                            'fonac' => 0,
+                            'otrde' => 0,
+                            'otrde1' => 0
+                        ));
                     }
                     //Imprimimos el reporte para nómina
                     $jc = new JasperCommand();
