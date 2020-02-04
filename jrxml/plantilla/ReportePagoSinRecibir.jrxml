@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePagoSinRecibir" language="groovy" pageWidth="793" pageHeight="1122" columnWidth="753" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="1.650000000000002"/>
-	<property name="ireport.x" value="124"/>
-	<property name="ireport.y" value="71"/>
+	<property name="ireport.x" value="12"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -18,10 +18,7 @@
   CTP.FraccionT AS FRACCION_TEXT, CTP.Precio AS PRECIO, CTP.Fecha AS FECHA_SINRECIBIR,
   CTP.Estatus AS ESTATUS, CTP.FechaRetorna AS FECHA_RECIBIDO, (CTP.Pares * CTP.Precio) AS SUBTOTAL,
 ifnull((CASE
- WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
- WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
- WHEN CTP.Fraccion = 306 THEN  ((CTP.Pares * CTP.Precio)*0.38 )
- WHEN CTP.Fraccion = 502 THEN  ((CTP.Pares * CTP.Precio)*0.38 )
+ WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.05 )
 END),0) AS STT_PORCTJ
  FROM controlpla AS CTP WHERE CTP.Estatus = 1 AND STR_TO_DATE(CTP.Fecha, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
 order by PROVEEDOR asc]]>
@@ -475,7 +472,7 @@ order by PROVEEDOR asc]]>
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[String.format("%.2f", (double)$F{STT_PORCTJ})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{STT_PORCTJ}>0 ? String.format("%.2f", (double)$F{STT_PORCTJ}):"")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

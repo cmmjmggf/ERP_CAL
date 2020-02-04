@@ -21,12 +21,9 @@
   CTP.FraccionT AS FRACCION_TEXT, CTP.Precio AS PRECIO, CTP.Fecha AS FECHA_SINRECIBIR,
   CTP.Estatus AS ESTATUS, CTP.FechaRetorna AS FECHA_RECIBIDO, (CTP.Pares * CTP.Precio) AS SUBTOTAL,
 ifnull((CASE
- WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
- WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
- WHEN CTP.Fraccion = 306 THEN  ((CTP.Pares * CTP.Precio)*0.12 )
- WHEN CTP.Fraccion = 502 THEN  ((CTP.Pares * CTP.Precio)*0.12 )
+ WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.05 )
 END),0) AS STT_PORCTJ
- FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
+ FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y") AND CTP.Fraccion NOT IN(304,306,502)
 order by abs(PROVEEDOR) asc]]>
 	</queryString>
 	<field name="PROVEEDOR" class="java.lang.Integer">
@@ -489,7 +486,7 @@ order by abs(PROVEEDOR) asc]]>
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[String.format("%.2f", (double)$F{STT_PORCTJ})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{STT_PORCTJ} > 0 ? String.format("%.2f", (double)$F{STT_PORCTJ}) : "")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
