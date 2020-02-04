@@ -91,6 +91,7 @@ class FacturacionVarios extends CI_Controller {
                 "regadu" => NULL,
                 "periodo" => Date('Y'),
                 "costo" => 0,
+                "modulo" => "VARIOS",
                 "obs" => substr($x["OBS"], 0, 199)
             ));
 
@@ -189,7 +190,7 @@ class FacturacionVarios extends CI_Controller {
             $TOTAL = $IMPORTE_TOTAL_SIN_IVA[0]->IMPORTE;
             switch (intval($x['TIPO_MONEDA'])) {
                 case 1:
-                    switch (intval($x['TP_DOCTO'])) {
+                    switch (intval($x['TIPO'])) {
                         case 1:
                             $TOTAL = $IMPORTE_TOTAL_CON_IVA;
                             break;
@@ -199,7 +200,7 @@ class FacturacionVarios extends CI_Controller {
                     }
                     break;
                 case 2:
-                    switch (intval($x['TP_DOCTO'])) {
+                    switch (intval($x['TIPO'])) {
                         case 1:
                             $TOTAL *= $x['TIPO_DE_CAMBIO'];
                             $TOTAL *= 0.16;
@@ -217,7 +218,7 @@ class FacturacionVarios extends CI_Controller {
                 "numcia" => NULL, "status" => 1,
                 "pagos" => 0, "saldo" => $TOTAL,
                 "comiesp" => NULL, "tcamb" => $x["TIPO_CAMBIO"],
-                "tmnda" => (intval($x["TIPO_MONEDA"]) === 1) ? 1111 : $x["TIPO_MONEDA"],
+                "tmnda" => (intval($x["TIPO_MONEDA"]) === 1) ? 1 : $x["TIPO_MONEDA"],
                 "stscont" => NULL, "nc" => (intval($x["TIMBRAR"]) === 1) ? 0 : 999,
                 "factura" => (intval($x["TIPO"]) === 1) ? 0 : 1
             ));
@@ -674,7 +675,7 @@ class FacturacionVarios extends CI_Controller {
                             PRINT $jc->getReport();
                             break;
                         case 2571:
-                            /*CLIENTE DEL COCHE MAZDA*/
+                            /* CLIENTE DEL COCHE MAZDA */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('rpt/qr.png');

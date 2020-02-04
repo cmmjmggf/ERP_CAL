@@ -1,3 +1,4 @@
+
 <div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
             
@@ -98,7 +99,7 @@
                         <input type="text" id="xEstilo" name="xEstilo" class="form-control form-control-sm">
                     </div>
                     <div class="col-10">
-                        <select class="form-control form-control-sm" id="Estilo" name="Estilo" required placeholder="">
+                        <select class="form-control form-control-sm notEnter selectNotEnter" id="Estilo" name="Estilo" required placeholder="">
                             <option></option>
                             <?php
                             foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
@@ -349,8 +350,7 @@
             getTotales(true);
         });
 
-        ClienteFactura.click(function () {
-            console.log('okokokokoko')
+        ClienteFactura.click(function () { 
             ClienteFactura[0].selectize.enable();
         });
 
@@ -459,8 +459,21 @@
         PrevisualizarDocto.click(function () {
             if (ClienteFactura.val() && Documento.val()) {
                 onOpenOverlay('');
-                modo = 1;
-                getVistaPrevia();
+                $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
+                    CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '',
+                    DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '',
+                    TP: TPFactura.val() !== '' ? TPFactura.val() : '',
+                    MODO: 1
+                }).done(function (data, x, jq) {
+                    onBeep(1);
+                    onCloseOverlay();
+                    onImprimirReporteFancyAFC(data, function (a, b) {
+                    });
+                }).fail(function (x, y, z) {
+                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                }).always(function () {
+                    onCloseOverlay();
+                });
 
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', function () {
@@ -492,8 +505,10 @@
             if (e.keyCode === 13) {
                 if (xEstilo.val()) {
                     Estilo[0].selectize.setValue(xEstilo.val());
+                    Concepto.focus().select();
                     if (Estilo.val()) {
                         onObtenerCodigoSatXEstilo();
+                        Concepto.focus().select();
                     } else {
                         onCampoInvalido(pnlTablero, 'NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', function () {
                             xEstilo.focus().select();
@@ -1283,15 +1298,14 @@
             console.log(a);
             if (a.length > 0) {
                 pnlTablero.find("span.productoSAT").text(a[0].CPS);
-                ProductoSAT.val(a[0].CPS);
-                Estilo[0].selectize.disable();
+                ProductoSAT.val(a[0].CPS); 
             }
         }).fail(function (x) {
             getError(x);
         }).always(function () {
         });
     }
-    
+
     function getTipoDeCambioYUltimaFactura() {
         var tpx = parseInt(TPFactura.val());
         if (tpx >= 1 && tpx <= 2) {
@@ -1315,7 +1329,7 @@
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                             Documento.val(r);
                             getReferencia();
-                        }  
+                        }
                     }).fail(function (xyz) {
                         getError(xyz);
                     }).always(function () {

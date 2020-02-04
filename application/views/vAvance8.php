@@ -79,6 +79,11 @@
                             <span class="fa fa-search"></span> Fracciones X Estilo
                         </button>
                     </div>
+                    <div class="col-2">
+                        <button type="button" id="btnRevisarPagoFraccion" name="btnRevisarPagoFraccion" class="btn btn-sm btn-info mt-3">
+                            <span class="fa fa-search"></span> Revisar fracción pagada x control 
+                        </button>
+                    </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
             <!--INICIO BLOQUE 2 COL 6-->
@@ -410,17 +415,72 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 mb-2">
+                    <div class="col-6">
                         <label>Estilo</label>
                         <input type="text" id="xEstiloABuscar" name="xEstiloABuscar" class="form-control form-control-sm" maxlength="8">
                     </div> 
+                    <div class="col-6">
+                        <label>Fraccion</label>
+                        <input type="text" id="xFraccionABuscar" name="xFraccionABuscar" class="form-control form-control-sm" maxlength="8">
+                    </div> 
+                    <div class="w-100 mb-2"></div>
                     <div class="col-12">
-                        <table id="tblFraccionesXEstilo" class="table table-hover table-sm nowrap">
+                        <table id="tblFraccionesXEstilo" class="table table-hover table-sm nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">Estilo</th>
                                     <th scope="col">Fraccion</th>
                                     <th scope="col">Costo</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <span class="fa fa-times"></span>    Cerrar 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="mdlFraccionesPagadasXControl">
+    <div class="modal-dialog notdraggable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><span class="fa fa-piggy-bank"></span> Fracciones pagadas x control </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label>Control</label>
+                        <input type="text" id="xControlBuscado" name="xControlBuscado" class="form-control form-control-sm" maxlength="12">
+                    </div> 
+                    <div class="col-6">
+                        <label>Fraccion</label>
+                        <input type="text" id="xFraccionPagada" name="xFraccionPagada" class="form-control form-control-sm" maxlength="8">
+                    </div> 
+                    <div class="w-100 mb-2"></div>
+                    <div class="col-12">
+                        <table id="tblFraccionesPagadas" class="table table-hover table-sm nowrap" style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Pares</th> 
+                                    <th scope="col">Fraccion</th>
+                                    <th scope="col">Empleado</th> 
+                                    <th scope="col">Semana</th> 
+                                    <th scope="col">Subtotal</th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -460,7 +520,10 @@
             estatus_de_avance = pnlTablero.find("span.estatus_de_avance"),
             Anio = pnlTablero.find("#Anio"), btnAceptar = pnlTablero.find("#btnAceptar"),
             btnRevisarFraccionesXEstilo = pnlTablero.find("#btnRevisarFraccionesXEstilo"),
-            mdlFraccionesXEstilo = $("#mdlFraccionesXEstilo");
+            mdlFraccionesXEstilo = $("#mdlFraccionesXEstilo"), FraccionesXEstilo,
+            tblFraccionesXEstilo = mdlFraccionesXEstilo.find("#tblFraccionesXEstilo"),
+            btnRevisarPagoFraccion = pnlTablero.find("#btnRevisarPagoFraccion"),
+            mdlFraccionesPagadasXControl = $("#mdlFraccionesPagadasXControl");
 
     var AVANO = {
         NUMERO_EMPLEADO: 0,
@@ -478,9 +541,88 @@
     // IIFE - Immediately Invoked Function Expression
     $(document).ready(function () {
 
+        btnRevisarPagoFraccion.click(function () {
+            mdlFraccionesPagadasXControl.modal('show');
+        });
+
+        mdlFraccionesXEstilo.find("#xFraccionABuscar").keydown(function (e) {
+            if ($(this).val() && e.keyCode === 13) {
+                onOpenOverlay('Cargando...');
+                FraccionesXEstilo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            } else if ($(this).val() === '' && e.keyCode === 13) {
+                onOpenOverlay('Cargando...');
+                FraccionesXEstilo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
+
+        mdlFraccionesXEstilo.find("#xEstiloABuscar").keydown(function (e) {
+            if ($(this).val() && e.keyCode === 13) {
+                onOpenOverlay('Cargando...');
+                FraccionesXEstilo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            } else if ($(this).val() === '' && e.keyCode === 13) {
+                onOpenOverlay('Cargando...');
+                FraccionesXEstilo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
+
         mdlFraccionesXEstilo.on('shown.bs.modal', function () {
             onClearInputs(mdlFraccionesXEstilo);
             mdlFraccionesXEstilo.find("#xEstiloABuscar").focus();
+
+            $.fn.dataTable.ext.errMode = 'throw';
+            if ($.fn.DataTable.isDataTable('#tblFraccionesXEstilo')) {
+                onOpenOverlay('Cargando...');
+                FraccionesXEstilo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+                return;
+            }
+            onOpenOverlay('Cargando...');
+            FraccionesXEstilo = tblFraccionesXEstilo.DataTable({
+                "dom": 'rt',
+                buttons: buttons,
+                orderCellsTop: true,
+                fixedHeader: true,
+                "ajax": {
+                    "url": '<?php print base_url('Avance8/getFraccionesXEstilo'); ?>',
+                    "dataSrc": "",
+                    "data": function (d) {
+                        d.ESTILO = mdlFraccionesXEstilo.find("#xEstiloABuscar").val() ?
+                                mdlFraccionesXEstilo.find("#xEstiloABuscar").val() : '';
+                        d.FRACCION = mdlFraccionesXEstilo.find("#xFraccionABuscar").val() ?
+                                mdlFraccionesXEstilo.find("#xFraccionABuscar").val() : '';
+                    }
+                },
+                "columns": [
+                    {"data": "ESTILO"},
+                    {"data": "FRACCION"},
+                    {"data": "COSTO"}
+                ],
+                language: lang,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 400,
+                "scrollX": true,
+                "scrollY": 300,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                "aaSorting": [
+                    [0, 'asc'], [1, 'asc']
+                ],
+                initComplete: function () {
+                    onCloseOverlay();
+                }
+            });
         });
 
         btnRevisarFraccionesXEstilo.click(function () {
@@ -508,13 +650,6 @@
                 pnlTablero.find("#FraccionFiltro").val('');
                 getInfoXControl(onAgregarAvance);
             }
-//            else {
-//                Estilo.val('');
-//                Pares.val('');
-//                SigAvance.val('');
-//                DiasPagoDeNomina.find("input").val(0);
-//                DiasPagoDeNomina.find("#txtTotal").val(0);
-//            }
         });
 
         pnlTablero.find("input[type='checkbox']").change(function () {
@@ -579,9 +714,9 @@
                                 }).always(function () {
 
                                 });
-//                                swal('ATENCIÓN', 'SELECCIONE UNA FRACCIÓN', 'success').then((value) => {
+                                //                                swal('ATENCIÓN', 'SELECCIONE UNA FRACCIÓN', 'success').then((value) => {
                                 pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
-//                                });
+                                //                                });
                             } else {
                                 NombreEmpleado.val('');
                                 pnlTablero.find(".nombre_empleado").text('');
@@ -673,7 +808,10 @@
                 d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : (Semana.val() ? Semana.val() : '');
                 d.FRACCION_FILTRO = pnlTablero.find("#FraccionFiltro").val() ? pnlTablero.find("#FraccionFiltro").val() : '';
                 d.FRACCIONES = "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606";
-            }
+            },
+            "aaSorting": [
+                [2, 'desc']
+            ]
         };
         $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
@@ -737,7 +875,7 @@
 //                        iMsg(a.FALTAN + ' DE LAS FRACCIONES SELECCIONADAS NO CORRESPONDEN A ESTE ESTILO', 'w', function () {
 //                            Control.focus().select();
 //                        });
-//                    } else {
+                    //                    } else {
                     Estilo.val(a.ESTILO);
                     Pares.val(a.PARES);
                     pnlTablero.find(".estilo_control").text(a.ESTILO);
@@ -786,7 +924,7 @@
 //                            Estilo.val('');
 //                            Pares.val('');
 //                            SigAvance.val('');
-//                        });
+                    //                        });
                     //                    }
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
@@ -813,7 +951,7 @@
 //        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
 //            if ($(e)[0].id !== $(v)[0].id) {
 //                $(v)[0].checked = false;
-//            }
+        //            }
         //        });
     }
 
@@ -824,7 +962,7 @@
         SigAvance.val('');
 //        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
 //            $(v)[0].checked = false;
-//        });
+        //        });
     }
 
     function onAvanzar() {
@@ -1028,6 +1166,85 @@
         }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
 
+
+        var depa_empleado = parseInt(Departamento.val());
+        var registro_valido = true;
+        if (depa_empleado === 80 && pnlTablero.find("#chk60")[0].checked) {
+            $.getJSON('<?php print base_url('Avance8/onRevisarCobroDeRayadoParaFOLEADO') ?>', {
+                CONTROL: Control.val()
+            }).done(function (a) {
+                var r = a[0];
+                switch (r.PUEDE_AVANZAR_A_FOLEADO_VALIDA) {
+                    case 0:
+                        registro_valido = false;
+                        onCampoInvalido(pnlTablero, "CONTROL FUERA DE AVANCE, RAYADO NO HA CAPTURADO", function () {
+                            Control.focus().select();
+                            Avance.ajax.reload();
+                        });
+                        return;
+                        break;
+                    case 1:
+                        registro_valido = true;
+                        onPagarFraccion(AVANO);
+                        break;
+                }
+            }).fail(function (x) {
+                getError(x);
+            });
+        } else {
+            if (depa_empleado === 90 && pnlTablero.find("#chk51")[0].checked) {
+                $.getJSON('<?php print base_url('Avance8/onRevisarCobroDeEntreteladoParaALMCORTEOMAQUILA') ?>', {
+                    CONTROL: Control.val()
+                }).done(function (a) {
+                    var r = a[0];
+                    switch (r.PUEDE_AVANZAR_A_ALMCORTEOMAQUILA_VALIDA) {
+                        case 0:
+                            registro_valido = false;
+                            onCampoInvalido(pnlTablero, "CONTROL FUERA DE AVANCE, REBAJADO NO HA CAPTURADO", function () {
+                                Control.focus().select();
+                                Avance.ajax.reload();
+                            });
+                            return;
+                            break;
+                        case 1:
+                            registro_valido = true;
+                            onPagarFraccion(AVANO);
+                            break;
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                });
+            } else {
+                if (depa_empleado === 120 && pnlTablero.find("#chk397")[0].checked) {
+                    $.getJSON('<?php print base_url('Avance8/onRevisarCobroDeEnsueladoParaALMPESPUNTE') ?>', {
+                        CONTROL: Control.val()
+                    }).done(function (a) {
+                        var r = a[0];
+                        switch (r.PUEDE_AVANZAR_A_ALMPESPUNTE_VALIDA) {
+                            case 0:
+                                registro_valido = false;
+                                onCampoInvalido(pnlTablero, "CONTROL FUERA DE AVANCE, PESPUNTE NO HA CAPTURADO.", function () {
+                                    Control.focus().select();
+                                    Avance.ajax.reload();
+                                });
+                                return;
+                                break;
+                            case 1:
+                                registro_valido = true;
+                                onPagarFraccion(AVANO);
+                                break;
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    });
+                } else {
+                    onPagarFraccion(AVANO);
+                }
+            }
+        }
+    }
+
+    function  onPagarFraccion(AVANO) {
         $.post('<?php print base_url('Avance8/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (c) {
             getPagosXEmpleadoXSemana();
             var dt = JSON.parse(c);
@@ -1055,15 +1272,18 @@
             }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
+            Avance.ajax.reload();
         }).always(function () {
+            Avance.ajax.reload();
             getPagosXEmpleadoXSemana();
         });
     }
+
     function getInfoXControl(f) {
         $.getJSON('<?php print base_url('Avance8/getInfoXControl'); ?>', {
             CONTROL: Control.val()
         }).done(function (a) {
-            console.log(a, a.length)
+            console.log(a, a.length);
             var r = a[0];
             Estilo.val(r.ESTILO);
             Pares.val(r.PARES);

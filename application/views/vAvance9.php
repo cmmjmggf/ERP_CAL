@@ -169,7 +169,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
                         <div class="w-100"></div>
-                        <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                        <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important; font-size: 22px !important;">-</span>
                         <input type="text" id="EstatusAvance" name="EstatusAvance" readonly="" class="form-control form-control-sm d-none" style="text-align: center">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -256,7 +256,7 @@
                     console.log('avance 2');
                     onAgregarAvanceSinFraccion();
                 }
-            } else {
+            } else if (Control.val() === '') {
                 SigAvance.val('');
                 pnlTablero.find(".estilo_control").text('-');
                 pnlTablero.find(".pares_control").text('-');
@@ -577,6 +577,9 @@
     }
 
     function onAgregarAvanceSinFraccion() {
+
+
+
         if (Control.val()) {
             /*COMPROBAR SI EL EMPLEADO ES DE RAYADO*/
 //            $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
@@ -706,14 +709,41 @@
             });
         }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
-        
-        
+
+        /*REVISO FRACCIONES 102,60,103*/
+        var depa_empleado = parseInt(Departamento.val());
+        var registro_valido = true;
+        if (depa_empleado === 80) {
+            $.getJSON('<?php print base_url('Avance9/onRevisarCobroDeCorteParaRAYADO') ?>', {
+                CONTROL: Control.val()
+            }).done(function (a) {
+                var r = a[0];
+                switch (r.PUEDE_AVANZAR_A_RAYADO_VALIDA) {
+                    case 0:
+                        registro_valido = false;
+                        onCampoInvalido(pnlTablero, "CONTROL FUERA DE AVANCE, CORTE NO HA CAPTURADO", function () {
+                            Control.focus().select();
+                        });
+                        break;
+                    case 1:
+                        registro_valido = true;
+                        onPagarFraccion(AVANO, fracciones);
+                        break;
+                }
+            }).fail(function (x) {
+                getError(x);
+            });
+        } else {
+            onPagarFraccion(AVANO, fracciones);
+        }
+    }
+
+    function  onPagarFraccion(AVANO, fracciones) {
         $.post('<?php print base_url('Avance9/onAgregarAvanceXEmpleadoYPagoDeNomina') ?>', AVANO).done(function (data) {
             console.log("\n * AVANCE NOMINA * \n", data);
             Avance.ajax.reload(function () {
                 Control.focus().select();
             });
-
             var dt = JSON.parse(data);
             var avanzo = 0;
             if (fracciones.length >= 1) {
@@ -743,18 +773,24 @@
                         return false;
                     } else {
                         if (parseInt(v.AVANZO) === 0) {
+                            onBeep(2);
 
-                            onNotifyOldPCF('', '3 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', 'warning', {from: "bottom", align: "center"}, function () {
-                                Control.focus().select();
-                                btnAceptar.attr('disabled', true)
-                                Avance.ajax.reload();
-                            });
+                            if (pnlTablero.find("#chk100")[0].checked) {
+                                onNotifyOldPCF('', 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO HA CAPTURADO ALMACEN EL RETORNO DE MATERIAL.', 'warning', {from: "bottom", align: "center"}, function () {
+                                    Control.focus().select();
+                                    btnAceptar.attr('disabled', true)
+                                    Avance.ajax.reload();
+                                });
+                                return;
+                            } else {
+                                onNotifyOldPCF('', '3 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', 'warning', {from: "bottom", align: "center"}, function () {
+                                    Control.focus().select();
+                                    btnAceptar.attr('disabled', true)
+                                    Avance.ajax.reload();
+                                });
+                                return;
+                            }
                             return;
-//                            onCampoInvalido(pnlTablero, 'ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE O NO SELECCIONO FRACCION Y PERTENECE A CORTE .', function () {
-//                                Control.focus().select();
-//                                btnAceptar.attr('disabled', true)
-//                                Avance.ajax.reload();
-//                            });
                         }
                         onNotifyOldPCF('', '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', 'warning', {from: "bottom", align: "center"}, function () {
                             Control.focus().select();
@@ -762,12 +798,6 @@
                             Avance.ajax.reload();
                         });
                         return;
-//                        onCampoInvalido(pnlTablero, '2 ESTE CONTROL (' + Control.val() + ') O ESTE EMPLEADO ESTAN FUERA DE AVANCE .', function () {
-//                            Control.focus().select();
-//                            btnAceptar.attr('disabled', true);
-//                            Avance.ajax.reload();
-//                        });
-
                     }
                 });
             }
@@ -776,7 +806,7 @@
                 if (parseInt(dt.AVANZO) === 1) {
                     Avance.ajax.reload();
                     onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
-//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
+                    //                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
                     onClearMO();
                     Control.focus().select();
                     onBeep(5);

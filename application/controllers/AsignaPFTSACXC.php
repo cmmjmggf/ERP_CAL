@@ -467,7 +467,7 @@ class AsignaPFTSACXC extends CI_Controller {
                                 ->set('DeptoProduccion', 10)
                                 ->where('Control', $x['CONTROL'])
                                 ->update('pedidox');
-                        $this->db->set('fec2', Date('Y-m-d h:i:s'))
+                        $this->db->set('fec2', Date('Y-m-d 00:00:00'))
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
                     }

@@ -417,7 +417,7 @@
         }, {
             type: type,
             z_index: 3031,
-            delay: 1000,
+            delay: 1500,
             newest_on_top: true,
             showProgressbar: false,
             placement: placement_config,

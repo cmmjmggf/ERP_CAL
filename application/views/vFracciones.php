@@ -16,6 +16,8 @@
                             <th>ID</th>
                             <th>Clave</th>
                             <th>Descripción</th>
+                            <th>Departamento</th>
+                            <th>-</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -227,11 +229,17 @@
                 "dataSrc": ""
             },
             "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}
+                {"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"},
+                {"data": "Depto"}, {"data": "ORDEN_DEPTO"}
             ],
             "columnDefs": [
                 {
                     "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [4],
                     "visible": false,
                     "searchable": false
                 }
@@ -240,14 +248,15 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 999999,
+            "scrollY": 300,
             "scrollX": true,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
             "aaSorting": [
-                [1, 'desc']/*ID*/
+                [4, 'asc']/*ID*/
             ]
         });
 

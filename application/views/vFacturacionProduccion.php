@@ -210,19 +210,19 @@
                     <div class="col-6" style="border-bottom: 1px solid #0202; ">
                         <div class="row">
                             <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
-                                <span class="font-weight-bold">Producción</span>
+                                <span class="font-weight-bold">PRODUCCIÓN</span>
                             </div>
-                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                            <div class="col-4 font-weight-bold" style="padding: 0px 10px 0px 10px !important;">
                                 Fabricados 
                                 <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
                                 <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
                             </div>
-                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                            <div class="col-4 font-weight-bold" style="padding: 0px 10px 0px 10px !important;">
                                 Facturados 
                                 <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
                                 <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
                             </div>
-                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                            <div class="col-4 font-weight-bold" style="padding: 0px 10px 0px 10px !important;">
                                 Saldo 
                                 <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
                                 <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
@@ -231,10 +231,10 @@
                     </div>
                     <div class="col-6" style="border-bottom: 1px solid #0202; ">
                         <div class="row">
-                            <div class="col-12" align="center"  style="padding: 0px 10px 0px 10px !important;">
-                                <span class="font-weight-bold">Devoluciones</span>
+                            <div class="col-12 font-weight-bold" align="center"  style="padding: 0px 10px 0px 10px !important;">
+                                <span class="font-weight-bold">DEVOLUCIONES</span>
                             </div>
-                            <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
+                            <div class="col-4 " style="padding: 0px 10px 0px 10px !important;">
                                 Devueltos 
                                 <span class="font-weight-bold text-danger devueltos"> 0 </span> 
                                 <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
@@ -270,7 +270,7 @@
                     <table id="tblTallasF" class="Tallas">
                         <thead></thead>
                         <tbody>
-                            <tr id="rTallasBuscaManual">
+                            <tr id="rTallasBuscaManual" style="font-weight: bold !important;">
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
                                 $style_input = "width: 35px; border: 1px solid #000 !important; font-weight: bold !important;text-align: center;padding-left: 4px;padding-right: 4px;";
@@ -376,7 +376,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>Precio</label>
-                <input type="text" id="PrecioFacturacion" name="PrecioFacturacion" style="color: #ff0000 !important;" class="form-control form-control-sm font-weight-bold numbersOnly">
+                <input type="text" id="PrecioFacturacion" name="PrecioFacturacion" style="color: #673AB7 !important;font-size: 14px !important;font-weight: bold !important;padding-top: 1px;border: solid 1px #000 !important;" class="form-control form-control-sm font-weight-bold numbersOnly">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="padding-left: 5px; padding-right: 5px;">
                 <label>Subtotal</label>
@@ -553,7 +553,7 @@
                 </table>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
-                <h3 style="color: #2196F3 !important;" class="font-weight-bold font-italic pares_totales_facturados">PARES 0</h3>
+                <h3 style="color: #1976D2 !important;" class="font-weight-bold font-italic pares_totales_facturados">PARES 0</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
                 <h3 class="font-weight-bold text-danger font-italic">SUBTOTAL</h3>
@@ -573,7 +573,7 @@
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
-                <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapieDLLS">-</h3>
+                <h3 class="d-none font-weight-bold text-danger font-italic totalfacturadoenletrapieDLLS">-</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadopie">$ 0.0</h3>
@@ -866,28 +866,30 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-12">
-                        <div class="table-responsive">
-                            <table id="tblAddendasCoppel" class="table table-hover table-sm nowrap" style="width: 100% !important;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th><th scope="col">FACTURA</th>
-                                        <th scope="col">R.SOC</th><th scope="col">EST.CTE</th>
-                                        <th scope="col">TALLA</th><th scope="col">EST.4E</th>
-                                        <th scope="col">PARES</th><th scope="col">PRECIO</th>
-                                        <th scope="col">PRECODES</th><th scope="col">CANTIDAD</th>
-                                        <th scope="col">%DECTO</th><th scope="col">MON.DESCTO</th>
-                                        <th scope="col">TOTAL</th><th scope="col">TOTALCONDESCUENTO</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="table-active">
-                                        <th scope="row">1</th><th scope="row">2</th><td>3</td><td>4</td><td>5</td>
-                                        <td>6</td><td>7</td><td>8</td><td>9</td><td>10</td> 
-                                        <td>11</td><td>12</td><td>13</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table id="tblAddendasCoppel" 
+                               class="table table-hover table-sm nowrap" 
+                               style="width: 100% !important;">
+                            <thead>
+                                <tr> 
+                                    <th>FACTURA</th>
+                                    <th>R.SOC</th>
+                                    <th>EST.CTE</th>
+                                    <th>TALLA</th>
+                                    <th>EST.4E</th>
+
+                                    <th>PARES</th>
+                                    <th>PRECIO</th>
+                                    <th>PRECODES</th>
+                                    <th>CANTIDAD</th>
+                                    <th>%DECTO</th>
+
+                                    <th>MON.DESCTO</th>
+                                    <th>TOTAL</th>
+                                    <th>TOTALCONDESCUENTO</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table> 
                     </div>
                 </div>
             </div>
@@ -963,12 +965,27 @@
             btnNuevaFactura = pnlTablero.find("#btnNuevaFactura"),
             btnRefrescaRegistro = pnlTablero.find("#btnRefrescaRegistro"),
             btnAdendaCoppel = pnlTablero.find("#btnAdendaCoppel"),
-            mdlAddendaCoppel = $("#mdlAddendaCoppel");
+            mdlAddendaCoppel = $("#mdlAddendaCoppel"), Tiendas,
+            tblTiendas = mdlAddendaCoppel.find("#tblTiendas"), AddendasCoppel,
+            tblAddendasCoppel = mdlAddendaCoppel.find("#tblAddendasCoppel"),
+            xTiendaCoppel = mdlAddendaCoppel.find("#xTiendaCoppel"),
+            FacturaCoppel = mdlAddendaCoppel.find("#FacturaCoppel");
 
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
     pnlTablero.find("input,textarea").addClass("font-weight-bold");
     var nuevo = true; /* 1 = NUEVO, 2 = MODIFICANDO, 3 = CERRADO*/
+
+    function onKeyDownOK(input, keyevt, fn) {
+        if (keyevt.keyCode === 13) {
+            fn();
+        }
+    }
+    function onKeyDownValOK(input, keyevt, fn) {
+        if (keyevt.keyCode === 13 && input.val()) {
+            fn();
+        }
+    }
 
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
@@ -979,11 +996,17 @@
         mdlAddendaCoppel.find("#TiendaCoppel").change(function () {
             var tienda = $(this).val();
             if (tienda) {
-
+                mdlAddendaCoppel.find("#xTiendaCoppel").val(tienda);
             }
         });
 
-        mdlAddendaCoppel.find("#xTiendaCoppel").keydown(function (e) {
+        mdlAddendaCoppel.find("#FacturaCoppel").on('keydown keyup', function (e) {
+            onKeyDownValOK(this, e, function () {
+
+            });
+        });
+
+        mdlAddendaCoppel.find("#xTiendaCoppel").on('keydown keyup', function (e) {
             var tcp = $(this).val();
             if (e.keyCode === 13 && tcp) {
                 var index = 0;
@@ -1006,6 +1029,8 @@
                         mdlAddendaCoppel.find("#NBodega").val(r.eq(13).text());
                         mdlAddendaCoppel.find("#FacturaCoppel").focus().select();
                         index = 1;
+
+                        AddendasCoppel.ajax.reload();
                         return false;
                     }
                 });
@@ -1020,17 +1045,83 @@
                 onEnable(mdlAddendaCoppel.find("#TiendaCoppel"));
                 onClearInputs(mdlAddendaCoppel);
                 onClearSelects(mdlAddendaCoppel);
+                AddendasCoppel.ajax.reload();
             }
         });
 
         mdlAddendaCoppel.on('shown.bs.modal', function () {
             mdlAddendaCoppel.find("input").val("");
             mdlAddendaCoppel.find("#xTiendaCoppel").focus().select();
+            $.fn.dataTable.ext.errMode = 'throw';
+            if ($.fn.DataTable.isDataTable('#tblAddendasCoppel')) {
+                AddendasCoppel.ajax.reload(function () {
+                    mdlAddendaCoppel.find("#xTiendaCoppel").focus().select();
+                });
+            } else {
+                AddendasCoppel = tblAddendasCoppel.DataTable({
+                    dom: 'rtip',
+                    "ajax": {
+                        "url": '<?php print base_url('FacturacionProduccion/getFacturasDetalles'); ?>',
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.FACTURA = FacturaCoppel.val() ? FacturaCoppel.val() : '';
+                            d.TIENDA = xTiendaCoppel.val() ? xTiendaCoppel.val() : '';
+                        }
+                    },
+                    "columns": [
+                        {"data": "FACTURA"},
+                        {"data": "RAZON_SOCIAL"},
+                        {"data": "EST_CTE"},
+                        {"data": "TALLA"},
+                        {"data": "EST_4E"},
+
+                        {"data": "PARES"},
+                        {"data": "PRECIO"},
+                        {"data": "PRE_CON_DES"},
+                        {"data": "CANTIDAD"},
+                        {"data": "PORCENTAJE_DESCUENTO"},
+
+                        {"data": "MONTO_DESCUENTO"},
+                        {"data": "TOTAL"},
+                        {"data": "TOTAL_CON_DESCUENTO"}
+                    ],
+                    "columnDefs": [
+                        {
+                            "targets": [0],
+                            "visible": true,
+                            "searchable": true
+                        }],
+                    language: lang,
+                    select: true,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 50,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "processing": true,
+                    "bSort": true,
+                    "scrollY": 300,
+                    "scrollX": true,
+                    responsive: false,
+                    "aaSorting": [
+                        [0, 'desc']/*ID*/
+                    ],
+                    initComplete: function () {
+                        mdlAddendaCoppel.find("#xTiendaCoppel").focus().select();
+                    }
+                });
+
+                tblAddendasCoppel.on('click', 'tr', function () {
+
+                });
+            }
         });
 
         btnAdendaCoppel.click(function () {
             mdlAddendaCoppel.modal('show');
         });
+
         /*FIN MODAL ADDENDA*/
 
 
@@ -1214,8 +1305,7 @@
             onOpenWindow('<?php print base_url('MovimientosCliente'); ?>');
         });
 
-        btnAcepta.click(function () {
-            /*REVISAR CANTIDAD FACTURADA*/
+        btnAcepta.click(function () {             /*REVISAR CANTIDAD FACTURADA*/
             if (Control.val()) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
                         {
@@ -1223,6 +1313,13 @@
                         }).done(function (a) {
                     var r = a[0];
                     var pares_finales_a_facturar = parseFloat(r.PARES_FACTURADOS) + parseFloat(TotalParesEntregaAF.val());
+ 
+                    pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
+                    pnlTablero.find(".produccionsaldo").text(r.PARES - r.PARES_FACTURADOS);
+                    TotalParesEntregaF.val(r.PARES_FACTURADOS);
+                    var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
+                    TotalParesEntregaAF.val(total_para_facturar);
+                    
                     /* 36 ES MENOR QUE 40*/
                     if (parseInt(r.PARES) < pares_finales_a_facturar) {
                         onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
@@ -1284,10 +1381,10 @@
                                 console.log('PARES OK');
                                 onAceptarControl();
 //                                } else {
-//                                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
-//                                        pnlTablero.find("#CAF1").focus().select();
-//                                    });
-//                                    return;
+                                //                                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
+                                //                                        pnlTablero.find("#CAF1").focus().select();
+                                //                                    });
+                                //                                    return;
                                 //                                }
                             } else {
                                 onCampoInvalido(pnlTablero, 'ES NECESARIO ESPECIFICAR UNA CANTIDAD A FACTURAR MAYOR A CERO', function () {
@@ -1339,6 +1436,7 @@
                     ClienteFactura[0].selectize.enable();
                     Documento.attr('readonly', false);
                     TPFactura.attr('disabled', false);
+                    onCloseOverlay();
                     getVistaPreviaDocumentoCerrado(function () {
                         iMsg("SE HA CERRADO EL DOCUMENTO", "s", function () {
                             nuevo = true;
@@ -1371,11 +1469,10 @@
                             ClienteClave.focus().select();
                         });
                     });
-                    onCloseOverlay();
                 }).fail(function (x) {
+                    onCloseOverlay();
                     getError(x);
                 }).always(function () {
-                    onCloseOverlay();
                 });
             } else {
                 onCampoInvalido(pnlTablero, 'LOS SIGUIENTES CAMPOS SON REQUERIDOS', function () {
@@ -1468,8 +1565,8 @@
                                         '<span class="fa fa-lock"></span>',
                                         v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
                                         v.ESTATUS_PRODUCCION, 1]);
-//                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
-//                                                facturado = true;
+                                    //                                            if (v.ESTATUS_PRODUCCION === 'FACTURADO' && !facturado) {
+                                    //                                                facturado = true;
                                     //                                            }
                                 });
                                 ParesFacturados.rows.add(r).draw(false);
@@ -1482,10 +1579,10 @@
 //                                        btnElijeControl.attr('disabled', true);
 //                                        if (facturado) {
 //                                            ClienteFactura[0].selectize.disable();
-//                                            TPFactura.attr('disabled', true);
-//                                            btnElijeControl.addClass("d-none");
-//                                            btnAcepta.addClass("d-none");
-//                                        }
+                                //                                            TPFactura.attr('disabled', true);
+                                //                                            btnElijeControl.addClass("d-none");
+                                //                                            btnAcepta.addClass("d-none");
+                                //                                        }
 
                             } else {
                                 pnlTablero.find("#btnNuevo").addClass("d-none");
@@ -1526,7 +1623,6 @@
             onBeep(1);
             if (ClienteFactura.val()) {
                 if (Control.val()) {
-
                     /*SUMAR TODO EL SALDO*/
                     for (var i = 1; i < 21; i++) {
                         var pares = pnlTablero.find(`#C${i}`),
@@ -1901,6 +1997,52 @@
     function getInfoXControl() {
         onBeep(3);
         getFacturacionDiff();
+
+        $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
+                {
+                    CONTROL: Control.val()
+                }).done(function (a) {
+            if (a.length > 0) {
+                var r = a[0];
+                pnlTablero.find(".produccionfabricados").text(r.PARES);
+                pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
+                pnlTablero.find(".produccionsaldo").text(r.PARES_FACTURADOS);
+                var xrow = pnlTablero.find("#tblTallasF tr#rCantidades:eq(1)").find("td");
+                xrow.eq(1).find("input").val(0);
+                xrow.eq(2).find("input").val(0);
+                xrow.eq(3).find("input").val(0);
+                xrow.eq(4).find("input").val(0);
+                xrow.eq(5).find("input").val(0);
+                xrow.eq(6).find("input").val(0);
+                xrow.eq(7).find("input").val(0);
+                xrow.eq(8).find("input").val(0);
+                xrow.eq(9).find("input").val(0);
+                xrow.eq(10).find("input").val(0);
+                xrow.eq(11).find("input").val(0);
+                xrow.eq(12).find("input").val(0);
+                xrow.eq(13).find("input").val(0);
+                xrow.eq(14).find("input").val(0);
+                xrow.eq(15).find("input").val(0);
+                xrow.eq(16).find("input").val(0);
+                xrow.eq(17).find("input").val(0);
+                xrow.eq(18).find("input").val(0);
+                xrow.eq(19).find("input").val(0);
+                xrow.eq(20).find("input").val(0);
+                xrow.eq(21).find("input").val(0);
+                xrow.eq(22).find("input").val(0);
+                var index = 1;
+                $.each(pnlTablero.find("#tblTallasF tr#rCantidades:eq(0) td"), function (k, v) {
+//                    console.log(v, $(v).index());
+                    if ($(v).find("input").val() === '') {
+                        onDisable(pnlTablero.find("#tblTallasF tr#rCantidades:eq(2) td:eq(" + $(v).index() + ") input"));
+                    }
+                });
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
     }
 
     function onVerTienda() {
@@ -1948,8 +2090,11 @@
                     CONTROL: Control.val()
                 }).done(function (a) {
             var r = a[0];
-            pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS); 
+            pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
             pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
+            TotalParesEntregaF.val(r.PARES_FACTURADOS);
+            var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
+            TotalParesEntregaAF.val(total_para_facturar);
         }).fail(function (x) {
             getError(x);
         }).always(function () {
@@ -2033,8 +2178,7 @@
         var res = 0, res1 = 0, res2 = 0, res3 = 0;
         //        console.log("txtreferen3 => " + txtreferen3);
         txtreferen4 = txtreferen3 / 97;
-        //        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));
-        res = (txtreferen4 % 1);
+        //        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));         res = (txtreferen4 % 1);
         res1 = res * 100;
         res2 = res1 % 1;
         res3 = res1 - res2;
@@ -2072,12 +2216,12 @@
 //                    if (abcd[0].CLIENTE === clientesito) {
 //                        control_pertenece_a_cliente = true;
 //                    } else {
-//                        onBeep(2);
-//                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
-//                            onResetCampos();
-//                            Control.focus().select();
-//                        });
-//                    }
+                //                        onBeep(2);
+                //                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
+                //                            onResetCampos();
+                //                            Control.focus().select();
+                //                        });
+                //                    }
                 //                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
                     CONTROL: Control.val() ? Control.val() : ''
@@ -2088,10 +2232,10 @@
                             for (var i = 1; i < 23; i++) {
                                 var ccc = 0;
                                 if (i < 10) {
-                                    ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : 0;
+                                    ccc = parseInt(abc[`par0${i}`]) > 0 ? abc[`par0${i}`] : "";
                                     pnlTablero.find(`#CF${i}`).val(ccc);
                                 } else {
-                                    ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : 0;
+                                    ccc = parseInt(abc[`par${i}`]) > 0 ? abc[`par${i}`] : "";
                                     pnlTablero.find(`#CF${i}`).val(ccc);
                                 }
                             }
@@ -2106,11 +2250,11 @@
 //                                        if (parseInt(xx.stsavan) === 13) {
 //                                            for (var i = 1; i < 21; i++) { 
 //                                                    pnlTablero.find(`#CF${i}`).val(''); 
-//                                            }
-//                                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO, INTENTE CON OTRO", function () {
-//                                                Control.focus().select();
-//                                            });
-//                                            return;
+                                //                                            }
+                                //                                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO, INTENTE CON OTRO", function () {
+                                //                                                Control.focus().select();
+                                //                                            });
+                                //                                            return;
                                 //                                        }
                                 Corrida.val(xx.Serie);
                                 var t = 0;
@@ -2196,12 +2340,12 @@
                 });
 //                    }
 //                } else {
-//                    onBeep(2);
-//                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
-//                        onResetCampos();
-//                        Control.focus().select();
-//                    });
-//                    return;
+                //                    onBeep(2);
+                //                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
+                //                        onResetCampos();
+                //                        Control.focus().select();
+                //                    });
+                //                    return;
                 //                }
             }).fail(function (x) {
                 getError(x);
@@ -2210,7 +2354,6 @@
             });
         }
     }
-
     function onResetCampos() {
         Corrida.val('');
         for (var i = 1; i < 21; i++) {
@@ -2259,7 +2402,6 @@
                 break;
         }
     }
-
     function onRecalcularSubtotal() {
         var pares = 0;
         for (var i = 1; i < 23; i++) {
@@ -2333,10 +2475,10 @@
 //        rowx.push(TMNDAFactura.val());
 //        rowx.push(PAGFactura.val());
 //        rowx.push(EstatusControl.val());
-//        rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
-//        //            console.log(rowx);
-//        ParesFacturados.row.add(rowx).draw(false);
-//        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+        //        rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
+        //        //            console.log(rowx);
+        //        ParesFacturados.row.add(rowx).draw(false);
+        //        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         //        getTotalFacturado();
         /*REGISTRAR EN FACTURACION*/
         TPFactura.attr('disabled', false);
@@ -2663,9 +2805,7 @@
     function getVistaPreviaDocumentoCerrado(f) {
         onBeep(1);
         onOpenOverlay('Espere un momento por favor...');
-        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {
-            CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '',
-            DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '',
+        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '', DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '',
             TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
         }).done(function (data, x, jq) {
             onBeep(1);
@@ -2708,5 +2848,17 @@
     input{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
+        border: solid 1px #000 !important;
     } 
+    input,textarea{
+        padding-top: 2px !important;
+        padding-bottom:  2px !important;
+        border: solid 1px #000 !important;
+    } 
+    .text-danger {
+        color: #b71a0a !important;
+    }
+    button {
+        font-weight: bold !important;
+    }
 </style>

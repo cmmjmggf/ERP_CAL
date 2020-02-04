@@ -48,7 +48,8 @@ class Fracciones extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->Fracciones_model->getRecords());
+//            print json_encode($this->Fracciones_model->getRecords());
+            print json_encode($this->db->select("F.ID, F.Clave, F.Descripcion, (SELECT CONCAT(Clave,\" \",Descripcion) FROM departamentos WHERE Clave = F.Departamento LIMIT 1) AS Depto, F.Departamento AS ORDEN_DEPTO", false)->from("fracciones AS F")->where("F.Estatus", "ACTIVO")->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

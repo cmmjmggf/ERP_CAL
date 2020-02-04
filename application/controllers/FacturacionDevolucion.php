@@ -451,6 +451,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["periodo"] = Date('Y');
             $f["costo"] = NULL;
             $f["obs"] = $x["OBSERVACIONES"];
+            $f["modulo"] = "DEVOLUCION";
             $this->db->insert('facturacion', $f);
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
