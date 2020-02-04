@@ -151,10 +151,17 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         try {
             $x = $this->input->get();
 
-            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO,
-                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA,
-                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION,
-                FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
+            $this->db->select("FPN.ID AS ID,
+                FPN.numeroempleado AS EMPLEADO,
+                (SELECT Busqueda from empleados where numero = FPN.numeroempleado ) AS NOM_EMPLEADO,
+                FPN.control AS CONTROL,
+                date_format(FPN.fecha,'%d/%m/%Y') AS FECHA,
+                FPN.estilo AS ESTILO,
+                (select Descripcion from departamentos where Clave = FPN.depto) AS FRACCION,
+                FPN.numfrac AS NUM_FRACCION,
+                FPN.semana AS SEMANA,
+                FPN.pares AS PARES,
+                FPN.depto AS DEPTO ", false)
                     ->from('fracpagnomina AS FPN');
             if ($x['CONTROL'] !== '') {
                 $this->db->where('FPN.control', $x['CONTROL']);

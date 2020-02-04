@@ -6,48 +6,41 @@
             </div>
             <div class="col-sm-6 float-right" align="right"></div>
         </div>
+        <hr>
         <div class="card-block">
-            <div class="row  mb-2">
+            <div class="row">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <label>Control</label>
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
                     <label>Estilo</label>
-                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm">
+                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" readonly="">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <label>Color</label>
-                    <select id="Color" name="Color" class="form-control"></select>
+                    <input type="text" id="Color" name="Color" class="form-control form-control-sm" readonly="">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
                     <label>Pares</label>
-                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm">
+                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm" readonly="">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <label>Cliente</label>
                     <div class="row">
                         <div class="col-3">
-                            <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm numbersOnly notdot" maxlength="15">
+                            <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm numbersOnly notdot" readonly="" maxlength="15">
                         </div>
                         <div class="col-9">
-                            <select id="Cliente" name="Cliente" class="form-control">
-                                <option></option>
-                                <?php
-                                foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
-                                        ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                                }
-                                ?>
-                            </select>
+                            <input type="text" id="Cliente" name="Cliente" class="form-control form-control-sm" readonly="" maxlength="600">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
                     <div class="col text-center">
-                        <p class="font-weight-bold">FECHAS DEL PEDIDO</p>
+                        <h6 class="font-weight-bold">FECHAS DEL PEDIDO</h6>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblFechasDelPedido" class="table table-sm table-hover" style="width:100%">
@@ -65,7 +58,7 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
                     <div class="col text-center">
-                        <p class="font-weight-bold">FECHAS DE FACTURACIÓN</p>
+                        <h6 class="font-weight-bold">FECHAS DE FACTURACIÓN</h6>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblFechasDeFacturacion" class="table table-sm table-hover" style="width:100%">
@@ -83,7 +76,7 @@
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
                     <div class="col text-center">
-                        <p class="font-weight-bold">FECHAS DEVOLUCIÓN</p>
+                        <h6 class="font-weight-bold">FECHAS DEVOLUCIÓN</h6>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblFechasDevolucion" class="table table-sm table-hover" style="width:100%">
@@ -101,7 +94,7 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="col text-center">
-                        <p class="font-weight-bold">FECHAS DE AVANCE</p>
+                        <h6 class="font-weight-bold">FECHAS DE AVANCE</h6>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblFechasDeAvance" class="table table-sm table-hover" style="width:100%">
@@ -134,7 +127,7 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div class="col text-center">
-                        <p class="font-weight-bold">RASTREO DE CONTROLES EN NOMINA</p>
+                        <h6 class="font-weight-bold">RASTREO DE CONTROLES EN NOMINA</h6>
                     </div>
                     <div class="w-100"></div>
                     <table id="tblRastreoDeControlesEnNomina" class="table table-sm table-hover" style="width:100%">
@@ -158,35 +151,23 @@
                     <div class="row">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label>Estatus en producción</label>
-                            <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control" placeholder="Estatus en producción">
+                            <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control rojo text-max" readonly="" >
                         </div>
                         <div class="w-100"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Empleado</label>
                             <div class="row">
                                 <div class="col-3">
-                                    <input type="text" id="xEmpleado" name="xEmpleado" class="form-control form-control-sm numbersOnly notdot" maxlength="8">
+                                    <input type="text" id="xEmpleado" name="xEmpleado" readonly="" class="form-control form-control-sm numbersOnly notdot" maxlength="8">
                                 </div>
                                 <div class="col-9">
-                                    <select id="Empleado" name="Empleado" class="form-control">
-                                        <option></option>
-                                        <?php
-                                        foreach ($this->db->select("E.Numero AS CLAVE, "
-                                                        . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
-                                                        . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
-                                                        . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
-                                                        . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
-                                                ->from("empleados AS E")->where_in('E.AltaBaja', array(1, 2))->get()->result() as $kk => $vv) {
-                                            print "<option value='{$vv->CLAVE}'>{$vv->EMPLEADO}</option>";
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" id="Empleado" name="Empleado" readonly="" class="form-control form-control-sm" maxlength="800">
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label>Fracción</label>
-                            <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm    ">
+                            <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm    " readonly="">
                         </div>
                     </div>
                 </div>
@@ -215,80 +196,15 @@
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
                 getInfoXControl(Control.val());
-            }
-        }).focusout(function () {
-            if (Control.val()) {
-                getInfoXControl(Control.val());
-            }
-        });
-        Cliente.change(function () {
-            if (Cliente.val()) {
-                xCliente.val(Cliente.val());
             } else {
-                xCliente.val('');
-                Cliente[0].selectize.enable();
-                Cliente[0].selectize.clear(true);
+                FechasDelPedido.ajax.reload();
+                FechasDeFacturacion.ajax.reload();
+                FechasDevolucion.ajax.reload();
+                RastreoDeControlesEnNomina.ajax.reload();
+                FechasDeAvance.ajax.reload();
             }
-            RastreoDeControlesEnNomina.ajax.reload(function () {
-                HoldOn.close();
-            });
         });
-        xCliente.on('keydown', function (e) {
-            if (e.keyCode === 13) {
-                if (xCliente.val()) {
-                    Cliente[0].selectize.setValue(xCliente.val());
-                    if (Cliente.val()) {
-                    } else {
-                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
-                            xCliente.focus().select();
-                        });
-                    }
-                } else {
-                    Cliente[0].selectize.enable();
-                    Cliente[0].selectize.clear(true);
-                }
-            } else {
-                Cliente[0].selectize.enable();
-                Cliente[0].selectize.clear(true);
-            }
-            RastreoDeControlesEnNomina.ajax.reload(function () {
-                HoldOn.close();
-            });
-        });
-        Empleado.change(function () {
-            if (Empleado.val()) {
-                xEmpleado.val(Empleado.val());
-            } else {
-                xEmpleado.val('');
-                Empleado[0].selectize.enable();
-                Empleado[0].selectize.clear(true);
-            }
-            RastreoDeControlesEnNomina.ajax.reload(function () {
-                HoldOn.close();
-            });
-        });
-        xEmpleado.on('keydown', function (e) {
-            if (e.keyCode === 13) {
-                if (xEmpleado.val()) {
-                    Empleado[0].selectize.setValue(xEmpleado.val());
-                    if (Empleado.val()) {
-                    } else {
-                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE EMPLEADO, ESPECIFIQUE OTRO', function () {
-                            xEmpleado.focus().select();
-                        });
-                    }
-                } else {
-                    Empleado[0].selectize.enable();
-                    Empleado[0].selectize.clear(true);
-                }
-            } else {
-                Empleado[0].selectize.enable();
-                Empleado[0].selectize.clear(true);
-            }
-            RastreoDeControlesEnNomina.ajax.reload(function () {
-                HoldOn.close();
-            });
-        });
+
         /*DATATABLES*/
         var cols = [
             {"data": "ID"}/*0*/, {"data": "PEDIDO"}/*1*/,
@@ -325,7 +241,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "150px",
             "scrollX": true
         });
         FechasDeFacturacion = tblFechasDeFacturacion.DataTable({
@@ -361,7 +277,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "150px",
             "scrollX": true
         });
         FechasDevolucion = tblFechasDevolucion.DataTable({
@@ -396,7 +312,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "150px",
             "scrollX": true
         });
         FechasDeAvance = tblFechasDeAvance.DataTable({
@@ -453,7 +369,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "150px",
             "scrollX": true
         });
         RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
@@ -465,15 +381,18 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CONTROL = (Control.val() ? Control.val().trim() : '');
-                    d.EMPLEADO = (Empleado.val() ? Empleado.val().trim() : '');
+                    d.EMPLEADO = '';
                     d.FRACCION = (Fraccion.val() ? Empleado.val().trim() : '');
                 }
             },
             "columns": [
                 {"data": "ID"}/*0*/, {"data": "EMPLEADO"}/*1*/,
-                {"data": "CONTROL"}/*2*/, {"data": "FECHA"},
-                {"data": "ESTILO"}, {"data": "FRACCION"},
-                {"data": "SEMANA"}, {"data": "PARES"},
+                {"data": "CONTROL"}/*2*/,
+                {"data": "FECHA"},
+                {"data": "ESTILO"},
+                {"data": "NUM_FRACCION"},
+                {"data": "SEMANA"},
+                {"data": "PARES"},
                 {"data": "DEPTO"}
             ],
             "columnDefs": coldefs,
@@ -497,8 +416,9 @@
             if (Control.val()) {
                 var r = RastreoDeControlesEnNomina.row($(this)).data();
                 console.log('ROW ', r);
-                Empleado[0].selectize.setValue(r.EMPLEADO);
-                Fraccion.val(r.NUM_FRACCION);
+                xEmpleado.val(r.EMPLEADO);
+                Empleado.val(r.NOM_EMPLEADO);
+                Fraccion.val(r.FRACCION);
             } else {
                 swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
                     Control.focus();
@@ -506,41 +426,20 @@
             }
         });
     });
-    function getColoresXEstilo(e) {
-        Color[0].selectize.clear(true);
-        Color[0].selectize.clearOptions();
-        $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
-            x.forEach(function (i) {
-                Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
+
 
     function getInfoXControl(e) {
         if (e) {
-            onOpenOverlay('Espere un momento por favor...');
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
                 if (x.length > 0) {
                     var xx = x[0];
                     Estilo.val(xx.Estilo);
-                    $.when($.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getColoresXEstilo') ?>", {ESTILO: xx.Estilo}).done(function (x, y, z) {
-                        x.forEach(function (i) {
-                            Color[0].selectize.addOption({text: i.COLOR, value: i.CLAVE});
-                        });
-                    }).fail(function (x, y, z) {
-                        getError(x);
-                    }).always(function () {
-                        HoldOn.close();
-                    })).done(function () {
-                        Color[0].selectize.setValue(xx.Color);
-                    });
+                    Color.val(xx.Color + ' ' + xx.ColorT);
                     Pares.val(xx.Pares);
-                    Cliente[0].selectize.setValue(xx.Cliente);
+                    xCliente.val(xx.Cliente);
+                    Cliente.val(xx.ClienteT);
                     EstatusProduccion.val(xx.EstatusProduccion);
+                    Control.focus().select();
                     FechasDelPedido.ajax.reload();
                     FechasDeFacturacion.ajax.reload();
                     FechasDevolucion.ajax.reload();
@@ -557,3 +456,15 @@
         }
     }
 </script>
+<style>
+    .text-max {
+        font-weight: bolder;
+        font-size: 22px;
+    }
+
+
+    .rojo {
+        background-color: #FFBEAC !important;
+
+    }
+</style>

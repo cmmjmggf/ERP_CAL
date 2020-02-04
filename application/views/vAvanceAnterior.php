@@ -436,7 +436,7 @@
                                     mdlAvanceAnterior.find("#ParesAvance").val("");
                                     swal({
                                         title: "ATENCIÓN",
-                                        text: "EL CONTROL NO CONCUERDA CON EL AVANCE QUE DESEA CAPTURAR ",
+                                        text: "El control está en ***" + data[0].EstatusProduccion + "*** y no concuerda con el avance requerido ",
                                         icon: "warning",
                                         closeOnClickOutside: false,
                                         closeOnEsc: false

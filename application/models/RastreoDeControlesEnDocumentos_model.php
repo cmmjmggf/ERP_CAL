@@ -32,10 +32,17 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
 
     public function getControlesEnNomina($CONTROL, $EMPLEADO, $FRACCION) {
         try {
-            $this->db->select("FPN.ID AS ID, FPN.numeroempleado AS EMPLEADO, 
-                FPN.control AS CONTROL, date_format(FPN.fecha,'%d/%m/%Y') AS FECHA, 
-                FPN.estilo AS ESTILO, FPN.fraccion AS FRACCION, FPN.numfrac AS NUM_FRACCION, 
-                FPN.semana AS SEMANA, FPN.pares AS PARES, FPN.depto AS DEPTO", false)
+            $this->db->select("FPN.ID AS ID,
+                FPN.numeroempleado AS EMPLEADO,
+                (SELECT Busqueda from empleados where numero = FPN.numeroempleado ) AS NOM_EMPLEADO,
+                FPN.control AS CONTROL,
+                date_format(FPN.fecha,'%d/%m/%Y') AS FECHA,
+                FPN.estilo AS ESTILO,
+                (select Descripcion from departamentos where Clave = FPN.depto) AS FRACCION,
+                FPN.numfrac AS NUM_FRACCION,
+                FPN.semana AS SEMANA,
+                FPN.pares AS PARES,
+                FPN.depto AS DEPTO ", false)
                     ->from('fracpagnomina AS FPN');
             if ($CONTROL !== '') {
                 $this->db->where('FPN.control', $CONTROL);
@@ -57,7 +64,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
 
     public function getClientes() {
         try {
-            return $this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE", false)
+            return $this->db->select("C.Clave AS CLAVE, CONCAT(C.RazonS) AS CLIENTE", false)
                             ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -79,8 +86,20 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
 
     public function getInfoXControl($Control) {
         try {
-            return $this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, C.Maquila, C.Semana, C.Consecutivo, C.Motivo, C.Cancelacion, C.EstatusProduccion", false)
-                            ->from('controles AS C')
+            return $this->db->select("C.ID, "
+                                    . "C.Control, "
+                                    . "C.Estilo, "
+                                    . "C.EstiloT, "
+                                    . "C.Color, "
+                                    . "C.ColorT, "
+                                    . "C.Cliente, "
+                                    . "(select razons from clientes where clave = C.Cliente) as ClienteT, "
+                                    . "C.Pares, "
+                                    . "C.Ano, "
+                                    . "C.Maquila, "
+                                    . "C.Semana, "
+                                    . "C.EstatusProduccion", false)
+                            ->from('pedidox AS C')
                             ->where('C.Control', $Control)
                             ->get()->result();
         } catch (Exception $exc) {
@@ -91,7 +110,7 @@ class RastreoDeControlesEnDocumentos_model extends CI_Model {
     public function getEmpleados() {
         try {
             return $this->db->select("E.Numero AS CLAVE, "
-                                    . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
+                                    . "CONCAT((CASE WHEN E.PrimerNombre = '0' THEN '' ELSE E.PrimerNombre END),' ',"
                                     . "(CASE WHEN E.SegundoNombre = '0' THEN '' ELSE E.SegundoNombre END),' ', "
                                     . "(CASE WHEN E.Paterno = '0' THEN '' ELSE E.Paterno END),' ', "
                                     . "(CASE WHEN E.Materno = '0' THEN '' ELSE E.Materno END)) AS EMPLEADO")
