@@ -206,4 +206,30 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
         }
     }
 
+    public function getDatosReporteExcelExportacion() {
+        try {
+            $this->db->query("set sql_mode=''");
+            $this->db->select(" EC.control,
+				ECB.cliente,
+                                ECB.estilocte as estilo,
+				ECB.color as color,
+                                ECB.idart as talla,
+                                ECB.codbarr
+                                FROM etiqcaja EC
+                                JOIN etiqcodbarr ECB on EC.estiped = ECB.estilo AND EC.combped = ECB.comb and EC.punto = ECB.talla and EC.cliente = ECB.cliente "
+                    . "", false);
+
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

@@ -39,6 +39,105 @@ class ReportesEstiquetasProduccion extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    /* Reporte de Etiquetas para EXPORTACION */
+
+    public function OnReporteEtiquetasCajasExportacion() {
+        $cm = $this->ReportesEstiquetasProduccion_model;
+        $this->db->query('truncate table etiqcaja;');
+        $Controles = $cm->getControlesParaEtiquetasCajas(
+                $this->input->post('Ano'), $this->input->post('Sem'), $this->input->post('Maq'), $this->input->post('Control'), $this->input->post('AControl'), $this->input->post('Tipo'), $this->input->post('Cliente'));
+
+        //Si hay controles generados hace el reporte
+        if (!empty($Controles)) {
+            foreach ($Controles as $key => $v) {
+                $Serie = $cm->getDatosSerie($v->Serie);
+                $Suela = $cm->getSuelaFromFichaTecnica($v->Estilo, $v->Color)[0]->Suela;
+                $talla = '';
+                $pares = 0;
+
+                /* Iteramos 22 veces para que recorra todas las tallas */
+                for ($i = 1; $i <= 22; $i++) {
+                    //Si el punto trae pares capturados
+                    if (intval($v->{"C$i"}) > 0) {
+                        $talla = floatval($Serie[0]->{"T$i"});
+                        $pares = intval($v->{"C$i"});
+
+                        //variables para crear el codigo de barras
+                        $estilo_cb = str_pad($v->Estilo, 6, '.', STR_PAD_LEFT);
+                        $color_cb = str_pad($v->Color, 3, '0', STR_PAD_LEFT);
+                        $talla_cb = (strlen($talla) <= 2) ? str_pad($talla, 4, '0', STR_PAD_LEFT) : $talla;
+                        $codigo_barras = $estilo_cb . $color_cb . $talla_cb;
+
+                        //Iteramos entre los pares para insertar por cada talla una etiqueta por par
+                        $cont = 1;
+                        while ($cont <= $pares) {
+                            $this->db->insert("etiqcaja", array(
+                                'contped' => $codigo_barras,
+                                'estiped' => $v->Estilo,
+                                'combped' => $v->Color,
+                                'punto' => $talla,
+                                'recio' => $v->Clave,
+                                'cliente' => $v->Cliente,
+                                'control' => $v->Control,
+                                'suela' => $Suela
+                            ));
+                            $cont++;
+                        }
+                    }
+                }
+            }
+            print 1;
+        }
+    }
+
+    public function onExportarCSVExportacion() {
+
+        try {
+            $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelExportacion();
+            $objPHPExcel = new Excel();
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            //Nombre de columnas
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, 'Control');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 1, 'Estilo');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, 1, 'Color');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, 1, 'Talla');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, 1, 'Codigo Barras');
+
+
+            $row = 2;
+            foreach ($reporte as $key => $value) {
+                // Agregamos los datos
+                //$objPHPExcel->getActiveSheet()->getStyle('B' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value->control);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $row, $value->estilo, PHPExcel_Cell_DataType::TYPE_STRING);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value->color);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value->talla);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value->codbarr);
+                $row++;
+            }
+            // Renombramos hoja
+            $objPHPExcel->getActiveSheet()->setTitle('Hoja1');
+            $path = 'uploads/Reportes/Etiquetas';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "ETIQUETAS CAJAS EXPORTACION " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.xlsx';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Etiquetas/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save(str_replace(__FILE__, $url, __FILE__));
+            print base_url() . $url;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     /* Reporte de Etiquetas para PAKAR */
 
     public function OnReporteEtiquetasCajasPakar() {
@@ -93,35 +192,6 @@ class ReportesEstiquetasProduccion extends CI_Controller {
     public function onExportarCSVPakar() {
 
         try {
-//            //Nombre del archivo
-//            $filename = 'ETIQUETAS_CAJAS_PAKAR_' . Date('h_i_s') . '.csv';
-//            header("Content-Description: File Transfer");
-//            header("Content-Disposition: attachment; filename=$filename");
-//            //Tipo de archivo
-//            header("Content-Type: application/csv; ");
-//            //Abrimos archivo
-//            $file = fopen('php://output', 'w');
-//            //Encabezados
-//            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-//            $header = array("Control", "Estilo", "Color", "Piel Color", "Suela", "Punto", "Codigo Barras");
-//
-//            //Escribir CSV en memoria
-//            fputcsv($file, $header);
-//            //Obtener datos de la tabla de paso
-//            $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelPakar();
-//
-//            //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
-//            foreach ($reporte as $key => $line) {
-//                //Se meten los datos del arreglo en el excel
-//                fputcsv($file, array_map(function($v) {
-//                            //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
-//                            return $v;
-//                        }, $line));
-//            }
-//            //Cerramos el archivo
-//            fclose($file);
-//            //Fin del metodo
-//            exit;
             $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelPakar();
             $objPHPExcel = new Excel();
             $objPHPExcel->setActiveSheetIndex(0);
@@ -223,35 +293,6 @@ class ReportesEstiquetasProduccion extends CI_Controller {
     public function onExportarCSVPriceSuper() {
 
         try {
-//            //Nombre del archivo
-//            $filename = 'ETIQUETAS_CAJAS_PRICE_SUPER_' . Date('h_i_s') . '.csv';
-//            header("Content-Description: File Transfer");
-//            header("Content-Disposition: attachment; filename=$filename");
-//            //Tipo de archivo
-//            header("Content-Type: application/csv; ");
-//            //Abrimos archivo
-//            $file = fopen('php://output', 'w');
-//            //Encabezados
-//            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-//            $header = array("Estilo", "Color", "3", "Id Art", "Marca", "6", "Control", "Punto", "Codigo Barras", "Num Prov", "11", "Pedido", "Catalogo");
-//            //Escribir CSV en memoria
-//            fputcsv($file, $header);
-//            //Obtener datos de la tabla de paso
-//            $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelPriceSuper();
-//
-//            //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
-//            foreach ($reporte as $key => $line) {
-//                //Se meten los datos del arreglo en el excel
-//                fputcsv($file, array_map(function($v) {
-//                            //a cada iteracion se le agrega "\r" a final de cada campo para forzar que sea texto
-//                            return $v;
-//                        }, $line));
-//            }
-//            //Cerramos el archivo
-//            fclose($file);
-//            //Fin del metodo
-//            exit;
-
             $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelPriceSuper();
             $objPHPExcel = new Excel();
             $objPHPExcel->setActiveSheetIndex(0);
@@ -366,48 +407,59 @@ class ReportesEstiquetasProduccion extends CI_Controller {
     public function onExportarCSVGenerico() {
 
         try {
-            //Nombre del archivo
-            $filename = 'ETIQUETAS_CAJAS_GENERAL_' . Date('h_i_s') . '.csv';
-            header("Content-Description: File Transfer");
-            header("Content-Disposition: attachment; filename=$filename");
-            //Tipo de archivo
-            header("Content-Type: application/csv; ");
-            //Abrimos archivo
-            $file = fopen('php://output', 'w');
-            //Encabezados
-            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            $header = array("Control", "Estilo", "Talla", "Tpo", "Color", "Nom Color", "Codigo 1", "Codigo 2", "Foto");
-            //Escribir CSV en memoria
-            fputcsv($file, $header);
-            //Obtener datos de la tabla de paso
             $reporte = $this->ReportesEstiquetasProduccion_model->getDatosReporteExcelGenerico();
+            $objPHPExcel = new Excel();
+            $objPHPExcel->setActiveSheetIndex(0);
 
-            //Llenamos el archivo con los datos del detalle, NOTA el return del modelo debe de ser un arreglo bidimensional, no un objeto bidimensional
-            foreach ($reporte as $key => $line) {
+            //Nombre de columnas
+
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, 'Control');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 1, 'Estilo');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, 1, 'Talla');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, 1, 'Tpo');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, 1, 'Color');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, 1, 'Nom Color');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, 1, 'Codigo 1');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, 1, 'Codigo 2');
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, 1, 'Foto');
 
 
-                $row = array(
-                    $line->control,
-                    $line->estiped,
-                    $line->punto,
-                    $line->tpo,
-                    $line->combped,
-                    $line->recio,
-                    $line->cod1,
-                    $line->cod2,
-                    'C:\\SIS386\\Fotos\\' . $line->estiped . '-1.jpg'
-                );
-                //Se meten los datos del arreglo en el csv
-                fputcsv($file, $row);
+            $row = 2;
+            foreach ($reporte as $key => $value) {
+                // Agregamos los datos
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value->control);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $row, $value->estiped, PHPExcel_Cell_DataType::TYPE_STRING);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value->punto);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value->tpo);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value->combped);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $value->recio);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $value->cod1);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $value->cod2);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, 'C:\\SIS386\\Fotos\\' . $value->estiped . '-1.jpg');
+                $row++;
             }
-            //Cerramos el archivo
-            fclose($file);
-            //Fin del metodo
-            exit;
+            // Renombramos hoja
+            $objPHPExcel->getActiveSheet()->setTitle('Hoja1');
+            $path = 'uploads/Reportes/Etiquetas';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "ETIQUETAS CAJAS GENERAL " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.xlsx';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Etiquetas/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save(str_replace(__FILE__, $url, __FILE__));
+            print base_url() . $url;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
+
+    /* Reporte etiqueta trazabilidad , en lobo solo no la usan */
 
     public function OnReporteEtiquetaTrazabalidad() {
         $cm = $this->ReportesEstiquetasProduccion_model;

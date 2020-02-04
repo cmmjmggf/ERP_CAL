@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="5.559917313492406"/>
-	<property name="ireport.x" value="3075"/>
-	<property name="ireport.y" value="112"/>
+	<property name="ireport.zoom" value="2.1435888100000664"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -35,7 +35,7 @@ cc.saldo,
 ((select sum(importe) from cartctepagos where mov in(1,2,3,4) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and agente = ag.clave and pagada = 0)/1.16) as IVA,
 -- comisiones = (importeliquidacion - IVA) * porcenComision
 case
-when datediff(cp.fechadep, cc.fecha) < 1 then (select porcentaje from agentesporcentajes where agente = ag.clave and Dias = '0' and A = '33')
+when datediff(cp.fechadep, cc.fecha) < 1 then (select porcentaje from agentesporcentajes where agente = ag.clave and Dias = '0')
 when ag.clave=2 and cp.cliente=100 then .03
 when ag.clave=3 and cp.cliente=1410 then .03
 when ag.clave=3 and cp.cliente=1701 then .05
@@ -105,11 +105,11 @@ when ag.clave=7 and cp.cliente=760 then .025
 when ag.clave=7 and cp.cliente=793 then .025
 when ag.clave=2 and cp.cliente=100 then .03
 when ag.clave=3 and cp.cliente=2305 then .03
-when (select sum(importe) from cartctepagos where mov in(5) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and agente = ag.clave and pagada = 0) = 0
+when (select ifnull(sum(importe),0) from cartctepagos where mov in(5) and remicion = cp.remicion and cliente = cp.cliente and tipo = cp.tipo and agente = ag.clave and pagada = 0) = 0
 	and datediff(cp.fechadep, cc.fecha) < 61
     and ag.clave <> 4
 then
-	(select porcentaje from agentesporcentajes where agente = ag.clave and Dias = '0' and A = '33')
+	(select porcentaje from agentesporcentajes where agente = ag.clave and Dias = '0')
 else
 	(SELECT Porcentaje FROM agentesporcentajes where datediff(cp.fechadep, cc.fecha) between Dias and A and Agente = ag.clave )
 end as porComision,

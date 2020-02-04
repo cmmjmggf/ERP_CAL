@@ -190,7 +190,10 @@
             } else if (cte === '39' || cte === '995') {//PRICE y ZAPATERÍA SUPER
                 reporte = 'OnReporteEtiquetasCajasPriceSuper';
                 csv = 'onExportarCSVPriceSuper';
-            } else {
+            } else if (cte === '2564' || cte === '2566' || cte === '2567' || cte === '2568') {//EXPORTACION SUSANA
+                reporte = 'OnReporteEtiquetasCajasExportacion';
+                csv = 'onExportarCSVExportacion';
+            } else {//CUALQUIER OTRO CLIENTE QUE NO SEA LOS ANTERIORES
                 reporte = 'OnReporteEtiquetasCajasGeneral';
                 csv = 'onExportarCSVGenerico';
             }
@@ -211,40 +214,20 @@
                 if (data.length > 0) {
 
 
-                    if (cte === '854') {
-                        $.ajax({
-                            url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
-                            type: "POST"
-                        }).done(function (data, x, jq) {
-                            console.log(data);
-                            if (data.length > 0) {
-                                window.open(data, '_blank');
-                                onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
-                            }
-                            HoldOn.close();
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                            HoldOn.close();
-                        });
-                    } else if (cte === '39' || cte === '995') {
-                        $.ajax({
-                            url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
-                            type: "POST"
-                        }).done(function (data, x, jq) {
-                            console.log(data);
-                            if (data.length > 0) {
-                                window.open(data, '_blank');
-                                onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
-                            }
-                            HoldOn.close();
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                            HoldOn.close();
-                        });
-                    } else {
-                        location.href = base_url + 'index.php/ReportesEstiquetasProduccion/' + csv;
+                    $.ajax({
+                        url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
+                        type: "POST"
+                    }).done(function (data, x, jq) {
+                        console.log(data);
+                        if (data.length > 0) {
+                            window.open(data, '_blank');
+                            onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
+                        }
                         HoldOn.close();
-                    }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                        HoldOn.close();
+                    });
 
 
                 } else {

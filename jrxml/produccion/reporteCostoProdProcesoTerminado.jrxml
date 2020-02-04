@@ -44,260 +44,25 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select
-PE.Control, PE.Estilo, PE.Color, PE.ColorT, E.Linea, L.Descripcion AS LineaT,
+PE.Control, PE.Estilo, PE.Color, PE.ColorT,
+E.Linea, L.Descripcion AS LineaT,
 cast(PE.Pares as decimal(4,0)) as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(4,0)) as ParesFacturados,
-cast(D.Clave as signed) AS Depto, C.EstatusProduccion  as DeptoT,
+cast(PE.DeptoProduccion as signed) AS Depto, PE.EstatusProduccion  as DeptoT,
 
-case when D.Clave = '10' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
+ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
+ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
+ifnull((select sum(GFD.costo) from gastosfabricaxdepto GFD where clave in (
 	select  DISTINCT(depto) as depto
 	from estilosprocesod
 	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-
-when D.Clave = '20' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '30' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '40' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '50' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '60' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '70' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '80' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '90' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '100' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '105' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '110' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '120' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '130' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '140' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '150' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '160' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '170' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '180' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '190' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '200' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '210' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '220' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-when D.Clave = '230' THEN
-
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-
-END AS Costo
+	and cast(depto as signed) <= CAST(PE.DeptoProduccion AS SIGNED))),0) as Costo
 from pedidox PE
-join controles C on C.control = PE.control
 join estilos E on E.Clave = PE.Estilo
 join lineas L on L.Clave = E.Linea
-join departamentos D on D.Descripcion = C.EstatusProduccion
-where PE.estatus in ('A','F') and PE.maquila not in ('98') and PE.maquila = $P{maq}
-and cast(D.Clave as signed) < 240
+where PE.stsavan <> 14 and PE.stsavan <> 13
+and PE.stsavan in (2, 10, 11, 2, 3, 33, 4, 40, 44, 5, 55, 6, 7, 8, 9)
+and PE.maquila <> '98' and PE.maquila = $P{maq}
 order by Depto asc, E.Linea asc, PE.Control asc;]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
@@ -356,6 +121,7 @@ order by Depto asc, E.Linea asc, PE.Control asc;]]>
 	<variable name="TotalGen" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[($F{Pares}-$F{ParesFacturados})*$F{Costo}]]></variableExpression>
 	</variable>
+	<filterExpression><![CDATA[($F{Pares}-$F{ParesFacturados}) >0]]></filterExpression>
 	<group name="Depto" isStartNewPage="true" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{Depto}]]></groupExpression>
 		<groupHeader>
@@ -631,7 +397,6 @@ order by Depto asc, E.Linea asc, PE.Control asc;]]>
 	</columnHeader>
 	<detail>
 		<band height="9" splitType="Stretch">
-			<printWhenExpression><![CDATA[($V{Pares_1}-$V{ParesFacturados_1})>0]]></printWhenExpression>
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="30" y="8" width="445" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
 				<graphicElement>

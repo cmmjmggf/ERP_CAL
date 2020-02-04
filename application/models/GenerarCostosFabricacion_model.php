@@ -192,7 +192,7 @@ class GenerarCostosFabricacion_model extends CI_Model {
                             from pedidox PE
                             join estilos E on E.Clave = PE.estilo
                             where PE.estilo <> '0' and PE.estilo is not null
-                            and PE.estatus in ('A')
+                            and PE.estatus in ('A','F')
                             GROUP BY PE.Maquila, PE.estilo, PE.Color
                             order by PE.Maquila ASC, PE.estilo ASC, PE.Color ASC ");
         } catch (Exception $exc) {

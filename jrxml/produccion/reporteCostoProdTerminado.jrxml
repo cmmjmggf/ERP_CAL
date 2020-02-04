@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.0276506581568685"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="46"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -54,26 +54,19 @@ PE.Color,
 PE.ColorT,
 cast(PE.Pares as decimal(4,0)) as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(4,0)) as ParesFacturados,
-cast(D.Clave as signed) AS Depto, C.EstatusProduccion  as DeptoT,
+cast(PE.DeptoProduccion as signed) AS Depto, PE.EstatusProduccion  as DeptoT,
 
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= D.Clave),0) +
-ifnull((select sum(costo) from gastosfabricaxdepto where clave in (
+ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
+ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
+ifnull((select sum(GFD.costo) from gastosfabricaxdepto GFD where clave in (
 	select  DISTINCT(depto) as depto
 	from estilosprocesod
 	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= D.Clave )),0)
-    AS Costo
-
+	and cast(depto as signed) <= CAST(PE.DeptoProduccion AS SIGNED))),0) as Costo
 from pedidox PE
-join controles C on C.control = PE.control
-join estilos E on E.Clave = PE.Estilo
-join departamentos D on D.Descripcion = C.EstatusProduccion
 join clientes CTE on CTE.Clave = PE.Cliente
-
-
-where PE.estatus in ('A','F') and PE.maquila not in ('98')
-and  cast(D.Clave as signed) = 240
+where PE.stsavan = 12
+and PE.maquila <> '98'
 order by CTE.Agente ASC,PE.Cliente desc, PE.Control asc;]]>
 	</queryString>
 	<field name="Agente" class="java.lang.String">
@@ -138,6 +131,7 @@ order by CTE.Agente ASC,PE.Cliente desc, PE.Control asc;]]>
 	<variable name="TotalGen" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[($F{Pares}-$F{ParesFacturados})*$F{Costo}]]></variableExpression>
 	</variable>
+	<filterExpression><![CDATA[($F{Pares}-$F{ParesFacturados}) >0]]></filterExpression>
 	<group name="Agente" isStartNewPage="true" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{Agente}]]></groupExpression>
 		<groupFooter>
@@ -416,7 +410,6 @@ order by CTE.Agente ASC,PE.Cliente desc, PE.Control asc;]]>
 	</columnHeader>
 	<detail>
 		<band height="9" splitType="Stretch">
-			<printWhenExpression><![CDATA[($F{Pares}-$F{ParesFacturados}) >0]]></printWhenExpression>
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="30" y="8" width="445" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
 				<graphicElement>
@@ -571,7 +564,7 @@ order by CTE.Agente ASC,PE.Cliente desc, PE.Control asc;]]>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Costeo de Producción en Proceso de: "+$P{mes} + " "+$P{ano}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Costeo de TERMINADO de: "+$P{mes} + " "+$P{ano}]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement x="0" y="5" width="72" height="42" uuid="c58a245f-921b-4b3d-abf1-71375bbcd2fc"/>

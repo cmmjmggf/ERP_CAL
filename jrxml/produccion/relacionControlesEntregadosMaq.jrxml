@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.8433187801425766"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.9513175103764793"/>
+	<property name="ireport.x" value="420"/>
+	<property name="ireport.y" value="31"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -275,7 +275,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="163" y="44" width="34" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<reportElement style="Column header" x="156" y="44" width="41" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -449,7 +449,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="163" y="0" width="34" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<reportElement x="156" y="0" width="41" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
@@ -533,7 +533,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				<textFieldExpression><![CDATA[$F{total_tej}+$F{subtotal_sintej}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement isPrintRepeatedValues="false" x="29" y="0" width="130" height="10" uuid="a74fe57e-bfb8-43f1-a0ae-2f5492f9e531"/>
+				<reportElement isPrintRepeatedValues="false" x="29" y="0" width="125" height="10" uuid="a74fe57e-bfb8-43f1-a0ae-2f5492f9e531"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
