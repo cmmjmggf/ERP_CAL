@@ -109,14 +109,14 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Empleado</label>
-                    <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm"> 
+                    <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm" maxlength="6"> 
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
                     <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm"></select> 
                 </div>  
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Fracción</label>
-                    <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm"> 
+                    <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="6"> 
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
                     <select id="FraccionS" name="FraccionS" class="form-control form-control-sm"></select>
@@ -573,13 +573,6 @@
         });
 
         btnAceptar.click(function () {
-//            var dpto = AvanceDeptoActual.val() ? parseInt(AvanceDeptoActual.val()) : 0,
-//                    depto_avance = Departamento.val() ? parseInt(Departamento.val()) : 0;
-//            if (dpto > 0) {
-//
-//            } else {
-//
-//            }
 
             if (Departamento.val() && Control.val()) {
                 var f = new FormData();
@@ -749,6 +742,11 @@
                             var xDepartamento = Departamento.val() ? parseInt(Departamento.val()) : 0;
                             var stsavan = parseInt(rr.ESTATUS_PRODUCCION);
 
+                            if (xDepartamento === 4 && stsavan === 3) {
+                                Fraccion.val(102);
+                                FraccionS[0].selectize.setValue(102);
+                                onEnable(btnAceptar);
+                            }
                             if (xDepartamento === 33 && stsavan === 3) {
                                 if (parseInt(rr.MAQUILA) === 98) {
                                     Fraccion.val(113);

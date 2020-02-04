@@ -415,7 +415,7 @@ class FacturacionProduccion extends CI_Controller {
             $f["regadu"] = NULL;
             $f["periodo"] = Date('Y');
             $f["costo"] = NULL;
-            $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? $x["OBSERVACIONES"] : "SO";
+            $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? strtoupper($x["OBSERVACIONES"]) : "SO";
             $f["modulo"] = "PRODUCCION";
             $this->db->insert('facturacion', $f);
 //            print $this->db->last_query();

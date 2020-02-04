@@ -394,7 +394,7 @@
 //                    } else {
                     if (Control.val() && e.keyCode === 13) {
                         getUltimoAvanceXControl();
-                        $.getJSON("<?php print base_url('AvancePespunteMaquila/getInfoControl'); ?>", {
+                        $.getJSON("<?php print base_url('AvanceTejido/getInfoControl'); ?>", {
                             CONTROL: Control.val()
                         }).done(function (a, b, c) {
                             console.log(a);

@@ -941,7 +941,7 @@ class Avance9 extends CI_Controller {
             } else {
                 $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 102 AND F.control = {$x['CONTROL']} LIMIT 1";
                 $revisa_cobro = $this->db->query($sql)->result();
-                if (intval($revisa_cobro[0]->EXISTE) === 0) {
+                if (intval($revisa_cobro[0]->EXISTE) === 0 && intval($revisa_cobro_de_corte[0]->EXISTE) >= 1) {
                     $avance_pago['COBRO_CORTE'] = "SI";
                     $avance_pago['PUEDE_AVANZAR_A_RAYADO'] = "SI";
                     $avance_pago['PUEDE_AVANZAR_A_RAYADO_VALIDA'] = 1;

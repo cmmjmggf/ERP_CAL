@@ -187,11 +187,11 @@ class AvanceTejido extends CI_Controller {
     public function onVerificarAvance() {
         try {
 //            print json_encode($this->avtm->onVerificarAvance($this->input->get('CONTROL')));
-             print json_encode($this->db->select("COUNT(A.ID) AS EXISTE", false)
-                            ->from('avance AS A')
-                            ->where_in('A.Departamento', array(150, 160))
-                            ->like('A.Control', $this->input->get('CONTROL'))
-                            ->get()->result());
+            print json_encode($this->db->select("COUNT(A.ID) AS EXISTE", false)
+                                    ->from('avance AS A')
+                                    ->where_in('A.Departamento', array(150, 160))
+                                    ->like('A.Control', $this->input->get('CONTROL'))
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -294,6 +294,20 @@ class AvanceTejido extends CI_Controller {
                 $this->db->set('fec7', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])->update('avaprd');
                 $l = new Logs("Avance tejido", "HA AVANZO EL CONTROL {$xXx['CONTROL']} A TEJIDO CON LA FRACCION {$xXx['FRACCION']}.", $this->session);
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoControl() {
+        try {
+            print json_encode($this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
+                                            . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
+                                            . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
+                                            . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
+                                    ->from('controles AS C')
+                                    ->where('C.Control', $this->input->get('CONTROL'))
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

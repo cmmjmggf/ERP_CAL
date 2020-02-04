@@ -16,7 +16,7 @@
                         <a class="dropdown-item" href="#" onclick="btnClientes.trigger('click');"><span class="fa fa-users"></span> CLIENTES</a>
                         <a class="dropdown-item" href="#" onclick="btnMovClientes.trigger('click');"><span class="fa fa-exchange-alt"></span> MOVIMIENTOS CLIENTES</a>
                     </div>
-                </div> 
+                </div>
                 <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter font-weight-bold" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
@@ -1313,13 +1313,16 @@
                         }).done(function (a) {
                     var r = a[0];
                     var pares_finales_a_facturar = parseFloat(r.PARES_FACTURADOS) + parseFloat(TotalParesEntregaAF.val());
- 
+
                     pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
                     pnlTablero.find(".produccionsaldo").text(r.PARES - r.PARES_FACTURADOS);
                     TotalParesEntregaF.val(r.PARES_FACTURADOS);
                     var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
+
+
+
                     TotalParesEntregaAF.val(total_para_facturar);
-                    
+
                     /* 36 ES MENOR QUE 40*/
                     if (parseInt(r.PARES) < pares_finales_a_facturar) {
                         onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
@@ -1376,6 +1379,7 @@
                             }
                             pares_finales = pares_facturados + pares_a_facturar;
                             if (pares_a_facturar > 0) {
+                                TotalParesEntregaAF.val(pares_a_facturar);
                                 console.log("son pares validos? => ", validos);
                                 //                                if (pares_finales <= pares && validos) {
                                 console.log('PARES OK');
@@ -2094,7 +2098,7 @@
             pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
             TotalParesEntregaF.val(r.PARES_FACTURADOS);
             var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
-            TotalParesEntregaAF.val(total_para_facturar);
+            TotalParesEntregaAF.val(ttpaf); 
         }).fail(function (x) {
             getError(x);
         }).always(function () {

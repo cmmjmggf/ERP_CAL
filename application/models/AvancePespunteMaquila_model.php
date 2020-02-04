@@ -137,7 +137,7 @@ class AvancePespunteMaquila_model extends CI_Model {
                                     . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
                                     . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
                             ->from('controles AS C')
-                            ->like('C.Control', $CONTROL)
+                            ->where('C.Control', $CONTROL)
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

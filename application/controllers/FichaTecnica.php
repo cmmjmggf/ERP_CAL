@@ -591,7 +591,17 @@ class FichaTecnica extends CI_Controller {
 
     public function getFichaTecnicaByEstiloByColor() {
         try {
-            print json_encode($this->ftm->getFichaTecnicaByEstiloByColor($this->input->get('Estilo'), $this->input->get('Color')));
+            $x = $this->input->get();
+            print json_encode($this->db->select("U.*, (SELECT Descripcion FROM colores WHERE estilo = '{$x['Estilo']}' AND clave = {$x['Color']} LIMIT 1) AS COLOR_TEXT", false)->from('fichatecnica AS U')->where('U.Estilo', $x['Estilo'])->where('U.Color', $x['Color'])->where_in('U.Estatus', 'ACTIVO')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getColorXClaveEstilo() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT C.Descripcion AS COLOR_TEXT FROM erp_cal.colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave = '{$x['COLOR']}'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -676,15 +686,11 @@ class FichaTecnica extends CI_Controller {
             $dbx = $this->db;
 
             $dbx->select('FT.ID,E.Linea AS LINEA, FT.Estilo AS ESTILO, FT.Color AS COLOR, '
-                            . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
-                            . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
-                            . 'A.Descripcion AS ARTICULOT, '
-                            . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO, '
-                            . '(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO', false)
-                    ->from('fichatecnica AS FT')
-                    ->join('piezas AS P', 'FT.Pieza = P.Clave')
-                    ->join('articulos AS A', 'FT.Articulo = A.Clave')
-                    ->join('estilos AS E', 'FT.Estilo = E.Clave');
+                    . 'FT.Pieza AS PIEZA, P.Descripcion AS PIEZAT,  '
+                    . 'P.Departamento AS SEC, FT.Articulo AS ARTICULO, '
+                    . 'A.Descripcion AS ARTICULOT, '
+                    . 'FT.Consumo AS CONSUMO, P.Rango AS RANGO, '
+                    . '(SELECT PM.Precio FROM preciosmaquilas AS PM WHERE PM.Articulo = A.Clave LIMIT 1) AS PRECIO', false)->from('fichatecnica AS FT')->join('piezas AS P', 'FT.Pieza = P.Clave')->join('articulos AS A', 'FT.Articulo = A.Clave')->join('estilos AS E', 'FT.Estilo = E.Clave');
 
             if ($LINEA !== '') {
                 $dbx->where('E.Linea', $LINEA);
@@ -711,13 +717,11 @@ class FichaTecnica extends CI_Controller {
         try {
             $burl = base_url();
             $this->db->select('E.Clave AS CLAVE, CONCAT("' . $burl . '",E.Foto) AS URL, '
-                    . 'REPLACE(E.Foto,"uploads/Estilos/","") AS FOTO ', false)
-                    ->from('estilos AS E');
+                    . 'REPLACE(E.Foto,"uploads/Estilos/","") AS FOTO ', false)->from('estilos AS E');
             if ($this->input->get('ESTILO') !== '') {
                 $this->db->where('E.Clave', $this->input->get('ESTILO'));
             }
-            $data = $this->db->group_by('E.Foto')
-                    ->order_by('ABS(E.Clave)', 'ASC')->get()->result();
+            $data = $this->db->group_by('E.Foto')->order_by('ABS(E.Clave)', 'ASC')->get()->result();
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -830,7 +834,7 @@ class PDF extends FPDF {
     const MM_IN_INCH = 25.4;
     const A4_HEIGHT = 297;
     const A4_WIDTH = 210;
-    // tweak these values (in pixels)
+// tweak these values (in pixels)
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 500;
 
@@ -855,11 +859,11 @@ class PDF extends FPDF {
     function centreImage($img) {
         list($width, $height) = $this->resizeToFit($img);
 
-        // you will probably want to swap the width/height
-        // around depending on the page's orientation
+// you will probably want to swap the width/height
+// around depending on the page's orientation
         $this->Image(
-                $img, (self::A4_HEIGHT - $width) / 2,
-                (self::A4_WIDTH - $height) / 2,
+                $img, (self::A4_HEIGHT - $width ) / 2,
+                (self::A4_WIDTH - $height ) / 2,
                 $width,
                 $height
         );

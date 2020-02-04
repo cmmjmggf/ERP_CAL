@@ -156,7 +156,13 @@ class AvancePespunteMaquila extends CI_Controller {
     }
 
     public function getInfoControl() {
-        try {
+        try {$this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
+                                    . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
+                                    . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
+                                    . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
+                            ->from('controles AS C')
+                            ->where('C.Control', $this->input->get('CONTROL'))
+                            ->get()->result();
             print json_encode($this->apm->getInfoControl($this->input->get('CONTROL')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
