@@ -1001,9 +1001,13 @@
         });
 
         mdlAddendaCoppel.find("#FacturaCoppel").on('keydown keyup', function (e) {
-            onKeyDownValOK(this, e, function () {
+//            onKeyDownValOK(this, e, function () {
+//                
+//            });
 
-            });
+            if (e.keyCode === 13 && $(this).val()) {
+
+            }
         });
 
         mdlAddendaCoppel.find("#xTiendaCoppel").on('keydown keyup', function (e) {
@@ -2000,53 +2004,54 @@
 
     function getInfoXControl() {
         onBeep(3);
-        getFacturacionDiff();
-
-        $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
-                {
-                    CONTROL: Control.val()
-                }).done(function (a) {
-            if (a.length > 0) {
-                var r = a[0];
-                pnlTablero.find(".produccionfabricados").text(r.PARES);
-                pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
-                pnlTablero.find(".produccionsaldo").text(r.PARES_FACTURADOS);
-                var xrow = pnlTablero.find("#tblTallasF tr#rCantidades:eq(1)").find("td");
-                xrow.eq(1).find("input").val(0);
-                xrow.eq(2).find("input").val(0);
-                xrow.eq(3).find("input").val(0);
-                xrow.eq(4).find("input").val(0);
-                xrow.eq(5).find("input").val(0);
-                xrow.eq(6).find("input").val(0);
-                xrow.eq(7).find("input").val(0);
-                xrow.eq(8).find("input").val(0);
-                xrow.eq(9).find("input").val(0);
-                xrow.eq(10).find("input").val(0);
-                xrow.eq(11).find("input").val(0);
-                xrow.eq(12).find("input").val(0);
-                xrow.eq(13).find("input").val(0);
-                xrow.eq(14).find("input").val(0);
-                xrow.eq(15).find("input").val(0);
-                xrow.eq(16).find("input").val(0);
-                xrow.eq(17).find("input").val(0);
-                xrow.eq(18).find("input").val(0);
-                xrow.eq(19).find("input").val(0);
-                xrow.eq(20).find("input").val(0);
-                xrow.eq(21).find("input").val(0);
-                xrow.eq(22).find("input").val(0);
-                var index = 1;
-                $.each(pnlTablero.find("#tblTallasF tr#rCantidades:eq(0) td"), function (k, v) {
+        if (Control.val()) {
+            getFacturacionDiff();
+            $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
+                    {
+                        CONTROL: Control.val()
+                    }).done(function (a) {
+                if (a.length > 0) {
+                    var r = a[0];
+                    pnlTablero.find(".produccionfabricados").text(r.PARES);
+                    pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
+                    pnlTablero.find(".produccionsaldo").text(r.PARES_FACTURADOS);
+                    var xrow = pnlTablero.find("#tblTallasF tr#rCantidades:eq(1)").find("td");
+                    xrow.eq(1).find("input").val(0);
+                    xrow.eq(2).find("input").val(0);
+                    xrow.eq(3).find("input").val(0);
+                    xrow.eq(4).find("input").val(0);
+                    xrow.eq(5).find("input").val(0);
+                    xrow.eq(6).find("input").val(0);
+                    xrow.eq(7).find("input").val(0);
+                    xrow.eq(8).find("input").val(0);
+                    xrow.eq(9).find("input").val(0);
+                    xrow.eq(10).find("input").val(0);
+                    xrow.eq(11).find("input").val(0);
+                    xrow.eq(12).find("input").val(0);
+                    xrow.eq(13).find("input").val(0);
+                    xrow.eq(14).find("input").val(0);
+                    xrow.eq(15).find("input").val(0);
+                    xrow.eq(16).find("input").val(0);
+                    xrow.eq(17).find("input").val(0);
+                    xrow.eq(18).find("input").val(0);
+                    xrow.eq(19).find("input").val(0);
+                    xrow.eq(20).find("input").val(0);
+                    xrow.eq(21).find("input").val(0);
+                    xrow.eq(22).find("input").val(0);
+                    var index = 1;
+                    $.each(pnlTablero.find("#tblTallasF tr#rCantidades:eq(0) td"), function (k, v) {
 //                    console.log(v, $(v).index());
-                    if ($(v).find("input").val() === '') {
-                        onDisable(pnlTablero.find("#tblTallasF tr#rCantidades:eq(2) td:eq(" + $(v).index() + ") input"));
-                    }
-                });
-            }
-        }).fail(function (x) {
-            getError(x);
-        }).always(function () {
+                        if ($(v).find("input").val() === '') {
+                            onDisable(pnlTablero.find("#tblTallasF tr#rCantidades:eq(2) td:eq(" + $(v).index() + ") input"));
+                        }
+                    });
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
 
-        });
+            });
+        }
     }
 
     function onVerTienda() {
@@ -2098,7 +2103,7 @@
             pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
             TotalParesEntregaF.val(r.PARES_FACTURADOS);
             var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
-            TotalParesEntregaAF.val(ttpaf); 
+            TotalParesEntregaAF.val(ttpaf);
         }).fail(function (x) {
             getError(x);
         }).always(function () {
@@ -2456,37 +2461,13 @@
         ParesFacturados.row.add(rowx).draw(false);
         $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         getTotalFacturado();
-//        var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
-//        var b = '</div><div class="col-12 cantidad" align="center">';
-//        var c = '</div></div>';
-//        var rowx = [
-//            123456789010, Documento.val(), ClienteFactura.val(), Control.val(), FechaFactura.val(),
-//            TotalParesEntregaAF.val()
-//        ];
-//        for (var i = 1; i < 23; i++) {
-//            rowx.push(a + getTalla('#T' + i) + b + getValor('#CAF' + i) + c);
-//        }
-//        rowx.push('$' + $.number(parseFloat(PrecioFacturacion.val()), 2, '.', ','));
-//        rowx.push(PrecioFacturacion.val());
-//        rowx.push('$' + $.number(parseFloat(SubtotalFacturacion.val()), 2, '.', ','));
-//        rowx.push(SubtotalFacturacion.val());
-//        rowx.push('<button type="button" class="btn btn-danger" onclick="onEliminarFila(this);"><span class="fa fa-trash"></span></button>');
-//        rowx.push(CajasFacturacion.val());
-//        rowx.push(ObservacionFacturacion.val());
-//        rowx.push(DescuentoFacturacion.val());
-//        rowx.push(ParesFacturadosFacturacion.val());
-//        rowx.push(Documento.val());
-//        rowx.push(TMNDAFactura.val());
-//        rowx.push(PAGFactura.val());
-//        rowx.push(EstatusControl.val());
-        //        rowx.push((pnlTablero.find("#cNoIva")[0].checked ? 1 : 0));
-        //        //            console.log(rowx);
-        //        ParesFacturados.row.add(rowx).draw(false);
-        //        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-        //        getTotalFacturado();
-        /*REGISTRAR EN FACTURACION*/
         TPFactura.attr('disabled', false);
         ClienteFactura[0].selectize.enable();
+        var total_pares_a_facturar = 0;
+        for (var i = 1; i < 23; i++) { 
+            total_pares_a_facturar += parseInt(($.isNumeric(pnlTablero.find("#CAF" + i).val()) ? parseInt(pnlTablero.find("#CAF" + i).val()) : 0));
+            TotalParesEntregaAF.val(total_pares_a_facturar);
+        }
         var p = {
             FECHA: FechaFactura.val(),
             CLIENTE: ClienteFactura.val(),

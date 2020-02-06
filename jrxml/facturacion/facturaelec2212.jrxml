@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec2212" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
 	<property name="ireport.zoom" value="1.8181818181818334"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="168"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -515,7 +515,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="53" splitType="Prevent">
+		<band height="64" splitType="Prevent">
 			<staticText>
 				<reportElement x="382" y="0" width="97" height="15" uuid="580e4cef-7b18-401b-a48b-db863228af57"/>
 				<textElement textAlignment="Right"/>
@@ -548,7 +548,12 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="45" height="20" uuid="acb5273e-784e-4d31-94bc-9ab4362ddf65"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{pareped_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="44" width="479" height="20" uuid="bc9920f3-ddcd-472d-b645-cf725c95adcb"/>
+				<textFieldExpression><![CDATA[$F{monletra}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Rastreo de controles ya capturados en nómina</h5>
+                <h5 class="modal-title"><span class="fa fa-search"></span> Rastreo de controles ya capturados en nómina</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -66,7 +66,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">IMPRIMIR</button>
+                <button type="button" class="btn btn-info" id="btnImprimir"><span class="fa fa-print"></span> IMPRIMIR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -91,7 +91,7 @@
             });
             mdlRastreoControlNomina.find("#AnoRastreo").val(new Date().getFullYear());
             getSemanaByFechaRastreoControlNom(getFechaActualConDiagonales());
-            mdlRastreoControlNomina.find('#SemRastreo').focus().select();
+            mdlRastreoControlNomina.find('#ControlRastreo').focus().select();
             getControlesNominaRastreo('', new Date().getFullYear(), sem_ini, '');
             getEmpleadosRastreoControl();
 
@@ -255,7 +255,7 @@
     function getSemanaByFechaRastreoControlNom(fecha) {
         $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getSemanaByFecha', {Fecha: fecha}).done(function (data) {
             if (data.length > 0) {
-                mdlRastreoControlNomina.find('#SemRastreo').val(data[0].sem);
+//                mdlRastreoControlNomina.find('#SemRastreo').val(data[0].sem);
             } else {
                 swal('ERROR', 'NO EXISTE SEMANA', 'info');
             }

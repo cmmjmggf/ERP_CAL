@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec39" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.zoom" value="2.0490403660952117"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="214"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -11,7 +11,7 @@
 	<parameter name="factura" class="java.lang.String"/>
 	<parameter name="certificado" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT   CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS CONTROL, F.fecha AS FECHA, F.hora, F.corrida, F.pareped, F.estilo AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias, F.agente, F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo ,
+		<![CDATA[SELECT   CONCAT(C.Clave, " ", C.RazonS) AS CLIENTE, C.Direccion AS DIRECCION, C.Colonia AS COLONIA, C.Ciudad AS CIUDAD, C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, (CASE WHEN F.contped = 0 THEN "" ELSE F.contped END) AS CONTROL, F.fecha AS FECHA, F.hora, F.corrida, F.pareped, CONCAT(F.estilo," ",(CASE WHEN F.colsuel = 0 THEN "" ELSE F.colsuel END)) AS ESTILO, F.precto AS PRECIO, F.subtot, F.iva, F.staped, F.monletra, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen AS REFERENCIA, F.decdias, F.agente, F.colsuel AS COLOR, F.tpofac, F.año, F.zona, F.horas AS HORAS, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo ,
 (CASE
 WHEN C.FormaPago = 0 THEN "00"
 WHEN C.FormaPago = 1 THEN "01"
@@ -56,7 +56,9 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 	<field name="tp" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="CONTROL" class="java.lang.Integer"/>
+	<field name="CONTROL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="FECHA" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -455,20 +457,12 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 				<reportElement x="0" y="11" width="572" height="1" uuid="5cd767b2-8aca-47df-bae7-b04853a6e906"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="128" y="-1" width="44" height="13" forecolor="#333333" backcolor="#FFFFFF" uuid="b53c8d1b-de01-4c43-9e3f-ae7b7bd97c0f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="172" y="-1" width="233" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="8d74a124-b3e0-4d7c-8c87-b70b59e4427d"/>
+				<reportElement mode="Transparent" x="128" y="-1" width="277" height="13" forecolor="#333333" backcolor="#FFFFFF" uuid="b53c8d1b-de01-4c43-9e3f-ae7b7bd97c0f"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="405" y="-1" width="60" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
@@ -489,7 +483,7 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="53" splitType="Prevent">
+		<band height="70" splitType="Prevent">
 			<staticText>
 				<reportElement x="382" y="0" width="97" height="15" uuid="580e4cef-7b18-401b-a48b-db863228af57"/>
 				<textElement textAlignment="Right"/>
@@ -545,6 +539,13 @@ FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN 
 				</textElement>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="0" y="53" width="382" height="17" uuid="3d1d89c7-cf23-481d-8646-ee2d17437388"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monletra}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>

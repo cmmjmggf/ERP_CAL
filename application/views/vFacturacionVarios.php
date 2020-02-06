@@ -102,7 +102,7 @@
                         <select class="form-control form-control-sm notEnter selectNotEnter" id="Estilo" name="Estilo" required placeholder="">
                             <option></option>
                             <?php
-                            foreach ($this->db->query("SELECT E.Clave AS Clave,CONCAT(E.Clave,'-',IFNULL(E.Descripcion,'')) AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
+                            foreach ($this->db->query("SELECT E.Clave AS Clave,IFNULL(E.Descripcion,'')  AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
                                 print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
                             }
                             ?>

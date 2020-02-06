@@ -5,7 +5,7 @@ require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
 class Avance8 extends CI_Controller {
 
-    private $avances = array(2 => "CORTE", 3 => "RAYADO", 4 => "FOLEADO", 33 => "REBAJADO", 40 => "ENTRETELADO", 42 => "MAQUILA", 44 => "ALMACEN DE CORTE", 5 => "PESPUNTE", 6 => "ALMACEN DE PESPUNTE", 7 => "TEJIDO", 8 => "ALMACEN DE TEJIDO", 9 => "MONTADO", 10 => "ADORNO", 11 => "ALMACEN ADORNO", 12 => "TERMINADO", 13 => "FACTURADO", 14 => "CANCELADO");
+    private $avances = array(2 => "CORTE", 3 => "RAYADO", 4 => "FOLEADO", 33 => "REBAJADO", 40 => "ENTRETELADO", 42 => "MAQUILA", 44 => "ALMACEN DE CORTE", 5 => "PESPUNTE",55=>"ENSUELADO", 6 => "ALMACEN DE PESPUNTE", 7 => "TEJIDO", 8 => "ALMACEN DE TEJIDO", 9 => "MONTADO", 10 => "ADORNO", 11 => "ALMACEN ADORNO", 12 => "TERMINADO", 13 => "FACTURADO", 14 => "CANCELADO");
 
     public function __construct() {
         parent::__construct();
@@ -760,9 +760,9 @@ class Avance8 extends CI_Controller {
             $x = $this->input->get();
             $avance_pago = array();
             /* 1 REVISAR SI YA ESTA COBRADO POR CORTE FRACCION 100 */
-            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,60,103) AND F.control = {$x['CONTROL']} LIMIT 1";
+            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103) AND F.control = {$x['CONTROL']} LIMIT 1";
             $revisa_cobro = $this->db->query($sql)->result();
-            if (intval($revisa_cobro[0]->EXISTE) === 4) {
+            if (intval($revisa_cobro[0]->EXISTE) === 3) {
                 $avance_pago['COBRO_CORTE'] = "SI";
                 $avance_pago['COBRO_RAYADO'] = "SI";
                 $avance_pago['PUEDE_AVANZAR_A_ALMCORTEOMAQUILA'] = "SI";
@@ -770,7 +770,7 @@ class Avance8 extends CI_Controller {
             } else {
                 $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(51) AND F.control = {$x['CONTROL']} LIMIT 1";
                 $revisa_cobro_entretelado = $this->db->query($sql)->result();
-                if (intval($revisa_cobro[0]->EXISTE) === 4 && intval($revisa_cobro_entretelado[0]->EXISTE) === 0) {
+                if (intval($revisa_cobro[0]->EXISTE) === 3 && intval($revisa_cobro_entretelado[0]->EXISTE) === 0) {
                     $avance_pago['COBRO_CORTE'] = "SI";
                     $avance_pago['COBRO_RAYADO'] = "SI";
                     $avance_pago['PUEDE_AVANZAR_A_ALMCORTEOMAQUILA'] = "SI";
@@ -803,9 +803,9 @@ class Avance8 extends CI_Controller {
             $x = $this->input->get();
             $avance_pago = array();
             /* 1 REVISAR SI YA ESTA COBRADO POR CORTE FRACCION 100 */
-            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,60,103,300) AND F.control = {$x['CONTROL']} LIMIT 1";
+            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,300) AND F.control = {$x['CONTROL']} LIMIT 1";
             $revisa_cobro = $this->db->query($sql)->result();
-            if (intval($revisa_cobro[0]->EXISTE) === 5) {
+            if (intval($revisa_cobro[0]->EXISTE) === 4) {
                 $avance_pago['COBRO_CORTE'] = "SI";
                 $avance_pago['COBRO_RAYADO'] = "SI";
                 $avance_pago['PUEDE_AVANZAR_A_ALMPESPUNTE'] = "SI";
@@ -813,7 +813,7 @@ class Avance8 extends CI_Controller {
             } else {
                 $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(397) AND F.control = {$x['CONTROL']} LIMIT 1";
                 $revisa_cobro_ensuelado = $this->db->query($sql)->result();
-                if (intval($revisa_cobro[0]->EXISTE) === 5 && intval($revisa_cobro_ensuelado[0]->EXISTE) === 0) {
+                if (intval($revisa_cobro[0]->EXISTE) === 4 && intval($revisa_cobro_ensuelado[0]->EXISTE) === 0) {
                     $avance_pago['COBRO_CORTE'] = "SI";
                     $avance_pago['COBRO_RAYADO'] = "SI";
                     $avance_pago['PUEDE_AVANZAR_A_ALMPESPUNTE'] = "SI";

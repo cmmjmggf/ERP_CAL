@@ -132,7 +132,7 @@ class FacturacionVarios extends CI_Controller {
                         }
                         break;
                     default :
-                        $Descripcion = $x["ESTILO"] . " " . $x["CONCEPTO"];
+                        $Descripcion = $x["CONCEPTO"];
                         break;
                 }
                 if (intval($x["TP"]) === 1) {

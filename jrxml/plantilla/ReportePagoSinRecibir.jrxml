@@ -18,7 +18,8 @@
   CTP.FraccionT AS FRACCION_TEXT, CTP.Precio AS PRECIO, CTP.Fecha AS FECHA_SINRECIBIR,
   CTP.Estatus AS ESTATUS, CTP.FechaRetorna AS FECHA_RECIBIDO, (CTP.Pares * CTP.Precio) AS SUBTOTAL,
 ifnull((CASE
- WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.05 )
+ WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.5 )
+WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
 END),0) AS STT_PORCTJ
  FROM controlpla AS CTP WHERE CTP.Estatus = 1 AND STR_TO_DATE(CTP.Fecha, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
 order by PROVEEDOR asc]]>

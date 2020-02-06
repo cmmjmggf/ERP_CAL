@@ -889,8 +889,7 @@ class FacturacionProduccion extends CI_Controller {
                             PRINT $jc->getReport();
                             exit(0);
                             break;
-                        case 1755:
-                            ;                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                        case 1755:                           /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('qrplus/qr.png');
@@ -1052,7 +1051,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             exit(0);
-                            break;
+                            break; 
                         default :
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
