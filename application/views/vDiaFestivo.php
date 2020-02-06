@@ -1,8 +1,9 @@
 <div class="modal fade" id="mdlGeneraDiaFestivo" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Genera día festivo</h5>
+                <h5 class="modal-title">
+                    <span class="fa fa-coins"></span>  Genera día festivo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -25,10 +26,17 @@
                         <label>Fecha Final</label>
                         <input type="text" id="FechaFinalGDF" name="FechaFinalGDF" maxlength="12" class="form-control form-control-sm date" readonly="">
                     </div>
+                    <div class="col-12 my-2">   
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <h2 class="font-weight-bold" style="color: #ff0000"><span style="color: #007bff">NOTA:</span> DEBE DE GENERAR PRIMERO LA NOMINA DEL DÍA FESTIVO.</h2>
+                        
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnGuardarGDF">GUARDAR</button>
+                <button type="button" class="btn btn-info" id="btnGuardarGDF"><span class="fa fa-save"></span> GENERAR</button>
             </div>
         </div>
     </div>

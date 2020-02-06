@@ -2,7 +2,8 @@
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Estatus del Pedido Por Grupo ó Agente</h5>
+                <h5 class="modal-title">
+                    <span class="fa fa-file"></span>  Estatus del Pedido Por Grupo ó Agente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -37,7 +38,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-info" id="btnImprimir">
+                    <span class="fa fa-print"></span>  ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>

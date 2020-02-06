@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.9686833286075056"/>
-	<property name="ireport.x" value="1070"/>
+	<property name="ireport.x" value="1081"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -55,24 +55,24 @@ PE.Semana,
 CASE
 WHEN PE.Control = 0 OR PE.Control IS NULL THEN 0
 WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 1
-WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN CAST(D.Clave AS SIGNED)
+WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN (CASE WHEN D.Clave IS NOT NULL THEN CAST(D.Clave AS SIGNED) ELSE C.DeptoProduccion END)
 END AS Avance,
 CASE
 WHEN PE.Control = 0 OR PE.Control IS NULL THEN 'PRE-PROGRAMADO'
 WHEN PE.Control > 0 AND C.EstatusProduccion IS NULL THEN 'PROGRAMADO'
-WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN D.Descripcion
+WHEN PE.Control > 0 AND C.EstatusProduccion IS NOT NULL THEN (CASE WHEN D.Descripcion IS NULL THEN C.EstatusProduccion ELSE  D.Descripcion END)
 END AS AvanceT,
 L.Clave AS Linea,
 L.Descripcion AS LineaT,
 cast(PE.Pares as decimal(4,0)) as Pares
 from pedidox PE
 left join controles C on PE.Control =  C.control
-left join departamentos D on D.Descripcion  = C. EstatusProduccion
+left join departamentos D on D.Descripcion  = C.EstatusProduccion
 join clientes CT on CT.Clave = PE.Cliente
 join estados EDO on EDO.Clave = CT.Estado
 join estilos E on E.Clave = PE.Estilo
 join lineas L on L.clave = E.Linea
-where PE.maquila not in('98')
+where PE.maquila not in('98') AND PE.stsavan NOT IN(13,14)  AND PE.stsavan IS NOT NULL
 and PE.estatus in ('A')
 and PE.agente = $P{agente}
 order by Estado ASC, Cliente ASC, PE.FechaEntrega ASC, PE.Clave ASC, PE.Estilo ASC, PE.Color ASC  ;]]>
@@ -501,14 +501,14 @@ order by Estado ASC, Cliente ASC, PE.FechaEntrega ASC, PE.Clave ASC, PE.Estilo A
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="707" y="0" width="61" height="9" uuid="f4592846-fa8d-425e-ba6d-fb238724f98b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{AvanceT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="693" y="0" width="11" height="9" uuid="6fc6f9ec-9573-4eb0-8f52-7d6608c01ace"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
