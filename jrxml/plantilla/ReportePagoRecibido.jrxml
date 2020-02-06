@@ -24,7 +24,7 @@ ifnull((CASE
  WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.5 )
 WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
 END),0) AS STT_PORCTJ
- FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y") AND CTP.Fraccion NOT IN(306,502)
+ FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
 order by abs(PROVEEDOR) asc]]>
 	</queryString>
 	<field name="PROVEEDOR" class="java.lang.Integer">
