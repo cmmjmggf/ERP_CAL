@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="3.4522712143932663"/>
-	<property name="ireport.x" value="2021"/>
-	<property name="ireport.y" value="39"/>
+	<property name="ireport.x" value="911"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -45,9 +45,10 @@ cv.flete,
 cv.precto,
 cv.preaut,
 cv.fecha,
-((cv.matpri + cv.mextr) * cv.toler)  as tolerancia,
-(cv.preaut * cv.`desc`)as descaut,
-(cv.preaut * cv.comic)as comisut
+cv.preaut - (cv.matpri+cv.mextr+ ((cv.matpri + cv.mextr) * cv.toler) + cv.maob + cv.tejida) -
+(cv.gfabri+ cv.gvta + cv.gadmon + cv.hms + cv.flete ) -
+(cv.preaut * cv.`desc`)-
+(cv.preaut * cv.comic) as utilpreaut
 from costovaria cv
 join lineas l on l.clave = cv.linea
 join costofijo cf on cf.lista = cv.lista
@@ -128,13 +129,9 @@ order by cv.lista, cv.corr, cv.estilo asc, cv.color asc]]>
 	<field name="fecha" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tolerancia" class="java.lang.Double"/>
-	<field name="descaut" class="java.lang.Double"/>
-	<field name="comisut" class="java.lang.Double"/>
-	<variable name="preutiaut" class="java.lang.Float">
-		<variableExpression><![CDATA[(($F{preaut}-$F{matpri}-$F{mextr}-$F{tolerancia}-
-$F{maob}-$F{gfabri}-$F{gvta}-$F{gadmon}-$F{hms}-
-$F{flete}-$F{descaut}-$F{comisut})/$F{preaut})]]></variableExpression>
+	<field name="utilpreaut" class="java.lang.Double"/>
+	<variable name="utilipreAut" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{utilpreaut}/$F{preaut}]]></variableExpression>
 	</variable>
 	<group name="Linea">
 		<groupExpression><![CDATA[$F{numlinea}]]></groupExpression>
@@ -900,14 +897,14 @@ $F{flete}-$F{descaut}-$F{comisut})/$F{preaut})]]></variableExpression>
 					<pen lineWidth="1.0" lineColor="#000000"/>
 				</graphicElement>
 			</line>
-			<textField pattern="#,##0.0%" isBlankWhenNull="true">
+			<textField pattern="#,##0.00%" isBlankWhenNull="true">
 				<reportElement x="711" y="0" width="27" height="11" isPrintInFirstWholeBand="true" uuid="5b16b58c-287e-41e9-a2b5-dd087e5c5e3b">
-					<printWhenExpression><![CDATA[$V{preutiaut}>0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$V{utilipreAut}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{preutiaut}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{utilipreAut}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -1,13 +1,8 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-3 float-left">
+            <div class="col-sm-6 float-left">
                 <legend class="float-left">Costeo inventarios</legend>
-            </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary btn-sm " id="btnCapturarGastos" >
-                    <span class="fa fa-check" ></span> GASTOS FABRICACIÓN
-                </button>
             </div>
             <div class="col-sm-6 float-right" align="right">
                 <button type="button" class="btn btn-primary btn-sm " id="btnVerFichaTecnica" >
@@ -27,17 +22,59 @@
                 </button>
             </div>
         </div>
+        <hr>
+        <div class="row" id="Gastos">
+            <div class="col-2 mt-3">
+                <label class="badge badge-danger" style="font-size: 15px;">Gastos de Fabricación</label>
+            </div>
+            <div class="col-1">
+                <label class="">Corte</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul" maxlength="5" id="corte" name="corte"   >
+            </div>
+            <div class="col-1">
+                <label class="">Pesp</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul" maxlength="5" id="pespu" name="pespu"   >
+            </div>
+            <div class="col-1">
+                <label class="">Tejido</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul" maxlength="5" id="tejido" name="tejido"   >
+            </div>
+            <div class="col-1">
+                <label class="">Mont</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul" maxlength="5" id="montado" name="montado"   >
+            </div>
+            <div class="col-1">
+                <label class="">Adorno</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul" maxlength="5" id="adorno" name="adorno"   >
+            </div>
+            <div class="col-1">
+                <label class="">Total</label>
+                <input type="text" class="form-control form-control-sm numbersOnly azul notSum" readonly="" maxlength="5" id="total" name="total"   >
+            </div>
+        </div>
         <div class="card-block">
             <div class="table-responsive" id="CosteaInventariosProceso">
                 <table id="tblCosteaInventariosProceso" class="table table-sm display " style="width:100%">
                     <thead>
                         <tr>
                             <th>Maq</th>
-                            <th>Linea</th>
                             <th>Estilo</th>
                             <th>Color</th>
                             <th></th>
-                            <th>Total</th>
+                            <th class="text-info">Corte</th>
+                            <th class="text-info">Pespu</th>
+                            <th class="text-info">Tejido</th>
+                            <th class="text-info">Monta</th>
+                            <th class="text-info">Adorn</th>
+                            <th class="text-danger">Ma-Pr</th>
+                            <th class="text-success">Corte</th>
+                            <th class="text-success">Pespu</th>
+                            <th class="text-success">Tejido</th>
+                            <th class="text-success">Monta</th>
+                            <th class="text-success">Adorn</th>
+                            <th class="text-danger">Ma-Ob</th>
+                            <th class="text-danger">Termin</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -46,168 +83,22 @@
         </div>
     </div>
 </div>
-<!--GUARDAR-->
-<div class="card border-0 m-3 d-none animated fadeIn" style="z-index: 99 !important" id="pnlDatos">
-    <div class="card-body text-dark">
-        <form id="frmNuevo">
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-4 float-left">
-                    <legend class="float-left">Costo por Estilo</legend>
-                </div>
-                <div class="col-12 col-sm-6 col-md-8" align="right">
-                    <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
-                        <span class="fa fa-arrow-left" ></span> REGRESAR
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm d-none" id="btnImprimirCosteaInventariosProceso">
-                        <span class="fa fa-file-invoice fa-1x"></span> IMPRIMIR
-                    </button>
-                </div>
-            </div>
-            <div class=" row">
-                <div class="col-12 col-sm-4 col-md-6 col-lg-3">
-                    <label for="Estilo">Estilo*</label>
-                    <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm" >
-                </div>
-                <div class="col-12 col-sm-4 col-md-6 col-lg-3">
-                    <label for="" >Color</label>
-                    <input type="text" id="Color" name="Color" readonly="" class="form-control form-control-sm" >
-                </div>
-                <div class="col-12 col-sm-4 col-md-6 col-lg-3">
-                    <label for="" >Maquila</label>
-                    <input type="text" id="Maquila" name="Maquila" readonly="" class="form-control form-control-sm" >
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--DETALLE-->
-<div class="card d-none m-3 animated fadeIn" id="pnlDetalle">
-    <div class="card-body" >
-        <!--DETALLE-->
-        <div class="row">
-            <div class=" col-md-9 ">
-                <div class="row">
-                    <div class="table-responsive" id="CosteaInventariosProcesoDetalle">
-                        <table id="tblCosteaInventariosProcesoDetalle" class="table table-sm  " style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Departamento</th>
-                                    <th>Costo M.O.</th>
-                                    <th>Costo Materiales</th>
-                                    <th>Gastos</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th>Totales:</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="">Fotografía</label>
-                <div id="VistaPrevia" >
-                    <img src="<?php echo base_url(); ?>img/camera.png" class="img-thumbnail img-fluid"/>
-                </div>
-            </div>
-        </div>
-        <!--FIN DETALLE-->
-    </div>
-</div>
-
-<!--MODAL DE CAPTURA DE GASTOS-->
-<div class="modal " id="mdlCapturaGastosFabricacion"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Captura gastos por Departamento</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-9">
-                        <label class="text-info " style="font-size: 15px;">Si no visualiza nada hacer click en el botón de [LIMPIA Y CAPTURA]--></label>
-                    </div>
-                    <div class="col-sm-3 float-right" align="right">
-                        <button type="button" class="btn btn-danger btn-sm"  id="btnLimpiarTabla">
-                            <span class="fa fa-cogs" ></span> LIMPIA Y CAPTURA
-                        </button>
-                    </div>
-
-
-                    <div class="col-sm-12 mt-3">
-                        <div class="table-responsive" id="GastosFabrica">
-                            <table id="tblGastosFabrica" class="table table-sm  " style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Clave</th>
-                                        <th>Departamento</th>
-                                        <th>Costo</th>
-                                        <th>Costo Oculto</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Total:</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" align="center">
-                        <label class="badge badge-danger" style="font-size: 15px;">CUALQUIER MODIFICACIÓN, TENDRÁ QUE VOLVER A REGENERAR LOS COSTOS</label>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  id="btnAceptar" data-dismiss="modal">ACEPTAR</button>
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!--SCRIPT-->
 <script>
     var master_url = base_url + 'index.php/GenerarCostosFabricacion/';
-    var pnlDatos = $("#pnlDatos");
     var pnlTablero = $("#pnlTablero");
-    var pnlDetalle = $("#pnlDetalle");
-    var btnNuevo = $("#btnNuevo");
     var btnGeneraCostosFabric = $("#btnGeneraCostosFabric");
-    var btnCapturarGastos = $("#btnCapturarGastos");
-
 
     var btnVerFichaTecnica = $('#btnVerFichaTecnica');
     var btnVerFracciones = $('#btnVerFracciones');
     var btnVerEstilos = $('#btnVerEstilos');
     var btnVerColores = $('#btnVerColores');
 
-    var mdlCapturaGastosFabricacion = $('#mdlCapturaGastosFabricacion');
 
-    var btnCancelar = pnlDatos.find("#btnCancelar");
-    var IdMovimiento = 0;
-    var nuevo = true;
     $(document).ready(function () {
+        handleEnterDiv(pnlTablero);
+        getGastosFab();
+        getRecords();
 
         btnVerColores.click(function () {
             $.fancybox.open({
@@ -317,13 +208,10 @@
             });
         });
 
-        btnCancelar.click(function () {
-            pnlTablero.removeClass("d-none");
-            pnlDatos.addClass('d-none');
-            pnlDetalle.addClass('d-none');
+        pnlTablero.find("#Gastos").find('input').blur(function () {
+            suma();
         });
-        getRecords();
-        handleEnter();
+
         btnGeneraCostosFabric.click(function () {
 
             swal({
@@ -345,60 +233,59 @@
             }).then((value) => {
                 switch (value) {
                     case "aceptar":
-                        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
-                        $.ajax({
-                            url: master_url + 'onValidaExisteFichaTecnicaManoObra',
-                            type: "POST",
-                            dataType: "JSON"
+                        var corte = pnlTablero.find('#corte').val();
+                        var pespu = pnlTablero.find('#pespu').val();
+                        var tejido = pnlTablero.find('#tejido').val();
+                        var montado = pnlTablero.find('#montado').val();
+                        var adorno = pnlTablero.find('#adorno').val();
+                        HoldOn.open({theme: "sk-bounce", message: "GENERANDO COSTOS,POR FAVOR ESPERE..."});
+                        $.getJSON(master_url + 'onGenerarCostosInventarioProceso', {
+                            corte: corte,
+                            pespu: pespu,
+                            tejido: tejido,
+                            montado: montado,
+                            adorno: adorno
                         }).done(function (data, x, jq) {
-                            var mensaje = 'Los siguientes registros no tienen ficha técnica: \n\n';
-                            var mensaje2 = 'Los siguientes registros no tienen mano de obra: \n\n';
-
-                            if (data.length > 0) { //Hay estilos sin ficha técnica o mano de obra
-                                $.each(data, function (k, v) {
-                                    if (v.msg === 'FT') {
-                                        mensaje += 'Estilo: ' + v.estilo + ' <--> Color: ' + v.color + ' \n';
-                                    } else {
-                                        mensaje2 += 'Estilo: ' + v.estilo + ' \n';
-                                    }
+                            console.log(data);
+                            HoldOn.close();
+                            if (data.pedidos === 0) {
+                                swal('ATENCIÓN', 'No existen estilos en producción para costear', 'error').then((value) => {
                                 });
-
-                                HoldOn.close();
-                                //Mandamos mensaje al usuario si quiere continuar o cancela la operacion
-                                swal({
-                                    title: "ATENCION",
-                                    text: mensaje + ' \n' + mensaje2,
-                                    icon: "warning",
-                                    closeOnClickOutside: false,
-                                    closeOnEsc: false,
-                                    buttons: {
-                                        cancelar: {
-                                            text: "Cancelar",
-                                            value: "cancelar"
-                                        },
-                                        eliminar: {
-                                            text: "Continuar",
-                                            value: "aceptar"
+                            } else {
+                                if (data.fichatecnica.length > 0) {
+                                    swal('ATENCIÓN', 'Los siguientes estilos no tienen Ficha Técnica \n' + data.fichatecnica, 'error').then((value) => {
+                                        if (data.fracciones.length > 0) {
+                                            swal('ATENCIÓN', 'Los siguientes estilos no tienen Fracciones capturadas \n' + data.fracciones, 'error').then((value) => {
+                                                swal('ATENCIÓN', 'SE HAN GENERADO LOS COSTOS ', 'success').then((value) => {
+                                                    CosteaInventariosProceso.ajax.reload();
+                                                });
+                                            });
+                                        } else {
+                                            swal('ATENCIÓN', 'SE HAN GENERADO LOS COSTOS ', 'success').then((value) => {
+                                                CosteaInventariosProceso.ajax.reload();
+                                            });
                                         }
+                                    });
+                                } else {
+                                    if (data.fracciones.length > 0) {
+                                        swal('ATENCIÓN', 'Los siguientes estilos no tienen Fracciones capturadas \n' + data.fracciones, 'error').then((value) => {
+                                            swal('ATENCIÓN', 'SE HAN GENERADO LOS COSTOS ', 'success').then((value) => {
+                                                CosteaInventariosProceso.ajax.reload();
+                                            });
+                                        });
+                                    } else {
+                                        swal('ATENCIÓN', 'SE HAN GENERADO LOS COSTOS ', 'success').then((value) => {
+                                            CosteaInventariosProceso.ajax.reload();
+                                        });
                                     }
-                                }).then((value) => {
-                                    switch (value) {
-                                        case "aceptar":
-                                            onGenerarCostos();
-                                        case "cancelar":
-                                            swal.close();
-                                            break;
-                                    }
-                                });
-
-                            } else {//Se generan los costos sin ningun mensaje
-                                onGenerarCostos();
+                                }
                             }
+
+
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                             HoldOn.close();
                         });
-
                     case "cancelar":
                         swal.close();
                         break;
@@ -406,47 +293,7 @@
             });
         });
 
-        btnCapturarGastos.click(function () {
-            mdlCapturaGastosFabricacion.modal('show');
-        });
-
-        mdlCapturaGastosFabricacion.on('shown.bs.modal', function () {
-            mdlCapturaGastosFabricacion.find("input").val("");
-            $.each(mdlCapturaGastosFabricacion.find("select"), function (k, v) {
-                mdlCapturaGastosFabricacion.find("select")[k].selectize.clear(true);
-            });
-            getDeptosParaGastosDepto();
-        });
-
-        mdlCapturaGastosFabricacion.find('#btnLimpiarTabla').click(function () {
-            HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
-            $.ajax({
-                url: master_url + 'onLimpiarTabla',
-                type: "POST"
-            }).done(function (data, x, jq) {
-                GastosFabrica.ajax.reload();
-                HoldOn.close();
-            }).fail(function (x, y, z) {
-                console.log(x, y, z);
-                HoldOn.close();
-            });
-        });
-
     });
-    function onGenerarCostos() {
-        HoldOn.open({theme: "sk-bounce", message: "GENERANDO COSTOS,POR FAVOR ESPERE..."});
-        $.ajax({
-            url: master_url + 'onGenerarCostosInventarioProceso',
-            type: "POST"
-        }).done(function (data, x, jq) {
-            swal('ATENCIÓN', 'SE HAN GENERADO LOS COSTOS', 'success');
-            CosteaInventariosProceso.ajax.reload();
-            HoldOn.close();
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-            HoldOn.close();
-        });
-    }
     var tblCosteaInventariosProceso = $('#tblCosteaInventariosProceso');
     var CosteaInventariosProceso;
     function getRecords() {
@@ -457,7 +304,7 @@
             tblCosteaInventariosProceso.DataTable().destroy();
         }
         CosteaInventariosProceso = tblCosteaInventariosProceso.DataTable({
-            "dom": 'Bfrtip',
+            "dom": 'frtip',
             buttons: buttons,
             "ajax": {
                 "url": master_url + 'getRecords',
@@ -467,18 +314,32 @@
             },
             "columns": [
                 {"data": "maq"},
-                {"data": "linea"},
                 {"data": "estilo"},
                 {"data": "color"},
-                {"data": "colorT"},
-                {"data": "totalmp"}
-            ],
-            "columnDefs": [
+                {"data": "nomcol"},
+
+                {"data": "mapcte"},
+                {"data": "mappes"},
+                {"data": "maptej"},
+                {"data": "mapmon"},
+                {"data": "mapado"},
+                {"data": "tomap"},
+
+                {"data": "mdocte"},
+                {"data": "mdopes"},
+                {"data": "mdotej"},
+                {"data": "mdomon"},
+                {"data": "mdoado"},
+                {"data": "tomdo"},
+
+                {"data": "termi"},
+                {"data": "fecha"}
             ],
             language: lang,
             "autoWidth": true,
             "colReorder": true,
             "displayLength": 20,
+            "scrollY": "400px",
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -491,280 +352,31 @@
                 HoldOn.close();
             }
         });
-        $('#tblCosteaInventariosProceso_filter input[type=search]').focus();
-        tblCosteaInventariosProceso.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            nuevo = false;
-            tblCosteaInventariosProceso.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = CosteaInventariosProceso.row(this).data();
-            temp = dtm.EstiloId;
-            $.getJSON(master_url + 'getDetalleByEstiloColorMaq', {estilo: dtm.estilo, color: dtm.color, maq: dtm.maq}).done(function (data, x, jq) {
-                pnlDatos.find("input").val("");
-                pnlDatos.find("#Estilo").val(dtm.estilo);
-                pnlDatos.find("#Color").val(dtm.color + ' ' + dtm.colorT);
-                pnlDatos.find("#Maquila").val(dtm.maq);
-                getFotoXEstilo(dtm.estilo);
-                getCosteaInventariosProcesoDetalleByID(dtm.estilo, dtm.color, dtm.maq);
-                pnlTablero.addClass("d-none");
-                pnlDetalle.removeClass('d-none');
-                pnlDatos.removeClass('d-none');
-                HoldOn.close();
-            }).fail(function (x, y, z) {
-                console.log(x, y, z);
-            }).always(function () {
-            });
-        });
+        //$('#tblCosteaInventariosProceso_filter input[type=search]').focus();
     }
-    var tblGastosFabrica = $('#tblGastosFabrica');
-    var GastosFabrica;
-    function getDeptosParaGastosDepto() {
-        HoldOn.open({theme: 'sk-bounce', message: 'CARGANDO DATOS...'});
-        temp = 0;
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblGastosFabrica')) {
-            tblGastosFabrica.DataTable().destroy();
-        }
-        GastosFabrica = tblGastosFabrica.DataTable({
-            "dom": 'frt',
-            buttons: buttons,
-            "ajax": {
-                "url": master_url + 'getDeptosParaGastosDepto',
-                "dataType": "json",
-                "type": 'POST',
-                "dataSrc": ""
-            },
-            "columns": [
-                {"data": "clave"},
-                {"data": "departamento"},
-                {"data": "costo"},
-                {"data": "costoHide"}
-            ],
-            "footerCallback": function (row, data, start, end, display) {
-                var api = this.api(); //Get access to Datatable API
-                // Update footer
-
-                var totalCV = api.column(3).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(2).footer()).html(api.column(2, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalCV), 2, '.', ',');
-                }, 0));
-            },
-            "columnDefs": [
-                {
-                    "targets": [3],
-                    "visible": false,
-                    "searchable": false
-                },
-            ],
-            language: lang,
-            "autoWidth": true,
-            "colReorder": false,
-            "displayLength": 50,
-            scrollY: 240,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            keys: true,
-            "bSort": true,
-            "aaSorting": [
-
-            ],
-            "initComplete": function (x, y) {
-                HoldOn.close();
-            }
-        });
-        $('#tblGastosFabrica_filter input[type=search]').focus();
-        tblGastosFabrica.find('tbody').on('click', 'tr', function () {
-            tblGastosFabrica.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-        });
-    }
-    function onChangeCosto(costo, depto) {
-        HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
-        $.ajax({
-            url: master_url + 'onChangeCosto',
-            type: "POST",
-            data: {
-                costo: costo === 0 ? 0 : costo,
-                depto: depto
-            }
-        }).done(function (data, x, jq) {
-            HoldOn.close();
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-            HoldOn.close();
-        });
-    }
-    function validate(event, val) {
-        if (((event.which !== 46 || (event.which === 46 && val === '')) || val.indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
-            event.preventDefault();
-        }
-    }
-    var tblCosteaInventariosProcesoDetalle = pnlDetalle.find('#tblCosteaInventariosProcesoDetalle');
-    var CosteaInventariosProcesoDetalle;
-    function getCosteaInventariosProcesoDetalleByID(Estilo, Color, Maquila) {
-
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblCosteaInventariosProcesoDetalle')) {
-            tblCosteaInventariosProcesoDetalle.DataTable().destroy();
-        }
-        CosteaInventariosProcesoDetalle = tblCosteaInventariosProcesoDetalle.DataTable({
-            "ajax": {
-                "url": master_url + 'getDetalleByEstiloColorMaq',
-                "dataSrc": "",
-                "data": {
-                    "estilo": Estilo,
-                    "color": Color,
-                    "maq": Maquila
-                }
-            },
-            "columnDefs": [
-
-                {
-                    "targets": [1],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                }, {
-                    "targets": [2],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [3],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [4],
-                    "render": function (data, type, row) {
-                        return '$' + $.number(parseFloat(data), 2, '.', ',');
-                    }
-                },
-                {
-                    "targets": [5],
-                    "visible": false,
-                    "searchable": false
-                }
-
-            ],
-            "columns": [
-                {"data": "depto"}, /*0*/
-                {"data": "costomo"}, /*1*/
-                {"data": "costomp"}, /*2*/
-                {"data": "gastos"}, /*3*/
-                {"data": "total"}, /*4*/
-                {"data": "orden"} /*4*/
-            ],
-            "footerCallback": function (row, data, start, end, display) {
-                var api = this.api(); //Get access to Datatable API
-                // Update footer
-                var totalMO = api.column(1).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(1).footer()).html(api.column(1, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalMO), 2, '.', ',');
-                }, 0));
-                var totalMP = api.column(2).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(2).footer()).html(api.column(2, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalMP), 2, '.', ',');
-                }, 0));
-                var totalG = api.column(3).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(3).footer()).html(api.column(3, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalG), 2, '.', ',');
-                }, 0));
-                var totalGEN = api.column(4).data().reduce(function (a, b) {
-                    var ax = 0, bx = 0;
-                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
-                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
-                    return  (ax + bx);
-                }, 0);
-                $(api.column(4).footer()).html(api.column(4, {page: 'current'}).data().reduce(function (a, b) {
-                    return '$' + $.number(parseFloat(totalGEN), 2, '.', ',');
-                }, 0));
-            },
-            "createdRow": function (row, data, index) {
-                $.each($(row).find("td"), function (k, v) {
-                    var c = $(v);
-                    var index = parseInt(k);
-                    switch (index) {
-                        case 0:
-                            /*COSTO MO*/
-                            c.addClass('text-info text-strong');
-                            break;
-                        case 4:
-                            /*ELIMINAR*/
-                            c.addClass('text-strong');
-                            break;
-                    }
-                });
-            },
-            "dom": 'frt',
-            "autoWidth": true,
-            language: lang,
-            "displayLength": 500,
-            "colReorder": true,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollY": 350,
-            "scrollCollapse": true,
-            "bSort": true,
-            "keys": true,
-            order: [[5, 'asc']],
-            "initComplete": function (x, y) {
-                HoldOn.close();
-            }
-        });
-        tblCosteaInventariosProcesoDetalle.find('tbody').on('click', 'tr', function () {
-            tblCosteaInventariosProcesoDetalle.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var tr = $(this);
-        });
-    }
-    function getFotoXEstilo(Estilo) {
-        $.getJSON(base_url + 'index.php/FraccionesXEstilo/' + 'getEstiloByID', {Estilo: Estilo}).done(function (data, x, jq) {
-
+    function getGastosFab() {
+        $.getJSON(master_url + 'getGastosFab').done(function (data) {
             if (data.length > 0) {
-                var dtm = data[0];
-                var vp = pnlDetalle.find("#VistaPrevia");
-                if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                    var ext = getExt(dtm.Foto);
-                    if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                        vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail img-fluid" width="400px" />');
-                    }
-                    if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                        vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                    }
-                } else {
-                    vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid"/>');
-                }
+                pnlTablero.find('#corte').val(data[0].gfcte);
+                pnlTablero.find('#pespu').val(data[0].gfpes);
+                pnlTablero.find('#tejido').val(data[0].gftej);
+                pnlTablero.find('#montado').val(data[0].gfmon);
+                pnlTablero.find('#adorno').val(data[0].gfado);
+                pnlTablero.find('#total').val(data[0].total);
+                pnlTablero.find('#corte').focus().select();
             }
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        }).always(function () {
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
         });
     }
-
+    function suma() {
+        var total = 0;
+        pnlTablero.find("#Gastos").find('input:not(.notSum)').each(function () {
+            total = total + parseFloat(($(this).val() === '') ? 0 : $(this).val());
+        });
+        pnlTablero.find('#total').val(parseFloat(total).toFixed(2));
+    }
 
 </script>
 <style>
@@ -779,10 +391,29 @@
         background-color: #FFF !important;
         color: #000!important;
     }
-</style>
 
-<style>
     .table-sm th, .table-sm td {
         padding: 0.05rem;
+    }
+    table tbody tr {
+        font-size: 0.7rem !important;
+    }
+
+    .verde {
+
+        background-color: #B9F5A2 !important;
+    }
+
+    .azul  {
+        background-color: #4BEFF1 !important;
+    }
+
+    .rojo {
+        background-color: #FFBEAC !important;
+
+    }
+    label{
+        margin-top: 0.0rem;
+        margin-bottom: 0.0rem;
     }
 </style>

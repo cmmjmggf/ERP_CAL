@@ -40,7 +40,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row d-none">
+                    <div class="row ">
                         <div class="col-12 col-sm-4">
                             <label>% Desperdicio</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly disabledForms" id="Desperdicio" name="Desperdicio" >
@@ -217,20 +217,20 @@
             if (data.length > 0) {
                 var Piezas = parseInt(Pzas);
                 if (Piezas === 1) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtraXBotaAlta));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtraXBotaAlta));
                 } else if (Piezas === 2) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtraXBota));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtraXBota));
                 } else if (Piezas <= 10 && Piezas > 2) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtra3a10));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra3a10));
                 } else if (Piezas <= 14 && Piezas > 10) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtra11a14));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra11a14));
                 } else if (Piezas <= 18 && Piezas > 14) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtra15a18));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra15a18));
                 } else if (Piezas > 19) {
-                    mdlFichaTecnicaCompra.find("#Desperdicio").val(parseFloat(data[0].PorExtra19a));
+                    mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val(parseFloat(data[0].PorExtra19a));
                 }
             } else {
-                mdlFichaTecnicaCompra.find("#Desperdicio").val('0')
+                mdlFichaTecnicaPreciosCostos.find("#Desperdicio").val('0')
             }
 
         }).fail(function (x, y, z) {

@@ -304,7 +304,25 @@ class Empleados extends CI_Controller {
                 }
             }
             unset($data["Numero"]);
-            var_dump($x->post('Numero'));
+            $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onModificarBajas() {
+        try {
+            $x = $this->input;
+            $data = array();
+            foreach ($this->input->post() as $key => $v) {
+                //print "$key  = $v \n";
+                if ($v !== '') {
+                    $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
+                }
+            }
+            $FECHA_FINAL_EGRE = date("Y-m-d", strtotime(str_replace('/', '-', $x->post('Numero'))));
+            $data['Egreso'] = $FECHA_FINAL_EGRE;
+            unset($data["Numero"]);
             $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

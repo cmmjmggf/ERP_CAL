@@ -47,7 +47,7 @@
                 frm.append('Numero', numeroEmp);
                 frm.append('AltaBaja', 2);
                 $.ajax({
-                    url: base_url + 'index.php/Empleados/onModificarExt',
+                    url: base_url + 'index.php/Empleados/onModificarBajas',
                     type: "POST",
                     cache: false,
                     contentType: false,
