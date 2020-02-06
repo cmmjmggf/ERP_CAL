@@ -67,7 +67,7 @@ when ag.clave=5 and cp.cliente=1917 then .025
 when ag.clave=5 and cp.cliente=531 then .04
 when ag.clave=6 and cp.cliente=1025 then .025
 when ag.clave=6 and cp.cliente=564 then .025
-when ag.clave=6 and cp.cliente=603 then .025
+-- when ag.clave=6 and cp.cliente=603 then .025
 when ag.clave=6 and cp.cliente=931 then .025
 when ag.clave=6 and cp.cliente=953 then .025
 when ag.clave=6 and cp.cliente=952 then .025

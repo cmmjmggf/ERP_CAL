@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-1" style="padding-right: 0px; padding-left: 0px;">
                     <label for="" >Estilo</label>
-                    <input type="text" class="form-control form-control-sm " maxlength="7" id="bEstilo" name="bEstilo" 
+                    <input type="text" class="form-control form-control-sm " maxlength="7" id="bEstilo" name="bEstilo"
                            style="   height: 65px;        font-weight: bold;        font-size: 45px;" >
                 </div>
                 <div class="col-10">
@@ -26,8 +26,8 @@
                             <select id="sbColor" name="sbColor" class="form-control form-control-sm required NotSelectize selectNotEnter d-none" required="" style="height: 50px; font-weight: bold; font-size: 45px;">
                                 <option value=""></option>
                             </select>
-                            <span class="nombre_color selectize-input-lg font-italic" 
-                                  style="color: #FFEB3B !important; font-weight:bold;  
+                            <span class="nombre_color selectize-input-lg font-italic"
+                                  style="color: #FFEB3B !important; font-weight:bold;
                                   text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;">-</span>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                     <label for="" >Estilo</label>
                     <input type="text" class="form-control form-control-sm d-none" maxlength="7"  id="Estilo" name="Estilo"   >
                     <div class="w-100"></div>
-                    <span class="clave_estilo" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;   
+                    <span class="clave_estilo" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;
                           text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;">-</span>
                 </div>
                 <div  class="col-8" >
@@ -161,16 +161,16 @@
                     <div class="row">
                         <div class="col-3 text-center">
                             <input type="text" class="form-control form-control-sm  numbersOnly d-none" id="Color" name="Color" maxlength="2" required="">
-                            <span class="clave_color" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;   
+                            <span class="clave_color" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;
                                   text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;">-</span>
                         </div>
                         <div  id="clave_color_select" class="col-9">
                             <select id="sColor" name="sColor" class="form-control form-control-sm required selectNotEnter" required="" >
                                 <option value=""></option>
-                            </select>     
+                            </select>
                         </div>
-                        <div  id="clave_color_text_select" class="col-9 d-none"> 
-                            <span class="nombre_color_text" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;   
+                        <div  id="clave_color_text_select" class="col-9 d-none">
+                            <span class="nombre_color_text" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;
                                   text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;">-</span>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                     <label for="FechaAlta">Fecha de alta</label>
                     <input type="text" class="form-control form-control-sm notEnter d-none" id="FechaAlta" name="FechaAlta"  >
                     <div class="w-100"></div>
-                    <span class="fecha_de_alta" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;   
+                    <span class="fecha_de_alta" style="color: #FFEB3B !important; font-weight:bold; font-size: 25px;
                           text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;">-</span>
                 </div>
             </div>
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-4 col-lg-2">
-                    <div class="row"> 
+                    <div class="row">
                         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <button type="button" id="btnAgregar" class="btn btn-info mt-4">
                                 <span class="fa fa-check"></span> ACEPTAR</button>
@@ -580,14 +580,34 @@
         });
         pnlDatos.find("[name='Articulo']").change(function () {
             if (nuevo) {
-                $.getJSON('<?php print base_url('FichaTecnica/onGetInfoArticulo'); ?>', {Articulo: $(this).val()}).done(function (data) {
-                    if (data.length > 0) {
-                        pnlDatos.find("#Unidad").val(data[0].unidad);
+                var art = $(this).val();
+                $.getJSON('<?php print base_url('FichaTecnica/onGetPrecioMaquila'); ?>', {Articulo: art}).done(function (dataPrecioMaq) {
+                    if (dataPrecioMaq.length > 0) {//Si tiene precio maquila trae la informacion del articulo
+                        $.getJSON('<?php print base_url('FichaTecnica/onGetInfoArticulo'); ?>', {Articulo: art}).done(function (data) {
+                            if (data.length > 0) {
+                                pnlDatos.find("#Unidad").val(data[0].unidad);
+                            }
+                        }).fail(function (x) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                        });
+                    } else {//Si no trae precio maquila no deja hacer nada y borra el articulo
+
+                        swal('ATENCIÓN', 'EL ARTÍCULO NO TIENE PRECIO/MAQUILA CAPTURADO \n\n Favor de revisarlo con el departamento de COMPRAS', 'warning').then((value) => {
+                            pnlDatos.find("#Unidad").val('');
+                            pnlDatos.find("[name='Articulo']")[0].selectize.clear(true);
+                            pnlDatos.find("[name='Articulo']")[0].selectize.focus();
+                        });
+
+
                     }
                 }).fail(function (x) {
                     swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                     console.log(x.responseText);
                 });
+
+
+
             }
         });
         pnlDatos.find("[name='Estilo']").keydown(function (e) {
@@ -704,9 +724,9 @@
 
             pnlTablero.find("#sbColor")[0].selectize.clear(true);
             pnlTablero.find("#sbColor")[0].selectize.clearOptions();
-  
+
             $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true); 
+                pnlDatos.find("select")[k].selectize.clear(true);
             });
             pnlDatos.find("#Estilo").focus();
             nuevo = true;
@@ -1477,7 +1497,7 @@
         font-size: 0.70rem !important;
     }
     .selectize-input-lg{
-        height: 50px; font-weight: bold; font-size: 39px; padding: 0px 12px 0px 12px; 
+        height: 50px; font-weight: bold; font-size: 39px; padding: 0px 12px 0px 12px;
     }
     button,input,label{
         font-weight: bold !important;
