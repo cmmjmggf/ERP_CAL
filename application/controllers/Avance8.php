@@ -363,8 +363,8 @@ class Avance8 extends CI_Controller {
                                             $avance = array(
                                                 'Control' => $xXx['CONTROL'],
                                                 'FechaAProduccion' => Date('d/m/Y'),
-                                                'Departamento' => 105,
-                                                'DepartamentoT' => 'ALMACEN CORTE',
+                                                'Departamento' => 100,
+                                                'DepartamentoT' => 'MAQUILA',
                                                 'FechaAvance' => Date('d/m/Y'),
                                                 'Estatus' => 'A',
                                                 'Usuario' => $_SESSION["ID"],
@@ -374,14 +374,14 @@ class Avance8 extends CI_Controller {
                                             );
                                             $this->db->insert('avance', $avance);
                                             $id = $this->db->insert_id();
-
-                                            $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                                            /* ACTUALIZA A 100 MAQUILA, stsavan 42 */
+                                            $this->db->set('EstatusProduccion', 'MAQUILA')->set('DeptoProduccion', 100)
                                                     ->where('Control', $xXx['CONTROL'])
                                                     ->update('controles');
-                                            $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
-                                                    ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                                            $this->db->set('stsavan', 42)->set('EstatusProduccion', 'MAQUILA')
+                                                    ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
                                                     ->update('pedidox');
-                                            $this->db->set('fec44', Date('Y-m-d 00:00:00'))
+                                            $this->db->set('fec42', Date('Y-m-d 00:00:00'))
                                                     ->where('contped', $xXx['CONTROL'])
                                                     ->update('avaprd');
                                         }

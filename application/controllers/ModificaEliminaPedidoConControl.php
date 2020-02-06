@@ -150,7 +150,8 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 exit(0);
             } else {
                 print json_encode(array("DELETED" => 1, "CONTROL" => $C, "MATCHES" => $X));
-                $this->db->set('stsavan', 14)->where('ID', $xxx['ID'])->where('Clave', $xxx['CLAVE'])->where('Control', $xxx['CONTROL'])->update('pedidox');
+                $this->db->set('stsavan', 14)->set('estatus', 'C')->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('ID', $xxx['ID'])->where('Clave', $xxx['CLAVE'])->where('Control', $xxx['CONTROL'])->update('pedidox');
+                $this->db->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('Control', $xxx['CONTROL'])->update('pedidox');
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
                 exit(0);
             }

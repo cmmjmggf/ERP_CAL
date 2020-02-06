@@ -74,8 +74,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                 /* 37 ENTRETELADO */
                 $this->db->set('status', 37)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(51))->update('fracpagnomina');
 
-                /* 74 ALMACEN CORTE */
-                $this->db->set('status', 74)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(74))->update('fracpagnomina');
+//                /* 74 ALMACEN CORTE */
+//                $this->db->set('status', 74)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(74))->update('fracpagnomina');
 
                 /* 40 FOLEADO */
                 $this->db->set('status', 40)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(60))->update('fracpagnomina');
@@ -101,7 +101,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                     34/* REBAJADO */,
                     40/* FOLEADO */,
                     37/* ENTRETELADO */,
-                    74/* ALM-CORTE */,
+//                    74/* ALM-CORTE */,
                     50/* PESPUNTE */,
                     55/* ENSUELADO */,
                     70/* TEJIDO */,
