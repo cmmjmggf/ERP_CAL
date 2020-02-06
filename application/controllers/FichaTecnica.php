@@ -52,6 +52,15 @@ class FichaTecnica extends CI_Controller {
         }
     }
 
+    public function onGetPrecioMaquila() {
+        try {
+            $Art = $this->input->get('Articulo');
+            print json_encode($this->db->query("select Precio from preciosmaquilas where Maquila = 1 and Articulo = '$Art' and estatus = 'A' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onGetInfoArticulo() {
         try {
             $Art = $this->input->get('Articulo');
@@ -104,7 +113,7 @@ class FichaTecnica extends CI_Controller {
             $pdf = new PDF('L');
             $pdf->AddPage();
 
-//            $pdf->centreImage(base_url("uploads/Estilos/{$x['ESTILO']}.JPG"));  
+//            $pdf->centreImage(base_url("uploads/Estilos/{$x['ESTILO']}.JPG"));
             $pdf->centreImage("{$x['URL']}");
 
             /* FIN RESUMEN */
