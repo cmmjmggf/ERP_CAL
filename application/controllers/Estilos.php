@@ -173,6 +173,10 @@ class Estilos extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
+            $check_estilo = $this->db->query("SELECT COUNT(*) AS EXISTE FROM estilos AS E WHERE E.Clave ='{$x->post('Clave')}' LIMIT 1")->result();
+            if (intval($check_estilo[0]->EXISTE) > 0) {
+                exit(0);
+            }
             $ID = $this->Estilos_model->onAgregar(array(
                 'Clave' => $x->post('Clave'),
                 'Descripcion' => $x->post('Descripcion'),
