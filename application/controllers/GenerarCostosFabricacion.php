@@ -115,7 +115,7 @@ class GenerarCostosFabricacion extends CI_Controller {
                                         from pedidox pe
                                         where pe.estilo <> '0' and pe.stsavan <> 14 and pe.stsavan <> 13
 					group by pe.Maquila,pe.estilo, pe.color
-                                        order by abs(pe.Maquila),pe.estilo, pe.color ")->result();
+                                        order by abs(pe.Maquila),pe.estilo, pe.color")->result();
 
             if (empty($Pedidos)) {//Si no existen salimos del método
                 $response['pedidos'] = 0;
@@ -294,28 +294,30 @@ class GenerarCostosFabricacion extends CI_Controller {
                                     'fecha' => Date('Y-m-d')
                         ));
                     }
-
-                    $term1 = $corte + $pesp + $teji + $mont + $ador;
-                    $term2 = $cortef + $pespf + $tejif + $montf + $adorf;
-                    $term3 = $gfcorte + $gfpespu + $gftejido + $gfmontado + $gfadorno;
-                    $terminado = $term1 + $term2 + $term3;
-
-                    $this->db->where('estilo', $estilo)->where('color', $ncolor)->where('linea', $linea)->where('maq', 1)
-                            ->update("estilosprocesox", array(
-                                'termi' => $terminado,
-                                'tomdo' => $term2,
-                                'tomap' => $term1
-                    ));
-                    //Actualiza el registro de gastos
-                    $this->db->where('linea', 99999)->where('estilo', 99999)
-                            ->update("estilosprocesox", array(
-                                'gfcte' => $gfcorte,
-                                'gfpes' => $gfpespu,
-                                'gftej' => $gftejido,
-                                'gfmon' => $gfmontado,
-                                'gfado' => $gfadorno,
-                    ));
                 }
+
+                /* Saca precio final en terminado despues del loop */
+                $this->db->query("update estilosprocesox set
+                                    tomdo = (mdocte+mdopes+mdotej+mdomon+mdoado),
+                                    tomap = (mapcte+mappes+maptej+mapmon+mapado),
+                                    termi = (mdocte+mdopes+mdotej+mdomon+mdoado) + (mapcte+mappes+maptej+mapmon+mapado) + (gfcte+gfpes+gftej+gfmon+gfado)
+                                    where maq = 1 ");
+
+
+
+                //Actualiza el registro de gastos
+                $this->db->where('linea', 99999)->where('estilo', 99999)
+                        ->update("estilosprocesox", array(
+                            'gfcte' => $gfcorte,
+                            'gfpes' => $gfpespu,
+                            'gftej' => $gftejido,
+                            'gfmon' => $gfmontado,
+                            'gfado' => $gfadorno,
+                ));
+
+
+
+
                 $response['fichatecnica'] = $estilossft; //Arroja los estilos que no tuvieron ficha tecnica
                 $response['fracciones'] = $estilossfrac; //Arroja los estilos que no tuvieron fracciones
             }

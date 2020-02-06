@@ -55,14 +55,42 @@ cast(PE.DeptoProduccion as signed) AS Depto,
 PE.EstatusProduccion  as DeptoT,
 cast(ifnull(PE.Pares,0) as decimal(5,0))  as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(5,0)) as ParesFacturados,
-ifnull((SELECT sum(EPMP.costomp) FROM estilosprocesod EPMP where EPMP.estilo = PE.Estilo and EPMP.color = PE.Color and EPMP.maq = PE.maquila  and CAST(EPMP.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
-ifnull((select sum(EPMO.costo) from estilosprocesodmo EPMO where EPMO.Estilo = PE.Estilo and CAST(EPMO.depto AS SIGNED) <= CAST(PE.DeptoProduccion AS SIGNED)),0) +
-ifnull((select sum(GFD.costo) from gastosfabricaxdepto GFD where clave in (
-	select  DISTINCT(depto) as depto
-	from estilosprocesod
-	where estilo = PE.Estilo and color = PE.Color and maq = PE.maquila
-	and cast(depto as signed) <= CAST(PE.DeptoProduccion AS SIGNED))),0) as Costo
-
+case
+when PE.stsavan = 2 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 3 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 33 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 4 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 40 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 44 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 44 then
+(select (mapcte+mdocte+gfcte) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 5 then
+(select (mapcte+mappes+mdocte+mdopes+gfcte+gfpes) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 55 then
+(select (mapcte+mappes+mdocte+mdopes+gfcte+gfpes) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 6 then
+(select (mapcte+mappes+mdocte+mdopes+gfcte+gfpes) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 7 then
+(select (mapcte+mappes+maptej+mdocte+mdopes+mdotej+gfcte+gfpes+gftej) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 8 then
+(select (mapcte+mappes+maptej+mdocte+mdopes+mdotej+gfcte+gfpes+gftej) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 9 then
+(select (mapcte+mappes+maptej+mapmon+mdocte+mdopes+mdotej+mdomon+gfcte+gfpes+gftej+gfmon) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 10 then
+(select (mapcte+mappes+maptej+mapmon+mapado+mdocte+mdopes+mdotej+mdomon+mdoado+gfcte+gfpes+gftej+gfmon+gfado) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 11 then
+(select (mapcte+mappes+maptej+mapmon+mapado+mdocte+mdopes+mdotej+mdomon+mdoado+gfcte+gfpes+gftej+gfmon+gfado) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 12 then
+(select (mapcte+mappes+maptej+mapmon+mapado+mdocte+mdopes+mdotej+mdomon+mdoado+gfcte+gfpes+gftej+gfmon+gfado) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+when PE.stsavan = 13 then
+(select (mapcte+mappes+maptej+mapmon+mapado+mdocte+mdopes+mdotej+mdomon+mdoado+gfcte+gfpes+gftej+gfmon+gfado) from estilosprocesox where linea = E.Linea and estilo = PE.Estilo and color = PE.Color and maq = PE.maquila)
+end as Costo
 from controlterm CT
 join pedidox PE on PE.control = CT.control
 join estilos E on E.Clave = PE.Estilo
