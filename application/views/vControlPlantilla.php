@@ -27,6 +27,10 @@
                     <span class="fa fa-exclamation"></span>
                     Reporte pago
                 </button>
+                <button type="button" id="btnCapturaPorcentajes" name="btnCapturaPorcentajes" class="btn btn-info btn-sm ">
+                    <span class="fa fa-dollar-sign"></span>
+                    Porcentaje Extra X Fracción
+                </button>
             </div>
         </div>
         <hr>
@@ -206,7 +210,54 @@
         </div>
     </div>
 </div>
-
+<!--MODA PARA CAPTURA DE PORCENTAJE X FRACCIONES SOLO LUCY Y YO-->
+<div class="modal" id="mdlCapturaPorcentaje">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content  modal-lg">
+            <div class="modal-header">
+                <h5 class="modal-title">Captura porcentaje extra para maquilas X fracción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Fracción</label>
+                    </div>
+                    <div class="col-8">
+                        <label>Porcentaje <span class="badge badge-danger" style="font-size: 14px;"> Ej. Si es 5% capture 0.05</span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" id="FraccionPor" name="FraccionPor" class="form-control form-control-sm numbersOnly" maxlength="3">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" id="PorcenXFraccion" name="PorcenXFraccion" class="form-control form-control-sm numbersOnly" maxlength="5">
+                    </div>
+                </div>
+                <br>
+                <div class="w-100"></div>
+                <table class="table table-hover table-sm" id="tblPorcentajes"  style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="d-none">ID</th>
+                            <th scope="col">Fracción</th>
+                            <th scope="col">Porcentaje</th>
+                            <th scope="col">Elimina</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary notEnter selectNotEnter" id="btnAceptaPorcentajeFraccion"><span class="fa fa-check"></span> ACEPTAR</button>
+                <button type="button" class="btn btn-secondary " id="btnSalir" data-dismiss="modal">SALIR</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var pnlTablero = $("#pnlTablero"), pnlCaptura = $("#pnlCaptura"),
@@ -228,8 +279,12 @@
             FechaVale = mdlRetorno.find("#FechaVale"), RetornaDocumento, tblRetornaDocumento = mdlRetorno.find("#tblRetornaDocumento"),
             btnConceptosPlantilla = pnlTablero.find("#btnConceptosPlantilla"),
             btnAceptaRetorno = mdlRetorno.find("#btnAceptaRetorno"), mdlReportePago = $("#mdlReportePago"),
-            btnAceptaReportePago = mdlReportePago.find("#btnAceptaReportePago");
-    btnReportePago = pnlTablero.find("#btnReportePago");
+            btnCapturaPorcentajes = pnlTablero.find("#btnCapturaPorcentajes"),
+            mdlCapturaPorcentaje = $("#mdlCapturaPorcentaje"),
+            btnAceptaPorcentajeFraccion = mdlCapturaPorcentaje.find("#btnAceptaPorcentajeFraccion"),
+            Porcentajes, tblPorcentajes = mdlCapturaPorcentaje.find("#tblPorcentajes"),
+            btnAceptaReportePago = mdlReportePago.find("#btnAceptaReportePago"),
+            btnReportePago = pnlTablero.find("#btnReportePago");
 
     var FechaActual = '<?php print Date('d/m/Y'); ?>';
 
@@ -432,6 +487,74 @@
             FechaVale.val(FechaActual);
         });
 
+        /*CAPTURA PORCENTAJES */
+        btnCapturaPorcentajes.click(function () {
+            if (usuario === 'LUCY' || usuario === 'CMEDINA') {
+                mdlCapturaPorcentaje.modal('show');
+            } else {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "USUARIO NO AUTORIZADO PARA ESTE MÓDULO ",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
+                    if (action) {
+                    }
+                });
+            }
+
+        });
+
+        mdlCapturaPorcentaje.on('shown.bs.modal', function () {
+            getPorcentajes();
+            mdlCapturaPorcentaje.find("input").val('');
+            mdlCapturaPorcentaje.find("#FraccionPor").focus();
+        });
+
+        mdlCapturaPorcentaje.find('#FraccionPor').on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                var fra = $(this).val();
+                if (fra) {
+                    $.getJSON('<?php print base_url('ControlPlantilla/onVerificarFraccionExiste'); ?>', {
+                        Fraccion: fra
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            mdlCapturaPorcentaje.find('#PorcenXFraccion').focus().select();
+                        } else {
+                            swal('ERROR', 'LA FRACCIÓN ' + fra + ' NO EXISTE', 'warning').then((value) => {
+                                mdlCapturaPorcentaje.find('#FraccionPor').val('').focus().select();
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        getError(x);
+                    });
+                }
+            }
+        });
+        mdlCapturaPorcentaje.find('#PorcenXFraccion').on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                var porce = $(this).val();
+                if (porce) {
+                    btnAceptaPorcentajeFraccion.focus();
+                }
+            }
+        });
+
+        btnAceptaPorcentajeFraccion.click(function () {
+            $.post('<?php print base_url('ControlPlantilla/onGuardarPorcentaje'); ?>', {
+                Fraccion: mdlCapturaPorcentaje.find('#FraccionPor').val(),
+                Porcentaje: mdlCapturaPorcentaje.find('#PorcenXFraccion').val()
+            }).done(function () {
+                Porcentajes.ajax.reload();
+                Porcentajes.columns.adjust().draw();
+                mdlCapturaPorcentaje.find("input").val('');
+                mdlCapturaPorcentaje.find("#FraccionPor").focus();
+            }).fail(function (x) {
+                getError(x);
+            });
+        });
+
         btnAcepta.click(function () {
             isValid('pnlTablero');
             if (valido) {
@@ -580,7 +703,7 @@
                                 Fraccion.val('').focus();
                                 return;
                             });
-                        } else if (data === '1') {
+                        } else if (data === '88') {
                             swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
                                 sFraccion[0].selectize.clear(true);
                                 sFraccion[0].selectize.clearOptions();
@@ -589,7 +712,7 @@
                                 Fraccion.val('').focus();
                                 return;
                             });
-                        } else if (data === '2') {
+                        } else if (data === '99') {
                             swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
                                 sFraccion[0].selectize.clear(true);
                                 sFraccion[0].selectize.clearOptions();
@@ -663,7 +786,51 @@
 
         });
     });
-
+    function getPorcentajes() {
+        if (!$.fn.DataTable.isDataTable('#tblPorcentajes')) {
+            var cols = [
+                {"data": "ID"}/*0*/,
+                {"data": "FRACCION"}/*1*/,
+                {"data": "PORCENTAJE"}/*2*/,
+                {"data": "BTN"}/*9*/
+            ];
+            var coldefs = [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ];
+            var xoptions = {
+                "dom": 'rt',
+                "ajax": {
+                    "url": '<?php print base_url('ControlPlantilla/getPorcentajes'); ?>',
+                    "dataSrc": ""
+                },
+                buttons: buttons,
+                "columns": cols,
+                "columnDefs": coldefs,
+                language: lang,
+                select: true,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 99999999,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                "scrollY": "300px",
+                "scrollX": true,
+                "aaSorting": [
+                    [1, 'asc']
+                ]
+            };
+            Porcentajes = tblPorcentajes.DataTable(xoptions);
+        } else {
+            Porcentajes.ajax.reload();
+            Porcentajes.columns.adjust().draw();
+        }
+    }
 
     function getDocsRetorno() {
         if (!$.fn.DataTable.isDataTable('#tblRetornaDocumento')) {
@@ -1014,6 +1181,27 @@
                         {ID: ID}).done(function (a) {
                     sws('SE HA ELIMINADO EL REGISTRO');
                     ControlPlantilla.ajax.reload();
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
+            }
+        });
+    }
+
+    function onEliminarPorcentajeByID(ID) {
+        onBeep(1);
+        swal({
+            title: "¿Estas seguro?",
+            text: "El registro será eliminado, una vez aceptada la acción",
+            icon: "warning",
+            buttons: true
+        }).then((value) => {
+            if (value) {
+                $.post('<?php print base_url('ControlPlantilla/onEliminarPorcentajeByID'); ?>',
+                        {ID: ID}).done(function (a) {
+                    Porcentajes.ajax.reload();
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
