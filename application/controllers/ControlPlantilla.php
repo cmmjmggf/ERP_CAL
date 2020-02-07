@@ -45,6 +45,57 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    /* Captura Porcentajes */
+
+    public function onGuardarPorcentaje() {
+        try {
+            $x = $this->input;
+
+            $Existe = $this->db->query("select * from porcentajesmaquilaplantilla where fraccion = '{$x->post('Fraccion')}' ")->result();
+
+            if (!empty($Existe)) {
+                $this->db->query("update porcentajesmaquilaplantilla set porcentaje = {$x->post('Porcentaje')} where fraccion = '{$x->post('Fraccion')}' ");
+            } else {
+                $this->db->insert('porcentajesmaquilaplantilla', array(
+                    'fraccion' => $x->post('Fraccion'),
+                    'porcentaje' => $x->post('Porcentaje')
+                ));
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getPorcentajes() {
+        try {
+            print json_encode($this->db->query('SELECT CP.`ID`,
+                                        CP.`fraccion` AS FRACCION,
+                                        CP.porcentaje AS PORCENTAJE,
+                                        CONCAT(\'<span class="fa fa-trash fa-lg text-danger" onclick="onEliminarPorcentajeByID(\',CP.ID,\')">\',\'</span>\') AS BTN
+                                        from porcentajesmaquilaplantilla AS CP ')->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onVerificarFraccionExiste() {
+        try {
+            $Fraccion = $this->input->get('Fraccion');
+            print json_encode($this->db->query("select * from fracciones where Clave = '$Fraccion' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarPorcentajeByID() {
+        try {
+            $ID = $this->input->post('ID');
+            $this->db->query("delete from porcentajesmaquilaplantilla where ID = {$ID} ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarPlantilla() {
         try {
             $Maquila = $this->input->get('Maquila');
@@ -197,10 +248,10 @@ class ControlPlantilla extends CI_Controller {
                     if (empty($ExisteFracPagNom)) {
                         print ($Existe[0]->CostoMO);
                     } else {
-                        print (2);
+                        print (99);
                     }
                 } else {
-                    print (1);
+                    print (88);
                 }
             } else {
                 print (0);

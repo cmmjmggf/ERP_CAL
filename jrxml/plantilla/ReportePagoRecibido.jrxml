@@ -13,18 +13,17 @@
 	<parameter name="empresa" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-  CTP.Proveedor AS PROVEEDOR,
-  CTP.ProveedorT AS PROVEEDORT,
-  CTP.Tipo AS TIPO,  CTP.Control AS CONTROL,
-  CTP.Documento AS DOCUMENTO,  CTP.Estilo AS ESTILO, CTP.Color AS CLAVE_COLOR,
-  CTP.ColorT AS COLOR_TEXT, CTP.Pares AS PARES, CTP.Fraccion AS CLAVE_FRACCION,
-  CTP.FraccionT AS FRACCION_TEXT, CTP.Precio AS PRECIO, CTP.Fecha AS FECHA_SINRECIBIR,
-  CTP.Estatus AS ESTATUS, CTP.FechaRetorna AS FECHA_RECIBIDO, (CTP.Pares * CTP.Precio) AS SUBTOTAL,
-ifnull((CASE
- WHEN CTP.Fraccion = 300 THEN  ((CTP.Pares * CTP.Precio)*0.5 )
-WHEN CTP.Fraccion = 304 THEN  ((CTP.Pares * CTP.Precio)*0.50 )
-END),0) AS STT_PORCTJ
- FROM controlpla AS CTP WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
+CTP.Proveedor AS PROVEEDOR,
+CTP.ProveedorT AS PROVEEDORT,
+CTP.Tipo AS TIPO,  CTP.Control AS CONTROL,
+CTP.Documento AS DOCUMENTO,  CTP.Estilo AS ESTILO, CTP.Color AS CLAVE_COLOR,
+CTP.ColorT AS COLOR_TEXT, CTP.Pares AS PARES, CTP.Fraccion AS CLAVE_FRACCION,
+CTP.FraccionT AS FRACCION_TEXT, CTP.Precio AS PRECIO, CTP.Fecha AS FECHA_SINRECIBIR,
+CTP.Estatus AS ESTATUS, CTP.FechaRetorna AS FECHA_RECIBIDO, (CTP.Pares * CTP.Precio) AS SUBTOTAL,
+ifnull((CTP.Pares *  CTP.Precio) * PMP.porcentaje,0) as STT_PORCTJ
+FROM controlpla AS CTP
+LEFT JOIN porcentajesmaquilaplantilla PMP on PMP.fraccion = CTP.Fraccion
+WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
 order by abs(PROVEEDOR) asc]]>
 	</queryString>
 	<field name="PROVEEDOR" class="java.lang.Integer">

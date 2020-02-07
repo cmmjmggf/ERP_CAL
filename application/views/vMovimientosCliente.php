@@ -246,7 +246,7 @@
         pnlTablero.find('#btnVerCartera').on("click", function () {
             var cliente = pnlTablero.find("#Cliente").val();
             if (cliente) {
-                HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                 $.ajax({
                     url: master_url + 'onReporteAntiguedadSaldosPorCliente',
                     type: "POST",
@@ -255,6 +255,8 @@
                     }
                 }).done(function (data, x, jq) {
                     console.log(data);
+
+
                     onImprimirReporteFancyArray(JSON.parse(data));
                     HoldOn.close();
                 }).fail(function (x, y, z) {
@@ -490,7 +492,7 @@
 //            },
             initComplete: function (a, b) {
                 HoldOn.close();
-            }, 
+            },
             "drawCallback": function (settings) {
                 var api = this.api();
                 var stt = 0.0;

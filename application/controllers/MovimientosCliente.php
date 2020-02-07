@@ -136,8 +136,17 @@ class MovimientosCliente extends CI_Controller {
     }
 
     public function onReporteAntiguedadSaldosPorCliente() {
-        $reports['CARTERACLIENTESTP1'] = $this->onReporteAntiguedadSaldosTp1();
-        $reports['CARTERACLIENTESTP2'] = $this->onReporteAntiguedadSaldosTp2();
+        $reports = array();
+
+        $reporte1 = $this->onReporteAntiguedadSaldosTp1();
+        $reporte2 = $this->onReporteAntiguedadSaldosTp2();
+
+        if ($reporte1 !== 0) {
+            $reports['CARTERACLIENTESTP1'] = $reporte1;
+        }
+        if ($reporte2 !== 0) {
+            $reports['CARTERACLIENTESTP2'] = $reporte2;
+        }
         print json_encode($reports);
     }
 
