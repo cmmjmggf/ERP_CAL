@@ -58,14 +58,30 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-            print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , P.Precio AS PRECIO, "
+//            print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
+//                                    . "P.Precio AS PRECIO, "
+//                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+//                                    . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+//                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+//                                    . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
+//                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+//                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}' "
+//                                    . " AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270)")->result());
+
+//            
+                        print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
+                                    . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
                                     . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                     . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
                                     . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}'")->result());
-        } catch (Exception $exc) {
+                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}' "
+                                    . " AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270)")->result());
+        
+                                    
+                                    } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -94,7 +110,7 @@ class FacturacionProduccion extends CI_Controller {
                 $pedidox = $this->db->query("SELECT "
                                 . "(CASE WHEN P.ParesFacturados >0 THEN P.ParesFacturados ELSE 0 END) AS PARES_FACTURADOS "
                                 . " FROM pedidox AS P "
-                                . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+                                . "WHERE P.Control = {$x['CONTROL']}  AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
 
                 /* SI EXISTE BUSCAR LOS PARES FACTURADOS EN "FACTURACION" */
                 $facturacion = $this->db->query("SELECT SUM(F.pareped) AS PARES_FACTURADOS FROM facturacion AS F "
@@ -120,7 +136,7 @@ class FacturacionProduccion extends CI_Controller {
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
                                         FROM facturaciondif AS F 
                                         INNER JOIN pedidox AS P ON F.contped = P.Control 
-                                        WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result());
+                                        WHERE F.contped = '{$x['CONTROL']}'   AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result());
                     exit(0);
                 } else {
                     print json_encode($this->db->query("SELECT
@@ -131,7 +147,7 @@ class FacturacionProduccion extends CI_Controller {
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
                                         FROM facturaciondif AS F 
                                         INNER JOIN pedidox AS P ON F.contped = P.Control 
-                                        WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result());
+                                        WHERE F.contped = '{$x['CONTROL']}'  AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result());
                 }
 //            }
             }
@@ -183,9 +199,20 @@ class FacturacionProduccion extends CI_Controller {
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES,
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA,
-                                P.Precio AS PRECIO, FORMAT(P.Precio,2) AS PRECIOT, P.ColorT AS COLORT", false)
+                                
+                                (SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+                                WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo ORDER BY C.ID DESC LIMIT 1) AS PRECIO, 
+
+FORMAT((SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1),2) AS PRECIOT,
+
+                                P.ColorT AS COLORT", false)
                     ->from("pedidox AS P")
-                    ->where_not_in("P.Control", array(0, 1));
+                    ->where_not_in("P.Control", array(0, 1))
+                    ->where_not_in("P.DeptoProduccion", array(270))
+                    ->where_not_in("P.stsavan", array(14))
+                    ->where_not_in("P.Estatus", array('C'));
+
             $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14));
@@ -1216,7 +1243,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
     public function onRevisarBloqueoDeVta() {
         try {
             $x = $this->input->get();
-            $check_bloqueo= $this->db->query("SELECT COUNT(*) AS EXISTE FROM bloqueovta AS B WHERE B.cliente = '{$x['CLIENTE']}' AND B.status = 1;")->result();
+            $check_bloqueo = $this->db->query("SELECT COUNT(*) AS EXISTE FROM bloqueovta AS B WHERE B.cliente = '{$x['CLIENTE']}' AND B.status = 1;")->result();
             if (intval($check_bloqueo[0]->EXISTE) === 1) {
                 /* BLOQUEADO = 1, SI */
                 print json_encode(array("BLOQUEADO" => 1));

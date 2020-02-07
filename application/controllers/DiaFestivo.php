@@ -84,16 +84,16 @@ class DiaFestivo extends CI_Controller {
                 $pn['numcon'] = 20/* DIA FESTIVO */;
                 $pn['tpcon'] = 1;
                 $pn['tpcond'] = 0;
-                $pn['importe'] = ($sueldin[0]->SUELDIN * 0.10);
+                $pn['importe'] = ($SUELDO_FINAL_DESTAJO * 0.10);
                 $pn['imported'] = 0;
-                $pn['fecha'] = Date('d/m/Y h:i:s');
+                $pn['fecha'] = Date('Y-m-d 00:00:00');
                 $pn['registro'] = 999;
                 $pn['status'] = 1;
                 $pn['tpomov'] = 1;
                 $pn['depto'] = $v->DEPTO;
                 $this->db->insert('prenomina', $pn);
                 /* MODIFICA EN PRENOMINAL OTRAS */
-                $this->db->set('otrper1', ($sueldin[0]->SUELDIN * 0.10))->where('numsem', $SEMANA)
+                $this->db->set('otrper1', ($SUELDO_FINAL_DESTAJO * 0.10))->where('numsem', $SEMANA)
                         ->where('año', $ANIO)->where('numemp', $v->NUMERO_EMPLEADO)
                         ->update('prenominal');
             }
@@ -120,7 +120,7 @@ class DiaFestivo extends CI_Controller {
                 $pn['tpcond'] = 0;
                 $pn['importe'] = $SUELDIN_FINAL;
                 $pn['imported'] = 0;
-                $pn['fecha'] = Date('d/m/Y h:i:s');
+                $pn['fecha'] = Date('Y-m-d 00:00:00');
                 $pn['registro'] = 999;
                 $pn['status'] = 1;
                 $pn['tpomov'] = 1;

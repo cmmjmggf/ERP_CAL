@@ -452,7 +452,7 @@ class GeneraNominaDeSemana extends CI_Controller {
              * 20 DIA FESTIVO
              * 100 OTRAS DED
              */
-            $empleados_concepto_10_15_20_100 = $this->db->query("SELECT numemp,importe,numcon FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND numcon IN(10,15,20,100) AND importe > 0 AND registro = 999")->result();
+            $empleados_concepto_10_15_20_100 = $this->db->query("SELECT numemp,importe,imported,numcon FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND numcon IN(10,15,20,100) AND importe > 0 AND registro = 999")->result();
 
             foreach ($empleados_concepto_10_15_20_100 as $k => $v) {
                 switch (intval($v->numcon)) {
@@ -467,7 +467,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where('status', 1)->update('prenominal');
                         break;
                     case 20:
-                        $this->db->set('otrper1', $v->importe)->where('numemp', $v->numemp)
+                        $this->db->set('otrper1', $v->imported)->where('numemp', $v->numemp)
                                 ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
                                 ->where('status', 1)->update('prenominal');
                         break;
