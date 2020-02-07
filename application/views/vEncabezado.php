@@ -51,6 +51,9 @@
         <link href="<?php echo base_url(); ?>js/selectize/css/selectize.bootstrap.css" rel="stylesheet" />
 
         <!--Third Party-->
+        <script src="<?php print base_url('js/printjs/print.min.js'); ?>"></script>
+        <link rel="stylesheet" type="text/css" href="<?php print base_url('js/printjs/print.min.css'); ?>">
+
 
         <!-- PivotTable.js libs from ../dist -->
         <script  src="<?php print base_url(); ?>js/jquery-ui.min.js"></script>

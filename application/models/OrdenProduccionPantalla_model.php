@@ -50,7 +50,7 @@ class OrdenProduccionPantalla_model extends CI_Model {
                     ->join("ordendeproducciond OPD", 'ON OP.ID =  OPD.OrdenDeProduccion')
                     ->join("agentes A", 'ON A.Nombre =  OP.Agente')
                     ->join("grupos G", 'ON G.Clave =  OPD.Grupo')
-                    ->join("controles C", 'ON C.Control =  OP.ControlT')
+                    ->join("pedidox C", 'ON C.Control =  OP.ControlT')
                     ->where("OP.ControlT", $Control)
                     ->order_by("Grupo", 'ASC');
             $query = $this->db->get();

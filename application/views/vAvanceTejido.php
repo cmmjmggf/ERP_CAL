@@ -35,7 +35,7 @@
             <div class="col-6 col-xs-6 col-sm-12 col-lg-2 col-xl-2">
                 <label>Documento</label>
                 <input type="text" id="Documento" name="Documento" class="form-control form-control-sm notEnter selectNotEnter">
-            </div> 
+            </div>
             <div class="col-6 col-xs-6 col-sm-2 col-lg-2 col-xl-2">
                 <label>Control</label>
                 <input type="text" id="Control" name="Control" class="form-control form-control-sm">
@@ -252,27 +252,53 @@
                     data: f
                 }).done(function (data, x, jq) {
                     console.log(data);
-                    onImprimirReporteFancyAFC(data, function (a, b) {
-                        btnImprimirVale.attr('disabled', false);
-                        pnlTablero.find("input").val("");
-                        $.each(pnlTablero.find("select"), function (k, v) {
-                            pnlTablero.find("select")[k].selectize.clear(true);
-                        });
-                        getUltimoDocumento();
-                        Fecha.val('<?php print Date('d/m/Y'); ?>');
-                        $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
-                            FECHA: Fecha.val()
-                        }).done(function (d) {
-                            var s = JSON.parse(d);
-                            if (s.length > 0) {
-                                Semana.val(s[0].SEMANA);
-                            }
-                        }).fail(function (x, y, z) {
-                            console.log(x, y, z);
-                        });
-                        Frac.val(401);
-                        xChofer.focus();
+
+                    printJS({
+                        printable: data,
+                        type: 'pdf'
                     });
+
+                    btnImprimirVale.attr('disabled', false);
+                    pnlTablero.find("input").val("");
+                    $.each(pnlTablero.find("select"), function (k, v) {
+                        pnlTablero.find("select")[k].selectize.clear(true);
+                    });
+                    getUltimoDocumento();
+                    Fecha.val('<?php print Date('d/m/Y'); ?>');
+                    $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
+                        FECHA: Fecha.val()
+                    }).done(function (d) {
+                        var s = JSON.parse(d);
+                        if (s.length > 0) {
+                            Semana.val(s[0].SEMANA);
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                    Frac.val(401);
+                    xChofer.focus();
+
+//                    onImprimirReporteFancyAFC(data, function (a, b) {
+//                        btnImprimirVale.attr('disabled', false);
+//                        pnlTablero.find("input").val("");
+//                        $.each(pnlTablero.find("select"), function (k, v) {
+//                            pnlTablero.find("select")[k].selectize.clear(true);
+//                        });
+//                        getUltimoDocumento();
+//                        Fecha.val('<?php print Date('d/m/Y'); ?>');
+//                        $.post('<?php print base_url('AvanceTejido/getxSemanaNomina'); ?>', {
+//                            FECHA: Fecha.val()
+//                        }).done(function (d) {
+//                            var s = JSON.parse(d);
+//                            if (s.length > 0) {
+//                                Semana.val(s[0].SEMANA);
+//                            }
+//                        }).fail(function (x, y, z) {
+//                            console.log(x, y, z);
+//                        });
+//                        Frac.val(401);
+//                        xChofer.focus();
+//                    });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -601,7 +627,7 @@
                         Control.focus().select();
                         Estilo.val('');
                         Color[0].selectize.clear(true);
-                        Pares.val(''); 
+                        Pares.val('');
                         Fecha.val('');
                         return;
                     });

@@ -208,6 +208,7 @@ class Explosiones_model extends CI_Model {
                                     JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                     WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
                                     AND cast(PE.Semana as signed) BETWEEN $Semana AND $aSemana
+                                    AND PE.Estatus IN ('A','F')
                                     AND `PE`.`Ano` = '$Ano'
                                     AND
                                     case
@@ -273,6 +274,7 @@ class Explosiones_model extends CI_Model {
                                     WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
                                     AND cast(PE.Semana as signed) BETWEEN $Semana AND $aSemana
                                     AND `PE`.`Ano` = '$Ano'
+                                    AND PE.Estatus IN ('A','F')
                                     AND
                                     case
                                     when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
