@@ -1,3 +1,6 @@
+<script src="<?php print base_url('js/printjs/print.min.js'); ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php print base_url('js/printjs/print.min.css'); ?>">
+
 <div class="modal" id="mdlEstilosFotos">
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable modal-lg" 
          style="max-width: 80%;" role="document">
@@ -92,9 +95,7 @@
                     ESTILO: xEstiloFotoClave.val(),
                     URL: url
                 }).done(function (a) {
-                    onImprimirReporteFancyAFC(a, function (a, b) {
-                        xEstiloFotoClave.focus().select();
-                    })
+                    printJS(a);
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
