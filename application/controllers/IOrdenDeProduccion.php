@@ -96,6 +96,10 @@ class IOrdenDeProduccion extends CI_Controller {
             if ($DIA !== '') {
                 $this->db->where("PE.DiaProg", $DIA);
             }
+            $this->db->where_not_in("PE.stsavan", array(14))
+                    ->where_not_in("PE.Estatus", array('C'))
+                    ->where_not_in("PE.EstatusProduccion", array('CANCELADO'))
+                    ->where_not_in("PE.DeptoProduccion", array(270));
             $CONTROLES = $this->db->where('E.Clave = C.Estilo', null, false)
                             ->group_by(array('OP.ControlT'))
                             ->order_by('ABS(OP.ControlT)', 'ASC')

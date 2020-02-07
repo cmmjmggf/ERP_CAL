@@ -152,6 +152,14 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 print json_encode(array("DELETED" => 1, "CONTROL" => $C, "MATCHES" => $X));
                 $this->db->set('stsavan', 14)->set('estatus', 'C')->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('ID', $xxx['ID'])->where('Clave', $xxx['CLAVE'])->where('Control', $xxx['CONTROL'])->update('pedidox');
                 $this->db->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('Control', $xxx['CONTROL'])->update('pedidox');
+
+                $existe_orden = $this->db->query("SELECT COUNT(*) AS EXISTE FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
+                if (intval($existe_orden[0]->EXISTE) > 0) {
+                    $orden_prod = $this->db->query("SELECT ID, ControlT FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
+                    $this->db->query("DELETE FROM ordendeproducciond WHERE OrdenDeProduccion = {$orden_prod[0]->ID}");
+                }
+                $this->db->query("DELETE FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
+
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
                 exit(0);
             }
@@ -166,7 +174,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
             $x = $this->input->post();
 //            var_dump($x);
 //            exit(0);
-            
+
             $this->db->set('Clave', $x['CLAVE_NUEVO'])
                     ->set('FechaEntrega', $x['FECHA_ENTREGA_NUEVO'])
                     ->set('Cliente', $x['CLIENTE_NUEVO'])

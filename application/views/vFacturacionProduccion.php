@@ -1001,12 +1001,16 @@
         });
 
         mdlAddendaCoppel.find("#FacturaCoppel").on('keydown keyup', function (e) {
-//            onKeyDownValOK(this, e, function () {
-//                
-//            });
-
             if (e.keyCode === 13 && $(this).val()) {
+                $.post('<?php print base_url('FacturacionProduccion/onRevisarExistenciaDeFacturas'); ?>', {
 
+                }).done(function () {
+
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+
+                });
             }
         });
 
@@ -1195,8 +1199,27 @@
                     if (ClienteFactura.val()) {
                         ClienteFactura[0].selectize.disable();
                     } else {
-                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
-                            ClienteClave.focus().select();
+                        /*REVISA SI ESTA BLOQUEADO EN BLOQUEVTA*/
+                        $.getJSON('<?php print base_url('FacturacionProduccion/onRevisarBloqueoDeVta'); ?>', {
+                            CLIENTE: ClienteClave.val()
+                        }).done(function (a) {
+                            console.log(a, a.BLOQUEADO);
+                            switch (parseInt(a.BLOQUEADO)) {
+                                case 0:
+                                    onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
+                                        ClienteClave.focus().select();
+                                    });
+                                    break;
+                                case 1:
+                                    onCampoInvalido(pnlTablero, 'ESTE CLIENTE ESTA BLOQUEADO POR COBRANZA. UNA VEZ DESBLOQUEADO, ACTUALICE LA PÁGINA CON "F5".', function () {
+                                        ClienteClave.focus().select();
+                                    });
+                                    break; 
+                            }
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+
                         });
                     }
                 } else {
@@ -2464,7 +2487,7 @@
         TPFactura.attr('disabled', false);
         ClienteFactura[0].selectize.enable();
         var total_pares_a_facturar = 0;
-        for (var i = 1; i < 23; i++) { 
+        for (var i = 1; i < 23; i++) {
             total_pares_a_facturar += parseInt(($.isNumeric(pnlTablero.find("#CAF" + i).val()) ? parseInt(pnlTablero.find("#CAF" + i).val()) : 0));
             TotalParesEntregaAF.val(total_pares_a_facturar);
         }

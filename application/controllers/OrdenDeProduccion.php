@@ -162,6 +162,10 @@ class OrdenDeProduccion extends CI_Controller {
                             ->where('P.Maquila', $x['MAQUILA'])
                             ->where('P.Semana', $x['SEMANA'])
                             ->where('P.Ano', $x['ANO'])
+                            ->where_not_in("P.stsavan", array(14))
+                            ->where_not_in("P.Estatus", array('C'))
+                            ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
+                            ->where_not_in("P.DeptoProduccion", array(270))
                             ->where('E.Clave = CO.Estilo  AND CT.PedidoDetalle = P.Clave  '
                                     . 'AND CT.Ano = ' . $ANIO_CT . ' AND OP.ID IS NULL '
                                     . 'AND CT.Control = P.Control', null, false)

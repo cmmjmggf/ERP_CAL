@@ -358,7 +358,7 @@ class FacturacionProduccion extends CI_Controller {
     public function onGuardarDocto() {
         try {
             $x = $this->input->post();
-            
+
             $this->db->trans_begin();
             $fecha = $x['FECHA'];
             $dia = substr($fecha, 0, 2);
@@ -563,7 +563,7 @@ class FacturacionProduccion extends CI_Controller {
             } else {
                 $this->db->trans_commit();
             }
-            
+
             /* SE REVISAN LOS PARES DE ESTE CONTROL */
             $this->onRevisarControlesFacturados();
             $EXISTE_EL_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
@@ -629,7 +629,7 @@ class FacturacionProduccion extends CI_Controller {
             $data = $this->db->query("SELECT P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES "
                             . "FROM pedidox AS P "
                             . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
-                            
+
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -889,7 +889,7 @@ class FacturacionProduccion extends CI_Controller {
                             PRINT $jc->getReport();
                             exit(0);
                             break;
-                        case 1755:                           /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                        case 1755: /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('qrplus/qr.png');
@@ -1051,7 +1051,7 @@ class FacturacionProduccion extends CI_Controller {
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             exit(0);
-                            break; 
+                            break;
                         default :
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
@@ -1208,6 +1208,38 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
         try {
             $data = $this->db->query("SELECT numtda, nomtda, dirtda, numetda, numitda, coltda, ciutda, edotda, teltda1, teltda2, teltda3, coptda, tpprov, provee FROM tiendas AS T ORDER BY ABS(T.numtda) ASC ")->result();
             print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRevisarBloqueoDeVta() {
+        try {
+            $x = $this->input->get();
+            $check_bloqueo= $this->db->query("SELECT COUNT(*) AS EXISTE FROM bloqueovta AS B WHERE B.cliente = '{$x['CLIENTE']}' AND B.status = 1;")->result();
+            if (intval($check_bloqueo[0]->EXISTE) === 1) {
+                /* BLOQUEADO = 1, SI */
+                print json_encode(array("BLOQUEADO" => 1));
+            } else {
+                /* BLOQUEADO = 0, SI */
+                print json_encode(array("BLOQUEADO" => 0));
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRevisarExistenciaDeFacturas() {
+        try {
+            $x = $this->input->post();
+            $check_en_facturas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturas AS F WHERE F.Factura = '{$x['FACTURA']}' ")->result();
+            if (intval($check_en_facturas[0]->EXISTE) === 0) {
+                /* EXISTE FACTURA EN "FACTURAS", NO */
+                print json_encode(array("TIENE_FACTURAS" => 0));
+            } else {
+                /* EXISTE FACTURA EN "FACTURAS", SI */
+                print json_encode(array("TIENE_FACTURAS" => 1));
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

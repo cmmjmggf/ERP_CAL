@@ -103,7 +103,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     $EXISTE_EN_PRENOMINA = $this->db->query("SELECT PN.* FROM prenomina AS PN "
                                     . "WHERE PN.año ={$x['ANIO']} AND PN.numsem = {$x['SEMANA']} "
                                     . "AND PN.numemp = {$v->Numero} AND PN.numcon =1")->result();
-                                    
+
                     if (empty($EXISTE_EN_PRENOMINA)) {
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
@@ -249,50 +249,6 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 $SUELDO_FINAL_DESTAJO = 0;
                             }
                         }
-                        //              Numero, DEPTO, DEPTOF, CELULA_MONTADO_ADORNO_PEGADO
-                        //                991	190	190	CELULA  MONTADO "B"
-                        //                992	210	210	CELULA  ADORNO "A"
-                        //                993	180	180	CELULA  MONTADO "A"
-                        //                1005	220	220	CELULA  ADORNO "B"
-                        //                1006	200	200	PEGADO
-////                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} AND E.FijoDestajoAmbos = 2 AND E.AltaBaja = 2 AND E.Numero BETWEEN 899 AND 1006")->result();
-//
-//                        $CELULA = $this->db->query("SELECT E.Numero AS NUMERO, E.DepartamentoFisico AS DEPTOCEL FROM empleados AS E WHERE E.DepartamentoFisico = {$v->DepartamentoFisico} AND E.FijoDestajoAmbos = 2 AND E.AltaBaja = 2 AND E.Numero IN(899,900,901,902,903,904,905,906,908,909,985,988,991,992,993,994,995,996,997,998,999,1000,1001,1002,1002,1003,1004,1005,1006)")->result();
-//
-//                        if (!empty($CELULA)) {
-//                            if (intval($CELULA[0]->NUMERO) > 0) {
-//                                $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-//                                $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-//
-//                                $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-//                                $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-//                            }
-////                            else {
-////                                /* LOS EMPLEADOS EN MONTADO "A" Y EN MONTADO "B" EN PORCENTAJE DE CELULAS,
-////                                 * A VECES EL NUMERO DE CELULA ES CERO (0) Y NO ES POSIBLE ENLAZARLOS, ES NECESARIO USAR EL DEPARTAMENTO */
-//////                                switch (intval($v->DepartamentoFisico)) {
-//////                                    case 180:
-////////                                        MONTADO "A"
-//////
-//////                                        break;
-//////                                    case 190:
-//////                                        break;
-//////                                    case 210:
-//////                                        break;
-//////                                }
-////                            }
-//                        } else {
-////                            $CELULA_PESPUNTE = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$CELULA[0]->NUMERO} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-//                            $fraccion_pespunte = 304;
-//                            $SUELDO_CELULA_PESPUNTE = $this->db->query("SELECT SUM(F.subtot) AS SUBTOTAL FROM fracpagnomina AS F WHERE F.semana = {$x['SEMANA']} AND F.fraccion = {$fraccion_pespunte} AND F.anio = {$x['ANIO']} AND F.depto = {$v->DepartamentoFisico} ")->result();
-//                            $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE  FPN.fraccion = {$fraccion_pespunte} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}  AND FPN.depto = {$v->DepartamentoFisico}")->result();
-//                            if (count($SUELDO_CELULA_PESPUNTE) > 0) {
-//                                $SUELDO_FINAL_DESTAJO = $SUELDO_CELULA_PESPUNTE[0]->SUBTOTAL * $v->CelulaPorcentaje;
-//                                $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-//                            } else {
-//                                $SUELDO_FINAL_DESTAJO = 0;
-//                            }
-//                        }
                     } else {
                         /* 2.3 SI EL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
@@ -465,6 +421,9 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                 }
 
+                $this->db->set('horext', 0)->set('otrper', 0)->set('otrper1', 0)->where('numsem', $x['SEMANA'])
+                        ->where('año', $x['ANIO'])->where('numemp', $v->Numero)->update('prenominal');
+
                 /* CALCULAR SI TIENE O NO CAJA DE AHORRO */
                 $this->onCajaDeAhorro($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
                 /* CALCULAR SI TIENE O NO INFONAVIT */
@@ -486,7 +445,40 @@ class GeneraNominaDeSemana extends CI_Controller {
                 /* CALCULAR SI TIENE O NO ISR */
                 $this->onISR($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
             }
-            /* ELMINA AL TERMINAR */
+            /* 06/02/2020
+             * 
+             * 10 GRATIFICACION
+             * 15 OTRAS PERCEPCIONES
+             * 20 DIA FESTIVO
+             * 100 OTRAS DED
+             */
+            $empleados_concepto_10_15_20_100 = $this->db->query("SELECT numemp,importe,numcon FROM prenomina WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND numcon IN(10,15,20,100) AND importe > 0 AND registro = 999")->result();
+
+            foreach ($empleados_concepto_10_15_20_100 as $k => $v) {
+                switch (intval($v->numcon)) {
+                    case 10:
+                        $this->db->set('horext', $v->importe)->where('numemp', $v->numemp)
+                                ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
+                                ->where('status', 1)->update('prenominal');
+                        break;
+                    case 15:
+                        $this->db->set('otrper', $v->importe)->where('numemp', $v->numemp)
+                                ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
+                                ->where('status', 1)->update('prenominal');
+                        break;
+                    case 20:
+                        $this->db->set('otrper1', $v->importe)->where('numemp', $v->numemp)
+                                ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
+                                ->where('status', 1)->update('prenominal');
+                        break;
+                    case 100:
+                        $this->db->set('otrde', $v->importe)->where('numemp', $v->numemp)
+                                ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
+                                ->where('status', 1)->update('prenominal');
+                        break;
+                }
+            }
+            /* ELMINA AL TERMINAR asdasd */
 
 //            $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
 //            $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
@@ -549,7 +541,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp,   infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('infon', $v->Infonavit)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
@@ -599,7 +591,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('fune', $v->Funeral)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)
                         ->update('prenominal');
@@ -625,7 +617,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('imss', $v->IMSS)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
@@ -651,7 +643,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('fierabono', $importe_fierabono)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
@@ -676,7 +668,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('fonac', $v->Fonacot)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
@@ -701,7 +693,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "registro" => 0, "status" => 1, "tpomov" => 0,
                     "depto" => $v->DepartamentoFisico
                 ));
-//                ID, numsem, año, numemp, diasemp, pares, salario, salariod, horext, otrper, otrper1, infon, imss, impu, precaha, cajhao, vtazap, zapper, fune, cargo, fonac, otrde, otrde1, registro, status, tpomov, salfis, depto
+
                 $this->db->set('impu', $v->ISR)->where('numsem', $SEM)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)->update('prenominal');
             } else {
@@ -886,7 +878,8 @@ class GeneraNominaDeSemana extends CI_Controller {
         try {
             $x = $this->input;
             $xxx = $this->input->post();
-            $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$xxx['SEMANA']}, {$xxx["ANIO"]}.", $this->session);
+            $SEMANA_VACACIONES = 99;
+            $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$SEMANA_VACACIONES}, {$xxx["ANIO"]}.", $this->session);
             $anio_completo = 365;
             $treinta_dias = 31;
             $total_vacaciones = 0;
@@ -897,15 +890,15 @@ class GeneraNominaDeSemana extends CI_Controller {
             $sueldin = 0;
 
             /* 1 ELIMINAR TODO REGISTRO QUE YA TENGA LA SEMANA, AÑO EN PRENOMINA Y PRENOMINAL */
-            $this->db->where('numsem', $x->post('SEMANA'))
+            $this->db->where('numsem', $SEMANA_VACACIONES)
                     ->where('año', $x->post('ANIO'))
-                    ->where('status', 1)  
-                    ->where('registro <>', 999)  
+                    ->where('status', 1)
+                    ->where('registro <>', 999)
                     ->delete('prenomina');
-            $this->db->where('numsem', $x->post('SEMANA'))
+            $this->db->where('numsem', $SEMANA_VACACIONES)
                     ->where('año', $x->post('ANIO'))
-                    ->where('status', 1)  
-                    ->where('registro <>', 999)  
+                    ->where('status', 1)
+                    ->where('registro <>', 999)
                     ->delete('prenominal');
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
             $empleados = $this->db->select('E.*')->from('empleados AS E')
@@ -1060,7 +1053,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $prima = $total_vacaciones * 0.25;
                 /* GRABAR VACACIONES */
                 $vp = array(
-                    "numsem" => $x->post('SEMANA'),
+                    "numsem" => $SEMANA_VACACIONES,
                     "año" => $x->post('ANIO'),
                     "numemp" => $v->Numero,
                     "diasemp" => $dias_trabajados_pagados,
@@ -1079,7 +1072,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $this->db->insert('prenomina', $vp);
                 /* GRABA PRE-NOMINA-L */
                 $pnl = array(
-                    "numsem" => $x->post('SEMANA'),
+                    "numsem" => $SEMANA_VACACIONES,
                     "año" => $x->post('ANIO'),
                     "numemp" => $v->Numero,
                     "salario" => $sueldin,
