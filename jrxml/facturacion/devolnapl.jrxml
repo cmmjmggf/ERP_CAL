@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolnapl" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
-	<property name="ireport.zoom" value="1.2745232708414267"/>
+	<property name="ireport.zoom" value="2.4836852922366215"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -17,11 +17,15 @@ WHEN D.clasif = 3 THEN "***** REPARACION *****"
  END) AS CLASIFICACION_T,
 
  D.seriped AS SERIE, D.cliente AS CLIENTE_CLAVE,
-(CASE WHEN D.tp = 1 THEN C.RazonS WHEN D.tp = 2 THEN C.NombreP END) AS CLIENTE_DOS,
+(SELECT CC.RazonS FROM clientes AS CC WHERE CC.Clave = D.cliente) AS CLIENTE_DOS,
 
 D.control AS CONTROL,
-D.estilo AS ESTILO_CLAVE,
-D.comb AS COLOR_CLAVE, (SELECT CO.Descripcion FROM colores AS CO WHERE D.comb = CO.Clave  AND D.estilo = CO.Estilo LIMIT 1) AS COLOR,
+(CASE WHEN D.estilo IS NULL OR D.estilo =''  OR D.estilo ='0'  OR D.estilo =0 THEN P.Estilo ELSE D.estilo END) AS ESTILO_CLAVE,
+
+(CASE WHEN D.comb IS NULL  OR D.comb =''  OR D.comb ='0'  OR D.comb =0  THEN P.Color ELSE D.comb END) AS COLOR_CLAVE,
+
+(SELECT CO.Descripcion FROM colores AS CO WHERE (CASE WHEN D.comb IS NULL  OR D.comb =''  OR D.comb ='0'  OR D.comb =0  THEN P.Color ELSE D.comb END) = CO.Clave  AND (CASE WHEN D.estilo IS NULL OR D.estilo =''  OR D.estilo ='0'  OR D.estilo =0 THEN P.Estilo ELSE D.estilo END) = CO.Estilo LIMIT 1)
+ AS COLOR,
 D.paredev AS PARES_DEVUELTOS,
 
 D.ctenvo AS DEPARTAMENTO_CLAVE,
@@ -56,7 +60,7 @@ ORDER BY ABS(D.clasif) ASC,CLIENTE_DOS ASC;]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ESTILO_CLAVE" class="java.lang.String"/>
-	<field name="COLOR_CLAVE" class="java.lang.Integer"/>
+	<field name="COLOR_CLAVE" class="java.lang.String"/>
 	<field name="COLOR" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -422,7 +426,7 @@ ORDER BY ABS(D.clasif) ASC,CLIENTE_DOS ASC;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ESTILO_CLAVE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="198" y="0" width="82" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="becf4d5c-a6e2-4784-bc50-cf8e9284080e"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

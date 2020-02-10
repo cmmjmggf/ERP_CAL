@@ -122,14 +122,14 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="15" y="178" width="349" height="19" uuid="22333b98-e7c7-4c21-90ce-3e2b75801e36"/>
 				<textElement verticalAlignment="Middle">
 					<font size="15" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="15" y="198" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="5739fd53-4dfb-452a-a60a-26f40a801cd0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -137,7 +137,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Colonia}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="15" y="218" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="056e3513-28bb-4225-a9f9-3000ac9e67c5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -145,7 +145,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Ciudad}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="15" y="238" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="9fbf21c1-655f-4925-8b95-2dca8b68989c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -193,7 +193,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<text><![CDATA[RFC.]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="15" y="258" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="31930ef0-9eee-4bd2-8bbc-706ee4902b35"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -201,7 +201,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TelOficina}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="15" y="277" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="fc62dfb7-d989-4789-96a7-2b7d3f64f199"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

@@ -933,7 +933,8 @@ P.Maquila AS MAQUILA
             /* 6 ALMACEN - PESPUNTE Y STSAVAN 55 ENSUELADO */
             /* 55 ENSUELADO (FRACCIONES) */
             if ($depto === 6 && $depto_actual === 55 && $frac === 306 ||
-                    $depto === 6 && $depto_actual === 55 && $frac === 397) {
+                    $depto === 6 && $depto_actual === 55 && $frac === 397 ||
+                    $depto === 6 && $depto_actual === 55 && $frac === 397 && intval($xXx['EMPLEADO']) === 1003) {
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
                 if (intval($check_fraccion[0]->EXISTE) === 0) {
@@ -973,6 +974,7 @@ P.Maquila AS MAQUILA
                                 $id = intval($dtm[0]->ID);
                             }
                             $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                            $xfraccion = 397;
                             $data = array(
                                 "numeroempleado" => $xXx['EMPLEADO'],
                                 "maquila" => intval($CONTROL[0]->MAQUILA),
@@ -986,15 +988,18 @@ P.Maquila AS MAQUILA
                                 "anio" => Date('Y'));
                             $data["fraccion"] = $xfraccion;
                             $data["numfrac"] = $xfraccion;
-                            $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
-                            $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
-                            $data["preciofrac"] = $PXFC;
-                            $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-                            $this->db->insert('fracpagnomina', $data);
-                            $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE PESPUNTE.", $this->session);
+                            $PRECIO_FRACCION_CONTROL_EXISTE_COSTO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                            if (intval($PRECIO_FRACCION_CONTROL_EXISTE_COSTO[0]->EXISTE) >= 1) {
+                                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
+                                $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                                $data["preciofrac"] = $PXFC;
+                                $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
+                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                $this->db->insert('fracpagnomina', $data);
+                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE PESPUNTE.", $this->session);
+                            }
+//                            $this->onPagarFraccionSinAvance($xXx, $frac);
                             break;
-                            $this->onPagarFraccionSinAvance($xXx, $frac);
                     }
                 }
                 exit(0);

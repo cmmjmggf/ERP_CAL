@@ -61,7 +61,7 @@
 <div id="pnlAcceso" class="card  div-login">
     <div class="card-body" style="padding: 15px;">
         <div class="row" style="padding: 15px;">
-            <div class="col-12 text-center mb-4">
+            <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
                 <!--<span class="fa fa-user-lock fa-2x"></span>-->
                 <span class="fa fa-key fa-2x"></span> 
                 <h4 class="m-3">CONTROL DE ACCESO</h4>
@@ -72,13 +72,16 @@
             <div class="col-12">
                 <input type="password" id="Contrasena" name="Contrasena" class="form-control not-form-small mt-3" placeholder="Contraseña" required>
             </div >
+            <div id="iplocal" class="text-center d-none col-12">
+                <span class="font-weight-bold font-italic" style="font-size: 16px"><?php print ($_SERVER['HTTP_HOST']); ?></span>
+            </div>
         </div>
     </div>
     <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
         <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span> 
     </div>
     <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
-</div>
+</div> 
 <script>
     var master_url = base_url + "Sesion/";
     var btnResetear = $("#btnResetear");

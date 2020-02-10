@@ -518,13 +518,11 @@ class AsignaPFTSACXC extends CI_Controller {
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
                     $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
-                            ->set('MaterialMalo', 0)
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO) 
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
                     $this->db->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'])
-                            ->set('MaterialMalo', 0)
+                            ->set('Devolucion', $x['REGRESO']) 
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
             }
@@ -552,13 +550,11 @@ class AsignaPFTSACXC extends CI_Controller {
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
                     $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
-                            ->set('MaterialMalo', 0)
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO) 
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
                     $this->db->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'])
-                            ->set('MaterialMalo', 0)
+                            ->set('Devolucion', $x['REGRESO']) 
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
             }//END REGRESO

@@ -444,6 +444,8 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["costo"] = NULL;
             $f["obs"] = strlen($x["OBSERVACIONES"]) > 0 ? strtoupper($x["OBSERVACIONES"]) : "SO";
             $f["modulo"] = "PRODUCCION";
+            $f["usuario"] = $this->session->USERNAME;
+            $f["usuario_id"] = $this->session->ID;
             $this->db->insert('facturacion', $f);
 //            print $this->db->last_query();
             $tipo_cambio = 0;
