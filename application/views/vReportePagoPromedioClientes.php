@@ -24,6 +24,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -76,6 +77,30 @@
                 HoldOn.close();
             }).always(function () {
                 onEnable(mdlReportePagoPromedioClientes.find('#btnImprimir'));
+            });
+        });
+        mdlReportePagoPromedioClientes.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlReportePagoPromedioClientes.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlReportePagoPromedioClientes.find("#frmCaptura")[0]);
+            $.ajax({
+                url: '<?php print base_url('ReportesClientesJasper/onReporteDiasPagoPromedioExcel'); ?>',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            }).always(function () {
+                onEnable(mdlReportePagoPromedioClientes.find('#btnImprimirExcel'));
             });
         });
     });

@@ -235,18 +235,17 @@ class DevolucionesDeClientes extends CI_Controller {
 
             /* 1. REPORTE AGRUPADO POR CLASIFICACIÓN */
             $jc->setParametros($P);
-            $jc->setJasperurl('jrxml\facturacion\devolnapl.jasper');
+            $jc->setJasperurl('jrxml\facturacion\Excel\devolnapl.jasper');
             $jc->setFilename('DEV_X_CLASIFICACION_' . Date('dmYhis'));
             $jc->setDocumentformat('xls');
             $reports['1UNO'] = $jc->getReport();
 
 //            /* 2. REPORTE AGRUPADO POR MAQUILA */
-            $jc->setParametros($P);
-            $jc->setJasperurl('jrxml\facturacion\devolnaplm.jasper');
-            $jc->setFilename('DEV_X_MAQUILA_' . Date('dmYhis'));
-            $jc->setDocumentformat('xls');
-            $reports['2DOS'] = $jc->getReport();
-
+//            $jc->setParametros($P);
+//            $jc->setJasperurl('jrxml\facturacion\devolnaplm.jasper');
+//            $jc->setFilename('DEV_X_MAQUILA_' . Date('dmYhis'));
+//            $jc->setDocumentformat('xls');
+//            $reports['2DOS'] = $jc->getReport();
 //            /* 3. REPORTE AGRUPADO CARGO UNO (cargoa = 1) */
 //            $jc->setParametros($P);
 //            $jc->setJasperurl('jrxml\facturacion\devolnaplp.jasper');

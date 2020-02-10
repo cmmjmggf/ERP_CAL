@@ -44,6 +44,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -141,6 +142,33 @@
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 onEnable(mdlEstadoCuenta306090.find('#btnImprimir'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+        mdlEstadoCuenta306090.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlEstadoCuenta306090.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlEstadoCuenta306090.find("#frmCaptura")[0]);
+            frm.append('Dias', dias);
+            $.ajax({
+                url: base_url + 'index.php/AuxReportesClientesDos/imprimirReportesCarteraExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                onEnable(mdlEstadoCuenta306090.find('#btnImprimirExcel'));
+                console.log(data);
+                if (data.length > 0) {
+                    console.log(data);
+                    onOpenWindowBlank(data);
+                    HoldOn.close();
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlEstadoCuenta306090.find('#btnImprimirExcel'));
                 console.log(x, y, z);
                 HoldOn.close();
             });

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.9686833286075056"/>
-	<property name="ireport.x" value="1081"/>
+	<property name="ireport.zoom" value="2.698803026006823"/>
+	<property name="ireport.x" value="307"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -44,6 +44,7 @@ cast(CT.Clave as signed) AS Cliente,
 CT.RazonS AS ClienteT,
 PE.Control,
 PE.Clave,
+(select nombre from agentes where clave = PE.agente) as nomagente,
 str_to_date(PE.FechaEntrega,'%d/%m/%Y') as FechaEntrega,
 str_to_date(PE.FechaPedido,'%d/%m/%Y') as FechaPedido,
 str_to_date(PE.FechaRecepcion,'%d/%m/%Y') as FechaRecepcion,
@@ -73,7 +74,6 @@ join estados EDO on EDO.Clave = CT.Estado
 join estilos E on E.Clave = PE.Estilo
 join lineas L on L.clave = E.Linea
 where PE.maquila not in('98') AND PE.stsavan NOT IN(13,14)  AND PE.stsavan IS NOT NULL
-and PE.estatus in ('A')
 and PE.agente = $P{agente}
 order by Estado ASC, Cliente ASC, PE.FechaEntrega ASC, PE.Clave ASC, PE.Estilo ASC, PE.Color ASC  ;]]>
 	</queryString>
@@ -91,6 +91,7 @@ order by Estado ASC, Cliente ASC, PE.FechaEntrega ASC, PE.Clave ASC, PE.Estilo A
 	<field name="Clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nomagente" class="java.lang.String"/>
 	<field name="FechaEntrega" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -399,6 +400,13 @@ order by Estado ASC, Cliente ASC, PE.FechaEntrega ASC, PE.Clave ASC, PE.Estilo A
 					<font size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{agente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="10" width="155" height="14" uuid="b3260567-1017-4b74-80b7-421a88710895"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomagente}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

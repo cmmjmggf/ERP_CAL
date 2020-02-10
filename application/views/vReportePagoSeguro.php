@@ -39,6 +39,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnAceptarExcel">EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -56,6 +57,32 @@
             });
             mdlReportePagoSeguro.find("#Ano").val(new Date().getFullYear());
             mdlReportePagoSeguro.find('#Mes')[0].selectize.focus();
+        });
+
+        mdlReportePagoSeguro.find('#btnAceptarExcel').on("click", function () {
+            onDisable(mdlReportePagoSeguro.find('#btnAceptarExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlReportePagoSeguro.find("#frmCaptura")[0]);
+            frm.append('NombreMes', mdlReportePagoSeguro.find("#Mes option:selected").text());
+            $.ajax({
+                url: base_url + 'index.php/ReportesClientesJasper/onReporteSeguroExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            }).always(function () {
+                onEnable(mdlReportePagoSeguro.find('#btnAceptarExcel'));
+            });
         });
 
         mdlReportePagoSeguro.find('#btnAceptar').on("click", function () {

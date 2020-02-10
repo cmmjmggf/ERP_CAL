@@ -584,6 +584,29 @@ class ReportesClientesJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteDiasPagoPromedioExcel() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIni'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFin'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["fechaIniF"] = $this->input->post('FechaIni');
+        $parametros["fechaFinF"] = $this->input->post('FechaFin');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\Excel\diasPagoPromedioFecha.jasper');
+        $jc->setFilename('DIAS_PAGO_PROMEDIO_EXCEL_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteSeguro() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -597,6 +620,22 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setJasperurl('jrxml\clientes\reporteSeguro.jasper');
         $jc->setFilename('PAGO_MENSUAL_SEGURO_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteSeguroExcel() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["mes"] = $this->input->post('Mes');
+        $parametros["nombreReporte"] = $this->input->post('NombreMes') . ' del ' . $this->input->post('Ano');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\clientes\reporteSeguroExcel.jasper');
+        $jc->setFilename('PAGO_MENSUAL_SEGURO_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
         PRINT $jc->getReport();
     }
 

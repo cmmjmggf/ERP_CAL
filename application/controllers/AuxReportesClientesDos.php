@@ -76,6 +76,30 @@ class AuxReportesClientesDos extends CI_Controller {
         }
     }
 
+    /* REPORTES EDOS DE CUENTA  60 90 A EXCEL */
+
+    public function imprimirReportesCarteraExcel() {
+        $Dias = $this->input->post('Dias');
+        if (intval($Dias) > 0) {
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["dCliente"] = $this->input->post('dClienteEdoCtaMasDias');
+            $parametros["aCliente"] = $this->input->post('aClienteEdoCtaMasDias');
+            $parametros["tp"] = $this->input->post('TpEdoCuentaMasDias');
+            $parametros["dias"] = $Dias;
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\clientes\Excel\reporteEstadoCuenta6090.jasper');
+            $jc->setFilename('EDO_CTA_CLIENTES_60_90_' . Date('h_i_s'));
+            $jc->setDocumentformat('xls');
+            PRINT $jc->getReport();
+        } else {
+            $this->onReporteAntiguedadSaldosGeneral();
+        }
+    }
+
     /* REPORTES EDOS DE CUENTA */
 
     public function imprimirReportesCartera() {

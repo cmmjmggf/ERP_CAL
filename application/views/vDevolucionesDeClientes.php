@@ -365,11 +365,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="col-6" align="left">
-                    <button type="button" class="btn btn-success" id="btnAceptaReporteDevolucionXLS"><span class="fa fa-print"></span> Aceptar </button>
-                </div>
                 <div class="col-6" align="right">
                     <button type="button" class="btn btn-info" id="btnAceptaReporteDevolucion"><span class="fa fa-print"></span> Aceptar</button>
+                </div>
+                <div class="col-6" align="left">
+                    <button type="button" class="btn btn-success" id="btnAceptaReporteDevolucionXLS"><span class="fa fa-file-excel"></span> Exportar a Excel</button>
                 </div>
             </div>
         </div>
@@ -707,10 +707,10 @@
                             /*1 = NORMAL (4 REPORTES)*/
                             onOpenOverlay('');
                             $.post('<?php print base_url('DevolucionesDeClientes/onImprimirRepNormalXLS'); ?>', p).done(function (a) {
-                                var b = JSON.parse(a); 
+                                var b = JSON.parse(a);
 //                                    onImprimirReporteFancyArray(JSON.parse(aaa));
 //                                   window.open(aaa, '_blank');
-                                    onOpenWindowBlankArray(b); 
+                                onOpenWindowBlankArray(b);
                             }).fail(function (x, y, z) {
                                 getError(x);
                             }).always(function () {
