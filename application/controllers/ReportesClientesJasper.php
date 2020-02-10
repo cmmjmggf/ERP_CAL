@@ -707,6 +707,36 @@ class ReportesClientesJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteCartaCobranzaXAgente() {
+        $reports = array();
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniRepFechas'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinRepFechas'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["agente"] = $this->input->post('AgenteRepFechas');
+        $parametros["tp"] = 1;
+        $jc->setJasperurl('jrxml\clientes\cartaCobranzaXAgente.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CARTA_COBRANZA_X_AGENTE_TP1' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        $reports['1UNO'] = $jc->getReport();
+
+        $parametros["tp"] = 2;
+        $jc->setJasperurl('jrxml\clientes\cartaCobranzaXAgente.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_CARTA_COBRANZA_X_AGENTE_TP2' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        $reports['2DOS'] = $jc->getReport();
+
+        print json_encode($reports);
+    }
+
     public function onVerificarAgente() {
         try {
             $Agente = $this->input->get('Agente');
