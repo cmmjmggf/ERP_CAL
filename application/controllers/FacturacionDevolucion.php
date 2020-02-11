@@ -285,7 +285,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $HORAS = Date('h:i:s a')/* HORAS SI ES LA HORA */;
             $this->db->set('hora', $HORA)
                     ->set('horas', $HORAS)
-                    ->set('referen', $x['REFERENCIA'])
+                    ->set('referen', intval($x['REFERENCIA']))
                     ->set('monletra', $x['TOTAL_EN_LETRA'])
                     ->where('factura', $x['FACTURA'])
                     ->where('cliente', $x['CLIENTE'])
@@ -481,7 +481,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                     'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                     'tcamb' => $tipo_cambio,
                     'noidentificado' => NULL,
-                    'referencia' => $x['REFERENCIA'],
+                    'referencia' => intval($x['REFERENCIA']),
                     'tienda' => $x['TIENDA']);
                 $this->db->insert('facturadetalle', $facturacion_detalle);
             }

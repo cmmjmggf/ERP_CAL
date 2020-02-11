@@ -267,7 +267,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
 
             $this->db->set('hora', $HORA)
                     ->set('horas', $HORAS)
-                    ->set('referen', $x['REFERENCIA'])
+                    ->set('referen', intval($x['REFERENCIA']))
                     ->set('monletra', $x['TOTAL_EN_LETRA'])
                     ->where('factura', $x['FACTURA'])
                     ->where('cliente', $x['CLIENTE'])
@@ -423,7 +423,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
             $f["origen"] = 0;
-            $f["referen"] = $x["REFERENCIA"];
+            $f["referen"] = intval($x["REFERENCIA"]);
 
             $f["decdias"] = 0;
             $f["agente"] = $x["AGENTE"];
@@ -476,7 +476,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                     'tcamb' => $tipo_cambio,
                     'noidentificado' => NULL,
-                    'referencia' => $x['REFERENCIA'],
+                    'referencia' => intval($x['REFERENCIA']),
                     'tienda' => $x['TIENDA']);
                 $this->db->insert('facturadetalle', $facturacion_detalle);
             }
