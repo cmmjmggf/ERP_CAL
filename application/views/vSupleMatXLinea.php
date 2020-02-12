@@ -30,7 +30,7 @@
                     <div class="w-100"></div>
                     <div class="col-12" align="right">
                         <button type="button" id="btnSuplirMaterialXLinea" name="btnSuplirMaterialXLinea" class="btn btn-info-blue mt-3" disabled="">
-                            Suplir
+                            <span class="fa fa-retweet"></span>   Suplir
                         </button>
                     </div>
                     <div class="w-100"></div>
@@ -93,7 +93,8 @@
             if (LineaDefinidora.val() && MaterialASuplirXLinea.val() && MaterialNuevoXLinea.val()) {
                 $.getJSON('<?php print base_url('FichaTecnica/getNumMaterialesASuplirXLinea'); ?>',
                         {
-                            LINEA: LineaDefinidora.val(), MATERIAL: MaterialASuplirXLinea.val()
+                            LINEA: LineaDefinidora.val(), MATERIAL: MaterialASuplirXLinea.val(),
+                            CONSUMO: ConsumoXLinea.val()
                         }).done(function (a) {
                     if (parseInt(a[0].MATERIALES_A_SUPLIR_X_LIN) > 0) {
                         swal({
@@ -132,6 +133,9 @@
                                     break;
                             }
                         });
+                        DetalleFTMaterialXLinea.ajax.reload(function () {
+                            HoldOn.close();
+                        });
                     } else {
                         swal('ATENCIÓN', 'NO EXISTEN MATERIALES A SUPLIR, ELIJA OTRA LINEA U OTRO MATERIAL', 'warning').then((value) => {
                             MaterialASuplirXLinea[0].selectize.focus();
@@ -140,7 +144,9 @@
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
-                    HoldOn.close();
+                    DetalleFTMaterialXLinea.ajax.reload(function () {
+                        HoldOn.close();
+                    });
                 });
             } else {
                 onBeep(2);

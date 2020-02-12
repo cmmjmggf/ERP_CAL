@@ -343,8 +343,8 @@ class FichaTecnica extends CI_Controller {
             if ($CONSUMO !== '' && intval($CONSUMO) > 0) {
                 $this->db->query("UPDATE fichatecnica AS FT
                 INNER JOIN estilos AS E ON FT.Estilo = E.Clave
-                SET FT.Articulo = {$MATERIALNUEVO}
-            WHERE E.Linea = {$LINEA}  AND FT.Articulo = $MATERIAL;");
+                SET FT.Articulo = {$MATERIALNUEVO}, FT.Consumo = {$CONSUMO} "
+                . "WHERE E.Linea = {$LINEA}  AND FT.Articulo = $MATERIAL;");
             } else {
                 $this->db->query("UPDATE fichatecnica AS FT
                 INNER JOIN estilos AS E ON FT.Estilo = E.Clave

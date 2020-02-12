@@ -49,7 +49,7 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
             $tmnda = $this->input->post('Moneda');
             $tcambio = $this->input->post('TipoCambio');
 
-            $Agente = $this->db->query("select Agente from clientes where clave = {$x['CLIENTE']} ")->result()[0]->Agente;
+            $Agente = $this->db->query("select Agente from clientes where clave = {$Cliente} ")->result()[0]->Agente;
 
             $UUID = '';
             if ($Tp === '1') {
@@ -77,8 +77,8 @@ class CancelaDocumentosVentaCobranza extends CI_Controller {
                         if (!empty($Pedido)) {//Si existe en pedidos traemos los pares
                             $txtpareped = $Pedido[0]->Pares;
 
-                            if (intval($paresfact) < intval($txtpareped)) {//Si los pares sobrantes son menores a los del pedido se va a terminado y actualiza los pares
-                                $this->db->set('DeptoProduccion', 240)->set('ParesFacturados', $txtpareped - $paresfact)
+                            if (intval($paresfact) <= intval($txtpareped)) {//Si los pares sobrantes son menores a los del pedido se va a terminado y actualiza los pares
+                                $this->db->set('DeptoProduccion', 240)->set('ParesFacturados', $paresfact)
                                         ->set('EstatusProduccion', 'TERMINADO')->set('stsavan', 12)->set('Estatus', 'A')->where('Control', $txtcontped)->update("pedidox");
                                 $this->db->set('DeptoProduccion', 12)->set('EstatusProduccion', 'TERMINADO')->where('Control', $txtcontped)->update("controles");
                             } else {//Si no, se va a facturado y actualiza los pares

@@ -1,7 +1,7 @@
 <div class="card m-1 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
-            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
@@ -23,6 +23,9 @@
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
+                <button type="button" id="btnCambiaFolio" name="btnCambiaFolio" class="btn btn-info">
+                    <span class="fa fa-pen"></span>
+                </button>
                 <button type="button" id="btnClientes" name="btnClientes" class="btn btn-primary d-none">
                     <span class="fa fa-users"></span>  CLIENTES
                 </button>
@@ -30,7 +33,7 @@
                     <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" align="center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">
                 <div class="row">
                     <div class="col-10">
                         <h4 class="font-weight-bold font-italic text-danger" style="cursor: pointer;" onclick="getHistorial()">F A C T U R A C I Ó N</h4>
@@ -121,7 +124,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>FA-PE.ORCO</label>
-                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm">
+                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm" readonly="">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-none"  style="padding-left: 5px; padding-right: 5px;">
                 <label>FC.A</label>
@@ -1181,6 +1184,10 @@
             }
         });
 
+        pnlTablero.find("#btnCambiaFolio").click(function () {
+            onReadAndWrite(pnlTablero.find("#Documento"));
+        });
+
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 ClienteClave.val(ClienteFactura.val());
@@ -1214,7 +1221,7 @@
                                     onCampoInvalido(pnlTablero, 'ESTE CLIENTE ESTA BLOQUEADO POR COBRANZA. UNA VEZ DESBLOQUEADO, ACTUALICE LA PÁGINA CON "F5".', function () {
                                         ClienteClave.focus().select();
                                     });
-                                    break; 
+                                    break;
                             }
                         }).fail(function (x) {
                             getError(x);
@@ -1333,9 +1340,10 @@
         });
 
         btnAcepta.click(function () {             /*REVISAR CANTIDAD FACTURADA*/
-            if (Control.val()) {
+            if (Control.val() && ClienteClave.val()) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
                         {
+                            CLIENTE: ClienteClave.val(),
                             CONTROL: Control.val()
                         }).done(function (a) {
                     var r = a[0];
@@ -1498,6 +1506,7 @@
                             ClienteClave.focus().select();
                             FechaFactura.val(Hoy);
                             ClienteClave.focus().select();
+                            onReadOnly(pnlTablero.find("#Documento"));
                         });
                     });
                 }).fail(function (x) {
@@ -1531,7 +1540,7 @@
                         return;
                     }
                     console.log(parseInt(ClienteFactura.val()) === r.CLIENTE, r);
-                    if (parseInt(ClienteFactura.val()) === r.CLIENTE) {
+                    if (parseInt(ClienteFactura.val()) === parseInt(r.CLIENTE)) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
                                 {
                                     CLIENTE: ClienteFactura.val(),
@@ -1604,17 +1613,6 @@
                                 $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
                                 onCloseOverlay();
                                 getTotalFacturado();
-//                                        pnlTablero.find("#btnNuevo").removeClass("d-none");
-//                                        pnlTablero.find("#btnNuevo").attr("disabled", false);
-//                                        Control.attr('disabled', true);
-//                                        btnElijeControl.attr('disabled', true);
-//                                        if (facturado) {
-//                                            ClienteFactura[0].selectize.disable();
-                                //                                            TPFactura.attr('disabled', true);
-                                //                                            btnElijeControl.addClass("d-none");
-                                //                                            btnAcepta.addClass("d-none");
-                                //                                        }
-
                             } else {
                                 pnlTablero.find("#btnNuevo").addClass("d-none");
                                 pnlTablero.find("#btnNuevo").attr("disabled", true);
@@ -1831,7 +1829,29 @@
             onBeep(1);
             onOpenWindow('<?php print base_url('Clientes'); ?>');
         });
+
         Control.on('keydown', function (e) {
+
+            $.post('<?php print base_url('FacturacionProduccion/onComprobarFactura'); ?>',
+                    {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                        FACTURA: Documento.val(),
+                        TP: TPFactura.val()
+                    }).done(function (a) {
+                //                        console.log("COMPROBANDO FACTURA => ", a, ClienteFactura.val(), a[0].CLIENTE);
+                console.log(a, JSON.parse(a), a[0], a[0].CLIENTE, a.CLIENTE);
+                var r = JSON.parse(a);
+                if (parseInt(r.FACTURA_EXISTE) === 2) {
+                    btnAcepta.attr('disabled', false);
+                    btnVistaPreviaF.attr('disabled', true);
+                    CajasFacturacion.attr('disabled', false);
+                    onCloseOverlay();
+                    return;
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+
+            });
             if (TPFactura.val()) {
                 if (ClienteFactura.val()) {
                     if (Control.val() && e.keyCode === 13) {
@@ -1852,6 +1872,7 @@
                 $(".swal-button--confirm").focus();
             }
         });
+
         FechaFactura.val(Hoy);
         ClienteClave.focus().select();
         handleEnterDiv(pnlTablero);
@@ -2027,10 +2048,11 @@
 
     function getInfoXControl() {
         onBeep(3);
-        if (Control.val()) {
+        if (Control.val() && ClienteFactura.val()) {
             getFacturacionDiff();
             $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
                     {
+                        CLIENTE: ClienteFactura.val(),
                         CONTROL: Control.val()
                     }).done(function (a) {
                 if (a.length > 0) {
@@ -2119,6 +2141,7 @@
         pnlTablero.find(".produccionfabricados").text(ttp);
         $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
                 {
+                    CLIENTE: ClienteClave.val(),
                     CONTROL: Control.val()
                 }).done(function (a) {
             var r = a[0];
@@ -2238,23 +2261,11 @@
     function getFacturacionDiff() {
         if (Control.val()) {
             onOpenOverlay('Cargando...');
-            var clientesito = ClienteFactura.val() ? ClienteFactura.val() : '';
             $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarControlXCliente'); ?>', {
                 CONTROL: Control.val() ? Control.val() : '',
                 CLIENTE: ClienteClave.val() ? ClienteClave.val() : ''
             }).done(function (abcd) {
                 control_pertenece_a_cliente = true;
-//                if (abcd.length > 0) {
-//                    if (abcd[0].CLIENTE === clientesito) {
-//                        control_pertenece_a_cliente = true;
-//                    } else {
-                //                        onBeep(2);
-                //                        onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE, INTENTE CON UNO DIFERENTE', function () {
-                //                            onResetCampos();
-                //                            Control.focus().select();
-                //                        });
-                //                    }
-                //                    if (clientesito !== '' && clientesito === abcd[0].CLIENTE) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getFacturacionDiff'); ?>', {
                     CONTROL: Control.val() ? Control.val() : ''
                 }).done(function (aa) {
@@ -2275,19 +2286,11 @@
                     }
                     if (control_pertenece_a_cliente) {
                         $.getJSON('<?php print base_url('FacturacionProduccion/getInfoXControl'); ?>', {
+                            CLIENTE: ClienteClave.val(),
                             CONTROL: Control.val()
                         }).done(function (a) {
                             if (a.length > 0) {
                                 var xx = a[0];
-//                                        if (parseInt(xx.stsavan) === 13) {
-//                                            for (var i = 1; i < 21; i++) { 
-//                                                    pnlTablero.find(`#CF${i}`).val(''); 
-                                //                                            }
-                                //                                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO, INTENTE CON OTRO", function () {
-                                //                                                Control.focus().select();
-                                //                                            });
-                                //                                            return;
-                                //                                        }
                                 Corrida.val(xx.Serie);
                                 var t = 0;
                                 for (var i = 1; i < 23; i++) {
@@ -2350,6 +2353,14 @@
                                 btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                 btnControlInCompleto.attr('disabled', true);
                                 btnControlCompleto.attr('disabled', true);
+                                onNotifyOldPCE('', 'EL CONTROL AUN NO ESTA TERMINADO', 'info', "bottom", "center");
+                                onCampoInvalido(pnlTablero, ' * EL CONTROL AÚN NO ESTÁ TERMINADO * ', function () {
+                                    Control.focus().select();
+                                    btnFacturaXAnticipoDeProducto.attr('disabled', true);
+                                    btnControlInCompleto.attr('disabled', true);
+                                    btnControlCompleto.attr('disabled', true);
+                                });
+                                return;
                             }
                         }).fail(function (x) {
                             getError(x);
@@ -2370,15 +2381,6 @@
                 }).always(function () {
                     onCloseOverlay();
                 });
-//                    }
-//                } else {
-                //                    onBeep(2);
-                //                    onCampoInvalido(pnlTablero, 'EL CONTROL ESPECIFICADO NO PERTENECE A ESTE CLIENTE O YA ESTA FACTURADO O FUE CANCELADO, INTENTE CON UNO DIFERENTE', function () {
-                //                        onResetCampos();
-                //                        Control.focus().select();
-                //                    });
-                //                    return;
-                //                }
             }).fail(function (x) {
                 getError(x);
             }).always(function () {
@@ -2386,6 +2388,7 @@
             });
         }
     }
+
     function onResetCampos() {
         Corrida.val('');
         for (var i = 1; i < 21; i++) {
@@ -2460,6 +2463,12 @@
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
+
+        var total_pares_a_facturar = 0;
+        for (var i = 1; i < 23; i++) {
+            total_pares_a_facturar += parseInt(($.isNumeric(pnlTablero.find("#CAF" + i).val()) ? parseInt(pnlTablero.find("#CAF" + i).val()) : 0));
+            TotalParesEntregaAF.val(total_pares_a_facturar);
+        }
         var rowx = [
             123456789010, Documento.val(), ClienteFactura.val(), Control.val(), FechaFactura.val(),
             TotalParesEntregaAF.val()
