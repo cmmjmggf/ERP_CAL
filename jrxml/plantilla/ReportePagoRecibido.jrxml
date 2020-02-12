@@ -24,7 +24,7 @@ ifnull((CTP.Pares *  CTP.Precio) * PMP.porcentaje,0) as STT_PORCTJ
 FROM controlpla AS CTP
 LEFT JOIN porcentajesmaquilaplantilla PMP on PMP.fraccion = CTP.Fraccion
 WHERE CTP.Estatus = 2 AND STR_TO_DATE(CTP.FechaRetorna, "%d/%m/%Y") BETWEEN STR_TO_DATE($P{FECHAINICIAL}, "%d/%m/%Y") AND STR_TO_DATE($P{FECHAFINAL}, "%d/%m/%Y")
-order by abs(PROVEEDOR) asc]]>
+order by abs(PROVEEDOR), abs(DOCUMENTO) asc]]>
 	</queryString>
 	<field name="PROVEEDOR" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

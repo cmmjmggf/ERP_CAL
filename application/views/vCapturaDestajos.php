@@ -998,7 +998,5 @@
     }
 </style>
 <?php
-$this->load->view('vRastreoControlNomina');
 $this->load->view('vRastreoConceptoNomina');
-$this->load->view('vCapturaComidaEmpleados');
 $this->load->view('vAvanceAnterior');

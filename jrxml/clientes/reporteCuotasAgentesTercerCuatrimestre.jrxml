@@ -15,15 +15,15 @@
 	<queryString>
 		<![CDATA[SELECT a.clave, a.nombre,
 cast(a.SeptiembreCuota as decimal(8,2)) as SeptiembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 9 ) as pedidoSeptiembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 9 ) as pedidoSeptiembre,
 cast(a.OctubreCuota as decimal(8,2)) as OctubreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 10 ) as pedidoOctubre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 10 ) as pedidoOctubre,
 cast(a.NoviembreCuota as decimal(8,2)) as NoviembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 11 ) as pedidoNoviembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 11 ) as pedidoNoviembre,
 cast(a.DiciembreCuota as decimal(8,2)) as DiciembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 12 ) as pedidoDiciembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 12 ) as pedidoDiciembre,
 a.SeptiembreCuota + a.OctubreCuota + a.NoviembreCuota + a.DiciembreCuota as cuotaTotal,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (9,10,11,12) ) as pedidoTotal
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (9,10,11,12) ) as pedidoTotal
 FROM agentes a
 order by abs(a.clave)]]>
 	</queryString>

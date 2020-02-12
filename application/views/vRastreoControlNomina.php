@@ -10,6 +10,10 @@
             <div class="modal-body">
                 <form id="frmExplosion">
                     <div class="row">
+                        <div class="col-6 col-xs-6 col-sm-3 col-lg-3 col-xl-3">
+                            <label>Control</label>
+                            <input type="text" id="ControlRastreo" name="ControlRastreo" maxlength="10" class="form-control form-control-sm numeric" required="">
+                        </div>
                         <div class="col-12 col-sm-6 col-md-2 col-xl-2">
                             <label>Año</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="AnoRastreo" name="AnoRastreo" required="">
@@ -18,10 +22,7 @@
                             <label>Sem.</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="SemRastreo" name="SemRastreo" required="">
                         </div>
-                        <div class="col-6 col-xs-6 col-sm-3 col-lg-3 col-xl-3">
-                            <label>Control</label>
-                            <input type="text" id="ControlRastreo" name="ControlRastreo" maxlength="10" class="form-control form-control-sm numeric" required="">
-                        </div>
+
                         <div class="col-5">
                             <label>Estatus Producción</label>
                             <input type="text" class="form-control form-control-sm" readonly="" id="EstatusProduccionRastreo" name="EstatusProduccionRastreo" >
@@ -66,7 +67,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnImprimir"><span class="fa fa-print"></span> IMPRIMIR</button>
+                <button type="button" class="btn btn-info" id="btnImprimeEnRastreo"><span class="fa fa-print"></span> IMPRIMIR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -85,12 +86,12 @@
         mdlRastreoControlNomina.on('shown.bs.modal', function () {
             handleEnterDiv(mdlRastreoControlNomina);
             validacionSelectPorContenedor(mdlRastreoControlNomina);
-            mdlRastreoControlNomina.find("input").not('#SemRastreo').val("");
+            mdlRastreoControlNomina.find("input").val("");
             $.each(mdlRastreoControlNomina.find("select"), function (k, v) {
                 mdlRastreoControlNomina.find("select")[k].selectize.clear(true);
             });
             mdlRastreoControlNomina.find("#AnoRastreo").val(new Date().getFullYear());
-            getSemanaByFechaRastreoControlNom(getFechaActualConDiagonales());
+            //getSemanaByFechaRastreoControlNom(getFechaActualConDiagonales());
             mdlRastreoControlNomina.find('#ControlRastreo').focus().select();
             getControlesNominaRastreo('', new Date().getFullYear(), sem_ini, '');
             getEmpleadosRastreoControl();
@@ -191,12 +192,13 @@
                 }
             }
         });
-        mdlRastreoControlNomina.find('#btnImprimir').on("click", function () {
-            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
 
+
+
+        mdlRastreoControlNomina.find('#btnImprimeEnRastreo').on("click", function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData();
             frm.append('Control', mdlRastreoControlNomina.find("#ControlRastreo").val());
-
             $.ajax({
                 url: base_url + 'index.php/CapturaFraccionesParaNomina/onImprimirReporteRastreoControl',
                 type: "POST",
@@ -207,40 +209,14 @@
             }).done(function (data, x, jq) {
                 console.log(data);
                 if (data.length > 0) {
-
-                    $.fancybox.open({
-                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
-                        type: 'iframe',
-                        opts: {
-                            afterShow: function (instance, current) {
-                                console.info('done!');
-                            },
-                            iframe: {
-                                // Iframe template
-                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
-                                preload: true,
-                                // Custom CSS styling for iframe wrapping element
-                                // You can use this to set custom iframe dimensions
-                                css: {
-                                    width: "100%",
-                                    height: "100%"
-                                },
-                                // Iframe tag attributes
-                                attr: {
-                                    scrolling: "auto"
-                                }
-                            }
-                        }
-                    });
-
-
+                    onImprimirReporteFancyAFC(data, function (a, b) {});
                 } else {
                     swal({
                         title: "ATENCIÓN",
                         text: "NO EXISTEN DATOS PARA ESTE REPORTE",
                         icon: "error"
                     }).then((action) => {
-                        mdlRastreoControlNomina.find('#btnImprimir').focus();
+                        mdlRastreoControlNomina.find('#btnImprimeEnRastreo').focus();
                     });
                 }
                 HoldOn.close();

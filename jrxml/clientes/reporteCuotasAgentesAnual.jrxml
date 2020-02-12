@@ -15,35 +15,34 @@
 	<queryString>
 		<![CDATA[SELECT a.clave, a.nombre,
 cast(a.EneroCuota as decimal(8,2)) as EneroCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 1 ) as pedidoEnero,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 1 ) as pedidoEnero,
 cast(a.FebreroCuota as decimal(8,2)) as FebreroCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 2 ) as pedidoFebrero,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 2 ) as pedidoFebrero,
 cast(a.MarzoCuota as decimal(8,2)) as MarzoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 3 ) as pedidoMarzo,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 3 ) as pedidoMarzo,
 cast(a.AbrilCuota as decimal(8,2)) as AbrilCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 4 ) as pedidoAbril,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 4 ) as pedidoAbril,
 cast(a.MayoCuota as decimal(8,2)) as MayoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 5 ) as pedidoMayo,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 5 ) as pedidoMayo,
 cast(a.JunioCuota as decimal(8,2)) as JunioCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 6 ) as pedidoJunio,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 6 ) as pedidoJunio,
 cast(a.JulioCuota as decimal(8,2)) as JulioCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 7 ) as pedidoJulio,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 7 ) as pedidoJulio,
 cast(a.AgostoCuota as decimal(8,2)) as AgostoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 8 ) as pedidoAgosto,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 8 ) as pedidoAgosto,
 cast(a.SeptiembreCuota as decimal(8,2)) as SeptiembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 9 ) as pedidoSeptiembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 9 ) as pedidoSeptiembre,
 cast(a.OctubreCuota as decimal(8,2)) as OctubreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 10 ) as pedidoOctubre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 10 ) as pedidoOctubre,
 cast(a.NoviembreCuota as decimal(8,2)) as NoviembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 11 ) as pedidoNoviembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 11 ) as pedidoNoviembre,
 cast(a.DiciembreCuota as decimal(8,2)) as DiciembreCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 12 ) as pedidoDiciembre,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 12 ) as pedidoDiciembre,
 a.EneroCuota + a.FebreroCuota + a.MarzoCuota + a.AbrilCuota+a.MayoCuota+a.JunioCuota+
 a.JulioCuota+a.AgostoCuota+a.SeptiembreCuota+a.OctubreCuota+a.NoviembreCuota+a.DiciembreCuota as cuotaTotal,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave) as pedidoTotal
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y'))o = $P{ano} and stsavan <> 14 and agente = a.Clave) as pedidoTotal
 FROM agentes a
-order by abs(a.clave)
-]]>
+order by abs(a.clave)]]>
 	</queryString>
 	<field name="clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

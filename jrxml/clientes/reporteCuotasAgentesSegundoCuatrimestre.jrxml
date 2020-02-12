@@ -15,15 +15,15 @@
 	<queryString>
 		<![CDATA[SELECT a.clave, a.nombre,
 cast(a.MayoCuota as decimal(8,2)) as MayoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 5 ) as pedidoMayo,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 5 ) as pedidoMayo,
 cast(a.JunioCuota as decimal(8,2)) as JunioCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 6 ) as pedidoJunio,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 6 ) as pedidoJunio,
 cast(a.JulioCuota as decimal(8,2)) as JulioCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 7 ) as pedidoJulio,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 7 ) as pedidoJulio,
 cast(a.AgostoCuota as decimal(8,2)) as AgostoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 8 ) as pedidoAgosto,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 8 ) as pedidoAgosto,
 a.MayoCuota + a.JunioCuota + a.JulioCuota + a.AgostoCuota as cuotaTotal,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (5,6,7,8) ) as pedidoTotal
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (5,6,7,8) ) as pedidoTotal
 FROM agentes a
 order by abs(a.clave)]]>
 	</queryString>

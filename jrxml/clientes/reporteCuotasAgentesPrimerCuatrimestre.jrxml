@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.9513175103764917"/>
-	<property name="ireport.x" value="1796"/>
+	<property name="ireport.zoom" value="2.2304157239725253"/>
+	<property name="ireport.x" value="410"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -15,18 +15,17 @@
 	<queryString>
 		<![CDATA[SELECT a.clave, a.nombre,
 cast(a.EneroCuota as decimal(8,2)) as EneroCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 1 ) as pedidoEnero,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 1 ) as pedidoEnero,
 cast(a.FebreroCuota as decimal(8,2)) as FebreroCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 2 ) as pedidoFebrero,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 2 ) as pedidoFebrero,
 cast(a.MarzoCuota as decimal(8,2)) as MarzoCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 3 ) as pedidoMarzo,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 3 ) as pedidoMarzo,
 cast(a.AbrilCuota as decimal(8,2)) as AbrilCuota,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 4 ) as pedidoAbril,
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) = 4 ) as pedidoAbril,
 a.EneroCuota + a.FebreroCuota + a.MarzoCuota + a.AbrilCuota as cuotaTotal,
-(SELECT sum(Pares) FROM pedidox where Ano = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (1,2,3,4) ) as pedidoTotal
+(SELECT sum(Pares) FROM pedidox where year(str_to_date(FechaEntrega,'%d/%m/%Y')) = $P{ano} and stsavan <> 14 and agente = a.Clave and month(str_to_date(FechaEntrega,'%d/%m/%Y')) in (1,2,3,4) ) as pedidoTotal
 FROM agentes a
-order by abs(a.clave)
-]]>
+order by abs(a.clave)]]>
 	</queryString>
 	<field name="clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

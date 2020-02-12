@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="3.4522712143932663"/>
-	<property name="ireport.x" value="911"/>
+	<property name="ireport.x" value="1441"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -45,7 +45,7 @@ cv.flete,
 cv.precto,
 cv.preaut,
 cv.fecha,
-cv.preaut - (cv.matpri+cv.mextr+ ((cv.matpri + cv.mextr) * cv.toler) + cv.maob + cv.tejida) -
+cv.preaut - (cv.matpri+cv.mextr+ ((cv.matpri + cv.mextr) * cv.toler) + cv.maob + ifnull(cv.tejida,0)) -
 (cv.gfabri+ cv.gvta + cv.gadmon + cv.hms + cv.flete ) -
 (cv.preaut * cv.`desc`)-
 (cv.preaut * cv.comic) as utilpreaut
@@ -766,7 +766,7 @@ order by cv.lista, cv.corr, cv.estilo asc, cv.color asc]]>
 				</graphicElement>
 			</line>
 			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="739" y="0" width="28" height="12" isPrintInFirstWholeBand="true" uuid="98e6ffce-5d21-4283-b87a-9c3c45bf5698"/>
+				<reportElement x="739" y="0" width="28" height="12" isPrintInFirstWholeBand="true" uuid="98e6ffce-5d21-4283-b87a-9c3c45bf5698"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
