@@ -5,7 +5,7 @@ require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
 class Avance8 extends CI_Controller {
 
-    private $avances = array(2 => "CORTE", 3 => "RAYADO", 4 => "FOLEADO", 33 => "REBAJADO", 40 => "ENTRETELADO", 42 => "MAQUILA", 44 => "ALMACEN DE CORTE", 5 => "PESPUNTE",55=>"ENSUELADO", 6 => "ALMACEN DE PESPUNTE", 7 => "TEJIDO", 8 => "ALMACEN DE TEJIDO", 9 => "MONTADO", 10 => "ADORNO", 11 => "ALMACEN ADORNO", 12 => "TERMINADO", 13 => "FACTURADO", 14 => "CANCELADO");
+    private $avances = array(2 => "CORTE", 3 => "RAYADO", 4 => "FOLEADO", 33 => "REBAJADO", 40 => "ENTRETELADO", 42 => "MAQUILA", 44 => "ALMACEN DE CORTE", 5 => "PESPUNTE", 55 => "ENSUELADO", 6 => "ALMACEN DE PESPUNTE", 7 => "TEJIDO", 8 => "ALMACEN DE TEJIDO", 9 => "MONTADO", 10 => "ADORNO", 11 => "ALMACEN ADORNO", 12 => "TERMINADO", 13 => "FACTURADO", 14 => "CANCELADO");
 
     public function __construct() {
         parent::__construct();
@@ -297,6 +297,15 @@ class Avance8 extends CI_Controller {
             $mes = substr($fecha, 3, 2);
             $anio = substr($fecha, 6, 4);
 
+            $REVISA_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                            . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} AND "
+                            . "P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
+                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+            if (intval($REVISA_CONTROL[0]->EXISTE) === 0) {
+                print "CONTROL {$xXx['CONTROL']} CANCELADO O NO EXISTE O ESTA MAL ESCRITO";
+                exit(0);
+            }
+            
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
             $AVANCES = array("AVANZO" => 0, "FRACCIONES" => count($FRACCIONES));
 //            var_dump($FRACCIONES);
@@ -468,15 +477,18 @@ class Avance8 extends CI_Controller {
                                                         . "WHERE P.Control = {$xXx['CONTROL']} "
                                                         . "AND P.stsavan IN(6,7,8,9,10,11,12,13,14)")->result();
                                         if (intval($REVISAR_AVANCE[0]->EXISTE) === 0) {
-                                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                                    ->set('DeptoProduccion', 130)
-                                                    ->where('Control', $xXx['CONTROL'])->update('controles');
-                                            $this->db->set('stsavan', 6)
-                                                    ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                                    ->set('DeptoProduccion', 130)
-                                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
-                                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                            $TEJIDO_FRACCION = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']} LIMIT 1")->result();
+                                            if (intval($TEJIDO_FRACCION[0]->EXISTE) === 0) {
+                                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                                        ->set('DeptoProduccion', 130)
+                                                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                                                $this->db->set('stsavan', 6)
+                                                        ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
+                                                        ->set('DeptoProduccion', 130)
+                                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
+                                                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                            }
                                         }
                                         /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
                                         $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM  fraccionesxestilo AS F INNER JOIN fracciones AS FF "
@@ -741,12 +753,12 @@ class Avance8 extends CI_Controller {
                     $avance_pago['PUEDE_AVANZAR_A_FOLEADO_VALIDA'] = 0;
                 }
             }
-            /* 1 REVISAR SI YA ESTA AVANZADO POR RAYADO EN PEDIDOS stsavan 3 */ 
+            /* 1 REVISAR SI YA ESTA AVANZADO POR RAYADO EN PEDIDOS stsavan 3 */
             $xsql = "SELECT COUNT(*) AS EXISTE,(SELECT PS.stsavan FROM pedidox AS PS WHERE PS.Control = {$x['CONTROL']} LIMIT 1) AS AVANCE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}  LIMIT 1";
             $revisa_avance = $this->db->query($xsql)->result();
-            if (intval($revisa_avance[0]->EXISTE) >= 1) { 
+            if (intval($revisa_avance[0]->EXISTE) >= 1) {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
-            } else { 
+            } else {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
             }
             print json_encode(array($avance_pago));
@@ -782,12 +794,12 @@ class Avance8 extends CI_Controller {
                     $avance_pago['PUEDE_AVANZAR_A_ALMCORTEOMAQUILA_VALIDA'] = 0;
                 }
             }
-            /* 1 REVISAR SI YA ESTA AVANZADO POR RAYADO EN PEDIDOS stsavan 3 */ 
+            /* 1 REVISAR SI YA ESTA AVANZADO POR RAYADO EN PEDIDOS stsavan 3 */
             $xsql = "SELECT COUNT(*) AS EXISTE,(SELECT PS.stsavan FROM pedidox AS PS WHERE PS.Control = {$x['CONTROL']} LIMIT 1) AS AVANCE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}  LIMIT 1";
             $revisa_avance = $this->db->query($xsql)->result();
-            if (intval($revisa_avance[0]->EXISTE) >= 1) { 
+            if (intval($revisa_avance[0]->EXISTE) >= 1) {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
-            } else { 
+            } else {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
             }
             print json_encode(array($avance_pago));
@@ -795,8 +807,6 @@ class Avance8 extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
-    
-    
 
     public function onRevisarCobroDeEnsueladoParaALMPESPUNTE() {
         try {
@@ -827,9 +837,9 @@ class Avance8 extends CI_Controller {
             }
             $xsql = "SELECT COUNT(*) AS EXISTE,(SELECT PS.stsavan FROM pedidox AS PS WHERE PS.Control = {$x['CONTROL']} LIMIT 1) AS AVANCE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1";
             $revisa_avance = $this->db->query($xsql)->result();
-            if (intval($revisa_avance[0]->EXISTE) >= 1) { 
+            if (intval($revisa_avance[0]->EXISTE) >= 1) {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
-            } else { 
+            } else {
                 $avance_pago['AVANZO_ACTUAL'] = $this->avances[intval($revisa_avance[0]->AVANCE)];
             }
             print json_encode(array($avance_pago));
@@ -837,6 +847,7 @@ class Avance8 extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
     public function onAvanzarXControl($CONTROL, $ESTATUS_PRODUCCION, $DEPTO_PRODUCCION, $STSAVAN) {
         try {
             $this->db->trans_begin();

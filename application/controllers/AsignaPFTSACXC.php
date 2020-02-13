@@ -297,8 +297,17 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             $x = $this->input->post();
             $xx = $this->input->post();
+            $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} "
+                            . "AND P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
+                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+            if (intval($CONTROL_EXISTE[0]->EXISTE) === 0) {
+                print "CONTROL  {$x['CONTROL']} CANCELADO";
+                exit(0);
+            }
             $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
-                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+
 //            var_dump($CONTROL);
 //            exit(0);
             $CONTROL_SEMANA_MAQUILA = $CONTROL[0];
@@ -309,12 +318,12 @@ class AsignaPFTSACXC extends CI_Controller {
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
 //            exit(0);
-            if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0 && 
-                    $x['MATERIAL_EXTRA']>0) {
+            if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0 &&
+                    $x['MATERIAL_EXTRA'] > 0) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])
-                        ->where('Fraccion', $x['FRACCION']) 
-                        ->where('Semana',  $x['SEMANA'])  
-                        ->where('Articulo', $x['ARTICULO']) 
+                        ->where('Fraccion', $x['FRACCION'])
+                        ->where('Semana', $x['SEMANA'])
+                        ->where('Articulo', $x['ARTICULO'])
                         ->update('asignapftsacxc');
 
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
@@ -437,7 +446,7 @@ class AsignaPFTSACXC extends CI_Controller {
 
                     /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
                     $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')
-                            ->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
+                                    ->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
                     print "\n onEntregarPielForroTextilSintetico ESTATUS DE AVANCE: ";
 
                     print "\n *FIN ESTATUS DE AVANCE* \n";
@@ -507,8 +516,19 @@ class AsignaPFTSACXC extends CI_Controller {
             /* AGREGAR MOVIMIENTO DE ARTICULO */
 //            exit(0);
             $x = $this->input->post();
+            $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND "
+                            . "P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
+                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+            if (intval($CONTROL_EXISTE[0]->EXISTE) === 0) {
+                print "CONTROL {$x['CONTROL']} CANCELADO O NO EXISTE O ESTA MAL ESCRITO";
+                exit(0);
+            }
+
             $CONTROL = $this->db->query("SELECT P.Semana AS SEMANA, P.Maquila AS MAQUILA "
-                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+                            . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND "
+                            . "P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
+                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
 
             $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')
                             ->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
@@ -518,11 +538,11 @@ class AsignaPFTSACXC extends CI_Controller {
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
                     $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO) 
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
                     $this->db->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO']) 
+                            ->set('Devolucion', $x['REGRESO'])
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
             }
@@ -550,11 +570,11 @@ class AsignaPFTSACXC extends CI_Controller {
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
                     $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO) 
+                            ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
                     $this->db->set('Empleado', $x['EMPLEADO'])
-                            ->set('Devolucion', $x['REGRESO']) 
+                            ->set('Devolucion', $x['REGRESO'])
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
             }//END REGRESO

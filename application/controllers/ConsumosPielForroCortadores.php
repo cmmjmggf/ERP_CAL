@@ -6,7 +6,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
         $this->load->library('session')->model('ConsumoPielForroXCortador_model', 'cpfxc')
-                ->helper('consumopielforro_helper');
+                ->helper('consumopielforro_helper')->helper('jaspercommand_helper');
     }
 
     public function index() {
@@ -339,9 +339,9 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->DifPesos, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
-                        $TOTAL_X_DIFERENCIA_PESOS += $vvv->DifPesos;
-                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->DifPesos;
+                        $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia * $vvv->Precio, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
+                        $TOTAL_X_DIFERENCIA_PESOS += $vvv->Diferencia * $vvv->Precio;
+                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->Diferencia * $vvv->Precio;
                         $pdf->Line(10, $pdf->GetY(), 269, $pdf->GetY());
                     }
 //                    $cols = array(25/* 1 */, 40/* 2 */, 50/* 3 */, 100/* 4 */, 110/* 5 */,
@@ -602,7 +602,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $aligns = array('L', 'L', 'L', 'L', 'L');
             $pdf->SetTextColor(0, 0, 0);
             $pdf->SetFont('Calibri', 'B', 10);
-            $CORTADORES = $this->cpfxc->getCortadoresXMaquilaSemanaArticulo($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $TIPO);
+            $CORTADORES = $this->cpfxc->getCortadoresXMaquilaSemanaArticulo($ARTICULO, intval($MAQUILA), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $TIPO);
             $base = 6;
             $alto_celda = 4;
             /* ANCHO DESPUÉS DE LOS MARGENES = 259, ES DE 215, PERO SON 10 DE MARGEN IZQ Y 10 DE MARGEN DER */
@@ -697,6 +697,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $TOTAL_X_REAL_PESOS = 0;
             $TOTAL_X_DIFERENCIA_PESOS = 0;
 
+            $TOTAL_PARES = 0;
             $TOTAL_PARES_X_ESTILO_CORTADOR = 0;
             $TOTAL_X_ESTILO_CORTADOR = 0;
             $TOTAL_X_CONTROL_CORTADOR = 0;
@@ -721,10 +722,35 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $pdf->Cell(110, $alto_celda, utf8_decode($v->NUMERO . " " . $v->CORTADOR), $bordes/* BORDE */, 0/* SALTO */, 'L');
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
-                $ESTILOS = $this->cpfxc->getEstilosPorCortador($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $v->NUMERO, $TIPO);
+//                $ESTILOS = $this->cpfxc->getEstilosPorCortador($ARTICULO, intval($MAQUILA),
+//                        $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $v->NUMERO, $TIPO);
+
+                $CORTADOR_CLAVE = $v->NUMERO;
+                $this->db->select("A.Estilo AS Estilo_X_Cortador", false)
+                        ->from("asignapftsacxc AS A")
+                        ->join("empleados AS E", "A.Empleado = IFNULL(E.Numero,0)", 'left');
+                if ($CORTADOR_CLAVE !== '') {
+                    $this->db->where("A.Empleado = '$CORTADOR_CLAVE'", null, false);
+                }
+                if ($ARTICULO !== '') {
+                    $this->db->where("A.Articulo = '$ARTICULO'", null, false);
+                }
+                if ($SEMANA_INICIAL !== '' && $SEMANA_FINAL !== '') {
+                    $this->db->where("A.Semana BETWEEN '$SEMANA_INICIAL' AND '$SEMANA_FINAL'", null, false);
+                }
+                if ($MAQUILA !== '') {
+                    $this->db->where("A.Maquila = '$MAQUILA'", null, false);
+                }
+                if ($ANIO !== '') {
+                    $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANIO'", null, false);
+                }
+                $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1)->group_by('A.Estilo');
+                $ESTILOS = $this->db->get()->result();
+
                 foreach ($ESTILOS as $kk => $vv) {
                     $RESUMEN = $this->cpfxc->getConsumosPielForroXMaquilaSemanaAnioCortadorArticuloFechaInicialFechaFinal($MAQUILA, $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $CORTADOR, $ARTICULO, $FECHAINICIAL, $FECHAFINAL, $v->NUMERO, $vv->Estilo_X_Cortador, $TIPO);
                     $Y = $pdf->GetY();
+                    $TOTAL_PARES = 0;
                     foreach ($RESUMEN as $kkk => $vvv) {
                         $TOTAL_PARES_X_ESTILO_CORTADOR += $vvv->Pares;
 
@@ -758,20 +784,17 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $TOTAL_X_REAL_PESOS += $vvv->RealPesos;
                         $TOTAL_X_REAL_PESOS_CORTADOR += $vvv->RealPesos;
 
-                        $TOTAL_X_DIFERENCIA_PESOS += $vvv->DifPesos;
-                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->DifPesos;
+                        $TOTAL_X_DIFERENCIA_PESOS += $vvv->Diferencia * $vvv->Precio;
+                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->Diferencia * $vvv->Precio;
                         $pdf->Line(10, $pdf->GetY(), 269, $pdf->GetY());
                     }
                     $pdf->SetFont('Calibri', 'B', 8);
                     $base = 100;
-//                    $pdf->SetFillColor(255, 255, 255);
-//                    $pdf->SetFillColor(244, 244, 244);
-//                    $pdf->Rect(10.2, $pdf->GetY() + .2, 258.7, 3.5, 'F');
                     $pdf->SetX(100);
-//                    $pdf->Cell(15, $alto_celda, utf8_decode("Total por estilo"), 0/* BORDE */, 0/* SALTO */, 'C');
+
                     $base += 20;
                     $pdf->SetX($base);
-                    $pdf->Cell(10, $alto_celda, number_format($TOTAL_PARES_X_ESTILO_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                    $pdf->Cell(10, $alto_celda, $TOTAL_PARES_X_ESTILO_CORTADOR, $bordes/* BORDE */, 0/* SALTO */, 'C');
 
                     $base += 10;
                     $pdf->SetX($base);
@@ -820,6 +843,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $TOTAL_X_REAL_PESOS = 0;
                     $TOTAL_X_DIFERENCIA_PESOS = 0;
                     $pdf->Line(10, $pdf->GetY(), 269, $pdf->GetY());
+                    $TOTAL_PARES += $TOTAL_PARES_X_ESTILO_CORTADOR;
                 }
                 $base = 100;
                 $pdf->SetFillColor(244, 244, 244);
@@ -828,7 +852,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $pdf->Cell(15, $alto_celda, utf8_decode("Total general"), 0/* BORDE */, 0/* SALTO */, 'C');
                 $base += 20;
                 $pdf->SetX($base);
-                $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                $pdf->Cell(10, $alto_celda, number_format($TOTAL_PARES, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'C');
                 $base += 10;
                 $pdf->SetX($base);
                 $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_CONTROL_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'C');
@@ -870,6 +894,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $TOTAL_X_SISTEMA_PESOS_CORTADOR = 0;
                 $TOTAL_X_REAL_PESOS_CORTADOR = 0;
                 $TOTAL_X_DIFERENCIA_PESOS_CORTADOR = 0;
+                $TOTAL_PARES = 0;
             }
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/ConsumosDePielYForro';
@@ -890,4 +915,45 @@ class ConsumosPielForroCortadores extends CI_Controller {
         }
     }
 
+    public function getReporteConsumoPielGeneral() {
+        try {
+            $x = $this->input->post();
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $pr["logo"] = base_url() . $this->session->LOGO;
+            $pr["empresa"] = $this->session->EMPRESA_RAZON;
+            $pr["MAQUILA"] = $x['MAQUILA'];
+            $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
+            $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
+            $pr["ANO"] = $x['ANIO'];
+            $jc->setParametros($pr);
+            $jc->setJasperurl('jrxml\conspifo\PielGeneral.jasper');
+            $jc->setFilename("CONSUMO_PIEL_GENERAL_" . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getReporteConsumoForroGeneral() {
+        try {
+            $x = $this->input->post();
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $pr["logo"] = base_url() . $this->session->LOGO;
+            $pr["empresa"] = $this->session->EMPRESA_RAZON;
+            $pr["MAQUILA"] = $x['MAQUILA'];
+            $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
+            $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
+            $pr["ANO"] = $x['ANIO'];
+            $jc->setParametros($pr);
+            $jc->setJasperurl('jrxml\conspifo\ForroGeneral.jasper');
+            $jc->setFilename("CONSUMO_FORRO_GENERAL_" . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            print $jc->getReport();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

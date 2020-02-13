@@ -82,7 +82,11 @@ class Avance9 extends CI_Controller {
                                             . "(P.Pares*F.CostoMO) AS TOTAL, {$v->NUMERO_FRACCION} AS Fraccion", false)
                                     ->from("pedidox AS P")->join('fraccionesxestilo as F', 'P.Estilo = F.Estilo')
                                     ->where_in("F.Fraccion", 99, 100, 96)
-                                    ->where("P.Control", $x['CR'])->limit(1)->get()->result();
+                                    ->where("P.Control", $x['CR'])
+                                    ->where_not_in("P.Estatus", array('C'))
+                                    ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
+                                    ->where_not_in("P.DeptoProduccion", array(270))
+                                    ->limit(1)->get()->result();
                     print json_encode($data);
                 } else {
                     print json_encode(array("MENSAJE" => "CONTROL INEXISTENTE O NO TIENE LAS FRACCIONES 99,100 O 96(MUESTRA)"));
@@ -108,6 +112,9 @@ class Avance9 extends CI_Controller {
                         $this->db->select("P.Estilo, P.Pares, F.CostoMO, (P.Pares*F.CostoMO) AS TOTAL, 99 AS Fraccion", false)
                                 ->from("pedidox AS P")->join('fraccionesxestilo as F', 'P.Estilo = F.Estilo')
                                 ->where("F.Fraccion", 99)
+                                ->where_not_in("P.Estatus", array('C'))
+                                ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
+                                ->where_not_in("P.DeptoProduccion", array(270))
                                 ->where("P.Control", $x['CR'])->limit(1);
                         break;
                     default:
@@ -393,6 +400,10 @@ class Avance9 extends CI_Controller {
 
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
+            $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan NOT IN(12,13,14) AND P.DeptoProduccion NOT IN(270) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.Estatus NOT IN('C') LIMIT 1")->result();
+            if(intval($CONTROL_EXISTE[0]->EXISTE)===0){
+                exit(0);
+            }
             $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
             $data = array(
                 "numeroempleado" => $xXx['NUMERO_EMPLEADO'],

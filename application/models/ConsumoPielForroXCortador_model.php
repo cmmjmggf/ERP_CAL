@@ -15,7 +15,8 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             return $this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero ,' ',E.PrimerNombre, ' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS EMPLEADO", false)
                             ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                             ->join('asignapftsacxc AS ACXC', 'E.Numero = ACXC.Empleado')
-                            ->where('D.Descripcion LIKE \'CORTE\'', null, false)->where('E.AltaBaja', 1)->get()->result();
+                            ->where('D.Descripcion LIKE \'CORTE\'', null, false)
+                    ->where('E.AltaBaja', 1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -95,7 +96,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                 $this->db->where("A.Maquila = '$MAQUILA'", null, false);
             }
             if ($ANO !== '') {
-                $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) LIKE '$ANO'", null, false);
+                $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANO'", null, false);
             }
             $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1);
             $this->db->group_by('A.Estilo');
@@ -111,9 +112,11 @@ class ConsumoPielForroXCortador_model extends CI_Model {
         try {
             $this->db->select("OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT, "
                             . "A.PrecioActual AS Precio, OP.Pares, (SUM(OPD.Cantidad)/OP.Pares) AS Consumo, SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
-                            . "A.Devolucion, A.Basura, (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)) AS Diferencia,"
-                            . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,(A.PrecioActual * A.Abono) AS RealPesos, "
-                            . "((A.PrecioActual * SUM(OPD.Cantidad)) - (A.PrecioActual * A.Abono)) AS DifPesos,"
+                            . "A.Devolucion, A.Basura, "
+                            . "(SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"
+                            . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,"
+                            . "(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS RealPesos, "
+                            . "(A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,"
                             . "(A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE", false)
                     ->from("ordendeproduccion AS OP")
                     ->join("ordendeproducciond AS OPD", "OP.ID = OPD.OrdenDeProduccion")
@@ -132,21 +135,22 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                 $this->db->where("OP.Maquila = '$MAQUILA'", null, false);
             }
             if ($ARTICULO !== '') {
-                $this->db->where("A.Articulo =  '$ARTICULO'", null, false);
+                $this->db->where("A.Articulo = '$ARTICULO'", null, false);
             }
             if ($SEMANAINICIAL !== '' && $SEMANAFINAL !== '') {
                 $this->db->where("OP.Semana BETWEEN '$SEMANAINICIAL' AND '$SEMANAFINAL'", null, false);
             }
             if ($EMPLEADO !== '') {
-                $this->db->where("A.Empleado LIKE '$EMPLEADO'", null, false);
+                $this->db->where("A.Empleado = '$EMPLEADO'", null, false);
             }
             if ($ESTILO !== '') {
-                $this->db->where("A.Estilo LIKE '$ESTILO'", null, false);
+                $this->db->where("A.Estilo = '$ESTILO'", null, false);
             }
-            $this->db->where("A.TipoMov = '$TIPO'", null, false)->group_by('OP.ControlT')
+            $this->db->where("A.TipoMov = '$TIPO'", null, false)
+                    ->group_by('A.Articulo')->group_by('OP.ControlT')
                     ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
-//            print $str;
+//            print $str."\n"."\n";
             return $this->db->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -10,6 +10,10 @@
         <ul class="navbar-nav w-100"></ul>
     </div>
 </nav>
+<?php
+//var_dump($this->session);
+//print "{$this->session->ID} {this->session->USERNAME}";
+?>
 <script>
     $(document).ready(function () {
         getMenu(7);

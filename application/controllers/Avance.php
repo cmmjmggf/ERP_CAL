@@ -377,6 +377,16 @@ P.Maquila AS MAQUILA
             if ($frac !== '') {
                 $frac = intval($x->post('FRACCION'));
             }
+
+            $REVISA_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                            . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} AND "
+                            . "P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
+                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+            if (intval($REVISA_CONTROL[0]->EXISTE) === 0) {
+                print "CONTROL {$xXx['CONTROL']} CANCELADO O NO EXISTE O ESTA MAL ESCRITO";
+                exit(0);
+            }
+
             /* depto ES EL DEPARTAMENTO AL QUE SE QUIERE MOVER, depto_actual ES EL DEPARTAMENTO DONDE ESTA ACTUALMENTE */
             $depto = intval($x->post('DEPTO'));
             $depto_actual = intval($x->post('AVANCEDEPTOACTUAL'));

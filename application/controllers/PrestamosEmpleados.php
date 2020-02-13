@@ -59,7 +59,7 @@ class PrestamosEmpleados extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('P.numemp', $x['EMPLEADO']);
             }
-            $this->db->where("YEAR(P.fechapre)", Date('Y'));
+            $this->db->where('P.numemp', $x['EMPLEADO'])->where("YEAR(fechapre)", Date('Y'));
             if ($x['EMPLEADO'] === '') {
                 $this->db->limit(25);
             }
@@ -103,6 +103,7 @@ class PrestamosEmpleados extends CI_Controller {
             if ($x["EMPLEADO"] !== '') {
                 $this->db->where("PP.numemp", $x["EMPLEADO"]);
             }
+            $this->db->where("status", 2)->where("YEAR(fecha)", Date('Y'));
             /* NO EXISTE ENLACE ENTRE EL PRESTAMO Y EL PAGO DE LOS PRESTAMOS */
             if ($x["PAGARE"] !== '') {
                 $check_pagare = $this->db->query("SELECT P.numemp AS EMPLEADO, P.sem AS SEMANA FROM prestamos AS P WHERE P.pagare = {$x['PAGARE']}")->result();
