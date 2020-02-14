@@ -10,7 +10,26 @@
             <div class="modal-body">
                 <form id="frmExplosion">
                     <div class="row">
+                        <div class="col-12">
+                            <span class="badge badge-info" style="font-size: 14px;">
+                                Nota. Para limpiar los campos de un sólo empleado capturelo, de lo contrario sólo oprima ACEPTAR
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-2" >
+                            <label for="" >Empleado</label>
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" required=""  id="EmpleadoLimpiaCA" name="EmpleadoLimpiaCA"   >
+                        </div>
+                        <div class="col-6">
+                            <label>-</label>
+                            <select id="sEmpleadoLimpiaCA" name="sEmpleadoLimpiaCA" class="form-control form-control-sm  ">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 mt-3">
                             <div class="table-responsive" id="EmpleadosParaLimpiarAhorraPrestamos">
                                 <table id="tblEmpleadosParaLimpiarAhorraPrestamos" class="table table-sm  " style="width:100%">
@@ -41,20 +60,41 @@
 <script>
     var mdlLimpiaCajaAhorroPrestamosEmpleados = $('#mdlLimpiaCajaAhorroPrestamosEmpleados');
     var btnVerEmpleados = $("#btnVerEmpleados");
-
-
     var tblEmpleadosParaLimpiarAhorraPrestamos = $('#tblEmpleadosParaLimpiarAhorraPrestamos');
     var EmpleadosParaLimpiarAhorraPrestamos;
 
     $(document).ready(function () {
-
-
         mdlLimpiaCajaAhorroPrestamosEmpleados.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlLimpiaCajaAhorroPrestamosEmpleados);
             getEmpleadosParaLimpiarAhorraPrestamosPLimpiarCampos();
-            //mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').focus();
+            getEmpleadosLimpiaCaptura();
+            mdlLimpiaCajaAhorroPrestamosEmpleados.find('#sEmpleadoLimpiaCA')[0].selectize.clear(true);
+            mdlLimpiaCajaAhorroPrestamosEmpleados.find('#sEmpleadoLimpiaCA')[0].selectize.clearOptions();
+            mdlLimpiaCajaAhorroPrestamosEmpleados.find('#EmpleadoLimpiaCA').val('').focus();
         });
-
+        mdlLimpiaCajaAhorroPrestamosEmpleados.find('#EmpleadoLimpiaCA').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtempl = $(this).val();
+                if (txtempl) {
+                    $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarEmpleadoComidas', {Empleado: txtempl}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlLimpiaCajaAhorroPrestamosEmpleados.find("#sEmpleadoLimpiaCA")[0].selectize.addItem(txtempl, true);
+                            mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').focus();
+                        } else {
+                            swal('ERROR', 'EMPLEADO NO EXISTE O DADO DE BAJA', 'warning').then((value) => {
+                                mdlLimpiaCajaAhorroPrestamosEmpleados.find('#sEmpleadoLimpiaCA')[0].selectize.clear(true);
+                                mdlLimpiaCajaAhorroPrestamosEmpleados.find('#EmpleadoLimpiaCA').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    mdlLimpiaCajaAhorroPrestamosEmpleados.find('#sEmpleadoLimpiaCA')[0].selectize.clear(true);
+                    mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').focus();
+                }
+            }
+        });
         mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').on("click", function () {
             swal({
                 title: "ESTÁS SEGURO?",
@@ -78,8 +118,12 @@
                         HoldOn.open({theme: "sk-bounce", message: "CARGANDO DATOS..."});
                         $.ajax({
                             url: base_url + 'index.php/Empleados/onLimpiarCamposAhorroPrestamo',
-                            type: "POST"
+                            type: "POST",
+                            data: {
+                                Empleado: mdlLimpiaCajaAhorroPrestamosEmpleados.find('#EmpleadoLimpiaCA').val()
+                            }
                         }).done(function (data, x, jq) {
+                            console.log(data);
                             EmpleadosParaLimpiarAhorraPrestamos.ajax.reload();
                             HoldOn.close();
                         }).fail(function (x, y, z) {
@@ -94,7 +138,10 @@
             });
 
         });
-
+        tblEmpleadosParaLimpiarAhorraPrestamos.find('tbody').on('click', 'tr', function () {
+            tblEmpleadosParaLimpiarAhorraPrestamos.find("tbody tr").removeClass("success");
+            $(this).addClass("success");
+        });
 
     });
 
@@ -106,7 +153,7 @@
             tblEmpleadosParaLimpiarAhorraPrestamos.DataTable().destroy();
         }
         EmpleadosParaLimpiarAhorraPrestamos = tblEmpleadosParaLimpiarAhorraPrestamos.DataTable({
-            "dom": 'frt',
+            "dom": 'rt',
             buttons: buttons,
             "ajax": {
                 "url": base_url + 'index.php/Empleados/getEmpleadosCajaAhorro',
@@ -140,11 +187,16 @@
                 HoldOn.close();
             }
         });
-        $('#tblEmpleadosParaLimpiarAhorraPrestamos_filter input[type=search]').focus();
-        tblEmpleadosParaLimpiarAhorraPrestamos.find('tbody').on('click', 'tr', function () {
-            tblEmpleadosParaLimpiarAhorraPrestamos.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
+    }
+    function getEmpleadosLimpiaCaptura() {
+        $.getJSON(base_url + 'index.php/Empleados/getEmpleadosComidasSelect', ).done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                mdlLimpiaCajaAhorroPrestamosEmpleados.find("#sEmpleadoLimpiaCA")[0].selectize.addOption({text: v.Nombre, value: v.Clave});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            HoldOn.close();
         });
     }
-
 </script>

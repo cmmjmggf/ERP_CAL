@@ -235,6 +235,12 @@ class Empleados extends CI_Controller {
 
     public function onLimpiarCamposAhorroPrestamo() {
         try {
+            $Empleado = $this->input->post('Empleado');
+
+            if ($Empleado !== '') {
+                $this->db->where('Numero', $Empleado);
+            }
+
             $this->db->set('Ahorro', 0)
                     ->set('SaldoPres', 0)
                     ->set('PressAcum', 0)

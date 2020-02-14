@@ -57,7 +57,7 @@ class OrdenDeProduccionPantalla extends CI_Controller {
                     break;
                 case 'ALMACEN':
                     $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuAlmacen');
+                    $this->load->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral');

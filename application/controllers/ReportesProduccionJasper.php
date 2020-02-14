@@ -706,4 +706,22 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteParesProducidosPorTipoConstruccion() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $parametros["asem"] = $this->input->post('aSem');
+        $parametros["amaq"] = $this->input->post('aMaq');
+        $parametros["maq"] = $this->input->post('Maq');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\paresProducidosPorTipoConstruccion.jasper');
+        $jc->setFilename('REPORTE_PARES_POR_TIPO_CONSTRUCCION_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
 }

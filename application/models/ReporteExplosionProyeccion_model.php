@@ -89,6 +89,7 @@ class ReporteExplosionProyeccion_model extends CI_Model {
                                 WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
                                 AND PE.Semana = $Semana
                                 AND `PE`.`Ano` = '$Ano'
+                                AND PE.Estatus IN ('A','F')
                                 AND case
                                 when $TipoE = '10' then `A`.`Grupo` IN('1', '2')
                                 when $TipoE = '80' then `A`.`Grupo` IN('3')
